@@ -163,7 +163,9 @@ def verify_commit(row: dict, source: dict) -> dict:
             "training_authorized": False, "network_eligible": False}
 
 
-def assemble(queue: dict, fetcher: Callable[[str], dict] = fetch_github_commit) -> dict:
+def assemble(queue: dict, fetcher: Callable[[str], dict] | None = None) -> dict:
+    if fetcher is None:
+        fetcher = fetch_github_commit
     if not isinstance(queue, dict) or queue.get("status") != STATUS:
         raise RealFixError("queue not marked draft-only")
     cases = []
