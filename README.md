@@ -8,6 +8,12 @@ An evidence-grounded security evaluation research project for [Telegraph Season 
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
 
+## Phase 2P: code questions from real pre-fix revisions
+
+FALSUM has now produced **5 remediation-withheld, real pre-fix source challenges** from three verified open-source projects. The questions-only artifact contains code from the historical parent revision without a supplied fix, GHSA/CVE, regression-test patch or answer. A **separate provenance artifact** links each task to immutable source and repair evidence; these public examples are NOT a sealed holdout.
+
+The [actual ModernBERT tokenizer gate](https://github.com/Iniwura/falsum/actions/runs/41130342976) checked **5/5 prompts within the 384-token task allowance** (maximum 286), reserving another 124 tokens for an answer and 4 for boundary safety under the 512-token limit. The original first attempt correctly failed when one question exceeded this allowance; CI now rejects overflow instead of truncating code. All examples remain **unlabelled and unreviewed**. See [Phase 2P documentation](docs/PHASE2P.md).
+
 ## Phase 2O: genuine public security-fix code (not training labels)
 
 FALSUM now verifies three **real upstream security-fix commits** in Requests, aiohttp, and Jinja2, covering proxy credential forwarding, static-file traversal, and a sandbox attribute-filter bypass. It checks full commit and parent identities, exact source and regression-test Git blob IDs, then **replays the code and test diff against the actual upstream parent revision**. Six file transitions must reconstruct byte-for-byte or CI fails.
