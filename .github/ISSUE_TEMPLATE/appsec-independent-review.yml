@@ -17,6 +17,7 @@ body:
         - real-requests-proxy-auth
         - real-aiohttp-static-traversal
         - real-jinja-attr-sandbox
+        - real-axios-absolute-baseurl
     validations:
       required: true
   - type: dropdown
