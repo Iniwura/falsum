@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "evidence": [
+    {
+      "id": "e1",
+      "ecosystem": "npm",
+      "package": "axios",
+      "version": "1.8.1",
+      "advisory_id": "GHSA-jr5f-v2jv-69x6",
+      "verdict": "affected",
+      "source_url": "https://raw.githubusercontent.com/github/advisory-database/4af30eafd57e3bd9a0b4865dee2ced6f611de33f/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json",
+      "source_excerpt": "axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL",
+      "source_sha256": "77f0eb6ad0808358a56ba849f5cdbb4b9c0fd6313e976bc30f3923aeb4695167",
+      "review_status": "draft"
+    },
+    {
+      "id": "e2",
+      "ecosystem": "npm",
+      "package": "axios",
+      "version": "1.8.2",
+      "advisory_id": "GHSA-jr5f-v2jv-69x6",
+      "verdict": "unaffected",
+      "source_url": "https://raw.githubusercontent.com/github/advisory-database/4af30eafd57e3bd9a0b4865dee2ced6f611de33f/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json",
+      "source_excerpt": "axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL",
+      "source_sha256": "77f0eb6ad0808358a56ba849f5cdbb4b9c0fd6313e976bc30f3923aeb4695167",
+      "review_status": "draft"
+    },
+    {
+      "id": "e3",
+      "ecosystem": "PyPI",
+      "package": "jinja2",
+      "version": "3.1.4",
+      "advisory_id": "GHSA-q2x7-8rv6-6q7h",
+      "verdict": "affected",
+      "source_url": "https://raw.githubusercontent.com/github/advisory-database/4af30eafd57e3bd9a0b4865dee2ced6f611de33f/advisories/github-reviewed/2024/12/GHSA-q2x7-8rv6-6q7h/GHSA-q2x7-8rv6-6q7h.json",
+      "source_excerpt": "Jinja has a sandbox breakout through indirect reference to format method",
+      "source_sha256": "53289d88385a37dbbc878e46d5fd3ea5749e82b9f5581da5f69b0019c0361807",
+      "review_status": "draft"
+    },
+    {
+      "id": "e4",
+      "ecosystem": "PyPI",
+      "package": "jinja2",
+      "version": "3.1.5",
+      "advisory_id": "GHSA-q2x7-8rv6-6q7h",
+      "verdict": "unaffected",
+      "source_url": "https://raw.githubusercontent.com/github/advisory-database/4af30eafd57e3bd9a0b4865dee2ced6f611de33f/advisories/github-reviewed/2024/12/GHSA-q2x7-8rv6-6q7h/GHSA-q2x7-8rv6-6q7h.json",
+      "source_excerpt": "Jinja has a sandbox breakout through indirect reference to format method",
+      "source_sha256": "53289d88385a37dbbc878e46d5fd3ea5749e82b9f5581da5f69b0019c0361807",
+      "review_status": "draft"
+    },
+    {
+      "id": "e5",
+      "ecosystem": "PyPI",
+      "package": "jinja2",
+      "version": "3.1.5",
+      "advisory_id": "GHSA-cpwx-vrp4-4pq7",
+      "verdict": "affected",
+      "source_url": "https://raw.githubusercontent.com/github/advisory-database/4af30eafd57e3bd9a0b4865dee2ced6f611de33f/advisories/github-reviewed/2025/03/GHSA-cpwx-vrp4-4pq7/GHSA-cpwx-vrp4-4pq7.json",
+      "source_excerpt": "Jinja2 vulnerable to sandbox breakout through attr filter selecting format method",
+      "source_sha256": "dd20a2e4e7fbc8812f5b4216fdc9f9d192003e5ef0ee9148f9a5d525084b6438",
+      "review_status": "draft"
+    },
+    {
+      "id": "e6",
+      "ecosystem": "PyPI",
+      "package": "jinja2",
+      "version": "3.1.6",
+      "advisory_id": "GHSA-cpwx-vrp4-4pq7",
+      "verdict": "unaffected",
+      "source_url": "https://raw.githubusercontent.com/github/advisory-database/4af30eafd57e3bd9a0b4865dee2ced6f611de33f/advisories/github-reviewed/2025/03/GHSA-cpwx-vrp4-4pq7/GHSA-cpwx-vrp4-4pq7.json",
+      "source_excerpt": "Jinja2 vulnerable to sandbox breakout through attr filter selecting format method",
+      "source_sha256": "dd20a2e4e7fbc8812f5b4216fdc9f9d192003e5ef0ee9148f9a5d525084b6438",
+      "review_status": "draft"
+    }
+  ],
+  "pairs": [
+    {
+      "id": "p1",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "split": "train",
+      "review_status": "draft",
+      "prompt": "An npm service uses axios 1.8.1, a configured baseURL and an API-key header. It forwards a user-controlled absolute URL to get(). Review the risk for CVE-2025-27152 and give a version-specific recommendation.",
+      "chosen": "This version is affected by CVE-2025-27152. An absolute URL can override baseURL and send headers to an unintended host. Treat user control as the key exposure condition; restrict destinations and upgrade to axios 1.8.2 or later.",
+      "rejected": "This version is fully protected by baseURL because axios will always prefix it to user-supplied URLs. Passing attacker-controlled absolute URLs cannot change the destination. No CVE-2025-27152 mitigation or dependency update is needed.",
+      "evidence_ids": [
+        "e1"
+      ]
+    },
+    {
+      "id": "p2",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "split": "train",
+      "review_status": "draft",
+      "prompt": "A pull-request reviewer sees axios 1.8.2 in a package lock and a warning about CVE-2025-27152. The request path still accepts absolute URLs from users. Explain what this particular advisory says without certifying the entire app.",
+      "chosen": "Axios 1.8.2 is a fixed release for CVE-2025-27152. This advisory alone does not justify flagging that exact version as vulnerable. Still assess how untrusted destinations are constrained, and check separate advisories and application-specific issues.",
+      "rejected": "Axios 1.8.2 remains affected by CVE-2025-27152 because absolute URLs may be supplied by users. The version upgrade has no effect on this specific advisory, so mark the dependency as confirmed vulnerable without further evidence.",
+      "evidence_ids": [
+        "e2"
+      ]
+    },
+    {
+      "id": "p3",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "split": "validation",
+      "review_status": "draft",
+      "prompt": "A Python web app renders untrusted user-authored Jinja sandbox templates using jinja2 3.1.4 and custom filters. Check CVE-2024-56326, distinguishing the impacted version from whether the application's code path is exploitable.",
+      "chosen": "Jinja2 3.1.4 falls within CVE-2024-56326's affected versions. The sandbox issue involves an indirect format-method reference and relevant filter behavior. Confirm that untrusted template content reaches this path and upgrade to 3.1.5 or newer.",
+      "rejected": "Jinja2 3.1.4 already includes the CVE-2024-56326 fix. The sandbox cannot be bypassed through indirect format-method references. Custom filters and user-authored templates are irrelevant, so dismiss the finding regardless of deployment details.",
+      "evidence_ids": [
+        "e3"
+      ]
+    },
+    {
+      "id": "p4",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "split": "validation",
+      "review_status": "draft",
+      "prompt": "A code review flags Jinja2 version 3.1.5 for CVE-2024-56326 because a developer added a custom sandbox filter. Evaluate the exact patch boundary for this CVE before assigning severity.",
+      "chosen": "CVE-2024-56326 was fixed in Jinja2 3.1.5, so this exact version is not affected by that advisory. Review the custom filter independently, and check other advisories, but do not mislabel this dependency release for CVE-2024-56326.",
+      "rejected": "CVE-2024-56326 still affects Jinja2 3.1.5 because custom filters can be dangerous. The published fix begins with 3.1.6. File a confirmed dependency vulnerability under this CVE, even without evidence of the relevant bypass.",
+      "evidence_ids": [
+        "e4"
+      ]
+    },
+    {
+      "id": "p5",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "split": "holdout",
+      "review_status": "draft",
+      "prompt": "A SaaS product uses Jinja2 3.1.5 to render templates supplied by external tenants inside SandboxedEnvironment. Review the specific CVE-2025-27516 finding and outline its applicability assumptions.",
+      "chosen": "Jinja2 3.1.5 is affected by CVE-2025-27516, involving a sandbox escape through the attr filter. Attacker control of template content is the relevant condition here. Upgrade to 3.1.6 and validate how tenant templates are isolated.",
+      "rejected": "Jinja2 3.1.5 is patched against every str.format-related sandbox bypass. The attr filter cannot bypass the sandbox in this version. Template author control is not relevant; dismiss CVE-2025-27516 as already fixed.",
+      "evidence_ids": [
+        "e5"
+      ]
+    },
+    {
+      "id": "p6",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "split": "holdout",
+      "review_status": "draft",
+      "prompt": "A developer asks whether Jinja2 3.1.6 still needs a CVE-2025-27516 dependency advisory in a system where tenant-authored templates can run. Restrict the verdict to this CVE and explain the remaining review work.",
+      "chosen": "Jinja2 3.1.6 is the patched release for CVE-2025-27516, so do not claim that exact version is affected by this advisory. Continue reviewing whether tenant templates are suitably restricted and whether separate issues remain in the application.",
+      "rejected": "CVE-2025-27516 continues to affect Jinja2 3.1.6 whenever tenants author templates. The published 3.1.6 fix does not address the attr-filter behavior. Treat the current dependency version as still vulnerable to this exact CVE.",
+      "evidence_ids": [
+        "e6"
+      ]
+    }
+  ]
+}

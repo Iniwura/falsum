@@ -32,6 +32,7 @@ def main(argv: list[str] | None = None) -> int:
     audit = commands.add_parser("audit-snapshots", help="verify reviewed evidence rows against archived OSV records")
     audit.add_argument("ledger", type=Path)
     audit.add_argument("--directory", type=Path, required=True)
+    audit.add_argument("--include-drafts", action="store_true", help="source-audit draft records without marking them reviewed")
     args = parser.parse_args(argv)
     try:
         if args.command == "fetch-osv":
@@ -47,7 +48,7 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         ledger = load_ledger(args.ledger)
         if args.command == 'audit-snapshots':
-            issues = audit_ledger_snapshots(ledger, args.directory)
+            issues = audit_ledger_snapshots(ledger, args.directory, include_drafts=args.include_drafts)
             if issues:
                 raise SourceError("\n".join(issues))
             print("SNAPSHOT AUDIT: verified source integrity and supported version labels (human review still required)")

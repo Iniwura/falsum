@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "source": "GitHub Advisory Database (reviewed OSV-format)",
+  "source_url": "https://raw.githubusercontent.com/github/advisory-database/4af30eafd57e3bd9a0b4865dee2ced6f611de33f/advisories/github-reviewed/2025/03/GHSA-cpwx-vrp4-4pq7/GHSA-cpwx-vrp4-4pq7.json",
+  "requested_id": "GHSA-cpwx-vrp4-4pq7",
+  "canonical_id": "GHSA-cpwx-vrp4-4pq7",
+  "sha256": "dd20a2e4e7fbc8812f5b4216fdc9f9d192003e5ef0ee9148f9a5d525084b6438",
+  "byte_size": 2527,
+  "pinned_commit": "4af30eafd57e3bd9a0b4865dee2ced6f611de33f",
+  "acquisition_method": "GitHub read-only connector",
+  "retrieved_date_utc": "2026-10-30"
+}

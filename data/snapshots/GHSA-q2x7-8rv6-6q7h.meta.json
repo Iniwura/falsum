@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "source": "GitHub Advisory Database (reviewed OSV-format)",
+  "source_url": "https://raw.githubusercontent.com/github/advisory-database/4af30eafd57e3bd9a0b4865dee2ced6f611de33f/advisories/github-reviewed/2024/12/GHSA-q2x7-8rv6-6q7h/GHSA-q2x7-8rv6-6q7h.json",
+  "requested_id": "GHSA-q2x7-8rv6-6q7h",
+  "canonical_id": "GHSA-q2x7-8rv6-6q7h",
+  "sha256": "53289d88385a37dbbc878e46d5fd3ea5749e82b9f5581da5f69b0019c0361807",
+  "byte_size": 2680,
+  "pinned_commit": "4af30eafd57e3bd9a0b4865dee2ced6f611de33f",
+  "acquisition_method": "GitHub read-only connector",
+  "retrieved_date_utc": "2026-10-30"
+}

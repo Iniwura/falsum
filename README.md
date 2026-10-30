@@ -39,3 +39,20 @@ The [current Telegraph scoring-adapter kit](https://github.com/telegraphprotocol
 ## Status
 
 Phase 1 + Phase 2a (offline verified, network fetch untested in CI). **Not an active scoring adapter. No network registration or judge acceptance is claimed.**
+
+## Phase 2b — public-advisory draft corpus (not submitted)
+
+The repository includes pinned OSV-format snapshots from GitHub's reviewed
+advisory database for Axios and two different Jinja2 CVEs. Version-boundary
+checks include the important OSV `ECOSYSTEM` format for stable npm and PyPI
+versions. Unsupported version syntax returns `unknown`, not an unsafe clean
+result. **All real-source cases remain `draft`, not independently human-reviewed.**
+
+```bash
+PYTHONPATH=src python -m falsum validate data/draft-ledger.json
+PYTHONPATH=src python -m falsum audit-snapshots data/draft-ledger.json --directory data/snapshots --include-drafts
+PYTHONPATH=src python -m unittest discover -s tests -v
+```
+
+Read [corpus provenance and review boundary](docs/CORPUS.md). This is evidence
+preparation, not model training, a scorer, or eligible Telegraph pool material.

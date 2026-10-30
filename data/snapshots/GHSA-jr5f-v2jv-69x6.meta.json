@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "source": "GitHub Advisory Database (reviewed OSV-format)",
+  "source_url": "https://raw.githubusercontent.com/github/advisory-database/4af30eafd57e3bd9a0b4865dee2ced6f611de33f/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json",
+  "requested_id": "GHSA-jr5f-v2jv-69x6",
+  "canonical_id": "GHSA-jr5f-v2jv-69x6",
+  "sha256": "77f0eb6ad0808358a56ba849f5cdbb4b9c0fd6313e976bc30f3923aeb4695167",
+  "byte_size": 4830,
+  "pinned_commit": "4af30eafd57e3bd9a0b4865dee2ced6f611de33f",
+  "acquisition_method": "GitHub read-only connector",
+  "retrieved_date_utc": "2026-10-30"
+}

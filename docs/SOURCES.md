@@ -42,7 +42,8 @@ sources before any material is marked reviewed or submitted.
 - `version_status` supports exact listed affected versions and strict SemVer
   `SEMVER` range events (introduced/fixed/last_affected/limit). `fixed` and
   `limit` are exclusive; `last_affected` is inclusive. Build metadata does not
-  change precedence. `ECOSYSTEM`, `GIT`, non-SemVer versions, malformed events,
+  change precedence. `ECOSYSTEM` stable three-component npm/PyPI intervals are supported narrowly;
+  other `ECOSYSTEM`, `GIT`, unsupported version syntax, malformed events,
   or incomplete coverage produce `unknown` instead of a guessed `unaffected`.
 - `unaffected` means only **outside the supported affected ranges in one
   advisory**. It does not mean an application is secure, the dependency has
@@ -68,3 +69,11 @@ rules and official V2 tokenizer gate remain separate.
 Specification: https://ossf.github.io/osv-schema/
 API: https://github.com/google/osv.dev/blob/master/docs/api/get-v1-vulns.md
 Official scoring kit: https://github.com/telegraphprotocol/telegraph-wasm-baseline
+
+## Source-pinned draft examples
+
+Phase 2b includes exact, digest-checked GitHub-reviewed OSV-format source files
+under `data/snapshots/` and their provenance sidecars. They use a pinned
+`github/advisory-database` commit rather than an unversioned API response.
+Use `audit-snapshots --include-drafts` to verify draft evidence without
+misrepresenting it as independently reviewed material. See `docs/CORPUS.md`.

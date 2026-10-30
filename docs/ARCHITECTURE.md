@@ -43,3 +43,11 @@ Transparent first-party usage demonstration, genuine network traces, reproducibl
 - Do not claim model accuracy without frozen evaluation data and recorded outputs.
 - Do not claim an active scorer without an explicit network result.
 - Preserve a fallback target if Security Review's independent contributor requirement cannot be satisfied.
+
+## Phase 2b checkpoint
+
+Pinned reviewed GitHub advisories are archived in OSV format and tested with
+conservative stable npm/PyPI `ECOSYSTEM` comparisons. The draft diagnostic
+ledger is held strictly outside accepted evaluation submissions. Human
+attestation, real-app exploitability validation, broad corpus development and
+Anjoman admission remain open. See `docs/CORPUS.md`.

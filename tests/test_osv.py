@@ -84,7 +84,7 @@ class TestOSV(unittest.TestCase):
         self.assertTrue(_in_semver_range('1.2.0', ev2))
 
     def test_unknown_on_unsupported_range(self):
-        r = record(); r['affected'][0]['ranges'].append({'type': 'ECOSYSTEM', 'events': [{'introduced': '0'}]})
+        r = record(); r['affected'][0]['ranges'].append({'type': 'GIT', 'events': [{'introduced': '0'}]})
         self.assertEqual(version_status(r, 'npm', 'fixture-lib', '1.9.0'), 'unknown')
         self.assertEqual(version_status(r, 'npm', 'fixture-lib', '1.1.0'), 'affected')
 
