@@ -8,6 +8,14 @@ An evidence-grounded security evaluation research project for [Telegraph Season 
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
 
+## Phase 2Q: independent AppSec review intake, always unverified until adjudicated
+
+FALSUM now runs a **read-only GitHub issue intake** whenever someone submits or edits the [structured AppSec review form](https://github.com/Iniwura/falsum/issues/new?template=appsec-independent-review.yml). It verifies the public issue author's GitHub identity, excludes the maintainer and bots, requires pinned pre/post code citations and the exact advisory, checks deployment reasoning and disagreement, and deduplicates claims by source case and GitHub account. Two agreeing GitHub accounts still **do not** become expert-reviewed labels automatically.
+
+[Verified intake workflow](https://github.com/Iniwura/falsum/actions/runs/41131525786): **16/16** offline adversarial tests passed, and a live public GitHub API read found **zero review submissions, zero independently validated labels and zero training-ready question pairs**. [Implementation, threat model and next gates](docs/PHASE2Q.md).
+
+**Bounty truth:** [Telegraph #96](https://github.com/telegraphprotocol/bounties/issues/96) requires eligible preference question pairs AND a registered working WASM evaluator. Its own reward is listed as **unfunded**; Season II prizes and protocol evaluator rewards are separate.
+
 ## Phase 2P: code questions from real pre-fix revisions
 
 FALSUM has now produced **6 remediation-withheld, real pre-fix source challenges** from four verified open-source Python/JavaScript projects. The questions-only artifact contains code from the historical parent revision without a supplied fix, GHSA/CVE, regression-test patch or answer. A **separate provenance artifact** links each task to immutable source and repair evidence; these public examples are NOT a sealed holdout.
