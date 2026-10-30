@@ -32,8 +32,8 @@ class PreFixChallengeTests(unittest.TestCase):
 
     def test_all_challenges_use_parent_only_without_labels(self):
         public, audit = build_challenges(self.report, self.reader)
-        self.assertEqual(len(public["prompts"]), 3)
-        self.assertEqual(len(audit["records"]), 3)
+        self.assertEqual(len(public["prompts"]), 4)
+        self.assertEqual(len(audit["records"]), 4)
         self.assertFalse(public["network_eligible"])
         self.assertFalse(public["sealed_holdout"])
         self.assertFalse(public["tokenizer_512_verified"])
