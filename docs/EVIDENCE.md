@@ -19,4 +19,4 @@ Export emits only reviewed pairs from the requested split as JSONL `{ "prompt": 
 
 ## Deliberate limits
 
-This gate does not download advisories, inspect the original source snapshot, validate semantic vulnerability truth, enforce that prompts fit ModernBERT's 512-token window, or report Telegraph eligibility. The Phase 2 verifier must add source retrieval and digest checking. A public URL can change; keep an immutable snapshot. An affected-version label is not always an exploitable deployment.
+This gate does not download advisories, inspect the original source snapshot, validate semantic vulnerability truth, enforce that prompts fit ModernBERT's 512-token window, or report Telegraph eligibility. Phase 2a adds OSV source retrieval, digest checking and conservative SemVer classification; other sources, conditional exploitability and full semantic verification still need independent review. A public URL can change; keep an immutable snapshot. An affected-version label is not always an exploitable deployment.

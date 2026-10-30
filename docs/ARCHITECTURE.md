@@ -9,7 +9,16 @@
 - Explicitly gated V2-compatible JSONL triplet export for reviewed cases only.
 - Python stdlib-only unit tests and GitHub Actions test workflow.
 
-## Phase 2 — not implemented
+## Phase 2a — implemented and tested offline
+
+- Strict-ID, single-host OSV public-advisory fetcher with immutable source
+  snapshot, digest, UTC retrieval metadata and fail-closed response checks.
+- Offline integrity checking against pinned snapshots, conservative strict
+  SemVer range interpretation, and reviewed-ledger source-audit command.
+- Real public-API connectivity is **not** part of CI and has not been verified
+  by mocked tests; unsupported version-range formats return `unknown`.
+
+## Phase 2b — not implemented
 
 - Real advisory snapshots with fetched source bytes and hash verification; version and deployment applicability verification; independent security review.
 - Gold preference material across diverse ecosystems and realistic security tasks; train and held-out advisory group partitioning.
