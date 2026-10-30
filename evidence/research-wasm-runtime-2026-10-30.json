@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "status": "QUARANTINED_RESEARCH_WASI_RUNTIME_EXECUTED_NOT_NETWORK_ELIGIBLE",
+  "source": {
+    "repository": "Iniwura/falsum",
+    "source_model_run_url": "https://github.com/Iniwura/falsum/actions/runs/41126779406",
+    "official_build_run_url": "https://github.com/Iniwura/falsum/actions/runs/41132003351",
+    "real_wasi_score_run_url": "https://github.com/Iniwura/falsum/actions/runs/41132583676",
+    "official_kit_commit": "5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e",
+    "underlying_model_training_pairs": 58,
+    "underlying_data_independently_reviewed": false,
+    "underlying_model_pr_validation_fraction": 0.25,
+    "underlying_model_counterfactual_families_both_correct": "1/6"
+  },
+  "official_build": {
+    "intent": "SECURITY_REVIEW_GENERAL",
+    "class": "hybrid",
+    "abi_version": 2,
+    "runtime": "onnx_f32",
+    "max_tokens": 512,
+    "wasm_file": "SECURITY_REVIEW_GENERAL.wasm",
+    "wasm_bytes": 601181412,
+    "sha256": "52db6ad999cd262af915b6b908dcead7920bc08036cdfae01fee60bfd196d6e8",
+    "keccak256": "0x8aa7a9560f7b40d3f1358a26d6b5e8522729d388e82455e1ab3fa76d21015d92",
+    "onnx_bytes": 599024135,
+    "onnx_sha256": "3f373ea41ae27c64931798cf7b5a7037ed2beeaa0ca5be047ce5c118e68df91d",
+    "structurally_verified_by_packager": true,
+    "reproducibility": {
+      "builds": 2,
+      "identical_sha256": true,
+      "sha256s": [
+        "52db6ad999cd262af915b6b908dcead7920bc08036cdfae01fee60bfd196d6e8",
+        "52db6ad999cd262af915b6b908dcead7920bc08036cdfae01fee60bfd196d6e8"
+      ]
+    }
+  },
+  "real_wasi_smoke": {
+    "actual_wasi_f32": -0.4765051305294037,
+    "pytorch_fp32_reference": -0.4765053391456604,
+    "absolute_delta": 2.086162567138672e-7,
+    "executed_ms": 9171,
+    "matched_one_fixed_input": true,
+    "model_accuracy_measured": false,
+    "network_node_execution_verified": false
+  },
+  "approval": {
+    "accepted_human_review_labels": 0,
+    "anjoman_eligible_rows": 0,
+    "registration_id": null,
+    "live_on_network": false,
+    "registration_authorized": false,
+    "model_quality_validated": false
+  },
+  "caveat": "Permanent copy of values logged by two Actions runs, not a signature, official network acceptance certificate, expert review, or scored benchmark. Expiring binary archive is separate."
+}
