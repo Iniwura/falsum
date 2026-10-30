@@ -38,14 +38,14 @@ class RealFixTests(unittest.TestCase):
         return copy.deepcopy(self.responses[sha])
 
     def test_pinned_real_queue_accepts_source_metadata(self):
-        self.assertEqual(len(self.queue["cases"]), 3)
+        self.assertEqual(len(self.queue["cases"]), 4)
         self.assertEqual({r["repository"] for r in self.queue["cases"]},
-                         {"psf/requests", "aio-libs/aiohttp", "pallets/jinja"})
+                         {"psf/requests", "aio-libs/aiohttp", "pallets/jinja", "axios/axios"})
 
     def test_builds_real_patch_evidence_without_model_labels(self):
         report = assemble(self.queue, self.fetch)
         self.assertEqual(report["status"], "SOURCE_VERIFIED_LABELS_UNREVIEWED")
-        self.assertEqual(report["source_verified"], 3)
+        self.assertEqual(report["source_verified"], 4)
         self.assertEqual(report["independent_human_reviews"], 0)
         self.assertFalse(report["training_authorized"])
         self.assertFalse(report["network_eligible"])
@@ -147,7 +147,7 @@ class RealFixTests(unittest.TestCase):
                    "--reviewer-out", str(root/"questions.json")]
             with patch("falsum.real_fix_corpus.fetch_github_commit", side_effect=self.fetch):
                 self.assertEqual(main(cmd), 0)
-                self.assertEqual(len(json.loads((root/"questions.json").read_text())["questions"]), 3)
+                self.assertEqual(len(json.loads((root/"questions.json").read_text())["questions"]), 4)
                 with self.assertRaises(SystemExit):
                     main(cmd)
 
