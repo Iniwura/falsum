@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "status": "PUBLIC_PATCH_SOURCES_DRAFT_UNREVIEWED",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "cases": [
+    {
+      "id": "real-requests-proxy-auth",
+      "repository": "psf/requests",
+      "commit": "74ea7cf7a6a27a4eeb2ae24e162bcc942a6706d5",
+      "parent": "302225334678490ec66b3614a9dddb8a02c5f4fe",
+      "source_path": "requests/sessions.py",
+      "source_blob": "dbcf2a7b0ee2898b72714b756e4b27fbbad4beab",
+      "test_path": "tests/test_requests.py",
+      "test_blob": "b420c44d73cde0c2ab7e7aa0e5182b345436f718",
+      "advisory": "GHSA-j8r2-6x86-q33q",
+      "cve": "CVE-2023-32681",
+      "family": "proxy-auth-redirect",
+      "hypothesis_to_review": "The published advisory limits the Proxy-Authorization leak to credentialed proxy usage with HTTPS redirect behavior; confirm the actual preconditions and what the patch changes.",
+      "public_source": "https://github.com/psf/requests/security/advisories/GHSA-j8r2-6x86-q33q"
+    },
+    {
+      "id": "real-aiohttp-static-traversal",
+      "repository": "aio-libs/aiohttp",
+      "commit": "1c335944d6a8b1298baf179b7c0b3069f10c514b",
+      "parent": "33ccdfb0a12690af5bb49bda2319ec0907fa7827",
+      "source_path": "aiohttp/web_urldispatcher.py",
+      "source_blob": "a05ac6cc3de4964a8ac6f23e8d02bf70d995af9e",
+      "test_path": "tests/test_web_urldispatcher.py",
+      "test_blob": "c3caa4ffcff2cee7d2aaf4f29e2ab268895d58d5",
+      "advisory": "GHSA-5h86-8mv2-jq9f",
+      "cve": "CVE-2024-23334",
+      "family": "static-file-path-traversal",
+      "hypothesis_to_review": "The advisory describes path traversal for aiohttp static routes configured with follow_symlinks=True; verify whether the patch and tests support that claim and note any residual deployment assumptions.",
+      "public_source": "https://github.com/aio-libs/aiohttp/security/advisories/GHSA-5h86-8mv2-jq9f"
+    },
+    {
+      "id": "real-jinja-attr-sandbox",
+      "repository": "pallets/jinja",
+      "commit": "065334d1ee5b7210e1a0a93c37238c86858f2af7",
+      "parent": "033c20015c7ca899ab52eb921bb0f08e6d3dd145",
+      "source_path": "src/jinja2/filters.py",
+      "source_blob": "2bcba4fbd3c660edb1166fcad6ef6fc9a4f6a1e5",
+      "test_path": "tests/test_security.py",
+      "test_blob": "3a13781926e45e598dc8df936b7df7fcbc1a449e",
+      "advisory": "GHSA-cpwx-vrp4-4pq7",
+      "cve": "CVE-2025-27516",
+      "family": "template-sandbox-attr",
+      "hypothesis_to_review": "The advisory limits the attr-filter sandbox bypass to applications rendering attacker-controlled templates. Check how the patch enforces the sandbox and distinguish vulnerable template control from harmless template use.",
+      "public_source": "https://github.com/pallets/jinja/security/advisories/GHSA-cpwx-vrp4-4pq7"
+    }
+  ]
+}
