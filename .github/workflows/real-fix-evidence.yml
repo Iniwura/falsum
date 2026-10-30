@@ -60,25 +60,25 @@ jobs:
           c = json.loads((root / "PRE-POST-CODE-REPLAY-VERIFIED.json").read_text())
           prompts = json.loads((Path(os.environ["RUNNER_TEMP"]) / "falsum-model-prompts/UNLABELED-PRE-FIX-PROMPTS.json").read_text())
           provenance = json.loads((root / "provenance/REMEDIATION-AND-SOURCE-REFERENCES.json").read_text())
-          assert a["source_verified"] == 3 and a["independent_human_reviews"] == 0
+          assert a["source_verified"] == 4 and a["independent_human_reviews"] == 0
           assert a["network_eligible"] is False and a["training_authorized"] is False
           assert b["proposed_labels"] == 0 and b["human_reviews"] == 0
-          assert len(b["questions"]) == len(a["cases"]) == 3
-          assert c["cases_replayed"] == 3 and c["file_replays_verified"] == 6
+          assert len(b["questions"]) == len(a["cases"]) == 4
+          assert c["cases_replayed"] == 4 and c["file_replays_verified"] == 8
           assert c["independent_human_reviews"] == 0 and c["network_eligible"] is False
           assert prompts["status"] == "UNREVIEWED_PUBLIC_PRE_FIX_CHALLENGE_NO_ANSWERS"
           assert prompts["network_eligible"] is False and prompts["sealed_holdout"] is False
           assert prompts["tokenizer_512_verified"] is False and prompts["independent_human_reviews"] == 0
           assert prompts["model_training_authorized"] is False
-          assert len(prompts["prompts"]) >= 3
+          assert len(prompts["prompts"]) >= 4
           assert all(set(item) == {"challenge_id", "prompt"} for item in prompts["prompts"])
           import hashlib
           prompt_sha = hashlib.sha256((Path(os.environ["RUNNER_TEMP"]) / "falsum-model-prompts/UNLABELED-PRE-FIX-PROMPTS.json").read_bytes()).hexdigest()
           assert provenance["public_prompt_sha256"] == prompt_sha
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as out:
               out.write("### FALSUM real upstream patch corpus\n\n")
-              out.write("3 immutable upstream security-fix commits + source and test patch blobs verified.\n\n")
-              out.write("6 exact parent-to-fix source/test file transitions reconstructed and Git blob hashes rechecked.\n\n")
+              out.write("4 immutable upstream security-fix commits + source and test patch blobs verified.\n\n")
+              out.write("8 exact parent-to-fix source/test file transitions reconstructed and Git blob hashes rechecked.\n\n")
               out.write(f"{len(prompts['prompts'])} unreviewed public pre-fix-only code prompts generated. No remediation/advisory labels in model input.\n\n")
               out.write("**NO independently reviewed labels. NO eligible training data or network evaluator.**\n")
           PY
