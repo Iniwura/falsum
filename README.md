@@ -8,6 +8,14 @@ An evidence-grounded security evaluation research project for [Telegraph Season 
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
 
+## Phase 2R: genuine ABI-v2 hybrid WASM build from actual trained model
+
+FALSUM has now **successfully exported its real quarantined ModernBERT LoRA checkpoint to 599 MB ONNX FP32, baked it into a WASI model and packaged a 601 MB WebAssembly module through the exact official Telegraph V2 toolchain**. The packager classified `SECURITY_REVIEW_GENERAL` as **hybrid**, wrote ABI v2 metadata, passed structural checks and produced **two byte-identical builds**.
+
+[Successful full build](https://github.com/Iniwura/falsum/actions/runs/41132003351) · [Download time-limited research-only WASM](https://github.com/Iniwura/falsum/actions/runs/41132003351/artifacts/13013677262) · [Detailed artifact hashes, provenance and limitations](docs/PHASE2R.md).
+
+**The WASM is not eligible for registration.** The underlying model still scored only **1/4 (25%)** on fictional PR validation, has **zero independent AppSec-reviewed preference labels**, and has not passed live node-side model scoring, a real project-separated holdout or Anjoman acceptance. The separate [real WASI execution experiment](.github/workflows/research-wasi-smoke.yml) tests a numerical reference without claiming security-review correctness.
+
 ## Phase 2Q: independent AppSec review intake, always unverified until adjudicated
 
 FALSUM now runs a **read-only GitHub issue intake** whenever someone submits or edits the [structured AppSec review form](https://github.com/Iniwura/falsum/issues/new?template=appsec-independent-review.yml). It verifies the public issue author's GitHub identity, excludes the maintainer and bots, requires pinned pre/post code citations and the exact advisory, checks deployment reasoning and disagreement, and deduplicates claims by source case and GitHub account. Two agreeing GitHub accounts still **do not** become expert-reviewed labels automatically.
@@ -30,7 +38,7 @@ FALSUM now verifies four **real upstream security-fix commits** in Requests, aio
 - [Source provenance, replay and independent-review boundary](docs/PHASE2O.md)
 - [Automated verified evidence workflow](.github/workflows/real-fix-evidence.yml)
 
-**Important:** These are real public patches, not independent security-review answer labels. Their real-world deployment prerequisites must still be reviewed by AppSec experts. This four-project corpus has **zero human-reviewed answers**, is **not** fed into the quarantined ModelBERT pilots, and is **not** an eligible Telegraph evaluation set.
+**Important:** These are real public patches, not independent security-review answer labels. Their real-world deployment prerequisites must still be reviewed by AppSec experts. This four-project corpus has **zero human-reviewed answers**, is **not** fed into the quarantined ModernBERT pilots, and is **not** an eligible Telegraph evaluation set.
 
 ## Phase 1 + Phase 2a: foundation and source snapshots
 
@@ -54,7 +62,7 @@ See [Evidence format and quality guarantees](docs/EVIDENCE.md), [Source snapshot
 
 ## Official V2 compatibility
 
-The [current Telegraph scoring-adapter kit](https://github.com/telegraphprotocol/telegraph-wasm-baseline) uses a **ModernBERT LoRA reward model → ONNX FP32 → WASI WASM** pipeline with ABI v2 and a 512-token model cap. The adapter runs offline and cannot retrieve new CVE facts during scoring. FALSUM's evidence ledger is a training and evaluation preparation system, not an alternative adapter runtime. The Phase 2k pilot **did** perform official tokenizer conformance, actual LoRA training and real model scoring. ONNX export, WASM package reproducibility, Telegraph registration and end-to-end network inference are **not yet implemented**.
+The [current Telegraph scoring-adapter kit](https://github.com/telegraphprotocol/telegraph-wasm-baseline) uses a **ModernBERT LoRA reward model → ONNX FP32 → WASI WASM** pipeline with ABI v2 and a 512-token model cap. The adapter runs offline and cannot retrieve new CVE facts during scoring. FALSUM's evidence ledger is a training and evaluation preparation system, not an alternative adapter runtime. The Phase 2k pilot **did** perform official tokenizer conformance, actual LoRA training and real model scoring. Phase 2R **has now verified ONNX export and deterministic ABI-v2 WASM packaging**; **Telegraph registration, node-side inference validation and dependable answer-ranking accuracy are still unverified**.
 
 ## Trust model
 
@@ -130,4 +138,4 @@ Run the provenance and shortcut audit:
 PYTHONPATH=src python -m falsum.pr_benchmark data/draft-pr-benchmark.json --source-casebook data/draft-scenarios.json
 ```
 
-The 12 cases remain hypothetical and **unreviewed**. They intentionally reuse the same candidate text under opposite conditions, so they are *diagnostic-only*, not a valid training dataset under Telegraph's negative-uniqueness gate. No ModernBERT adapter or network score is claimed. The [dedicated CI workflow](.github/workflows/pr-review-benchmark.yml) verifies these constraints on Python 3.11–3.13.
+The 12 cases remain hypothetical and **unreviewed**. They intentionally reuse the same candidate text under opposite conditions, so they are *diagnostic-only*, not a valid training dataset under Telegraph's negative-uniqueness gate. This isolated benchmark does not train a new adapter or claim a network score. The [dedicated CI workflow](.github/workflows/pr-review-benchmark.yml) verifies these constraints on Python 3.11–3.13.
