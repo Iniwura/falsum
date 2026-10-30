@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "falsum-eval"
+version = "0.1.0"
+description = "Evidence-grounded security review evaluation dataset quality gates"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+[project.scripts]
+falsum = "falsum.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
