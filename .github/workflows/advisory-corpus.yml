@@ -3,8 +3,10 @@ on:
   push:
     paths:
       - 'src/falsum/advisory_corpus.py'
+      - 'src/falsum/review_gate.py'
       - 'data/advisory-queue.json'
       - 'tests/test_advisory_corpus.py'
+      - 'tests/test_review_gate.py'
       - '.github/workflows/advisory-corpus.yml'
   workflow_dispatch:
 jobs:
@@ -22,6 +24,10 @@ jobs:
         run: PYTHONPATH=src python -m unittest discover -s tests -p test_advisory_corpus.py -v
       - name: Build source-pinned draft diagnostics (no upload, no training)
         run: PYTHONPATH=src python -m falsum.advisory_corpus data/advisory-queue.json --out "$RUNNER_TEMP/falsum-phase2f"
+      - name: Independently rebuild entire corpus from archived GHSA sources
+        run: |
+          PYTHONPATH=src python -m falsum.review_gate data/advisory-queue.json \
+            "$RUNNER_TEMP/falsum-phase2f/DRAFT-ONLY-corpus.json" --audit-only
       - name: Checkout official Telegraph V2 gate at pinned commit
         uses: actions/checkout@v4
         with:

@@ -87,3 +87,7 @@ A [pinned upstream Telegraph training-kit check](docs/PHASE2E.md) now runs in CI
 ## Phase 2f: pinned GitHub advisory research queue
 
 The [32-advisory research queue](data/advisory-queue.json) provides a reproducible **draft-only** pipeline for synthetic affected/fixed-version tasks (potentially 52 training, 6 validation, 6 holdout comparisons). Use `PYTHONPATH=src python -m falsum.advisory_corpus data/advisory-queue.json --out build/phase2f-quarantined` with outbound GitHub access. The workflow never marks rows reviewed, trains a model, or claims Telegraph eligibility. See [Phase 2f notes](docs/PHASE2F.md).
+
+## Phase 2g — independent review and evidence-chain audit
+
+The [Phase 2g audit](docs/PHASE2G.md) deterministically rebuilds all quarantined version-boundary cases from pinned GHSA sources, rejecting flipped preferences, altered prompts, missing rows, and manipulated provenance. A separate blinded question packet can be given to independent reviewers without exposing its private answer key. CI runs the reconstruction against the generated 32-advisory source archive. All cases remain draft; **no expert reviews, network eligibility, model training, or scorer registration are claimed**.
