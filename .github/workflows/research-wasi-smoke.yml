@@ -1,0 +1,68 @@
+name: RESEARCH ONLY - execute packaged FALSUM WASI and compare FP32 score
+
+on:
+  push:
+    paths:
+      - 'tools/research_wasi_smoke.go'
+      - '.github/workflows/research-wasi-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  run-real-wasi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.7'
+      - name: Download real quarantined WASM package
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-WASM-FEASIBILITY-NOT-SUBMITTABLE
+          repository: Iniwura/falsum
+          run-id: 41132003351
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: ${{ runner.temp }}/falsum-wasm-candidate
+      - name: Checkout exact Telegraph V2 Go module and Wazero dependencies
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Run actual 601 MB model in wazero sandbox and measure score fidelity
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-wasi-evidence"
+          cd telegraph-kit
+          go run ../tools/research_wasi_smoke.go \
+            --archive "$RUNNER_TEMP/falsum-wasm-candidate" \
+            --report "$RUNNER_TEMP/falsum-wasi-evidence/WASI-ACTUAL-SCORE-VS-PYTORCH.json" \
+            2>&1 | tee "$RUNNER_TEMP/falsum-wasi-evidence/WASI-EXECUTION-LOG.txt"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = Path(os.environ["RUNNER_TEMP"])/"falsum-wasi-evidence/WASI-ACTUAL-SCORE-VS-PYTORCH.json"
+          r=json.loads(p.read_text())
+          assert r["status"]=="WASI_EXECUTED_REFERENCE_PARITY_WITHIN_TOLERANCE"
+          assert r["registration_authorized"] is False
+          assert r["network_eligible"] is False and r["human_reviewed"]==0
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### Real WASI model execution — research only\n\n")
+              f.write(f"PyTorch: {r['reference_pytorch_f32']:.6f}, Wazero WASI: {r['actual_wasi_f32']:.6f}, |difference| {r['absolute_delta']:.6f}, threshold {r['absolute_tolerance']:.6f}.\n\n")
+              f.write("One model runtime smoke input; NOT validation of security-review accuracy, network acceptance, or Anjoman eligibility.\n")
+          PY
+      - name: Upload research-only scored execution report, including failure logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-WASI-REAL-SCORE-RESEARCH-ONLY
+          path: ${{ runner.temp }}/falsum-wasi-evidence/
+          if-no-files-found: warn
+          retention-days: 7
