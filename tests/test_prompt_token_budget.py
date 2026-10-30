@@ -24,7 +24,7 @@ def source():
         "tokenizer_512_verified": False,
         "prompts": [{
             "challenge_id": "1abcdef000abcdef0000",
-            "prompt": "Review this excerpt for security. Source excerpt:\nline with code",
+            "prompt": "Review the following original code excerpt for security. Source excerpt:\nline with code",
         }],
     }
 
