@@ -1,0 +1,50 @@
+name: ModernBERT scoring contract (no model training)
+on:
+  push:
+    paths:
+      - 'src/falsum/model_eval.py'
+      - 'tests/test_model_eval.py'
+      - 'docs/PHASE2J.md'
+      - '.github/workflows/model-scoring-contract.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/model_eval.py'
+      - 'tests/test_model_eval.py'
+      - '.github/workflows/model-scoring-contract.yml'
+jobs:
+  score-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline adversarial scorer tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -p 'test_model_eval.py' -v
+      - name: Checkout exact Telegraph V2 training kit
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Install the official renderer's NumPy dependency
+        run: python -m pip install 'numpy>=1.26,<3'
+      - name: Verify exact official V2 render template
+        shell: bash
+        run: |
+          PYTHONPATH="src:telegraph-kit" python - <<'PY'
+          from falsum.model_eval import render
+          from wide_runtime.train_adapter import render as upstream
+          samples = [
+              ("Review this PR", "No confirmed finding."),
+              ("Line one\nLine two", "Response: {x} \n extra"),
+              ("", ""),
+          ]
+          for prompt, answer in samples:
+              assert render(prompt, answer) == upstream(prompt, answer)
+          print("PASS: exact pinned Telegraph V2 render contract (no model loaded)")
+          PY
