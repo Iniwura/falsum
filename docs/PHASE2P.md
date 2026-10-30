@@ -57,6 +57,12 @@ The [research-only real-fix CI](../.github/workflows/real-fix-evidence.yml) runs
 
 This is a capacity and provenance achievement, not evidence that the model can recognize the vulnerabilities or even that the complete answer fits before a separate full-render check.
 
+## Independent review handoff
+
+To reduce manual friction for independent AppSec reviewers, FALSUM includes a [structured independent-review issue form](https://github.com/Iniwura/falsum/issues/new?template=appsec-independent-review.yml). It requests the exact source case, a supported/unsupported/uncertain verdict, original trust-boundary reasoning, deployment preconditions, immutable code-line references, uncertainty and reviewer attestation. GitHub's authenticated issue author is a public contact point, **not automatic evidence of technical expertise or approval**. Reviews remain proposals until independently checked and adjudicated.
+
+The [central reviewer request](https://github.com/Iniwura/falsum/issues/1) remains open. We do not forge human reviewer identities or promote unreviewed source cases.
+
 ## Still required before training or registration
 
 - A genuine external AppSec reviewer must establish independent case-specific security truth and realistic deployment preconditions. *Zero have been accepted so far.*
