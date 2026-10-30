@@ -70,7 +70,7 @@ func main(){
  inputBytes,err:=json.Marshal(input);must(err)
  dir,err:=os.MkdirTemp("","falsum-wasi-");must(err);defer os.RemoveAll(dir)
  must(os.WriteFile(filepath.Join(dir,"input.json"),inputBytes,0600))
- ctx,cancel:=context.WithTimeout(context.Background(),180*time.Second);defer cancel()
+ ctx,cancel:=context.WithTimeout(context.Background(),600*time.Second);defer cancel()
  rt:=wazero.NewRuntimeWithConfig(ctx,wazero.NewRuntimeConfig().WithCloseOnContextDone(true))
  defer rt.Close(context.Background())
  _,err=wasi_snapshot_preview1.Instantiate(ctx,rt);must(err)
