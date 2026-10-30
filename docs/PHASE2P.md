@@ -45,6 +45,18 @@ PYTHONPATH=src python -m falsum.prompt_token_budget \
 
 The [research-only real-fix CI](../.github/workflows/real-fix-evidence.yml) runs all checks. Any malformed original, changed Git blob, modified hunk, unexpected answer metadata, synthetic promotion, or token-cap overflow fails the relevant stage.
 
+## Verified run, 30 October 2026
+
+[GitHub Actions run 41130342976](https://github.com/Iniwura/falsum/actions/runs/41130342976) completed successfully after a first real tokenizer audit correctly rejected an oversized question. The generator was tightened to omit redundant line-number prefixes and unnecessary context rather than silently truncate a candidate.
+
+- **5 real pre-fix questions** extracted from the three source-verified projects.
+- **5/5 within the static token budget**, with a maximum of **286 rendered task-template tokens** against the 384-token allowance.
+- Each question reserves **124 answer tokens plus 4 tokens of boundary safety** under the 512-token cap.
+- **0 human-reviewed cases, 0 approved training labels and 0 eligible/network claims**.
+- The [questions-only artifact](https://github.com/Iniwura/falsum/actions/runs/41130342976/artifacts/13011519997) and [full public-source provenance artifact](https://github.com/Iniwura/falsum/actions/runs/41130342976/artifacts/13013425056) were uploaded separately. Neither should be treated as a secret evaluation holdout.
+
+This is a capacity and provenance achievement, not evidence that the model can recognize the vulnerabilities or even that the complete answer fits before a separate full-render check.
+
 ## Still required before training or registration
 
 - A genuine external AppSec reviewer must establish independent case-specific security truth and realistic deployment preconditions. *Zero have been accepted so far.*
