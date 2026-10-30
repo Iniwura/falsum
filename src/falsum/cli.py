@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from .ledger import LedgerError, export_jsonl, load_ledger
+from .scenarios import ScenarioError, read_casebook, readiness_report, export_reviewed
 from .osv import SourceError, audit_ledger_snapshots, verify_snapshot, version_status
 from .sources import fetch_osv
 
@@ -33,8 +34,25 @@ def main(argv: list[str] | None = None) -> int:
     audit.add_argument("ledger", type=Path)
     audit.add_argument("--directory", type=Path, required=True)
     audit.add_argument("--include-drafts", action="store_true", help="source-audit draft records without marking them reviewed")
+    casebook = commands.add_parser("check-scenarios", help="validate security-review draft scenarios")
+    casebook.add_argument("casebook", type=Path)
+    case_export = commands.add_parser("export-scenarios", help="export only fully reviewed scenario pairs")
+    case_export.add_argument("casebook", type=Path)
+    case_export.add_argument("--split", required=True, choices=("train", "validation", "holdout"))
+    case_export.add_argument("--out", required=True, type=Path)
     args = parser.parse_args(argv)
     try:
+        if args.command in ("check-scenarios", "export-scenarios"):
+            book = read_casebook(args.casebook)
+            if args.command == "check-scenarios":
+                import json
+                print(json.dumps(readiness_report(book), indent=2, sort_keys=True))
+                return 0
+            output = export_reviewed(book, args.split, base_dir=args.casebook.parent)
+            args.out.parent.mkdir(parents=True, exist_ok=True)
+            args.out.write_text(output, encoding="utf-8")
+            print(f"EXPORTED: {output.count(chr(10))} reviewed scenario pairs")
+            return 0
         if args.command == "fetch-osv":
             path = fetch_osv(args.advisory_id, args.directory)
             print(f"SNAPSHOT: {path}")
@@ -61,7 +79,7 @@ def main(argv: list[str] | None = None) -> int:
         args.out.write_text(text, encoding="utf-8")
         print(f"EXPORTED: {text.count(chr(10))} reviewed {args.split} pairs to {args.out}")
         return 0
-    except (LedgerError, SourceError, OSError, ValueError) as exc:
+    except (LedgerError, ScenarioError, SourceError, OSError, ValueError) as exc:
         print(f"FALSUM ERROR: {exc}", file=sys.stderr)
         return 1
 

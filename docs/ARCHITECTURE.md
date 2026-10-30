@@ -51,3 +51,16 @@ conservative stable npm/PyPI `ECOSYSTEM` comparisons. The draft diagnostic
 ledger is held strictly outside accepted evaluation submissions. Human
 attestation, real-app exploitability validation, broad corpus development and
 Anjoman admission remain open. See `docs/CORPUS.md`.
+
+## Phase 2c — application-security draft comparisons
+
+Added a separate non-CVE scenario casebook because the old CVE/GHSA ledger cannot
+honestly represent misconfigurations or secret-handling situations as advisories.
+`src/falsum/scenarios.py` checks provenance *metadata*, answer length, negative
+reuse, near duplicates, exposed credential patterns, and source/family leakage
+across dataset splits. Unlike basic advisory cases, these scenarios have no
+published incident; the situation's preconditions are supplied hypothetically.
+The source links are unpinned and all cases are draft. Any export requires human
+review plus a SHA-256 check against actual local source bytes. No Anjoman upload
+or model accuracy is claimed. A unified independently reviewed corpus is still
+a prerequisite for training.

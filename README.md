@@ -56,3 +56,22 @@ PYTHONPATH=src python -m unittest discover -s tests -v
 
 Read [corpus provenance and review boundary](docs/CORPUS.md). This is evidence
 preparation, not model training, a scorer, or eligible Telegraph pool material.
+
+## Phase 2c — security-review application scenarios (draft only)
+
+Twelve additional **hypothetical, non-submitted** cases test configuration,
+secret-handling, SSRF, Actions token privileges, and TLS certificate-validation
+preconditions. Cases are partitioned by rule family and source across training,
+validation, and holdout. All linked guidance is **unpinned** and every case
+remains `draft`, with no human review or network-eligibility claim.
+
+```bash
+PYTHONPATH=src python -m falsum check-scenarios data/draft-scenarios.json
+# This export intentionally refuses unreviewed/unpinned material:
+PYTHONPATH=src python -m falsum export-scenarios data/draft-scenarios.json --split train --out train.jsonl
+```
+
+Read [Phase 2c casebook, provenance and promotion gates](docs/SCENARIOS.md).
+The program does **not** analyze real repositories, detect real secrets, or
+replace human review. It must not be represented as a deployed security scanner
+or an accepted Telegraph scoring adapter.
