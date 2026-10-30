@@ -10,19 +10,19 @@ An evidence-grounded security evaluation research project for [Telegraph Season 
 
 ## Phase 2P: code questions from real pre-fix revisions
 
-FALSUM has now produced **5 remediation-withheld, real pre-fix source challenges** from three verified open-source projects. The questions-only artifact contains code from the historical parent revision without a supplied fix, GHSA/CVE, regression-test patch or answer. A **separate provenance artifact** links each task to immutable source and repair evidence; these public examples are NOT a sealed holdout.
+FALSUM has now produced **6 remediation-withheld, real pre-fix source challenges** from four verified open-source Python/JavaScript projects. The questions-only artifact contains code from the historical parent revision without a supplied fix, GHSA/CVE, regression-test patch or answer. A **separate provenance artifact** links each task to immutable source and repair evidence; these public examples are NOT a sealed holdout.
 
-The [actual ModernBERT tokenizer gate](https://github.com/Iniwura/falsum/actions/runs/41130342976) checked **5/5 prompts within the 384-token task allowance** (maximum 286), reserving another 124 tokens for an answer and 4 for boundary safety under the 512-token limit. The original first attempt correctly failed when one question exceeded this allowance; CI now rejects overflow instead of truncating code. All examples remain **unlabelled and unreviewed**. See [Phase 2P documentation](docs/PHASE2P.md).
+The [actual ModernBERT tokenizer gate](https://github.com/Iniwura/falsum/actions/runs/41130722345) checked **6/6 prompts within the 384-token task allowance** (maximum 286), reserving another 124 tokens for an answer and 4 for boundary safety under the 512-token limit. The original first attempt correctly failed when one question exceeded this allowance; CI now rejects overflow instead of truncating code. All examples remain **unlabelled and unreviewed**. See [Phase 2P documentation](docs/PHASE2P.md).
 
 ## Phase 2O: genuine public security-fix code (not training labels)
 
-FALSUM now verifies three **real upstream security-fix commits** in Requests, aiohttp, and Jinja2, covering proxy credential forwarding, static-file traversal, and a sandbox attribute-filter bypass. It checks full commit and parent identities, exact source and regression-test Git blob IDs, then **replays the code and test diff against the actual upstream parent revision**. Six file transitions must reconstruct byte-for-byte or CI fails.
+FALSUM now verifies four **real upstream security-fix commits** in Requests, aiohttp, Jinja2, and Axios, covering proxy credential forwarding, static-file traversal, and a sandbox attribute-filter bypass. It checks full commit and parent identities, exact source and regression-test Git blob IDs, then **replays the code and test diff against the actual upstream parent revision**. Eight file transitions must reconstruct byte-for-byte or CI fails.
 
 - [Real source queue](data/real-fix-queue.json)
 - [Source provenance, replay and independent-review boundary](docs/PHASE2O.md)
 - [Automated verified evidence workflow](.github/workflows/real-fix-evidence.yml)
 
-**Important:** These are real public patches, not independent security-review answer labels. Their real-world deployment prerequisites must still be reviewed by AppSec experts. This corpus has **zero human-reviewed answers**, is **not** fed into the quarantined ModelBERT pilots, and is **not** an eligible Telegraph evaluation set.
+**Important:** These are real public patches, not independent security-review answer labels. Their real-world deployment prerequisites must still be reviewed by AppSec experts. This four-project corpus has **zero human-reviewed answers**, is **not** fed into the quarantined ModelBERT pilots, and is **not** an eligible Telegraph evaluation set.
 
 ## Phase 1 + Phase 2a: foundation and source snapshots
 
