@@ -64,3 +64,7 @@ The source links are unpinned and all cases are draft. Any export requires human
 review plus a SHA-256 check against actual local source bytes. No Anjoman upload
 or model accuracy is claimed. A unified independently reviewed corpus is still
 a prerequisite for training.
+
+## Phase 2e interim quality checkpoint
+
+See [official upstream dataset-gate diagnostic](PHASE2E.md). In a dedicated CI job the pinned V2 upstream kit checks the draft-only dataset and is expected to fail; local tests report dataset readiness without granting model-training permission. Expand and independently review real material before replacing the intentional FAIL with a genuine PASS.

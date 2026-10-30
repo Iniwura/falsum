@@ -9,6 +9,7 @@ from .ledger import LedgerError, export_jsonl, load_ledger
 from .scenarios import ScenarioError, read_casebook, readiness_report, export_reviewed, verify_source_snapshots
 from .osv import SourceError, audit_ledger_snapshots, verify_snapshot, version_status
 from .sources import fetch_osv
+from .preflight import preflight_casebook, PreflightError
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -42,8 +43,15 @@ def main(argv: list[str] | None = None) -> int:
     case_export.add_argument("casebook", type=Path)
     case_export.add_argument("--split", required=True, choices=("train", "validation", "holdout"))
     case_export.add_argument("--out", required=True, type=Path)
+    preflight = commands.add_parser("preflight", help="diagnose draft corpus against V2 dataset thresholds; NEVER eligible")
+    preflight.add_argument("casebook", type=Path)
+    preflight.add_argument("--diagnostic-dir", type=Path)
     args = parser.parse_args(argv)
     try:
+        if args.command == "preflight":
+            import json
+            print(json.dumps(preflight_casebook(args.casebook, diagnostic_dir=args.diagnostic_dir), indent=2, sort_keys=True))
+            return 0
         if args.command in ("check-scenarios", "export-scenarios", "audit-scenarios"):
             book = read_casebook(args.casebook)
             if args.command == "check-scenarios":
@@ -87,7 +95,7 @@ def main(argv: list[str] | None = None) -> int:
         args.out.write_text(text, encoding="utf-8")
         print(f"EXPORTED: {text.count(chr(10))} reviewed {args.split} pairs to {args.out}")
         return 0
-    except (LedgerError, ScenarioError, SourceError, OSError, ValueError) as exc:
+    except (LedgerError, ScenarioError, PreflightError, SourceError, OSError, ValueError) as exc:
         print(f"FALSUM ERROR: {exc}", file=sys.stderr)
         return 1
 

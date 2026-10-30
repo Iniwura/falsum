@@ -1,0 +1,43 @@
+name: Telegraph official data gate (diagnostic only)
+on:
+  push:
+  pull_request:
+
+jobs:
+  official-data-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout FALSUM
+        uses: actions/checkout@v4
+      - name: Checkout pinned Telegraph V2 kit
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e
+          path: telegraph-kit
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install minimum official data-gate dependency
+        run: python -m pip install 'numpy>=1.26,<3'
+      - name: Generate quarantined research diagnostic
+        run: |
+          PYTHONPATH=src python -m falsum preflight data/draft-scenarios.json --diagnostic-dir "$RUNNER_TEMP/falsum-draft"
+      - name: Run actual pinned Telegraph dataset gate
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH="$GITHUB_WORKSPACE/telegraph-kit" python -m wide_runtime.train_adapter \
+            --intent SECURITY_REVIEW_GENERAL \
+            --data "$RUNNER_TEMP/falsum-draft/DRAFT-ONLY-NOT-FOR-TRAINING.jsonl" \
+            --check-data
+          code=$?
+          set -e
+          echo "Official kit exit code: $code"
+          if [ "$code" -ne 1 ]; then
+            echo "Expected data-quality failure for 6 draft train rows; code 0 or 2 indicates a changed contract or tooling error."
+            exit 1
+          fi
+          echo "Expected FAIL confirmed. This is NOT training or Telegraph eligibility."

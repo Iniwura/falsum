@@ -79,3 +79,7 @@ or an accepted Telegraph scoring adapter.
 ## Phase 2d — pinned application-security guidance
 
 Four upstream documentation revisions have been pinned, with curated SHA-256 verified excerpt manifests. Run `PYTHONPATH=src python -m falsum audit-scenarios data/draft-scenarios.json`. See [Phase 2d provenance](docs/PHASE2D.md). All scenario cases are still drafts; no independent human review, eligible Telegraph rows, model or scorer is claimed.
+
+## Phase 2e — official dataset-gate diagnostic
+
+A [pinned upstream Telegraph training-kit check](docs/PHASE2E.md) now runs in CI on quarantined **draft-only** rows. The official check is currently expected to **fail** because the training partition contains six pairs and the upstream 2% single-negative rule requires at least 50 unique rows. This is deliberate transparency, not a passing data gate, not a trained model, and not network eligibility.
