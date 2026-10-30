@@ -68,6 +68,10 @@ To probe execution rather than only package shape, the repository includes:
 
 Even if one runtime score matches, that would NOT establish the evaluator ranks security answers correctly. A real held-out, independently reviewed benchmark, correct hybrid comparator integration and acceptance by the network are still mandatory.
 
+## Permanent, inspectable evidence after artifact expiration
+
+The short-lived 601 MB GitHub artifact is not the only record. [A compact source-controlled evidence manifest](../evidence/research-wasm-runtime-2026-10-30.json) retains the official package hashes, ABI/class metadata, exact immutable kit commit, two-build reproducibility, actual WASI score and all unverified/blocked research status flags, linking to the primary GitHub Actions logs. Its [regression tests](../tests/test_research_wasm_evidence.py) reject drift toward invented eligibility or numerical results. This is an auditable transcription of CI evidence, not cryptographically signed network acceptance.
+
 ## Overall status
 
 The builder milestone proves we can technically create an official-format model package on GitHub-hosted CPU resources without owning a GPU or VPS. **It does not rescue an ineffective model** or establish question-pair contribution eligibility. Further model training should wait on independent AppSec labels, more realistically scoped security review questions and a larger project-separated holdout.
