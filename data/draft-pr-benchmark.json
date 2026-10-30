@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "status": "HYPOTHETICAL_DRAFT_NOT_REVIEWED",
+  "source_casebook_sha256": "2338dc16aea66fd2e2a607b7b945cff3e99b2daa84f68d20a10e598ee7ef87cc",
+  "provenance": "Original, fictional PR changes derived from 12 pinned-guidance research scenarios; not real repository incidents or expert-reviewed judgments.",
+  "cases": [
+    {
+      "id": "dj-prod-debug",
+      "casebook_id": "dj-prod-debug",
+      "rule_family": "django-debug",
+      "category": "configuration",
+      "split": "train",
+      "review_status": "draft",
+      "file_path": "service/settings/production.py",
+      "patch": "diff --git a/service/settings/production.py b/service/settings/production.py\n@@ -12,5 +12,5 @@\n-DEBUG = False\n+DEBUG = True\n ALLOWED_HOSTS = [\"checkout.example.invalid\"]\n+# DEPLOY_PROFILE: production; publicly reachable error views\n",
+      "deployment_evidence": "The production settings are confirmed active for an internet-facing service.",
+      "source_ids": [
+        "django-checklist"
+      ],
+      "prompt": "Security review of this proposed change to `service/settings/production.py`.\n\nDeployment evidence: The production settings are confirmed active for an internet-facing service.\n\n```diff\ndiff --git a/service/settings/production.py b/service/settings/production.py\n@@ -12,5 +12,5 @@\n-DEBUG = False\n+DEBUG = True\n ALLOWED_HOSTS = [\"checkout.example.invalid\"]\n+# DEPLOY_PROFILE: production; publicly reachable error views\n```\n\nAssess the security finding and its preconditions. Describe what the provided facts support; avoid inventing exploit evidence.",
+      "chosen": "Flag the active production debug setting: error pages may expose project settings, code excerpts or local data. Disable it for this deployment.",
+      "rejected": "The setting is a harmless optimization: debug pages only improve developer diagnostics and do not affect production confidentiality in this service.",
+      "contrast_chosen": "The change enables debug output in the deployed production service. Treat public diagnostic data exposure as a configuration risk and disable it there.",
+      "contrast_rejected": "The change enables debug output only in isolated development settings. Do not claim production information exposure without an active production path.",
+      "contrast_set_id": "django-debug",
+      "contrast_design": "COUNTERFACTUAL_DRAFT"
+    },
+    {
+      "id": "dj-dev-debug",
+      "casebook_id": "dj-dev-debug",
+      "rule_family": "django-debug",
+      "category": "configuration",
+      "split": "train",
+      "review_status": "draft",
+      "file_path": "service/settings/development.py",
+      "patch": "diff --git a/service/settings/development.py b/service/settings/development.py\n@@ -3,4 +3,4 @@\n-DEBUG = False\n+DEBUG = True\n+# Only imported by the isolated local development runserver\n+# Production loads service.settings.production with DEBUG = False\n",
+      "deployment_evidence": "A separate production configuration is active; the development server has no public route.",
+      "source_ids": [
+        "django-checklist"
+      ],
+      "prompt": "Security review of this proposed change to `service/settings/development.py`.\n\nDeployment evidence: A separate production configuration is active; the development server has no public route.\n\n```diff\ndiff --git a/service/settings/development.py b/service/settings/development.py\n@@ -3,4 +3,4 @@\n-DEBUG = False\n+DEBUG = True\n+# Only imported by the isolated local development runserver\n+# Production loads service.settings.production with DEBUG = False\n```\n\nAssess the security finding and its preconditions. Describe what the provided facts support; avoid inventing exploit evidence.",
+      "chosen": "Do not report confirmed production debug leakage from the dev-only file. Verify that production actually imports the intended hardened settings module.",
+      "rejected": "Report critical production information disclosure solely from the presence of DEBUG=True in the dev-only file, despite the distinct production configuration.",
+      "contrast_chosen": "The change enables debug output only in isolated development settings. Do not claim production information exposure without an active production path.",
+      "contrast_rejected": "The change enables debug output in the deployed production service. Treat public diagnostic data exposure as a configuration risk and disable it there.",
+      "contrast_set_id": "django-debug",
+      "contrast_design": "COUNTERFACTUAL_DRAFT"
+    },
+    {
+      "id": "dj-committed-key",
+      "casebook_id": "dj-committed-key",
+      "rule_family": "django-secret",
+      "category": "secret_handling",
+      "split": "train",
+      "review_status": "draft",
+      "file_path": "service/settings/production.py",
+      "patch": "diff --git a/service/settings/production.py b/service/settings/production.py\n@@ -7,4 +7,4 @@\n-SECRET_KEY = os.environ[\"DJANGO_SECRET_KEY\"]\n+SECRET_KEY = \"[REDACTED: confirmed current production signing key]\"\n+# Security incident: investigators independently confirmed the value was live\n+# The real secret is excluded from this exercise\n",
+      "deployment_evidence": "Investigators confirmed the committed value was the actual deployed key, not a placeholder.",
+      "source_ids": [
+        "django-checklist"
+      ],
+      "prompt": "Security review of this proposed change to `service/settings/production.py`.\n\nDeployment evidence: Investigators confirmed the committed value was the actual deployed key, not a placeholder.\n\n```diff\ndiff --git a/service/settings/production.py b/service/settings/production.py\n@@ -7,4 +7,4 @@\n-SECRET_KEY = os.environ[\"DJANGO_SECRET_KEY\"]\n+SECRET_KEY = \"[REDACTED: confirmed current production signing key]\"\n+# Security incident: investigators independently confirmed the value was live\n+# The real secret is excluded from this exercise\n```\n\nAssess the security finding and its preconditions. Describe what the provided facts support; avoid inventing exploit evidence.",
+      "chosen": "Treat the verified live signing key disclosure as a security finding. Rotate the affected key, protect dependent sessions, and remove public exposure.",
+      "rejected": "The key was only present in settings, so retaining it in public history is safe; changing it would add unnecessary operational disruption.",
+      "contrast_chosen": "The committed value is an active production signing secret. Treat its exposure as a finding, rotate the deployed key and assess downstream impact.",
+      "contrast_rejected": "The committed value is a nonfunctional documentation placeholder. Do not claim live key disclosure without evidence the string is deployed or usable.",
+      "contrast_set_id": "django-secret",
+      "contrast_design": "COUNTERFACTUAL_DRAFT"
+    },
+    {
+      "id": "dj-placeholder-key",
+      "casebook_id": "dj-placeholder-key",
+      "rule_family": "django-secret",
+      "category": "secret_handling",
+      "split": "train",
+      "review_status": "draft",
+      "file_path": "README.md",
+      "patch": "diff --git a/README.md b/README.md\n@@ -36,3 +36,5 @@\n+Example only; never use as production credentials:\n+`SECRET_KEY=\"EXAMPLE_FAKE_KEY_NOT_VALID\"`\n+Production loads DJANGO_SECRET_KEY from a protected environment variable.\n",
+      "deployment_evidence": "The literal placeholder is not read by any production code path.",
+      "source_ids": [
+        "django-checklist"
+      ],
+      "prompt": "Security review of this proposed change to `README.md`.\n\nDeployment evidence: The literal placeholder is not read by any production code path.\n\n```diff\ndiff --git a/README.md b/README.md\n@@ -36,3 +36,5 @@\n+Example only; never use as production credentials:\n+`SECRET_KEY=\"EXAMPLE_FAKE_KEY_NOT_VALID\"`\n+Production loads DJANGO_SECRET_KEY from a protected environment variable.\n```\n\nAssess the security finding and its preconditions. Describe what the provided facts support; avoid inventing exploit evidence.",
+      "chosen": "The documented placeholder is not evidence of a live key leak. Verify the running configuration and scan for real credentials separately.",
+      "rejected": "This confirms a production signing-key compromise; revoke all sessions immediately because every string named SECRET_KEY must be a real secret.",
+      "contrast_chosen": "The committed value is a nonfunctional documentation placeholder. Do not claim live key disclosure without evidence the string is deployed or usable.",
+      "contrast_rejected": "The committed value is an active production signing secret. Treat its exposure as a finding, rotate the deployed key and assess downstream impact.",
+      "contrast_set_id": "django-secret",
+      "contrast_design": "COUNTERFACTUAL_DRAFT"
+    },
+    {
+      "id": "ssrf-redirect",
+      "casebook_id": "ssrf-redirect",
+      "rule_family": "ssrf-redirect",
+      "category": "request_boundary",
+      "split": "train",
+      "review_status": "draft",
+      "file_path": "webhook/checker.js",
+      "patch": "diff --git a/webhook/checker.js b/webhook/checker.js\n@@ -18,5 +18,6 @@\n export async function inspectWebhook(customerUrl) {\n+  return fetch(customerUrl, { redirect: 'follow' });\n }\n+# public endpoint; attacker controls customerUrl; internal egress is possible\n",
+      "deployment_evidence": "The caller controls the entire URL; redirects are followed and internal hosts are reachable.",
+      "source_ids": [
+        "owasp-ssrf"
+      ],
+      "prompt": "Security review of this proposed change to `webhook/checker.js`.\n\nDeployment evidence: The caller controls the entire URL; redirects are followed and internal hosts are reachable.\n\n```diff\ndiff --git a/webhook/checker.js b/webhook/checker.js\n@@ -18,5 +18,6 @@\n export async function inspectWebhook(customerUrl) {\n+  return fetch(customerUrl, { redirect: 'follow' });\n }\n+# public endpoint; attacker controls customerUrl; internal egress is possible\n```\n\nAssess the security finding and its preconditions. Describe what the provided facts support; avoid inventing exploit evidence.",
+      "chosen": "Flag an SSRF path: untrusted destinations and redirects can reach internal endpoints. Constrain resolved targets at connect time and restrict redirects.",
+      "rejected": "There is no request-boundary risk because the first URL must use HTTPS; redirects and internal reachability do not change the security outcome.",
+      "contrast_chosen": "The request path accepts caller-controlled destinations and follows redirects to reachable internal services. Flag the resulting SSRF exposure and enforce boundaries.",
+      "contrast_rejected": "The request path chooses a fixed trusted destination and disallows redirects. The stated controls reduce this SSRF path, while DNS and egress need verification.",
+      "contrast_set_id": "ssrf-redirect",
+      "contrast_design": "COUNTERFACTUAL_DRAFT"
+    },
+    {
+      "id": "ssrf-controlled",
+      "casebook_id": "ssrf-controlled",
+      "rule_family": "ssrf-redirect",
+      "category": "request_boundary",
+      "split": "train",
+      "review_status": "draft",
+      "file_path": "webhook/partners.js",
+      "patch": "diff --git a/webhook/partners.js b/webhook/partners.js\n@@ -10,3 +10,9 @@\n+const PARTNERS = Object.freeze({\n+  acme: 'https://callback.example.invalid/notify'\n+});\n+export function callback(partnerId) {\n+  if (!Object.hasOwn(PARTNERS, partnerId)) throw new Error('unknown partner');\n+  return fetch(PARTNERS[partnerId], { redirect: 'manual' });\n+}\n+# network egress rules claimed, not independently verified\n",
+      "deployment_evidence": "Inputs select among fixed destinations; network and DNS enforcement remain unaudited.",
+      "source_ids": [
+        "owasp-ssrf"
+      ],
+      "prompt": "Security review of this proposed change to `webhook/partners.js`.\n\nDeployment evidence: Inputs select among fixed destinations; network and DNS enforcement remain unaudited.\n\n```diff\ndiff --git a/webhook/partners.js b/webhook/partners.js\n@@ -10,3 +10,9 @@\n+const PARTNERS = Object.freeze({\n+  acme: 'https://callback.example.invalid/notify'\n+});\n+export function callback(partnerId) {\n+  if (!Object.hasOwn(PARTNERS, partnerId)) throw new Error('unknown partner');\n+  return fetch(PARTNERS[partnerId], { redirect: 'manual' });\n+}\n+# network egress rules claimed, not independently verified\n```\n\nAssess the security finding and its preconditions. Describe what the provided facts support; avoid inventing exploit evidence.",
+      "chosen": "The described controls reduce the obvious arbitrary-destination SSRF route. Check resolution and network enforcement before claiming complete protection.",
+      "rejected": "All SSRF is impossible whenever a service keeps a partner allowlist. There is no reason to test destination resolution or egress bypass.",
+      "contrast_chosen": "The request path chooses a fixed trusted destination and disallows redirects. The stated controls reduce this SSRF path, while DNS and egress need verification.",
+      "contrast_rejected": "The request path accepts caller-controlled destinations and follows redirects to reachable internal services. Flag the resulting SSRF exposure and enforce boundaries.",
+      "contrast_set_id": "ssrf-redirect",
+      "contrast_design": "COUNTERFACTUAL_DRAFT"
+    },
+    {
+      "id": "action-pr-write",
+      "casebook_id": "action-pr-write",
+      "rule_family": "github-token",
+      "category": "workflow_permissions",
+      "split": "validation",
+      "review_status": "draft",
+      "file_path": ".github/workflows/pr.yml",
+      "patch": "diff --git a/.github/workflows/pr.yml b/.github/workflows/pr.yml\n@@ -1,5 +1,9 @@\n+on: pull_request_target\n+permissions: write-all\n+jobs:\n+  run-untrusted-code:\n+    steps:\n+      - uses: actions/checkout@v4\n+        with:\n+          ref: ${{ github.event.pull_request.head.sha }}\n+      - run: npm ci && npm test\n",
+      "deployment_evidence": "pull_request_target checks out untrusted fork code and executes it with broad token authority.",
+      "source_ids": [
+        "github-actions"
+      ],
+      "prompt": "Security review of this proposed change to `.github/workflows/pr.yml`.\n\nDeployment evidence: pull_request_target checks out untrusted fork code and executes it with broad token authority.\n\n```diff\ndiff --git a/.github/workflows/pr.yml b/.github/workflows/pr.yml\n@@ -1,5 +1,9 @@\n+on: pull_request_target\n+permissions: write-all\n+jobs:\n+  run-untrusted-code:\n+    steps:\n+      - uses: actions/checkout@v4\n+        with:\n+          ref: ${{ github.event.pull_request.head.sha }}\n+      - run: npm ci && npm test\n```\n\nAssess the security finding and its preconditions. Describe what the provided facts support; avoid inventing exploit evidence.",
+      "chosen": "Flag unnecessarily broad token authority for an untrusted build. Reduce to contents: read and avoid granting write scopes to the PR job.",
+      "rejected": "Granting write-all is a best practice because build scripts need full access to the repository by default, including write access to source.",
+      "contrast_chosen": "This workflow executes untrusted changes while retaining repository write authority. Flag the token privilege boundary and restrict the job before execution.",
+      "contrast_rejected": "This workflow tests pull requests with a read-only token and no forwarded secrets. Do not infer write-token exposure from its existence alone.",
+      "contrast_set_id": "github-token",
+      "contrast_design": "COUNTERFACTUAL_DRAFT"
+    },
+    {
+      "id": "action-readonly",
+      "casebook_id": "action-readonly",
+      "rule_family": "github-token",
+      "category": "workflow_permissions",
+      "split": "validation",
+      "review_status": "draft",
+      "file_path": ".github/workflows/pr.yml",
+      "patch": "diff --git a/.github/workflows/pr.yml b/.github/workflows/pr.yml\n@@ -1,4 +1,9 @@\n+on: pull_request\n+permissions:\n+  contents: read\n+jobs:\n+  unit-tests:\n+    steps:\n+      - uses: actions/checkout@v4\n+      - run: npm ci && npm test\n+# no secrets forwarded to this job\n",
+      "deployment_evidence": "The job uses a read-only token, tests changes, and has no secret or write credentials.",
+      "source_ids": [
+        "github-actions"
+      ],
+      "prompt": "Security review of this proposed change to `.github/workflows/pr.yml`.\n\nDeployment evidence: The job uses a read-only token, tests changes, and has no secret or write credentials.\n\n```diff\ndiff --git a/.github/workflows/pr.yml b/.github/workflows/pr.yml\n@@ -1,4 +1,9 @@\n+on: pull_request\n+permissions:\n+  contents: read\n+jobs:\n+  unit-tests:\n+    steps:\n+      - uses: actions/checkout@v4\n+      - run: npm ci && npm test\n+# no secrets forwarded to this job\n```\n\nAssess the security finding and its preconditions. Describe what the provided facts support; avoid inventing exploit evidence.",
+      "chosen": "The supplied token scope is consistent with least privilege for this test job. Do not report a confirmed write-token exposure without more evidence.",
+      "rejected": "This PR job has a critical repository-write escalation because every GITHUB_TOKEN can modify source, even with permissions restricted to contents: read.",
+      "contrast_chosen": "This workflow tests pull requests with a read-only token and no forwarded secrets. Do not infer write-token exposure from its existence alone.",
+      "contrast_rejected": "This workflow executes untrusted changes while retaining repository write authority. Flag the token privilege boundary and restrict the job before execution.",
+      "contrast_set_id": "github-token",
+      "contrast_design": "COUNTERFACTUAL_DRAFT"
+    },
+    {
+      "id": "action-secret-log",
+      "casebook_id": "action-secret-log",
+      "rule_family": "github-secret",
+      "category": "secret_handling",
+      "split": "validation",
+      "review_status": "draft",
+      "file_path": ".github/workflows/release.yml",
+      "patch": "diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml\n@@ -12,4 +12,8 @@\n+env:\n+  DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}\n+steps:\n+  - run: |\n+      echo \"$DEPLOY_TOKEN\" | base64\n+# actual token withheld; its transformed value would be logged\n",
+      "deployment_evidence": "The job prints the full transformed production token value into workflow logs.",
+      "source_ids": [
+        "github-actions"
+      ],
+      "prompt": "Security review of this proposed change to `.github/workflows/release.yml`.\n\nDeployment evidence: The job prints the full transformed production token value into workflow logs.\n\n```diff\ndiff --git a/.github/workflows/release.yml b/.github/workflows/release.yml\n@@ -12,4 +12,8 @@\n+env:\n+  DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}\n+steps:\n+  - run: |\n+      echo \"$DEPLOY_TOKEN\" | base64\n+# actual token withheld; its transformed value would be logged\n```\n\nAssess the security finding and its preconditions. Describe what the provided facts support; avoid inventing exploit evidence.",
+      "chosen": "Flag potential secret disclosure via transformed log output. Stop printing the encoded value, rotate if exposed, and audit access to the logs.",
+      "rejected": "The output is safe because GitHub automatically masks every possible encoded form of secrets; base64 logging cannot expose a credential.",
+      "contrast_chosen": "The workflow publishes a transformed production token into job logs. Flag likely credential exposure and assess log access and required rotation.",
+      "contrast_rejected": "The workflow injects a protected token only for the deploy operation, with no observed output. Do not report confirmed exfiltration without a disclosure path.",
+      "contrast_set_id": "github-secret",
+      "contrast_design": "COUNTERFACTUAL_DRAFT"
+    },
+    {
+      "id": "action-env-secret",
+      "casebook_id": "action-env-secret",
+      "rule_family": "github-secret",
+      "category": "secret_handling",
+      "split": "validation",
+      "review_status": "draft",
+      "file_path": ".github/workflows/release.yml",
+      "patch": "diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml\n@@ -12,4 +12,8 @@\n+environment: protected-release\n+env:\n+  DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}\n+steps:\n+  - run: ./deploy --token-from-env DEPLOY_TOKEN\n+# no printing, no unknown third-party actions in the shown steps\n",
+      "deployment_evidence": "The job only injects the secret into a protected deploy step; no leak is evidenced.",
+      "source_ids": [
+        "github-actions"
+      ],
+      "prompt": "Security review of this proposed change to `.github/workflows/release.yml`.\n\nDeployment evidence: The job only injects the secret into a protected deploy step; no leak is evidenced.\n\n```diff\ndiff --git a/.github/workflows/release.yml b/.github/workflows/release.yml\n@@ -12,4 +12,8 @@\n+environment: protected-release\n+env:\n+  DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}\n+steps:\n+  - run: ./deploy --token-from-env DEPLOY_TOKEN\n+# no printing, no unknown third-party actions in the shown steps\n```\n\nAssess the security finding and its preconditions. Describe what the provided facts support; avoid inventing exploit evidence.",
+      "chosen": "Secret injection alone is not evidence of exfiltration. Review third-party actions and access controls, but avoid inventing an observed token leak.",
+      "rejected": "Any GitHub Actions job using a secret is already compromised, regardless of the job permissions or whether a disclosure path exists.",
+      "contrast_chosen": "The workflow injects a protected token only for the deploy operation, with no observed output. Do not report confirmed exfiltration without a disclosure path.",
+      "contrast_rejected": "The workflow publishes a transformed production token into job logs. Flag likely credential exposure and assess log access and required rotation.",
+      "contrast_set_id": "github-secret",
+      "contrast_design": "COUNTERFACTUAL_DRAFT"
+    },
+    {
+      "id": "tls-production",
+      "casebook_id": "tls-production",
+      "rule_family": "node-tls-validation",
+      "category": "tls_validation",
+      "split": "holdout",
+      "review_status": "draft",
+      "file_path": "payments/client.js",
+      "patch": "diff --git a/payments/client.js b/payments/client.js\n@@ -6,5 +6,6 @@\n export const paymentClient = axios.create({\n+  httpsAgent: new https.Agent({ rejectUnauthorized: false }),\n   baseURL: process.env.PAYMENTS_API\n });\n+# service/payments/client.js is imported by deployed production checkout\n",
+      "deployment_evidence": "The disabled certificate-verification setting is active for sensitive production requests.",
+      "source_ids": [
+        "node-tls"
+      ],
+      "prompt": "Security review of this proposed change to `payments/client.js`.\n\nDeployment evidence: The disabled certificate-verification setting is active for sensitive production requests.\n\n```diff\ndiff --git a/payments/client.js b/payments/client.js\n@@ -6,5 +6,6 @@\n export const paymentClient = axios.create({\n+  httpsAgent: new https.Agent({ rejectUnauthorized: false }),\n   baseURL: process.env.PAYMENTS_API\n });\n+# service/payments/client.js is imported by deployed production checkout\n```\n\nAssess the security finding and its preconditions. Describe what the provided facts support; avoid inventing exploit evidence.",
+      "chosen": "Flag disabled peer-certificate rejection on production HTTPS connections. Restore certificate and hostname checks and investigate whether traffic was exposed.",
+      "rejected": "No TLS authenticity risk exists because encryption still occurs; ignoring certificate validation is harmless when the HTTP URL begins with https.",
+      "contrast_chosen": "This deployed payment client disables certificate verification for sensitive HTTPS requests. Flag a production transport-integrity risk and restore validation.",
+      "contrast_rejected": "This isolated local test client disables verification only for its self-signed fixture. Do not assert production impact without a deployed code path.",
+      "contrast_set_id": "node-tls-validation",
+      "contrast_design": "COUNTERFACTUAL_DRAFT"
+    },
+    {
+      "id": "tls-test-only",
+      "casebook_id": "tls-test-only",
+      "rule_family": "node-tls-validation",
+      "category": "tls_validation",
+      "split": "holdout",
+      "review_status": "draft",
+      "file_path": "tests/fixtures/mock_tls.js",
+      "patch": "diff --git a/tests/fixtures/mock_tls.js b/tests/fixtures/mock_tls.js\n@@ -2,4 +2,5 @@\n+const agent = new https.Agent({ rejectUnauthorized: false });\n+export const localFixture = () => request('https://localhost:9443', { agent });\n+# imported exclusively by an isolated test runner; production does not load it\n",
+      "deployment_evidence": "The insecure setting applies only to local tests, with production importing a distinct client.",
+      "source_ids": [
+        "node-tls"
+      ],
+      "prompt": "Security review of this proposed change to `tests/fixtures/mock_tls.js`.\n\nDeployment evidence: The insecure setting applies only to local tests, with production importing a distinct client.\n\n```diff\ndiff --git a/tests/fixtures/mock_tls.js b/tests/fixtures/mock_tls.js\n@@ -2,4 +2,5 @@\n+const agent = new https.Agent({ rejectUnauthorized: false });\n+export const localFixture = () => request('https://localhost:9443', { agent });\n+# imported exclusively by an isolated test runner; production does not load it\n```\n\nAssess the security finding and its preconditions. Describe what the provided facts support; avoid inventing exploit evidence.",
+      "chosen": "Do not report confirmed production certificate bypass solely from the isolated test fixture. Confirm it cannot be enabled in deployment builds.",
+      "rejected": "The presence of rejectUnauthorized:false in any test proves the customer-facing payment client disables certificate verification in production.",
+      "contrast_chosen": "This isolated local test client disables verification only for its self-signed fixture. Do not assert production impact without a deployed code path.",
+      "contrast_rejected": "This deployed payment client disables certificate verification for sensitive HTTPS requests. Flag a production transport-integrity risk and restore validation.",
+      "contrast_set_id": "node-tls-validation",
+      "contrast_design": "COUNTERFACTUAL_DRAFT"
+    }
+  ]
+}

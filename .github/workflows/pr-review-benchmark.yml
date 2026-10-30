@@ -1,0 +1,48 @@
+name: PR counterfactual evaluation (DRAFT ONLY)
+on:
+  push:
+    paths:
+      - 'src/falsum/pr_benchmark.py'
+      - 'data/draft-pr-benchmark.json'
+      - 'data/draft-scenarios.json'
+      - 'data/guidance/**'
+      - 'tests/test_pr_benchmark.py'
+      - '.github/workflows/pr-review-benchmark.yml'
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Test adversarial corpus integrity and leakage probes
+        run: PYTHONPATH=src python -m unittest discover -s tests -p test_pr_benchmark.py -v
+      - name: Run baseline and counterfactual diagnostics
+        shell: bash
+        run: |
+          PYTHONPATH=src python -m falsum.pr_benchmark data/draft-pr-benchmark.json \
+            --source-casebook data/draft-scenarios.json --report-out "$RUNNER_TEMP/pr-report.json"
+          python - "$RUNNER_TEMP/pr-report.json" <<'PY'
+          import json,sys
+          data=json.load(open(sys.argv[1]))
+          assert data['status']=='DRAFT_ONLY' and data['reviewed']==0 and data['eligible']==0
+          for s in ('validation','holdout'):
+              assert data['counterfactual_diagnostic']['results'][s]['pairwise_fraction']==0.5
+          print('Passed: answer-only shortcut is neutralized by exact counterfactual reversals')
+          PY
+      - name: Publish non-eligible diagnostic metrics only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: draft-pr-shortcut-diagnostic-${{ matrix.python-version }}
+          path: ${{ runner.temp }}/pr-report.json
+          if-no-files-found: warn
+          retention-days: 14
