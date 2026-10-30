@@ -19,13 +19,16 @@ jobs:
       TOKENIZERS_PARALLELISM: 'false'
       OMP_NUM_THREADS: '4'
       MKL_NUM_THREADS: '4'
-      DATA_DIR: ${{ runner.temp }}/falsum-pilot
-      MODEL_DIR: ${{ runner.temp }}/falsum-pilot-model
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Set isolated runner output paths
+        shell: bash
+        run: |
+          echo "DATA_DIR=$RUNNER_TEMP/falsum-pilot" >> "$GITHUB_ENV"
+          echo "MODEL_DIR=$RUNNER_TEMP/falsum-pilot-model" >> "$GITHUB_ENV"
       - name: Verify research-only data audit tests (offline)
         run: PYTHONPATH=src python -m unittest discover -s tests -p test_research_pilot.py -v
       - name: Reconstruct archived GHSA draft data from immutable records
