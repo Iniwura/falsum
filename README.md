@@ -2,7 +2,7 @@
 
 **Every claim stands trial.**
 
-**Current research checkpoint (30 October 2026):** We trained a *real* ModernBERT LoRA reward adapter with the official pinned Telegraph V2 trainer on 52 automatically generated, unreviewed advisory comparisons. Upstream test: **5/6 (83.33%, PASS)**. But only **1 of 6** paired counterfactual security-review families were correct in both contexts; the PR validation set scored **1/4 (25%)**. This is a research failure diagnosis, **not** a submission-ready model or accepted network evaluator. Read the [actual model-scoring postmortem and evidence](docs/PHASE2L.md) and [research pilot](docs/PHASE2K.md).
+**Current research checkpoint (30 October 2026):** We trained a *real* ModernBERT LoRA reward adapter with the official pinned Telegraph V2 trainer on 52 automatically generated, unreviewed advisory comparisons. Upstream test: **5/6 (83.33%, PASS)**. But only **1 of 6** paired counterfactual security-review families were correct in both contexts; the PR validation set scored **1/4 (25%)**. This is a research failure diagnosis, **not** a submission-ready model or accepted network evaluator. Read the [actual model-scoring postmortem and evidence](docs/PHASE2L.md) and [research pilot](docs/PHASE2K.md). A [separate context-training A/B experiment](docs/PHASE2M.md) freezes the validation and holdout partitions; results must be inspected before any stronger claims.
 
 An evidence-grounded security evaluation research project for [Telegraph Season II](https://hackathon.telegraphprotocol.com/). FALSUM targets the `SECURITY_REVIEW_GENERAL` child Intent and the `SECURITY_REVIEW` evaluator family, as described by [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96).
 
