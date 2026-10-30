@@ -52,8 +52,8 @@ class ReplayTests(unittest.TestCase):
 
     def test_all_six_files_reconstruct_exactly(self):
         result = verify_report(self.report, self.reader)
-        self.assertEqual(result["cases_replayed"], 3)
-        self.assertEqual(result["file_replays_verified"], 6)
+        self.assertEqual(result["cases_replayed"], 4)
+        self.assertEqual(result["file_replays_verified"], 8)
         self.assertFalse(result["network_eligible"])
         self.assertFalse(result["training_authorized"])
         self.assertEqual(result["independent_human_reviews"], 0)
