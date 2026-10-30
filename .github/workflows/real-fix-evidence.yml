@@ -8,6 +8,8 @@ on:
       - 'tests/test_real_fix_replay.py'
       - 'src/falsum/pre_fix_challenges.py'
       - 'tests/test_pre_fix_challenges.py'
+      - 'src/falsum/prompt_token_budget.py'
+      - 'tests/test_prompt_token_budget.py'
       - 'data/real-fix-queue.json'
       - '.github/workflows/real-fix-evidence.yml'
   workflow_dispatch:
@@ -30,6 +32,7 @@ jobs:
           PYTHONPATH=src python -m unittest discover -s tests -p 'test_real_fix_corpus.py' -v
           PYTHONPATH=src python -m unittest discover -s tests -p 'test_real_fix_replay.py' -v
           PYTHONPATH=src python -m unittest discover -s tests -p 'test_pre_fix_challenges.py' -v
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_prompt_token_budget.py' -v
       - name: Fetch actual public commit objects and recheck pinned revisions
         shell: bash
         run: |
@@ -79,6 +82,18 @@ jobs:
               out.write(f"{len(prompts['prompts'])} unreviewed public pre-fix-only code prompts generated. No remediation/advisory labels in model input.\n\n")
               out.write("**NO independently reviewed labels. NO eligible training data or network evaluator.**\n")
           PY
+      - name: Check actual ModernBERT token limit and reserve answer space
+        shell: bash
+        env:
+          HF_HUB_DISABLE_TELEMETRY: '1'
+          TOKENIZERS_PARALLELISM: 'false'
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'transformers==4.57.1'
+          PYTHONPATH=src python -m falsum.prompt_token_budget \
+            --prompts "$RUNNER_TEMP/falsum-model-prompts/UNLABELED-PRE-FIX-PROMPTS.json" \
+            --out "$RUNNER_TEMP/falsum-model-prompts/MODERNBERT-TOKEN-BUDGET-REPORT.json"
+          echo "ModernBERT token capacity checked for every generated real-code task with 124 answer tokens plus four boundary tokens reserved. Full inference still requires per-answer cap checks." >> "$GITHUB_STEP_SUMMARY"
       - name: Upload source evidence + external review questions
         uses: actions/upload-artifact@v4
         with:
