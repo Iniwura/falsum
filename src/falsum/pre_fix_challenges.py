@@ -36,7 +36,7 @@ def _canonical(value: object) -> bytes:
     return (json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False) + "\n").encode("utf-8")
 
 
-def parent_regions(parent: bytes, patch: str, *, flank: int = 3) -> list[dict]:
+def parent_regions(parent: bytes, patch: str, *, flank: int = 0) -> list[dict]:
     """Select exact old-line windows around *every* changed source hunk.
 
     Never uses + lines; all displayed material is sliced from the actual
@@ -76,7 +76,9 @@ def parent_regions(parent: bytes, patch: str, *, flank: int = 3) -> list[dict]:
         if right - left + 1 > MAX_SEGMENT_LINES:
             raise ChallengeError("source region exceeds line budget; refuse hidden truncation")
         chunk = "".join(f"{n:>5} | {lines[n - 1]}\n" for n in range(left, right + 1))
-        windows.append({"first_line": left, "last_line": right, "numbered_source": chunk})
+        windows.append({"first_line": left, "last_line": right,
+                        "numbered_source": chunk,
+                        "raw_source": "\n".join(lines[left-1:right]) + "\n"})
     return windows
 
 
@@ -101,12 +103,10 @@ def build_challenges(report: dict, reader: Callable[[str], bytes] | None = None)
         for index, window in enumerate(windows):
             ident = _sha(f'{source["repository"]}:{source["parent"]}:{source["source"]["file_path"]}:{index}'.encode())[:20]
             question = (
-                "Review this excerpt from an existing codebase. Identify any concrete security "
-                "concern supported by the shown lines, or explain what additional runtime, "
-                "deployment, or caller-control evidence would be needed. "
-                "Do not invent conditions or claim that any deployed service is exploitable.\n\n"
-                "Source excerpt (original line numbers, before any later changes):\n"
-                + FENCE + "python\n" + window["numbered_source"] + FENCE
+                "Review the following original code excerpt for concrete security concerns. "
+                "State missing deployment preconditions and avoid unsupported exploitability claims.\n\n"
+                "Source excerpt:\n"
+                + FENCE + "python\n" + window["raw_source"] + FENCE
             )
             if len(question.encode("utf-8")) > MAX_PROMPT_BYTES:
                 raise ChallengeError("challenge exceeds text budget; no silent truncation")
