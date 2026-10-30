@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Callable
 
@@ -22,6 +23,9 @@ MAX_SEGMENT_LINES = 70
 MAX_PROMPT_BYTES = 4300
 MAX_HUNKS_PER_CASE = 12
 FENCE = chr(96) * 3
+ADVISORY_ID = re.compile(r"(?i)\\b(?:GHSA-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}|CVE-\\d{4}-\\d{4,})\\b")
+LANGUAGES = {".py": "python", ".js": "javascript", ".ts": "typescript", ".go": "go",
+             ".rs": "rust", ".rb": "ruby"}
 
 
 class ChallengeError(ValueError):
@@ -100,13 +104,18 @@ def build_challenges(report: dict, reader: Callable[[str], bytes] | None = None)
         if git_blob_sha(base) != verified["files"]["source"]["parent_git_blob"]:
             raise ChallengeError("parent changed since cryptographic replay")
         windows = parent_regions(base, source["source"]["patch"])
+        language = LANGUAGES.get(Path(source["source"]["file_path"]).suffix.lower())
+        if language is None:
+            raise ChallengeError("unsupported code language for source-review challenge")
         for index, window in enumerate(windows):
+            if ADVISORY_ID.search(window["raw_source"]):
+                raise ChallengeError("pre-fix source includes public advisory identifier; unsafe label shortcut")
             ident = _sha(f'{source["repository"]}:{source["parent"]}:{source["source"]["file_path"]}:{index}'.encode())[:20]
             question = (
                 "Review the following original code excerpt for concrete security concerns. "
                 "State missing deployment preconditions and avoid unsupported exploitability claims.\n\n"
                 "Source excerpt:\n"
-                + FENCE + "python\n" + window["raw_source"] + FENCE
+                + FENCE + language + "\n" + window["raw_source"] + FENCE
             )
             if len(question.encode("utf-8")) > MAX_PROMPT_BYTES:
                 raise ChallengeError("challenge exceeds text budget; no silent truncation")
