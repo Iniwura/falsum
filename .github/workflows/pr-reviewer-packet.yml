@@ -1,0 +1,48 @@
+name: PR reviewer packet - public questions ONLY
+on:
+  push:
+    paths:
+      - 'src/falsum/pr_review_packet.py'
+      - 'tests/test_pr_review_packet.py'
+      - 'data/draft-pr-benchmark.json'
+      - 'data/draft-scenarios.json'
+      - '.github/workflows/pr-reviewer-packet.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  blind-packet:
+    name: Produce public-only AppSec questions (NOT approved)
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Audit blindness and separate key paths
+        run: PYTHONPATH=src python -m unittest discover -s tests -p test_pr_review_packet.py -v
+      - name: Generate blind questions; private key remains runner-local
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.pr_review_packet \
+            --benchmark data/draft-pr-benchmark.json \
+            --casebook data/draft-scenarios.json \
+            --public-out "$RUNNER_TEMP/falsum-public-pr-questions" \
+            --private-out "$RUNNER_TEMP/falsum-private-pr-key"
+          test -f "$RUNNER_TEMP/falsum-public-pr-questions/BLIND-PR-REVIEW.jsonl"
+          test -f "$RUNNER_TEMP/falsum-private-pr-key/DO-NOT-SHARE-PR-ANSWER-KEY.jsonl"
+          if grep -q 'proposed_label' "$RUNNER_TEMP/falsum-public-pr-questions/BLIND-PR-REVIEW.jsonl"; then
+            echo 'Possible private label leak in public packet' >&2
+            exit 1
+          fi
+          echo 'This packet contains fictional UNREVIEWED PR examples. No Telegraph eligibility, human review or accepted labels.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Private answer key intentionally excluded from artifacts.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload ONLY public unreviewed AppSec reviewer questions
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PR-BLIND-QUESTIONS-NOT-REVIEWED
+          path: ${{ runner.temp }}/falsum-public-pr-questions/
+          if-no-files-found: error
+          retention-days: 30
