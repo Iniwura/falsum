@@ -4,6 +4,8 @@ on:
     paths:
       - 'src/falsum/real_fix_corpus.py'
       - 'tests/test_real_fix_corpus.py'
+      - 'src/falsum/real_fix_replay.py'
+      - 'tests/test_real_fix_replay.py'
       - 'data/real-fix-queue.json'
       - '.github/workflows/real-fix-evidence.yml'
   workflow_dispatch:
@@ -24,6 +26,7 @@ jobs:
         run: |
           set -euo pipefail
           PYTHONPATH=src python -m unittest discover -s tests -p 'test_real_fix_corpus.py' -v
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_real_fix_replay.py' -v
       - name: Fetch actual public commit objects and recheck pinned revisions
         shell: bash
         run: |
@@ -33,6 +36,9 @@ jobs:
             --queue data/real-fix-queue.json \
             --out "$RUNNER_TEMP/falsum-real-fixes/SOURCE-VERIFIED-NOT-LABELED.json" \
             --reviewer-out "$RUNNER_TEMP/falsum-real-fixes/EXTERNAL-REVIEW-QUESTIONS-NO-LABELS.json"
+          PYTHONPATH=src python -m falsum.real_fix_replay \
+            --evidence "$RUNNER_TEMP/falsum-real-fixes/SOURCE-VERIFIED-NOT-LABELED.json" \
+            --out "$RUNNER_TEMP/falsum-real-fixes/PRE-POST-CODE-REPLAY-VERIFIED.json"
           python - <<'PY'
           import json
           import os
@@ -40,13 +46,17 @@ jobs:
           root = Path(os.environ["RUNNER_TEMP"]) / "falsum-real-fixes"
           a = json.loads((root / "SOURCE-VERIFIED-NOT-LABELED.json").read_text())
           b = json.loads((root / "EXTERNAL-REVIEW-QUESTIONS-NO-LABELS.json").read_text())
+          c = json.loads((root / "PRE-POST-CODE-REPLAY-VERIFIED.json").read_text())
           assert a["source_verified"] == 3 and a["independent_human_reviews"] == 0
           assert a["network_eligible"] is False and a["training_authorized"] is False
           assert b["proposed_labels"] == 0 and b["human_reviews"] == 0
           assert len(b["questions"]) == len(a["cases"]) == 3
+          assert c["cases_replayed"] == 3 and c["file_replays_verified"] == 6
+          assert c["independent_human_reviews"] == 0 and c["network_eligible"] is False
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as out:
               out.write("### FALSUM real upstream patch corpus\n\n")
               out.write("3 immutable upstream security-fix commits + source and test patch blobs verified.\n\n")
+              out.write("6 exact parent-to-fix source/test file transitions reconstructed and Git blob hashes rechecked.\n\n")
               out.write("**NO independently reviewed labels. NO eligible training data or network evaluator.**\n")
           PY
       - name: Upload source evidence + external review questions
