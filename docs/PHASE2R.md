@@ -42,6 +42,21 @@ The package's hexadecimal and SHA identifiers come directly from the official Gi
 
 [Download the archived experimental WASM and manifest](https://github.com/Iniwura/falsum/actions/runs/41132003351/artifacts/13013677262). The uploaded artifact is roughly 556 MB compressed and is scheduled to expire **2 November 2026 at 21:36 UTC**. Do not distribute or submit it as a reliable evaluator.
 
+## Verified REAL WASI model execution on the same checkpoint
+
+The independent [actual Wazero execution workflow 41132583676](https://github.com/Iniwura/falsum/actions/runs/41132583676) completed **successfully**. It downloaded the official packaged research WASM from the earlier run, rechecked the exact **601,181,412-byte** package's SHA-256, official ABI v2/hybrid metadata and source research quarantine, and executed the module with the same ten token IDs used in the official Python export.
+
+| Model scorer | Measured float32 output |
+| --- | ---: |
+| Original PyTorch merged LoRA scorer | -0.4765053391456604 |
+| Actual Wazero WASI packaged module | -0.4765051305294037 |
+| Absolute score difference | **0.0000002086162567138672** |
+| WASI execution time reported | **9,171 ms** |
+
+The predeclared maximum permitted absolute delta was **0.05**, so the actual difference passed by a large margin. This provides **single-input numerical fidelity evidence**, not a ranking-quality or live-node acceptance score. The successful [short-lived score report artifact](https://github.com/Iniwura/falsum/actions/runs/41132583676/artifacts/13013642937) expires on **6 November 2026**.
+
+The scored execution had **0 approved human review labels**, **0 network-eligible training rows**, and **no registration/publishing**. Wazero execution is not equivalent to the network's own module acceptance or multi-candidate ranking under its deadline and resource constraints.
+
 ## Important limits and next technical checks
 
 **Official packaging success only proves structural feasibility**, not model fidelity, execution under the target network's node, or answer-ranking quality. The official builder checks the WASI command shape and compiles it; the node's actual fixed smoke score, time and resource limits are a separate step.
@@ -49,7 +64,7 @@ The package's hexadecimal and SHA identifiers come directly from the official Gi
 To probe execution rather than only package shape, the repository includes:
 
 - [tools/research_wasi_smoke.go](../tools/research_wasi_smoke.go), a Wazero WASI runner pinned to the exact artifact SHA and official exporter input token IDs. It compares the module's actual finite FP32 score against the PyTorch export reference with a declared maximum absolute difference of 0.05.
-- [The actual runtime smoke workflow](../.github/workflows/research-wasi-smoke.yml). It consumes the archived WASM without retraining or repackaging and archives its measurement or failure logs. **Read that workflow's actual results before making numerical parity claims.**
+- [The actual runtime smoke workflow](../.github/workflows/research-wasi-smoke.yml). It consumes the archived WASM without retraining or repackaging and archives its measurement or failure logs. That workflow now **passed** on one frozen input, with an absolute score delta of about 2.09e-7; see the measured results above.
 
 Even if one runtime score matches, that would NOT establish the evaluator ranks security answers correctly. A real held-out, independently reviewed benchmark, correct hybrid comparator integration and acceptance by the network are still mandatory.
 
