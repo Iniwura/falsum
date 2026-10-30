@@ -45,7 +45,7 @@ def audit_prompts(manifest: dict, tokenize) -> dict:
             raise TokenBudgetError("public model prompt contains non-prompt or answer metadata")
         case_id, prompt = item["challenge_id"], item["prompt"]
         if (not isinstance(case_id, str) or not case_id or case_id in ids
-                or not isinstance(prompt, str) or not prompt.startswith("Review this excerpt")
+                or not isinstance(prompt, str) or not prompt.startswith("Review the following original code excerpt")
                 or "Source excerpt" not in prompt):
             raise TokenBudgetError(f"invalid or duplicate prompt at index {i}")
         ids.add(case_id)
