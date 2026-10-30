@@ -91,3 +91,15 @@ The [32-advisory research queue](data/advisory-queue.json) provides a reproducib
 ## Evidence-present security judgment benchmark (Phase 2h)
 
 Our initial GHSA-ID prompts did not give the model the affected-version boundary it would need for reasoning. We now build a **second, draft-only evidence-grounded benchmark** from pinned source events, plus missing-evidence controls designed to catch confident guessing. Run `PYTHONPATH=src python -m falsum.grounded_eval data/advisory-queue.json /path/to/DRAFT-ONLY-corpus.json --out /tmp/falsum-grounded`. See [evidence availability and scoring protocol](docs/PHASE2H.md). These are not independently reviewed cases, model scores or accepted Telegraph evaluation material.
+
+## Phase 2i — PR counterfactual challenge (research-only)
+
+The [12-case fictional PR benchmark](docs/PHASE2I.md) tests security judgments about deployment configurations, SSRF, signing keys, GitHub Actions permissions, logging, and TLS. A source-blind answer-only baseline ranked **6/6** original validation/holdout answers correctly without reading a question or diff, exposing a serious shortcut. We replaced those easy comparisons with six paired context reversals. On the paired benchmark, that same baseline scored **50%** on validation and holdout.
+
+Run the provenance and shortcut audit:
+
+```bash
+PYTHONPATH=src python -m falsum.pr_benchmark data/draft-pr-benchmark.json --source-casebook data/draft-scenarios.json
+```
+
+The 12 cases remain hypothetical and **unreviewed**. They intentionally reuse the same candidate text under opposite conditions, so they are *diagnostic-only*, not a valid training dataset under Telegraph's negative-uniqueness gate. No ModernBERT adapter or network score is claimed. The [dedicated CI workflow](.github/workflows/pr-review-benchmark.yml) verifies these constraints on Python 3.11–3.13.
