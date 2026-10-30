@@ -155,13 +155,20 @@ def fetch_pinned(row: dict, *, opener=None, commit: str = PIN) -> tuple[dict, by
 
 
 def _answer(ghsa: str, package: str, version: str, status: str, template: int) -> str:
+    """Counterbalanced evidence claims: no answer-only style or length signal.
+
+    Every advisory produces one affected and one patched example. In the
+    matched chosen/rejected answers, only the equal-length semantic predicate
+    changes; the same predicates occur on both sides of the full corpus.
+    """
+    predicate = "inside" if status == "affected" else "beyond"
     if template % 2 == 0:
-        if status == "affected":
-            return f"For {ghsa}, {package} {version} is in the published affected version range. Flag the dependency and check the application's exposure conditions."
-        return f"For {ghsa}, {package} {version} is outside the published affected version range. Do not claim this advisory applies without other evidence."
-    if status == "affected":
-        return f"The pinned {ghsa} range covers version {version} of {package}. Report an affected dependency while separately evaluating exploit prerequisites."
-    return f"The pinned {ghsa} range excludes version {version} of {package}. Avoid reporting this specific vulnerability without separate supporting evidence."
+        return (f"The version {package}@{version} lies {predicate} the affected range "
+                f"published in {ghsa}. This assesses dependency range status, "
+                "not whether the installed deployment is exploitable.")
+    return (f"For advisory {ghsa}, the dependency {package} version {version} "
+            f"falls {predicate} the affected range. Report the source-bound "
+            "version determination without inventing exploit conditions.")
 
 
 def _pair(row: dict, doc: dict, version: str, status: str, template: int) -> dict:

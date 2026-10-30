@@ -67,6 +67,15 @@ class AdvisoryCorpusTests(unittest.TestCase):
         self.assertEqual(len(corpus['cases']),64)
         self.assertEqual(sum(x['split']=='train' for x in corpus['cases']),52)
         self.assertEqual({x['review_status'] for x in corpus['cases']},{'draft'})
+        self.assertTrue(all(len(x['chosen']) == len(x['rejected']) for x in corpus['cases']))
+        from falsum.preflight import diagnostic_metrics
+        train = [{k: row[k] for k in ('prompt', 'chosen', 'rejected')}
+                 for row in corpus['cases'] if row['split'] == 'train']
+        self.assertEqual(diagnostic_metrics(train)['length_shortcut_accuracy'], 0.5)
+        self.assertTrue(diagnostic_metrics(train)['preflight_clear'])
+        self.assertEqual(sum('inside' in x['chosen'] for x in train), 26)
+        self.assertEqual(sum('beyond' in x['chosen'] for x in train), 26)
+
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory)
             (root/'snapshots').mkdir()
