@@ -55,6 +55,15 @@ class GroundingTests(unittest.TestCase):
         self.assertIn('2.4.1',evidence)
         self.assertIn('3.2.1',evidence)
 
+    def test_all_five_ranges_from_multi_branch_advisory_are_kept(self):
+        record={'id':'GHSA-aaaa-bbbb-cccc','affected':[
+            {'package':{'ecosystem':'npm','name':'pkg'},
+             'ranges':[{'type':'ECOSYSTEM','events':[{'introduced':str(i)+'.0.0'},
+                     {'fixed':str(i)+'.1.0'}]}]} for i in range(1,6)]}
+        output=_range_evidence(record,'npm','pkg','2.0.1')
+        self.assertEqual(output.count('fixed (exclusive)'),5)
+        self.assertIn('5.1.0',output)
+
     def test_reject_prerelease_boundary(self):
         record={'id':'GHSA-aaaa-bbbb-cccc','affected':[{'package':{'ecosystem':'npm','name':'pkg'},
             'ranges':[{'type':'ECOSYSTEM','events':[{'introduced':'0'},{'fixed':'2.4.1rc1'}]}]}]}

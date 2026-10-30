@@ -36,7 +36,7 @@ def _range_evidence(record: dict, ecosystem: str, package: str, version: str) ->
         if affected.get('versions'):
             raise GroundingError('explicit version enumerations cannot be reduced to one interval')
         matching.extend(affected.get('ranges', []))
-    if not matching or len(matching) > 4:
+    if not matching or len(matching) > 8:
         raise GroundingError(f'unsupported number of published ranges: {len(matching)}')
     rendered=[]
     for block in matching:
