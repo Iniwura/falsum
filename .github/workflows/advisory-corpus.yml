@@ -74,10 +74,11 @@ jobs:
           code=$?
           set -e
           echo "Grounded DRAFT-only dataset gate exit: $code (0=shortcut-pass, 1=shortcut-fail; not model performance)" >> "$GITHUB_STEP_SUMMARY"
-          if [ "$code" -eq 2 ]; then
-            echo "The official quality checker errored while processing the grounded dataset."
+          if [ "$code" -ne 0 ]; then
+            echo "Grounded draft data did not pass the official shortcut gate (exit $code)."
             exit 1
           fi
+          echo "Grounded DRAFT-only data passed official shortcut checks. No model performance or network eligibility is implied." >> "$GITHUB_STEP_SUMMARY"
       - name: Save evidence-and-gate diagnostics, explicitly not for training
         if: always()
         uses: actions/upload-artifact@v4
