@@ -4,6 +4,8 @@ on:
     paths:
       - 'src/falsum/research_pilot.py'
       - 'tests/test_research_pilot.py'
+      - 'src/falsum/pilot_decision.py'
+      - 'tests/test_pilot_decision.py'
       - '.github/workflows/research-model-pilot.yml'
   workflow_dispatch:
 permissions:
@@ -107,6 +109,39 @@ jobs:
           status=${PIPESTATUS[0]}
           echo "Counterfactual model evaluation exit: $status (failure is a research result, not a fabricated score)" >> "$GITHUB_STEP_SUMMARY"
           exit 0
+      - name: Publish fail-closed research decision from actual model scoring
+        if: steps.train.outcome == 'success'
+        shell: bash
+        run: |
+          set -euo pipefail
+          official="$MODEL_DIR/SECURITY_REVIEW_GENERAL/result.json"
+          counterfactual="$DATA_DIR/COUNTERFACTUAL-MODEL-RESULT.json"
+          pilot="$DATA_DIR/PILOT-QUARANTINE-MANIFEST.json"
+          if [[ ! -f "$official" || ! -f "$counterfactual" || ! -f "$pilot" ]]; then
+            echo "Research decision: INCOMPLETE. Missing trained-model evidence." >> "$GITHUB_STEP_SUMMARY"
+            if [[ "${{ steps.train.outputs.upstream_training_exit_code }}" == "0" ]]; then
+              echo 'Trainer reported success but complete real-model evidence was not produced.' >&2
+              exit 1
+            fi
+            exit 0
+          fi
+          PYTHONPATH="$GITHUB_WORKSPACE/src" python -m falsum.pilot_decision \
+            --official "$official" \
+            --counterfactual "$counterfactual" \
+            --pilot "$pilot" \
+            --output "$DATA_DIR/PILOT-DECISION.json"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          r = json.loads((Path(os.environ["DATA_DIR"]) / "PILOT-DECISION.json").read_text())
+          s = r["research_counterfactual"]
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as out:
+              out.write("### FALSUM: model pilot verdict (research only)\n\n")
+              out.write(f"Official trainer: {r['official_training']['verdict']} on {r['official_training']['test_pairs']} draft test pairs.\n\n")
+              out.write(f"Counterfactual context reversals: {s['families_correct_in_both_contexts']}/{s['total_families']} family pairs.\n\n")
+              out.write(f"Decision: **{r['status']}**, network eligible: **NO**, registration authorized: **NO**.\n")
+          PY
       - name: Save research-only evidence and actual checkpoint (never publish or register)
         if: always()
         uses: actions/upload-artifact@v4
@@ -118,6 +153,7 @@ jobs:
             ${{ runner.temp }}/falsum-pilot/UPSTREAM-DATA-GATE.log
             ${{ runner.temp }}/falsum-pilot/RESEARCH-TRAINING.log
             ${{ runner.temp }}/falsum-pilot/COUNTERFACTUAL-MODEL-RESULT.json
+            ${{ runner.temp }}/falsum-pilot/PILOT-DECISION.json
             ${{ runner.temp }}/falsum-pilot/COUNTERFACTUAL-MODEL-LOG.txt
             ${{ runner.temp }}/falsum-pilot/MODEL-MISSING.txt
             ${{ runner.temp }}/falsum-pilot-model/SECURITY_REVIEW_GENERAL/result.json
