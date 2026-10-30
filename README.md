@@ -14,7 +14,9 @@ FALSUM has now **successfully exported its real quarantined ModernBERT LoRA chec
 
 [Successful full build](https://github.com/Iniwura/falsum/actions/runs/41132003351) · [Download time-limited research-only WASM](https://github.com/Iniwura/falsum/actions/runs/41132003351/artifacts/13013677262) · [Detailed artifact hashes, provenance and limitations](docs/PHASE2R.md).
 
-**The WASM is not eligible for registration.** The underlying model still scored only **1/4 (25%)** on fictional PR validation, has **zero independent AppSec-reviewed preference labels**, and has not passed live node-side model scoring, a real project-separated holdout or Anjoman acceptance. The separate [real WASI execution experiment](.github/workflows/research-wasi-smoke.yml) tests a numerical reference without claiming security-review correctness.
+The [real WASI execution smoke test](https://github.com/Iniwura/falsum/actions/runs/41132583676) also **passed**: Wazero ran the actual official-format packaged module and obtained **−0.4765051305** versus the PyTorch exporter's **−0.4765053391**, an absolute difference of **2.09 × 10⁻⁷** on one fixed input. This demonstrates single-input runtime fidelity only, not security-review correctness or live Telegraph node acceptance. [Source, build and smoke proof](docs/PHASE2R.md).
+
+**The WASM is not eligible for registration.** The underlying model still scored only **1/4 (25%)** on fictional PR validation, has **zero independent AppSec-reviewed preference labels**, and has not passed the network's own node-side acceptance, a real project-separated holdout or Anjoman acceptance. The separate [real WASI execution experiment](.github/workflows/research-wasi-smoke.yml) verified single-input PyTorch/WASI score fidelity without claiming security-review correctness.
 
 ## Phase 2Q: independent AppSec review intake, always unverified until adjudicated
 
@@ -62,7 +64,7 @@ See [Evidence format and quality guarantees](docs/EVIDENCE.md), [Source snapshot
 
 ## Official V2 compatibility
 
-The [current Telegraph scoring-adapter kit](https://github.com/telegraphprotocol/telegraph-wasm-baseline) uses a **ModernBERT LoRA reward model → ONNX FP32 → WASI WASM** pipeline with ABI v2 and a 512-token model cap. The adapter runs offline and cannot retrieve new CVE facts during scoring. FALSUM's evidence ledger is a training and evaluation preparation system, not an alternative adapter runtime. The Phase 2k pilot **did** perform official tokenizer conformance, actual LoRA training and real model scoring. Phase 2R **has now verified ONNX export and deterministic ABI-v2 WASM packaging**; **Telegraph registration, node-side inference validation and dependable answer-ranking accuracy are still unverified**.
+The [current Telegraph scoring-adapter kit](https://github.com/telegraphprotocol/telegraph-wasm-baseline) uses a **ModernBERT LoRA reward model → ONNX FP32 → WASI WASM** pipeline with ABI v2 and a 512-token model cap. The adapter runs offline and cannot retrieve new CVE facts during scoring. FALSUM's evidence ledger is a training and evaluation preparation system, not an alternative adapter runtime. The Phase 2k pilot **did** perform official tokenizer conformance, actual LoRA training and real model scoring. Phase 2R **has now verified ONNX export and deterministic ABI-v2 WASM packaging**; **Telegraph registration, full node-side acceptance and dependable answer-ranking accuracy are still unverified**, although one independent Wazero WASI execution smoke now passes.
 
 ## Trust model
 
