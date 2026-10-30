@@ -2,6 +2,8 @@
 
 **Every claim stands trial.**
 
+**Current research checkpoint (30 October 2026):** We trained a *real* ModernBERT LoRA reward adapter with the official pinned Telegraph V2 trainer on 52 automatically generated, unreviewed advisory comparisons. Upstream test: **5/6 (83.33%, PASS)**. But only **1 of 6** paired counterfactual security-review families were correct in both contexts; the PR validation set scored **1/4 (25%)**. This is a research failure diagnosis, **not** a submission-ready model or accepted network evaluator. Read the [actual model-scoring postmortem and evidence](docs/PHASE2L.md) and [research pilot](docs/PHASE2K.md).
+
 An evidence-grounded security evaluation research project for [Telegraph Season II](https://hackathon.telegraphprotocol.com/). FALSUM targets the `SECURITY_REVIEW_GENERAL` child Intent and the `SECURITY_REVIEW` evaluator family, as described by [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96).
 
 ## Phase 1 + Phase 2a: foundation and source snapshots
@@ -26,7 +28,7 @@ See [Evidence format and quality guarantees](docs/EVIDENCE.md), [Source snapshot
 
 ## Official V2 compatibility
 
-The [current Telegraph scoring-adapter kit](https://github.com/telegraphprotocol/telegraph-wasm-baseline) uses a **ModernBERT LoRA reward model → ONNX FP32 → WASI WASM** pipeline with ABI v2 and a 512-token model cap. The adapter runs offline and cannot retrieve new CVE facts during scoring. FALSUM's evidence ledger is a training and evaluation preparation system, not an alternative adapter runtime. Tokenizer conformance, training, ONNX export, WASM package reproducibility, and endpoint validation are **not yet implemented**.
+The [current Telegraph scoring-adapter kit](https://github.com/telegraphprotocol/telegraph-wasm-baseline) uses a **ModernBERT LoRA reward model → ONNX FP32 → WASI WASM** pipeline with ABI v2 and a 512-token model cap. The adapter runs offline and cannot retrieve new CVE facts during scoring. FALSUM's evidence ledger is a training and evaluation preparation system, not an alternative adapter runtime. The Phase 2k pilot **did** perform official tokenizer conformance, actual LoRA training and real model scoring. ONNX export, WASM package reproducibility, Telegraph registration and end-to-end network inference are **not yet implemented**.
 
 ## Trust model
 
@@ -38,7 +40,7 @@ The [current Telegraph scoring-adapter kit](https://github.com/telegraphprotocol
 
 ## Status
 
-Phase 1 + Phase 2a (offline verified, network fetch untested in CI). **Not an active scoring adapter. No network registration or judge acceptance is claimed.**
+Phase 2L: official CPU training completed and produced a quarantined LoRA adapter; independent security-review evaluation failed on five of six paired counterfactual families. **No active scoring adapter, network registration or judge acceptance is claimed.**
 
 ## Phase 2b — public-advisory draft corpus (not submitted)
 
