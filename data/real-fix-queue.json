@@ -47,6 +47,21 @@
       "family": "template-sandbox-attr",
       "hypothesis_to_review": "The advisory limits the attr-filter sandbox bypass to applications rendering attacker-controlled templates. Check how the patch enforces the sandbox and distinguish vulnerable template control from harmless template use.",
       "public_source": "https://github.com/pallets/jinja/security/advisories/GHSA-cpwx-vrp4-4pq7"
+    },
+    {
+      "id": "real-axios-absolute-baseurl",
+      "repository": "axios/axios",
+      "commit": "02c3c69ced0f8fd86407c23203835892313d7fde",
+      "parent": "8603e677c09fb81bd106999c194308dd230bc596",
+      "source_path": "lib/core/buildFullPath.js",
+      "source_blob": "553cffcb5e26bebe93577adae7c1f73f6cd0f293",
+      "test_path": "test/specs/core/buildFullPath.spec.js",
+      "test_blob": "ecf9ee730bf504f7faad3578e1ca53566aca3da3",
+      "advisory": "GHSA-jr5f-v2jv-69x6",
+      "cve": "CVE-2025-27152",
+      "family": "absolute-url-baseurl-routing",
+      "hypothesis_to_review": "The published advisory discusses absolute-URL override behavior despite a configured baseURL. The added allowAbsoluteUrls option in this 0.x backport is opt-in, so reviewers must verify the exact defaults, caller control and deployment behavior rather than assuming that upgrading makes every request safe.",
+      "public_source": "https://github.com/axios/axios/security/advisories/GHSA-jr5f-v2jv-69x6"
     }
   ]
 }
