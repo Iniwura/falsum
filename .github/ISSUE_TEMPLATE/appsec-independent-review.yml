@@ -1,0 +1,75 @@
+name: Independent AppSec evidence review (human only)
+description: Independently validate one public FALSUM source case; this is NOT automatic evaluator approval.
+title: "[AppSec review] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        FALSUM needs genuinely independent AppSec assessments. Source verification, a trained model, GitHub stars or a check mark do not establish ground truth. Review the actual historical code and deployment preconditions; mark uncertain when the evidence is incomplete. No credentials or private disclosures.
+        Cases and public source evidence: https://github.com/Iniwura/falsum/blob/main/docs/PHASE2O.md
+        Pre-fix challenge separation: https://github.com/Iniwura/falsum/blob/main/docs/PHASE2P.md
+  - type: dropdown
+    id: case
+    attributes:
+      label: Public source case
+      description: Select the specific source-verified case you actually inspected.
+      options:
+        - real-requests-proxy-auth
+        - real-aiohttp-static-traversal
+        - real-jinja-attr-sandbox
+    validations:
+      required: true
+  - type: dropdown
+    id: decision
+    attributes:
+      label: Is the claimed issue supported by this source fix and its regression test?
+      options:
+        - supported
+        - unsupported
+        - uncertain - needs more evidence
+    validations:
+      required: true
+  - type: textarea
+    id: analysis
+    attributes:
+      label: Original security analysis
+      description: Explain the security boundary, what the original code does, and how the fix affects it. Do not paraphrase model output as your own review.
+      placeholder: Describe concrete data flow, trust boundary, caller control and the exact code relevant to this conclusion.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Deployment preconditions and limitations
+      description: Explain configuration, versions, required access, and what the evidence cannot establish.
+      placeholder: State which conditions must hold, what assumptions remain unverified, and possible alternative interpretations.
+    validations:
+      required: true
+  - type: textarea
+    id: citations
+    attributes:
+      label: Pinpoint source evidence
+      description: Give immutable parent/fix commit URLs and exact file lines, plus a primary advisory or regression-test citation.
+      placeholder: |
+        Parent file link (commit SHA and #Lx-Ly):
+        Fix and test (commit SHA and #Lx-Ly):
+        Public advisory and supporting passage:
+    validations:
+      required: true
+  - type: textarea
+    id: uncertainty
+    attributes:
+      label: Uncertainty, disagreement, and possible corrections
+      description: Challenge the stated hypothesis whenever warranted. State what evidence would change your judgment.
+      placeholder: Explain missing data, uncertainty, edge cases or why the published patch alone is insufficient.
+    validations:
+      required: true
+  - type: checkboxes
+    id: attestation
+    attributes:
+      label: Independent reviewer attestation
+      options:
+        - label: I inspected the original primary evidence independently, and I am not submitting generated or copied analysis as a personal expert review.
+          required: true
+        - label: I understand this issue is a review proposal, not a verified acceptance, hackathon submission, or model training label.
+          required: true
