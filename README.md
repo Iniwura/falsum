@@ -8,6 +8,16 @@ An evidence-grounded security evaluation research project for [Telegraph Season 
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
 
+## Phase 2O: genuine public security-fix code (not training labels)
+
+FALSUM now verifies three **real upstream security-fix commits** in Requests, aiohttp, and Jinja2, covering proxy credential forwarding, static-file traversal, and a sandbox attribute-filter bypass. It checks full commit and parent identities, exact source and regression-test Git blob IDs, then **replays the code and test diff against the actual upstream parent revision**. Six file transitions must reconstruct byte-for-byte or CI fails.
+
+- [Real source queue](data/real-fix-queue.json)
+- [Source provenance, replay and independent-review boundary](docs/PHASE2O.md)
+- [Automated verified evidence workflow](.github/workflows/real-fix-evidence.yml)
+
+**Important:** These are real public patches, not independent security-review answer labels. Their real-world deployment prerequisites must still be reviewed by AppSec experts. This corpus has **zero human-reviewed answers**, is **not** fed into the quarantined ModelBERT pilots, and is **not** an eligible Telegraph evaluation set.
+
 ## Phase 1 + Phase 2a: foundation and source snapshots
 
 This repository starts with an **offline, fail-closed data quality gate** for security evaluation material. It catches malformed provenance, unreviewed evidence, duplicated negatives, easy length shortcuts, near-duplicate prompts, and advisory leakage across train/validation/holdout splits. It exports the exact `prompt` / `chosen` / `rejected` JSONL format used by the official training kit.
