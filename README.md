@@ -83,3 +83,7 @@ Four upstream documentation revisions have been pinned, with curated SHA-256 ver
 ## Phase 2e — official dataset-gate diagnostic
 
 A [pinned upstream Telegraph training-kit check](docs/PHASE2E.md) now runs in CI on quarantined **draft-only** rows. The official check is currently expected to **fail** because the training partition contains six pairs and the upstream 2% single-negative rule requires at least 50 unique rows. This is deliberate transparency, not a passing data gate, not a trained model, and not network eligibility.
+
+## Phase 2f: pinned GitHub advisory research queue
+
+The [32-advisory research queue](data/advisory-queue.json) provides a reproducible **draft-only** pipeline for synthetic affected/fixed-version tasks (potentially 52 training, 6 validation, 6 holdout comparisons). Use `PYTHONPATH=src python -m falsum.advisory_corpus data/advisory-queue.json --out build/phase2f-quarantined` with outbound GitHub access. The workflow never marks rows reviewed, trains a model, or claims Telegraph eligibility. See [Phase 2f notes](docs/PHASE2F.md).

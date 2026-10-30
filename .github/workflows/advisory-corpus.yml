@@ -1,0 +1,60 @@
+name: Pinned GHSA corpus diagnostic (DRAFT ONLY)
+on:
+  push:
+    paths:
+      - 'src/falsum/advisory_corpus.py'
+      - 'data/advisory-queue.json'
+      - 'tests/test_advisory_corpus.py'
+      - '.github/workflows/advisory-corpus.yml'
+  workflow_dispatch:
+jobs:
+  research-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate queue and generator (offline)
+        run: PYTHONPATH=src python -m unittest discover -s tests -p test_advisory_corpus.py -v
+      - name: Build source-pinned draft diagnostics (no upload, no training)
+        run: PYTHONPATH=src python -m falsum.advisory_corpus data/advisory-queue.json --out "$RUNNER_TEMP/falsum-phase2f"
+      - name: Checkout official Telegraph V2 gate at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Install official gate's NumPy dependency
+        run: python -m pip install 'numpy>=1.26,<3'
+      - name: Run official shortcut gate on quarantined draft pairs
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH="$GITHUB_WORKSPACE/telegraph-kit" python -m wide_runtime.train_adapter \
+            --intent SECURITY_REVIEW_GENERAL \
+            --data "$RUNNER_TEMP/falsum-phase2f/DRAFT-ONLY-train.jsonl" --check-data
+          code=$?
+          set -e
+          echo "Official dataset checker exit: $code" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$code" -eq 2 ]; then
+            echo "The official checker returned a tooling/data error, not a dataset verdict."
+            exit 1
+          fi
+          if [ "$code" -eq 0 ]; then
+            echo "Draft data passed shortcut checks; NOT reviewed or eligible." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Draft data failed shortcut checks; still under research." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Save evidence-and-gate diagnostics, explicitly not for training
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-RESEARCH-ONLY-NOT-TELEGRAPH-ELIGIBLE
+          path: ${{ runner.temp }}/falsum-phase2f/
+          if-no-files-found: warn
+          retention-days: 14
