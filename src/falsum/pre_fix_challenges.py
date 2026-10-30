@@ -23,7 +23,7 @@ MAX_SEGMENT_LINES = 70
 MAX_PROMPT_BYTES = 4300
 MAX_HUNKS_PER_CASE = 12
 FENCE = chr(96) * 3
-ADVISORY_ID = re.compile(r"(?i)\\b(?:GHSA-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}|CVE-\\d{4}-\\d{4,})\\b")
+ADVISORY_ID = re.compile(r"(?i)\b(?:GHSA-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}|CVE-\d{4}-\d{4,})\b")
 LANGUAGES = {".py": "python", ".js": "javascript", ".ts": "typescript", ".go": "go",
              ".rs": "rust", ".rb": "ruby"}
 
