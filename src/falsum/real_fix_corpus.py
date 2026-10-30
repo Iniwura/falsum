@@ -118,7 +118,7 @@ def fetch_github_commit(url: str) -> dict:
     return data
 
 
-def _selected_patch(file: dict, name: str, blob: str, key: str) -> dict:
+def _selected_patch(file: dict, name: str, blob: str, key: str, *, require_removed: bool = False) -> dict:
     if not isinstance(file, dict) or file.get("filename") != name or file.get("sha") != blob:
         raise RealFixError(f"{key}: wrong upstream source path/blob")
     if file.get("status") != "modified":
@@ -126,7 +126,7 @@ def _selected_patch(file: dict, name: str, blob: str, key: str) -> dict:
     patch = file.get("patch")
     if not isinstance(patch, str) or not patch.startswith("@@ ") or len(patch.encode("utf-8")) > MAX_PATCH_BYTES:
         raise RealFixError(f"{key}: missing or oversized textual patch")
-    if not any(line.startswith("-") and not line.startswith("---") for line in patch.splitlines()):
+    if require_removed and not any(line.startswith("-") and not line.startswith("---") for line in patch.splitlines()):
         raise RealFixError(f"{key}: patch lacks removed source lines")
     if not any(line.startswith("+") and not line.startswith("+++") for line in patch.splitlines()):
         raise RealFixError(f"{key}: patch lacks added source lines")
@@ -147,7 +147,7 @@ def verify_commit(row: dict, source: dict) -> dict:
     if not isinstance(files, list) or not files or len(files) > 100:
         raise RealFixError(f"{row['id']}: missing or oversized change list")
     matches = {f.get("filename"): f for f in files if isinstance(f, dict)}
-    main = _selected_patch(matches.get(row["source_path"]), row["source_path"], row["source_blob"], row["id"])
+    main = _selected_patch(matches.get(row["source_path"]), row["source_path"], row["source_blob"], row["id"], require_removed=True)
     test = _selected_patch(matches.get(row["test_path"]), row["test_path"], row["test_blob"], row["id"])
     if main["sha256"] == test["sha256"]:
         raise RealFixError(f"{row['id']}: source and test patch are identical")
