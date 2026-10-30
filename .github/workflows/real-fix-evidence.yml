@@ -1,0 +1,58 @@
+name: Real upstream security-fix evidence (research only)
+on:
+  push:
+    paths:
+      - 'src/falsum/real_fix_corpus.py'
+      - 'tests/test_real_fix_corpus.py'
+      - 'data/real-fix-queue.json'
+      - '.github/workflows/real-fix-evidence.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-evidence:
+    name: Pin real upstream patches + produce review packet (NO labels)
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline malicious source/review-status tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_real_fix_corpus.py' -v
+      - name: Fetch actual public commit objects and recheck pinned revisions
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-real-fixes"
+          PYTHONPATH=src python -m falsum.real_fix_corpus \
+            --queue data/real-fix-queue.json \
+            --out "$RUNNER_TEMP/falsum-real-fixes/SOURCE-VERIFIED-NOT-LABELED.json" \
+            --reviewer-out "$RUNNER_TEMP/falsum-real-fixes/EXTERNAL-REVIEW-QUESTIONS-NO-LABELS.json"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"]) / "falsum-real-fixes"
+          a = json.loads((root / "SOURCE-VERIFIED-NOT-LABELED.json").read_text())
+          b = json.loads((root / "EXTERNAL-REVIEW-QUESTIONS-NO-LABELS.json").read_text())
+          assert a["source_verified"] == 3 and a["independent_human_reviews"] == 0
+          assert a["network_eligible"] is False and a["training_authorized"] is False
+          assert b["proposed_labels"] == 0 and b["human_reviews"] == 0
+          assert len(b["questions"]) == len(a["cases"]) == 3
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as out:
+              out.write("### FALSUM real upstream patch corpus\n\n")
+              out.write("3 immutable upstream security-fix commits + source and test patch blobs verified.\n\n")
+              out.write("**NO independently reviewed labels. NO eligible training data or network evaluator.**\n")
+          PY
+      - name: Upload source evidence + external review questions
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PUBLIC-REAL-FIXES-UNREVIEWED
+          path: ${{ runner.temp }}/falsum-real-fixes/
+          if-no-files-found: error
+          retention-days: 30
