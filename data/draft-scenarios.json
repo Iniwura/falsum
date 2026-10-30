@@ -4,26 +4,42 @@
     {
       "id": "django-checklist",
       "publisher": "Django Project",
-      "url": "https://github.com/django/django/blob/main/docs/howto/deployment/checklist.txt",
-      "state": "linked_unpinned"
+      "url": "https://raw.githubusercontent.com/django/django/3bdcd29a61be034b9c9a1cea744371c12339c48e/docs/howto/deployment/checklist.txt",
+      "state": "pinned",
+      "snapshot_path": "guidance/django-checklist.excerpt.json",
+      "sha256": "7997ca1667d64463c2e8d17ed1c07e473e86b0d112bfcf21030aa20a3a94368d",
+      "source_commit": "3bdcd29a61be034b9c9a1cea744371c12339c48e",
+      "source_kind": "curated_excerpt"
     },
     {
       "id": "owasp-ssrf",
       "publisher": "OWASP",
-      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
-      "state": "linked_unpinned"
+      "url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/920293be317721982fa50324a6f26af3f29dc45e/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.md",
+      "state": "pinned",
+      "snapshot_path": "guidance/owasp-ssrf.excerpt.json",
+      "sha256": "a075aaf9700079917872b1d38106df01f2cb0e550039bc6edb853af005383a03",
+      "source_commit": "920293be317721982fa50324a6f26af3f29dc45e",
+      "source_kind": "curated_excerpt"
     },
     {
       "id": "github-actions",
       "publisher": "GitHub Docs",
-      "url": "https://github.com/github/docs/blob/main/content/actions/reference/security/secure-use.md",
-      "state": "linked_unpinned"
+      "url": "https://raw.githubusercontent.com/github/docs/5ecebc9f4d708c7cfda4d3ba80224815dd6a7f1d/content/actions/reference/security/secure-use.md",
+      "state": "pinned",
+      "snapshot_path": "guidance/github-actions.excerpt.json",
+      "sha256": "84deb7381518c05cc904cbff05fc72a72defbfb84c3ebfe097f9f7d0d59f5267",
+      "source_commit": "5ecebc9f4d708c7cfda4d3ba80224815dd6a7f1d",
+      "source_kind": "curated_excerpt"
     },
     {
       "id": "node-tls",
       "publisher": "Node.js Project",
-      "url": "https://nodejs.org/api/tls.html",
-      "state": "linked_unpinned"
+      "url": "https://raw.githubusercontent.com/nodejs/node/97aed16adb90a720308d7ebea417c9a9db81ea26/doc/api/tls.md",
+      "state": "pinned",
+      "snapshot_path": "guidance/node-tls.excerpt.json",
+      "sha256": "9733e03add510952827dbbc8df6b7a6e74bad88b2b44ad99ebe80b15e59e0fcc",
+      "source_commit": "97aed16adb90a720308d7ebea417c9a9db81ea26",
+      "source_kind": "curated_excerpt"
     }
   ],
   "cases": [

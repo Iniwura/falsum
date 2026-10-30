@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 from .ledger import LedgerError, export_jsonl, load_ledger
-from .scenarios import ScenarioError, read_casebook, readiness_report, export_reviewed
+from .scenarios import ScenarioError, read_casebook, readiness_report, export_reviewed, verify_source_snapshots
 from .osv import SourceError, audit_ledger_snapshots, verify_snapshot, version_status
 from .sources import fetch_osv
 
@@ -34,6 +34,8 @@ def main(argv: list[str] | None = None) -> int:
     audit.add_argument("ledger", type=Path)
     audit.add_argument("--directory", type=Path, required=True)
     audit.add_argument("--include-drafts", action="store_true", help="source-audit draft records without marking them reviewed")
+    guidance_audit = commands.add_parser('audit-scenarios', help='verify pinned security guidance snapshots')
+    guidance_audit.add_argument('casebook', type=Path)
     casebook = commands.add_parser("check-scenarios", help="validate security-review draft scenarios")
     casebook.add_argument("casebook", type=Path)
     case_export = commands.add_parser("export-scenarios", help="export only fully reviewed scenario pairs")
@@ -42,11 +44,17 @@ def main(argv: list[str] | None = None) -> int:
     case_export.add_argument("--out", required=True, type=Path)
     args = parser.parse_args(argv)
     try:
-        if args.command in ("check-scenarios", "export-scenarios"):
+        if args.command in ("check-scenarios", "export-scenarios", "audit-scenarios"):
             book = read_casebook(args.casebook)
             if args.command == "check-scenarios":
                 import json
-                print(json.dumps(readiness_report(book), indent=2, sort_keys=True))
+                print(json.dumps(readiness_report(book, base_dir=args.casebook.parent), indent=2, sort_keys=True))
+                return 0
+            if args.command == 'audit-scenarios':
+                issues = verify_source_snapshots(book, args.casebook.parent)
+                if issues:
+                    raise ScenarioError('; '.join(issues))
+                print('SOURCE AUDIT: pinned excerpts match checksums and local provenance; expert review still required')
                 return 0
             output = export_reviewed(book, args.split, base_dir=args.casebook.parent)
             args.out.parent.mkdir(parents=True, exist_ok=True)

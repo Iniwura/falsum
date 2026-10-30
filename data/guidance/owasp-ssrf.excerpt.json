@@ -1,0 +1,19 @@
+{
+  "format": "falsum_upstream_excerpt_v1",
+  "source_id": "owasp-ssrf",
+  "immutable_url": "https://raw.githubusercontent.com/OWASP/CheatSheetSeries/920293be317721982fa50324a6f26af3f29dc45e/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.md",
+  "upstream": {
+    "repository": "OWASP/CheatSheetSeries",
+    "commit": "920293be317721982fa50324a6f26af3f29dc45e",
+    "path": "cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.md"
+  },
+  "capture_note": "Curated verbatim excerpt(s) only, not a full upstream snapshot or independent review.",
+  "excerpts": [
+    {
+      "quote": "Application can send request only to **identified and trusted applications**"
+    },
+    {
+      "quote": "Disable the support for the following of the [redirection]"
+    }
+  ]
+}

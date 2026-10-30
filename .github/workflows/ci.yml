@@ -17,3 +17,7 @@ jobs:
         run: python -m compileall -q src tests
       - name: Run offline evidence gates and tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Audit pinned security guidance
+        run: PYTHONPATH=src python -m falsum audit-scenarios data/draft-scenarios.json
+      - name: Audit pinned security guidance
+        run: PYTHONPATH=src python -m falsum audit-scenarios data/draft-scenarios.json

@@ -75,3 +75,7 @@ Read [Phase 2c casebook, provenance and promotion gates](docs/SCENARIOS.md).
 The program does **not** analyze real repositories, detect real secrets, or
 replace human review. It must not be represented as a deployed security scanner
 or an accepted Telegraph scoring adapter.
+
+## Phase 2d — pinned application-security guidance
+
+Four upstream documentation revisions have been pinned, with curated SHA-256 verified excerpt manifests. Run `PYTHONPATH=src python -m falsum audit-scenarios data/draft-scenarios.json`. See [Phase 2d provenance](docs/PHASE2D.md). All scenario cases are still drafts; no independent human review, eligible Telegraph rows, model or scorer is claimed.

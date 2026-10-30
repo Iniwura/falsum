@@ -1,0 +1,19 @@
+{
+  "format": "falsum_upstream_excerpt_v1",
+  "source_id": "django-checklist",
+  "immutable_url": "https://raw.githubusercontent.com/django/django/3bdcd29a61be034b9c9a1cea744371c12339c48e/docs/howto/deployment/checklist.txt",
+  "upstream": {
+    "repository": "django/django",
+    "commit": "3bdcd29a61be034b9c9a1cea744371c12339c48e",
+    "path": "docs/howto/deployment/checklist.txt"
+  },
+  "capture_note": "Curated verbatim excerpt(s) only, not a full upstream snapshot or independent review.",
+  "excerpts": [
+    {
+      "quote": "**You must never enable debug in production.**"
+    },
+    {
+      "quote": "avoid\ncommitting it to source control."
+    }
+  ]
+}

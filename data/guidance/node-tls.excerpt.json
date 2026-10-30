@@ -1,0 +1,16 @@
+{
+  "format": "falsum_upstream_excerpt_v1",
+  "source_id": "node-tls",
+  "immutable_url": "https://raw.githubusercontent.com/nodejs/node/97aed16adb90a720308d7ebea417c9a9db81ea26/doc/api/tls.md",
+  "upstream": {
+    "repository": "nodejs/node",
+    "commit": "97aed16adb90a720308d7ebea417c9a9db81ea26",
+    "path": "doc/api/tls.md"
+  },
+  "capture_note": "Curated verbatim excerpt(s) only, not a full upstream snapshot or independent review.",
+  "excerpts": [
+    {
+      "quote": "If not `false`, the server certificate is\n    verified against the list of supplied CAs."
+    }
+  ]
+}

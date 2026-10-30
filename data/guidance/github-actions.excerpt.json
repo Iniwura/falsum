@@ -1,0 +1,16 @@
+{
+  "format": "falsum_upstream_excerpt_v1",
+  "source_id": "github-actions",
+  "immutable_url": "https://raw.githubusercontent.com/github/docs/5ecebc9f4d708c7cfda4d3ba80224815dd6a7f1d/content/actions/reference/security/secure-use.md",
+  "upstream": {
+    "repository": "github/docs",
+    "commit": "5ecebc9f4d708c7cfda4d3ba80224815dd6a7f1d",
+    "path": "content/actions/reference/security/secure-use.md"
+  },
+  "capture_note": "Curated verbatim excerpt(s) only, not a full upstream snapshot or independent review.",
+  "excerpts": [
+    {
+      "quote": "Because there are multiple ways a secret value can be transformed, automatic redaction is not guaranteed."
+    }
+  ]
+}

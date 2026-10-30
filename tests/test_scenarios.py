@@ -44,6 +44,7 @@ class ScenarioTests(unittest.TestCase):
     def test_unverified_source_pin_rejected(self):
         b = copy.deepcopy(self.book)
         b['sources'][0]['state'] = 'pinned'
+        b['sources'][0]['sha256'] = ''
         self.assertTrue(any('checksum' in e for e in validate_casebook(b)))
 
     def test_split_leak_on_rule_rejected(self):
@@ -112,9 +113,45 @@ class ScenarioTests(unittest.TestCase):
 
     def test_draft_disclosures_are_not_verification(self):
         self.assertTrue(all(x['review_status'] == 'draft' for x in self.book['cases']))
-        self.assertTrue(all(x['state'] == 'linked_unpinned' for x in self.book['sources']))
+        self.assertTrue(all(x['state'] == 'pinned' for x in self.book['sources']))
         self.assertTrue(all('FAKE' not in x['chosen'] for x in self.book['cases']))
 
+
+    def test_pinned_guidance_integrity_and_honest_status(self):
+        self.assertEqual(verify_source_snapshots(self.book, BOOK_PATH.parent), [])
+        result = readiness_report(self.book, base_dir=BOOK_PATH.parent)
+        self.assertEqual(result['pinned_sources'], 4)
+        self.assertTrue(result['source_integrity_ok'])
+        self.assertFalse(result['local_export_ready'])
+        self.assertFalse(result['submission_ready'])
+        self.assertEqual(result['network_eligibility'], 'unverified')
+
+    def test_guidance_audit_cli(self):
+        self.assertEqual(main(['audit-scenarios', str(BOOK_PATH)]), 0)
+
+    def test_tampered_excerpt_fails_even_after_rehash(self):
+        with tempfile.TemporaryDirectory() as folder:
+            sample = copy.deepcopy(self.book['sources'][0])
+            src = BOOK_PATH.parent / sample['snapshot_path']
+            dst = Path(folder) / sample['snapshot_path']
+            dst.parent.mkdir(parents=True)
+            excerpt = json.loads(src.read_text(encoding='utf-8'))
+            excerpt['immutable_url'] = 'https://example.org/incorrect'
+            raw = (json.dumps(excerpt, indent=2) + '\n').encode('utf-8')
+            dst.write_bytes(raw)
+            sample['sha256'] = hashlib.sha256(raw).hexdigest()
+            errors = verify_source_snapshots({'sources':[sample]}, Path(folder))
+            self.assertTrue(any('provenance mismatch' in x for x in errors))
+
+    def test_unlocated_snapshot_is_never_ready(self):
+        result = readiness_report(self.book)
+        self.assertFalse(result['source_integrity_ok'])
+        self.assertFalse(result['submission_ready'])
+        self.assertFalse(result['local_export_ready'])
+
+    def test_missing_real_excerpt_fails_closed(self):
+        with tempfile.TemporaryDirectory() as folder:
+            self.assertTrue(verify_source_snapshots(self.book, Path(folder)))
 
 if __name__ == '__main__':
     unittest.main()

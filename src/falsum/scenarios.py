@@ -161,11 +161,15 @@ def read_casebook(path: str | Path) -> dict:
     return data
 
 
-def readiness_report(book: dict) -> dict:
+def readiness_report(book: dict, *, base_dir: str | Path | None = None) -> dict:
+    """Local export-readiness only; never infer Telegraph network eligibility."""
     errors = validate_casebook(book)
     if errors:
         raise ScenarioError('\n'.join(errors))
     cases = book['cases']
+    all_reviewed = bool(cases) and all(x['review_status'] == 'reviewed' for x in cases)
+    all_pinned = bool(book['sources']) and all(x['state'] == 'pinned' for x in book['sources'])
+    issues = verify_source_snapshots(book, base_dir) if base_dir is not None else ['source snapshots not audited']
     return {
         'count': len(cases),
         'by_category': dict(sorted(Counter(x['category'] for x in cases).items())),
@@ -173,8 +177,11 @@ def readiness_report(book: dict) -> dict:
         'by_outcome': dict(sorted(Counter(x['expected_outcome'] for x in cases).items())),
         'reviewed': sum(x['review_status'] == 'reviewed' for x in cases),
         'pinned_sources': sum(x['state'] == 'pinned' for x in book['sources']),
-        'submission_ready': all(x['review_status'] == 'reviewed' for x in cases)
-                           and all(x['state'] == 'pinned' for x in book['sources']),
+        'source_integrity_ok': not issues,
+        'source_integrity_errors': issues,
+        'local_export_ready': all_reviewed and all_pinned and not issues,
+        'submission_ready': False,
+        'network_eligibility': 'unverified',
     }
 
 
@@ -199,6 +206,21 @@ def verify_source_snapshots(book: dict, base_dir: str | Path) -> list[str]:
             digest = hashlib.sha256(target.read_bytes()).hexdigest()
             if digest != src.get('sha256'):
                 raise OSError('source snapshot SHA-256 mismatch')
+            if str(name).endswith('.excerpt.json'):
+                try:
+                    body = json.loads(target.read_text(encoding='utf-8'))
+                except (UnicodeError, ValueError) as exc:
+                    raise OSError('invalid excerpt JSON') from exc
+                if (not isinstance(body, dict)
+                        or body.get('format') != 'falsum_upstream_excerpt_v1'
+                        or body.get('source_id') != src.get('id')
+                        or body.get('immutable_url') != src.get('url')
+                        or not isinstance(body.get('upstream'), dict)
+                        or body['upstream'].get('commit') != src.get('source_commit')
+                        or not isinstance(body.get('excerpts'), list)
+                        or not body['excerpts']
+                        or any(not isinstance(x, dict) or not x.get('quote') for x in body['excerpts'])):
+                    raise OSError('excerpt provenance mismatch')
         except OSError as exc:
             errors.append(f"{src.get('id')}: {exc}")
     return errors
