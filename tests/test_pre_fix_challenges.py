@@ -8,7 +8,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from falsum.pre_fix_challenges import (
-    ChallengeError, _canonical, build_challenges, parent_regions, main,
+    ChallengeError, ADVISORY_ID, _canonical, build_challenges, parent_regions, main,
 )
 from falsum.real_fix_replay import ReplayError, git_blob_sha, raw_url
 from test_real_fix_replay import setup
@@ -54,7 +54,17 @@ class PreFixChallengeTests(unittest.TestCase):
             self.assertNotIn("pallets/jinja", item["prompt"])
         self.assertEqual({r["challenge_id"] for r in public["prompts"]},
                          {r["challenge_id"] for r in audit["records"]})
+        by_id = {r["challenge_id"]: r for r in audit["records"]}
+        for item in public["prompts"]:
+            origin = by_id[item["challenge_id"]]["repository"]
+            expected_lang = "javascript" if origin == "axios/axios" else "python"
+            self.assertIn(chr(96)*3 + expected_lang, item["prompt"])
         self.assertTrue(all(r["human_label"] is None and not r["eligible"] for r in audit["records"]))
+
+    def test_cve_and_ghsa_advisory_leak_matcher(self):
+        self.assertIsNotNone(ADVISORY_ID.search("security: GHSA-ab12-cd34-ef56"))
+        self.assertIsNotNone(ADVISORY_ID.search("CVE-2025-27152"))
+        self.assertIsNone(ADVISORY_ID.search("CVE not present and no vulnerability label"))
 
     def test_parent_ranges_are_actual_old_source(self):
         old = b"first\nsecond\nthird\nFOURTH\nfifth\nsixth\nseventh\neighth\n"
