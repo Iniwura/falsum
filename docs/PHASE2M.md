@@ -27,6 +27,23 @@ PYTHONPATH=src python -m falsum.context_curriculum \
   --manifest /tmp/CONTEXT-MANIFEST.json
 ```
 
+## Measured result (30 October 2026)
+
+The real [A/B workflow](https://github.com/Iniwura/falsum/actions/runs/41126779406) finished successfully, using the actual official V2 ModernBERT trainer. Its quarantined checkpoint and evidence were uploaded as artifact `13011655915`.
+
+| Measure | Control: 52 | Intervention: 58 |
+| --- | ---: | ---: |
+| Official data-quality shortcut gate | PASS | PASS |
+| Official synthetic GHSA test | 5 / 6 (83.33%) | 6 / 6 (100%) |
+| Full-context PR validation | 1 / 4 (25%) | 1 / 4 (25%) |
+| Full-context PR holdout | 2 / 2 (100%) | 2 / 2 (100%) |
+| Counterfactual rule families both correct | 1 / 6 | 1 / 6 |
+| Answer-only PR validation | 2 / 4 (50%) | 2 / 4 (50%) |
+
+This is **no improvement** on the primary PR judgment task despite a better official six-case advisory result. Five PR families still fail at least one context reversal. Training with only six additional fictional PR preferences does not establish credible cross-domain generalization. An official test PASS is not a license to submit this unreviewed research model.
+
+The next iteration should **not** repeatedly tune against the same 4 validation / 2 holdout PRs or fabricate more weak labels. Expand to independently verified, realistic project-separated PR cases and obtain genuine blind expert judgments first.
+
 ## Interpretation rules
 
 The headline comparison is **full-context PR validation accuracy** and **number of paired families correctly reversed**. An answer-only ablation is retained to detect style shortcuts. The GHSA official test result must be reported separately, never substituted for code-review performance.
