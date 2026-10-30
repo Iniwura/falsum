@@ -1,0 +1,123 @@
+name: RESEARCH ONLY - CPU ModernBERT LoRA pilot
+on:
+  push:
+    paths:
+      - 'src/falsum/research_pilot.py'
+      - 'tests/test_research_pilot.py'
+      - '.github/workflows/research-model-pilot.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research-model:
+    name: Train research-only V2 reward model (NOT network eligible)
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      PYTHONUNBUFFERED: '1'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '4'
+      MKL_NUM_THREADS: '4'
+      DATA_DIR: ${{ runner.temp }}/falsum-pilot
+      MODEL_DIR: ${{ runner.temp }}/falsum-pilot-model
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify research-only data audit tests (offline)
+        run: PYTHONPATH=src python -m unittest discover -s tests -p test_research_pilot.py -v
+      - name: Reconstruct archived GHSA draft data from immutable records
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.advisory_corpus data/advisory-queue.json --out "$DATA_DIR"
+          PYTHONPATH=src python -m falsum.review_gate data/advisory-queue.json "$DATA_DIR/DRAFT-ONLY-corpus.json" --audit-only
+          PYTHONPATH=src python -m falsum.grounded_eval data/advisory-queue.json "$DATA_DIR/DRAFT-ONLY-corpus.json" --out "$DATA_DIR/grounded"
+          PYTHONPATH=src python -m falsum.research_pilot data/advisory-queue.json "$DATA_DIR" --manifest "$DATA_DIR/PILOT-QUARANTINE-MANIFEST.json"
+      - name: Checkout immutable official Telegraph V2 model trainer
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Install CPU PyTorch and official kit model dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r telegraph-kit/requirements.txt 'transformers>=4.48,<5' 'numpy>=1.26,<3' 'peft>=0.14,<1'
+          mkdir -p "$DATA_DIR"
+          python -m pip freeze > "$DATA_DIR/RESEARCH-DEPENDENCIES.txt"
+      - name: Require upstream shortcut gate to pass before training
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=telegraph-kit python -m wide_runtime.train_adapter \
+            --intent SECURITY_REVIEW_GENERAL \
+            --data "$DATA_DIR/grounded/DRAFT-grounded-train.jsonl" --check-data \
+            2>&1 | tee "$DATA_DIR/UPSTREAM-DATA-GATE.log"
+      - name: Train actual ModernBERT LoRA for research ONLY (CPU, 1 epoch)
+        id: train
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p "$MODEL_DIR"
+          PYTHONPATH=telegraph-kit python -m wide_runtime.train_adapter \
+            --intent SECURITY_REVIEW_GENERAL \
+            --data "$DATA_DIR/grounded/DRAFT-grounded-train.jsonl" \
+            --val-data "$DATA_DIR/grounded/DRAFT-grounded-validation.jsonl" \
+            --test-data "$DATA_DIR/grounded/DRAFT-grounded-holdout.jsonl" \
+            --max-length 512 --batch-size 1 --eval-batch 1 --grad-accum 8 --epochs 1 \
+            --out "$MODEL_DIR/SECURITY_REVIEW_GENERAL" \
+            2>&1 | tee "$DATA_DIR/RESEARCH-TRAINING.log"
+          status=${PIPESTATUS[0]}
+          echo "upstream_training_exit_code=$status" >> "$GITHUB_OUTPUT"
+          echo "Official trainer exit: $status (0=model passed 6-case holdout; 1=failed evaluation; 2=tooling error)" >> "$GITHUB_STEP_SUMMARY"
+          echo "This is a CPU research pilot trained on UNREVIEWED SYNTHETIC data, NOT an eligible Telegraph evaluator." >> "$GITHUB_STEP_SUMMARY"
+          if [ "$status" -gt 1 ]; then
+            echo 'Tooling/data error: investigate the training log.'
+            exit "$status"
+          fi
+          # Exit code 1 is a genuine failed model evaluation, not a tool failure.
+          # Record the result; never relabel the model as passing.
+          exit 0
+      - name: Measure REAL model on counterfactual PRs with answer-only ablation
+        if: steps.train.outcome == 'success'
+        shell: bash
+        run: |
+          set -uo pipefail
+          adapter="$MODEL_DIR/SECURITY_REVIEW_GENERAL/adapter"
+          if [ ! -f "$adapter/adapter_config.json" ] || [ ! -f "$adapter/adapter_model.safetensors" ]; then
+            echo 'No real trained PEFT checkpoint available for scoring.' | tee "$DATA_DIR/MODEL-MISSING.txt"
+            exit 0
+          fi
+          PYTHONPATH="$GITHUB_WORKSPACE/src:$GITHUB_WORKSPACE/telegraph-kit" python -m falsum.model_eval \
+            --benchmark data/draft-pr-benchmark.json \
+            --casebook data/draft-scenarios.json \
+            --adapter "$adapter" \
+            --report "$DATA_DIR/COUNTERFACTUAL-MODEL-RESULT.json" \
+            2>&1 | tee "$DATA_DIR/COUNTERFACTUAL-MODEL-LOG.txt"
+          status=${PIPESTATUS[0]}
+          echo "Counterfactual model evaluation exit: $status (failure is a research result, not a fabricated score)" >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+      - name: Save research-only evidence and actual checkpoint (never publish or register)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-MODEL-RESEARCH-NOT-SUBMITTABLE
+          path: |
+            ${{ runner.temp }}/falsum-pilot/PILOT-QUARANTINE-MANIFEST.json
+            ${{ runner.temp }}/falsum-pilot/RESEARCH-DEPENDENCIES.txt
+            ${{ runner.temp }}/falsum-pilot/UPSTREAM-DATA-GATE.log
+            ${{ runner.temp }}/falsum-pilot/RESEARCH-TRAINING.log
+            ${{ runner.temp }}/falsum-pilot/COUNTERFACTUAL-MODEL-RESULT.json
+            ${{ runner.temp }}/falsum-pilot/COUNTERFACTUAL-MODEL-LOG.txt
+            ${{ runner.temp }}/falsum-pilot/MODEL-MISSING.txt
+            ${{ runner.temp }}/falsum-pilot-model/SECURITY_REVIEW_GENERAL/result.json
+            ${{ runner.temp }}/falsum-pilot-model/SECURITY_REVIEW_GENERAL/adapter/
+          if-no-files-found: warn
+          retention-days: 7
