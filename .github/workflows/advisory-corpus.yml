@@ -4,9 +4,11 @@ on:
     paths:
       - 'src/falsum/advisory_corpus.py'
       - 'src/falsum/review_gate.py'
+      - 'src/falsum/grounded_eval.py'
       - 'data/advisory-queue.json'
       - 'tests/test_advisory_corpus.py'
       - 'tests/test_review_gate.py'
+      - 'tests/test_grounded_eval.py'
       - '.github/workflows/advisory-corpus.yml'
   workflow_dispatch:
 jobs:
@@ -28,6 +30,12 @@ jobs:
         run: |
           PYTHONPATH=src python -m falsum.review_gate data/advisory-queue.json \
             "$RUNNER_TEMP/falsum-phase2f/DRAFT-ONLY-corpus.json" --audit-only
+      - name: Test grounded evidence builder and score comparison harness
+        run: PYTHONPATH=src:tests python -m unittest discover -s tests -p test_grounded_eval.py -v
+      - name: Build evidence-present benchmark with source-blind controls
+        run: |
+          PYTHONPATH=src python -m falsum.grounded_eval data/advisory-queue.json \
+            "$RUNNER_TEMP/falsum-phase2f/DRAFT-ONLY-corpus.json" --out "$RUNNER_TEMP/falsum-phase2f/grounded"
       - name: Checkout official Telegraph V2 gate at pinned commit
         uses: actions/checkout@v4
         with:
@@ -55,6 +63,20 @@ jobs:
             echo "Draft data passed shortcut checks; NOT reviewed or eligible." >> "$GITHUB_STEP_SUMMARY"
           else
             echo "Draft data failed shortcut checks; still under research." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Run official shortcut gate on evidence-present drafts (separate result)
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH="$GITHUB_WORKSPACE/telegraph-kit" python -m wide_runtime.train_adapter \
+            --intent SECURITY_REVIEW_GENERAL \
+            --data "$RUNNER_TEMP/falsum-phase2f/grounded/DRAFT-grounded-train.jsonl" --check-data
+          code=$?
+          set -e
+          echo "Grounded DRAFT-only dataset gate exit: $code (0=shortcut-pass, 1=shortcut-fail; not model performance)" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$code" -eq 2 ]; then
+            echo "The official quality checker errored while processing the grounded dataset."
+            exit 1
           fi
       - name: Save evidence-and-gate diagnostics, explicitly not for training
         if: always()
