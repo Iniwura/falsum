@@ -1,0 +1,70 @@
+name: Independent AppSec intake (review claims only)
+
+on:
+  issues:
+    types: [opened, edited, reopened, closed]
+  workflow_dispatch:
+  push:
+    paths:
+      - 'src/falsum/independent_review_intake.py'
+      - 'tests/test_independent_review_intake.py'
+      - 'data/real-fix-queue.json'
+      - '.github/workflows/appsec-review-intake.yml'
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  independent-review-intake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate all offline adversarial review-intake scenarios
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_independent_review_intake.py' -v
+
+      - name: Read public GitHub issues and quarantine unverified reviewer claims
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-intake"
+          PYTHONPATH=src python -m falsum.independent_review_intake \
+            --queue data/real-fix-queue.json \
+            --out "$RUNNER_TEMP/falsum-intake/PUBLIC-REVIEW-CLAIMS-NOT-VERIFIED.json"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          path = Path(os.environ["RUNNER_TEMP"]) / "falsum-intake/PUBLIC-REVIEW-CLAIMS-NOT-VERIFIED.json"
+          a = json.loads(path.read_text(encoding="utf-8"))
+          assert a["input_source"] == "PUBLIC_GITHUB_API"
+          assert a["status"] == "REVIEW_CLAIMS_REQUIRE_MANUAL_ADJUDICATION"
+          assert a["accepted_training_labels"] == 0
+          assert a["accepted_independent_expert_reviews"] == 0
+          assert a["exportable_preference_pairs"] == []
+          assert a["network_eligible"] is False and a["training_authorized"] is False
+          assert a["model_accuracy_measured"] is False
+          assert a["source_case_count"] == 4
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as out:
+              out.write("### Independent AppSec review claim intake\n\n")
+              out.write(f"GitHub issues inspected: {a['issues_examined']}; structured review claims passing format checks: {a['valid_format_claims']}; rejected: {a['format_rejected']}.\n\n")
+              out.write("**Expert-validated reviews: 0. Accepted training labels: 0. Network eligible: NO.**\n\n")
+              out.write("Even matching claims from two accounts MUST be independently adjudicated. GitHub identity and checkbox claims do NOT establish expert review quality.\n")
+          PY
+
+      - name: Archive public review claims only (no training labels)
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-INDEPENDENT-REVIEW-CLAIMS-UNADJUDICATED
+          path: ${{ runner.temp }}/falsum-intake/
+          retention-days: 30
+          if-no-files-found: error
