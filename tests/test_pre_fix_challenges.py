@@ -17,6 +17,15 @@ from test_real_fix_replay import setup
 class PreFixChallengeTests(unittest.TestCase):
     def setUp(self):
         self.report, self.files = setup()
+        # Offline replay stubs deliberately omit advisory metadata; authentic
+        # source reports include these public provenance fields.
+        for item in self.report["cases"]:
+            item["advisory_url"] = "https://github.com/example/security/advisories/GHSA-0000-0000-0000"
+            item["commit_url"] = (
+                f'https://github.com/{item["repository"]}/commit/{item["commit"]}')
+        self.report["cases_sha256"] = hashlib.sha256(json.dumps(
+            self.report["cases"], sort_keys=True,
+            separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
 
     def reader(self, url):
         return self.files[url]
