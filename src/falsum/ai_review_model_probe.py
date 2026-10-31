@@ -75,7 +75,7 @@ def _verify(public: dict, key: dict) -> list[tuple[dict, dict]]:
     for family,items in families.items():
         if (len(items)!=2 or
                 {x[1]["proposed_kind"] for x in items}!={"finding","conditional"} or
-                {x[0]["candidate_a"],x[0]["candidate_b"]} !=
+                {items[0][0]["candidate_a"],items[0][0]["candidate_b"]} !=
                 {items[1][0]["candidate_a"],items[1][0]["candidate_b"]}):
             raise ProvisionalProbeError(f"{family}: candidate text or context pair leaked")
         a,b=items
