@@ -1,0 +1,64 @@
+name: Source-pinned Axios URL-routing behavior (no HTTP requests)
+
+on:
+  push:
+    paths:
+      - 'src/falsum/axios_source_behavior.py'
+      - 'tests/test_axios_source_behavior.py'
+      - 'tools/axios_source_routing.cjs'
+      - '.github/workflows/axios-source-behavior.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  axios-source-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Offline tampering and source-integrity tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -p 'test_axios_source_behavior.py' -v
+      - name: Fetch exact publicly pinned original and patched Axios URL helpers
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.axios_source_behavior \
+            --out "$RUNNER_TEMP/axios-pinned-sources"
+      - name: Test actual upstream helper branch behavior (no HTTP request)
+        shell: bash
+        run: |
+          set -euo pipefail
+          node tools/axios_source_routing.cjs \
+            "$RUNNER_TEMP/axios-pinned-sources" \
+            "$RUNNER_TEMP/axios-pinned-sources/ACTUAL-AXIOS-URL-BEHAVIOR-RESULT.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"axios-pinned-sources/ACTUAL-AXIOS-URL-BEHAVIOR-RESULT.json"
+          d=json.loads(p.read_text())
+          assert d["status"]=="REAL_SOURCE_AXIOS_URL_ROUTING_TESTS_PASSED"
+          assert d["tests"]==6 and d["no_http_request_sent"] is True
+          assert d["fixed_default_still_permits_absolute"] is True
+          assert d["fixed_explicit_allow_false_constrains_with_configured_base"] is True
+          assert d["credential_exfiltration_reproduced"] is False
+          assert d["independently_human_reviewed"] is False and d["eligible_for_network"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as out:
+              out.write("### Real Axios 0.x pre-fix and patch URL-routing checks\n\n")
+              out.write("6/6 actual original source behavior assertions passed; historical default and patch default both allow absolute URLs that override baseURL. Explicit opt-in allowAbsoluteUrls=false with configured baseURL changes the final route.\n\n")
+              out.write("No HTTP was sent. This demonstrates URL construction only, NOT credential exfiltration or an independently reviewed deployed exploit.\n")
+          PY
+      - name: Archive public immutable source and non-exploit behavioral evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-AXIOS-ACTUAL-URL-ROUTING-NOT-NETWORK-ELIGIBLE
+          path: ${{ runner.temp }}/axios-pinned-sources/
+          if-no-files-found: error
+          retention-days: 30
