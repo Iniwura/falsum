@@ -33,22 +33,6 @@ jobs:
         run: |
           set -euo pipefail
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_ai_review_model_probe.py' -v
-      - name: Retrieve immutable AI research question packet
-        uses: actions/download-artifact@v4
-        with:
-          name: FALSUM-AI-DRAFT-CONTRASTIVE-QUESTIONS-NOT-ELIGIBLE
-          run-id: 41210477426
-          repository: Iniwura/falsum
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path: ${{ runner.temp }}/ai-questions
-      - name: Retrieve separate AI-provisional key and evidence
-        uses: actions/download-artifact@v4
-        with:
-          name: FALSUM-AI-PROVISIONAL-SOURCE-EVIDENCE-NOT-HUMAN-REVIEWED
-          run-id: 41210477426
-          repository: Iniwura/falsum
-          github-token: __GH_TOKEN__
-          path: ${{ runner.temp }}/ai-private
       - name: Retrieve previously scored quarantined real model checkpoint
         uses: actions/download-artifact@v4
         with:
@@ -56,7 +40,7 @@ jobs:
           run-id: 41126779406
           repository: Iniwura/falsum
           github-token: __GH_TOKEN__
-          path: ${{ runner.temp }}/context-model
+          path: __TEMP__/context-model
       - name: Checkout exact official Telegraph scoring kit
         uses: actions/checkout@v4
         with:
@@ -72,6 +56,22 @@ jobs:
           python -m pip install 'transformers==4.57.1' 'peft>=0.14,<1' 'numpy>=1.26,<3'
           mkdir -p "$RUNNER_TEMP/ai-model-probe"
           python -m pip freeze > "$RUNNER_TEMP/ai-model-probe/RESEARCH-PROBE-DEPENDENCIES.txt"
+      - name: Rebuild and verify actual pinned real-source draft A/B input, no old artifact credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/ai-questions" "$RUNNER_TEMP/ai-private" "$RUNNER_TEMP/source-evidence"
+          PYTHONPATH=src python -m falsum.real_fix_corpus \
+            --queue data/real-fix-queue.json \
+            --out "$RUNNER_TEMP/source-evidence/REAL-SOURCE-VERIFIED.json" \
+            --reviewer-out "$RUNNER_TEMP/source-evidence/REVIEW-QUESTIONS.json"
+          PYTHONPATH=src python -m falsum.ai_review_benchmark \
+            --specs data/ai-review-drafts.json \
+            --queue data/real-fix-queue.json \
+            --evidence "$RUNNER_TEMP/source-evidence/REAL-SOURCE-VERIFIED.json" \
+            --questions-out "$RUNNER_TEMP/ai-questions/AI-A-B-QUESTIONS-NO-KEY.json" \
+            --key-out "$RUNNER_TEMP/ai-private/PROVISIONAL-AI-ANSWER-KEY-NOT-GROUND-TRUTH.json" \
+            --token-out "$RUNNER_TEMP/ai-questions/ACTUAL-512-TOKEN-FULL-A-B-INPUT-REPORT.json"
       - name: Score genuine LoRA on eight AI draft cases and answer-only control
         shell: bash
         run: |
