@@ -1,0 +1,126 @@
+name: RESEARCH ONLY - score real ModernBERT on AI-authored context reversals
+
+on:
+  push:
+    paths:
+      - 'src/falsum/ai_review_model_probe.py'
+      - 'tests/test_ai_review_model_probe.py'
+      - '.github/workflows/ai-review-model-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  research-model-context:
+    name: Real model vs AI-authored A/B pairs, never independent accuracy
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      PYTHONUNBUFFERED: '1'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '4'
+      MKL_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline adversarial scoring contract tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_ai_review_model_probe.py' -v
+      - name: Retrieve immutable AI research question packet
+        uses: actions/download-artifact@v4
+        with:
+          name: FALSUM-AI-DRAFT-CONTRASTIVE-QUESTIONS-NOT-ELIGIBLE
+          run-id: 41210477426
+          repository: Iniwura/falsum
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: ${{ runner.temp }}/ai-questions
+      - name: Retrieve separate AI-provisional key and evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: FALSUM-AI-PROVISIONAL-SOURCE-EVIDENCE-NOT-HUMAN-REVIEWED
+          run-id: 41210477426
+          repository: Iniwura/falsum
+          github-token: __GH_TOKEN__
+          path: ${{ runner.temp }}/ai-private
+      - name: Retrieve previously scored quarantined real model checkpoint
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-CONTEXT-EXPERIMENT-NOT-SUBMITTABLE
+          run-id: 41126779406
+          repository: Iniwura/falsum
+          github-token: __GH_TOKEN__
+          path: ${{ runner.temp }}/context-model
+      - name: Checkout exact official Telegraph scoring kit
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Install CPU-only actual model dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install 'transformers==4.57.1' 'peft>=0.14,<1' 'numpy>=1.26,<3'
+          mkdir -p "$RUNNER_TEMP/ai-model-probe"
+          python -m pip freeze > "$RUNNER_TEMP/ai-model-probe/RESEARCH-PROBE-DEPENDENCIES.txt"
+      - name: Score genuine LoRA on eight AI draft cases and answer-only control
+        shell: bash
+        run: |
+          set -euo pipefail
+          find_one() {
+            local path
+            path="$(find "$1" -type f -name "$2")"
+            if [[ -z "$path" || "$(printf '%s\n' "$path" | wc -l)" -ne 1 ]]; then
+              echo "Expected one matching artifact file: $2" >&2
+              exit 1
+            fi
+            printf '%s' "$path"
+          }
+          questions="$(find_one "$RUNNER_TEMP/ai-questions" 'AI-A-B-QUESTIONS-NO-KEY.json')"
+          key="$(find_one "$RUNNER_TEMP/ai-private" 'PROVISIONAL-AI-ANSWER-KEY-NOT-GROUND-TRUTH.json')"
+          official="$(find_one "$RUNNER_TEMP/context-model" 'PILOT-DECISION.json')"
+          earlier="$(find_one "$RUNNER_TEMP/context-model" 'COUNTERFACTUAL-MODEL-RESULT.json')"
+          config="$(find_one "$RUNNER_TEMP/context-model" 'adapter_config.json')"
+          adapter="$(dirname "$config")"
+          test -s "$adapter/adapter_model.safetensors"
+          PYTHONPATH="$GITHUB_WORKSPACE/src:$GITHUB_WORKSPACE/telegraph-kit" \
+            python -m falsum.ai_review_model_probe \
+              --public "$questions" \
+              --key "$key" \
+              --adapter "$adapter" \
+              --official-pilot "$official" \
+              --counterfactual "$earlier" \
+              --out "$RUNNER_TEMP/ai-model-probe/AI-DRAFT-REAL-MODEL-DIAGNOSTIC.json" \
+              2>&1 | tee "$RUNNER_TEMP/ai-model-probe/MODEL-SCORE-LOG.txt"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          report=json.loads((Path(os.environ["RUNNER_TEMP"])/"ai-model-probe/AI-DRAFT-REAL-MODEL-DIAGNOSTIC.json").read_text())
+          assert report["status"]=="PROVISIONAL_AI_CONTEXT_DIAGNOSTIC_NOT_INDEPENDENT_ACCURACY"
+          assert report["ai_proposals_compared"]==8 and report["two_context_families"]==4
+          assert report["human_reviews"]==0 and report["accepted_evaluation_pairs"]==0
+          assert report["network_eligible"] is False and report["registration_authorized"] is False
+          assert report["model_quality_validated"] is False and report["sealed_holdout"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### Actual ModernBERT model on AI-assisted source-grounded context reversals\n\n")
+              f.write(f"Matched AI research proposals: {report['model_agrees_with_ai_proposals']}/8; paired context families both matched: {report['families_matching_both_ai_proposals']}/4.\n\n")
+              f.write(f"Real model inferences: {report['distinct_model_inferences']} including answer-only ablation.\n\n")
+              f.write("**NOT an independent security accuracy measure. NO approved human labels. NO network registration or eligibility.**\n")
+          PY
+      - name: Archive actual model results without publishing checkpoint
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-AI-DRAFT-MODEL-DIAGNOSTIC
+          path: ${{ runner.temp }}/ai-model-probe/
+          retention-days: 14
+          if-no-files-found: warn
