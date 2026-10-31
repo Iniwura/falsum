@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "AI_AUTHORED_SECURITY_REVIEW_DRAFT_UNREVIEWED",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "research_only": true,
+  "independent_human_reviews": 0,
+  "model_training_authorized": false,
+  "network_eligible": false,
+  "notice": "AI-generated provisional source-grounded case reasoning and synthetic deployment facts in distinct TRAIN CANDIDATE projects; NOT expert reviews or independent test labels, training authorization or Anjoman eligible evaluation material.",
+  "cases": [
+    {
+      "id": "real-starlette-commonprefix-traversal",
+      "source_review": {
+        "code_boundary": "The original StaticFiles lookup_path used os.path.commonprefix on filesystem path strings, so a sibling name starting with the configured directory name could pass the containment check even when outside the actual static root.",
+        "fix_review": "The upstream repair replaces commonprefix with os.path.commonpath to compare filesystem path components instead of lexical prefixes; the relevant parent and patched blobs are pinned.",
+        "regression_evidence": "The added test uses an actual static root alongside similarly prefixed private file and directory names, then asserts parent-path requests raise 404 rather than exposing them.",
+        "limitations": "The attack assumes that a request path can reach the relevant StaticFiles handler without a proxy rewriting away traversal segments and that a readable same-prefix sibling file exists. The patch itself does not establish real deployment disclosure."
+      },
+      "finding_answer": "This historical static-file path check compares path strings by common prefix, not by directory containment. The deployment exposes a route to untrusted requests and stores a readable private sibling path sharing the root's prefix. Flag a credible file disclosure risk and upgrade; verify the exact raw routing path and file permissions before claiming a specific secret was read.",
+      "conditional_answer": "The historical static-file guard has a known lexical-prefix weakness, but this described deployment has no accessible same-prefix sibling target and the exposed routing path is normalized before the handler. The available evidence does not demonstrate file disclosure here. Still recommend the upstream repair and audit any alternate routes, rather than claiming that every StaticFiles use exposes private files.",
+      "scenarios": [
+        {
+          "id": "exposure",
+          "proposed_preferred": "finding",
+          "facts": "An affected Starlette service mounts a public StaticFiles route at a directory named static. An adjacent readable file named static1.txt is outside that directory. The server receives unnormalized request paths containing parent segments and passes them to StaticFiles."
+        },
+        {
+          "id": "missing-precondition",
+          "proposed_preferred": "conditional",
+          "facts": "The same historical Starlette StaticFiles code is used, but the deployed static root has no readable sibling file or directory sharing the static prefix. Its reverse proxy normalizes parent segments before forwarding, and no alternate unnormalized route is described."
+        }
+      ]
+    },
+    {
+      "id": "real-urllib3-redirect-header-case",
+      "source_review": {
+        "code_boundary": "The historical PoolManager redirect code removed headers by exact case-sensitive dictionary key from a removal set containing Authorization, leaving differently cased authorization names available on redirects across hosts.",
+        "fix_review": "The repair converts configured removal names to lowercase and compares each supplied header key using lowercase before deleting matching credentials when a redirect changes host.",
+        "regression_evidence": "The added dummy-server tests send lowercase authorization to an alternate redirect destination and check it is absent, while testing configurable custom secret removal behavior.",
+        "limitations": "Cross-origin redirect behavior, direct caller-specified sensitive header casing, and redirect-removal policy all matter. Disabling removal or not following redirects changes the scenario; successful redirection alone is not proof that valid credentials leaked."
+      },
+      "finding_answer": "This historical redirect implementation strips sensitive headers using case-sensitive keys. Here a caller supplies a lowercase authorization header and follows a redirect to a different origin under the default removal policy. Flag a credible credential-forwarding risk, reproduce the receiving request safely and upgrade. Do not claim that all redirect requests disclose credentials regardless of header casing.",
+      "conditional_answer": "The historical code can mishandle differently cased authorization headers on cross-host redirects, but this caller disables automatic redirect following and handles any target change manually. The provided trace contains no cross-host second request, so it does not demonstrate credential forwarding. Recommend a patched dependency and explicit redirect policy without asserting that credentials already reached another host.",
+      "scenarios": [
+        {
+          "id": "exposure",
+          "proposed_preferred": "finding",
+          "facts": "An application using this historical urllib3 version supplies a lowercase authorization header to PoolManager.request(), leaves redirect handling enabled and receives a redirect response to a second origin. The second destination can receive the follow-up request."
+        },
+        {
+          "id": "missing-precondition",
+          "proposed_preferred": "conditional",
+          "facts": "An application using the same historical urllib3 code supplies a lowercase authorization header but turns off automatic redirect following. It inspects Location responses manually and sends no subsequent cross-origin request; no alternate redirect mechanism is shown."
+        }
+      ]
+    },
+    {
+      "id": "real-django-intcomma-recursive-dos",
+      "source_review": {
+        "code_boundary": "The historical humanize intcomma filter repeatedly inserted thousands separators with recursive re-invocation of the filter, causing time and call-depth costs to grow with long digit strings.",
+        "fix_review": "The upstream fix replaces recursive formatting with a single match of the numeric prefix and reverse grouping, then appends the untouched suffix to avoid repeated recursive processing.",
+        "regression_evidence": "The upstream humanize test expansion adds long and signed numeric formatting cases as well as other expected outputs to protect number formatting behavior.",
+        "limitations": "A denial-of-service risk requires sufficiently large attacker-controlled numeric input to reach a template or other callable application path using intcomma without effective length bounds. Small validated numeric strings do not establish the same resource behavior."
+      },
+      "finding_answer": "The historical intcomma implementation recursively formats long digit strings. This service renders unbounded, untrusted numeric text through that filter, creating a credible resource exhaustion and availability risk. Flag the risky input path, enforce a strict input-length bound and apply the patched Django version. A code weakness is not itself evidence that the service has already exhausted resources.",
+      "conditional_answer": "The historical intcomma implementation has recursive cost on very long strings, but the application only feeds bounded integers after strict server-side validation. This route cannot currently supply the oversized digit strings required for the published denial-of-service condition. Recommend patching and maintaining those limits, while avoiding a claim that ordinary short numbers demonstrate a remotely exploitable outage.",
+      "scenarios": [
+        {
+          "id": "exposure",
+          "proposed_preferred": "finding",
+          "facts": "A public Django endpoint inserts a user-supplied numeric-looking string of arbitrary length into a developer-owned template that applies the humanize intcomma filter. The endpoint has no server-side maximum input length before template rendering."
+        },
+        {
+          "id": "missing-precondition",
+          "proposed_preferred": "conditional",
+          "facts": "The same historical Django intcomma filter appears in templates, but every value reaching it is a server-derived integer validated to at most twelve decimal digits. User-submitted strings cannot reach the filter directly, and no alternate route is described."
+        }
+      ]
+    },
+    {
+      "id": "real-express-malformed-redirect-host",
+      "source_review": {
+        "code_boundary": "The historical Express res.location code encoded redirect values and included earlier parsing-based checks; malformed URLs could be interpreted inconsistently by URL allowlist checks and Location header handling.",
+        "fix_review": "The improved 4.19.2 source patch replaces the earlier host comparison approach with a more direct authority-prefix rule and carefully handles malformed redirect representations; this is not the first attempted fix.",
+        "regression_evidence": "The upstream modified test suite contains additional malformed redirect and URI cases, with removed tests from the interim version and new expected behavior, making the improved patch itself the relevant reference.",
+        "limitations": "A real open redirect requires an application that accepts user-controlled redirect destinations and an allowlist or validation step that can be bypassed. A hardcoded internal Location value or strictly server-constructed relative path does not demonstrate the advisory."
+      },
+      "finding_answer": "The historical Express response helper can encode malformed redirect URLs in ways that undermine an application host allowlist. This endpoint accepts user-controlled destinations and validates them before sending the value through res.location. Flag the risk of a redirect escaping the intended host restrictions, upgrade to the fully corrected version and test malformed values without assuming every redirect is unsafe.",
+      "conditional_answer": "Although this historical Express helper has an open-redirect advisory involving malformed user-controlled URLs, the described endpoint only redirects to fixed server-selected relative routes and accepts no destination parameter. The published bypass precondition is absent in this scoped path. Preserve dependency-upgrade advice and verify other handlers, but do not call this static navigation route a demonstrated external redirect.",
+      "scenarios": [
+        {
+          "id": "exposure",
+          "proposed_preferred": "finding",
+          "facts": "An Express 4.19.1 application accepts a client-provided next URL, compares its parsed host against an allowlist, then calls res.location(next) without first canonicalizing malformed URL syntax consistently. External users can submit candidate next values."
+        },
+        {
+          "id": "missing-precondition",
+          "proposed_preferred": "conditional",
+          "facts": "The same historical Express response implementation is installed, but this application only passes fixed relative values chosen inside server code to res.location(). The request body and query cannot select, alter or supply redirect destinations; no other redirect route is in scope."
+        }
+      ]
+    }
+  ]
+}
