@@ -5,6 +5,9 @@ on:
     paths:
       - 'data/real-fix-train-candidates.json'
       - 'data/real-fix-queue.json'
+      - 'data/advisory-queue.json'
+      - 'src/falsum/phase2t_prior_exposure.py'
+      - 'tests/test_phase2t_prior_exposure.py'
       - 'src/falsum/real_fix_corpus.py'
       - 'src/falsum/real_fix_replay.py'
       - 'src/falsum/phase2t_project_isolation.py'
@@ -30,6 +33,7 @@ jobs:
         run: |
           set -euo pipefail
           PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase2t_project_isolation.py' -v
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase2t_prior_exposure.py' -v
           PYTHONPATH=src python -m unittest discover -s tests -p 'test_real_fix_corpus.py' -v
           PYTHONPATH=src python -m unittest discover -s tests -p 'test_real_fix_replay.py' -v
       - name: Enforce disjoint projects and label quarantine
@@ -41,6 +45,15 @@ jobs:
             --train data/real-fix-train-candidates.json \
             --inspected data/real-fix-queue.json \
             --out "$RUNNER_TEMP/falsum-phase2t/PROJECT-ISOLATION-NOT-SEALED-HOLDOUT.json"
+      - name: Diagnose exact prior GHSA training leakage, do not call original diagnostics a sealed holdout
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase2t_prior_exposure \
+            --prior data/advisory-queue.json \
+            --new data/real-fix-train-candidates.json \
+            --inspected data/real-fix-queue.json \
+            --out "$RUNNER_TEMP/falsum-phase2t/PRIOR-GHSA-EXPOSURE-AND-OVERLAP.json"
       - name: Retrieve actual 4 new upstream patches and independently replay 8 source/test revisions
         shell: bash
         run: |
@@ -59,6 +72,7 @@ jobs:
           partition=json.loads((root/"PROJECT-ISOLATION-NOT-SEALED-HOLDOUT.json").read_text())
           corpus=json.loads((root/"FOUR-ADDITIONAL-PUBLIC-SOURCES-NO-LABELS.json").read_text())
           replay=json.loads((root/"EXACT-PARENT-AND-FIX-BLOBS-REPLAYED.json").read_text())
+          prior=json.loads((root/"PRIOR-GHSA-EXPOSURE-AND-OVERLAP.json").read_text())
           assert partition["project_separation_verified"] is True and partition["sealed_holdout"] is False
           assert partition["splits"][0]["rows"]==4 and partition["splits"][1]["rows"]==4
           assert corpus["source_verified"]==4 and corpus["independent_human_reviews"]==0
@@ -66,6 +80,9 @@ jobs:
           assert corpus["network_eligible"] is False and replay["network_eligible"] is False
           assert partition["training_data_authorized"] is False
           assert partition["human_approved_labels"]==0
+          assert prior["pools"][0]["exact_advisory_matches"]==0
+          assert prior["pools"][1]["exact_advisory_matches"]==2
+          assert prior["heldout_sealed"] is False and prior["network_eligible"] is False
           with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
               f.write("### Phase 2T: source-verified project-separated research pools\n\n")
               f.write("4 NEW independent repositories, 4 immutable upstream patches and **8 exact source/test file transitions** verified.\\n\\n")
