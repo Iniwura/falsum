@@ -8,6 +8,16 @@ An evidence-grounded security evaluation research project for [Telegraph Season 
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
 
+## Phase 2S: real-source AI AppSec research exposes model's context weakness
+
+FALSUM now has **four AI-authored AppSec review dossiers** tied to real, immutable Requests, aiohttp, Jinja2 and Axios security fixes and tests. Each has two hypothetical deployment contexts with **identical competing answers** but opposite AI-proposed preferred answers. The source verification CI produced **8/8 authentic source/test replay transitions**, **8 research A/B cases**, and **16/16 full Task/Answer renders within ModernBERT's 512-token limit** (maximum **440**). [Corpus build](https://github.com/Iniwura/falsum/actions/runs/41210477426) · [Technical methodology and evidence](docs/PHASE2S.md).
+
+We ran our **actual existing, quarantined ModernBERT LoRA model** on all eight cases. It agreed with the AI research proposals **4/8** but correctly reversed its preferred answer across **0/4** opposing project-context families. It favored the same answer in both scenarios for each project. This is **not independently verified accuracy**, but clearly exposes a problem in the context discrimination we want. [Real model CI](https://github.com/Iniwura/falsum/actions/runs/41211098910) · [Exact case-level scores](evidence/ai-review-frozen-model-case-scores-2026-10-31.json).
+
+We also **executed actual original and fixed Axios URL-building code** from Git-pinned source (6/6 assertions). The new 0.x allowAbsoluteUrls guard is **opt-in**: by default, even the patched helper still lets an absolute URL override a configured baseURL. The selected upstream regression test's no-baseURL case does not by itself prove configured-baseURL protection. No outgoing HTTP was sent, and **we do not claim a deployed SSRF exploit**. [Actual source-behavior test](https://github.com/Iniwura/falsum/actions/runs/41211349379).
+
+All Phase 2S judgments remain **AI-authored research drafts**. They are NOT independent human reviews, a sealed holdout, eligible Anjoman evaluation rows or approved model training labels. We should not register this model based on these results.
+
 ## Phase 2R: genuine ABI-v2 hybrid WASM build from actual trained model
 
 FALSUM has now **successfully exported its real quarantined ModernBERT LoRA checkpoint to 599 MB ONNX FP32, baked it into a WASI model and packaged a 601 MB WebAssembly module through the exact official Telegraph V2 toolchain**. The packager classified `SECURITY_REVIEW_GENERAL` as **hybrid**, wrote ABI v2 metadata, passed structural checks and produced **two byte-identical builds**.
