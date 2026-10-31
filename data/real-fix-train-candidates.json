@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "status": "PUBLIC_PATCH_SOURCES_DRAFT_UNREVIEWED",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "cases": [
+    {
+      "id": "real-starlette-commonprefix-traversal",
+      "repository": "Kludex/starlette",
+      "commit": "1797de464124b090f10cf570441e8292936d63e3",
+      "parent": "24c1fac62a80bb153c6548145334fc643991e35a",
+      "source_path": "starlette/staticfiles.py",
+      "source_blob": "4c856063c2945d93f1b79505f9d8de7919b947aa",
+      "test_path": "tests/test_staticfiles.py",
+      "test_blob": "23d0b57fc2b23fbc5f23734ce856980a3d4ae064",
+      "advisory": "GHSA-v5gw-mw7f-84px",
+      "cve": "CVE-2023-29159",
+      "family": "sibling-prefix-static-root-traversal",
+      "hypothesis_to_review": "The historical StaticFiles containment check used string commonprefix rather than path-aware commonpath; verify whether sibling file or directory names sharing the static root prefix are reachable via unnormalized paths and whether the newly added tests cover that risk.",
+      "public_source": "https://github.com/Kludex/starlette/security/advisories/GHSA-v5gw-mw7f-84px"
+    },
+    {
+      "id": "real-urllib3-redirect-header-case",
+      "repository": "urllib3/urllib3",
+      "commit": "adb358f8e06865406d1f05e581a16cbea2136fbc",
+      "parent": "a252e2549ff797fe13e688f05296fa496e0c469a",
+      "source_path": "src/urllib3/poolmanager.py",
+      "source_blob": "a13149b1bce41d543b272789557d8c427e7bdded",
+      "test_path": "test/with_dummyserver/test_poolmanager.py",
+      "test_blob": "de0b9172d932678fd6b11c6b0b7159fabcacf4f5",
+      "advisory": "GHSA-gwvm-45gx-3cf8",
+      "cve": "CVE-2018-25091",
+      "family": "case-insensitive-cross-origin-header-stripping",
+      "hypothesis_to_review": "The original PoolManager cross-host redirect logic removed only exactly cased Authorization header names; investigate the lower-case header bypass, whether redirect removal can be intentionally disabled and which headers the patch actually strips.",
+      "public_source": "https://github.com/advisories/GHSA-gwvm-45gx-3cf8"
+    },
+    {
+      "id": "real-django-intcomma-recursive-dos",
+      "repository": "django/django",
+      "commit": "55519d6cf8998fe4c8f5c8abffc2b10a7c3d14e9",
+      "parent": "9cefdfc43f0bae696b56fa5a0bf22346f85affff",
+      "source_path": "django/contrib/humanize/templatetags/humanize.py",
+      "source_blob": "2c26f8944a78da3cc378196d185a34cfd3e17d2c",
+      "test_path": "tests/humanize_tests/tests.py",
+      "test_blob": "a78bbadafd895975b6e9f7750afbc786061f28d3",
+      "advisory": "GHSA-xxj9-f6rv-m3x4",
+      "cve": "CVE-2024-24680",
+      "family": "recursive-long-number-format-resource-exhaustion",
+      "hypothesis_to_review": "The pre-fix intcomma filter recursively reformatted growing comma-separated digit strings and could exhaust resources for extremely long values; establish whether untrusted data can reach the template filter and distinguish fixed iterative behavior from general application denial-of-service claims.",
+      "public_source": "https://github.com/advisories/GHSA-xxj9-f6rv-m3x4"
+    },
+    {
+      "id": "real-express-malformed-redirect-host",
+      "repository": "expressjs/express",
+      "commit": "0b746953c4bd8e377123527db11f9cd866e39f94",
+      "parent": "4f0f6cc67d531431c096ea006c2191b92931bbc3",
+      "source_path": "lib/response.js",
+      "source_blob": "dd7b3c8201d24c47a537b85f6615a967392f8691",
+      "test_path": "test/res.location.js",
+      "test_blob": "c80b38de6b8f64b6478ee2a0abbb3ad2bdf2801b",
+      "advisory": "GHSA-rv95-896h-c2vc",
+      "cve": "CVE-2024-29041",
+      "family": "malformed-encoded-redirect-authority",
+      "hypothesis_to_review": "Express redirect Location encoding changed how malformed user-controlled URLs and their authority components were interpreted, potentially defeating a separate application redirect allowlist; review the improved 4.19.2 patch rather than assuming the earlier 4.19.0 patch was final.",
+      "public_source": "https://github.com/expressjs/express/security/advisories/GHSA-rv95-896h-c2vc"
+    }
+  ]
+}
