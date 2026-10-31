@@ -58,7 +58,7 @@ class PriorExposureTests(unittest.TestCase):
         report=audit(self.prior,self.new,self.old)
         self.assertTrue(all(not r["case_is_new_to_complete_model"] for p in report["pools"]
                             for r in p["records"]))
-        self.assertIn("NOT",report["warning"])
+        self.assertIn("does not establish independence",report["warning"])
         self.assertEqual(len(report["pools"][0]["records"]),4)
 
 
