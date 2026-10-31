@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "PHASE2T_NEW_PROJECT_MODEL_FROZEN_SCORE_DIAGNOSTIC_NOT_GROUND_TRUTH",
+  "date": "2026-10-31",
+  "source_runs": {
+    "source_replay": "https://github.com/Iniwura/falsum/actions/runs/41232688735",
+    "candidate_question_build": "https://github.com/Iniwura/falsum/actions/runs/41232403688",
+    "frozen_model_score": "https://github.com/Iniwura/falsum/actions/runs/41232475893",
+    "previous_model_training": "https://github.com/Iniwura/falsum/actions/runs/41126779406",
+    "source_model_score_artifact_id": 13053679923,
+    "raw_model_report_sha256": "219f9cb7d1b9bac763351373fef6ada2f2d3bfd98f64a69d36e93e4aad09fef9",
+    "source_model_adapter_sha256": "1f1c59642936235c73eb94eb44a5f9b95e8899635d997e2e3d2546b567948f1d",
+    "model_question_packet_sha256": "65cef7f9747e404dbe2e6879e992df82985e1ef5b970858166cbc4180c8564a8"
+  },
+  "source_inventory": {
+    "new_projects": 4,
+    "new_pinned_security_commits": 4,
+    "exact_source_and_test_replays": 8,
+    "previously_inspected_projects": 4,
+    "distinct_repositories_total": 8
+  },
+  "prior_model_advisory_exposure": {
+    "prior_queue": "data/advisory-queue.json",
+    "source": "https://github.com/Iniwura/falsum/blob/main/data/advisory-queue.json",
+    "prior_ghsa_records": 32,
+    "new_cases_exact_prior_ghsa_count": 0,
+    "new_cases_prior_package_matches": 0,
+    "earlier_inspected_cases_exact_prior_ghsa_count": 2,
+    "earlier_inspected_exact_overlaps": [
+      {
+        "case": "real-jinja-attr-sandbox",
+        "advisory": "GHSA-cpwx-vrp4-4pq7",
+        "prior_split": "train"
+      },
+      {
+        "case": "real-axios-absolute-baseurl",
+        "advisory": "GHSA-jr5f-v2jv-69x6",
+        "prior_split": "train"
+      }
+    ],
+    "interpretation": "No overlap with this prior pinned advisory queue does not prove zero base-model pretraining exposure or a blinded benchmark. Previous four-case diagnostic included two advisories in the earlier trainer's train partition."
+  },
+  "new_model_diagnostic": {
+    "research_cases": 8,
+    "actual_model_inferences": 24,
+    "agreement_with_ai_proposed_judgments": 4,
+    "ai_proposal_agreement_fraction": 0.5,
+    "distinct_source_context_families": 4,
+    "families_agreeing_with_both_ai_proposed_context_preferences": 0,
+    "largest_full_modernbert_render_tokens": 466,
+    "model_cap": 512,
+    "projects": [
+      {
+        "source_case": "real-starlette-commonprefix-traversal",
+        "model_preferred_essay_in_both_contexts": "finding",
+        "agreed_on_exposure": true,
+        "agreed_on_missing_precondition": false,
+        "provisional_margins": [
+          0.056933701038360596,
+          -0.1273019164800644
+        ]
+      },
+      {
+        "source_case": "real-urllib3-redirect-header-case",
+        "model_preferred_essay_in_both_contexts": "conditional",
+        "agreed_on_exposure": false,
+        "agreed_on_missing_precondition": true,
+        "provisional_margins": [
+          -0.1708955466747284,
+          0.15427076816558838
+        ]
+      },
+      {
+        "source_case": "real-django-intcomma-recursive-dos",
+        "model_preferred_essay_in_both_contexts": "finding",
+        "agreed_on_exposure": true,
+        "agreed_on_missing_precondition": false,
+        "provisional_margins": [
+          0.014218956232070923,
+          -0.00868535041809082
+        ]
+      },
+      {
+        "source_case": "real-express-malformed-redirect-host",
+        "model_preferred_essay_in_both_contexts": "conditional",
+        "agreed_on_exposure": false,
+        "agreed_on_missing_precondition": true,
+        "provisional_margins": [
+          -0.04587286710739136,
+          0.0034850239753723145
+        ]
+      }
+    ]
+  },
+  "approval": {
+    "human_expert_reviewed_pairs": 0,
+    "training_authorized": false,
+    "untouched_holdout": false,
+    "network_eligible": false,
+    "telegraph_registered": false,
+    "independent_model_accuracy_evaluated": false
+  },
+  "caveat": "AI-authored hypothetical deployment contexts and provisional preferences, public issue/fix evidence. Findings only reproduce relative model preference on draft comparisons. No signed model eval, reviewed security ground truth, network acceptance, or live funds."
+}
