@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "status": "AI_AUTHORED_RESEARCH_DIAGNOSTIC_NO_INDEPENDENT_ACCURACY",
+  "recorded_on": "2026-10-31",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "data_source": {
+    "queue": "data/real-fix-queue.json",
+    "ai_specification": "data/ai-review-drafts.json",
+    "real_source_projects": 4,
+    "source_test_file_replays": 8,
+    "research_only": true,
+    "human_reviewed_pairs": 0,
+    "official_network_eligible_pairs": 0,
+    "reproducible_pair_generation_run": "https://github.com/Iniwura/falsum/actions/runs/41210477426",
+    "full_rendered_model_inputs_checked": 16,
+    "max_full_rendered_tokens": 440,
+    "full_model_input_cap": 512
+  },
+  "frozen_real_model_probe": {
+    "source_model_run": "https://github.com/Iniwura/falsum/actions/runs/41126779406",
+    "run": "https://github.com/Iniwura/falsum/actions/runs/41211098910",
+    "artifact": "https://github.com/Iniwura/falsum/actions/runs/41211098910/artifacts/13046188129",
+    "actual_inferences": 24,
+    "ai_proposals_compared": 8,
+    "model_agrees_with_ai_proposals": 4,
+    "agreement_fraction": 0.5,
+    "two_context_families": 4,
+    "families_matching_both_ai_proposals": 0,
+    "validates_real_world_security_accuracy": false,
+    "validates_network_eligibility": false,
+    "remarks": "AI-specified context labels on fictional deployment cases, not expert ground truth. Answer-only scorer cannot satisfy both opposite labels within each project family."
+  },
+  "axios_upstream_behavior": {
+    "run": "https://github.com/Iniwura/falsum/actions/runs/41211349379",
+    "artifact": "https://github.com/Iniwura/falsum/actions/runs/41211349379/artifacts/13046038865",
+    "upstream_repository": "axios/axios",
+    "parent_commit": "8603e677c09fb81bd106999c194308dd230bc596",
+    "fix_commit": "02c3c69ced0f8fd86407c23203835892313d7fde",
+    "verified_original_and_fixed_source_files": 6,
+    "url_construction_behavior_assertions_passed": 6,
+    "pre_fix_absolute_ignores_base_url": true,
+    "post_fix_default_still_allows_absolute_override": true,
+    "post_fix_allow_absolute_urls_false_with_base_url_prevents_override": true,
+    "post_fix_allow_absolute_urls_false_without_base_url_keeps_absolute": true,
+    "http_requests_sent": 0,
+    "credential_exfiltration_reproduced": false,
+    "human_reviewed": false,
+    "caution": "No actual outgoing HTTP was sent. Tests verify exact Git-pinned helper URL construction, not a deployed SSRF or network request."
+  },
+  "release_gate": {
+    "human_reviews": 0,
+    "anjoman_eligible_rows": 0,
+    "live_network_evaluator": false,
+    "registration_authorized": false,
+    "model_quality_validated": false,
+    "recommendation": "Do not register the existing model; repair context-sensitivity with credible independently adjudicated preferences and broader project-separated evaluation."
+  }
+}
