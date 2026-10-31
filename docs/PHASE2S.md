@@ -45,6 +45,42 @@ Primary source records:
 
 The [AI-reviewed model probe](../src/falsum/ai_review_model_probe.py) and [Actions workflow](../.github/workflows/ai-review-model-probe.yml) use the **actual previously trained frozen ModernBERT LoRA checkpoint**, verify its archived SHA-256, and score all eight provisional cases plus an answer-only control. The metric is agreement with AI proposals, **not independently observed security accuracy**. The answer-only control cannot pass both opposed contexts from the same source family.
 
+## Verified real-model result, 31 October 2026
+
+[Real-model CI run 41211098910](https://github.com/Iniwura/falsum/actions/runs/41211098910) ultimately passed. The first attempts failed because literal workflow placeholders prevented artifact authentication; after correcting the GitHub Actions token and runner-path expressions, the exact frozen and previously scored LoRA checkpoint loaded correctly.
+
+It scored the 8 provisional AI-authored source cases using the actual ModernBERT model plus answer-only comparisons, requiring **24 real inferences**.
+
+| Measure | Observed |
+| --- | ---: |
+| Agreement with AI-proposed judgments | **4/8 (50%)** |
+| Opposite-context source families with both model choices matching the AI proposals | **0/4** |
+| Independent human approved labels | **0** |
+| Anjoman eligible preference pairs | **0** |
+
+The baseline should achieve both context reversals in each family if it is truly following the deployment evidence rather than reusing a preferred answer style. It achieved **zero** full family reversals. These are still **AI-proposed** labels on hypothetical deployments, not an independently valid security accuracy score.
+
+[Archived real model-score report](https://github.com/Iniwura/falsum/actions/runs/41211098910/artifacts/13046188129).
+
+## Additional Axios primary-source behavior evidence
+
+The independent [Axios source-behavior CI run 41211349379](https://github.com/Iniwura/falsum/actions/runs/41211349379) passed **3 offline tamper tests and 6 actual URL-routing behavior assertions** on six original and patched upstream JavaScript files retrieved from Git-pinned commits and verified by their exact Git blob hashes.
+
+Actual execution, with NO HTTP network requests:
+
+- Historical helper: a supplied absolute URL is returned untouched instead of being constrained by configured baseURL.
+- Patched helper with no explicit allowAbsoluteUrls setting: **still** returns that absolute URL unchanged.
+- Patched helper with allowAbsoluteUrls=true: also preserves the absolute URL.
+- Patched helper with allowAbsoluteUrls=false AND configured baseURL: combines into a path under the baseURL rather than replacing the origin with the supplied absolute URL.
+- Patched helper with allowAbsoluteUrls=false but **no baseURL**: returns the absolute URL unchanged, exactly the branch exercised by the selected upstream regression test.
+- Relative URL path still combines with baseURL.
+
+This establishes URL construction logic, not an outgoing request, request header forwarding, credential leakage or a deployed SSRF exploit.
+
+[Source files and machine-readable URL behavior report](https://github.com/Iniwura/falsum/actions/runs/41211349379/artifacts/13046038865).
+
+A [permanent evidence summary](../evidence/ai-review-phase2s-2026-10-31.json) records both GitHub Actions runs and the blocked network/independent-review status after temporary artifacts expire.
+
 ## Next
 
 Inspect actual model and case-level results; then improve source-grounded evidence and real task diversity without training on repeatedly inspected provisional diagnostic pairs. Build separately authored and reviewed believable answer comparisons that can meet the official Anjoman checks; submit or register only after real acceptance. The current official bounty is **unfunded** and requires eligible material and a registered evaluator, so building more hypothetical research tests does not finish it.
