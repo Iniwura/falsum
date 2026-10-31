@@ -66,7 +66,7 @@ jobs:
           assert corpus["network_eligible"] is False and replay["network_eligible"] is False
           assert partition["training_data_authorized"] is False
           assert partition["human_approved_labels"]==0
-          with open(os.environ["GITHUB_STEP_SUMMARY"],"a) as f:
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
               f.write("### Phase 2T: source-verified project-separated research pools\n\n")
               f.write("4 NEW independent repositories, 4 immutable upstream patches and **8 exact source/test file transitions** verified.\\n\\n")
               f.write("8 total distinct research projects: 4 NEW train-candidate-only source cases and 4 publicly inspected, non-sealed diagnostics.\\n\\n")
