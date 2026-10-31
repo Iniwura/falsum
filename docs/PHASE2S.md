@@ -58,6 +58,21 @@ It scored the 8 provisional AI-authored source cases using the actual ModernBERT
 | Independent human approved labels | **0** |
 | Anjoman eligible preference pairs | **0** |
 
+### Detailed per-project diagnostic (actual frozen model)
+
+I downloaded and inspected the [small real-model diagnostic artifact](https://github.com/Iniwura/falsum/actions/runs/41211098910/artifacts/13046188129). Each model-side candidate pair was identical across its two contexts (with A/B orientation potentially shuffled), yet the model selected the **same answer essay** in BOTH contexts for all four projects.
+
+| Source family | Essay preferred by model in both contexts | Exposure hypothesis matched? | Missing-precondition hypothesis matched? |
+| --- | --- | --- | --- |
+| Requests | Conditional / no confirmed disclosure | No | Yes |
+| aiohttp | Report traversal finding | Yes | No |
+| Jinja2 | Report sandbox finding | Yes | No |
+| Axios | Conditional / no demonstrated SSRF | No | Yes |
+
+The model's numerical scores did change with context text, so the evidence does **not** justify saying the network ignores context in every respect. It just never **reversed the relative winner** as this provisional contrastive study required.
+
+[Exact original eight scored cases, source-checksums and zero-eligibility flags](../evidence/ai-review-frozen-model-case-scores-2026-10-31.json). Its original JSON report SHA-256 is pinned to the archived Action output, and [regression checks](../tests/test_ai_review_evidence.py) protect arithmetic and status integrity. Again, these case preferences are AI research judgments, not an official accuracy benchmark.
+
 The baseline should achieve both context reversals in each family if it is truly following the deployment evidence rather than reusing a preferred answer style. It achieved **zero** full family reversals. These are still **AI-proposed** labels on hypothetical deployments, not an independently valid security accuracy score.
 
 [Archived real model-score report](https://github.com/Iniwura/falsum/actions/runs/41211098910/artifacts/13046188129).
