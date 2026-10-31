@@ -79,8 +79,12 @@ def load_queue(path: Path) -> dict:
         if not _is_path(row["source_path"]) or not _is_path(row["test_path"]) or row["source_path"] == row["test_path"]:
             raise RealFixError("invalid or repeated source/test path")
         url = f'https://github.com/{row["repository"]}/security/advisories/{row["advisory"]}'
-        if row["public_source"] != url:
-            raise RealFixError("advisory URL cannot point to another host/project/id")
+        central_url = f'https://github.com/advisories/{row["advisory"]}'
+        if row["public_source"] not in (url, central_url):
+            raise RealFixError("advisory URL must match exact repository or GitHub Advisory Database GHSA")
+        # A GitHub Advisory Database link is not a maintainer-issued repository
+        # advisory. Source authenticity still comes from immutable Git commits,
+        # not from attributing a central listing to the upstream maintainers.
         if len(row["hypothesis_to_review"]) > 700 or len(row["hypothesis_to_review"]) < 90:
             raise RealFixError("review hypothesis must be bounded and substantive")
         if row["id"] in ids or row["commit"] in commits or row["repository"] in projects or row["family"] in families:
