@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "status": "FROZEN_MODEL_AI_DRAFT_DIAGNOSTIC_NOT_SECURITY_ACCURACY",
+  "research_date": "2026-10-31",
+  "source_run": "https://github.com/Iniwura/falsum/actions/runs/41211098910",
+  "source_artifact_id": 13046188129,
+  "original_report_sha256": "cb39e495ff893050ba5c4dc792dd18d48857b65799fc384b765d558c6a1d3d2a",
+  "original_report_archive_sha256": "0fe3a2e0bc4aa8e751a9284c06b37461fd0ba11aeca3d813bee511e4ef8cd03e",
+  "actual_model_adapter_sha256": "1f1c59642936235c73eb94eb44a5f9b95e8899635d997e2e3d2546b567948f1d",
+  "source_public_packet_sha256": "5e973482615cb939087d682eaf9613faae1c1a1b5a73e6043005e0eb67b5170a",
+  "notes": "Transcribed exactly from actual original GitHub Actions JSON model score artifact; original report hash preserved. Same two source-based candidate texts per pair, opposite hypothetical deployment conditions and AI-proposed labels. NOT independently adjudicated ground truth.",
+  "metrics": {
+    "model_inferences": 24,
+    "contexts": 8,
+    "ai_draft_agreements": 4,
+    "ai_draft_agreement_fraction": 0.5,
+    "source_families": 4,
+    "context_families_matching_both_ai_preferences": 0,
+    "model_selected_the_same_candidate_essay_in_both_contexts_for_all_families": true,
+    "human_expert_reviews": 0,
+    "anjoman_eligible_pairs": 0
+  },
+  "project_preferences": [
+    {
+      "project": "real-requests-proxy-auth",
+      "selected_answer_kind_both_contexts": "conditional",
+      "matches_exposure": false,
+      "matches_missing_precondition": true
+    },
+    {
+      "project": "real-aiohttp-static-traversal",
+      "selected_answer_kind_both_contexts": "finding",
+      "matches_exposure": true,
+      "matches_missing_precondition": false
+    },
+    {
+      "project": "real-jinja-attr-sandbox",
+      "selected_answer_kind_both_contexts": "finding",
+      "matches_exposure": true,
+      "matches_missing_precondition": false
+    },
+    {
+      "project": "real-axios-absolute-baseurl",
+      "selected_answer_kind_both_contexts": "conditional",
+      "matches_exposure": false,
+      "matches_missing_precondition": true
+    }
+  ],
+  "case_scores": [
+    {
+      "case_id": "real-requests-proxy-auth:exposure",
+      "project": "real-requests-proxy-auth",
+      "scenario": "exposure",
+      "score_a": -0.5917158126831055,
+      "score_b": -0.5021005868911743,
+      "ai_proposed_margin": -0.08961522579193115,
+      "answer_only_margin": -0.14201563596725464,
+      "agrees_with_ai_proposal": false
+    },
+    {
+      "case_id": "real-requests-proxy-auth:missing-precondition",
+      "project": "real-requests-proxy-auth",
+      "scenario": "missing-precondition",
+      "score_a": -0.5309293270111084,
+      "score_b": -0.4592653512954712,
+      "ai_proposed_margin": 0.07166397571563721,
+      "answer_only_margin": 0.14201563596725464,
+      "agrees_with_ai_proposal": true
+    },
+    {
+      "case_id": "real-aiohttp-static-traversal:exposure",
+      "project": "real-aiohttp-static-traversal",
+      "scenario": "exposure",
+      "score_a": -0.4440523684024811,
+      "score_b": -0.42041587829589844,
+      "ai_proposed_margin": 0.02363649010658264,
+      "answer_only_margin": 0.25354811549186707,
+      "agrees_with_ai_proposal": true
+    },
+    {
+      "case_id": "real-aiohttp-static-traversal:missing-precondition",
+      "project": "real-aiohttp-static-traversal",
+      "scenario": "missing-precondition",
+      "score_a": -0.4536798596382141,
+      "score_b": -0.4118388891220093,
+      "ai_proposed_margin": -0.041840970516204834,
+      "answer_only_margin": -0.25354811549186707,
+      "agrees_with_ai_proposal": false
+    },
+    {
+      "case_id": "real-jinja-attr-sandbox:exposure",
+      "project": "real-jinja-attr-sandbox",
+      "scenario": "exposure",
+      "score_a": -0.18204453587532043,
+      "score_b": -0.12351219356060028,
+      "ai_proposed_margin": 0.058532342314720154,
+      "answer_only_margin": 0.018194526433944702,
+      "agrees_with_ai_proposal": true
+    },
+    {
+      "case_id": "real-jinja-attr-sandbox:missing-precondition",
+      "project": "real-jinja-attr-sandbox",
+      "scenario": "missing-precondition",
+      "score_a": -0.0972159206867218,
+      "score_b": -0.07751256972551346,
+      "ai_proposed_margin": -0.019703350961208344,
+      "answer_only_margin": -0.018194526433944702,
+      "agrees_with_ai_proposal": false
+    },
+    {
+      "case_id": "real-axios-absolute-baseurl:exposure",
+      "project": "real-axios-absolute-baseurl",
+      "scenario": "exposure",
+      "score_a": -0.645217776298523,
+      "score_b": -0.5840986371040344,
+      "ai_proposed_margin": -0.061119139194488525,
+      "answer_only_margin": -0.06260347366333008,
+      "agrees_with_ai_proposal": false
+    },
+    {
+      "case_id": "real-axios-absolute-baseurl:missing-precondition",
+      "project": "real-axios-absolute-baseurl",
+      "scenario": "missing-precondition",
+      "score_a": -0.5827682018280029,
+      "score_b": -0.6816023588180542,
+      "ai_proposed_margin": 0.09883415699005127,
+      "answer_only_margin": 0.06260347366333008,
+      "agrees_with_ai_proposal": true
+    }
+  ],
+  "release": {
+    "model_quality_validated": false,
+    "network_eligible": false,
+    "network_registered": false,
+    "model_training_authorized_for_submission": false
+  },
+  "limitations": "Model scores react numerically to deployment text, but the relative preferred essay never reversed in any project family. This is evidence against the desired context discrimination in this small AI-authored diagnostic, not proof the model ignores all context on every real-world question."
+}
