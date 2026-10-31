@@ -8,6 +8,18 @@ An evidence-grounded security evaluation research project for [Telegraph Season 
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
 
+## Phase 2T: eight real projects, reproducible generalization failure, historical leakage disclosed
+
+Four more independently maintained public fixes from **Starlette, urllib3, Django and Express** have been pinned and cryptographically replayed against their actual source and modified regression-test files. This yields **eight distinct source projects** across separate research pools, with no cross-pool repository, commit, advisory or selected blob reuse. [Successful real-source CI](https://github.com/Iniwura/falsum/actions/runs/41232688735) · [Complete technical evidence](docs/PHASE2T.md).
+
+Their **eight new AI-provisional context-reversal questions** passed all full-token 512-cap checks (**maximum 466**) and source authenticity gates. [Source-grounded new question build](https://github.com/Iniwura/falsum/actions/runs/41232403688).
+
+We tested the **same frozen research ModernBERT LoRA checkpoint**, with no additional model training, on all eight new cases. It matched AI-proposed answers **4/8** and switched correctly across **0/4** opposite-context source families again. Four original project families also showed **0/4**, making **0/8 inspected families** with both context judgments matching the AI proposals. [Verified actual model experiment](https://github.com/Iniwura/falsum/actions/runs/41232475893) · [Permanent model and source evidence](evidence/phase2t-2026-10-31.json).
+
+**Important correction:** The old research training queue included the EXACT Jinja2 and Axios advisories later used as Phase 2S diagnostics, so those earlier cases were **not unseen**. The four newly sourced projects showed **zero exact GHSA and package overlap with that specific prior advisory queue**, but this does **not** establish an untouched, sealed evaluation set or exclude wider pretraining exposure.
+
+All added judgments remain AI-authored, speculative deployment scenarios. **No human-validated labels, eligible preference data, registered evaluator or winning accuracy claim.** The current model should NOT be registered on the basis of this research.
+
 ## Phase 2S: real-source AI AppSec research exposes model's context weakness
 
 FALSUM now has **four AI-authored AppSec review dossiers** tied to real, immutable Requests, aiohttp, Jinja2 and Axios security fixes and tests. Each has two hypothetical deployment contexts with **identical competing answers** but opposite AI-proposed preferred answers. The source verification CI produced **8/8 authentic source/test replay transitions**, **8 research A/B cases**, and **16/16 full Task/Answer renders within ModernBERT's 512-token limit** (maximum **440**). [Corpus build](https://github.com/Iniwura/falsum/actions/runs/41210477426) · [Technical methodology and evidence](docs/PHASE2S.md).
