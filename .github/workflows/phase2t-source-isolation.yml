@@ -1,0 +1,81 @@
+name: Phase 2T - project-separated real-fix train-candidate source audit
+
+on:
+  push:
+    paths:
+      - 'data/real-fix-train-candidates.json'
+      - 'data/real-fix-queue.json'
+      - 'src/falsum/real_fix_corpus.py'
+      - 'src/falsum/real_fix_replay.py'
+      - 'src/falsum/phase2t_project_isolation.py'
+      - 'tests/test_phase2t_project_isolation.py'
+      - '.github/workflows/phase2t-source-isolation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-isolation:
+    name: Confirm four new source/test repairs and no project leakage
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline project-leakage and source-schema regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase2t_project_isolation.py' -v
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_real_fix_corpus.py' -v
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_real_fix_replay.py' -v
+      - name: Enforce disjoint projects and label quarantine
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-phase2t"
+          PYTHONPATH=src python -m falsum.phase2t_project_isolation \
+            --train data/real-fix-train-candidates.json \
+            --inspected data/real-fix-queue.json \
+            --out "$RUNNER_TEMP/falsum-phase2t/PROJECT-ISOLATION-NOT-SEALED-HOLDOUT.json"
+      - name: Retrieve actual 4 new upstream patches and independently replay 8 source/test revisions
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.real_fix_corpus \
+            --queue data/real-fix-train-candidates.json \
+            --out "$RUNNER_TEMP/falsum-phase2t/FOUR-ADDITIONAL-PUBLIC-SOURCES-NO-LABELS.json" \
+            --reviewer-out "$RUNNER_TEMP/falsum-phase2t/UNREVIEWED-NEW-SOURCE-QUESTIONS.json"
+          PYTHONPATH=src python -m falsum.real_fix_replay \
+            --evidence "$RUNNER_TEMP/falsum-phase2t/FOUR-ADDITIONAL-PUBLIC-SOURCES-NO-LABELS.json" \
+            --out "$RUNNER_TEMP/falsum-phase2t/EXACT-PARENT-AND-FIX-BLOBS-REPLAYED.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"falsum-phase2t"
+          partition=json.loads((root/"PROJECT-ISOLATION-NOT-SEALED-HOLDOUT.json").read_text())
+          corpus=json.loads((root/"FOUR-ADDITIONAL-PUBLIC-SOURCES-NO-LABELS.json").read_text())
+          replay=json.loads((root/"EXACT-PARENT-AND-FIX-BLOBS-REPLAYED.json").read_text())
+          assert partition["project_separation_verified"] is True and partition["sealed_holdout"] is False
+          assert partition["splits"][0]["rows"]==4 and partition["splits"][1]["rows"]==4
+          assert corpus["source_verified"]==4 and corpus["independent_human_reviews"]==0
+          assert replay["cases_replayed"]==4 and replay["file_replays_verified"]==8
+          assert corpus["network_eligible"] is False and replay["network_eligible"] is False
+          assert partition["training_data_authorized"] is False
+          assert partition["human_approved_labels"]==0
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a) as f:
+              f.write("### Phase 2T: source-verified project-separated research pools\n\n")
+              f.write("4 NEW independent repositories, 4 immutable upstream patches and **8 exact source/test file transitions** verified.\\n\\n")
+              f.write("8 total distinct research projects: 4 NEW train-candidate-only source cases and 4 publicly inspected, non-sealed diagnostics.\\n\\n")
+              f.write("**No accepted preference labels, no training authorization, no sealed holdout, no network eligibility.**\n")
+          PY
+      - name: Archive source-only project split and exact upstream patch evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE2T-FOUR-NEW-PUBLIC-FIXES-PROJECT-DISJOINT
+          path: ${{ runner.temp }}/falsum-phase2t/
+          if-no-files-found: error
+          retention-days: 30
