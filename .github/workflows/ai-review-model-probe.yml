@@ -39,8 +39,8 @@ jobs:
           name: QUARANTINED-FALSUM-CONTEXT-EXPERIMENT-NOT-SUBMITTABLE
           run-id: 41126779406
           repository: Iniwura/falsum
-          github-token: __GH_TOKEN__
-          path: __TEMP__/context-model
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: ${{ runner.temp }}/context-model
       - name: Checkout exact official Telegraph scoring kit
         uses: actions/checkout@v4
         with:
