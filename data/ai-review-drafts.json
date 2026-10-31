@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "AI_AUTHORED_SECURITY_REVIEW_DRAFT_UNREVIEWED",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "research_only": true,
+  "independent_human_reviews": 0,
+  "model_training_authorized": false,
+  "network_eligible": false,
+  "notice": "AI-authored provisional reasoning. Primary-source evidence is real, but the fictional deployment facts and paired preferences have NOT been independently adjudicated or accepted by Anjoman. Do NOT claim accuracy or train a network submission from this file.",
+  "cases": [
+    {
+      "id": "real-requests-proxy-auth",
+      "source_review": {
+        "code_boundary": "In the historical rebuild_proxies path, a username and password recovered from a proxy URL cause Proxy-Authorization to be attached to a prepared request without checking whether its destination scheme is HTTPS.",
+        "fix_review": "The upstream repair guards that header attachment with not scheme.startswith('https') and delegates standard tunneled HTTPS proxy authentication to urllib3.",
+        "regression_evidence": "The upstream parameterized test checks that Proxy-Authorization is present for HTTP and absent for HTTPS prepared requests after rebuild_proxies.",
+        "limitations": "The test is a header-presence regression, not a demonstrated interception of a real redirected TLS session. Actual exposure depends on credentials in the proxy URL and redirected destination behavior. An affected package version alone is insufficient proof of disclosure."
+      },
+      "finding_answer": "This historical redirect path can attach Proxy-Authorization to a prepared HTTPS request. Here the configured proxy URL supplies a username and password, and a redirect to an HTTPS destination occurs. Treat that combination as a credible proxy-credential disclosure risk; verify the emitted headers and remediate the dependency. Do not claim that every proxy request leaks.",
+      "conditional_answer": "The header insertion requires credentials from the proxy URL, and this scenario supplies no such username and password. The historical code remains a security-sensitive implementation, but this deployment evidence does not establish a leaked proxy credential. Ask for actual proxy configuration and redirect traces, and recommend the patched release without asserting that disclosure occurred.",
+      "scenarios": [
+        {
+          "id": "exposure",
+          "proposed_preferred": "finding",
+          "facts": "A Python service uses this historical Requests version. A session's HTTP proxy URL contains a username and password, and a user-controlled request is redirected to an HTTPS origin through that proxy. The endpoint can receive the prepared HTTPS request."
+        },
+        {
+          "id": "missing-precondition",
+          "proposed_preferred": "conditional",
+          "facts": "The same historical Requests code is used, but the application's configured proxy URL has no username or password, and the provided traffic record includes no other proxy credential source. A redirect reaches HTTPS. No emitted Proxy-Authorization header is shown."
+        }
+      ]
+    },
+    {
+      "id": "real-aiohttp-static-traversal",
+      "source_review": {
+        "code_boundary": "The historical static handler joined request-derived filenames to its configured root and resolved paths; containment checks were skipped in the branch when follow_symlinks was true.",
+        "fix_review": "The upstream repair normalizes an unresolved path and requires it to be relative to the static root before resolving when follow_symlinks is true.",
+        "regression_evidence": "The upstream added raw-socket requests containing parent-directory segments and a symlink/normalization scenario, checking inaccessible private files return 404 while an intended symlink target remains readable.",
+        "limitations": "A real server requires static routes with follow_symlinks=True and remotely reachable paths. Fixed behavior does not guarantee that every static-route deployment is secure; filesystem access and configuration still matter."
+      },
+      "finding_answer": "The historical handler allows a static-file path to escape containment when follow_symlinks is enabled. This deployment exposes that static route to remote users, who can supply traversal segments in the requested path. Flag a credible arbitrary-file read risk and disable the risky option or patch the dependency. Confirm which files are readable before describing specific disclosure.",
+      "conditional_answer": "The historical code conditionally bypasses containment only for the follow_symlinks branch, but this deployment uses follow_symlinks=False on its relevant route. The shown configuration does not establish the published traversal path. Check other static routes and symlink behavior, and advise patching the affected release without claiming this particular public endpoint exposes arbitrary files.",
+      "scenarios": [
+        {
+          "id": "exposure",
+          "proposed_preferred": "finding",
+          "facts": "The server uses this affected aiohttp revision and publicly mounts /static with follow_symlinks=True. Remote clients can make raw HTTP requests containing parent-directory path components. A sibling file outside the static root exists and is readable by the service account."
+        },
+        {
+          "id": "missing-precondition",
+          "proposed_preferred": "conditional",
+          "facts": "The server uses the same affected aiohttp revision, but its only configured static route is follow_symlinks=False. No separate static handlers or proxy path-rewrite bypass is described; all other service access details are unknown."
+        }
+      ]
+    },
+    {
+      "id": "real-jinja-attr-sandbox",
+      "source_review": {
+        "code_boundary": "The historical attr filter called getattr and performed a sandbox is_safe_attribute check but did not consistently route all access through the environment's attribute semantics, allowing an attr-based path to the string format method.",
+        "fix_review": "The repair uses getattr_static/hasattr for attribute existence, then delegates the actual lookup to environment.getattr to apply sandbox behavior consistently.",
+        "regression_evidence": "A new SandboxedEnvironment test renders a crafted attr('format') template and expects SecurityError, supporting the specific sandbox escape regression.",
+        "limitations": "The advisory requires attacker control of the template source, not merely a variable rendered by a trusted template. Even sandboxed rendering does not mean arbitrary untrusted Python expression execution is otherwise safe."
+      },
+      "finding_answer": "The historical attr filter can bypass the intended sandbox handling of a string's format method. Here untrusted users can supply template source that the service compiles and renders inside SandboxedEnvironment, matching the published attack prerequisite. Flag a serious sandbox-escape risk and stop rendering untrusted templates or update Jinja. Validate the rendering path before assuming code execution occurred.",
+      "conditional_answer": "This application compiles templates only from trusted repository files; outside users influence variable values but cannot edit template expressions. The historical attr implementation deserves patching, yet the scenario lacks the attacker-controlled template source required for the documented sandbox escape. Do not report confirmed remote code execution solely because untrusted data appears in rendered template variables.",
+      "scenarios": [
+        {
+          "id": "exposure",
+          "proposed_preferred": "finding",
+          "facts": "The service lets an authenticated but untrusted customer submit arbitrary Jinja template source. It compiles that source using SandboxedEnvironment from this historical revision and renders it on the server; the customer can insert an attr('format') expression."
+        },
+        {
+          "id": "missing-precondition",
+          "proposed_preferred": "conditional",
+          "facts": "The service renders only developer-authored templates checked into its repository. Outside users supply data values for those templates, but they cannot edit, select, upload, or otherwise construct template source; the sandbox is enabled."
+        }
+      ]
+    },
+    {
+      "id": "real-axios-absolute-baseurl",
+      "source_review": {
+        "code_boundary": "The historical buildFullPath returns an absolute requestedURL unchanged even with a baseURL, so a baseURL setting by itself does not constrain the network destination.",
+        "fix_review": "The upstream 0.x repair adds the allowAbsoluteUrls argument and, only when that option is explicitly false with a configured baseURL, combines the base URL with a requested absolute URL. Do not assume the default became restrictive.",
+        "regression_evidence": "The selected regression test asserts a call with no baseURL and allowAbsoluteUrls=false leaves the absolute URL unchanged; that specific test does not demonstrate rejection with a configured baseURL. The source patch, not that test alone, supports the opt-in branch logic.",
+        "limitations": "Potential SSRF requires an attacker-controlled absolute URL in the request path and a reachable server-side network target. Credential leakage further requires credentials/headers and forwarding to an unintended origin. A patched version still needs explicit configuration or application input restrictions."
+      },
+      "finding_answer": "The historical helper does not bind an absolute request URL to the configured baseURL. Here an untrusted input can supply such a URL and the client attaches a sensitive API key, so request redirection can contact an unintended host and leak that header. Flag the SSRF and credential-forwarding risk; validate inputs and enforce explicit URL restrictions, not merely baseURL.",
+      "conditional_answer": "Although this historical helper accepts absolute URLs despite baseURL, the described call site only supplies server-selected relative paths and has no attacker-controlled absolute input. This evidence does not establish an SSRF or leaked API key for that path. Preserve the dependency warning, confirm the input allowlist is enforced, and do not treat baseURL alone as protection if the calling assumptions change.",
+      "scenarios": [
+        {
+          "id": "exposure",
+          "proposed_preferred": "finding",
+          "facts": "A Node.js backend uses this historical Axios version with baseURL set to an internal API and an X-API-KEY header on its client. It passes an unvalidated customer-supplied URL to client.get(), and an absolute URL to another host is accepted by that call."
+        },
+        {
+          "id": "missing-precondition",
+          "proposed_preferred": "conditional",
+          "facts": "The same historical Axios helper is present. The backend constructs request URLs from an enum of hard-coded, relative API path values; users can choose an enum member but cannot pass absolute URLs. The configured client uses baseURL, and no other call site is in scope."
+        }
+      ]
+    }
+  ]
+}
