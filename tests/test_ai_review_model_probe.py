@@ -1,11 +1,12 @@
 """Test actual-model diagnostic bookkeeping without claiming expert accuracy."""
 import copy
+import hashlib
 import math
 import unittest
 from unittest.mock import patch
 
 from falsum.ai_review_benchmark import build
-from falsum.ai_review_model_probe import ProvisionalProbeError, _verify, evaluate
+from falsum.ai_review_model_probe import ProvisionalProbeError, _canonical, _verify, evaluate
 from test_ai_review_benchmark import sample
 
 
@@ -89,8 +90,10 @@ class AIModelProbeTests(unittest.TestCase):
     def test_public_label_leak_refused(self):
         pub=copy.deepcopy(self.public)
         pub["cases"][0]["proposed_preferred"]="A"
+        key=copy.deepcopy(self.key)
+        key["public_packet_sha256"]=hashlib.sha256(_canonical(pub)).hexdigest()
         with self.assertRaisesRegex(ProvisionalProbeError,"leaked label"):
-            _verify(pub,self.key)
+            _verify(pub,key)
 
     def test_duplicate_case_refused(self):
         pub=copy.deepcopy(self.public)
