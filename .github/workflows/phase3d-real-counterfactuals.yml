@@ -8,6 +8,8 @@ on:
       - 'tests/test_phase3d_counterfactual.py'
       - 'src/falsum/phase3d_quality_gate.py'
       - 'tests/test_phase3d_quality_gate.py'
+      - 'tests/test_phase3d_research_evidence.py'
+      - 'evidence/phase3d-2026-11-01.json'
   workflow_dispatch:
 permissions:
   contents: read
@@ -30,6 +32,7 @@ jobs:
           set -euo pipefail
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3d_counterfactual.py -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3d_quality_gate.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3d_research_evidence.py -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3b_delta_readiness.py -v
           mkdir -p "$RUNNER_TEMP/falsum-phase3d/reports"
       - name: Checkout exact official Telegraph 2026 shared Foundation engine runtime
