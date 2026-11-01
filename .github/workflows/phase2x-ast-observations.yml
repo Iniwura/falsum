@@ -1,0 +1,124 @@
+name: Phase 2X - independently recomputed Python AST evidence (not network ready)
+on:
+  push:
+    paths:
+      - 'src/falsum/phase2x_ast_observer.py'
+      - 'src/falsum/phase2x_reconcile.py'
+      - 'tests/test_phase2x_ast_observer.py'
+      - '.github/workflows/phase2x-ast-observations.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ast-syntax-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run AST adversarial tests and previous proof-gate regression suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase2x_ast_observer.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase2w_proof_gate.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase2w_capture.py -v
+      - name: Create explicitly illustrative Python file and contradictory user claim
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-2x/application" "$RUNNER_TEMP/falsum-2x/reports"
+          cat > "$RUNNER_TEMP/falsum-2x/application/app.py" <<'PYCODE'
+          app.router.add_static("/assets", "/var/www/assets", follow_symlinks=False)
+          PYCODE
+          cat > "$RUNNER_TEMP/falsum-2x/select.json" <<'JSON'
+          {"status":"EXPLICIT_AST_FILE_SELECTION_UNREVIEWED","files":["app.py"]}
+          JSON
+          cat > "$RUNNER_TEMP/falsum-2x/claims.json" <<'JSON'
+          {
+            "status":"SUBMITTER_ASSERTIONS_UNREVIEWED",
+            "claims":[
+              {"requirement_id":"follow_symlinks_enabled",
+               "claim":"present",
+               "path":"app.py",
+               "line_start":1,
+               "line_end":1}
+            ]
+          }
+          JSON
+      - name: Real AST file analysis from raw source and SHA 256
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase2x_ast_observer \
+            --catalog data/phase2w-applicability-rules.json \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --fresh-spec data/phase2u-fresh-transfer-cases.json \
+            --case-id real-aiohttp-static-traversal \
+            --root "$RUNNER_TEMP/falsum-2x/application" \
+            --paths-json "$RUNNER_TEMP/falsum-2x/select.json" \
+            --out "$RUNNER_TEMP/falsum-2x/reports/VERIFIED-AST-CALL-SYNTAX.json"
+          PYTHONPATH=src python -m falsum.phase2w_capture \
+            --catalog data/phase2w-applicability-rules.json \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --fresh-spec data/phase2u-fresh-transfer-cases.json \
+            --case-id real-aiohttp-static-traversal \
+            --claims "$RUNNER_TEMP/falsum-2x/claims.json" \
+            --root "$RUNNER_TEMP/falsum-2x/application" \
+            --out "$RUNNER_TEMP/falsum-2x/reports/UNREVIEWED-USER-CLAIMS.json"
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"falsum-2x/reports"
+          ast=json.loads((p/"VERIFIED-AST-CALL-SYNTAX.json").read_text())
+          manifest=json.loads((p/"UNREVIEWED-USER-CLAIMS.json").read_text())
+          assert len(ast["observations"])==1
+          assert ast["observations"][0]["syntactic_implication"]=="SYNTACTIC_ABSENT"
+          assert manifest["evidence"][0]["claim"]=="present"
+          (p/"ONE-ILLUSTRATIVE-APPLICATION-CLAIM.json").write_text(json.dumps(
+              {"schema_version":1,
+               "status":"UNREVIEWED_APPLICATION_EVIDENCE_BATCH",
+               "research_only":True,"scenarios":[manifest]}))
+          (p/"RECOMPUTE-THIS-AST-PACKET.json").write_text(json.dumps([ast]))
+          PY
+      - name: Recompute AST independently and identify assertion contradiction
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase2x_reconcile \
+            --catalog data/phase2w-applicability-rules.json \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --fresh-spec data/phase2u-fresh-transfer-cases.json \
+            --batch "$RUNNER_TEMP/falsum-2x/reports/ONE-ILLUSTRATIVE-APPLICATION-CLAIM.json" \
+            --ast-packets "$RUNNER_TEMP/falsum-2x/reports/RECOMPUTE-THIS-AST-PACKET.json" \
+            --root "$RUNNER_TEMP/falsum-2x/application" \
+            --out "$RUNNER_TEMP/falsum-2x/reports/AST-CORRECTED-SUBMITTER-CLAIM.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"falsum-2x/reports"
+          result=json.loads((p/"AST-CORRECTED-SUBMITTER-CLAIM.json").read_text())
+          assert result["ast_packets_recomputed_from_live_checkout"]==1
+          assert result["ast_contradictions_found"]==1
+          assert result["cases"][0]["reconciled_status"]=="BLOCKED_AST_SYNTAX_CONFLICT_REQUIRES_HUMAN_REVIEW"
+          assert result["actual_app_security_semantics_verified"] is False
+          assert result["verified_exploits"]==0 and result["human_approved_labels"]==0
+          assert result["network_eligible"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### FALSUM Phase2X: machine-recomputed local syntax versus submitter claims\n\n")
+              f.write("Example unreviewed app asserted follow_symlinks=True, while exact SHA-pinned Python AST showed follow_symlinks=False; reviewer was **BLOCKED and flagged**.\n\n")
+              f.write("Dynamic kwargs and unsupported semantic/control-flow conclusions ABSTAIN. No exploitation, version or whole-application safety is claimed.\n\n")
+              f.write("**0 expert labels, 0 accepted evaluator pairs, no live registration.**\n")
+          PY
+      - name: Archive local research evidence (no private code outside illustrative fixtures)
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE2X-SCOPED-AST-FACTS-AND-CONFLICT-CHECK
+          path: ${{ runner.temp }}/falsum-2x/reports/
+          retention-days: 14
+          if-no-files-found: error
