@@ -1,0 +1,86 @@
+name: Phase 3F - seven independent vulnerability-fix security review families
+on:
+  push:
+    paths:
+      - 'src/falsum/phase3f_multifamily_material.py'
+      - 'tests/test_phase3f_multifamily_material.py'
+      - '.github/workflows/phase3f-diverse-public-fixes.yml'
+      - 'data/real-fix-queue.json'
+      - 'data/real-fix-train-candidates.json'
+      - 'data/phase2w-applicability-rules.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verified-diverse-security-material:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONUNBUFFERED: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Strict offline adversarial tests for source authenticity, patch/test pair, research-only labels
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3f_multifamily_material.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_real_fix_corpus.py -v
+          mkdir -p "$RUNNER_TEMP/falsum-phase3f"
+      - name: Verify real published source AND regression test against eight immutable upstream commits
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase3f_multifamily_material \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --catalog data/phase2w-applicability-rules.json \
+            --out "$RUNNER_TEMP/falsum-phase3f/SEVEN-DIVERSE-REAL-PATCH-REVIEW-QUESTIONS.json"
+      - name: Enforce original two-patch provenance, seven distinct families and zero labels
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"falsum-phase3f/SEVEN-DIVERSE-REAL-PATCH-REVIEW-QUESTIONS.json"
+          d=json.loads(p.read_text(encoding="utf-8"))
+          assert d["status"]=="PHASE3F_SEVEN_DISTINCT_PUBLIC_SECURITY_PATCH_REVIEW_CASES_UNADJUDICATED"
+          assert d["external_source_revisions_verified"]==8
+          assert d["external_source_and_test_file_blob_pairs_verified"]==8
+          assert d["review_cases"]==7 and d["distinct_security_families"]==7
+          assert len(d["review_packets"])==7
+          assert len({r["repository"] for r in d["review_packets"]})==7
+          assert d["fresh_project_holdout_reused"] is False
+          assert d["independent_human_labels"]==0 and d["accepted_training_pairs"]==0
+          assert d["network_eligible"] is False and d["registered_evaluator"] is False
+          assert d["full_application_execution"] is False
+          assert d["actual_production_exploits_verified"]==0
+          for item in d["review_packets"]:
+              assert item["source_post_fix_git_blob_sha1"]
+              assert item["regression_test_post_fix_git_blob_sha1"]
+              assert len(item["source_patch_sha256"])==64
+              assert len(item["regression_test_patch_sha256"])==64
+              assert len(item["source_pinned_unreviewed_prerequisites"])==2
+              assert all(x["status"]=="AUTHOR_HYPOTHESIS_NOT_HUMAN_VERIFIED"
+                         for x in item["source_pinned_unreviewed_prerequisites"])
+              assert item["human_preference"] is None
+              assert item["training_authorized"] is False
+              assert item["source_patch_is_exploit_proof"] is False
+              assert item["network_eligible"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as out:
+              out.write("### Phase 3F: authentic public security-fix diversity expansion\n\n")
+              out.write("Reverified **8 source/test upstream fix commits** with exact Git blob identities, source diff and real upstream regression-test diff. Generated **7 new, distinct non-aiohttp vulnerability review questions**.\n\n")
+              out.write("Fresh Phase2U source-separated projects and Phase3D failure prompts were NOT reused in these questions. All questions and candidate answers are FALSUM drafts. **0 expert labels, 0 accepted Telegraph rows, 0 proven exploits, 0 evaluator registrations.**\n\n")
+              out.write("This advances material diversity and reviewability, NOT security accuracy or qualification.\n")
+          PY
+      - name: Preserve only public source identities and prospective questions (not entire source/test patches)
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3F-SEVEN-SECURITY-FAMILIES-UNREVIEWED
+          path: ${{ runner.temp }}/falsum-phase3f/SEVEN-DIVERSE-REAL-PATCH-REVIEW-QUESTIONS.json
+          retention-days: 14
+          if-no-files-found: error
