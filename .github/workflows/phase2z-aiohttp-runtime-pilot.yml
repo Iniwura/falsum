@@ -1,0 +1,94 @@
+name: Phase 2Z - pinned real aiohttp loopback runtime and source crosscheck
+on:
+  push:
+    paths:
+      - 'src/falsum/phase2z_runtime_pilot.py'
+      - 'tests/test_phase2z_runtime_pilot.py'
+      - 'examples/phase2z_runtime_pilot/**'
+      - 'data/phase2z-aiohttp-pilot-contract.json'
+      - '.github/workflows/phase2z-aiohttp-runtime-pilot.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  local-framework-runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONUNBUFFERED: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      PIP_DISABLE_PIP_VERSION_CHECK: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify fail-closed source contract before installing or executing any framework
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m unittest discover -s tests -p test_phase2z_runtime_pilot.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase2y_bindings.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase2y_claim_guard.py -v
+      - name: Install exact patched aiohttp 3.10.11 release and record full resolved dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'aiohttp==3.10.11'
+          mkdir -p "$RUNNER_TEMP/falsum-2z"
+          python -m pip freeze > "$RUNNER_TEMP/falsum-2z/ACTUAL-INSTALLED-PYTHON-DEPENDENCIES.txt"
+          python - <<'PY'
+          import aiohttp,importlib.metadata
+          assert aiohttp.__version__=="3.10.11"
+          assert importlib.metadata.version("aiohttp")=="3.10.11"
+          print("Actual pinned installed patched aiohttp:",aiohttp.__version__)
+          PY
+      - name: Execute genuine library and isolated loopback HTTP against 3 controlled apps
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase2z_runtime_pilot \
+            --contract data/phase2z-aiohttp-pilot-contract.json \
+            --catalog data/phase2w-applicability-rules.json \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --fresh-spec data/phase2u-fresh-transfer-cases.json \
+            --root "$GITHUB_WORKSPACE" \
+            --out "$RUNNER_TEMP/falsum-2z/REAL-INSTALLED-PATCHED-AIOHTTP-AND-STATIC-EVIDENCE.json"
+      - name: Assert exact trace and rule out inflated exploit and network claims
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"falsum-2z"
+          x=json.loads((root/"REAL-INSTALLED-PATCHED-AIOHTTP-AND-STATIC-EVIDENCE.json").read_text())
+          assert x["status"]=="PHASE2Z_CONTROLLED_AIOHTTP_RUNTIME_CORRELATION_NOT_VULNERABILITY_ACCURACY"
+          assert x["installed_patched_aiohttp_version"]=="3.10.11"
+          assert x["research_applications_executed"]==3
+          assert x["controlled_loopback_requests"]==6
+          assert x["reconciliation"]["runtime_routes_verified"]==3
+          assert x["reconciliation"]["literal_static_flag_correspondences"]==2
+          assert x["reconciliation"]["dynamic_config_static_abstentions"]==1
+          assert [r["runtime_registered_follow_symlinks"] for r in x["results"]]==[False,True,False]
+          assert [r["static_source_keyword"] for r in x["results"]]==[
+              "SYNTACTIC_ABSENT","SYNTACTIC_PRESENT","UNDETERMINED"]
+          assert all(r["loopback_public_http_status"]==200 and r["loopback_missing_http_status"]==404 for r in x["results"])
+          assert all(r["external_network_requests"]==0 for r in x["results"])
+          assert x["real_customer_apps_tested"]==0
+          assert x["human_reviews"]==0 and x["confirmed_vulnerabilities"]==0
+          assert x["network_eligible"] is False and x["registered_evaluator"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### FALSUM real installed aiohttp loopback runtime pilot\n\n")
+              f.write("Pinned patched aiohttp **3.10.11**, three allowlisted example Python apps with real imported aiohttp.Application/StaticResource, six actual HTTP requests confined to loopback.\n\n")
+              f.write("Verified explicit False, explicit True and dynamic False route configurations at runtime. Phase2Y static AST independently matched only the literal cases and **abstained on dynamic source**.\n\n")
+              f.write("All examples use a patched version (GHSA-5h86-8mv2-jq9f was patched in 3.9.2). **NO historic CVE reproduction, independent exploit proof, production application audit, human ground truth, network eligibility or live evaluator registration.**\n")
+          PY
+      - name: Save only safe local example and runtime report, not user application files
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE2Z-PINNED-PATCHED-AIOHTTP-LOCAL-RUNTIME-NOT-ELIGIBLE
+          path: ${{ runner.temp }}/falsum-2z/
+          retention-days: 14
+          if-no-files-found: error
