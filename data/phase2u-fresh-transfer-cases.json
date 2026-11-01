@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "status": "FRESH_PUBLIC_PROJECT_TRANSFER_DIAGNOSTIC_NO_TRAINING",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "research_only": true,
+  "independent_human_reviews": 0,
+  "model_training_authorized": false,
+  "network_eligible": false,
+  "heldout_sealed": false,
+  "notice": "Three source-pinned projects different from all eight prior source pools. AI-authored hypothetical contexts and preference choices are not independent ground truth. Evaluations will be public and are not a sealed holdout. Do not train on these cases before or after reading their scores.",
+  "cases": [
+    {
+      "id": "fresh-tornado-cookie-attribute",
+      "repository": "tornadoweb/tornado",
+      "commit": "ab4953f1262636343bcc1875117f7a8c93d10509",
+      "parent": "80ec6222be073c7de359332c860371bbae6971dc",
+      "source_path": "tornado/web.py",
+      "source_blob": "17ace9b5ceaacc184f3aabb0f8a8ee6c54860d72",
+      "test_path": "tornado/test/web_test.py",
+      "test_blob": "84c0615272857fb52f607e899673b34ad2a9366a",
+      "upstream_evidence": "https://github.com/tornadoweb/tornado/commit/ab4953f1262636343bcc1875117f7a8c93d10509",
+      "advisory": "GHSA-c6v4-qj2h-f748",
+      "research_limitation": "The fix converts max_age to an integer; risk depends on untrusted non-integer max_age reaching set_cookie, not merely on using cookies.",
+      "finding_answer": "The historical set_cookie path converted max_age directly to a string. In this deployment, untrusted text reaches that attribute, so a semicolon-containing value could influence the emitted Set-Cookie attributes. Flag the cookie-attribute injection boundary, constrain the argument to integers and upgrade the dependency. The patch alone cannot prove a production browser accepted a crafted cookie.",
+      "conditional_answer": "The historical cookie implementation is security sensitive, but this caller passes only a constant integer as max_age and never derives that argument from untrusted input. The described path does not demonstrate cookie-attribute injection. Confirm other call sites and apply the upstream fix, without claiming the routine use of a fixed numeric cookie lifetime is exploitable.",
+      "scenarios": [
+        {
+          "id": "exposure",
+          "proposed_preferred": "finding",
+          "facts": "An affected Tornado web handler passes a user-controlled string as the max_age argument of set_cookie. The string may contain a semicolon followed by an additional cookie attribute, and the handler is reachable by untrusted clients."
+        },
+        {
+          "id": "missing-precondition",
+          "proposed_preferred": "conditional",
+          "facts": "The same historical Tornado set_cookie function is present, but this handler always calls it with a literal integer max_age=3600. The argument is neither derived from user data nor dynamically cast from a string, and no other call site is shown."
+        }
+      ]
+    },
+    {
+      "id": "fresh-undici-chunked-dump",
+      "repository": "nodejs/undici",
+      "commit": "6d583124e7cf60b640097d64144ed633cc450584",
+      "parent": "8f5868fbdbc8f1146dfc1bcd1f2d117790141390",
+      "source_path": "lib/interceptor/dump.js",
+      "source_blob": "09b57f2163fb327e5dc488e619d2344527239f10",
+      "test_path": "test/interceptors/dump-interceptor.js",
+      "test_blob": "50a773284b02af3b4e2a61fe532119e53eee1de2",
+      "upstream_evidence": "https://github.com/nodejs/undici/commit/6d583124e7cf60b640097d64144ed633cc450584",
+      "advisory": "GHSA-2gqq-gqf2-x968",
+      "research_limitation": "The fix aborts excess streamed chunks and propagates terminal errors; the risk is specific to an affected dump interceptor processing streamed responses beyond maxSize.",
+      "finding_answer": "The historical dump interceptor could finish or suppress stream terminal events at its configured limit without properly rejecting additional incoming chunked body bytes. Here an untrusted upstream can stream beyond maxSize through the affected interceptor. Flag the response-size enforcement and completion-integrity risk, confirm the consuming caller's expectations and update Undici. Do not claim that all HTTP streaming is vulnerable.",
+      "conditional_answer": "The historical dump interceptor patch addresses oversized streamed responses, but this application never passes an oversized body through its dump interceptor. The shown caller receives only locally bounded responses below maxSize, and no attacker-controlled streaming source is in scope. The patch remains advisable, yet the evidence does not demonstrate the published oversized-chunk condition at this endpoint.",
+      "scenarios": [
+        {
+          "id": "exposure",
+          "proposed_preferred": "finding",
+          "facts": "A Node.js service uses the historical Undici dump interceptor with maxSize=512 bytes. The upstream response is controlled by a third party and streams a chunked body containing more than 512 bytes; a downstream consumer interprets completion events."
+        },
+        {
+          "id": "missing-precondition",
+          "proposed_preferred": "conditional",
+          "facts": "The same historical Undici dump interceptor is configured with maxSize=512 bytes, but the only response source is a locally generated fixed 100-byte body. External clients cannot change its length or transfer encoding, and no alternate streaming source is present."
+        }
+      ]
+    },
+    {
+      "id": "fresh-websockets-deflate-limit",
+      "repository": "python-websockets/websockets",
+      "commit": "b6a25ceb3555d0ba69e5961b8d7616e4c1aecb2b",
+      "parent": "2b89213dc3a34c98d19f87cd4504046a656fe05c",
+      "source_path": "websockets/extensions/permessage_deflate.py",
+      "source_blob": "7ca911a2da562ff675a3fc084c9e4fc7eb61dbb8",
+      "test_path": "websockets/extensions/test_permessage_deflate.py",
+      "test_blob": "e4afcec394d2a1403fd8b3e71f11f74c23fda129",
+      "upstream_evidence": "https://github.com/python-websockets/websockets/commit/b6a25ceb3555d0ba69e5961b8d7616e4c1aecb2b",
+      "advisory": null,
+      "research_limitation": "The historical deflate decoder lacked an output cap, but this only matters when a peer can send compressed frames and a negotiated decompression path expands beyond intended application bounds.",
+      "finding_answer": "The historical permessage-deflate decoder decompresses entire frames without passing a decompressed-output limit to zlib. Here untrusted peers negotiate compression and can submit small frames that expand beyond the application's intended bound. Flag the resource exhaustion risk and apply the patched decoder with a meaningful max_size. Do not infer a successful service outage solely from the source diff.",
+      "conditional_answer": "The historical deflate decoder contains a missing output-limit mechanism, but this deployment has compression disabled and never invokes that decoder for untrusted frames. The documented decompression-bomb path is absent from the described connection settings. Upgrade and verify all extension negotiations, without reporting a demonstrated decompression attack on connections that do not negotiate compression.",
+      "scenarios": [
+        {
+          "id": "exposure",
+          "proposed_preferred": "finding",
+          "facts": "A WebSocket server using this historical websockets revision negotiates permessage-deflate with untrusted remote peers and accepts compressed frames. It has an application message-size bound that is intended to limit decompressed payloads."
+        },
+        {
+          "id": "missing-precondition",
+          "proposed_preferred": "conditional",
+          "facts": "The same historical websockets revision is installed, but this server disables permessage-deflate entirely and accepts no compressed frames. It does not instantiate the deflate decoder on its untrusted-traffic path, and no other message decompression extension is enabled."
+        }
+      ]
+    }
+  ]
+}
