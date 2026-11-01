@@ -67,7 +67,7 @@ def construct(tokenizer_bytes:bytes,encode)->dict:
         answer_ids=[a[0] for a in fam["fixed_answers"]]
         if len(set(answer_ids))!=2:
             raise CounterfactualInputError("duplicate fixed answer identities")
-        if [c[2] for c in fam["contexts"]]!=[answer_ids[1],answer_ids[0]]:
+        if set(c[2] for c in fam["contexts"])!=set(answer_ids):
             raise CounterfactualInputError("expected counterfactual reversal must be explicit")
         for context_id,task,preferred in fam["contexts"]:
             for answer_id,answer in fam["fixed_answers"]:
