@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "status": "PHASE2X_SCOPED_PYTHON_AST_FACT_CHECK_RESEARCH_ONLY",
+  "date": "2026-11-01",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "repository": "https://github.com/Iniwura/falsum",
+  "verified_run": "https://github.com/Iniwura/falsum/actions/runs/41288248962",
+  "artifact": "https://github.com/Iniwura/falsum/actions/runs/41288248962/artifacts/13075957276",
+  "artifact_id": 13075957276,
+  "implemented": {
+    "source": "src/falsum/phase2x_ast_observer.py",
+    "reconciliation": "src/falsum/phase2x_reconcile.py",
+    "tests": "tests/test_phase2x_ast_observer.py",
+    "source_pin_catalog": "data/phase2w-applicability-rules.json",
+    "supported_python_ast_cases": [
+      {
+        "case_id": "real-aiohttp-static-traversal",
+        "syntactic_check": "qualified router.add_static follow_symlinks literal boolean",
+        "runtime_callee_verified": false
+      },
+      {
+        "case_id": "fresh-tornado-cookie-attribute",
+        "syntactic_check": "self.set_cookie keyword max_age literal integer",
+        "runtime_callee_verified": false
+      },
+      {
+        "case_id": "fresh-websockets-deflate-limit",
+        "syntactic_check": "qualified websockets.serve compression literal None or deflate",
+        "runtime_callee_verified": false
+      }
+    ],
+    "checked_entire_source_file_sha256": true,
+    "checked_exact_call_lines": true,
+    "checked_canonical_call_ast_sha256": true,
+    "fresh_ast_recomputed_from_application_checkout_during_reconciliation": true,
+    "local_call_observation_only": true,
+    "unknown_dynamic_inputs_abstain": true,
+    "evidence_path_symlink_and_escape_rejected": true,
+    "source_case_and_requirement_allowlist_enforced": true,
+    "compared_developer_claim_to_exact_same_path_file_hash_and_overlapping_call_site": true,
+    "blocked_opposing_developer_syntax_claim": true,
+    "human_review_required": true
+  },
+  "verified_ci": {
+    "new_ast_adversarial_tests_passed": 20,
+    "original_evidence_gate_tests_passed": 20,
+    "original_application_capture_tests_passed": 9,
+    "total_unit_tests_passed": 49,
+    "illustrative_local_app_checks": 1,
+    "exactly_recomputed_ast_packets": 1,
+    "submitted_unreviewed_claim": "follow_symlinks enabled",
+    "observed_literal_code": "follow_symlinks=False",
+    "ast_claim_contradictions_detected": 1,
+    "final_research_status": "BLOCKED_AST_SYNTAX_CONFLICT_REQUIRES_HUMAN_REVIEW",
+    "ci_conclusion": "success"
+  },
+  "constraints": {
+    "real_customer_apps_audited": 0,
+    "real_production_dependency_versions_verified": 0,
+    "call_binding_identity_verified": false,
+    "call_reachability_verified": false,
+    "whole_application_absence_proven": false,
+    "exploits_confirmed": 0,
+    "independent_expert_security_labels": 0,
+    "accepted_Anjoman_evaluation_rows": 0,
+    "model_training_performed": false,
+    "network_eligible": false,
+    "evaluator_registered": false
+  },
+  "research_conclusion": "AST-independent syntactic facts can reject localized contradictory submitter claims without fabricating security labels. This is a narrow source-evidence quality check, not vulnerability detection accuracy.",
+  "next_step": "Strengthen import/name binding and bounded framework-specific control-flow checks while preserving explicit abstention; verify on non-synthetic applications before any model release."
+}
