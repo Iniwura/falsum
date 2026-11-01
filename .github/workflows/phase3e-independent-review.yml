@@ -4,6 +4,8 @@ on:
     paths:
       - 'src/falsum/phase3e_review_packets.py'
       - 'tests/test_phase3e_review_packets.py'
+      - 'src/falsum/phase3e_review_intake.py'
+      - 'tests/test_phase3e_review_intake.py'
       - '.github/workflows/phase3e-independent-review.yml'
       - 'data/phase3a-external-source-cases.json'
       - 'data/phase3a-dependency-manifests.json'
@@ -27,6 +29,7 @@ jobs:
         run: |
           set -euo pipefail
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3e_review_packets.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3e_review_intake.py -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3a_external_sources.py -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3a_dependency_manifests.py -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3d_research_evidence.py -v
@@ -39,6 +42,40 @@ jobs:
             --sources-contract data/phase3a-external-source-cases.json \
             --dependency-contract data/phase3a-dependency-manifests.json \
             --out "$RUNNER_TEMP/falsum-phase3e/INDEPENDENT-REVIEW-QUEUE-NOT-EXPERT-LABELS.json"
+      - name: Generate blank SHA-bound reviewer submission and verify zero accepted human labels
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python - <<'PY'
+          from pathlib import Path
+          import json,os,hashlib
+          from falsum.phase2w_proof_gate import _canonical
+          d=Path(os.environ["RUNNER_TEMP"])/"falsum-phase3e"
+          p=json.loads((d/"INDEPENDENT-REVIEW-QUEUE-NOT-EXPERT-LABELS.json").read_text())
+          r={
+              "schema_version":1,
+              "status":"UNVERIFIED_PUBLIC_REVIEW_SUBMISSIONS",
+              "packet_bundle_sha256":hashlib.sha256(_canonical(p)).hexdigest(),
+              "reviews":[]
+          }
+          (d/"BLANK-INDEPENDENT-REVIEW-CLAIMS.json").write_text(json.dumps(r,indent=2)+"\n")
+          PY
+          PYTHONPATH=src python -m falsum.phase3e_review_intake \
+            --packets "$RUNNER_TEMP/falsum-phase3e/INDEPENDENT-REVIEW-QUEUE-NOT-EXPERT-LABELS.json" \
+            --reviews "$RUNNER_TEMP/falsum-phase3e/BLANK-INDEPENDENT-REVIEW-CLAIMS.json" \
+            --out "$RUNNER_TEMP/falsum-phase3e/VERIFIED-NO-EXPERT-LABELS-YET.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=Path(os.environ["RUNNER_TEMP"])/"falsum-phase3e"
+          out=json.loads((d/"VERIFIED-NO-EXPERT-LABELS-YET.json").read_text())
+          assert out["source_review_packets"]==5
+          assert out["self_reported_review_records"]==0
+          assert out["verified_independent_human_labels"]==0
+          assert out["accepted_training_pairs"]==0
+          assert out["evaluator_registered"] is False
+          assert out["network_eligible"] is False
+          PY
       - name: Explicitly reject automatic trainer use and eligibility claims
         shell: bash
         run: |
