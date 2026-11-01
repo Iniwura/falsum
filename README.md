@@ -14,9 +14,11 @@ To address the previous FALSUM-only sample bias, we verified source files from *
 
 [Actual external-source verification CI](https://github.com/Iniwura/falsum/actions/runs/41290675846) found five authentic aiohttp static-route calls: **one \`follow_symlinks=True\`, two \`False\`, and two with the option omitted**. None constitutes a verified exploit, safe application, affected dependency version or reviewed security label. The omitted setting stays unresolved and the true setting stays a version-dependent candidate, not a vulnerability verdict.
 
+The [dependency-declaration verifier](src/falsum/phase3a_dependency_manifests.py) also checked four Git-pinned files from the same commits. **Perspective** (\`aiohttp>=2,<4\`) and **Maubot** (\`aiohttp>=3,<4\`) each *permit* historical affected versions, while the separately documented **NLWeb AskAgent** (\`>=3.13.5\`) and **Azure** (\`==3.13.3\`) profiles *exclude* this historical range. These are declared requirements, **not deployed/installed version proofs**. [Verified expanded 47-test CI](https://github.com/Iniwura/falsum/actions/runs/41291177670) · [Pinned dependency evidence](evidence/phase3a-declared-dependencies-2026-11-01.json).
+
 [Read the exact three-application evidence study](docs/PHASE3A.md) · [Permanent Git-pinned observation metadata](evidence/phase3a-2026-11-01.json) · [Source-only audit implementation](src/falsum/phase3a_external_sources.py).
 
-The external-source audit passed 33 focused regression checks plus foundation and official diagnostic data checks. **We have not executed any third-party application, established real deployment versions, validated exploit-detection accuracy, produced independently human-reviewed labels or registered a Telegraph evaluator.**
+The expanded external-source and dependency audit passed 47 focused regression checks plus foundation and official diagnostic data checks. **We have not executed any third-party application, established real deployment versions, validated exploit-detection accuracy, produced independently human-reviewed labels or registered a Telegraph evaluator.**
 
 ## Phase 2Z: actual patched Python framework runtime evidence
 
