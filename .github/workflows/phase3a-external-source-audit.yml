@@ -4,6 +4,9 @@ on:
     paths:
       - 'src/falsum/phase3a_external_sources.py'
       - 'data/phase3a-external-source-cases.json'
+      - 'data/phase3a-dependency-manifests.json'
+      - 'src/falsum/phase3a_dependency_manifests.py'
+      - 'tests/test_phase3a_dependency_manifests.py'
       - 'tests/test_phase3a_external_sources.py'
       - 'tests/test_phase3a_evidence.py'
       - 'evidence/phase3a-2026-11-01.json'
@@ -29,6 +32,7 @@ jobs:
           set -euo pipefail
           PYTHONPATH=src python -m unittest discover -s tests -p test_phase3a_external_sources.py -v
           PYTHONPATH=src python -m unittest discover -s tests -p test_phase3a_evidence.py -v
+          PYTHONPATH=src python -m unittest discover -s tests -p test_phase3a_dependency_manifests.py -v
           PYTHONPATH=src python -m unittest discover -s tests -p test_phase2z_runtime_pilot.py -v
           PYTHONPATH=src python -m unittest discover -s tests -p test_phase2z_evidence.py -v
       - name: Fetch exactly three independent external Python source files by full immutable upstream commit
@@ -39,6 +43,35 @@ jobs:
           PYTHONPATH=src python -m falsum.phase3a_external_sources \
             --contract data/phase3a-external-source-cases.json \
             --out "$RUNNER_TEMP/falsum-3a/EXTERNAL-SOURCES-SHA1-SHA256-AST-ONLY.json"
+      - name: Independently fetch FOUR SHA-pinned upstream aiohttp requirement profiles; NO dependency installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase3a_dependency_manifests \
+            --contract data/phase3a-dependency-manifests.json \
+            --out "$RUNNER_TEMP/falsum-3a/EXTERNAL-DECLARED-DEPENDENCY-RANGES-NOT-INSTALLED.json"
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"falsum-3a/EXTERNAL-DECLARED-DEPENDENCY-RANGES-NOT-INSTALLED.json"
+          d=json.loads(p.read_text())
+          assert d["status"]=="PHASE3A_EXTERNAL_DEPENDENCY_DECLARATIONS_NOT_RUNTIME_VERSIONS"
+          assert d["pinned_external_manifest_profiles"]==4
+          assert d["external_projects_with_at_least_one_manifest"]==3
+          assert d["declaration_profiles_permitting_historical_affected_versions"]==2
+          assert d["declaration_profiles_excluding_historical_affected_versions"]==2
+          assert d["distinct_nlweb_profiles_not_a_single_install"]
+          assert d["actual_installed_or_deployed_versions_verified"]==0
+          assert d["third_party_application_executions"]==0
+          assert d["confirmed_application_vulnerabilities"]==0
+          assert d["human_reviewed_labels"]==0
+          assert d["network_eligible"] is False
+          assert d["registered_evaluator"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### Four independent Git-blob verified dependency DECLARATIONS\n\n")
+              f.write("Perspective optional >=2,<4; Maubot >=3,<4: each ALLOWS historical affected release ranges. NLWeb AskAgent >=3.13.5 and separate Azure ==3.13.3 profiles EXCLUDE this historical <3.9.2 range. **Different profiles are not evidence of one deployed install**.\n\n")
+              f.write("No third-party applications or installer scripts were run; no actual dependency version, exploitability, model quality or security label verified.\n\n")
+          PY
       - name: Check true external source exposure facts without false positive claims
         shell: bash
         run: |
