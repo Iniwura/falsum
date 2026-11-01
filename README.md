@@ -2,7 +2,7 @@
 
 **Every claim stands trial.**
 
-**Current research checkpoint (1 November 2026):** The Phase 2Z pipeline verified three allowlisted example applications against **real pinned aiohttp 3.10.11**, including static-to-runtime route checks and six localhost HTTP requests; 55 focused tests passed. This is evidence-plumbing proof, not CVE exploitation or independently validated real-application vulnerability accuracy. No approved security labels, eligible Anjoman evaluations or live evaluator registrations. See [Phase 2Z](docs/PHASE2Z.md) and the [reward-model generalization postmortem](docs/PHASE2V.md).
+**Current research checkpoint (1 November 2026):** The Phase 2Z pipeline verified three allowlisted example applications against **real pinned aiohttp 3.10.11**, including static-to-runtime route checks and six localhost HTTP requests; 58 focused tests passed. This is evidence-plumbing proof, not CVE exploitation or independently validated real-application vulnerability accuracy. No approved security labels, eligible Anjoman evaluations or live evaluator registrations. See [Phase 2Z](docs/PHASE2Z.md) and the [reward-model generalization postmortem](docs/PHASE2V.md).
 
 An evidence-grounded security evaluation research project for [Telegraph Season II](https://hackathon.telegraphprotocol.com/). FALSUM targets the `SECURITY_REVIEW_GENERAL` child Intent and the `SECURITY_REVIEW` evaluator family, as described by [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96).
 
@@ -12,7 +12,7 @@ An evidence-grounded security evaluation research project for [Telegraph Season 
 
 FALSUM's evidence engine now has a real **pinned aiohttp 3.10.11 runtime integration**, not just synthetic Python AST tests. It checks exact tracked source Git blob hashes **before executing** three controlled application fixtures, compares Phase 2Y static call syntax against the actual registered \`aiohttp.web_urldispatcher.StaticResource\` flag, and exercises six ordinary HTTP requests over localhost. Two literal values matched runtime; a variable-controlled value remained appropriately **UNDETERMINED** statically while actual runtime resolved it.
 
-[Actual Phase 2Z run](https://github.com/Iniwura/falsum/actions/runs/41289904581) passed **55/55 focused tests** and all six loopback requests. The historical aiohttp traversal advisory was fixed in 3.9.2; this pilot uses a later **patched** version. There is **no reproduction of that CVE**, no independently sourced external application, no security accuracy score and no confirmed exploit.
+[Actual Phase 2Z run](https://github.com/Iniwura/falsum/actions/runs/41290076124) passed **58/58 focused tests** and all six loopback requests. The historical aiohttp traversal advisory was fixed in 3.9.2; this pilot uses a later **patched** version. There is **no reproduction of that CVE**, no independently sourced external application, no security accuracy score and no confirmed exploit.
 
 [Phase 2Z technical report and local reproduction](docs/PHASE2Z.md) · [Permanent exact execution evidence](evidence/phase2z-2026-11-01.json).
 
