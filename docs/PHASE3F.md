@@ -4,7 +4,7 @@
 
 ## Outcome
 
-[Verified workflow 41353159310](https://github.com/Iniwura/falsum/actions/runs/41353159310) passed **25 focused tests** (12 Phase 3F tests + 13 existing real-upstream-fix-corpus checks). The new evaluator-material pipeline:
+[Verified workflow 41353459211](https://github.com/Iniwura/falsum/actions/runs/41353459211) passed **28 focused tests** (12 Phase 3F tests + 3 permanent evidence checks + 13 existing real-upstream-fix-corpus checks). The new evaluator-material pipeline:
 
 - Revalidated **8 original upstream security-fix commits**, 4 original and 4 prior train-source candidates, including the historical aiohttp source used in earlier research.
 - For each checked commit, verified the **exact full 40-hex Git commit SHA**, expected single parent, **source Git blob SHA-1**, **regression-test Git blob SHA-1**, and actual modified source and regression test textual patches. Saved SHA-256 digests of source and test diffs, without archiving the complete source/test patches.
@@ -13,7 +13,7 @@
 - Left all three Phase 2U fresh source-separated diagnostic projects (**Tornado, Undici, websockets**) outside this material set. It also did **not** train on the known Phase 3D failed counterfactuals.
 - Authored two possible answers per case that may differ in subtle applicability reasoning, rather than simply asserting a confirmed exploit. Their A/B polarity is mixed; it is **not** released as an approved preference label.
 
-[Verified public artifact: seven reviewed-source candidate packets](https://github.com/Iniwura/falsum/actions/runs/41353159310/artifacts/13102565304). GitHub Actions artifacts are time-limited. The [source-generator code](../src/falsum/phase3f_multifamily_material.py) and immutable upstream queue inputs are retained in GitHub for reproduction.
+[Verified public artifact: seven reviewed-source candidate packets](https://github.com/Iniwura/falsum/actions/runs/41353459211/artifacts/13102585762). GitHub Actions artifacts are time-limited. The [source-generator code](../src/falsum/phase3f_multifamily_material.py) and immutable upstream queue inputs are retained in GitHub for reproduction.
 
 ## The seven different historical source fixes
 
