@@ -39,6 +39,27 @@ The Phase 2V training workflow is [phase2v-coupled-research.yml](../.github/work
 - [Real checkpoint source-separated comparison](../src/falsum/phase2v_transfer_eval.py)
 - [Machine research runs](https://github.com/Iniwura/falsum/actions/workflows/phase2v-coupled-research.yml)
 
+## Verified executed result — 1 November 2026
+
+[Real 16-step gradient training, three-project transfer and evidence archive](https://github.com/Iniwura/falsum/actions/runs/41285552033) **completed SUCCESS**. The official-v2-consistent ModernBERT and PEFT adapter ran actual backpropagation using the custom Phase 2V objective. Nine offline gradient, provenance and label-integrity tests passed before and after real PyTorch installation; pinned source/test file replay and the real tokenizer limit passed. Output was saved locally in the GitHub Actions artifact, **never registered**.
+
+**Real source-authenticated training, but synthetic preference labels.** Its train adapter started from actual Phase 2U file-manifest hash \`a20bdc0ffdc9ee776877e60b5c19c225d9279467d005916a6978db1650482d33\` and created a different adapter with hash \`ac0aa02a7554eb263547041eb099ccc62657c382bc3438baf70314f327ab8dba\`. Training consisted of 16 gradient steps (lr 0.00012, target 0.25, contrastive weight 0.6, answer-only penalty 0.1, seed 23). There were 24 full model-render input variants and the largest consumed **466 / 512 tokens**. First sampled objective: **2.26461**; final sampled objective: **2.13346**. These are losses on different shuffled example steps, so the raw numbers alone do not establish convergence. The pre/post exact same four-source in-sample score below is more informative.
+
+| Development diagnostic against AI-authored proposals | Phase 2U input checkpoint | Phase 2V after 16 steps |
+| --- | ---: | ---: |
+| Four *already trained/inspected* source families: proposed judgments matched | 4/8 | **6/8** |
+| Four *already trained/inspected* families: BOTH source-context judgments matched | 1/4 | **2/4** |
+| Three separate untrained source projects: proposed judgments matched | 3/6 | **3/6** |
+| Three separate projects: BOTH opposite contexts matched | 0/3 | **0/3** |
+
+The four in-sample families were Starlette, urllib3, Django and Express, so **6/8 and 2/4 are not generalization metrics**. Django and urllib3 matched both AI proposals after training; Express and Starlette still failed to reverse their relative answer preference in the missing-precondition context.
+
+The transfer test used the three actual original+repair source/test-replayed projects Tornado, Undici and Python websockets, none included in the Phase 2V research training curriculum. All six context tasks had exactly the same source and fictional environment facts for both models. Both checkpoints made **3/6** preferred judgments agree with AI proposals and **0/3** full family reversals. The numerical answer scores changed, but **no transfer-family preference crossed the necessary decision boundary**.
+
+**Result: the objective is capable of changing this model's in-sample margin behavior but has not shown useful cross-project transfer.** This is a well-grounded negative result and not a successful new evaluator.
+
+[Permanent machine-readable evidence](../evidence/phase2v-2026-11-01.json) pins training and comparison report SHA-256, model manifest hashes, source identities and exact research metrics. The GitHub Actions result artifact ID is **13075226722** and will expire per its seven-day retention policy.
+
 ## Release policy
 
 A positive in-sample margin change means the optimizer can learn **these four already seen AI proposals**; it does not prove useful generalization. Any improvement on the three other projects would be a promising research observation at best, because the benchmark is small, public and AI-labeled. An unchanged result is a failed transfer attempt and must be reported directly.
