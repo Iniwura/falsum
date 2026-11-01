@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3C_REAL_MODERNBERT_FOUNDATION_LOADED_AND_SCORED_RESEARCH_ONLY",
+  "date": "2026-11-01",
+  "intent_family": "SECURITY_REVIEW",
+  "source_checkpoint_provenance": "actual Phase2U AI-provisional ModernBERT LoRA, format migrated and structurally checked in Phase3B",
+  "verified_gitHub_actions_run": "https://github.com/Iniwura/falsum/actions/runs/41306369871",
+  "artifact_url": "https://github.com/Iniwura/falsum/actions/runs/41306369871/artifacts/13082973270",
+  "artifact_id": 13082973270,
+  "runtime_kit_commit": "1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd",
+  "foundation_release": "modernbert-base-lora16-v1",
+  "model": {
+    "sha256": "3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc",
+    "keccak256": "0xf8f94708f30ed31b6f0825dbffb235fa60b0e71b76fde39dbc696cf277ef8aa7",
+    "safetensors_bytes": 6776908,
+    "class": "hybrid",
+    "rank": 8,
+    "format": "lora-v1"
+  },
+  "published_assets": {
+    "foundation_manifest_sha256": "f7de64b999acd3f735118fbe5999abf251fdf188f9797e3a4e36c54ee9e4dbbe",
+    "foundation_onnx_sha256": "0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6",
+    "foundation_engine_wasm_sha256": "77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de",
+    "official_tokenizer_sha256": "67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456",
+    "all_downloaded_sha256_verified": true
+  },
+  "actual_experiment": {
+    "prompt_concept": "Does aiohttp 3.10.11 with follow_symlinks=True confirm historical CVE-2024-23334?",
+    "source_owned_illustrative_question_only": true,
+    "token_lengths": [
+      100,
+      93
+    ],
+    "official_current_node_task_answer_template": true,
+    "token_count_max_allowed": 512,
+    "exact_official_tokenizer_used": true,
+    "model_package_was_original_phase3b_sha_verified": true,
+    "old_checkpoint_not_retrained": true,
+    "real_foundation_onnx_loaded": true,
+    "real_wasi_engine_loaded": true,
+    "official_adapterbuild_hybrid_stage1_passed": true,
+    "official_loaded_flag": true,
+    "distinct_answer_inputs_scored": 2,
+    "independent_loaded_model_sessions": 2,
+    "each_answer_scored_twice_by_node": 2,
+    "total_real_scores": 4,
+    "exact_repeat_f32_bits_verified": true,
+    "cautious_answer_score_hex": "0xbf52c0e6",
+    "cautious_answer_score_f32": -0.8232558965682983,
+    "overclaim_answer_score_hex": "0xbf80182c",
+    "overclaim_answer_score_f32": -1.0007376670837402,
+    "observed_cautious_minus_overclaim_margin": 0.1774817705154419,
+    "observed_research_candidate_prefers_cautious_answer": true,
+    "model_accuracy_certified": false,
+    "independent_expert_adjudication": false
+  },
+  "regression": {
+    "focused_phase3c_score_tests": 12,
+    "focused_old_checkpoint_tests": 7,
+    "total_focused_tests": 19,
+    "full_foundation_suite_tests": 495,
+    "full_foundation_suite_skipped": 1,
+    "full_foundation_suite_conclusion": "success",
+    "official_data_gate_conclusion": "success",
+    "phase3c_actual_model_ci_conclusion": "success"
+  },
+  "constraints": {
+    "independent_real_appsec_label_count": 0,
+    "authentic_third_party_application_runtime_scored": false,
+    "context_reversal_generalization_proven": false,
+    "original_separate_diagnostic_correct_context_families": "0/3",
+    "network_hidden_evaluation_passed": false,
+    "actual_registered_evaluator": false,
+    "actually_eligible_anjoman_rows": 0,
+    "certified_security_accuracy": false,
+    "runnable_production_endpoint_available": false,
+    "network_eligible": false
+  },
+  "conclusion": "An actual Phase2U-trained model migrated to the current hybrid delta is loaded and scored by Telegraph's official Foundation runtime. Two inputs were scored twice each deterministically; the model ranked the cautious answer higher in one illustrative question. This does not establish model generalization, production use, accepted eval rows or network activation.",
+  "next_step": "Measure counterfactual reversal on project-separated and version-disjoint tasks with the actual Foundation runtime; obtain independently adjudicated real-security examples and build a realistic endpoint/registration plan."
+}
