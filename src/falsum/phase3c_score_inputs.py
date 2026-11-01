@@ -13,7 +13,7 @@ from pathlib import Path
 
 STATUS="PHASE3C_REAL_FOUNDATION_SCORE_INPUTS_AI_PROVISIONAL_NOT_ACCURACY"
 TOKENIZER_SHA256="67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456"
-TOKEN_CAP=96
+TOKEN_CAP=160
 TASK=("Review aiohttp Python static routing. The actual installed package is aiohttp 3.10.11. "
       "The route uses follow_symlinks=True. Is CVE-2024-23334 confirmed?")
 CANDIDATES=(
@@ -72,7 +72,7 @@ def main(argv:list[str]|None=None)->int:
         from tokenizers import Tokenizer
         tk=Tokenizer.from_str(raw.decode())
         # The exact node uses right truncation with a 512-token maximum.
-        # Keep this research smoke <=96, no premature truncate.
+        # Keep this research smoke <=160, no premature truncate.
         def encode(text):
             return tk.encode(text,add_special_tokens=True).ids
         result=make_inputs(raw,encode)
