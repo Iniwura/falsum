@@ -1,0 +1,119 @@
+name: Phase 3B - export OLD research checkpoint to current shared Foundation LoRA format
+on:
+  push:
+    paths:
+      - '.github/workflows/phase3b-shared-foundation-delta.yml'
+      - 'src/falsum/phase3b_delta_readiness.py'
+      - 'tests/test_phase3b_delta_readiness.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  check-research-delta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '4'
+      MKL_NUM_THREADS: '4'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate exact foundation and historical model identities before any downloads
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m unittest discover -s tests -p test_phase3b_delta_readiness.py -v
+      - name: Obtain official pinned shared Foundation exporter
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Restore real existing Phase 2U research-trained LoRA (NO retraining)
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE2U-CONTEXT-LORA-RESEARCH
+          run-id: 41283929744
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/falsum-3b/old-research-checkpoint
+      - name: Verify checkpoint SHA identities and reject any missing trained reward head
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-3b/out"
+          PYTHONPATH=src python -m falsum.phase3b_delta_readiness \
+            --root "$RUNNER_TEMP/falsum-3b/old-research-checkpoint" \
+            --out "$RUNNER_TEMP/falsum-3b/out/REAL-OLD-CHECKPOINT-COMPATIBILITY.json"
+      - name: Download exact official foundation manifest, verify published SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 3 \
+            'https://github.com/telegraphprotocol/telegraph-foundation/releases/download/modernbert-base-lora16-v1/foundation.json' \
+            -o "$RUNNER_TEMP/falsum-3b/foundation.json"
+          echo "f7de64b999acd3f735118fbe5999abf251fdf188f9797e3a4e36c54ee9e4dbbe  $RUNNER_TEMP/falsum-3b/foundation.json" | sha256sum -c -
+      - name: Install CPU-only dependencies needed for OFFICIAL delta export
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install 'transformers>=4.48,<5' 'peft>=0.14,<1' 'numpy>=1.26,<3' 'safetensors>=0.4.5'
+      - name: Export actual trained LoRA into 2026-11-01 node delta package (no new training)
+        shell: bash
+        run: |
+          set -euo pipefail
+          adapter=$(find "$RUNNER_TEMP/falsum-3b/old-research-checkpoint" -name adapter_config.json -type f -print -quit)
+          if [ -z "$adapter" ]; then echo "Missing exact saved old LoRA"; exit 1; fi
+          adapter=$(dirname "$adapter")
+          PYTHONPATH=telegraph-kit python -m float_runtime.export_adapter \
+            --adapter "$adapter" --intent SECURITY_REVIEW --class judgment \
+            --foundation "$RUNNER_TEMP/falsum-3b/foundation.json" \
+            --out "$RUNNER_TEMP/falsum-3b/out/SECURITY_REVIEW.safetensors"
+          test -s "$RUNNER_TEMP/falsum-3b/out/SECURITY_REVIEW.safetensors"
+      - name: Official current Telegraph Go structural parser checks exact delta and hash
+        shell: bash
+        working-directory: telegraph-kit
+        run: |
+          set -euo pipefail
+          go run ./cmd/adapterbuild lora \
+            --intent SECURITY_REVIEW \
+            --package "$RUNNER_TEMP/falsum-3b/out/SECURITY_REVIEW.safetensors" \
+            --foundation "$RUNNER_TEMP/falsum-3b/foundation.json" \
+            --out "$RUNNER_TEMP/falsum-3b/out" \
+            | tee "$RUNNER_TEMP/falsum-3b/out/OFFICIAL-STRUCTURAL-CHECK.json"
+          python - <<'PY'
+          import json,os,hashlib
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"falsum-3b/out"
+          x=json.loads((root/"OFFICIAL-STRUCTURAL-CHECK.json").read_text())
+          p=root/"SECURITY_REVIEW.safetensors"
+          assert x["sha256"]==hashlib.sha256(p.read_bytes()).hexdigest()
+          assert x["class"]=="judgment" and x["intent"]=="SECURITY_REVIEW"
+          assert x["keccak256"].startswith("0x")
+          assert x["bytes"]==p.stat().st_size
+          readiness=json.loads((root/"REAL-OLD-CHECKPOINT-COMPATIBILITY.json").read_text())
+          assert readiness["research_only"] is True
+          assert readiness["original_training_source"]=="PHASE2U-AI-PROVISIONAL"
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### FALSUM current 2026 shared-Foundation delta export\n\n")
+              f.write("Real saved Phase2U ModernBERT LoRA converted to a genuine safetensors package; official pinned Telegraph Go adapter checker passed.\n\n")
+              f.write("This is **structural compatibility only**, not hidden network evaluation, independent security-model accuracy, running executor, or registration. The old model failed context-transfer benchmarks and remains QUARANTINED.\n\n")
+              f.write(f"Official SHA256: {x['sha256']}; keccak: {x['keccak256']}\n")
+          PY
+      - name: Save quarantined real delta artifact and exact structural evidence (not registered)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE3B-RESEARCH-DELTA-NOT-NETWORK-REGISTERED
+          path: |
+            ${{ runner.temp }}/falsum-3b/out/
+            ${{ runner.temp }}/falsum-3b/foundation.json
+          retention-days: 14
+          if-no-files-found: warn
