@@ -1,0 +1,104 @@
+name: Phase 2Y - fail-closed import declarations and bounded syntactic invocation
+on:
+  push:
+    paths:
+      - 'src/falsum/phase2y_bindings.py'
+      - 'tests/test_phase2y_bindings.py'
+      - '.github/workflows/phase2y-binding-evidence.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  static-import-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run new import and bounded invocation adversarial tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2y_bindings.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2x_ast_observer.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2w_proof_gate.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2w_capture.py' -v
+      - name: Build actual illustrative Python application and select exact local files
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-phase2y/app" "$RUNNER_TEMP/falsum-phase2y/reports"
+          cat > "$RUNNER_TEMP/falsum-phase2y/app/aiohttp_app.py" <<'PY'
+          from aiohttp import web as active_web
+          app = active_web.Application()
+          def setup_routes():
+              app.router.add_static('/assets', './assets', follow_symlinks=False)
+          setup_routes()
+          PY
+          cat > "$RUNNER_TEMP/falsum-phase2y/app/websocket_app.py" <<'PY'
+          from websockets import serve as serve_socket
+          serve_socket(handler, 'localhost', 8765, compression=None)
+          PY
+          cat > "$RUNNER_TEMP/falsum-phase2y/app/tornado_app.py" <<'PY'
+          from tornado.web import RequestHandler
+          class Handler(RequestHandler):
+              def get(self):
+                  self.set_cookie("test", "value", max_age=3600)
+          PY
+          for name in aiohttp_app websocket_app tornado_app; do
+            printf '{"status":"EXPLICIT_AST_FILE_SELECTION_UNREVIEWED","files":["%s.py"]}\n' "$name" > "$RUNNER_TEMP/falsum-phase2y/$name.json"
+          done
+      - name: Execute real Python AST resolver for all three upstream vulnerability families
+        shell: bash
+        run: |
+          set -euo pipefail
+          for config in \
+            "real-aiohttp-static-traversal aiohttp_app" \
+            "fresh-websockets-deflate-limit websocket_app" \
+            "fresh-tornado-cookie-attribute tornado_app"; do
+            read -r id file <<< "$config"
+            PYTHONPATH=src python -m falsum.phase2y_bindings \
+              --catalog data/phase2w-applicability-rules.json \
+              --old-queue data/real-fix-queue.json \
+              --train-queue data/real-fix-train-candidates.json \
+              --fresh-spec data/phase2u-fresh-transfer-cases.json \
+              --case-id "$id" \
+              --root "$RUNNER_TEMP/falsum-phase2y/app" \
+              --selection "$RUNNER_TEMP/falsum-phase2y/$file.json" \
+              --out "$RUNNER_TEMP/falsum-phase2y/reports/$file-static-source-evidence.json"
+          done
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          out=Path(os.environ["RUNNER_TEMP"])/"falsum-phase2y/reports"
+          paths=["aiohttp_app","websocket_app","tornado_app"]
+          expected=[
+              ("DIRECT_MODULE_CALL_TO_LOCAL_FUNCTION_SYNTAX","SYNTACTIC_ABSENT"),
+              ("MODULE_TOP_LEVEL_CALL_SYNTAX","SYNTACTIC_ABSENT"),
+              ("FRAMEWORK_CALLBACK_EXECUTION_UNVERIFIED","SYNTACTIC_ABSENT")
+          ]
+          for name,(path,meaning) in zip(paths,expected):
+              doc=json.loads((out/f"{name}-static-source-evidence.json").read_text())
+              assert doc["status"]=="PHASE2Y_BOUNDED_IMPORT_AND_INVOCATION_SYNTAX_RESEARCH_ONLY"
+              assert len(doc["bound_syntactic_calls"])==1
+              one=doc["bound_syntactic_calls"][0]
+              assert one["syntactic_invocation_path"]==path
+              assert one["literal_keyword_implication"]==meaning
+              assert one["runtime_callee_identity_verified"] is False
+              assert one["actual_call_execution_verified"] is False
+              assert doc["verified_exploitability"] is False
+              assert doc["network_eligible"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### Phase 2Y: conservative static import / invocation syntax\n\n")
+              f.write("Three source-pinned Python examples: imported aiohttp Application and direct module setup call, imported websockets serve alias, and Tornado RequestHandler subclass method. Real file SHA and AST hashes checked.\n\n")
+              f.write("Dynamic alias and execution remain UNVERIFIED. No runtime package identity, deployment reachability, expert label, registered evaluator or confirmed exploit.\n")
+          PY
+      - name: Archive only synthetic non-sensitive source evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE2Y-STATIC-IMPORT-AND-INVOCATION-SYNTAX-NOT-ELIGIBLE
+          path: ${{ runner.temp }}/falsum-phase2y/reports/
+          retention-days: 14
+          if-no-files-found: error
