@@ -42,6 +42,24 @@ def _imports(module:ast.Module, case_id:str)->dict[str,str]:
     return found
 
 
+def _binding_count(tree:ast.Module, name:str)->int:
+    count=0
+    for node in ast.walk(tree):
+        if isinstance(node,ast.Import):
+            count+=sum((a.asname or a.name.split(".")[0])==name for a in node.names)
+        elif isinstance(node,ast.ImportFrom):
+            count+=sum((a.asname or a.name)==name for a in node.names)
+        elif isinstance(node,(ast.FunctionDef,ast.AsyncFunctionDef,ast.ClassDef)):
+            count+=int(node.name==name)
+        elif isinstance(node,ast.arg):
+            count+=int(node.arg==name)
+        elif isinstance(node,ast.ExceptHandler) and node.name is not None:
+            count+=int(node.name==name)
+        elif isinstance(node,ast.Name) and node.id==name and isinstance(node.ctx,(ast.Store,ast.Del)):
+            count+=1
+    return count
+
+
 def _store_count(tree:ast.Module, name:str)->int:
     """Count assignments, deletions and named expression stores in every scope.
 
@@ -85,7 +103,7 @@ def _function_invoked(module:ast.Module, owner:ast.FunctionDef)->bool:
     if owner.decorator_list or owner.args.args or owner.args.posonlyargs or owner.args.kwonlyargs:
         return False
     defs=[n for n in module.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name==owner.name]
-    if len(defs)!=1 or _store_count(module,owner.name)!=0:
+    if len(defs)!=1 or _binding_count(module,owner.name)!=1:
         return False
     invocations=[n for n in module.body if isinstance(n,ast.Expr) and isinstance(n.value,ast.Call)
                  and isinstance(n.value.func,ast.Name) and n.value.func.id==owner.name
@@ -107,8 +125,7 @@ def _site_path(node:ast.Call, parent:dict, module:ast.Module, case_id:str)->str:
         if isinstance(prev,ast.FunctionDef):
             # Could be straight-line function in module, with no decorators
             # and exactly one module-level direct call. Only an Expr call.
-            if (not isinstance(parent.get(cur),ast.Expr)
-                    or not any(cur is expr.value for expr in prev.body if isinstance(expr,ast.Expr))):
+            if not isinstance(cur,ast.Expr) or cur not in prev.body:
                 return "NESTED_FUNCTION_EXECUTION_UNDETERMINED"
             return ("DIRECT_MODULE_CALL_TO_LOCAL_FUNCTION_SYNTAX"
                     if _function_invoked(module,prev)
@@ -139,7 +156,7 @@ def _tornado_method_info(node:ast.Call,parent:dict,tree:ast.Module,imports:dict)
     base=klass.bases[0]
     if not (isinstance(base,ast.Name) and imports.get(base.id)=="TORNADO_REQUEST_HANDLER_FROM_IMPORT"):
         return None
-    if _store_count(tree,base.id)!=0 or _store_count(tree,klass.name)!=0:
+    if _binding_count(tree,base.id)!=1 or _binding_count(tree,klass.name)!=1:
         return None
     # self explicitly rebound anywhere in method (including nested scopes):
     if any(isinstance(n,ast.Name) and n.id=="self" and
@@ -172,7 +189,7 @@ def analyze(catalog:dict,sources:list[dict],case_id:str,root:Path,paths:list[str
         dynamic=_dynamic_global(tree)
         # Every import alias must remain unassigned in every scope. If a
         # name is shadowed, remove it instead of claiming the imported callee.
-        bindings={k:v for k,v in bindings.items() if _store_count(tree,k)==0 and not dynamic}
+        bindings={k:v for k,v in bindings.items() if _binding_count(tree,k)==1 and not dynamic}
         app_vars=set()
         if case_id=="real-aiohttp-static-traversal":
             for item in tree.body:
@@ -185,7 +202,7 @@ def analyze(catalog:dict,sources:list[dict],case_id:str,root:Path,paths:list[str
                 if (isinstance(constructor,ast.Attribute) and constructor.attr=="Application"
                         and isinstance(constructor.value,ast.Name)
                         and bindings.get(constructor.value.id)=="AIOHTTP_WEB_FROM_IMPORT"
-                        and _store_count(tree,item.targets[0].id)==1):
+                        and _binding_count(tree,item.targets[0].id)==1):
                     app_vars.add(item.targets[0].id)
         parents={child:node for node in ast.walk(tree) for child in ast.iter_child_nodes(node)}
         lines=body.splitlines()
