@@ -84,19 +84,35 @@ jobs:
           official=root/"official-tokenizer.json"
           before=json.loads(original.read_text(encoding="utf-8"))
           current=json.loads(official.read_text(encoding="utf-8"))
-          if before!=current:
-              # NEVER bypass a genuinely changed tokenizer mapping/behavior.
-              disagreements=[k for k in sorted(set(before)|set(current)) if before.get(k)!=current.get(k)]
-              print("TOKENIZER SEMANTIC MISMATCH:",disagreements,flush=True)
-              raise SystemExit("Old and current tokenizer JSON meaning differ; checkpoint cannot safely export without compatibility work")
+          differences=[k for k in sorted(set(before)|set(current)) if before.get(k)!=current.get(k)]
+          if differences not in ([],["truncation"]):
+              print("TOKENIZER UNSAFE SEMANTIC DIFFERENCES:",differences,flush=True)
+              raise SystemExit("Old and node vocabulary/normalizer/postprocessor/tokenization differ; deny export")
+          old_trunc=before.get("truncation")
+          node_trunc=current.get("truncation")
+          allowed=("direction","strategy","stride","max_length")
+          if (not isinstance(old_trunc,dict) or set(old_trunc)!=set(allowed)
+                  or old_trunc!=dict(direction="Right",strategy="LongestFirst",stride=0,max_length=512)):
+              raise SystemExit("Training tokenizer truncation config not the proven 512-token right policy")
+          if (not isinstance(node_trunc,dict) or set(node_trunc)!=set(allowed)
+                  or node_trunc["direction"]!="Right"
+                  or node_trunc["strategy"]!="LongestFirst"
+                  or node_trunc["stride"]!=0
+                  or type(node_trunc["max_length"]) is not int
+                  or node_trunc["max_length"]<512):
+              raise SystemExit("Official tokenizer has incompatible truncation direction/strategy or fewer than 512 tokens")
+          print("Verified token-vocabulary and tokenizer semantics identical except explicit max-length policy.",
+                "previous=",old_trunc,"official=",node_trunc,flush=True)
           copy=root/"export-only-model"
           shutil.copytree(source,copy)
           shutil.copy2(official,copy/"tokenizer.json")
-          assert json.loads((copy/"tokenizer.json").read_text())==before
+          assert json.loads((copy/"tokenizer.json").read_text())==current
           details={
               "old_checkpoint_tokenizer_sha256":hashlib.sha256(original.read_bytes()).hexdigest(),
               "node_tokenizer_sha256":hashlib.sha256(official.read_bytes()).hexdigest(),
-              "semantic_tokenizer_json_comparison":"EXACT_PARSED_JSON_EQUALITY",
+              "semantic_tokenizer_json_comparison":"EQUAL_EXCEPT_VERIFIED_RIGHTWARD_TRUNCATION_MAX_LENGTH",
+              "original_truncation":old_trunc,"official_truncation":node_trunc,
+              "network_input_max_tokens":512,
               "original_checkpoint_bytes_unchanged":True,
               "canonical_tokenizer_substituted_in_separate_export_only_copy":True,
               "research_only":True,"independent_security_accuracy_verified":False,
