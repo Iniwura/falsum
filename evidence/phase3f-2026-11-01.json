@@ -2,9 +2,9 @@
   "schema_version": 1,
   "status": "PHASE3F_SEVEN_DIVERSE_GIT_SOURCE_AND_TEST_VERIFIED_REVIEW_PACKETS_UNADJUDICATED",
   "date": "2026-11-01",
-  "verified_workflow_url": "https://github.com/Iniwura/falsum/actions/runs/41353159310",
-  "artifact_url": "https://github.com/Iniwura/falsum/actions/runs/41353159310/artifacts/13102565304",
-  "artifact_id": 13102565304,
+  "verified_workflow_url": "https://github.com/Iniwura/falsum/actions/runs/41353459211",
+  "artifact_url": "https://github.com/Iniwura/falsum/actions/runs/41353459211/artifacts/13102585762",
+  "artifact_id": 13102585762,
   "public_reviewer_issue_url": "https://github.com/Iniwura/falsum/issues/3",
   "project": "Iniwura/falsum",
   "review_only": true,
@@ -48,13 +48,14 @@
   "actual_ci": {
     "targeted_phase3f_tests_passed": 12,
     "existing_real_source_corpus_tests_passed": 13,
-    "targeted_tests_total": 25,
+    "targeted_tests_total": 28,
     "pipeline_conclusion": "success",
     "public_review_issue_created": true,
     "accepted_training_pairs": 0,
     "independent_human_approved_labels": 0,
     "eligible_anjoman_evaluation_rows": 0,
-    "network_eligible": false
+    "network_eligible": false,
+    "permanent_evidence_integrity_tests_passed": 3
   },
   "model_status": {
     "model_retrained_in_this_phase": false,
