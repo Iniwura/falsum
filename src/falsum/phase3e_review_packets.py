@@ -60,9 +60,10 @@ def _answers(syntax:str)->tuple[str,str]:
             "The declared version range may or may not admit affected releases, but no "
             "deployed package version, real route registration, attacker-influenced "
             "symlink path or exploit has been verified. Request those facts.",
-            "The True flag and repository dependency declaration are enough to "
-            "treat this as a confirmed exploitable production CVE regardless of "
-            "the installed version. A separate runtime verification is unnecessary.",
+            "The explicit True and a dependency range that allows vulnerable releases "
+            "establish that this application uses an affected aiohttp release in "
+            "production. Flag the issue as an applicable CVE, while keeping "
+            "actual exploit reproduction as a separate follow-up.",
         )
     if syntax=="EXPLICIT_FALSE":
         return (
@@ -70,18 +71,19 @@ def _answers(syntax:str)->tuple[str,str]:
             "does not show the advisory's symlink-following prerequisite. "
             "Do not infer the whole project is secure or that the route was "
             "executed; review other call sites and the deployed environment.",
-            "The False value proves every route and deployment of the "
-            "application is safe from the historical advisory. "
-            "No other routes or installed dependency versions need review.",
+            "Because this route explicitly passes False, the entire project's "
+            "deployed static-routing surface can be classified as unaffected by "
+            "this CVE without checking other call sites, adapters or runtime changes.",
         )
     return (
         "The flag is omitted in this source call. Establish the exact "
         "installed aiohttp version, effective default and actual registered "
         "route before deciding if the advisory prerequisite is present. "
         "An omitted keyword alone is not a proof of security.",
-        "An omitted flag always proves symlink-following is disabled "
-        "in the deployed application, regardless of aiohttp version "
-        "and initialization behavior. No runtime evidence is necessary.",
+        "An omitted follow_symlinks argument is generally equivalent to "
+        "the library's default False configuration. Classify the deployed "
+        "route as unaffected without checking the installed implementation "
+        "or whether route initialization changes the default.",
     )
 
 
