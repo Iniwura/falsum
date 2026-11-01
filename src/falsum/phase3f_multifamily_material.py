@@ -168,11 +168,33 @@ def generate(original:dict,training:dict,catalog:dict,fetcher=None)->dict:
     if any(row["id"].startswith("fresh-") for row in actual_rows):
         raise ProofError("exclude fresh Phase2U source-separated diagnostic projects")
     # Source pinned Phase2W hypotheses remain unapproved.
-    # Trusting the catalog as an expert security label is forbidden.
+    # Match their versioned source identities instead of silently using
+    # arbitrary rule explanations as reviewed ground truth.
     if (not isinstance(catalog,dict)
+        or catalog.get("status")!="RESEARCH_SOURCE_PINNED_APPLICABILITY_RULES_NOT_SECURITY_CERTIFICATION"
+        or catalog.get("research_only") is not True
         or catalog.get("independent_human_reviews")!=0
-        or catalog.get("network_eligible") is not False):
+        or catalog.get("network_eligible") is not False
+        or not isinstance(catalog.get("rules"),list)
+        or len(catalog["rules"])!=11):
         raise ProofError("applicability metadata falsely claims external validation")
+    rule_map={r.get("case_id"):r for r in catalog["rules"] if isinstance(r,dict)}
+    if len(rule_map)!=11:
+        raise ProofError("duplicate applicability rule identity")
+    for ident,repo,commit,source_blob,test_blob in PINS:
+        rule=rule_map.get(ident)
+        original_row=sources[ident]
+        if (not isinstance(rule,dict)
+            or rule.get("repository")!=repo
+            or rule.get("source_commit")!=commit
+            or rule.get("source_blob")!=source_blob
+            or rule.get("source_path")!=original_row["source_path"]
+            or rule.get("source_advisory")!=original_row["advisory"]
+            or not isinstance(rule.get("requirements"),list)
+            or len(rule["requirements"])!=2
+            or any(not isinstance(x,dict) or
+                   set(x)!={"id","explanation"} for x in rule["requirements"])):
+            raise ProofError("AI-authored prerequisite rule source changed or is incomplete")
     # Verify the upstream *actual* Git commit, one parent, and source AND
     # regression-test modified-file blob objects/diff hashes. No execution.
     old_report=assemble(original,fetcher=fetcher)
@@ -227,6 +249,11 @@ def generate(original:dict,training:dict,catalog:dict,fetcher=None)->dict:
                 f"{item['regression_test']['file_path']}"
             ),
             "review_question":prompt,
+            "source_pinned_unreviewed_prerequisites":[
+                {"id":x["id"],"question":x["explanation"],
+                 "status":"AUTHOR_HYPOTHESIS_NOT_HUMAN_VERIFIED"}
+                for x in rule_map[ident]["requirements"]
+            ],
             "unreviewed_candidates":[
                 {"id":"A","text":answers[0],"sha256":hashlib.sha256(answers[0].encode()).hexdigest()},
                 {"id":"B","text":answers[1],"sha256":hashlib.sha256(answers[1].encode()).hexdigest()},
