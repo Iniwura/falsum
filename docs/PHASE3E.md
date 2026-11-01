@@ -28,6 +28,8 @@ The builder never imports outside application code; fetching a pinned source fil
 
 We also implemented [Phase 3E review intake](../src/falsum/phase3e_review_intake.py). It accepts a SHA-bound bundle and structured reviewer claims that reference a public GitHub issue comment. This supports visible reviewer feedback and conflict reporting, but **does not trust self-attestation as independent security expertise**. A GitHub URL, username and comment are claims until cross-checked. Every intake report has exactly **zero automatically accepted labels**, regardless of the number of self-reported reviewers.
 
+**Public review call is now open:** [FALSUM Issue #2](https://github.com/Iniwura/falsum/issues/2). This is an invitation for outside feedback, not evidence that anybody has reviewed the cases yet.
+
 A reviewer should:
 
 1. Open a pinned code/source link and confirm exact commit, line and argument.
