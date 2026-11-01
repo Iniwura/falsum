@@ -1,0 +1,131 @@
+name: Phase2U - old versus new real LoRA on three new source projects
+on:
+  push:
+    paths:
+      - 'src/falsum/phase2u_fresh_compare.py'
+      - 'tests/test_phase2u_fresh_compare.py'
+      - '.github/workflows/phase2u-transfer-model-compare.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-separated-model-compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      PYTHONUNBUFFERED: '1'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '4'
+      MKL_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Adversarial offline model-score and status integrity tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase2u_fresh_compare.py -v
+      - name: Retrieve exact original frozen research LoRA and authoritative provenance
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-CONTEXT-EXPERIMENT-NOT-SUBMITTABLE
+          run-id: 41126779406
+          repository: Iniwura/falsum
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: ${{ runner.temp }}/frozen-original
+      - name: Retrieve newly trained research LoRA and quarantine manifest
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE2U-CONTEXT-LORA-RESEARCH
+          run-id: 41283929744
+          repository: Iniwura/falsum
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: ${{ runner.temp }}/new-intervention
+      - name: Checkout actual official Telegraph V2 scoring implementation
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Install real CPU-only ModernBERT checkpoint scorer
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install 'transformers==4.57.1' 'peft>=0.14,<1' 'numpy>=1.26,<3'
+          mkdir -p "$RUNNER_TEMP/real-transfer"
+          python -m pip freeze > "$RUNNER_TEMP/real-transfer/DEPENDENCIES.txt"
+      - name: Reproduce real pre-fix code and exact upstream patches for three NEW projects
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/real-transfer/private"
+          PYTHONPATH=src python -m falsum.phase2u_fresh_transfer \
+            --spec data/phase2u-fresh-transfer-cases.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --old-queue data/real-fix-queue.json \
+            --prior-advisories data/advisory-queue.json \
+            --public-out "$RUNNER_TEMP/real-transfer/NEW-SOURCE-QUESTIONS-WITHOUT-KEY.json" \
+            --key-out "$RUNNER_TEMP/real-transfer/private/NEW-SOURCE-AI-DRAFT-KEY.json" \
+            --token-out "$RUNNER_TEMP/real-transfer/REAL-FULL-MODEL-TOKEN-GATE.json"
+      - name: Score both authenticated real checkpoints with answer-only control
+        shell: bash
+        run: |
+          set -euo pipefail
+          find_one() {
+            local root="$1" filename="$2" matches
+            matches="$(find "$root" -type f -name "$filename")"
+            if [[ -z "$matches" || "$(printf '%s\n' "$matches" | wc -l)" -ne 1 ]]; then
+              echo "Expected exactly one artifact file $filename under $root" >&2
+              exit 1
+            fi
+            printf '%s' "$matches"
+          }
+          old_conf="$(find_one "$RUNNER_TEMP/frozen-original" adapter_config.json)"
+          new_conf="$(find_one "$RUNNER_TEMP/new-intervention" adapter_config.json)"
+          old_adapter="$(dirname "$old_conf")"
+          new_adapter="$(dirname "$new_conf")"
+          old_decision="$(find_one "$RUNNER_TEMP/frozen-original" PILOT-DECISION.json)"
+          old_counter="$(find_one "$RUNNER_TEMP/frozen-original" COUNTERFACTUAL-MODEL-RESULT.json)"
+          new_train="$(find_one "$RUNNER_TEMP/new-intervention" PHASE2U-TRAIN-MANIFEST.json)"
+          test -s "$old_adapter/adapter_model.safetensors"
+          test -s "$new_adapter/adapter_model.safetensors"
+          PYTHONPATH="$GITHUB_WORKSPACE/src:$GITHUB_WORKSPACE/telegraph-kit" \
+            python -m falsum.phase2u_fresh_compare \
+              --public "$RUNNER_TEMP/real-transfer/NEW-SOURCE-QUESTIONS-WITHOUT-KEY.json" \
+              --key "$RUNNER_TEMP/real-transfer/private/NEW-SOURCE-AI-DRAFT-KEY.json" \
+              --train-manifest "$new_train" \
+              --baseline-adapter "$old_adapter" \
+              --experiment-adapter "$new_adapter" \
+              --baseline-decision "$old_decision" \
+              --baseline-counterfactual "$old_counter" \
+              --out "$RUNNER_TEMP/real-transfer/REAL-ORIGINAL-VS-NEW-THREE-PROJECT-CHECK.json"
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"real-transfer"
+          x=json.loads((root/"REAL-ORIGINAL-VS-NEW-THREE-PROJECT-CHECK.json").read_text())
+          assert x["status"]=="FROZEN_VS_RESEARCH_LORA_THREE_NEW_SOURCE_PROVISIONAL_TRANSFER"
+          assert x["prior_model"]["total_ai_proposals"]==6 and x["context_intervention"]["total_ai_proposals"]==6
+          assert x["human_reviews"]==0 and x["network_eligible"] is False
+          assert x["independent_security_accuracy_certified"] is False
+          assert x["prior_adapter_sha256"]!=x["new_adapter_sha256"]
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### FALSUM Phase 2U: actual old vs new LoRA on 3 source-separated public projects\n\n")
+              f.write(f"Original frozen model: {x['prior_model']['ai_proposals_matched']}/6 AI-proposed preferences, {x['prior_model']['families_matching_both_ai_proposals']}/3 paired families.\\n\\n")
+              f.write(f"New trained model: {x['context_intervention']['ai_proposals_matched']}/6 AI-proposed preferences, {x['context_intervention']['families_matching_both_ai_proposals']}/3 paired families.\\n\\n")
+              f.write("No expert adjudication, no sealed holdout, no accepted network quality, no eligible Anjoman contribution. This is an explicitly public research transfer diagnostic.\\n")
+          PY
+      - name: Archive real model source-separated comparison, never upload model to network
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE2U-REAL-THREE-PROJECT-TRANSFER-COMPARISON
+          path: ${{ runner.temp }}/real-transfer/
+          if-no-files-found: warn
+          retention-days: 14
