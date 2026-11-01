@@ -217,11 +217,16 @@ def evaluate_batch(catalog:dict,source_rows:list[dict],batch:dict,root:Path)->di
             or batch["research_only"] is not True or not isinstance(batch["scenarios"],list)
             or not 1<=len(batch["scenarios"])<=100):
         raise ProofError("invalid batch or attempted release-status promotion")
-    rows=[evaluate_case(rules.get(m.get("case_id")) if isinstance(m,dict) else None,m,root)
-          for m in batch["scenarios"]]
-    keys=[(x["case_id"],str(i)) for i,x in enumerate(rows)]
-    if len(rows)!=len(keys):
-        raise ProofError("duplicate scenario processing")
+    rows=[]
+    seen_scenarios=set()
+    for manifest in batch["scenarios"]:
+        if not isinstance(manifest,dict) or manifest.get("case_id") not in rules:
+            raise ProofError("batch references unknown pinned security source")
+        digest=hashlib.sha256(_canonical(manifest)).hexdigest()
+        if digest in seen_scenarios:
+            raise ProofError("duplicate evidence manifest in batch")
+        seen_scenarios.add(digest)
+        rows.append(evaluate_case(rules[manifest["case_id"]],manifest,root))
     counts={k:sum(r["result"]==k for r in rows) for k in (
         "CONDITIONALLY_APPLICABLE_REVIEW_CANDIDATE",
         "APPLICABILITY_PRECONDITION_CONTRADICTED",
