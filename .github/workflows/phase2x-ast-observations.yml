@@ -5,6 +5,8 @@ on:
       - 'src/falsum/phase2x_ast_observer.py'
       - 'src/falsum/phase2x_reconcile.py'
       - 'tests/test_phase2x_ast_observer.py'
+      - 'tests/test_phase2x_research_evidence.py'
+      - 'evidence/phase2x-2026-11-01.json'
       - '.github/workflows/phase2x-ast-observations.yml'
   workflow_dispatch:
 permissions:
@@ -23,6 +25,7 @@ jobs:
         run: |
           set -euo pipefail
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase2x_ast_observer.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase2x_research_evidence.py -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase2w_proof_gate.py -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase2w_capture.py -v
       - name: Create explicitly illustrative Python file and contradictory user claim
