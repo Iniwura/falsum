@@ -1,0 +1,87 @@
+name: "FALSUM | Verify a pinned public security-review case"
+description: "Independent review of public source evidence. Never report speculative vulnerabilities as confirmed."
+title: "[FALSUM review] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        FALSUM is preparing evidence-grounded research material for the Telegraph Evaluators track. This form records a reviewer's assessment, **not an approved network label**.
+
+        **Only discuss public code and non-sensitive facts.** Do not publish private information, credentials, unreleased vulnerabilities, exploit payloads, or customer deployment details. Use responsible disclosure for real findings.
+
+        Open the specific five-review-case packet from the latest [Phase 3E CI run](https://github.com/Iniwura/falsum/actions/workflows/phase3e-independent-review.yml).
+  - type: input
+    id: packet
+    attributes:
+      label: Exact packet ID
+      description: One of the five authentic external callsite IDs.
+      placeholder: perspective-external-line-47
+    validations:
+      required: true
+  - type: input
+    id: pinned-source
+    attributes:
+      label: GitHub pinned source URL
+      description: Include the full upstream 40-character commit and exact line number.
+      placeholder: https://github.com/owner/repo/blob/0123.../path.py#L42
+    validations:
+      required: true
+  - type: input
+    id: dependency
+    attributes:
+      label: Declared dependency profile and URL
+      description: A dependency declaration is not an installed or deployed version. If more than one profile exists, mention each separately.
+      placeholder: aiohttp>=3,<4; https://github.com/...
+    validations:
+      required: true
+  - type: dropdown
+    id: preference
+    attributes:
+      label: Candidate interpretation preferred
+      description: Choose based on the verified evidence, not on the model's earlier ranking.
+      options:
+        - A
+        - B
+        - ABSTAIN - evidence insufficient or both answers need revision
+    validations:
+      required: true
+  - type: dropdown
+    id: version-proof
+    attributes:
+      label: Installed framework version evidence
+      options:
+        - UNKNOWN - only an upstream source or manifest is available
+        - DECLARED_ONLY - confirmed requirement constraint, not actual install
+        - INDEPENDENTLY_CHECKED_CLAIM - evidence of a real installed version is linked below
+    validations:
+      required: true
+  - type: dropdown
+    id: runtime-proof
+    attributes:
+      label: Runtime route and exposure evidence
+      options:
+        - UNKNOWN - cannot establish actual route registration
+        - SOURCE_SYNTAX_ONLY - source call shown but not executed
+        - INDEPENDENTLY_CHECKED_CLAIM - real safe runtime evidence linked below
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Evidence-backed review and limitations
+      description: Explain the source call, dependency profile, unresolved preconditions, why A/B/ABSTAIN was chosen, and any independent public evidence URLs.
+      placeholder: The pinned call shows ..., but the actual installed version and the reachable deployment path are not established, so ...
+    validations:
+      required: true
+  - type: checkboxes
+    id: provenance
+    attributes:
+      label: Reviewer attestation
+      options:
+        - label: I am not the FALSUM repository owner and I reviewed the linked public source independently.
+          required: true
+        - label: I understand this comment is an unverified review claim, not an automatically accepted expert label, confirmed exploit or eligible Telegraph evaluation.
+          required: true
+        - label: I have not included secrets, confidential deployment data, or unpublished exploit details.
+          required: true
