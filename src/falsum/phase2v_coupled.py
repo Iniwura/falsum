@@ -45,7 +45,13 @@ def build_families(public:dict,key:dict,manifest:dict,train:dict,old:dict,prior:
             or manifest.get("training_projects")!=sorted({r["repository"] for r in train["cases"]})
             or manifest.get("independent_human_reviews")!=0
             or manifest.get("network_eligible") is not False
-            or manifest.get("prior_ai_draft_inspected") is not True):
+            or manifest.get("prior_ai_draft_inspected") is not True
+            or manifest.get("ai_source_packet_sha256") != hashlib.sha256(
+                (json.dumps(public,sort_keys=True,separators=(",",":"),ensure_ascii=False)+"\n").encode()
+            ).hexdigest()
+            or manifest.get("ai_proposal_key_sha256") != hashlib.sha256(
+                (json.dumps(key,sort_keys=True,separators=(",",":"),ensure_ascii=False)+"\n").encode()
+            ).hexdigest()):
         raise CoupledError("wrong or promoted source-training provenance")
     grouped={}
     for q,k in verified:
