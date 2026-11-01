@@ -81,7 +81,7 @@ class MigrationBoundaryTests(unittest.TestCase):
             locate(self.root)
 
     def test_no_symlink_checkpoint_hiding(self):
-        (self.root/"bad-link").symlink_to(self.model,is_directory=True)
+        (self.root/"bad-link").symlink_to(self.model,target_is_directory=True)
         with self.assertRaisesRegex(DeltaReadinessError,"symlink"):
             locate(self.root)
 
