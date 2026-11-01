@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "status": "EXTERNAL_AIOHTTP_DECLARED_DEPENDENCIES_ONLY_NO_INSTALL_PROOF",
+  "research_only": true,
+  "upstream_advisory": "GHSA-5h86-8mv2-jq9f",
+  "patched_version": "3.9.2",
+  "external_application_code_executed": false,
+  "profiles": [
+    {
+      "id": "perspective-optional-aiohttp",
+      "repository": "perspective-dev/perspective",
+      "commit": "444865accd46bcfdeb552960ce4f63fe8286de42",
+      "path": "rust/perspective-python/pyproject.toml",
+      "git_blob_sha1": "a3a296cc6bb807c6b074ce457c97bdb698cb8ed3",
+      "manifest_kind": "toml-optional-aiohttp",
+      "line": 77,
+      "declared_requirement": "aiohttp>=2,<4",
+      "profile": "perspective_python_optional"
+    },
+    {
+      "id": "nlweb-main-askagent-aiohttp",
+      "repository": "nlweb-ai/NLWeb",
+      "commit": "b423f15d9aeaa023ce75993ac9deed2354597043",
+      "path": "AskAgent/python/requirements.txt",
+      "git_blob_sha1": "a4c9f65fdad14cc1eea664204527e614f110882a",
+      "manifest_kind": "requirements-text",
+      "line": 12,
+      "declared_requirement": "aiohttp>=3.13.5",
+      "profile": "nlweb_askagent_python"
+    },
+    {
+      "id": "nlweb-azure-aiohttp",
+      "repository": "nlweb-ai/NLWeb",
+      "commit": "b423f15d9aeaa023ce75993ac9deed2354597043",
+      "path": "requirements_azure.txt",
+      "git_blob_sha1": "fd9fbf6c7fcb8c1ff80bd2b490fe1a3ce1cd4fd2",
+      "manifest_kind": "requirements-text",
+      "line": 5,
+      "declared_requirement": "aiohttp==3.13.3",
+      "profile": "nlweb_azure_variant"
+    },
+    {
+      "id": "maubot-base-aiohttp",
+      "repository": "maubot/maubot",
+      "commit": "f20825b5e3031a89eb5b2edea7f6f7726ada9a10",
+      "path": "requirements.txt",
+      "git_blob_sha1": "35beea99f743af408dd3b1d126dd924e9546fbdb",
+      "manifest_kind": "requirements-text",
+      "line": 2,
+      "declared_requirement": "aiohttp>=3,<4",
+      "profile": "maubot_base_requirements"
+    }
+  ],
+  "trust_boundary": {
+    "profiles_are_not_single_deployment_environment": true,
+    "installed_versions_verified": false,
+    "dependency_solver_executed": false,
+    "code_imported": false,
+    "security_labels_approved": 0,
+    "vulnerabilities_confirmed": 0,
+    "accepted_anjoman_evaluation_rows": 0,
+    "network_eligible": false
+  }
+}
