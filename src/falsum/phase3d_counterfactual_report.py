@@ -12,6 +12,7 @@ from pathlib import Path
 
 from .phase3c_score_report import _score, ScoreProofError
 from .phase3d_counterfactual_inputs import STATUS as INPUT_STATUS,FAMILIES
+from .phase3c_score_inputs import TOKENIZER_SHA256
 
 STATUS="PHASE3D_REAL_FOUNDATION_COUNTERFACTUAL_REVERSAL_DIAGNOSTIC_NOT_CERTIFIED"
 
@@ -21,6 +22,9 @@ def compare(inputs:dict,actuals:dict)->dict:
         or inputs.get("research_only") is not True
         or inputs.get("network_eligible") is not False
         or inputs.get("independent_expert_labels")!=0
+        or inputs.get("official_tokenizer_sha256")!=TOKENIZER_SHA256
+        or inputs.get("actual_node_token_cap")!=512
+        or inputs.get("bounded_counterfactual_token_cap")!=192
         or inputs.get("candidate_answer_bytes_fixed_within_each_family") is not True
         or inputs.get("context_counterfactual_families")!=2
         or inputs.get("unseen_or_blind_holdout") is not False
@@ -42,7 +46,9 @@ def compare(inputs:dict,actuals:dict)->dict:
             or type(r.get("token_count")) is not int
             or not 8<=r["token_count"]<=192
             or not isinstance(r.get("input_ids"),list)
-            or len(r["input_ids"])!=r["token_count"]):
+            or len(r["input_ids"])!=r["token_count"]
+            or r["input_ids"][0]!=50281 or r["input_ids"][-1]!=50282
+            or any(type(v) is not int or v<0 or v>=50368 for v in r["input_ids"])):
             raise ScoreProofError("provisional input count/identity invalid")
         f=next(f for f in FAMILIES if f["family"]==expected_f)
         c=next(c for c in f["contexts"] if c[0]==expected_c)
