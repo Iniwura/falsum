@@ -32,7 +32,8 @@
     "conflict_reporting": true,
     "reviewer_self_attestation_never_promoted_to_ground_truth": true,
     "no_user_application_code_executed": true,
-    "candidate_wrong_answers_use_plausible_near_miss_reasoning": true
+    "candidate_wrong_answers_use_plausible_near_miss_reasoning": true,
+    "public_independent_review_invitation_url": "https://github.com/Iniwura/falsum/issues/2"
   },
   "real_ci": {
     "phase3e_review_packet_tests": 12,
