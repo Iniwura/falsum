@@ -5,9 +5,9 @@
   "competition": "Telegraph Season II Evaluators",
   "track_requirement": "Official hackathon rules permit evaluation material, adapter, or both; actual acceptance and quality still required.",
   "source_repo": "https://github.com/Iniwura/falsum",
-  "actual_verified_workflow_url": "https://github.com/Iniwura/falsum/actions/runs/41351281574",
-  "artifact_url": "https://github.com/Iniwura/falsum/actions/runs/41351281574/artifacts/13101112320",
-  "artifact_id": 13101112320,
+  "actual_verified_workflow_url": "https://github.com/Iniwura/falsum/actions/runs/41351597701",
+  "artifact_url": "https://github.com/Iniwura/falsum/actions/runs/41351597701/artifacts/13100738614",
+  "artifact_id": 13100738614,
   "implementation": {
     "externally_pinned_sources": [
       "perspective-dev/perspective",
@@ -31,7 +31,8 @@
     "source_sha_bound_submission": true,
     "conflict_reporting": true,
     "reviewer_self_attestation_never_promoted_to_ground_truth": true,
-    "no_user_application_code_executed": true
+    "no_user_application_code_executed": true,
+    "candidate_wrong_answers_use_plausible_near_miss_reasoning": true
   },
   "real_ci": {
     "phase3e_review_packet_tests": 12,
