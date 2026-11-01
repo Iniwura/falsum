@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "status": "PHASE2W_EVIDENCE_FIRST_PROOF_PIPELINE_RESEARCH_ONLY",
+  "date": "2026-11-01",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "source_repository": "https://github.com/Iniwura/falsum",
+  "ci": "https://github.com/Iniwura/falsum/actions/runs/41286462954",
+  "ci_artifact_url": "https://github.com/Iniwura/falsum/actions/runs/41286462954/artifacts/13075692037",
+  "ci_artifact_id": 13075692037,
+  "verification": {
+    "rules": 11,
+    "required_preconditions": 22,
+    "source_projects": [
+      "psf/requests",
+      "aio-libs/aiohttp",
+      "pallets/jinja",
+      "axios/axios",
+      "Kludex/starlette",
+      "urllib3/urllib3",
+      "django/django",
+      "expressjs/express",
+      "tornadoweb/tornado",
+      "nodejs/undici",
+      "python-websockets/websockets"
+    ],
+    "source_git_test_transitions_reverified_in_phase2w_ci": 16,
+    "three_additional_source_project_transitions_verified_in_phase2u_ci": 6,
+    "fresh_source_prior_run": "https://github.com/Iniwura/falsum/actions/runs/41284227213",
+    "source_hash_primitive": "Git post-fix blob SHA-1 plus immutable GitHub commit/parent; app excerpts are SHA-256 whole file and exact lines",
+    "application_capture_command": "python -m falsum.phase2w_capture",
+    "application_gate_command": "python -m falsum.phase2w_proof_gate",
+    "proof_gate_adversarial_tests_passed": 20,
+    "app_capture_adversarial_tests_passed": 9,
+    "project_isolation_tests_passed": 9,
+    "fresh_upstream_safety_tests_passed": 8,
+    "total_tests_passed": 46,
+    "synthetic_deployment_scenarios": 44,
+    "simulated_decisions": {
+      "conditional_review_candidate": 11,
+      "applicability_precondition_contradicted": 11,
+      "insufficient_evidence": 11,
+      "conflicting_application_claims": 11
+    },
+    "separate_illustrative_application_capture_and_evaluation_passed": true
+  },
+  "safety_limits": {
+    "synthetic_scenario_count": 44,
+    "real_customer_applications_audited": 0,
+    "independent_human_reviewed_precondition_labels": 0,
+    "automatically_verified_semantic_applicability_facts": 0,
+    "confirmed_exploits": 0,
+    "model_training_authorized": false,
+    "anjoman_eligible_evaluation_rows": 0,
+    "evaluator_registered": false,
+    "network_eligible": false,
+    "source_metadata_pinned_but_not_proof_of_app_semantics": true
+  },
+  "learning": "Conservative three-valued facts plus conflict detection and explicit abstention are implementable and reproducible; actual semantics remain submitter assertions rather than machine proofs. This is evidence integrity plumbing, not a validated vulnerability detector.",
+  "next_phase": "Introduce narrow AST/static observations for literal flags/constant call arguments with provenance and nonliteral abstention; compare to real application tests and human-reviewed interpretations before promoting any evaluator."
+}
