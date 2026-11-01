@@ -2,11 +2,19 @@
 
 **Every claim stands trial.**
 
-**Current research checkpoint (1 November 2026):** Phase 3E has built **five Git-pinned authentic outside-application security review questions** and a public reviewer-intake workflow (50 focused tests passing), making evaluator material a second hackathon path alongside the compatible ModernBERT LoRA. However, Phase 3D showed **0/2 context preference reversals** on the actual model. All review questions remain unadjudicated; zero expert-reviewed labels, zero accepted Anjoman rows and no evaluator registration are claimed. The current checkpoint remains blocked from release. See [Phase 3E reviewer packets](docs/PHASE3E.md), [Phase 3D model failure](docs/PHASE3D.md) and [Phase 3C loaded inference](docs/PHASE3C.md).
+**Current research checkpoint (1 November 2026):** FALSUM now has **12 prepared, source-verifiable public security-review questions** across Phases 3E/3F, including **seven non-aiohttp vulnerability families** backed by real upstream security fixes **and regression test blobs** ([Phase 3F](docs/PHASE3F.md)). Its original ModernBERT LoRA also structurally loads and scores on Telegraph's official Foundation runtime, but the Phase 3D context-reversal diagnostic failed **0/2** families. The old model remains **blocked from registration**. Our questions have **zero independently human-adjudicated labels** and **zero confirmed Anjoman-eligible rows**; source diversity is not model accuracy or acceptance. Independent reviews are requested at [GitHub Issue #3](https://github.com/Iniwura/falsum/issues/3).
 
 An evidence-grounded security evaluation research project for [Telegraph Season II](https://hackathon.telegraphprotocol.com/). FALSUM targets the `SECURITY_REVIEW_GENERAL` child Intent and the `SECURITY_REVIEW` evaluator family, as described by [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96).
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
+
+## Phase 3F: seven new distinct public security-fix families for independent review
+
+We widened FALSUM's reviewer material beyond the original aiohttp issue. [Phase 3F's passing verification run](https://github.com/Iniwura/falsum/actions/runs/41353159310) checked **8 historical upstream Git fix commits, exact source and regression-test blob identities**, and generated **7 new non-aiohttp evaluation-review questions**, spanning Requests, Jinja, Axios, Starlette, urllib3, Django and Express. Each question has verified source/test patch hashes, a GHSA/CVE citation, two explicit unreviewed prerequisite hypotheses and two unadjudicated answer candidates. Together with Phase 3E's five authenticated source-call questions, we now have **12 prepared, unreviewed questions**.
+
+[Full Phase 3F verification and limitations](docs/PHASE3F.md) · [7-question research artifact](https://github.com/Iniwura/falsum/actions/runs/41353159310/artifacts/13102565304) · [Permanent 25-test evidence](evidence/phase3f-2026-11-01.json) · [Independent reviewer issue #3](https://github.com/Iniwura/falsum/issues/3).
+
+The three fresh source-separated transfer projects are **excluded** from this review set; no old Phase 3D model failures were relabeled as new expert data. This is an important evidence-diversity improvement, **not** a retrained model or proof of security accuracy. **0 independent expert-approved preferences, 0 network-eligible evaluation rows and no registered evaluator.** The old trained LoRA remains blocked after its **0/2 real context-reversal failure**.
 
 ## Phase 3E: build an independent, evidence-backed evaluator review set
 
