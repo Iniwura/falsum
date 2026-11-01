@@ -64,6 +64,10 @@ The intake report remains unverified and non-eligible until real independent val
 
 [CI and actual evidence for Phase 3E](../.github/workflows/phase3e-independent-review.yml) include adversarial source hash, prompt identity, source-version ambiguity, duplicate-reviewer, fabricated-expert-label and network-promotion tests. The CI artifact holds the generated five-question queue, blank review input with its correct SHA and the zero-label intake report.
 
+[Passing Phase 3E CI (50 focused tests)](https://github.com/Iniwura/falsum/actions/runs/41351597701) · [Five review packets and blank intake artifact](https://github.com/Iniwura/falsum/actions/runs/41351597701/artifacts/13100738614) · [Permanent verification summary](../evidence/phase3e-2026-11-01.json).
+
+The candidate contrasts now use **plausible near-miss errors** (such as confusing a permissive dependency constraint with a verified deployed version) rather than trivial assertions that an exploit has definitely been reproduced. These remain unreviewed author-generated answer candidates, not independent ground truth.
+
 ## Competition plan and hard boundaries
 
 Winning is the objective, but the evidence needs to survive judge reproduction. Our next material goal is to obtain **genuine outside security reviewers** who verify the source facts and identify ambiguous cases, then expand beyond this one aiohttp vulnerability into additional source families **without using those validation cases for training**.
