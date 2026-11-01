@@ -2,11 +2,19 @@
 
 **Every claim stands trial.**
 
-**Current research checkpoint (1 November 2026):** FALSUM has a tested source-bound evidence pipeline and an explicitly limited Python AST claim cross-check. Phase 2X passed 49 tests and blocked a false developer claim in a synthetic demonstration. Earlier real LoRA models passed a small official synthetic advisory test but failed to generalize across deployment-context reversals. No verified vulnerability accuracy, accepted Anjoman evaluation rows or registered evaluator are claimed. Read [Phase 2X](docs/PHASE2X.md), [Phase 2W](docs/PHASE2W.md) and the [real model training postmortem](docs/PHASE2V.md).
+**Current research checkpoint (1 November 2026):** FALSUM has source-bound evidence checking, independent narrow Python AST facts, and import-declaration-aware assertion review. Phase 2Y passed 89 focused tests and correctly abstained on an unbound fake framework call. Historical real reward-model training remains insufficient for reliable deployment-context generalization. No expert-adjudicated security accuracy, accepted Anjoman contributions or registered evaluator are claimed. See [Phase 2Y](docs/PHASE2Y.md) and [the model postmortem](docs/PHASE2V.md).
 
 An evidence-grounded security evaluation research project for [Telegraph Season II](https://hackathon.telegraphprotocol.com/). FALSUM targets the `SECURITY_REVIEW_GENERAL` child Intent and the `SECURITY_REVIEW` evaluator family, as described by [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96).
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
+
+## Phase 2Y: framework import bindings and guarded claim reconciliation
+
+The security evidence pipeline now distinguishes **simple framework-backed Python import declarations** from unrelated code that merely shares a vulnerable-looking method name. The [Phase 2Y static binder](src/falsum/phase2y_bindings.py) checks narrow aiohttp Application constructor chains, explicitly imported websockets server call aliases and Tornado RequestHandler subclasses, with SHA-verified source and conservative module/function call-path classification. Shadowed imports, dynamic rebinding, eval/exec, conditional or uninvoked functions abstain instead of pretending actual framework execution is known.
+
+The [binding-aware claim guard](src/falsum/phase2y_claim_guard.py) **recomputes the original application source evidence** before flagging contradictions. In real GitHub Actions tests, an imported aiohttp call with a literal False and opposing developer claim was flagged for review, while a visually identical fake dummy.router.add_static call was **correctly left unresolved**. [Verified Phase 2Y CI](https://github.com/Iniwura/falsum/actions/runs/41289002820) passed **89/89 tests** across new import/call guarding and previous evidence plumbing.
+
+**Static import declarations do not prove actual runtime callee identity or code execution, and no true security-vulnerability accuracy is established.** Zero independent human-reviewed labels, zero accepted Anjoman rows and no registered evaluator. [Complete Phase 2Y technical report](docs/PHASE2Y.md) · [Permanent execution evidence](evidence/phase2y-2026-11-01.json).
 
 ## Phase 2X: independently parsed source facts, rather than trusting every claim
 
