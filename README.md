@@ -2,11 +2,21 @@
 
 **Every claim stands trial.**
 
-**Current research checkpoint (1 November 2026):** The existing trained ModernBERT LoRA has now been exported into Telegraph's new small shared-Foundation **hybrid safetensors delta** format, with an actual official Stage 1 structural PASS ([Phase 3B](docs/PHASE3B.md)). External-source and dependency checks on Perspective, NLWeb and Maubot also passed. However, the original model failed source-separated context generalization tests, has not yet scored through the new Foundation runtime, and has no independent approved AppSec labels, accepted Anjoman rows, runnable endpoint or active network registration. **Research candidate, not submitted evaluator.**
+**Current research checkpoint (1 November 2026):** Phase 3C has now **loaded and scored the real trained SECURITY_REVIEW LoRA with the official published 599 MB shared Foundation ONNX/WASI runtime**. Two answers were each scored twice with exact repeatability, and one synthetic example preferred the cautious answer. The evaluator packaging and inference layers work, but cross-project context generalization is still unproven (older 0/3 reversal study), and no independent human-reviewed labels, eligible Anjoman rows, runnable production endpoint or registered evaluator exist. See [actual scored Phase 3C](docs/PHASE3C.md) and [Phase 3B delta packaging](docs/PHASE3B.md).
 
 An evidence-grounded security evaluation research project for [Telegraph Season II](https://hackathon.telegraphprotocol.com/). FALSUM targets the `SECURITY_REVIEW_GENERAL` child Intent and the `SECURITY_REVIEW` evaluator family, as described by [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96).
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
+
+## Phase 3C: actual shared Foundation inference, not just package structure
+
+**Real runtime breakthrough:** the [current official pinned Telegraph Go adapterbuild/ONNX/WASI runtime](https://github.com/Iniwura/falsum/actions/runs/41306369871) now **loaded the published 599 MB ModernBERT Foundation ONNX** and our exact byte-verified pre-trained \`SECURITY_REVIEW\` hybrid LoRA. It scored **two distinct security-review answers twice each**, achieving **bit-identical repeated float32 scores**. This is no longer just a Stage 1 structural parse.
+
+On one explicitly synthetic aiohttp-3.10.11 / CVE-2024-23334 prompt, the model scored a version-aware cautious answer **-0.8233** and a clearly overconfident answer **-1.0007**, preferring the cautious response. This is only one positive research diagnostic. The previous project-separated context-reversal model failures remain unresolved; no independent or real-world security accuracy can be inferred.
+
+The actual Phase 3C inference run passed **19 focused safety/identity checks**, the full repository suite passed **495 tests** (one skipped), and Telegraph's official diagnostic data gate passed. [Full report and reproduction](docs/PHASE3C.md) · [Permanent actual score and hash evidence](evidence/phase3c-2026-11-01.json) · [Temporary real official runtime score artifacts](https://github.com/Iniwura/falsum/actions/runs/41306369871/artifacts/13082973270).
+
+**Not yet completed:** independently reviewed real-world security preferences, genuine counterfactual model generalization, runnable public executor endpoint, accepted Anjoman evaluation pairs and live registered evaluator. Passing real inference is not enough to claim a competitive security judge.
 
 ## Phase 3B: real adapter exported to the NEW shared ModernBERT Foundation
 
