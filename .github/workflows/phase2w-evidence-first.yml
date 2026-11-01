@@ -1,0 +1,106 @@
+name: Phase 2W - evidence-first 11-project applicability proof gate (unreviewed)
+on:
+  push:
+    paths:
+      - 'data/phase2w-applicability-rules.json'
+      - 'src/falsum/phase2w_proof_gate.py'
+      - 'src/falsum/phase2w_synthetic_demo.py'
+      - 'tests/test_phase2w_proof_gate.py'
+      - '.github/workflows/phase2w-evidence-first.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  evidence-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline adversarial proof, SHA, exact citations and invalid assertion tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase2w_proof_gate.py' -v
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase2t_project_isolation.py' -v
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase2u_fresh_transfer.py' -v
+      - name: Generate 44 explicitly synthetic source-bound application scenarios
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-2w"
+          PYTHONPATH=src python -m falsum.phase2w_synthetic_demo \
+            --catalog data/phase2w-applicability-rules.json \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --fresh-spec data/phase2u-fresh-transfer-cases.json \
+            --root "$RUNNER_TEMP/falsum-2w/simulated-application-files" \
+            --out "$RUNNER_TEMP/falsum-2w/SYNTHETIC-UNREVIEWED-EXCERPTS.json"
+      - name: Execute 11x4 evidence verification and precondition logic end-to-end
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase2w_proof_gate \
+            --catalog data/phase2w-applicability-rules.json \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --fresh-spec data/phase2u-fresh-transfer-cases.json \
+            --batch "$RUNNER_TEMP/falsum-2w/SYNTHETIC-UNREVIEWED-EXCERPTS.json" \
+            --root "$RUNNER_TEMP/falsum-2w/simulated-application-files" \
+            --out "$RUNNER_TEMP/falsum-2w/PHASE2W-EVIDENCE-INTEGRITY-AND-LOGIC.json"
+          python - <<'PY'
+          import os,json,hashlib
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"falsum-2w"
+          report=json.loads((root/"PHASE2W-EVIDENCE-INTEGRITY-AND-LOGIC.json").read_text())
+          assert report["status"]=="EVIDENCE_FIRST_CONDITIONAL_FINDINGS_UNREVIEWED"
+          assert len(report["results"])==44
+          assert len({x["case_id"] for x in report["results"]})==11
+          assert all(count==11 for count in report["counts"].values())
+          assert report["confirmed_exploits"]==0 and report["independent_human_reviews"]==0
+          assert report["accepted_evaluation_labels"]==0 and report["network_eligible"] is False
+          assert report["application_assertions_independently_verified"] is False
+          assert report["source_replayed_in_this_call"] is False
+          assert all(x["human_review_required"] and not x["confirmed_security_finding"] for x in report["results"])
+          assert all(x["application_evidence_origin"]=="synthetic_fixture" for x in report["results"])
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as summary:
+              summary.write("### FALSUM Phase2W evidence-first precondition study\n\n")
+              summary.write("11 Git-pinned published source fix identities with 22 named applicability preconditions.\n\n")
+              summary.write("44/44 **synthetic** fixture outcomes exercised: 11 conditionally applicable, 11 contradicted, 11 insufficient evidence, 11 conflicting claims.\n\n")
+              summary.write("All local files were SHA256 and exact-line checked; path traversals, symlinks, forged quotes, unknown conditions and false human labels refused.\n\n")
+              summary.write("**ZERO real applications audited, ZERO verified exploits, ZERO human-expert reviews, ZERO accepted Anjoman evaluation labels, NO registered evaluator.**\n")
+          PY
+      - name: Reproduce original four and training four *actual* upstream source/test Git object transitions
+        shell: bash
+        run: |
+          set -euo pipefail
+          for pool in old new; do
+            if [ "$pool" = old ]; then queue="data/real-fix-queue.json"; else queue="data/real-fix-train-candidates.json"; fi
+            PYTHONPATH=src python -m falsum.real_fix_corpus \
+              --queue "$queue" \
+              --out "$RUNNER_TEMP/falsum-2w/$pool-SOURCE-VERIFIED.json" \
+              --reviewer-out "$RUNNER_TEMP/falsum-2w/$pool-REVIEW-QUESTIONS.json"
+            PYTHONPATH=src python -m falsum.real_fix_replay \
+              --evidence "$RUNNER_TEMP/falsum-2w/$pool-SOURCE-VERIFIED.json" \
+              --out "$RUNNER_TEMP/falsum-2w/$pool-REAL-EXACT-SOURCE-REPLAY.json"
+          done
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"falsum-2w"
+          for pool in ("old","new"):
+              proof=json.loads((root/f"{pool}-REAL-EXACT-SOURCE-REPLAY.json").read_text())
+              assert proof["cases_replayed"]==4
+              assert proof["file_replays_verified"]==8
+              assert proof["training_authorized"] is False
+          print("Real upstream source/test SHA-replays pass 16/16 across original eight projects")
+          PY
+      - name: Archive research-only integrity and upstream evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE2W-HASHED-APPLICATION-PROOF-RESEARCH-ONLY
+          path: ${{ runner.temp }}/falsum-2w/
+          if-no-files-found: error
+          retention-days: 14
