@@ -13,8 +13,8 @@ class Phase2ZRealFrameworkEvidenceTests(unittest.TestCase):
     def test_actual_ci_and_pinned_executable_sources(self):
         e=self.e
         self.assertEqual(e["actual_verified_run"],
-                         "https://github.com/Iniwura/falsum/actions/runs/41289904581")
-        self.assertEqual(e["artifact_id"],13076666791)
+                         "https://github.com/Iniwura/falsum/actions/runs/41290076124")
+        self.assertEqual(e["artifact_id"],13077016302)
         self.assertEqual(e["installed_runtime_dependency"]["exact_version"],"3.10.11")
         self.assertEqual(e["advisory_fixed_release"],"3.9.2")
         self.assertTrue(e["source_verification"]["verifies_executable_bytes_before_import"])
@@ -36,7 +36,7 @@ class Phase2ZRealFrameworkEvidenceTests(unittest.TestCase):
         self.assertEqual(actual["static_source_syntax_predictions"],
                          ["SYNTACTIC_ABSENT","SYNTACTIC_PRESENT","UNDETERMINED"])
         self.assertEqual(actual["runtime_resolves_dynamic_setting_while_static_analyzer_abstains"],1)
-        self.assertEqual(e["ci_tests"]["total_focused_tests_passed"],55)
+        self.assertEqual(e["ci_tests"]["total_focused_tests_passed"],58)
         self.assertEqual(e["ci_tests"]["ci_status"],"success")
 
     def test_dont_call_this_cve_or_independent_accuracy(self):
