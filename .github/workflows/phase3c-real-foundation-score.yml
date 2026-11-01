@@ -1,0 +1,151 @@
+name: Phase 3C - REAL shared Foundation ONNX + existing security LoRA inference
+on:
+  push:
+    paths:
+      - '.github/workflows/phase3c-real-foundation-score.yml'
+      - 'src/falsum/phase3c_score_inputs.py'
+      - 'src/falsum/phase3c_score_report.py'
+      - 'tests/test_phase3c_score_proof.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-model-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      PYTHONUNBUFFERED: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test score provenance, input validation and no-fabricated-accuracy controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3c_score_proof.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3b_delta_readiness.py -v
+          mkdir -p "$RUNNER_TEMP/falsum-phase3c/reports"
+      - name: Checkout exact official Telegraph 2026 shared Foundation engine runtime
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Download original converted PHASE 3B real trained LoRA research artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE3B-RESEARCH-DELTA-NOT-NETWORK-REGISTERED
+          run-id: 41304788714
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/falsum-phase3c/old-real-model
+      - name: Verify exact original adapter SHA256 BEFORE ANY model inference
+        shell: bash
+        run: |
+          set -euo pipefail
+          pkg="$(find "$RUNNER_TEMP/falsum-phase3c/old-real-model" -type f -name SECURITY_REVIEW.safetensors -print -quit)"
+          test -n "$pkg"
+          echo "3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc  $pkg" | sha256sum -c -
+          echo "REAL_MODEL_PACKAGE=$pkg" >> "$GITHUB_ENV"
+          echo "Original current-format model bytes verified; ZERO retraining and no tampering." >> "$GITHUB_STEP_SUMMARY"
+      - name: Download and SHA256 verify official 599MB Foundation, engine and tokenizer
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-phase3c/foundation"
+          prefix='https://github.com/telegraphprotocol/telegraph-foundation/releases/download/modernbert-base-lora16-v1'
+          for asset in foundation.json foundation_engine.wasm foundation_lora_fp32.onnx tokenizer.json; do
+            curl --fail --location --silent --show-error --retry 3 \
+              "$prefix/$asset" -o "$RUNNER_TEMP/falsum-phase3c/foundation/$asset"
+          done
+          (
+            cd "$RUNNER_TEMP/falsum-phase3c/foundation"
+            printf '%s  %s\n' \
+              f7de64b999acd3f735118fbe5999abf251fdf188f9797e3a4e36c54ee9e4dbbe foundation.json \
+              77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de foundation_engine.wasm \
+              0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6 foundation_lora_fp32.onnx \
+              67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456 tokenizer.json \
+                | sha256sum -c -
+          )
+      - name: Generate two bounded real official tokenizer input-ID arrays
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'tokenizers==0.22.2'
+          PYTHONPATH=src python -m falsum.phase3c_score_inputs \
+            --tokenizer "$RUNNER_TEMP/falsum-phase3c/foundation/tokenizer.json" \
+            --out "$RUNNER_TEMP/falsum-phase3c/reports/RESEARCH-QUESTION-TOKEN-INPUTS.json"
+      - name: Build the official pinned Telegraph Go adapterbuild executable
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd telegraph-kit
+          go build -o "$RUNNER_TEMP/falsum-phase3c/adapterbuild" ./cmd/adapterbuild
+      - name: Run REAL Foundation loading and BIT-IDENTICAL repeated score checks for TWO security answers
+        shell: bash
+        run: |
+          set -euo pipefail
+          foundation="$RUNNER_TEMP/falsum-phase3c/foundation"
+          report="$RUNNER_TEMP/falsum-phase3c/reports"
+          for name in cautious overclaim; do
+            mkdir -p "$report/$name"
+            "$RUNNER_TEMP/falsum-phase3c/adapterbuild" lora \
+              --intent SECURITY_REVIEW \
+              --package "$REAL_MODEL_PACKAGE" \
+              --foundation "$foundation/foundation.json" \
+              --foundation-onnx "$foundation/foundation_lora_fp32.onnx" \
+              --engine "$foundation/foundation_engine.wasm" \
+              --engine-hash 77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de \
+              --input "$report/SCORE-$name-TOKEN-INPUT.json" \
+              --out "$report/$name" \
+              > "$report/$name/OFFICIAL-REAL-FOUNDATION-SCORE.json" \
+              2> "$report/$name/OFFICIAL-ENGINE-LOG.txt"
+            python - "$report/$name/OFFICIAL-REAL-FOUNDATION-SCORE.json" <<'PY'
+          import json,sys
+          r=json.load(open(sys.argv[1]))
+          assert r["manifest"]["verification"]["loaded"] is True
+          assert r["manifest"]["verification"]["stage1"] is True
+          assert r["manifest"]["verification"]["repeats"]==2
+          assert r["score_hex"]
+          print("Actual official model-scoring smoke loaded Foundation and returned f32 bits:",r["score_hex"])
+          PY
+          done
+      - name: Independently verify both real node f32 results and preserve provisional research status
+        shell: bash
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/falsum-phase3c/reports"
+          PYTHONPATH=src python -m falsum.phase3c_score_report \
+            --inputs "$d/RESEARCH-QUESTION-TOKEN-INPUTS.json" \
+            --cautious "$d/cautious/OFFICIAL-REAL-FOUNDATION-SCORE.json" \
+            --overclaim "$d/overclaim/OFFICIAL-REAL-FOUNDATION-SCORE.json" \
+            --out "$d/REAL-FOUNDATION-SCORE-AND-REPEAT-EVIDENCE.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=Path(os.environ["RUNNER_TEMP"])/"falsum-phase3c/reports"
+          x=json.loads((d/"REAL-FOUNDATION-SCORE-AND-REPEAT-EVIDENCE.json").read_text())
+          assert x["official_node_runtime_foundation_loaded"] is True
+          assert x["repeat_bit_consistency_verified"] is True
+          assert x["actual_repeated_inferences"]==4
+          assert x["source_training_quality_certified"] is False
+          assert x["human_approved_labels"]==0
+          assert x["network_eligible"] is False and x["evaluator_registered"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### Phase 3C genuinely loaded new Foundation + existing real FALSUM LoRA\n\n")
+              f.write("Published exact SHA-verified ModernBERT Foundation ONNX, official WASI engine and canonical tokenizer loaded with original SHA-pinned trained SECURITY_REVIEW hybrid delta.\n\n")
+              f.write("Two explicit source-owned answers were scored twice each. The official runtime checked bit-for-bit repeatability. See the exact recorded f32 score bits in the research artifact.\n\n")
+              f.write("**Structural+runtime compatibility only. NOT independently adjudicated AppSec correctness, network hidden evaluation, eligible pairs, deployed executor or registration.**\n")
+          PY
+      - name: Always archive bounded research logs, not 600 MB Foundation and not old model weights
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3C-REAL-FOUNDATION-SCORE-RESEARCH-NOT-NETWORK-ELIGIBLE
+          path: ${{ runner.temp }}/falsum-phase3c/reports/
+          retention-days: 14
+          if-no-files-found: warn
