@@ -7,7 +7,8 @@ from pathlib import Path
 
 from falsum.phase2w_proof_gate import ProofError
 from falsum.phase2z_runtime_pilot import (
-    ALLOWED, CASE, VERSION, STATUS, validate_contract, reconcile_observations,
+    ALLOWED, CASE, VERSION, STATUS, _git_blob, _original_files,
+    validate_contract, reconcile_observations,
 )
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -103,6 +104,31 @@ class PilotTrustBoundaryTests(unittest.TestCase):
         d=spec();d["fixtures"][0]["expert_approved"]=True
         with self.assertRaises(ProofError):
             validate_contract(d)
+
+    def test_only_pinned_actual_git_blob_can_execute(self):
+        d=spec()
+        d["fixtures"][0]["source_git_blob"]="0"*40
+        with self.assertRaisesRegex(ProofError,"changed source fixture"):
+            validate_contract(d)
+        d=spec()
+        d["public_asset_git_blob"]="0"*40
+        with self.assertRaisesRegex(ProofError,"locked patched framework"):
+            validate_contract(d)
+
+    def test_tampered_source_rejected_before_any_import(self):
+        d=spec()
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td)
+            file=root/d["fixtures"][0]["path"]
+            file.parent.mkdir(parents=True)
+            file.write_text("print('untrusted execution attempt')\\n")
+            with self.assertRaisesRegex(ProofError,"Git blob changed"):
+                _original_files(root,[d["fixtures"][0]])
+
+    def test_git_blob_has_strict_content_hash(self):
+        sample=b"demo\\n"
+        self.assertEqual(len(_git_blob(sample)),40)
+        self.assertNotEqual(_git_blob(sample),_git_blob(sample+b"tampered"))
 
     def test_no_allowlist_source_overwrite(self):
         self.assertEqual(len(ALLOWED),3)
