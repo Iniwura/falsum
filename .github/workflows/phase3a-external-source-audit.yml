@@ -5,6 +5,8 @@ on:
       - 'src/falsum/phase3a_external_sources.py'
       - 'data/phase3a-external-source-cases.json'
       - 'tests/test_phase3a_external_sources.py'
+      - 'tests/test_phase3a_evidence.py'
+      - 'evidence/phase3a-2026-11-01.json'
       - '.github/workflows/phase3a-external-source-audit.yml'
   workflow_dispatch:
 permissions:
@@ -26,6 +28,7 @@ jobs:
         run: |
           set -euo pipefail
           PYTHONPATH=src python -m unittest discover -s tests -p test_phase3a_external_sources.py -v
+          PYTHONPATH=src python -m unittest discover -s tests -p test_phase3a_evidence.py -v
           PYTHONPATH=src python -m unittest discover -s tests -p test_phase2z_runtime_pilot.py -v
           PYTHONPATH=src python -m unittest discover -s tests -p test_phase2z_evidence.py -v
       - name: Fetch exactly three independent external Python source files by full immutable upstream commit
