@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "status": "RESEARCH_SOURCE_PINNED_APPLICABILITY_RULES_NOT_SECURITY_CERTIFICATION",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "research_only": true,
+  "independent_human_reviews": 0,
+  "network_eligible": false,
+  "source_verification": "Pinned provenance only; separate CI upstream source-and-test replay required. Rules and condition explanations AI authored, not expert vetted.",
+  "rules": [
+    {
+      "case_id": "real-requests-proxy-auth",
+      "repository": "psf/requests",
+      "source_commit": "74ea7cf7a6a27a4eeb2ae24e162bcc942a6706d5",
+      "source_blob": "dbcf2a7b0ee2898b72714b756e4b27fbbad4beab",
+      "source_path": "requests/sessions.py",
+      "source_advisory": "GHSA-j8r2-6x86-q33q",
+      "source_kind": "historical-source-fix",
+      "requirements": [
+        {
+          "id": "credentialed_proxy",
+          "explanation": "Proxy URL supplies an authenticated user and password"
+        },
+        {
+          "id": "https_redirect",
+          "explanation": "A request undergoes the affected HTTPS redirect path"
+        }
+      ]
+    },
+    {
+      "case_id": "real-aiohttp-static-traversal",
+      "repository": "aio-libs/aiohttp",
+      "source_commit": "1c335944d6a8b1298baf179b7c0b3069f10c514b",
+      "source_blob": "a05ac6cc3de4964a8ac6f23e8d02bf70d995af9e",
+      "source_path": "aiohttp/web_urldispatcher.py",
+      "source_advisory": "GHSA-5h86-8mv2-jq9f",
+      "source_kind": "historical-source-fix",
+      "requirements": [
+        {
+          "id": "follow_symlinks_enabled",
+          "explanation": "The reachable static route is configured follow_symlinks=True"
+        },
+        {
+          "id": "remote_traversal_path",
+          "explanation": "Untrusted clients can submit traversal-bearing static paths"
+        }
+      ]
+    },
+    {
+      "case_id": "real-jinja-attr-sandbox",
+      "repository": "pallets/jinja",
+      "source_commit": "065334d1ee5b7210e1a0a93c37238c86858f2af7",
+      "source_blob": "2bcba4fbd3c660edb1166fcad6ef6fc9a4f6a1e5",
+      "source_path": "src/jinja2/filters.py",
+      "source_advisory": "GHSA-cpwx-vrp4-4pq7",
+      "source_kind": "historical-source-fix",
+      "requirements": [
+        {
+          "id": "sandboxed_render",
+          "explanation": "The affected Jinja sandbox attr filter is used"
+        },
+        {
+          "id": "attacker_template_source",
+          "explanation": "An untrusted party controls actual template source, not only variable values"
+        }
+      ]
+    },
+    {
+      "case_id": "real-axios-absolute-baseurl",
+      "repository": "axios/axios",
+      "source_commit": "02c3c69ced0f8fd86407c23203835892313d7fde",
+      "source_blob": "553cffcb5e26bebe93577adae7c1f73f6cd0f293",
+      "source_path": "lib/core/buildFullPath.js",
+      "source_advisory": "GHSA-jr5f-v2jv-69x6",
+      "source_kind": "historical-source-fix",
+      "requirements": [
+        {
+          "id": "server_request_from_input",
+          "explanation": "The backend makes HTTP requests through the affected client"
+        },
+        {
+          "id": "untrusted_absolute_url",
+          "explanation": "An untrusted party can provide an absolute target URL"
+        }
+      ]
+    },
+    {
+      "case_id": "real-starlette-commonprefix-traversal",
+      "repository": "Kludex/starlette",
+      "source_commit": "1797de464124b090f10cf570441e8292936d63e3",
+      "source_blob": "4c856063c2945d93f1b79505f9d8de7919b947aa",
+      "source_path": "starlette/staticfiles.py",
+      "source_advisory": "GHSA-v5gw-mw7f-84px",
+      "source_kind": "historical-source-fix",
+      "requirements": [
+        {
+          "id": "exposed_staticfiles_route",
+          "explanation": "An untrusted request can reach the affected StaticFiles lookup"
+        },
+        {
+          "id": "readable_same_prefix_sibling",
+          "explanation": "A readable sibling name shares the static root lexical prefix"
+        }
+      ]
+    },
+    {
+      "case_id": "real-urllib3-redirect-header-case",
+      "repository": "urllib3/urllib3",
+      "source_commit": "adb358f8e06865406d1f05e581a16cbea2136fbc",
+      "source_blob": "a13149b1bce41d543b272789557d8c427e7bdded",
+      "source_path": "src/urllib3/poolmanager.py",
+      "source_advisory": "GHSA-gwvm-45gx-3cf8",
+      "source_kind": "historical-source-fix",
+      "requirements": [
+        {
+          "id": "credential_header_casing",
+          "explanation": "An affected-casing authorization header is passed to PoolManager"
+        },
+        {
+          "id": "cross_origin_redirect_followed",
+          "explanation": "The caller follows a cross-host redirect"
+        }
+      ]
+    },
+    {
+      "case_id": "real-django-intcomma-recursive-dos",
+      "repository": "django/django",
+      "source_commit": "55519d6cf8998fe4c8f5c8abffc2b10a7c3d14e9",
+      "source_blob": "2c26f8944a78da3cc378196d185a34cfd3e17d2c",
+      "source_path": "django/contrib/humanize/templatetags/humanize.py",
+      "source_advisory": "GHSA-xxj9-f6rv-m3x4",
+      "source_kind": "historical-source-fix",
+      "requirements": [
+        {
+          "id": "intcomma_on_untrusted",
+          "explanation": "The affected intcomma filter receives user-controlled numeric text"
+        },
+        {
+          "id": "unbounded_numeric_length",
+          "explanation": "That input can exceed effective numeric length bounds"
+        }
+      ]
+    },
+    {
+      "case_id": "real-express-malformed-redirect-host",
+      "repository": "expressjs/express",
+      "source_commit": "0b746953c4bd8e377123527db11f9cd866e39f94",
+      "source_blob": "dd7b3c8201d24c47a537b85f6615a967392f8691",
+      "source_path": "lib/response.js",
+      "source_advisory": "GHSA-rv95-896h-c2vc",
+      "source_kind": "historical-source-fix",
+      "requirements": [
+        {
+          "id": "client_redirect_target",
+          "explanation": "The requester controls a redirect destination"
+        },
+        {
+          "id": "inconsistent_url_validation",
+          "explanation": "The application host allowlist and Location encoding disagree on malformed URL handling"
+        }
+      ]
+    },
+    {
+      "case_id": "fresh-tornado-cookie-attribute",
+      "repository": "tornadoweb/tornado",
+      "source_commit": "ab4953f1262636343bcc1875117f7a8c93d10509",
+      "source_blob": "17ace9b5ceaacc184f3aabb0f8a8ee6c54860d72",
+      "source_path": "tornado/web.py",
+      "source_advisory": "GHSA-c6v4-qj2h-f748",
+      "source_kind": "fresh-public-transfer",
+      "requirements": [
+        {
+          "id": "set_cookie_max_age",
+          "explanation": "The affected set_cookie max_age path is executed"
+        },
+        {
+          "id": "untrusted_noninteger_max_age",
+          "explanation": "An attacker can provide a non-integer cookie max_age value"
+        }
+      ]
+    },
+    {
+      "case_id": "fresh-undici-chunked-dump",
+      "repository": "nodejs/undici",
+      "source_commit": "6d583124e7cf60b640097d64144ed633cc450584",
+      "source_blob": "09b57f2163fb327e5dc488e619d2344527239f10",
+      "source_path": "lib/interceptor/dump.js",
+      "source_advisory": "GHSA-2gqq-gqf2-x968",
+      "source_kind": "fresh-public-transfer",
+      "requirements": [
+        {
+          "id": "dump_interceptor_used",
+          "explanation": "The affected Undici dump interceptor consumes the response"
+        },
+        {
+          "id": "untrusted_oversize_stream",
+          "explanation": "An untrusted streamed response can exceed the configured maxSize"
+        }
+      ]
+    },
+    {
+      "case_id": "fresh-websockets-deflate-limit",
+      "repository": "python-websockets/websockets",
+      "source_commit": "b6a25ceb3555d0ba69e5961b8d7616e4c1aecb2b",
+      "source_blob": "7ca911a2da562ff675a3fc084c9e4fc7eb61dbb8",
+      "source_path": "websockets/extensions/permessage_deflate.py",
+      "source_advisory": null,
+      "source_kind": "fresh-public-transfer",
+      "requirements": [
+        {
+          "id": "compression_negotiated",
+          "explanation": "The affected permessage-deflate decoder is negotiated"
+        },
+        {
+          "id": "untrusted_compressed_frame",
+          "explanation": "Untrusted peers can send compressed frames into that decoder"
+        }
+      ]
+    }
+  ]
+}
