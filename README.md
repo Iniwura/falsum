@@ -8,6 +8,16 @@ An evidence-grounded security evaluation research project for [Telegraph Season 
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
 
+## Phase 2W: evidence-first, source-bound application precondition checks
+
+The previous LoRA checkpoints failed to generalize security-context judgments, so we built an **application evidence integrity + applicability gate**, rather than repeating the same reward-model training. The new [Phase 2W rulebook](data/phase2w-applicability-rules.json) names **22 explicit required conditions across 11 real Git-pinned upstream security fixes**. A [file-hash and citation verifier](src/falsum/phase2w_proof_gate.py) accepts source-bound app evidence and returns one of four abstention-friendly states: **conditional candidate / contradicted precondition / insufficient evidence / conflicting claims**.
+
+A [real local application capture command](src/falsum/phase2w_capture.py) extracts SHA-256, actual file quotes and exact line ranges from developer-specified code without modifying the app. It rejects altered files, symlinks, escaping paths, forged quotes and unknown conditions. **Matching code bytes is not independent semantic validation**, and the gate does not report confirmed exploits or eligible training labels.
+
+[Successful Phase 2W CI](https://github.com/Iniwura/falsum/actions/runs/41286462954) passed 46 adversarial/isolation/source tests, a 44-case synthetic decision study (11 of each four statuses), a working CLI capture of application file evidence, and reverified 16 authentic Git pre/post source/test transitions; the other three source projects were already checked in [Phase 2U](https://github.com/Iniwura/falsum/actions/runs/41284227213). No real customer application was security-audited.
+
+[Phase 2W methodology and exact CLI usage](docs/PHASE2W.md). **0 human-reviewed findings, 0 real-world exploit confirmations, 0 accepted Anjoman rows and 0 live evaluator registrations.** Next: cautiously derive *machine-observed* facts for narrowly scoped source patterns, rather than trusting an asserted fact because its quote has a valid SHA.
+
 ## Phase 2V: custom context-coupled gradient training, no transfer yet
 
 We implemented and ran an **actually different, differentiable training objective** on the real ModernBERT LoRA model. Instead of independently preferring a fixed security answer, the model trains on *both* conflicting deployment contexts for the same original source, plus a contrastive margin and an answer-only penalty. Real PyTorch gradient tests, pinned input adapter, original source/patch replay and complete token limit all passed. [Actual Phase 2V run](https://github.com/Iniwura/falsum/actions/runs/41285552033).
