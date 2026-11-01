@@ -71,7 +71,16 @@ def _store_count(tree:ast.Module, name:str)->int:
 
 
 def _dynamic_global(tree:ast.Module)->bool:
-    return any(isinstance(n,(ast.Global,ast.Nonlocal,ast.NamedExpr)) for n in ast.walk(tree))
+    for n in ast.walk(tree):
+        if isinstance(n,(ast.Global,ast.Nonlocal,ast.NamedExpr)):
+            return True
+        if isinstance(n,ast.Attribute) and isinstance(n.ctx,(ast.Store,ast.Del)):
+            return True  # conservative: monkeypatching any module/class attribute
+        if (isinstance(n,ast.Call) and isinstance(n.func,ast.Name)
+                and n.func.id in {"exec","eval","setattr","delattr",
+                                  "globals","locals","vars","__import__"}):
+            return True  # dynamic rebinding cannot be resolved statically
+    return False
 
 
 def _identity(call:ast.Call,case_id:str,bindings:dict[str,str],app_vars:set[str],tornado_self:str|None)->tuple[str,str]:
