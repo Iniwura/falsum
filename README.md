@@ -2,11 +2,21 @@
 
 **Every claim stands trial.**
 
-**Current research checkpoint (1 November 2026):** The actual trained SECURITY_REVIEW LoRA now **loads, scores and repeats deterministically** on Telegraph's official shared Foundation runtime, but Phase 3D found **0/2 correct context-reversal families and 2/4 matching provisional deployment judgments** across 16 real scores. Model release is blocked. Our source evidence tools, external-application studies, package and runtime are verified; independent security judgment accuracy, adjudicated labels, Anjoman-eligible rows, evaluator hosting and registration are not. See [Phase 3D negative result](docs/PHASE3D.md), [Phase 3C scoring proof](docs/PHASE3C.md) and [Phase 2V model-training analysis](docs/PHASE2V.md).
+**Current research checkpoint (1 November 2026):** Phase 3E has built **five Git-pinned authentic outside-application security review questions** and a public reviewer-intake workflow (50 focused tests passing), making evaluator material a second hackathon path alongside the compatible ModernBERT LoRA. However, Phase 3D showed **0/2 context preference reversals** on the actual model. All review questions remain unadjudicated; zero expert-reviewed labels, zero accepted Anjoman rows and no evaluator registration are claimed. The current checkpoint remains blocked from release. See [Phase 3E reviewer packets](docs/PHASE3E.md), [Phase 3D model failure](docs/PHASE3D.md) and [Phase 3C loaded inference](docs/PHASE3C.md).
 
 An evidence-grounded security evaluation research project for [Telegraph Season II](https://hackathon.telegraphprotocol.com/). FALSUM targets the `SECURITY_REVIEW_GENERAL` child Intent and the `SECURITY_REVIEW` evaluator family, as described by [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96).
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
+
+## Phase 3E: build an independent, evidence-backed evaluator review set
+
+With our Phase 3D model failing **0/2** counterfactual reversal families, we now have a **second competitive Evaluators-track path**: valuable source-backed evaluation material that can be independently reviewed even before a stronger LoRA is ready. Telegraph's Season II rules explicitly permit evaluation **material, an adapter, or both**. Model quality remains our main open problem.
+
+The [Phase 3E reviewer packet builder](src/falsum/phase3e_review_packets.py) re-verifies external source commits, exact Git blob hashes, Python AST call sites and dependency declarations from **Perspective, NLWeb and Maubot** to produce **five research review questions**, each with pinned source URLs, separate requirement profiles and two **unadjudicated** candidate answers. The [review intake](src/falsum/phase3e_review_intake.py) and [public GitHub reviewer form](.github/ISSUE_TEMPLATE/falsum-security-review.yml) support independent feedback and disagreement tracking but **never silently count a comment as a verified expert label**.
+
+[Actual passing 50-test Phase 3E CI](https://github.com/Iniwura/falsum/actions/runs/41351281574) · [Complete how-to and reviewer packet descriptions](docs/PHASE3E.md) · [Public artifact with all five review questions and blank reviewer intake](https://github.com/Iniwura/falsum/actions/runs/41351281574/artifacts/13101112320) · [Permanent provenance and limitations](evidence/phase3e-2026-11-01.json).
+
+**Currently five prepared cases, zero independently validated labels, zero eligible Anjoman pairs, no registered evaluator, and no new trained-model improvement.** We need genuinely independent security feedback and additional CVE families before evaluating new model training, then verify a disjoint blind holdout. Do not use the already-observed Phase 3D diagnostics as hidden quality evidence.
 
 ## Phase 3D: actual loaded-model counterfactual failure, do not register
 
