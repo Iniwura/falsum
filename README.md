@@ -2,11 +2,21 @@
 
 **Every claim stands trial.**
 
-**Current research checkpoint (1 November 2026):** FALSUM has source-bound evidence checking, independent narrow Python AST facts, and import-declaration-aware assertion review. Phase 2Y passed 89 focused tests and correctly abstained on an unbound fake framework call. Historical real reward-model training remains insufficient for reliable deployment-context generalization. No expert-adjudicated security accuracy, accepted Anjoman contributions or registered evaluator are claimed. See [Phase 2Y](docs/PHASE2Y.md) and [the model postmortem](docs/PHASE2V.md).
+**Current research checkpoint (1 November 2026):** The Phase 2Z pipeline verified three allowlisted example applications against **real pinned aiohttp 3.10.11**, including static-to-runtime route checks and six localhost HTTP requests; 55 focused tests passed. This is evidence-plumbing proof, not CVE exploitation or independently validated real-application vulnerability accuracy. No approved security labels, eligible Anjoman evaluations or live evaluator registrations. See [Phase 2Z](docs/PHASE2Z.md) and the [reward-model generalization postmortem](docs/PHASE2V.md).
 
 An evidence-grounded security evaluation research project for [Telegraph Season II](https://hackathon.telegraphprotocol.com/). FALSUM targets the `SECURITY_REVIEW_GENERAL` child Intent and the `SECURITY_REVIEW` evaluator family, as described by [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96).
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
+
+## Phase 2Z: actual patched Python framework runtime evidence
+
+FALSUM's evidence engine now has a real **pinned aiohttp 3.10.11 runtime integration**, not just synthetic Python AST tests. It checks exact tracked source Git blob hashes **before executing** three controlled application fixtures, compares Phase 2Y static call syntax against the actual registered \`aiohttp.web_urldispatcher.StaticResource\` flag, and exercises six ordinary HTTP requests over localhost. Two literal values matched runtime; a variable-controlled value remained appropriately **UNDETERMINED** statically while actual runtime resolved it.
+
+[Actual Phase 2Z run](https://github.com/Iniwura/falsum/actions/runs/41289904581) passed **55/55 focused tests** and all six loopback requests. The historical aiohttp traversal advisory was fixed in 3.9.2; this pilot uses a later **patched** version. There is **no reproduction of that CVE**, no independently sourced external application, no security accuracy score and no confirmed exploit.
+
+[Phase 2Z technical report and local reproduction](docs/PHASE2Z.md) · [Permanent exact execution evidence](evidence/phase2z-2026-11-01.json).
+
+**FALSUM is research-only:** zero independently reviewed AppSec labels, zero accepted Anjoman network rows, and no registered evaluator. The next task is an independently reviewable, consented outside application with a pinned source revision and isolated runtime checks.
 
 ## Phase 2Y: framework import bindings and guarded claim reconciliation
 
