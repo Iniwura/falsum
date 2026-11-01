@@ -4,6 +4,8 @@ on:
     paths:
       - 'src/falsum/phase2z_runtime_pilot.py'
       - 'tests/test_phase2z_runtime_pilot.py'
+      - 'tests/test_phase2z_evidence.py'
+      - 'evidence/phase2z-2026-11-01.json'
       - 'examples/phase2z_runtime_pilot/**'
       - 'data/phase2z-aiohttp-pilot-contract.json'
       - '.github/workflows/phase2z-aiohttp-runtime-pilot.yml'
@@ -28,6 +30,7 @@ jobs:
         run: |
           set -euo pipefail
           PYTHONPATH=src python -m unittest discover -s tests -p test_phase2z_runtime_pilot.py -v
+          PYTHONPATH=src python -m unittest discover -s tests -p test_phase2z_evidence.py -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase2y_bindings.py -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase2y_claim_guard.py -v
       - name: Install exact patched aiohttp 3.10.11 release and record full resolved dependencies
