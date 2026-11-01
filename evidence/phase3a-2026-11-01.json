@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3A_THREE_AUTHENTIC_EXTERNAL_APP_FILES_VERIFIED_SOURCE_ONLY",
+  "date": "2026-11-01",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "repo": "https://github.com/Iniwura/falsum",
+  "ci_run": "https://github.com/Iniwura/falsum/actions/runs/41290675846",
+  "artifact": "https://github.com/Iniwura/falsum/actions/runs/41290675846/artifacts/13076967118",
+  "artifact_id": 13076967118,
+  "studies": [
+    {
+      "repository": "perspective-dev/perspective",
+      "commit": "444865accd46bcfdeb552960ce4f63fe8286de42",
+      "path": "examples/python-aiohttp/server.py",
+      "expected_git_blob_sha1": "6025af225ed0c9c6cfdf0c81abc7a05c8dc9b34b",
+      "calls": [
+        {
+          "line": 47,
+          "syntax": "EXPLICIT_TRUE"
+        },
+        {
+          "line": 48,
+          "syntax": "OMITTED_OPTION"
+        }
+      ]
+    },
+    {
+      "repository": "nlweb-ai/NLWeb",
+      "commit": "b423f15d9aeaa023ce75993ac9deed2354597043",
+      "path": "AskAgent/python/webserver/routes/static.py",
+      "expected_git_blob_sha1": "455e333e12de498bf45bec4b8b53541b22431233",
+      "calls": [
+        {
+          "line": 45,
+          "syntax": "EXPLICIT_FALSE"
+        },
+        {
+          "line": 56,
+          "syntax": "EXPLICIT_FALSE"
+        }
+      ]
+    },
+    {
+      "repository": "maubot/maubot",
+      "commit": "f20825b5e3031a89eb5b2edea7f6f7726ada9a10",
+      "path": "maubot/server.py",
+      "expected_git_blob_sha1": "4ba07eacddda99e4f17b1649f6e9863399e458a8",
+      "calls": [
+        {
+          "line": 112,
+          "syntax": "OMITTED_OPTION"
+        }
+      ]
+    }
+  ],
+  "source_verification": {
+    "unique_outside_project_repositories": 3,
+    "exact_full_sha_commits_pinned": 3,
+    "exact_git_blob_bytes_verified": 3,
+    "full_file_sha256_reported_for_each": true,
+    "source_raw_download_host": "raw.githubusercontent.com",
+    "ast_parsing_successful": 3,
+    "source_call_sites": 5,
+    "explicit_true": 1,
+    "explicit_false": 2,
+    "omitted_option_unresolved": 2,
+    "unaffected_source_code_executed": 0,
+    "third_party_source_copied_to_artifact": false,
+    "code_under_review_imported_or_executed": false
+  },
+  "tests": {
+    "phase3a_adversarial_offline": 15,
+    "phase2z_runtime_contract": 15,
+    "phase2z_evidence_integrity": 3,
+    "total_focused": 33,
+    "initial_external_source_ci_conclusion": "success",
+    "foundation_workflow_conclusion": "success",
+    "official_diagnostic_data_gate_conclusion": "success"
+  },
+  "trust_boundary": {
+    "affected_dependency_versions_ascertained": false,
+    "real_external_application_executed": false,
+    "full_third_party_application_audited": false,
+    "no_user_code_execution_authorized": true,
+    "real_aiohttp_runtime_execution_previously_only_controlled_falsum_fixtures": true,
+    "external_app_reachability_proven": false,
+    "external_app_vulnerability_confirmed": 0,
+    "independent_appsec_human_labels": 0,
+    "accepted_anjoman_evaluation_rows": 0,
+    "live_telegraph_evaluator_registered": false,
+    "network_eligible": false
+  },
+  "conclusion": "Three unrelated public projects contain authentic aiohttp static route call sites with explicit True, explicit False, and omitted keyword. Exact Git blob provenance and local AST parsing verified. All five applicability questions remain unresolved without dependency version and runtime exposure evidence; no exploit claims.",
+  "next": "Independently pin each application's dependency declaration at the same upstream revision; differentiate declared constraints from actually installed/deployed versions, and pursue authorized isolated behavioral checks before human review."
+}
