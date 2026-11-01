@@ -59,19 +59,57 @@ jobs:
             'https://github.com/telegraphprotocol/telegraph-foundation/releases/download/modernbert-base-lora16-v1/foundation.json' \
             -o "$RUNNER_TEMP/falsum-3b/foundation.json"
           echo "f7de64b999acd3f735118fbe5999abf251fdf188f9797e3a4e36c54ee9e4dbbe  $RUNNER_TEMP/falsum-3b/foundation.json" | sha256sum -c -
+          curl --fail --location --silent --show-error --retry 3 \
+            'https://github.com/telegraphprotocol/telegraph-foundation/releases/download/modernbert-base-lora16-v1/tokenizer.json' \
+            -o "$RUNNER_TEMP/falsum-3b/official-tokenizer.json"
+          echo "67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456  $RUNNER_TEMP/falsum-3b/official-tokenizer.json" | sha256sum -c -
       - name: Install CPU-only dependencies needed for OFFICIAL delta export
         shell: bash
         run: |
           set -euo pipefail
           python -m pip install 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
           python -m pip install 'transformers>=4.48,<5' 'peft>=0.14,<1' 'numpy>=1.26,<3' 'safetensors>=0.4.5'
+      - name: Semantic tokenizer equality gate before preparing export-only copy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os,hashlib,shutil
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"falsum-3b"
+          old=list((root/"old-research-checkpoint").rglob("adapter_config.json"))
+          assert len(old)==1, "exactly one original trained adapter expected"
+          source=old[0].parent
+          original=source/"tokenizer.json"
+          official=root/"official-tokenizer.json"
+          before=json.loads(original.read_text(encoding="utf-8"))
+          current=json.loads(official.read_text(encoding="utf-8"))
+          if before!=current:
+              # NEVER bypass a genuinely changed tokenizer mapping/behavior.
+              disagreements=[k for k in sorted(set(before)|set(current)) if before.get(k)!=current.get(k)]
+              print("TOKENIZER SEMANTIC MISMATCH:",disagreements,flush=True)
+              raise SystemExit("Old and current tokenizer JSON meaning differ; checkpoint cannot safely export without compatibility work")
+          copy=root/"export-only-model"
+          shutil.copytree(source,copy)
+          shutil.copy2(official,copy/"tokenizer.json")
+          assert json.loads((copy/"tokenizer.json").read_text())==before
+          details={
+              "old_checkpoint_tokenizer_sha256":hashlib.sha256(original.read_bytes()).hexdigest(),
+              "node_tokenizer_sha256":hashlib.sha256(official.read_bytes()).hexdigest(),
+              "semantic_tokenizer_json_comparison":"EXACT_PARSED_JSON_EQUALITY",
+              "original_checkpoint_bytes_unchanged":True,
+              "canonical_tokenizer_substituted_in_separate_export_only_copy":True,
+              "research_only":True,"independent_security_accuracy_verified":False,
+              "network_eligible":False,
+          }
+          (root/"out"/"TOKENIZER-SEMANTIC-COMPATIBILITY.json").write_text(json.dumps(details,indent=2)+"\n")
+          PY
       - name: Export actual trained LoRA into 2026-11-01 node delta package (no new training)
         shell: bash
         run: |
           set -euo pipefail
-          adapter=$(find "$RUNNER_TEMP/falsum-3b/old-research-checkpoint" -name adapter_config.json -type f -print -quit)
-          if [ -z "$adapter" ]; then echo "Missing exact saved old LoRA"; exit 1; fi
-          adapter=$(dirname "$adapter")
+          adapter="$RUNNER_TEMP/falsum-3b/export-only-model"
+          test -s "$adapter/adapter_model.safetensors"
           PYTHONPATH=telegraph-kit python -m float_runtime.export_adapter \
             --adapter "$adapter" --intent SECURITY_REVIEW --class judgment \
             --foundation "$RUNNER_TEMP/falsum-3b/foundation.json" \
