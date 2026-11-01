@@ -3,9 +3,9 @@
   "status": "PHASE2Z_CONTROLLED_REAL_AIOHTTP_RUNTIME_RESEARCH_ONLY",
   "date": "2026-11-01",
   "intent": "SECURITY_REVIEW_GENERAL",
-  "actual_verified_run": "https://github.com/Iniwura/falsum/actions/runs/41289904581",
-  "artifact_url": "https://github.com/Iniwura/falsum/actions/runs/41289904581/artifacts/13076666791",
-  "artifact_id": 13076666791,
+  "actual_verified_run": "https://github.com/Iniwura/falsum/actions/runs/41290076124",
+  "artifact_url": "https://github.com/Iniwura/falsum/actions/runs/41290076124/artifacts/13077016302",
+  "artifact_id": 13077016302,
   "historical_advisory": "GHSA-5h86-8mv2-jq9f",
   "historical_cve": "CVE-2024-23334",
   "advisory_fixed_release": "3.9.2",
@@ -58,9 +58,10 @@
     "pilot_fail_closed_contract_tests": 15,
     "phase2y_import_tests": 28,
     "phase2y_claim_guard_tests": 12,
-    "total_focused_tests_passed": 55,
+    "total_focused_tests_passed": 58,
     "ci_status": "success",
-    "previous_adversarial_schema_bypass_discovered_and_fixed": true
+    "previous_adversarial_schema_bypass_discovered_and_fixed": true,
+    "pilot_evidence_integrity_tests": 3
   },
   "limitations": {
     "external_third_party_apps_tested": 0,
