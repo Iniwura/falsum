@@ -37,6 +37,31 @@ For each file, it downloads at the full immutable Git commit, checks complete co
 
 [Temporary verified external-source report artifact](https://github.com/Iniwura/falsum/actions/runs/41290675846/artifacts/13076967118). It records hashes and AST descriptors only, without external projects' full source.
 
+## Added: authentic upstream dependency declaration check
+
+The [same outside application commits](../data/phase3a-external-source-cases.json) also provide actual dependency declarations. FALSUM now fetches four independently pinned **requirement files**, compares each full file to its upstream Git blob SHA-1, parses Python requirements or \`pyproject.toml\` with the standard library, and evaluates the declared version range against the known aiohttp 3.9.2 fix threshold. It does **not** invoke \`setup.py\`, install a dependency, import third-party code or infer which requirement profile was deployed.
+
+| Independent project requirement profile | Declared aiohttp requirement | Historical CVE-2024-23334 range |
+| --- | --- | --- |
+| [Perspective Python optional aiohttp](https://github.com/perspective-dev/perspective/blob/444865accd46bcfdeb552960ce4f63fe8286de42/rust/perspective-python/pyproject.toml) | \`aiohttp>=2,<4\` | **Permits** historically affected versions |
+| [Maubot base requirements](https://github.com/maubot/maubot/blob/f20825b5e3031a89eb5b2edea7f6f7726ada9a10/requirements.txt) | \`aiohttp>=3,<4\` | **Permits** historically affected versions |
+| [NLWeb AskAgent Python requirements](https://github.com/nlweb-ai/NLWeb/blob/b423f15d9aeaa023ce75993ac9deed2354597043/AskAgent/python/requirements.txt) | \`aiohttp>=3.13.5\` | **Excludes** the historical affected range for this profile |
+| [NLWeb alternate Azure requirements](https://github.com/nlweb-ai/NLWeb/blob/b423f15d9aeaa023ce75993ac9deed2354597043/requirements_azure.txt) | \`aiohttp==3.13.3\` | **Excludes** the historical affected range for this profile |
+
+**Do not infer an actual vulnerability from a permissive range.** It might resolve to a patched release. Likewise, the two NLWeb files represent *different installation profiles*, so differing requirements do not prove a broken install. They do not prove which deployed environment, if any, used either file. Independent dependency **declarations** are substantially better evidence than guessing a framework version from a source call, but they are not installed-version telemetry or independently adjudicated AppSec correctness.
+
+[Successful expanded CI run 41291177670](https://github.com/Iniwura/falsum/actions/runs/41291177670) verified the three previous outside application source files **and all four upstream dependency file Git blob hashes**. It passed **47 focused tests** (15 external AST, 3 evidence-integrity, 11 dependency-regression, 15 prior runtime-contract and 3 prior runtime-evidence checks). No external application was executed.
+
+[Machine-readable four-manifest evidence](../evidence/phase3a-declared-dependencies-2026-11-01.json) · [Checked manifest identities](../data/phase3a-dependency-manifests.json) · [Manifest parser](../src/falsum/phase3a_dependency_manifests.py).
+
+Reproduce the declarations separately from the source call analysis:
+
+~~~bash
+PYTHONPATH=src python -m falsum.phase3a_dependency_manifests \
+  --contract data/phase3a-dependency-manifests.json \
+  --out /tmp/falsum-declared-aiohttp-ranges.json
+~~~
+
 ## Run it again
 
 From the FALSUM checkout with Python 3.11 or newer (network access is only for retrieving the three pinned, public GitHub source files):
