@@ -1,0 +1,183 @@
+name: Phase 2V - REAL paired-context LoRA gradient experiment (not eligible)
+on:
+  push:
+    paths:
+      - 'src/falsum/phase2v_coupled.py'
+      - 'src/falsum/phase2v_transfer_eval.py'
+      - 'tests/test_phase2v_coupled.py'
+      - '.github/workflows/phase2v-coupled-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  coupled-model-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    env:
+      PYTHONUNBUFFERED: '1'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '4'
+      MKL_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Configure runner output safely
+        shell: bash
+        run: |
+          echo "PHASE_DIR=$RUNNER_TEMP/falsum-phase2v" >> "$GITHUB_ENV"
+          echo "MODEL_DIR=$RUNNER_TEMP/falsum-phase2v-adapter" >> "$GITHUB_ENV"
+      - name: Fail closed on objective, direction, source separation and fake human labels
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2v_coupled.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2u_context_transfer.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2u_fresh_transfer.py' -v
+      - name: Retrieve actual Phase2U checkpoint AND exact source-training identity
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE2U-CONTEXT-LORA-RESEARCH
+          run-id: 41283929744
+          repository: Iniwura/falsum
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: ${{ runner.temp }}/actual-phase2u
+      - name: Checkout pinned official Telegraph model scorer, tokenizer and backbone contract
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Install real CPU ModernBERT tokenizer, PyTorch and PEFT
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r telegraph-kit/requirements.txt 'transformers>=4.48,<5' 'numpy>=1.26,<3' 'peft>=0.14,<1'
+          mkdir -p "$PHASE_DIR"
+          python -m pip freeze > "$PHASE_DIR/ACTUAL-DEPENDENCIES.txt"
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2v_coupled.py' -v
+      - name: Reproduce exact four public training source commits and retain AI status
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.real_fix_corpus \
+            --queue data/real-fix-train-candidates.json \
+            --out "$PHASE_DIR/TRAIN-SOURCE-EVIDENCE.json" \
+            --reviewer-out "$PHASE_DIR/TRAIN-SOURCE-QUESTIONS.json"
+          PYTHONPATH=src python -m falsum.real_fix_replay \
+            --evidence "$PHASE_DIR/TRAIN-SOURCE-EVIDENCE.json" \
+            --out "$PHASE_DIR/TRAIN-EXACT-8-FILE-REPLAYS.json"
+          PYTHONPATH=src python -m falsum.ai_review_benchmark \
+            --specs data/ai-review-train-candidate-drafts.json \
+            --queue data/real-fix-train-candidates.json \
+            --evidence "$PHASE_DIR/TRAIN-SOURCE-EVIDENCE.json" \
+            --questions-out "$PHASE_DIR/TRAIN-MODEL-FACING-QUESTIONS.json" \
+            --key-out "$PHASE_DIR/TRAIN-AI-PROPOSED-KEY.json" \
+            --token-out "$PHASE_DIR/TRAIN-REAL-512-TOKEN-REPORT.json"
+      - name: Execute real coupled-context PEFT gradient updates
+        shell: bash
+        run: |
+          set -euo pipefail
+          find_one() {
+            local matches
+            matches="$(find "$1" -type f -name "$2")"
+            if [[ -z "$matches" || "$(printf '%s\n' "$matches" | wc -l)" -ne 1 ]]; then
+              echo "Expected unique file: $2" >&2
+              exit 1
+            fi
+            printf '%s' "$matches"
+          }
+          input_adapter="$(dirname "$(find_one "$RUNNER_TEMP/actual-phase2u" adapter_config.json)")"
+          original_manifest="$(find_one "$RUNNER_TEMP/actual-phase2u" PHASE2U-TRAIN-MANIFEST.json)"
+          test -s "$input_adapter/adapter_model.safetensors"
+          PYTHONPATH="$GITHUB_WORKSPACE/src:$GITHUB_WORKSPACE/telegraph-kit" \
+            python -m falsum.phase2v_coupled \
+              --public "$PHASE_DIR/TRAIN-MODEL-FACING-QUESTIONS.json" \
+              --key "$PHASE_DIR/TRAIN-AI-PROPOSED-KEY.json" \
+              --training-manifest "$original_manifest" \
+              --train-queue data/real-fix-train-candidates.json \
+              --old-queue data/real-fix-queue.json \
+              --prior data/advisory-queue.json \
+              --adapter "$input_adapter" \
+              --out "$MODEL_DIR" \
+              --report "$PHASE_DIR/REAL-COUPLED-TRAINING-REPORT.json" \
+              --steps 16 --lr 0.00012 --target 0.25 --contrast-weight 0.6 \
+              --neutral-weight 0.1 --seed 23 \
+              2>&1 | tee "$PHASE_DIR/ACTUAL-COUPLED-OPTIMIZATION.log"
+          test -s "$MODEL_DIR/adapter_model.safetensors"
+      - name: Reproduce THREE separate projects' complete source and regression repair bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase2u_fresh_transfer \
+            --spec data/phase2u-fresh-transfer-cases.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --old-queue data/real-fix-queue.json \
+            --prior-advisories data/advisory-queue.json \
+            --public-out "$PHASE_DIR/FRESH-MODEL-FACING-QUESTIONS.json" \
+            --key-out "$PHASE_DIR/FRESH-SEPARATE-AI-KEY.json" \
+            --token-out "$PHASE_DIR/FRESH-ACTUAL-MODEL-TOKENS.json"
+      - name: Score Phase2U control and Phase2V treatment with REAL checkpoint inference
+        shell: bash
+        run: |
+          set -euo pipefail
+          find_one() {
+            local matches
+            matches="$(find "$1" -type f -name "$2")"
+            if [[ -z "$matches" || "$(printf '%s\n' "$matches" | wc -l)" -ne 1 ]]; then
+              echo "Expected unique file: $2" >&2
+              exit 1
+            fi
+            printf '%s' "$matches"
+          }
+          input_adapter="$(dirname "$(find_one "$RUNNER_TEMP/actual-phase2u" adapter_config.json)")"
+          original_manifest="$(find_one "$RUNNER_TEMP/actual-phase2u" PHASE2U-TRAIN-MANIFEST.json)"
+          PYTHONPATH="$GITHUB_WORKSPACE/src:$GITHUB_WORKSPACE/telegraph-kit" \
+            python -m falsum.phase2v_transfer_eval \
+              --public "$PHASE_DIR/FRESH-MODEL-FACING-QUESTIONS.json" \
+              --key "$PHASE_DIR/FRESH-SEPARATE-AI-KEY.json" \
+              --train-manifest "$original_manifest" \
+              --old-adapter "$input_adapter" \
+              --new-adapter "$MODEL_DIR" \
+              --new-training-report "$PHASE_DIR/REAL-COUPLED-TRAINING-REPORT.json" \
+              --out "$PHASE_DIR/PHASE2V-REAL-SOURCE-SEPARATED-RESULT.json"
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          root=Path(os.environ["PHASE_DIR"])
+          train=json.loads((root/"REAL-COUPLED-TRAINING-REPORT.json").read_text())
+          score=json.loads((root/"PHASE2V-REAL-SOURCE-SEPARATED-RESULT.json").read_text())
+          assert train["status"]=="EXPERIMENTAL_COUPLED_CONTEXT_MODEL_NOT_CERTIFIED"
+          assert train["training_steps"]==16 and train["max_full_model_tokens"]<=512
+          assert score["status"]=="PHASE2V_PAIRED_OBJECTIVE_SOURCE_SEPARATED_DIAGNOSTIC_NOT_SECURITY_ACCURACY"
+          assert score["human_reviews"]==0 and score["network_eligible"] is False
+          assert score["registered_live_evaluator"] is False
+          assert score["prior_model"]["total_ai_proposals"]==6
+          assert score["context_intervention"]["total_ai_proposals"]==6
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### FALSUM real coupled-context gradient experiment\n\n")
+              f.write(f"In-sample context families: {train['initial_inspected_training_source_metrics']['matching_both_provisional_contexts']}/4 before, {train['posttrain_inspected_training_source_metrics']['matching_both_provisional_contexts']}/4 after training. **These were AI draft training examples.**\\n\\n")
+              f.write(f"3 SOURCE-SEPARATED projects: Phase2U control {score['prior_model']['ai_proposals_matched']}/6 and {score['prior_model']['families_matching_both_ai_proposals']}/3 full context families; Phase2V treatment {score['context_intervention']['ai_proposals_matched']}/6 and {score['context_intervention']['families_matching_both_ai_proposals']}/3.\\n\\n")
+              f.write("Model inference is real. Source fixes are authentic. AI judgments unreviewed; **not independent security correctness, model registration or an accepted network evaluator.**")
+          PY
+      - name: Archive actual LoRA trained adapter and source-separated failure/success evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE2V-COUPLED-OBJECTIVE-RESEARCH-NOT-SUBMITTABLE
+          path: |
+            ${{ runner.temp }}/falsum-phase2v/REAL-COUPLED-TRAINING-REPORT.json
+            ${{ runner.temp }}/falsum-phase2v/ACTUAL-COUPLED-OPTIMIZATION.log
+            ${{ runner.temp }}/falsum-phase2v/PHASE2V-REAL-SOURCE-SEPARATED-RESULT.json
+            ${{ runner.temp }}/falsum-phase2v/TRAIN-REAL-512-TOKEN-REPORT.json
+            ${{ runner.temp }}/falsum-phase2v/FRESH-ACTUAL-MODEL-TOKENS.json
+            ${{ runner.temp }}/falsum-phase2v/TRAIN-EXACT-8-FILE-REPLAYS.json
+            ${{ runner.temp }}/falsum-phase2v/ACTUAL-DEPENDENCIES.txt
+            ${{ runner.temp }}/falsum-phase2v-adapter/
+          if-no-files-found: warn
+          retention-days: 7
