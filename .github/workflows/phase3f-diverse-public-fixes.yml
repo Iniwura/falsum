@@ -4,6 +4,8 @@ on:
     paths:
       - 'src/falsum/phase3f_multifamily_material.py'
       - 'tests/test_phase3f_multifamily_material.py'
+      - 'tests/test_phase3f_evidence.py'
+      - 'evidence/phase3f-2026-11-01.json'
       - '.github/workflows/phase3f-diverse-public-fixes.yml'
       - 'data/real-fix-queue.json'
       - 'data/real-fix-train-candidates.json'
@@ -28,6 +30,7 @@ jobs:
         run: |
           set -euo pipefail
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3f_multifamily_material.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3f_evidence.py -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p test_real_fix_corpus.py -v
           mkdir -p "$RUNNER_TEMP/falsum-phase3f"
       - name: Verify real published source AND regression test against eight immutable upstream commits
