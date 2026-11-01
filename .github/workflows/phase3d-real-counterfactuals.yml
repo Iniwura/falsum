@@ -76,7 +76,7 @@ jobs:
         run: |
           set -euo pipefail
           python -m pip install 'tokenizers==0.22.2'
-          PYTHONPATH=src python -m falsum.phase3c_score_inputs \
+          PYTHONPATH=src python -m falsum.phase3d_counterfactual_inputs \
             --tokenizer "$RUNNER_TEMP/falsum-phase3d/foundation/tokenizer.json" \
             --out "$RUNNER_TEMP/falsum-phase3d/reports/COUNTERFACTUAL-TOKEN-INPUTS.json"
       - name: Build the official pinned Telegraph Go adapterbuild executable
