@@ -1,0 +1,202 @@
+name: Phase 2U - actual ModernBERT context-transfer research (NOT network eligible)
+on:
+  push:
+    paths:
+      - 'src/falsum/phase2u_context_transfer.py'
+      - 'src/falsum/phase2u_transfer_probe.py'
+      - 'tests/test_phase2u_context_transfer.py'
+      - '.github/workflows/phase2u-context-transfer.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  model-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    env:
+      PYTHONUNBUFFERED: '1'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '4'
+      MKL_NUM_THREADS: '4'
+      PHASE_DIR: ${{ runner.temp }}/falsum-phase2u
+      MODEL_DIR: ${{ runner.temp }}/falsum-phase2u-model
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: All adversarial Phase2U training contamination tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2u_context_transfer.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2t_project_isolation.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2t_prior_exposure.py' -v
+      - name: Verify four training-source projects, four excluded comparison projects, and historical overlap
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$PHASE_DIR" "$MODEL_DIR"
+          PYTHONPATH=src python -m falsum.phase2t_project_isolation \
+            --train data/real-fix-train-candidates.json --inspected data/real-fix-queue.json \
+            --out "$PHASE_DIR/PROJECT-ISOLATION.json"
+          PYTHONPATH=src python -m falsum.phase2t_prior_exposure \
+            --prior data/advisory-queue.json --new data/real-fix-train-candidates.json \
+            --inspected data/real-fix-queue.json --out "$PHASE_DIR/PRIOR-GHSA-EXPOSURE.json"
+          PYTHONPATH=src python -m falsum.real_fix_corpus \
+            --queue data/real-fix-train-candidates.json \
+            --out "$PHASE_DIR/TRAIN-SOURCE-VERIFIED.json" \
+            --reviewer-out "$PHASE_DIR/TRAIN-SOURCE-REVIEW-QUESTIONS.json"
+          PYTHONPATH=src python -m falsum.real_fix_replay \
+            --evidence "$PHASE_DIR/TRAIN-SOURCE-VERIFIED.json" \
+            --out "$PHASE_DIR/TRAIN-EXACT-FILE-REPLAY.json"
+          PYTHONPATH=src python -m falsum.real_fix_corpus \
+            --queue data/real-fix-queue.json \
+            --out "$PHASE_DIR/INSPECTED-SOURCE-VERIFIED.json" \
+            --reviewer-out "$PHASE_DIR/INSPECTED-REVIEW-QUESTIONS.json"
+          PYTHONPATH=src python -m falsum.real_fix_replay \
+            --evidence "$PHASE_DIR/INSPECTED-SOURCE-VERIFIED.json" \
+            --out "$PHASE_DIR/INSPECTED-EXACT-FILE-REPLAY.json"
+      - name: Rebuild original 52 GHSA research training pairs from pinned advisory sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.advisory_corpus data/advisory-queue.json --out "$PHASE_DIR"
+          PYTHONPATH=src python -m falsum.review_gate data/advisory-queue.json "$PHASE_DIR/DRAFT-ONLY-corpus.json" --audit-only
+          PYTHONPATH=src python -m falsum.grounded_eval data/advisory-queue.json "$PHASE_DIR/DRAFT-ONLY-corpus.json" --out "$PHASE_DIR/grounded"
+          PYTHONPATH=src python -m falsum.research_pilot data/advisory-queue.json "$PHASE_DIR" --manifest "$PHASE_DIR/PILOT-QUARANTINE-MANIFEST.json"
+      - name: Checkout immutable official Telegraph V2 trainer
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Install real ModernBERT LoRA dependencies on CPU
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r telegraph-kit/requirements.txt 'transformers>=4.48,<5' 'numpy>=1.26,<3' 'peft>=0.14,<1'
+          python -m pip freeze > "$PHASE_DIR/RESEARCH-DEPENDENCIES.txt"
+      - name: Build source-pinned AI research drafts for training and disjoint inspected comparison
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.ai_review_benchmark \
+            --specs data/ai-review-train-candidate-drafts.json \
+            --queue data/real-fix-train-candidates.json \
+            --evidence "$PHASE_DIR/TRAIN-SOURCE-VERIFIED.json" \
+            --questions-out "$PHASE_DIR/TRAIN-PUBLIC-QUESTIONS.json" \
+            --key-out "$PHASE_DIR/TRAIN-AI-PROPOSALS.json" \
+            --token-out "$PHASE_DIR/TRAIN-INPUT-TOKEN-REPORT.json"
+          PYTHONPATH=src python -m falsum.phase2u_context_transfer \
+            --public "$PHASE_DIR/TRAIN-PUBLIC-QUESTIONS.json" \
+            --key "$PHASE_DIR/TRAIN-AI-PROPOSALS.json" \
+            --train-queue data/real-fix-train-candidates.json \
+            --old-queue data/real-fix-queue.json \
+            --prior-advisories data/advisory-queue.json \
+            --baseline-train "$PHASE_DIR/grounded/DRAFT-grounded-train.jsonl" \
+            --out "$PHASE_DIR/PHASE2U-RESEARCH-TRAIN.jsonl" \
+            --manifest "$PHASE_DIR/PHASE2U-TRAIN-MANIFEST.json"
+          PYTHONPATH=src python -m falsum.ai_review_benchmark \
+            --specs data/ai-review-drafts.json --queue data/real-fix-queue.json \
+            --evidence "$PHASE_DIR/INSPECTED-SOURCE-VERIFIED.json" \
+            --questions-out "$PHASE_DIR/INSPECTED-PUBLIC-QUESTIONS.json" \
+            --key-out "$PHASE_DIR/INSPECTED-AI-PROPOSALS.json" \
+            --token-out "$PHASE_DIR/INSPECTED-INPUT-TOKEN-REPORT.json"
+          PYTHONPATH=src python - <<'PY'
+          import os,json
+          from pathlib import Path
+          from transformers import AutoTokenizer
+          from falsum.model_eval import render
+          root=Path(os.environ["PHASE_DIR"])
+          train=[json.loads(line) for line in (root/"PHASE2U-RESEARCH-TRAIN.jsonl").read_text().splitlines() if line.strip()]
+          manifest=json.loads((root/"PHASE2U-TRAIN-MANIFEST.json").read_text())
+          assert manifest["total_train_rows"]==len(train) and manifest["research_pair_count"]==8
+          assert manifest["independent_human_reviews"]==0 and manifest["network_eligible"] is False
+          assert manifest["prior_ai_draft_inspected"] is True
+          token=AutoTokenizer.from_pretrained("answerdotai/ModernBERT-base")
+          assert token.is_fast
+          counts=[len(token.encode(render(r["prompt"],r[k]),truncation=False)) for r in train[-8:] for k in ("chosen","rejected")]
+          assert max(counts)<=512, f"research samples exceed 512 tokens; refuse truncation: {counts}"
+          (root/"TRAIN-ADDED-FULL-TOKEN-REPORT.json").write_text(json.dumps(
+              {"full_train_inputs":len(counts),"max_tokens":max(counts),"cap":512,
+               "all_pass":True,"network_eligible":False},indent=2)+"\n")
+          print("All 16 actual new full training inputs fit the 512 token node cap: max",max(counts))
+          PY
+      - name: Official upstream shortcut gate MUST pass before any training
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=telegraph-kit python -m wide_runtime.train_adapter \
+            --intent SECURITY_REVIEW_GENERAL \
+            --data "$PHASE_DIR/PHASE2U-RESEARCH-TRAIN.jsonl" --check-data \
+            2>&1 | tee "$PHASE_DIR/OFFICIAL-DATA-GATE-LOG.txt"
+      - name: Train actual new 1-epoch LoRA, retain failure as evidence
+        id: train
+        shell: bash
+        run: |
+          set +e
+          set -o pipefail
+          PYTHONPATH=telegraph-kit python -m wide_runtime.train_adapter \
+            --intent SECURITY_REVIEW_GENERAL \
+            --data "$PHASE_DIR/PHASE2U-RESEARCH-TRAIN.jsonl" \
+            --val-data "$PHASE_DIR/grounded/DRAFT-grounded-validation.jsonl" \
+            --test-data "$PHASE_DIR/grounded/DRAFT-grounded-holdout.jsonl" \
+            --max-length 512 --batch-size 1 --eval-batch 1 --grad-accum 8 --epochs 1 \
+            --out "$MODEL_DIR/SECURITY_REVIEW_GENERAL" \
+            2>&1 | tee "$PHASE_DIR/REAL-TRAINING-LOG.txt"
+          status=$?
+          echo "upstream_training_exit_code=$status" >> "$GITHUB_OUTPUT"
+          echo "Real official V2 trainer exit: $status (0 success; 1 evaluation failure; >1 tooling error)." >> "$GITHUB_STEP_SUMMARY"
+          if [ "$status" -gt 1 ]; then exit "$status"; fi
+          exit 0
+      - name: Actual new LoRA vs previous frozen on previously inspected OTHER projects
+        shell: bash
+        run: |
+          set -euo pipefail
+          adapter="$MODEL_DIR/SECURITY_REVIEW_GENERAL/adapter"
+          test -s "$adapter/adapter_model.safetensors"
+          PYTHONPATH="$GITHUB_WORKSPACE/src:$GITHUB_WORKSPACE/telegraph-kit" python -m falsum.phase2u_transfer_probe \
+            --public "$PHASE_DIR/INSPECTED-PUBLIC-QUESTIONS.json" \
+            --key "$PHASE_DIR/INSPECTED-AI-PROPOSALS.json" \
+            --training-manifest "$PHASE_DIR/PHASE2U-TRAIN-MANIFEST.json" \
+            --adapter "$adapter" \
+            --report "$PHASE_DIR/REAL-NEW-MODEL-INSPECTED-COMPARISON.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["PHASE_DIR"])
+          score=json.loads((root/"REAL-NEW-MODEL-INSPECTED-COMPARISON.json").read_text())
+          assert score["status"]=="PHASE2U_INSPECTED_COMPARISON_NOT_GENERALIZATION"
+          assert score["ai_proposals_compared"]==8 and score["human_reviews"]==0
+          assert score["network_eligible"] is False and score["model_quality_validated"] is False
+          assert score["prior_advisory_training_overlap_known"] is True
+          baseline=score["prior_frozen_model_reference"]
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as out:
+              out.write("### Phase 2U actual LoRA research comparison (NOT clean holdout)\n\n")
+              out.write(f"Previous original checkpoint: {baseline['model_agrees_with_ai_proposals']}/8 AI draft agreements, {baseline['families_matching_both_ai_proposals']}/4 full pair reversals.\\n\\n")
+              out.write(f"New checkpoint: {score['model_agrees_with_ai_proposals']}/8 AI draft agreements, {score['families_matching_both_ai_proposals']}/4 full pair reversals.\\n\\n")
+              out.write("These original four projects were inspected and 2 GHSA advisories overlapped PRIOR training. **Not independently adjudicated accuracy, network eligibility, or an authorized live submission.**")
+          PY
+      - name: Save model, data-gate, and fail-closed research-only evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE2U-CONTEXT-LORA-RESEARCH
+          path: |
+            ${{ runner.temp }}/falsum-phase2u/PHASE2U-TRAIN-MANIFEST.json
+            ${{ runner.temp }}/falsum-phase2u/TRAIN-ADDED-FULL-TOKEN-REPORT.json
+            ${{ runner.temp }}/falsum-phase2u/OFFICIAL-DATA-GATE-LOG.txt
+            ${{ runner.temp }}/falsum-phase2u/REAL-TRAINING-LOG.txt
+            ${{ runner.temp }}/falsum-phase2u/REAL-NEW-MODEL-INSPECTED-COMPARISON.json
+            ${{ runner.temp }}/falsum-phase2u/PILOT-QUARANTINE-MANIFEST.json
+            ${{ runner.temp }}/falsum-phase2u/PROJECT-ISOLATION.json
+            ${{ runner.temp }}/falsum-phase2u/PRIOR-GHSA-EXPOSURE.json
+            ${{ runner.temp }}/falsum-phase2u/RESEARCH-DEPENDENCIES.txt
+            ${{ runner.temp }}/falsum-phase2u-model/SECURITY_REVIEW_GENERAL/result.json
+            ${{ runner.temp }}/falsum-phase2u-model/SECURITY_REVIEW_GENERAL/adapter/
+          retention-days: 7
+          if-no-files-found: warn
