@@ -8,6 +8,16 @@ An evidence-grounded security evaluation research project for [Telegraph Season 
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
 
+## Phase 2V: custom context-coupled gradient training, no transfer yet
+
+We implemented and ran an **actually different, differentiable training objective** on the real ModernBERT LoRA model. Instead of independently preferring a fixed security answer, the model trains on *both* conflicting deployment contexts for the same original source, plus a contrastive margin and an answer-only penalty. Real PyTorch gradient tests, pinned input adapter, original source/patch replay and complete token limit all passed. [Actual Phase 2V run](https://github.com/Iniwura/falsum/actions/runs/41285552033).
+
+In-sample AI draft agreement changed **4/8 → 6/8** and families matching BOTH contexts **1/4 → 2/4**. **But on three other source-separated projects, transfer stayed 3/6 AI draft choices and 0/3 full-context families**, unchanged from the Phase 2U checkpoint. The experiment learned some already inspected pairs, but no improvement in the diagnostic that matters most. We must not describe this as a successful generalizable security reviewer or an accepted network evaluator.
+
+[Complete Phase 2V report](docs/PHASE2V.md) · [Immutable real model and source evidence summary](evidence/phase2v-2026-11-01.json).
+
+**FALSUM is still research-only: zero independently validated labels, zero accepted Anjoman evaluation rows, no registered live evaluator.** Next work should address label quality and broader independent project diversity before another expensive training run. Neither pretrained checkpoint nor new coupled adapter should be registered based on the present findings.
+
 ## Phase 2U: authentic second LoRA trained, but NO security-context transfer
 
 We ran a genuinely **new official Telegraph V2 ModernBERT LoRA** training experiment using 52 pinned GHSA research pairs plus eight AI-authored deployment-context comparisons from four source-verified projects. The upstream data shortcut gate passed (100% unique negatives, 50% length-only accuracy, 41.1% answer-only surface probe). The actual one-epoch trained checkpoint got a **PASS on the trainer's six small synthetic GHSA test pairs**. [Real training CI](https://github.com/Iniwura/falsum/actions/runs/41283929744).
