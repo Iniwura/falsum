@@ -13,16 +13,17 @@ class RealDiverseSourceEvidence(unittest.TestCase):
     def test_real_external_commit_test_verification_evidence(self):
         e=self.e
         self.assertEqual(e["verified_workflow_url"],
-                         "https://github.com/Iniwura/falsum/actions/runs/41353159310")
-        self.assertEqual(e["artifact_id"],13102565304)
+                         "https://github.com/Iniwura/falsum/actions/runs/41353459211")
+        self.assertEqual(e["artifact_id"],13102585762)
         self.assertEqual(e["actual_pinned_source_project_revisions_queried"],8)
         self.assertEqual(e["real_patch_source_and_regression_test_pairs_verified"],8)
         self.assertEqual(e["distinct_non_aiohttp_security_family_review_packets"],7)
         self.assertEqual(e["total_prepared_review_packets_phases_3e_and_3f"],12)
         self.assertEqual(len(e["seven_projects"]),7)
         self.assertEqual(len(set(e["seven_projects"])),7)
-        self.assertEqual(e["actual_ci"]["targeted_tests_total"],25)
+        self.assertEqual(e["actual_ci"]["targeted_tests_total"],28)
         self.assertEqual(e["actual_ci"]["pipeline_conclusion"],"success")
+        self.assertEqual(e["actual_ci"]["permanent_evidence_integrity_tests_passed"],3)
 
     def test_reserve_fresh_projects_and_never_claim_deployment_or_exploit(self):
         src=self.e["source_integrity"]
