@@ -127,7 +127,7 @@ jobs:
           adapter="$RUNNER_TEMP/falsum-3b/export-only-model"
           test -s "$adapter/adapter_model.safetensors"
           PYTHONPATH=telegraph-kit python -m float_runtime.export_adapter \
-            --adapter "$adapter" --intent SECURITY_REVIEW --class judgment \
+            --adapter "$adapter" --intent SECURITY_REVIEW --class hybrid \
             --foundation "$RUNNER_TEMP/falsum-3b/foundation.json" \
             --out "$RUNNER_TEMP/falsum-3b/out/SECURITY_REVIEW.safetensors"
           test -s "$RUNNER_TEMP/falsum-3b/out/SECURITY_REVIEW.safetensors"
@@ -149,7 +149,7 @@ jobs:
           x=json.loads((root/"OFFICIAL-STRUCTURAL-CHECK.json").read_text())
           p=root/"SECURITY_REVIEW.safetensors"
           assert x["sha256"]==hashlib.sha256(p.read_bytes()).hexdigest()
-          assert x["class"]=="judgment" and x["intent"]=="SECURITY_REVIEW"
+          assert x["class"]=="hybrid" and x["intent"]=="SECURITY_REVIEW"
           assert x["keccak256"].startswith("0x")
           assert x["bytes"]==p.stat().st_size
           readiness=json.loads((root/"REAL-OLD-CHECKPOINT-COMPATIBILITY.json").read_text())
