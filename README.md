@@ -2,11 +2,19 @@
 
 **Every claim stands trial.**
 
-**Current research checkpoint (1 November 2026):** Phase 3C has now **loaded and scored the real trained SECURITY_REVIEW LoRA with the official published 599 MB shared Foundation ONNX/WASI runtime**. Two answers were each scored twice with exact repeatability, and one synthetic example preferred the cautious answer. The evaluator packaging and inference layers work, but cross-project context generalization is still unproven (older 0/3 reversal study), and no independent human-reviewed labels, eligible Anjoman rows, runnable production endpoint or registered evaluator exist. See [actual scored Phase 3C](docs/PHASE3C.md) and [Phase 3B delta packaging](docs/PHASE3B.md).
+**Current research checkpoint (1 November 2026):** The actual trained SECURITY_REVIEW LoRA now **loads, scores and repeats deterministically** on Telegraph's official shared Foundation runtime, but Phase 3D found **0/2 correct context-reversal families and 2/4 matching provisional deployment judgments** across 16 real scores. Model release is blocked. Our source evidence tools, external-application studies, package and runtime are verified; independent security judgment accuracy, adjudicated labels, Anjoman-eligible rows, evaluator hosting and registration are not. See [Phase 3D negative result](docs/PHASE3D.md), [Phase 3C scoring proof](docs/PHASE3C.md) and [Phase 2V model-training analysis](docs/PHASE2V.md).
 
 An evidence-grounded security evaluation research project for [Telegraph Season II](https://hackathon.telegraphprotocol.com/). FALSUM targets the `SECURITY_REVIEW_GENERAL` child Intent and the `SECURITY_REVIEW` evaluator family, as described by [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96).
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
+
+## Phase 3D: actual loaded-model counterfactual failure, do not register
+
+**Evidence-driven model quality checkpoint:** the previously trained and officially loaded hybrid ModernBERT LoRA successfully scored **eight real Task/Answer inputs twice each (16 official inference calls)**, but it failed both controlled security-context reversal families. The same answer was preferred before and after changing the installed aiohttp version, and before and after toggling `follow_symlinks`. Only **2/4 individual source-fact-based provisional preferences** matched and **0/2 complete two-context families** reversed appropriately.
+
+[Real 16-inference CI run](https://github.com/Iniwura/falsum/actions/runs/41308317723) · [Full negative-result report](docs/PHASE3D.md) · [Exact scores and official hash provenance](evidence/phase3d-2026-11-01.json).
+
+**Do not register this trained checkpoint yet.** The model package works with the current Foundation runtime, but these outcomes show that it is not reliably sensitive to crucial deployment facts. The new [model quality gate](src/falsum/phase3d_quality_gate.py) blocks release, and there are still zero independently expert-reviewed labels, accepted Anjoman contributions or live evaluator registrations. This tiny FALSUM-authored diagnostic is not a general accuracy estimate; it is a concrete failure that must be fixed before we claim competition readiness.
 
 ## Phase 3C: actual shared Foundation inference, not just package structure
 
