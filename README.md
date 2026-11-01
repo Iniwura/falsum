@@ -2,11 +2,21 @@
 
 **Every claim stands trial.**
 
-**Current research checkpoint (1 November 2026):** The Phase 2Z pipeline verified three allowlisted example applications against **real pinned aiohttp 3.10.11**, including static-to-runtime route checks and six localhost HTTP requests; 58 focused tests passed. This is evidence-plumbing proof, not CVE exploitation or independently validated real-application vulnerability accuracy. No approved security labels, eligible Anjoman evaluations or live evaluator registrations. See [Phase 2Z](docs/PHASE2Z.md) and the [reward-model generalization postmortem](docs/PHASE2V.md).
+**Current research checkpoint (1 November 2026):** Phase 3A verifies three authentic, non-FALSUM, Git-pinned aiohttp application source files and five static-route calls; the data contain one literal True, two False and two omitted conditions. Phase 2Z also validated real patched aiohttp runtime behavior on source-owned controlled fixtures. Neither work establishes independent real-application exploit accuracy, deployed dependency versions, accepted Anjoman rows or registered evaluator status. See [external-source Phase 3A](docs/PHASE3A.md), [runtime Phase 2Z](docs/PHASE2Z.md) and [model generalization postmortem](docs/PHASE2V.md).
 
 An evidence-grounded security evaluation research project for [Telegraph Season II](https://hackathon.telegraphprotocol.com/). FALSUM targets the `SECURITY_REVIEW_GENERAL` child Intent and the `SECURITY_REVIEW` evaluator family, as described by [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96).
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
+
+## Phase 3A: three authentic outside application source projects
+
+To address the previous FALSUM-only sample bias, we verified source files from **three unrelated public projects**: [Perspective](https://github.com/perspective-dev/perspective), [NLWeb](https://github.com/nlweb-ai/NLWeb) and [Maubot](https://github.com/maubot/maubot). Each was fetched at an **exact upstream Git commit**, checked against its **exact source Git blob**, and parsed using Python AST **without executing external code**.
+
+[Actual external-source verification CI](https://github.com/Iniwura/falsum/actions/runs/41290675846) found five authentic aiohttp static-route calls: **one \`follow_symlinks=True\`, two \`False\`, and two with the option omitted**. None constitutes a verified exploit, safe application, affected dependency version or reviewed security label. The omitted setting stays unresolved and the true setting stays a version-dependent candidate, not a vulnerability verdict.
+
+[Read the exact three-application evidence study](docs/PHASE3A.md) · [Permanent Git-pinned observation metadata](evidence/phase3a-2026-11-01.json) · [Source-only audit implementation](src/falsum/phase3a_external_sources.py).
+
+The external-source audit passed 33 focused regression checks plus foundation and official diagnostic data checks. **We have not executed any third-party application, established real deployment versions, validated exploit-detection accuracy, produced independently human-reviewed labels or registered a Telegraph evaluator.**
 
 ## Phase 2Z: actual patched Python framework runtime evidence
 
