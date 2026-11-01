@@ -4,6 +4,8 @@ on:
     paths:
       - 'src/falsum/phase2y_bindings.py'
       - 'tests/test_phase2y_bindings.py'
+      - 'tests/test_phase2y_claim_guard.py'
+      - 'src/falsum/phase2y_claim_guard.py'
       - '.github/workflows/phase2y-binding-evidence.yml'
   workflow_dispatch:
 permissions:
@@ -22,6 +24,7 @@ jobs:
         run: |
           set -euo pipefail
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2y_bindings.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2y_claim_guard.py' -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2x_ast_observer.py' -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2w_proof_gate.py' -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2w_capture.py' -v
@@ -94,6 +97,74 @@ jobs:
               f.write("### Phase 2Y: conservative static import / invocation syntax\n\n")
               f.write("Three source-pinned Python examples: imported aiohttp Application and direct module setup call, imported websockets serve alias, and Tornado RequestHandler subclass method. Real file SHA and AST hashes checked.\n\n")
               f.write("Dynamic alias and execution remain UNVERIFIED. No runtime package identity, deployment reachability, expert label, registered evaluator or confirmed exploit.\n")
+          PY
+      - name: Contrast imported aiohttp call with unbound lookalike and reject confident false-positive
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/falsum-phase2y/app/fake.py" <<'PYCODE'
+          dummy.router.add_static("/assets", "./assets", follow_symlinks=False)
+          PYCODE
+          printf '{"status":"EXPLICIT_AST_FILE_SELECTION_UNREVIEWED","files":["aiohttp_app.py","fake.py"]}\n' > "$RUNNER_TEMP/falsum-phase2y/both.json"
+          PYTHONPATH=src python -m falsum.phase2y_bindings \
+            --catalog data/phase2w-applicability-rules.json \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --fresh-spec data/phase2u-fresh-transfer-cases.json \
+            --case-id real-aiohttp-static-traversal \
+            --root "$RUNNER_TEMP/falsum-phase2y/app" \
+            --selection "$RUNNER_TEMP/falsum-phase2y/both.json" \
+            --out "$RUNNER_TEMP/falsum-phase2y/reports/AIOHTTP-BOUND-AND-FAKE-SELECTED.json"
+          for spec in "aiohttp_app.py 4 real-bound" "fake.py 1 fake-unbound"; do
+            read -r path line label <<< "$spec"
+            printf '{"status":"SUBMITTER_ASSERTIONS_UNREVIEWED","claims":[{"requirement_id":"follow_symlinks_enabled","claim":"present","path":"%s","line_start":%s,"line_end":%s}]}\n' \
+                "$path" "$line" "$line" > "$RUNNER_TEMP/falsum-phase2y/$label-claim.json"
+            PYTHONPATH=src python -m falsum.phase2w_capture \
+              --catalog data/phase2w-applicability-rules.json \
+              --old-queue data/real-fix-queue.json \
+              --train-queue data/real-fix-train-candidates.json \
+              --fresh-spec data/phase2u-fresh-transfer-cases.json \
+              --case-id real-aiohttp-static-traversal \
+              --claims "$RUNNER_TEMP/falsum-phase2y/$label-claim.json" \
+              --root "$RUNNER_TEMP/falsum-phase2y/app" \
+              --out "$RUNNER_TEMP/falsum-phase2y/reports/$label-captured.json"
+          done
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"falsum-phase2y/reports"
+          cases=[json.loads((p/f"{label}-captured.json").read_text())
+                 for label in ("real-bound","fake-unbound")]
+          (p/"TWO-CLAIMS.json").write_text(json.dumps({
+              "schema_version":1,"status":"UNREVIEWED_APPLICATION_EVIDENCE_BATCH",
+              "research_only":True,"scenarios":cases}))
+          packet=json.loads((p/"AIOHTTP-BOUND-AND-FAKE-SELECTED.json").read_text())
+          (p/"RECOMPUTE-BOUND-REPORT.json").write_text(json.dumps([packet]))
+          PY
+          PYTHONPATH=src python -m falsum.phase2y_claim_guard \
+            --catalog data/phase2w-applicability-rules.json \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --fresh-spec data/phase2u-fresh-transfer-cases.json \
+            --batch "$RUNNER_TEMP/falsum-phase2y/reports/TWO-CLAIMS.json" \
+            --binding-packets "$RUNNER_TEMP/falsum-phase2y/reports/RECOMPUTE-BOUND-REPORT.json" \
+            --root "$RUNNER_TEMP/falsum-phase2y/app" \
+            --out "$RUNNER_TEMP/falsum-phase2y/reports/FRAMEWORK-BOUND-VS-UNBOUND-CLAIM-GUARD.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"falsum-phase2y/reports"
+          r=json.loads((p/"FRAMEWORK-BOUND-VS-UNBOUND-CLAIM-GUARD.json").read_text())
+          assert r["recomputed_binding_reports"]==1
+          assert r["local_source_syntax_conflicts"]==1
+          assert len(r["cases"])==2
+          assert r["cases"][0]["decision"]=="STATIC_SYNTAX_CONTRADICTION_HUMAN_REVIEW_REQUIRED"
+          assert r["cases"][1]["decision"]=="ABSTAIN_NO_BINDING_QUALIFIED_CONTRADICTION"
+          assert r["cases"][1]["matched_local_bound_call_observations"]==0
+          assert r["actual_framework_runtime_binding_verified"] is False
+          assert r["actual_exploits_proven"]==0 and r["network_eligible"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("A framework-imported aiohttp source call with contradicting local syntax was **flagged for human review**; a deliberately identical-looking fake object call **abstained**. No runtime import identity or exploit verdict is claimed.\n")
           PY
       - name: Archive only synthetic non-sensitive source evidence
         uses: actions/upload-artifact@v4
