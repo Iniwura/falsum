@@ -8,6 +8,18 @@ An evidence-grounded security evaluation research project for [Telegraph Season 
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
 
+## Phase 2U: authentic second LoRA trained, but NO security-context transfer
+
+We ran a genuinely **new official Telegraph V2 ModernBERT LoRA** training experiment using 52 pinned GHSA research pairs plus eight AI-authored deployment-context comparisons from four source-verified projects. The upstream data shortcut gate passed (100% unique negatives, 50% length-only accuracy, 41.1% answer-only surface probe). The actual one-epoch trained checkpoint got a **PASS on the trainer's six small synthetic GHSA test pairs**. [Real training CI](https://github.com/Iniwura/falsum/actions/runs/41283929744).
+
+**That did not improve FALSUM's deployment-sensitive reviewing.** On four already inspected, separately sourced PR-review examples the new and original checkpoints both agreed with AI draft preferences 4/8 and reversed the preferred essay correctly across 0/4 opposite-context source families.
+
+To test actual cross-project transfer we acquired **three further untouched-by-training public projects**: Tornado cookie-attribute handling, Undici oversized streaming dump handling and Python websockets decompression limits. Six exact original-to-repair source/test transitions replayed, and all 12 full model inputs fit the real 512-token limit. [New source audit](https://github.com/Iniwura/falsum/actions/runs/41284227213). Both actual LoRA models were then scored, with no new training: original **3/6 provisional choices and 0/3 context families**; new **3/6 and 0/3**. [Real two-checkpoint test](https://github.com/Iniwura/falsum/actions/runs/41284380222).
+
+These are **AI-authored hypothetical judgments, NOT independently reviewed AppSec accuracy**, and are **not** eligible Anjoman pairs, a sealed holdout, or an approved network evaluator. We should NOT repeat the ineffective 52+8 one-epoch recipe or represent the trainer's six-pair PASS as proof that security context is understood.
+
+[Full Phase 2U methodology and limitations](docs/PHASE2U.md) · [Permanent verified score and model hashes](evidence/phase2u-2026-11-01.json)
+
 ## Phase 2T: eight real projects, reproducible generalization failure, historical leakage disclosed
 
 Four more independently maintained public fixes from **Starlette, urllib3, Django and Express** have been pinned and cryptographically replayed against their actual source and modified regression-test files. This yields **eight distinct source projects** across separate research pools, with no cross-pool repository, commit, advisory or selected blob reuse. [Successful real-source CI](https://github.com/Iniwura/falsum/actions/runs/41232688735) · [Complete technical evidence](docs/PHASE2T.md).
