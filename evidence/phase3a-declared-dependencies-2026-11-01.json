@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3A_THREE_EXTERNAL_PROJECT_DEPENDENCY_DECLARATIONS_VERIFIED",
+  "date": "2026-11-01",
+  "upstream_security_advisory": "GHSA-5h86-8mv2-jq9f",
+  "historical_affected_range": "aiohttp versions earlier than 3.9.2",
+  "runtime_versions_verified": 0,
+  "ci_run": "https://github.com/Iniwura/falsum/actions/runs/41291177670",
+  "ci_artifact": "https://github.com/Iniwura/falsum/actions/runs/41291177670/artifacts/13077830172",
+  "artifact_id": 13077830172,
+  "requirements": [
+    {
+      "repository": "perspective-dev/perspective",
+      "revision": "444865accd46bcfdeb552960ce4f63fe8286de42",
+      "path": "rust/perspective-python/pyproject.toml",
+      "git_blob_sha1": "a3a296cc6bb807c6b074ce457c97bdb698cb8ed3",
+      "line": 77,
+      "profile": "optional aiohttp support for perspective-python",
+      "declared": "aiohttp>=2,<4",
+      "interpretation": "DECLARATION_PERMITS_HISTORIC_AFFECTED_RANGE",
+      "actual_install_verified": false
+    },
+    {
+      "repository": "nlweb-ai/NLWeb",
+      "revision": "b423f15d9aeaa023ce75993ac9deed2354597043",
+      "path": "AskAgent/python/requirements.txt",
+      "git_blob_sha1": "a4c9f65fdad14cc1eea664204527e614f110882a",
+      "line": 12,
+      "profile": "NLWeb AskAgent Python",
+      "declared": "aiohttp>=3.13.5",
+      "interpretation": "DECLARATION_EXCLUDES_HISTORIC_AFFECTED_RANGE",
+      "actual_install_verified": false
+    },
+    {
+      "repository": "nlweb-ai/NLWeb",
+      "revision": "b423f15d9aeaa023ce75993ac9deed2354597043",
+      "path": "requirements_azure.txt",
+      "git_blob_sha1": "fd9fbf6c7fcb8c1ff80bd2b490fe1a3ce1cd4fd2",
+      "line": 5,
+      "profile": "NLWeb Azure alternate requirements",
+      "declared": "aiohttp==3.13.3",
+      "interpretation": "DECLARATION_REQUIRES_AT_LEAST_FIXED",
+      "actual_install_verified": false
+    },
+    {
+      "repository": "maubot/maubot",
+      "revision": "f20825b5e3031a89eb5b2edea7f6f7726ada9a10",
+      "path": "requirements.txt",
+      "git_blob_sha1": "35beea99f743af408dd3b1d126dd924e9546fbdb",
+      "line": 2,
+      "profile": "Maubot base requirements",
+      "declared": "aiohttp>=3,<4",
+      "interpretation": "DECLARATION_PERMITS_HISTORIC_AFFECTED_RANGE",
+      "actual_install_verified": false
+    }
+  ],
+  "verified": {
+    "external_public_application_source_projects": 3,
+    "full_source_blobs_pinned_and_rechecked": 3,
+    "actual_app_static_routes_parsed": 5,
+    "separate_dependency_files_verified_against_full_git_blobs": 4,
+    "distinct_dependency_profile_files": 4,
+    "profiles_which_allow_an_affected_release": 2,
+    "profiles_which_exclude_affected_releases": 2,
+    "all_provenance_pinned_by_full_upstream_commit": true,
+    "unit_tests_external_source": 15,
+    "unit_tests_external_source_evidence": 3,
+    "unit_tests_dependency_provenance": 11,
+    "unit_tests_prior_runtime_contract": 15,
+    "unit_tests_prior_runtime_evidence": 3,
+    "total_focused_tests_passed": 47,
+    "ci_conclusion": "success",
+    "dependency_resolver_executed": false,
+    "external_application_imports_or_executions": 0,
+    "actual_third_party_runtime_versions_measured": 0,
+    "vulnerability_proven": 0,
+    "independent_expert_security_labels": 0,
+    "accepted_anjoman_evaluation_rows": 0,
+    "network_eligible": false
+  },
+  "caution": "Verified Git-pinned requirement text is not an actual installed or deployed dependency. Perspective and Maubot allow a historically affected version; this does not show they actually used it. NLWeb AskAgent and Azure are distinct requirement profiles with different lower-bound/exact declarations, not evidence of one conflicting resolved environment.",
+  "next_step": "Pin actual dependency resolution in an authorized isolated environment of an external application, and obtain independent human-reviewed vulnerability and false-positive labels before claiming reliability or evaluator registration."
+}
