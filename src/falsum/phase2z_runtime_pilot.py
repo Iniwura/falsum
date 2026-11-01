@@ -56,11 +56,10 @@ def validate_contract(spec:dict)->list[dict]:
     for row,expected in zip(rows,ALLOWED):
         if (not isinstance(row,dict)
                 or set(row)!={"name","module","path","expected_runtime_flag","expected_syntax"}
-                or tuple(row.values())!=expected):
-            # Fixed explicit keys, not arbitrary row ordering, defines the identity.
-            if not isinstance(row,dict) or tuple(row.get(k) for k in (
-                    "name","module","path","expected_runtime_flag","expected_syntax"))!=expected:
-                raise ProofError("changed source fixture or expected real runtime result")
+                or tuple(row.get(k) for k in (
+                    "name","module","path","expected_runtime_flag","expected_syntax"))!=expected
+                or type(row.get("expected_runtime_flag")) is not bool):
+            raise ProofError("changed source fixture, surplus fields or expected real runtime result")
     return rows
 
 
