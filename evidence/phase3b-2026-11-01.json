@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3B_REAL_SHARED_FOUNDATION_SAFETENSORS_DELTA_STRUCTURAL_PASS_RESEARCH_ONLY",
+  "verified_on": "2026-11-01",
+  "source_project": "https://github.com/Iniwura/falsum",
+  "actual_export_and_official_check_run": "https://github.com/Iniwura/falsum/actions/runs/41304788714",
+  "artifact_id": 13082304092,
+  "artifact_url": "https://github.com/Iniwura/falsum/actions/runs/41304788714/artifacts/13082304092",
+  "prior_model_training_run": 41283929744,
+  "prior_model_training_artifact": 13074383795,
+  "original_model_checkpoint_manifest_sha256": "a20bdc0ffdc9ee776877e60b5c19c225d9279467d005916a6978db1650482d33",
+  "pinned_current_official_kit_commit": "1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd",
+  "foundation_release": "modernbert-base-lora16-v1",
+  "foundation_manifest_file_sha256": "f7de64b999acd3f735118fbe5999abf251fdf188f9797e3a4e36c54ee9e4dbbe",
+  "foundation_graph_sha256": "0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6",
+  "official_foundation_tokenizer_sha256": "67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456",
+  "old_saved_tokenizer_sha256": "3703d011b3ee259e00b59b60772f8fd54998d79e8fa5a1388d507eff28f8f09e",
+  "tokenizer_compatibility": {
+    "full_parsed_json_matches_except_truncation": true,
+    "old_truncation": {
+      "direction": "Right",
+      "max_length": 512,
+      "strategy": "LongestFirst",
+      "stride": 0
+    },
+    "official_truncation": {
+      "direction": "Right",
+      "max_length": 1536,
+      "strategy": "LongestFirst",
+      "stride": 0
+    },
+    "official_node_input_max_tokens": 512,
+    "original_adapter_bytes_never_modified": true,
+    "official_tokenizer_bytes_substituted_only_in_separate_export_copy": true,
+    "framework_export_enforced_canonical_tokenizer_sha": true
+  },
+  "real_structurally_checked_adapter": {
+    "filename": "SECURITY_REVIEW.safetensors",
+    "intent": "SECURITY_REVIEW",
+    "class": "hybrid",
+    "abi": "lora-v1",
+    "sha256": "3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc",
+    "keccak256": "0xf8f94708f30ed31b6f0825dbffb235fa60b0e71b76fde39dbc696cf277ef8aa7",
+    "size_bytes": 6776908,
+    "rank": 8,
+    "alpha": 32,
+    "allowed_target_modules": [
+      "Wi",
+      "Wo",
+      "Wqkv"
+    ],
+    "tensors": 178,
+    "max_tokens": 512,
+    "official_stage1_parser_passed": true,
+    "actually_loaded_and_scored_with_foundation": false,
+    "runner_smoke_scored": false,
+    "network_hidden_evaluation_passed": false,
+    "actively_registered": false,
+    "network_eligible": false
+  },
+  "experimental_quality": {
+    "official_old_trainer_small_synthetic_pair_gate_passed": true,
+    "old_three_external_project_diagnostic_preference_agreement": "3/6 AI suggestions",
+    "old_three_external_project_diagnostic_correct_context_families": "0/3",
+    "model_generalization_not_demonstrated": true,
+    "independent_human_security_labels": 0,
+    "accepted_anjoman_pool_rows": 0,
+    "no_near_term_claim_to_replace_canonical": true
+  },
+  "limitations": "A correctly exported delta package and a structural parser result do not demonstrate foundation runtime scoring, 70% hidden network score, independent AppSec correctness, an operational external runnable endpoint, or active testnet registration. This trained checkpoint remains quarantined.",
+  "next_actions": [
+    "Run official foundation + delta score smoke using immutable engine and tokenizer in an isolated CI environment without registering anything",
+    "Obtain independent human adjudication, realistic holdout examples and eligible Anjoman material",
+    "Verify affordable always-available external runnable endpoint requirements before any registration"
+  ]
+}
