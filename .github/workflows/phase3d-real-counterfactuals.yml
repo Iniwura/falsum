@@ -1,0 +1,162 @@
+name: Phase 3D - REAL foundation version and symlink-flag counterfactual reversal
+on:
+  push:
+    paths:
+      - '.github/workflows/phase3d-real-counterfactuals.yml'
+      - 'src/falsum/phase3d_counterfactual_inputs.py'
+      - 'src/falsum/phase3d_counterfactual_report.py'
+      - 'tests/test_phase3d_counterfactual.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-model-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      PYTHONUNBUFFERED: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test score provenance, input validation and no-fabricated-accuracy controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3d_counterfactual.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3b_delta_readiness.py -v
+          mkdir -p "$RUNNER_TEMP/falsum-phase3d/reports"
+      - name: Checkout exact official Telegraph 2026 shared Foundation engine runtime
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Download original converted PHASE 3B real trained LoRA research artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE3B-RESEARCH-DELTA-NOT-NETWORK-REGISTERED
+          run-id: 41304788714
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/falsum-phase3d/old-real-model
+      - name: Verify exact original adapter SHA256 BEFORE ANY model inference
+        shell: bash
+        run: |
+          set -euo pipefail
+          pkg="$(find "$RUNNER_TEMP/falsum-phase3d/old-real-model" -type f -name SECURITY_REVIEW.safetensors -print -quit)"
+          test -n "$pkg"
+          echo "3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc  $pkg" | sha256sum -c -
+          echo "REAL_MODEL_PACKAGE=$pkg" >> "$GITHUB_ENV"
+          echo "Original current-format model bytes verified; ZERO retraining and no tampering." >> "$GITHUB_STEP_SUMMARY"
+      - name: Download and SHA256 verify official 599MB Foundation, engine and tokenizer
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-phase3d/foundation"
+          prefix='https://github.com/telegraphprotocol/telegraph-foundation/releases/download/modernbert-base-lora16-v1'
+          for asset in foundation.json foundation_engine.wasm foundation_lora_fp32.onnx tokenizer.json; do
+            curl --fail --location --silent --show-error --retry 3 \
+              "$prefix/$asset" -o "$RUNNER_TEMP/falsum-phase3d/foundation/$asset"
+          done
+          (
+            cd "$RUNNER_TEMP/falsum-phase3d/foundation"
+            printf '%s  %s\n' \
+              f7de64b999acd3f735118fbe5999abf251fdf188f9797e3a4e36c54ee9e4dbbe foundation.json \
+              77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de foundation_engine.wasm \
+              0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6 foundation_lora_fp32.onnx \
+              67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456 tokenizer.json \
+                | sha256sum -c -
+          )
+      - name: Generate eight bounded identical-answer controlled counterfactual tokenizer inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'tokenizers==0.22.2'
+          PYTHONPATH=src python -m falsum.phase3c_score_inputs \
+            --tokenizer "$RUNNER_TEMP/falsum-phase3d/foundation/tokenizer.json" \
+            --out "$RUNNER_TEMP/falsum-phase3d/reports/COUNTERFACTUAL-TOKEN-INPUTS.json"
+      - name: Build the official pinned Telegraph Go adapterbuild executable
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd telegraph-kit
+          go build -o "$RUNNER_TEMP/falsum-phase3d/adapterbuild" ./cmd/adapterbuild
+      - name: Run actual full Foundation ONNX and WASI scoring on EIGHT distinct inputs twice each
+        shell: bash
+        run: |
+          set -euo pipefail
+          f="$RUNNER_TEMP/falsum-phase3d/foundation"
+          d="$RUNNER_TEMP/falsum-phase3d/reports"
+          python - "$d/COUNTERFACTUAL-TOKEN-INPUTS.json" <<'PY' > "$d/CASE-IDS.txt"
+          import json,sys
+          x=json.load(open(sys.argv[1]))
+          assert len(x["inputs"])==8
+          for r in x["inputs"]:
+              assert r["id"].replace("-","").isalnum()
+              print(r["id"])
+          PY
+          test "$(wc -l < "$d/CASE-IDS.txt")" -eq 8
+          while IFS= read -r id; do
+            test -n "$id"
+            mkdir -p "$d/$id"
+            "$RUNNER_TEMP/falsum-phase3d/adapterbuild" lora \
+              --intent SECURITY_REVIEW \
+              --package "$REAL_MODEL_PACKAGE" \
+              --foundation "$f/foundation.json" \
+              --foundation-onnx "$f/foundation_lora_fp32.onnx" \
+              --engine "$f/foundation_engine.wasm" \
+              --engine-hash 77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de \
+              --input "$d/SCORE-$id.json" \
+              --out "$d/$id" \
+              > "$d/$id/OFFICIAL-SCORE.json" \
+              2> "$d/$id/OFFICIAL-ENGINE-LOG.txt"
+            python - "$d/$id/OFFICIAL-SCORE.json" <<'PY'
+          import json,sys
+          x=json.load(open(sys.argv[1]))
+          assert x["manifest"]["verification"]["stage1"] is True
+          assert x["manifest"]["verification"]["loaded"] is True
+          assert x["manifest"]["verification"]["repeats"]==2
+          assert x["score_hex"]
+          print("Official loaded model score:",sys.argv[1],x["score_hex"],flush=True)
+          PY
+          done < "$d/CASE-IDS.txt"
+      - name: Calculate REAL observed margins without treating failures as a CI failure
+        shell: bash
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/falsum-phase3d/reports"
+          PYTHONPATH=src python -m falsum.phase3d_counterfactual_report \
+            --inputs "$d/COUNTERFACTUAL-TOKEN-INPUTS.json" \
+            --scores-dir "$d" \
+            --out "$d/ACTUAL-REAL-REVERSAL-MARGINS.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=Path(os.environ["RUNNER_TEMP"])/"falsum-phase3d/reports"
+          x=json.loads((d/"ACTUAL-REAL-REVERSAL-MARGINS.json").read_text())
+          assert x["real_independent_score_inputs"]==8
+          assert x["real_inference_calls_including_repeats"]==16
+          assert x["families_tested"]==2
+          assert x["labels_human_adjudicated"]==0
+          assert x["network_eligible"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### Actual Foundation + rank-8 LoRA counterfactual diagnostic\n\n")
+              for family in x["counterfactual_families"]:
+                  f.write(f"**{family['family']}**: ranking reversal = {family['ranking_reverses_when_one_deployment_fact_changes']}; both rule preferences = {family['both_context_preferences_match_provisional_rule']}\n\n")
+                  for row in family["contexts"]:
+                      f.write(f"- {row['context']}: score margin {row['margin_a_minus_b']:.7f}, preferred {row['model_preferred']}, provisional expected {row['rule_provisional_expected']}\n")
+                  f.write("\n")
+              f.write("**These are actual repeated model scores, but researcher-defined scenarios and rule-based preferences, not human-reviewed labels, network accuracy or registration.**\n")
+          PY
+      - name: Always archive bounded research logs, not 600 MB Foundation and not old model weights
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE3D-REAL-COUNTERFACTUAL-MARGINS-NOT-NETWORK-ELIGIBLE
+          path: ${{ runner.temp }}/falsum-phase3d/reports/
+          retention-days: 14
+          if-no-files-found: warn
