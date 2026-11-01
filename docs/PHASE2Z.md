@@ -27,7 +27,7 @@ This runs for all three source fixtures, for **six actual loopback HTTP requests
 
 ### Actual observed outcome
 
-[Successful actual CI run 41289904581](https://github.com/Iniwura/falsum/actions/runs/41289904581):
+[Successful actual CI run 41290076124](https://github.com/Iniwura/falsum/actions/runs/41290076124):
 
 | Source fixture | Static Phase 2Y implication | Real patched aiohttp route flag | Loopback HTTP |
 | --- | --- | --- | --- |
@@ -37,9 +37,9 @@ This runs for all three source fixtures, for **six actual loopback HTTP requests
 
 All three module/source pairs matched, all route flags were observed through the **actual imported framework**, and the dynamic third sample was **not given fake static certainty**.
 
-The final workflow completed **15 Phase 2Z provenance/contract tests**, **28 Phase 2Y binding tests**, and **12 Phase 2Y claim-guard tests**, for **55 focused passing tests**. Prior foundation and official Telegraph data gate runs also remained green. One earlier failing adversarial test exposed a surplus-contract-field bypass; it was fixed, reverified and is part of the final passing result. Source fixture hash pins were further hardened so tampered runnable files fail before import.
+The final workflow completed **15 Phase 2Z provenance/contract tests, **3 permanent runtime evidence tests****, **28 Phase 2Y binding tests**, and **12 Phase 2Y claim-guard tests**, for **58 focused passing tests**. Prior foundation and official Telegraph data gate runs also remained green. One earlier failing adversarial test exposed a surplus-contract-field bypass; it was fixed, reverified and is part of the final passing result. Source fixture hash pins were further hardened so tampered runnable files fail before import.
 
-[Actual runtime report and pip freeze artifact 13076666791](https://github.com/Iniwura/falsum/actions/runs/41289904581/artifacts/13076666791). Artifacts are time-limited, so the observed facts are also preserved in [permanent evidence](../evidence/phase2z-2026-11-01.json).
+[Actual runtime report and pip freeze artifact 13077016302](https://github.com/Iniwura/falsum/actions/runs/41290076124/artifacts/13077016302). Artifacts are time-limited, so the observed facts are also preserved in [permanent evidence](../evidence/phase2z-2026-11-01.json).
 
 ## Local reproduction
 
