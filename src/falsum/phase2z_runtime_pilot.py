@@ -28,13 +28,25 @@ ALLOWED=(
 )
 CASE="real-aiohttp-static-traversal"
 VERSION="3.10.11"
+SOURCE_GIT_BLOBS=(
+    "ee193d962f1cdabbe5ac79d3e11c21bcc1472a65",
+    "0589f7861bded015a6c0c4b40faf1f055e3af863",
+    "25e2252d5bde2dc9b5712db1d5f4935593341fdd",
+)
+PUBLIC_ASSET_GIT_BLOB="d02056871746cde2569403cd398040e71ff6009c"
+
+
+def _git_blob(data:bytes)->str:
+    # Exact raw Git blob SHA-1, NOT a substitute for SHA-256.
+    return hashlib.sha1(f"blob {len(data)}\\0".replace("\\0","\0").encode()+data).hexdigest()
+
 
 
 def validate_contract(spec:dict)->list[dict]:
     if (not isinstance(spec,dict) or
             set(spec)!={"schema_version","status","framework","installed_version","advisory",
                         "patched_since","source_case","only_allowed_python_modules","fixtures",
-                        "trusted_input_notice","independent_human_reviews",
+                        "trusted_input_notice","public_asset_git_blob","independent_human_reviews",
                         "live_vulnerabilities_confirmed","network_eligible","limits"}
             or spec.get("schema_version")!=1
             or spec.get("status")!="CONTROLLED_PATCHED_AIOHTTP_RUNTIME_PILOT_RESEARCH_ONLY"
@@ -43,6 +55,7 @@ def validate_contract(spec:dict)->list[dict]:
             or spec.get("patched_since")!="3.9.2"
             or spec.get("advisory")!="GHSA-5h86-8mv2-jq9f"
             or spec.get("source_case")!=CASE
+            or spec.get("public_asset_git_blob")!=PUBLIC_ASSET_GIT_BLOB
             or spec.get("independent_human_reviews")!=0
             or spec.get("live_vulnerabilities_confirmed")!=0
             or spec.get("network_eligible") is not False):
@@ -53,11 +66,12 @@ def validate_contract(spec:dict)->list[dict]:
     rows=spec.get("fixtures")
     if not isinstance(rows,list) or len(rows)!=len(ALLOWED):
         raise ProofError("exactly three controlled and explicit source fixtures required")
-    for row,expected in zip(rows,ALLOWED):
+    for row,expected,blob in zip(rows,ALLOWED,SOURCE_GIT_BLOBS):
         if (not isinstance(row,dict)
-                or set(row)!={"name","module","path","expected_runtime_flag","expected_syntax"}
+                or set(row)!={"name","module","path","expected_runtime_flag","expected_syntax","source_git_blob"}
                 or tuple(row.get(k) for k in (
                     "name","module","path","expected_runtime_flag","expected_syntax"))!=expected
+                or row.get("source_git_blob")!=blob
                 or type(row.get("expected_runtime_flag")) is not bool):
             raise ProofError("changed source fixture, surplus fields or expected real runtime result")
     return rows
@@ -71,6 +85,8 @@ def _original_files(root:Path,rows:list[dict])->list[Path]:
         file=(root/row["path"]).resolve(strict=True)
         if file!=root.resolve()/row["path"] or not file.is_file() or file.is_symlink():
             raise ProofError("fixture path escapes tracked repository")
+        if _git_blob(file.read_bytes()) != row["source_git_blob"]:
+            raise ProofError("source fixture Git blob changed; refusing import or execution")
         locations.append(file)
     return locations
 
@@ -135,6 +151,8 @@ def run_pilot(spec:dict,catalog:dict,sources:list[dict],root:Path)->dict:
     runtime_sha=hashlib.sha256(actual_path.read_bytes()).hexdigest()
     asset=(root/"examples/phase2z_runtime_pilot/assets/public.txt").resolve(strict=True)
     asset_bytes=asset.read_bytes()
+    if _git_blob(asset_bytes)!=PUBLIC_ASSET_GIT_BLOB:
+        raise ProofError("controlled HTTP response asset Git object changed")
     if not asset_bytes or len(asset_bytes)>2000:
         raise ProofError("missing bounded harmless public asset")
     observed=[]
