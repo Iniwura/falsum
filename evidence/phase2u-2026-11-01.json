@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "status": "PHASE2U_REAL_TRAINING_FAILED_CONTEXT_TRANSFER_RESEARCH_ONLY",
+  "date": "2026-11-01",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "training_run": "https://github.com/Iniwura/falsum/actions/runs/41283929744",
+  "training_artifact_id": 13074383795,
+  "training_artifact_expiry": "2026-11-08",
+  "frozen_model_experiment_run": "https://github.com/Iniwura/falsum/actions/runs/41126779406",
+  "source_separated_generation_run": "https://github.com/Iniwura/falsum/actions/runs/41284227213",
+  "three_project_comparison_run": "https://github.com/Iniwura/falsum/actions/runs/41284380222",
+  "three_project_comparison_artifact_id": 13074830234,
+  "three_project_comparison_report_sha256": "819d5a42b8d7de7f2bb405a4584226304bafa11c389e479181a159c9f7b9b79a",
+  "new_model_adapter_sha256": "a20bdc0ffdc9ee776877e60b5c19c225d9279467d005916a6978db1650482d33",
+  "frozen_model_adapter_sha256": "1f1c59642936235c73eb94eb44a5f9b95e8899635d997e2e3d2546b567948f1d",
+  "training_data": {
+    "prior_synthetic_GHSA_train_pairs": 52,
+    "new_AI_provisional_source_context_pairs": 8,
+    "total": 60,
+    "research_training_projects": [
+      "Kludex/starlette",
+      "urllib3/urllib3",
+      "django/django",
+      "expressjs/express"
+    ],
+    "never_trained_on_these_inspected_projects": [
+      "aio-libs/aiohttp",
+      "axios/axios",
+      "pallets/jinja",
+      "psf/requests"
+    ],
+    "prior_inspected_projects_advisory_overlap_count": 2,
+    "prior_AI_draft_inspected": true,
+    "human_approved_labels": 0,
+    "source_test_replays_for_train_projects": 8,
+    "complete_added_training_model_inputs": 16,
+    "maximum_added_input_tokens": 497,
+    "node_token_cap": 512,
+    "official_data_gate": {
+      "passed": true,
+      "unique_rejected_fraction": 1,
+      "maximum_repeated_negative_fraction": 0.0167,
+      "length_shortcut_accuracy": 0.5,
+      "answer_only_surface_probe_accuracy": 0.4111,
+      "negative_train_eval_leak": 0
+    }
+  },
+  "real_model_training": {
+    "algorithm": "official Telegraph V2 ModernBERT Bradley-Terry LoRA reward model",
+    "pinned_official_kit_commit": "5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e",
+    "research_epochs": 1,
+    "training_loss": 0.695,
+    "validation_pairwise_accuracy": 0.6667,
+    "validation_loss": 0.6918,
+    "official_result_evaluation_pairs": 6,
+    "official_result_pairwise_accuracy": 1,
+    "official_result_verdict": "PASS",
+    "official_result_does_not_authorize_network_eligibility": true
+  },
+  "inspected_original_four_projects_diagnostic": {
+    "source": "real fixed public patches and AI-invented deployment contexts; two of four advisories appeared in prior GHSA training",
+    "frozen_model_agrees_with_AI_proposals": 4,
+    "new_model_agrees_with_AI_proposals": 4,
+    "count": 8,
+    "frozen_families_with_both_contexts_correct_against_AI_proposals": 0,
+    "new_families_with_both_contexts_correct_against_AI_proposals": 0,
+    "families": 4
+  },
+  "fresh_source_separated_transfer": {
+    "never_used_in_intervention_training": [
+      "tornadoweb/tornado",
+      "nodejs/undici",
+      "python-websockets/websockets"
+    ],
+    "source_git_commits": [
+      "ab4953f1262636343bcc1875117f7a8c93d10509",
+      "6d583124e7cf60b640097d64144ed633cc450584",
+      "b6a25ceb3555d0ba69e5961b8d7616e4c1aecb2b"
+    ],
+    "verified_pre_post_source_and_regression_file_replays": 6,
+    "research_AI_context_pair_count": 6,
+    "actual_full_model_inputs_token_checked": 12,
+    "largest_full_model_tokens": 450,
+    "source_separated_but_not_sealed": true,
+    "old_model_ai_proposal_agreements": 3,
+    "new_model_ai_proposal_agreements": 3,
+    "old_model_families_matching_both_provisional_contexts": 0,
+    "new_model_families_matching_both_provisional_contexts": 0,
+    "source_families": 3,
+    "individual_model_cases": [
+      {
+        "id": "fresh-tornado-cookie-attribute:exposure",
+        "original_margin": 0.1063,
+        "new_margin": 0.08569,
+        "old_ai_agree": true,
+        "new_ai_agree": true
+      },
+      {
+        "id": "fresh-tornado-cookie-attribute:missing-precondition",
+        "original_margin": -0.12489,
+        "new_margin": -0.11464,
+        "old_ai_agree": false,
+        "new_ai_agree": false
+      },
+      {
+        "id": "fresh-undici-chunked-dump:exposure",
+        "original_margin": -0.06988,
+        "new_margin": -0.05776,
+        "old_ai_agree": false,
+        "new_ai_agree": false
+      },
+      {
+        "id": "fresh-undici-chunked-dump:missing-precondition",
+        "original_margin": 0.05444,
+        "new_margin": 0.04704,
+        "old_ai_agree": true,
+        "new_ai_agree": true
+      },
+      {
+        "id": "fresh-websockets-deflate-limit:exposure",
+        "original_margin": 0.11208,
+        "new_margin": 0.11051,
+        "old_ai_agree": true,
+        "new_ai_agree": true
+      },
+      {
+        "id": "fresh-websockets-deflate-limit:missing-precondition",
+        "original_margin": -0.09485,
+        "new_margin": -0.10325,
+        "old_ai_agree": false,
+        "new_ai_agree": false
+      }
+    ]
+  },
+  "conclusion": {
+    "provisional_context_transfer_improvement_observed": false,
+    "research_only": true,
+    "independent_human_reviews": 0,
+    "eligible_Anjoman_evaluation_pairs": 0,
+    "live_evaluator_registered": false,
+    "deployment_authorized": false,
+    "independent_security_accuracy_measured": false,
+    "recommended_next_step": "Do not repeat the current 52:8 advisory-heavy one-epoch recipe. Build an explicitly evidence-conditioned training objective with adequate independent/project-separated examples and external review where possible, measure against larger untouched projects, and require improvement in full-pair context reversals before a WASM network candidate."
+  },
+  "provenance_note": "All security preferences in source-specific comparisons are AI-authored hypothetical judgements, not expert adjudications; exact run and source-model archive hashes preserved. A PASS on six draft GHSA pairs is not an independent accepted network score. Study was not trained on its three fresh transfer projects."
+}
