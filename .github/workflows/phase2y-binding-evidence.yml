@@ -5,6 +5,8 @@ on:
       - 'src/falsum/phase2y_bindings.py'
       - 'tests/test_phase2y_bindings.py'
       - 'tests/test_phase2y_claim_guard.py'
+      - 'tests/test_phase2y_research_evidence.py'
+      - 'evidence/phase2y-2026-11-01.json'
       - 'src/falsum/phase2y_claim_guard.py'
       - '.github/workflows/phase2y-binding-evidence.yml'
   workflow_dispatch:
@@ -25,6 +27,7 @@ jobs:
           set -euo pipefail
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2y_bindings.py' -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2y_claim_guard.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2y_research_evidence.py' -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2x_ast_observer.py' -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2w_proof_gate.py' -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2w_capture.py' -v
