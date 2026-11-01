@@ -1,0 +1,80 @@
+name: Phase 3A - three pinned outside app source probes (no execution)
+on:
+  push:
+    paths:
+      - 'src/falsum/phase3a_external_sources.py'
+      - 'data/phase3a-external-source-cases.json'
+      - 'tests/test_phase3a_external_sources.py'
+      - '.github/workflows/phase3a-external-source-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  external-source-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Adversarially prove no invented external repos, labels, execution or trust promotion
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m unittest discover -s tests -p test_phase3a_external_sources.py -v
+          PYTHONPATH=src python -m unittest discover -s tests -p test_phase2z_runtime_pilot.py -v
+          PYTHONPATH=src python -m unittest discover -s tests -p test_phase2z_evidence.py -v
+      - name: Fetch exactly three independent external Python source files by full immutable upstream commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-3a"
+          PYTHONPATH=src python -m falsum.phase3a_external_sources \
+            --contract data/phase3a-external-source-cases.json \
+            --out "$RUNNER_TEMP/falsum-3a/EXTERNAL-SOURCES-SHA1-SHA256-AST-ONLY.json"
+      - name: Check true external source exposure facts without false positive claims
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"falsum-3a/EXTERNAL-SOURCES-SHA1-SHA256-AST-ONLY.json"
+          r=json.loads(p.read_text(encoding="utf-8"))
+          assert r["status"]=="PHASE3A_EXTERNAL_GIT_SOURCE_AST_FACTS_NOT_SECURITY_VERDICTS"
+          assert r["external_source_commits_and_blobs_verified"] is True
+          assert r["source_executes_imports_or_applications"] is False
+          assert r["independent_external_project_count"]==3 and r["source_call_count"]==5
+          assert r["observed_syntactic_states"]=={
+              "EXPLICIT_FALSE":2,"EXPLICIT_TRUE":1,"OMITTED_OPTION":2}
+          assert r["third_party_applications_executed"]==0
+          assert r["affected_dependency_versions_proven"] is False
+          assert r["runtime_exploitability_proven"] is False
+          assert r["confirmed_vulnerabilities"]==0
+          assert r["independent_expert_ground_truth_labels"]==0
+          assert r["accepted_anjoman_evaluation_rows"]==0
+          assert r["registered_evaluator"] is False and r["network_eligible"] is False
+          for case in r["cases"]:
+              assert len(case["full_file_sha256"])==64
+              assert case["source_code_executed"] is False
+              assert case["dependency_version_proven"] is False
+              assert case["external_runtime_tested"] is False
+              for call in case["static_router_calls"]:
+                  assert call["call_executed"] is False
+                  assert call["applicability_conclusion"]=="UNRESOLVED_NO_DEPLOYMENT_OR_VERSION_PROOF"
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as f:
+              f.write("### FALSUM source-independent public application pilot\n\n")
+              f.write("Three **externally maintained public repositories** at pinned full Git commits: Perspective, NLWeb, Maubot. All three full source file Git blob SHA-1 IDs verified before Python AST parsing. Five real source call sites: **1 True, 2 False, 2 omitted**.\n\n")
+              f.write("No third-party application code was executed or copied into artifacts; no real dependency/production environment verified. **All five applicability verdicts remain UNRESOLVED**. This is genuine external source evidence, not observed exploitability, accuracy or network submission.\n")
+          PY
+      - name: Archive only proof report, not external proprietary or licensed source code
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3A-THREE-EXTERNAL-REAL-SOURCE-ONLY-NO-SECURITY-ACCURACY
+          path: ${{ runner.temp }}/falsum-3a/EXTERNAL-SOURCES-SHA1-SHA256-AST-ONLY.json
+          retention-days: 14
+          if-no-files-found: error
