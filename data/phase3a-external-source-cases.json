@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "status": "EXTERNAL_PUBLIC_APPLICATION_SOURCE_PINNED_NOT_EXECUTED",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "research_only": true,
+  "external_app_execution_authorized": false,
+  "advisory": "GHSA-5h86-8mv2-jq9f",
+  "source_projects": [
+    {
+      "id": "perspective-external",
+      "repository": "perspective-dev/perspective",
+      "commit": "444865accd46bcfdeb552960ce4f63fe8286de42",
+      "path": "examples/python-aiohttp/server.py",
+      "git_blob_sha1": "6025af225ed0c9c6cfdf0c81abc7a05c8dc9b34b",
+      "expected_values": [
+        "EXPLICIT_TRUE",
+        "OMITTED_OPTION"
+      ],
+      "expected_call_lines": [
+        47,
+        48
+      ]
+    },
+    {
+      "id": "nlweb-external",
+      "repository": "nlweb-ai/NLWeb",
+      "commit": "b423f15d9aeaa023ce75993ac9deed2354597043",
+      "path": "AskAgent/python/webserver/routes/static.py",
+      "git_blob_sha1": "455e333e12de498bf45bec4b8b53541b22431233",
+      "expected_values": [
+        "EXPLICIT_FALSE",
+        "EXPLICIT_FALSE"
+      ],
+      "expected_call_lines": [
+        45,
+        56
+      ]
+    },
+    {
+      "id": "maubot-external",
+      "repository": "maubot/maubot",
+      "commit": "f20825b5e3031a89eb5b2edea7f6f7726ada9a10",
+      "path": "maubot/server.py",
+      "git_blob_sha1": "4ba07eacddda99e4f17b1649f6e9863399e458a8",
+      "expected_values": [
+        "OMITTED_OPTION"
+      ],
+      "expected_call_lines": [
+        112
+      ]
+    }
+  ],
+  "trust_boundary": {
+    "scope": "Verbatim public sources retrieved at exact full Git commit and verified exact Git file blob SHA1; syntax-only AST parsing, no import/execution.",
+    "affected_dependency_version_proven": false,
+    "runtime_import_binding_proven": false,
+    "production_reachability_proven": false,
+    "complete_application_audited": false,
+    "independent_human_labels": 0,
+    "real_security_exploits_proven": 0,
+    "accepted_anjoman_rows": 0,
+    "network_eligible": false,
+    "note": "Even source literal True does not establish historical advisory applicability without affected dependency version and deployment conditions. Omitted keyword is UNRESOLVED, never safe."
+  }
+}
