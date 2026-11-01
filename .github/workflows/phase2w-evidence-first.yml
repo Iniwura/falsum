@@ -5,6 +5,8 @@ on:
       - 'data/phase2w-applicability-rules.json'
       - 'src/falsum/phase2w_proof_gate.py'
       - 'src/falsum/phase2w_synthetic_demo.py'
+      - 'src/falsum/phase2w_capture.py'
+      - 'tests/test_phase2w_capture.py'
       - 'tests/test_phase2w_proof_gate.py'
       - '.github/workflows/phase2w-evidence-first.yml'
   workflow_dispatch:
@@ -23,7 +25,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase2w_proof_gate.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2w_proof_gate.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase2w_capture.py' -v
           PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase2t_project_isolation.py' -v
           PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase2u_fresh_transfer.py' -v
       - name: Generate 44 explicitly synthetic source-bound application scenarios
@@ -96,6 +99,66 @@ jobs:
               assert proof["file_replays_verified"]==8
               assert proof["training_authorized"] is False
           print("Real upstream source/test SHA-replays pass 16/16 across original eight projects")
+          PY
+      - name: Verify actual source-file capture command can construct and check a developer-submitted application excerpt
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-2w/illustrative-application"
+          cat > "$RUNNER_TEMP/falsum-2w/illustrative-application/app.py" <<'PYCODE'
+          proxy = "http://user:password@proxy.example.invalid:8080"
+          redirected_to = "https://example.invalid/"
+          opts = {"proxy": proxy, "redirected_to": redirected_to}
+          PYCODE
+          cat > "$RUNNER_TEMP/falsum-2w/claims.json" <<'JSON'
+          {
+            "status": "SUBMITTER_ASSERTIONS_UNREVIEWED",
+            "claims": [
+              {"requirement_id": "credentialed_proxy", "claim": "present", "path": "app.py", "line_start": 1, "line_end": 1},
+              {"requirement_id": "https_redirect", "claim": "present", "path": "app.py", "line_start": 2, "line_end": 2}
+            ]
+          }
+          JSON
+          PYTHONPATH=src python -m falsum.phase2w_capture \
+            --catalog data/phase2w-applicability-rules.json \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --fresh-spec data/phase2u-fresh-transfer-cases.json \
+            --case-id real-requests-proxy-auth \
+            --claims "$RUNNER_TEMP/falsum-2w/claims.json" \
+            --root "$RUNNER_TEMP/falsum-2w/illustrative-application" \
+            --out "$RUNNER_TEMP/falsum-2w/CAPTURED-EXACT-APPLICATION-EXCERPTS.json"
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"falsum-2w"
+          m=json.loads((root/"CAPTURED-EXACT-APPLICATION-EXCERPTS.json").read_text())
+          assert m["evidence_origin"]=="unreviewed_application_submission"
+          assert len(m["evidence"])==2
+          assert all(len(e["sha256"])==64 and e["quote"] for e in m["evidence"])
+          packet={"schema_version":1,"status":"UNREVIEWED_APPLICATION_EVIDENCE_BATCH",
+                  "research_only":True,"scenarios":[m]}
+          (root/"ILLUSTRATIVE-APPLICATION-BATCH.json").write_text(json.dumps(packet))
+          PY
+          PYTHONPATH=src python -m falsum.phase2w_proof_gate \
+            --catalog data/phase2w-applicability-rules.json \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --fresh-spec data/phase2u-fresh-transfer-cases.json \
+            --batch "$RUNNER_TEMP/falsum-2w/ILLUSTRATIVE-APPLICATION-BATCH.json" \
+            --root "$RUNNER_TEMP/falsum-2w/illustrative-application" \
+            --out "$RUNNER_TEMP/falsum-2w/ILLUSTRATIVE-APPLICATION-REVIEW.json"
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"falsum-2w"
+          d=json.loads((root/"ILLUSTRATIVE-APPLICATION-REVIEW.json").read_text())
+          assert d["results"][0]["result"]=="CONDITIONALLY_APPLICABLE_REVIEW_CANDIDATE"
+          assert not d["results"][0]["confirmed_security_finding"]
+          assert not d["results"][0]["actual_application_semantics_verified"]
+          assert not d["network_eligible"]
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("Illustrative local application file capture, SHA binding and line evidence extraction also passed. This is a fictional code example, not proof of exploitability.\n")
           PY
       - name: Archive research-only integrity and upstream evidence
         uses: actions/upload-artifact@v4
