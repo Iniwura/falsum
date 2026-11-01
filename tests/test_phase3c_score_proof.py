@@ -18,7 +18,7 @@ from falsum.phase3c_score_report import (
 def fake_inputs():
     def encode(t):
         v=2 if t.endswith(CANDIDATES[0][1]) else 3
-        return [50281, 100, 200, v, 50282]
+        return [50281, 100, 200, v, 301, 302, 303, 50282]
     raw=b"mock-tokenizer-only-for-tests"
     with patch("falsum.phase3c_score_inputs.TOKENIZER_SHA256",hashlib.sha256(raw).hexdigest()):
         return make_inputs(raw,encode)
