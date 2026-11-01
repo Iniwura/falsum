@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "status": "PHASE2V_REAL_GRADIENT_IN_SAMPLE_PROGRESS_NO_SOURCE_TRANSFER",
+  "date": "2026-11-01",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "workflow_run": "https://github.com/Iniwura/falsum/actions/runs/41285552033",
+  "workflow_artifact": "https://github.com/Iniwura/falsum/actions/runs/41285552033/artifacts/13075226722",
+  "workflow_artifact_id": 13075226722,
+  "archive_sha256": "ba0929b0912d71fb01e9019c0df5034f3790573fbd5a9858c08d474449c9cf03",
+  "exact_training_report_sha256": "7361115e9b4f4722c112e2fefffdce91ca28866db863ab6085543d4c13211b96",
+  "exact_external_comparison_sha256": "1ba8f056f96f5d3e2796cace5cd4cd447f297b3e819aa1cca076a81d541ccd44",
+  "official_pinned_kit_commit": "5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e",
+  "training": {
+    "objective": "per-source coupled Bradley-Terry softplus exposure and missing prerequisites plus paired-context cross-difference margin and squared prompt-hidden style margin",
+    "optimizer": "AdamW trainable PEFT LoRA",
+    "code": "src/falsum/phase2v_coupled.py",
+    "research_only": true,
+    "official_upstream_training_procedure": false,
+    "starting_model": "Phase2U LoRA research checkpoint",
+    "starting_adapter_manifest_sha256": "a20bdc0ffdc9ee776877e60b5c19c225d9279467d005916a6978db1650482d33",
+    "trained_adapter_manifest_sha256": "ac0aa02a7554eb263547041eb099ccc62657c382bc3438baf70314f327ab8dba",
+    "steps": 16,
+    "learning_rate": 0.00012,
+    "margin_target": 0.25,
+    "contrastive_weight": 0.6,
+    "answer_only_neutral_weight": 0.1,
+    "seed": 23,
+    "full_model_inputs": 24,
+    "max_full_tokens": 466,
+    "node_max_tokens": 512,
+    "first_step_objective": 2.2646074295043945,
+    "last_step_objective": 2.133462905883789,
+    "training_projects": [
+      "Kludex/starlette",
+      "django/django",
+      "expressjs/express",
+      "urllib3/urllib3"
+    ],
+    "project_isolation": "Prior original four diagnostics excluded and three newer transfer projects also excluded",
+    "training_labels": "AI-authored hypothetical preferences; previously inspected; not expert validated",
+    "before": {
+      "ai_provisional_preferences_matched": 4,
+      "ai_provisional_preference_cases": 8,
+      "source_families_with_both_contexts_matched": 1,
+      "source_families": 4
+    },
+    "after": {
+      "ai_provisional_preferences_matched": 6,
+      "ai_provisional_preference_cases": 8,
+      "source_families_with_both_contexts_matched": 2,
+      "source_families": 4
+    },
+    "after_family_results": [
+      {
+        "id": "real-django-intcomma-recursive-dos",
+        "both_correct_against_ai": true,
+        "exposure_margin": 0.08509001135826111,
+        "missing_margin": -0.07270675897598267
+      },
+      {
+        "id": "real-express-malformed-redirect-host",
+        "both_correct_against_ai": false,
+        "exposure_margin": 0.16432738304138184,
+        "missing_margin": 0.04379107058048248
+      },
+      {
+        "id": "real-starlette-commonprefix-traversal",
+        "both_correct_against_ai": false,
+        "exposure_margin": 0.15601104497909546,
+        "missing_margin": 0.033089280128479004
+      },
+      {
+        "id": "real-urllib3-redirect-header-case",
+        "both_correct_against_ai": true,
+        "exposure_margin": 0.08261418342590332,
+        "missing_margin": -0.16149264574050903
+      }
+    ]
+  },
+  "transfer": {
+    "code": "src/falsum/phase2v_transfer_eval.py",
+    "verification": "3 separate original untrained source projects and exact source/test file replay, 6 AI-proposed context comparisons",
+    "source_projects": [
+      "tornadoweb/tornado",
+      "nodejs/undici",
+      "python-websockets/websockets"
+    ],
+    "source_test_file_replays": 6,
+    "source_families": 3,
+    "original_phase2u": {
+      "ai_provisional_preferences_matched": 3,
+      "questions": 6,
+      "source_families_both_provisional_contexts_matched": 0
+    },
+    "phase2v_treatment": {
+      "ai_provisional_preferences_matched": 3,
+      "questions": 6,
+      "source_families_both_provisional_contexts_matched": 0
+    },
+    "agreement_gain": 0,
+    "full_context_family_gain": 0,
+    "source_separated_but_not_sealed": true,
+    "prior_knowledge": "AI-proposed outcomes on these public sources were inspected previously in Phase2U",
+    "effect_absent": "no previously nonflipping transfer project changed its preferred essay to match both hypothetical scenarios"
+  },
+  "conclusion": {
+    "observed_research_result": "Coupled loss learned some of four seen AI-provisional source contrasts, but did not generalize to three excluded source families.",
+    "independent_expert_labels": 0,
+    "accepted_Anjoman_evaluation_rows": 0,
+    "network_eligible": false,
+    "live_evaluator_registered": false,
+    "eligible_network_release": false,
+    "avoid": "Do not repeat the tiny four-project curriculum and call in-sample improvement generalization; do not publish/submit its WASM as model quality proof.",
+    "next": "Audit answer-only style bias and more diverse, credible application evidence. Build more independent source families, legitimate human/peer adjudication, and truly untouched transfer tasks before further CPU training. No spending or live publishing."
+  }
+}
