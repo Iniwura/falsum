@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "status": "PHASE2Y_IMPORT_DECLARATION_CALL_PATH_GUARD_RESEARCH_ONLY",
+  "date": "2026-11-01",
+  "source_repo": "https://github.com/Iniwura/falsum",
+  "canonical_ci_run": "https://github.com/Iniwura/falsum/actions/runs/41289002820",
+  "canonical_ci_artifact": "https://github.com/Iniwura/falsum/actions/runs/41289002820/artifacts/13076218012",
+  "canonical_artifact_id": 13076218012,
+  "program": {
+    "analyzer": "src/falsum/phase2y_bindings.py",
+    "reconciler": "src/falsum/phase2y_claim_guard.py",
+    "primary_test_files": [
+      "tests/test_phase2y_bindings.py",
+      "tests/test_phase2y_claim_guard.py"
+    ],
+    "supported_python_security_families": [
+      "real-aiohttp-static-traversal",
+      "fresh-websockets-deflate-limit",
+      "fresh-tornado-cookie-attribute"
+    ],
+    "source_whole_file_sha256_verified": true,
+    "exact_ast_call_sha256_verified": true,
+    "syntactic_import_declarations_checked": true,
+    "local_aiohttp_constructor_binding_checked": true,
+    "websocket_import_aliases_checked": true,
+    "tornado_direct_subclass_structure_checked": true,
+    "direct_module_function_call_syntax_classified": true,
+    "conditional_or_uninvoked_paths_abstain": true,
+    "shadowed_imports_monkeypatch_exec_eval_globals_abstain": true,
+    "source_claims_recomputed_for_reconciliation": true,
+    "runtime_import_identity_verified": false,
+    "app_execution_verified": false,
+    "deployed_version_verified": false,
+    "whole_app_security_proven": false
+  },
+  "final_ci": {
+    "phase2y_static_binding_tests": 28,
+    "phase2y_claim_guard_tests": 12,
+    "phase2x_ast_tests": 20,
+    "phase2w_evidence_tests": 20,
+    "phase2w_capture_tests": 9,
+    "total_focused_tests_passed": 89,
+    "end_to_end_framework_source_scenarios": 3,
+    "additional_import_bound_and_fake_lookalike_test_cases": 2,
+    "import_bound_local_false_assertion_review_flags": 1,
+    "unbound_fake_lookalike_false_flags": 0,
+    "unbound_fake_lookalike_abstentions": 1,
+    "final_status": "success"
+  },
+  "release_constraints": {
+    "research_only": true,
+    "live_security_exploits_verified": 0,
+    "production_application_traces": 0,
+    "human_approved_appsec_labels": 0,
+    "anjoman_network_eligible_rows": 0,
+    "registered_evaluator": false,
+    "network_eligible": false
+  },
+  "conclusion": "The static analyzer can refuse unbound lookalike methods and issue more selective literal-source contradiction flags for unshadowed framework import declarations. No true runtime import identity, execution, exploitability or model-quality improvement has been demonstrated.",
+  "next": "Collect real independently reviewable application tests, declared dependency pins and narrow runtime traces with strict no-network and credential safety before attempting model packaging or release."
+}
