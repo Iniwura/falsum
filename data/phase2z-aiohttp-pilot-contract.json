@@ -17,26 +17,30 @@
       "module": "examples.phase2z_runtime_pilot.secure_static",
       "path": "examples/phase2z_runtime_pilot/secure_static.py",
       "expected_runtime_flag": false,
-      "expected_syntax": "SYNTACTIC_ABSENT"
+      "expected_syntax": "SYNTACTIC_ABSENT",
+      "source_git_blob": "ee193d962f1cdabbe5ac79d3e11c21bcc1472a65"
     },
     {
       "name": "permissive",
       "module": "examples.phase2z_runtime_pilot.permissive_static",
       "path": "examples/phase2z_runtime_pilot/permissive_static.py",
       "expected_runtime_flag": true,
-      "expected_syntax": "SYNTACTIC_PRESENT"
+      "expected_syntax": "SYNTACTIC_PRESENT",
+      "source_git_blob": "0589f7861bded015a6c0c4b40faf1f055e3af863"
     },
     {
       "name": "dynamic",
       "module": "examples.phase2z_runtime_pilot.dynamic_static",
       "path": "examples/phase2z_runtime_pilot/dynamic_static.py",
       "expected_runtime_flag": false,
-      "expected_syntax": "UNDETERMINED"
+      "expected_syntax": "UNDETERMINED",
+      "source_git_blob": "25e2252d5bde2dc9b5712db1d5f4935593341fdd"
     }
   ],
-  "trusted_input_notice": "Only three controlled FALSUM source fixtures are imported. No user-provided repository code, no internet requests and no server exposed beyond loopback.",
+  "trusted_input_notice": "Only three exact Git-blob-pinned FALSUM source fixtures and a pinned public asset are imported. Arbitrary application code is never accepted or executed. Six normal localhost HTTP requests only.",
   "independent_human_reviews": 0,
   "live_vulnerabilities_confirmed": 0,
   "network_eligible": false,
-  "limits": "Runtime observation is only installed aiohttp 3.10.11 in CI on a controlled application. The GHSA pertains to historic versions below 3.9.2 and the presence of follow_symlinks=True on a patched version is not evidence that the old vulnerability is exploitable."
+  "limits": "Runtime observation is only installed aiohttp 3.10.11 in CI on a controlled application. The GHSA pertains to historic versions below 3.9.2 and the presence of follow_symlinks=True on a patched version is not evidence that the old vulnerability is exploitable.",
+  "public_asset_git_blob": "d02056871746cde2569403cd398040e71ff6009c"
 }
