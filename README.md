@@ -2,11 +2,21 @@
 
 **Every claim stands trial.**
 
-**Current research checkpoint (30 October 2026):** We trained a *real* ModernBERT LoRA reward adapter with the official pinned Telegraph V2 trainer on 52 automatically generated, unreviewed advisory comparisons. Upstream test: **5/6 (83.33%, PASS)**. But only **1 of 6** paired counterfactual security-review families were correct in both contexts; the PR validation set scored **1/4 (25%)**. This is a research failure diagnosis, **not** a submission-ready model or accepted network evaluator. Read the [actual model-scoring postmortem and evidence](docs/PHASE2L.md) and [research pilot](docs/PHASE2K.md). A [controlled 58-pair context-training A/B experiment](docs/PHASE2M.md) raised the small official held-out score to **6/6**, but **did not improve PR validation (still 1/4) or paired contextual correctness (still 1/6 rule families)**. No strong correctness claim is justified.
+**Current research checkpoint (1 November 2026):** FALSUM has a tested source-bound evidence pipeline and an explicitly limited Python AST claim cross-check. Phase 2X passed 49 tests and blocked a false developer claim in a synthetic demonstration. Earlier real LoRA models passed a small official synthetic advisory test but failed to generalize across deployment-context reversals. No verified vulnerability accuracy, accepted Anjoman evaluation rows or registered evaluator are claimed. Read [Phase 2X](docs/PHASE2X.md), [Phase 2W](docs/PHASE2W.md) and the [real model training postmortem](docs/PHASE2V.md).
 
 An evidence-grounded security evaluation research project for [Telegraph Season II](https://hackathon.telegraphprotocol.com/). FALSUM targets the `SECURITY_REVIEW_GENERAL` child Intent and the `SECURITY_REVIEW` evaluator family, as described by [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96).
 
 **Independent validation:** [FALSUM issue #1](https://github.com/Iniwura/falsum/issues/1) requests genuine AppSec review. A [label-blinded PR reviewer packet](docs/PHASE2N.md) can now be generated with proposed answers stored separately; a [public-question-only Actions artifact](https://github.com/Iniwura/falsum/actions/runs/41127352499) is also available. No independent reviewer approval or network eligibility is implied.
+
+## Phase 2X: independently parsed source facts, rather than trusting every claim
+
+FALSUM now has a **Python AST evidence checker** for three narrowly scoped vulnerability preconditions: aiohttp static-route follow_symlinks literals, Tornado set_cookie max_age integer literals and Python websockets explicit compression arguments. The checker validates the **full original application file SHA-256, exact call-site line range and AST node hash**, then re-parses the local source rather than trusting a claimed machine-verification JSON report.
+
+The [new AST reconciler](src/falsum/phase2x_reconcile.py) cross-checks a submitter's unreviewed application evidence **only if it cites the very same hashed file, prerequisite and overlapping call line**. If an excerpt claims follow_symlinks enabled but the actual AST parses follow_symlinks=False, it flags the contradiction for human review. For dynamic values, unresolved aliasing, unknown reachability and other source areas, it **abstains** rather than making up a safe or vulnerable conclusion.
+
+[Phase 2X CI run](https://github.com/Iniwura/falsum/actions/runs/41288248962) passed **49 tests** and proved the contradictory-literal scenario end to end using both actual CLIs. This is valuable syntactic cross-checking, **not verified runtime binding, application-level safety, or exploit accuracy**. Zero independent expert labels, zero accepted network evaluation rows, and no registered evaluator.
+
+[Phase 2X technical documentation and CLI examples](docs/PHASE2X.md) · [Permanent exact experiment evidence](evidence/phase2x-2026-11-01.json)
 
 ## Phase 2W: evidence-first, source-bound application precondition checks
 
