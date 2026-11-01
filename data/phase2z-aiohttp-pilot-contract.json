@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "CONTROLLED_PATCHED_AIOHTTP_RUNTIME_PILOT_RESEARCH_ONLY",
+  "framework": "aiohttp",
+  "installed_version": "3.10.11",
+  "advisory": "GHSA-5h86-8mv2-jq9f",
+  "patched_since": "3.9.2",
+  "source_case": "real-aiohttp-static-traversal",
+  "only_allowed_python_modules": [
+    "examples.phase2z_runtime_pilot.secure_static",
+    "examples.phase2z_runtime_pilot.permissive_static",
+    "examples.phase2z_runtime_pilot.dynamic_static"
+  ],
+  "fixtures": [
+    {
+      "name": "secure",
+      "module": "examples.phase2z_runtime_pilot.secure_static",
+      "path": "examples/phase2z_runtime_pilot/secure_static.py",
+      "expected_runtime_flag": false,
+      "expected_syntax": "SYNTACTIC_ABSENT"
+    },
+    {
+      "name": "permissive",
+      "module": "examples.phase2z_runtime_pilot.permissive_static",
+      "path": "examples/phase2z_runtime_pilot/permissive_static.py",
+      "expected_runtime_flag": true,
+      "expected_syntax": "SYNTACTIC_PRESENT"
+    },
+    {
+      "name": "dynamic",
+      "module": "examples.phase2z_runtime_pilot.dynamic_static",
+      "path": "examples/phase2z_runtime_pilot/dynamic_static.py",
+      "expected_runtime_flag": false,
+      "expected_syntax": "UNDETERMINED"
+    }
+  ],
+  "trusted_input_notice": "Only three controlled FALSUM source fixtures are imported. No user-provided repository code, no internet requests and no server exposed beyond loopback.",
+  "independent_human_reviews": 0,
+  "live_vulnerabilities_confirmed": 0,
+  "network_eligible": false,
+  "limits": "Runtime observation is only installed aiohttp 3.10.11 in CI on a controlled application. The GHSA pertains to historic versions below 3.9.2 and the presence of follow_symlinks=True on a patched version is not evidence that the old vulnerability is exploitable."
+}
