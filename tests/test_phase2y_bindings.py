@@ -212,6 +212,14 @@ class StaticBindingTests(unittest.TestCase):
             with self.assertRaises(ProofError):
                 analyze(self.catalog,self.sources,AIO,self.root,["app.py"])
 
+    def test_runtime_monkeypatch_and_dynamic_exec_abstain(self):
+        for line in ("web.Application = something", "setattr(web, 'Application', replacement)",
+                     "exec(source)", "globals()['web'] = replacement"):
+            with self.subTest(line=line):
+                src=("from aiohttp import web\napp=web.Application()\n" + line
+                     + "\napp.router.add_static('/x',path,follow_symlinks=False)\n")
+                self.assertEqual(self.obs(src),[])
+
     def test_inactive_module_not_proven_executed(self):
         x=self.obs("from aiohttp import web\napp=web.Application()\n"
                    "app.router.add_static('/x',x,follow_symlinks=False)\n")
