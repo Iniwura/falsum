@@ -1,0 +1,77 @@
+name: Phase2U - three new project exact source transfer check (no training)
+on:
+  push:
+    paths:
+      - 'data/phase2u-fresh-transfer-cases.json'
+      - 'src/falsum/phase2u_fresh_transfer.py'
+      - 'tests/test_phase2u_fresh_transfer.py'
+      - '.github/workflows/phase2u-fresh-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Adversarial research source, replay and status tests
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m unittest discover -s tests -p test_phase2u_fresh_transfer.py -v
+      - name: Install tokenizer for REAL complete model input counting
+        run: python -m pip install 'transformers==4.57.1'
+      - name: Verify three original+fixed source and regression-test files with exact Git blob replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/fresh-model-only" "$RUNNER_TEMP/fresh-source-private"
+          PYTHONPATH=src python -m falsum.phase2u_fresh_transfer \
+            --spec data/phase2u-fresh-transfer-cases.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --old-queue data/real-fix-queue.json \
+            --prior-advisories data/advisory-queue.json \
+            --public-out "$RUNNER_TEMP/fresh-model-only/NEW-REAL-SOURCE-AI-COMPARISONS.json" \
+            --key-out "$RUNNER_TEMP/fresh-source-private/AI-UNREVIEWED-PROPOSED-KEY-AND-BLOB-REPLAY.json" \
+            --token-out "$RUNNER_TEMP/fresh-model-only/REAL-512-TOKEN-INPUT-AUDIT.json"
+          python - <<'PY'
+          import os,json,hashlib
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          public=(root/"fresh-model-only/NEW-REAL-SOURCE-AI-COMPARISONS.json").read_bytes()
+          packet=json.loads(public)
+          private=json.loads((root/"fresh-source-private/AI-UNREVIEWED-PROPOSED-KEY-AND-BLOB-REPLAY.json").read_text())
+          metrics=json.loads((root/"fresh-model-only/REAL-512-TOKEN-INPUT-AUDIT.json").read_text())
+          assert len(packet["cases"])==6
+          assert packet["research_only"] and not packet["sealed_holdout"] and not packet["network_eligible"]
+          assert private["public_packet_sha256"]==hashlib.sha256(public).hexdigest()
+          assert len(private["verified_sources"])==3
+          assert all(x["pre_and_post_files_verified"]==2 for x in private["verified_sources"])
+          assert metrics["exact_pre_post_source_test_replays"]==6
+          assert metrics["real_full_model_inputs"]==12 and metrics["max_full_input_tokens"]<=512
+          assert private["independent_human_reviews"]==0 and not private["training_authorized"]
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### Three fresh projects outside all prior FALSUM source pools\n\n")
+              f.write("Tornado, Undici and Python websockets: 3 upstream commits, 6 exact parent-to-fix source/test byte replays, 6 public AI-provisional opposite-context comparisons, 12 complete model inputs pass real tokenizer 512-cap.\\n\\n")
+              f.write("No independent expert labels, no sealed holdout, no model training, no eligible Anjoman data.\\n")
+          PY
+      - name: Archive model-facing questions without answer labels
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE2U-THREE-NEW-SOURCE-QUESTIONS-NOT-ELIGIBLE
+          path: ${{ runner.temp }}/fresh-model-only/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Archive separate proposed AI key and genuine source-byte provenance
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE2U-THREE-SOURCE-AI-KEY-NOT-EXPERT
+          path: ${{ runner.temp }}/fresh-source-private/
+          if-no-files-found: error
+          retention-days: 14
