@@ -1,4 +1,6 @@
-# Phase 3O — 20 eligible Anjoman evaluation rows; bounty claim ready
+# Phase 3O — historical 20-row eligibility milestone (superseded by Phase 3P)
+
+**Historical checkpoint; updated after the bounty comment was posted:** [Phase 3P public verified receipt](../evidence/phase3p-2026-11-02-bounty-claim.json) confirms that [the `/submit` comment](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) is **already posted**. Its maintainer review is **pending**. The remaining text below documents the earlier preparation stage, not the current “submit pending” status.
 
 **2 November 2026: first confirmed eligibility milestone for FALSUM.** The operator supplied a new screenshot of their signed-in Anjoman [Evaluators](https://anjoman.ai/dashboard/eval) page for **`SECURITY_REVIEW_GENERAL`**. The account's own history now displays **`Eligible: 20`** and the newest 10 of its 20 rows are each labeled **Eligible**. This follows the same batch's prior **20 stored, zero duplicates and zero refused** receipt and **20 Admitted** history.
 

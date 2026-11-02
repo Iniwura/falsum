@@ -1,0 +1,80 @@
+# FALSUM — Season II Evaluators: judge reproduction and entry preparation
+
+**Current as of 2 Nov 2026:** The actual contributor [filed `/submit` on bounty #96](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) for **20 eligible** `SECURITY_REVIEW_GENERAL` evaluation preference pairs. GitHub shows the comment authored by `Iniwura`, posted at **20:52:18 UTC**. [Public, privacy-safe verification](../evidence/phase3p-2026-11-02-bounty-claim.json).
+
+**Pending:** Bounty maintainer acceptance, independent expert semantic review, a strong independent mission/app demonstration, official Season II website registration/final submission. **Neither experimental ModernBERT LoRA is registered, validated for general security reasoning, or production ready.**
+
+The [official Season II rules](https://hackathon.telegraphprotocol.com/rules) allow **evaluation material, an adapter, or both** in Evaluators. The final entry is **separate from GitHub bounty claims**, due **1 December 2026, 23:59 UTC**. Main competition awards include an Evaluators-track **verified-delivery** category and **excellence** category. Winning is not guaranteed by network `eligible` status or a passing unit test.
+
+## The precise contribution
+
+FALSUM fills a specific intelligence measurement need: a `SECURITY_REVIEW_GENERAL` model response should distinguish **source-backed code weaknesses** from **proven, reachable security impact**. A safe reviewer should differentiate fixed versus affected dependency releases, distinguish vulnerable code from active exploit, and avoid making up secret leakage or customer impact.
+
+**Verified network evidence**:
+- 20 hidden evaluation preference pairs uploaded to the actual Anjoman intent by the signed-in contributor, initially 20 stored, no duplicates/refusals, then **20 Eligible** in the contributor's UI.
+- [Bounty `/submit` claim](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) with contributor address included by the operator.
+- [Phase 3O status record](../evidence/phase3o-2026-11-02-20-eligible.json) and [Phase 3P GitHub receipt](../evidence/phase3p-2026-11-02-bounty-claim.json). Screenshots and exact network case text are **not** in this public repository.
+- No signed independent node receipt, maintainer acceptance, evidence of third-party application reuse, or adapter registration is claimed.
+
+**Public-source and safe runtime evidence**:
+- [Starlette historical path-containment reproduction](PHASE3H.md): real isolated 0.26.1 versus 0.27.0, four harmless in-process file fixtures and observed before/after behavior, [successful CI](https://github.com/Iniwura/falsum/actions/runs/41409503521).
+- [Requests historical proxy-auth reproduction](PHASE3I.md): real isolated 2.30.0 versus 2.31.0, five in-memory cases, **no HTTP transport**, [successful CI](https://github.com/Iniwura/falsum/actions/runs/41410209502).
+- [Source-backed, unapproved historical review material](PHASE3F.md); [review-intake tooling](PHASE3G.md). Public examples are *not* the hidden questions accepted in the Anjoman pool.
+
+**Actual model measurement, including bad outcomes**:
+- [Original LoRA on official Foundation](PHASE3J.md): 16 real repeated inference calls; **0/2 complete history-sensitive reversal families** and **2/4 provisional context expectations**. Adapter remains quarantined.
+- [New real research LoRA training](PHASE3K.md): official trainer's internal 6/6 **does not transfer**; both actual before/after checkpoints matched **3/6** prior-inspected separate-project provisional preferences, **0/3** complete reversals. Training success **is not** model improvement.
+
+## How a judge can reproduce safely
+
+Prerequisites: Git, Python 3.11–3.13 and a clone of this public repository. For offline test suites no wallet, secret, payment, Anjoman hidden material or account access is needed.
+
+```bash
+git clone https://github.com/Iniwura/falsum.git
+cd falsum
+PYTHONPATH=src python -m unittest discover -s tests -v
+PYTHONPATH=src python -m falsum audit-scenarios data/draft-scenarios.json
+```
+
+Expected: tests and public research-only scenario audit pass. The authoritative multi-Python version and upstream data-gate evidence is on [GitHub Actions](https://github.com/Iniwura/falsum/actions). Some separate real-library and Foundation inference runs download isolated runtime dependencies or a large official model and are documented/pinned in their individual phase workflows; don't present these as instant offline tests.
+
+For a **no-wallet operator handoff demonstration**, see [Phase 3L](PHASE3L.md) and [Phase 3M](PHASE3M.md). These test only private JSONL preflight and SHA256 EIP-191 message construction using **fabricated** local data. They must not be used to generate public copies of live hidden eligibility questions.
+
+**Reproduce a meaningful failure case**: run `PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3n_eligibility_guard.py' -v`; its known synthetic inputs prove that `admitted:20` is not promoted to `eligible:20`. Check [Phase 3N](PHASE3N.md) for exact safeguards. This is a **test of contribution-accounting integrity**, not a proof that our evaluation prompts are inherently accurate.
+
+Reviewers may independently inspect the bounty comment through public GitHub. Actual Anjoman contributor status and hidden material should be verified using the **organizers' authorized reviewer access**, without demanding confidential test prompts in a public GitHub issue.
+
+## What not to claim
+
+| Claim | Current support |
+| --- | --- |
+| 20 network-eligible evaluation rows under contributor account | Contributor UI evidence, bounty claim filed; maintainer review pending |
+| Real installed-library before/after historical regressions | Two independent pinned-family CI executions |
+| Security scoring model reliably context-sensitive | **NO: actual real-model tests failed** |
+| Evaluator module registered/active | **NO** |
+| Independent expert security labels | **NO** |
+| Independently integrated with an H2 mission app | **NO** |
+| Maintainer-approved bounty | **PENDING** |
+| Final hackathon submission or prize | **NOT YET** |
+
+These distinctions are features of trustworthy evaluation, not gaps to hide.
+
+## Mission impact: testable opportunities, not invented adoption
+
+The same `SECURITY_REVIEW_GENERAL` intent can help evaluate security-review intelligence consumed by commercial missions such as **Exchange** (listing service dependency review), **Model Economy** (agent/provider credential and prompt-to-tool risks), and **Web3 Native & DeFi** (off-chain API authorization, RPC handling and package risk). These are potential distinct workflows aligned with the [source bounty issue](https://github.com/telegraphprotocol/bounties/issues/96), **not proof any mission app currently consumes FALSUM's material**.
+
+The [official judging rules](https://hackathon.telegraphprotocol.com/rules) prioritize distinct verified mission workflows, independent tests and demonstrable new evaluation coverage. Delivery awards for Evaluators select qualifying groups based on such evidence, and excellence ties consider measurement improvement or useful new coverage. Do not label a mission `verified` merely because it appears on a slide or map.
+
+## Before final H2 entry
+
+1. **Maintainer review:** collect real verified response to the [submitted claim](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396). Don't equate GitHub's acceptance of a comment with protocol or bounty approval.
+2. **Mission demonstration:** create **public-safe** synthetic PR/security-review example using a different question from the hidden eligible pool; have an independent developer reproduce the failure and improved assessment. Document real input, observable output, provenance, test and no confidential case data.
+3. **Clear demo:** record [the 2–5 minute judge storyboard](H2_EVALUATORS_DEMO_STORYBOARD.md), with real browser and public CI screens. Don't claim a working scoring adapter or show hidden prompts.
+4. **Distribution and feedback:** provide useful original developer tutorials or updates on separate dates, invite actual reproduction, record genuine reactions or independent integrations only after they occur. No fake adoption metrics.
+5. **Official entry:** register and submit through [the H2 website](https://hackathon.telegraphprotocol.com/) by **Dec 1 23:59 UTC**, with FALSUM name, Evaluators track, exact Intent, safe demo, repeatable steps, links, limitations and showcase permissions. **A GitHub `/submit` bounty comment does not create this entry.**
+
+### Winner-oriented editorial positioning
+
+**FALSUM — evaluate the evidence, not the confidence.** Source-anchored security evaluation material has actually reached the network's eligible pool, while FALSUM's public experiments demonstrate why uncontextualized reward models can reward the wrong security conclusion. The honest story is **delivered evaluation coverage + independent verification path**, not a magically improved LoRA model.
+
+A win requires judges to verify meaningful quality and usefulness. Treat this as a proven contribution with a still-open impact demonstration, not as a winner already selected.
