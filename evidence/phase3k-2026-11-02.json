@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3K_REAL_RESEARCH_LORA_TRAINED_NO_SEPARATE_PROJECT_TRANSFER_IMPROVEMENT",
+  "date": "2026-11-02",
+  "repository": "Iniwura/falsum",
+  "merged_pr": "https://github.com/Iniwura/falsum/pull/8",
+  "verified_full_workflow": "https://github.com/Iniwura/falsum/actions/runs/41413881596",
+  "quarantined_training_comparison_artifact": "https://github.com/Iniwura/falsum/actions/runs/41413881596/artifacts/13127215716",
+  "workflow_conclusion": "success",
+  "new_model": {
+    "framework": "ModernBERT-base",
+    "actual_torch_cpu_trainer": "telegraphprotocol/telegraph-wasm-baseline",
+    "trainer_commit": "5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e",
+    "real_training_performed": true,
+    "epochs": 1,
+    "total_research_train_rows": 60,
+    "previous_advisory_train_rows": 52,
+    "new_opposite_context_train_rows": 8,
+    "training_source_families": [
+      "Kludex/starlette",
+      "psf/requests"
+    ],
+    "training_labels": "FALSUM_RESEARCH_PROVISIONAL_NOT_EXPERT_APPROVED",
+    "official_training_data_shortcut_gate": "PASS",
+    "official_trainer_test": {
+      "split": "test",
+      "evaluated_pairs": 6,
+      "pairwise_accuracy": 1,
+      "length_baseline": 0.5,
+      "beat_length_baseline": true,
+      "verdict": "PASS",
+      "validation_loss": 0.691459,
+      "observed_train_loss": 0.6938
+    },
+    "model_artifact_research_only": true,
+    "model_packaged_for_current_official_foundation_runtime": false,
+    "model_registered_to_network": false
+  },
+  "actual_transfer_comparison": {
+    "comparison_source_projects": [
+      "tornadoweb/tornado",
+      "nodejs/undici",
+      "python-websockets/websockets"
+    ],
+    "projects_in_new_training": false,
+    "previously_inspected_by_falsum": true,
+    "sealed_untouched_holdout": false,
+    "independently_human_approved_expected_preferences": false,
+    "real_model_scorers": "ModernBertAdapterScorer loads actual distinct old and newly trained HF/PyTorch LoRA checkpoints",
+    "official_foundation_onnx_wasi_scorer_used": false,
+    "total_provisional_evaluation_contexts": 6,
+    "source_families": 3,
+    "old_model_provisional_preferences_matched": 3,
+    "new_model_provisional_preferences_matched": 3,
+    "old_model_complete_reversals": 0,
+    "new_model_complete_reversals": 0,
+    "improvement_in_matching_contexts": 0,
+    "improvement_in_complete_reversals": 0,
+    "new_model_demonstrated_security_reasoning_improvement": false
+  },
+  "quality_boundary": {
+    "human_approved_security_labels": 0,
+    "accepted_anjoman_rows": 0,
+    "accepted_training_pairs_for_network": 0,
+    "registered_evaluator": false,
+    "independent_model_accuracy_certified": false,
+    "competition_ready": false,
+    "eligible_for_network": false,
+    "original_phase3d_counterfactuals": "0/2",
+    "original_phase3j_counterfactuals": "0/2",
+    "original_model_release_veto_remains": true,
+    "new_model_release_veto": true
+  },
+  "next_decision": "DO_NOT_REGISTER_OR_CLAIM_CONTEXT_IMPROVEMENT; prioritize external evaluation material and independent adjudication before more unmeasured retraining",
+  "notice": "The genuine pinned official trainer passed a six-pair internal research gate, but separate source-replayed prior-inspected AI-provisional transfer examples showed NO change (3/6 preferences and 0/3 complete families for both real checkpoints). Authentic training success is not blind generalization, independent expert accuracy or a qualifying network contribution. Original and new checkpoints stay quarantined."
+}
