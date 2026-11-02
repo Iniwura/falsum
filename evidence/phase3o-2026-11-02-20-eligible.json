@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3O_USER_ANJOMAN_UI_20_ELIGIBLE_BOUNTY_CLAIM_READY_MAINTAINER_NOT_YET_VERIFIED",
+  "observed_date": "2026-11-02",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "source": "User-supplied signed-in Anjoman Evaluators account screenshot, not independently authenticated /mine API response",
+  "observed_visible_account_history": {
+    "filter_intent": "SECURITY_REVIEW_GENERAL",
+    "summary_badge": "Eligible: 20",
+    "newest_ten_row_labels": "Eligible",
+    "total_user_submission_rows_displayed": 20,
+    "note": "UI says showing newest 10 of 20; summary badge explicitly reports 20 Eligible. Other ten rows not individually rendered in screenshot."
+  },
+  "upload_previously_confirmed": {
+    "stored": 20,
+    "duplicate": 0,
+    "refused": 0,
+    "previous_status": "Admitted: 20"
+  },
+  "claims": {
+    "user_ui_confirmed_eligible": 20,
+    "independent_api_verified_user_owned_eligible": null,
+    "bounty_issue_submission_posted": false,
+    "bounty_maintainer_approved": false,
+    "evaluator_adapter_registered": false,
+    "hackathon_final_entry_submitted": false,
+    "hackathon_won": false
+  },
+  "links": {
+    "repo": "https://github.com/Iniwura/falsum",
+    "bounty": "https://github.com/telegraphprotocol/bounties/issues/96",
+    "private_user_evaluate_page": "https://anjoman.ai/dashboard/eval",
+    "protocol": "https://anjoman.ai/docs/scoring/contribute-evaluation-data"
+  },
+  "privacy": {
+    "user_account_address_published": false,
+    "user_account_email_published": false,
+    "screenshot_published": false,
+    "hidden_questions_answers_row_identifiers_published": false
+  },
+  "next_operator_gate": "Obtain explicit permission to publicly include the correct contributor wallet address (not a screenshot-truncated address) in a /submit comment on bounty #96. Comment should claim only 20 eligible evaluation-material rows; maintainer decides approval. This action is not an evaluator module registration.",
+  "deadline_context": "Telegraph Season II December 1 2026 23:59 UTC; separate hackathon submission needed.",
+  "security_quality_limit": "Origin declared as AI-assisted llm/unverified. Anjoman eligible is pool admission status, not independent human semantic certification or proof of evaluator adapter quality."
+}
