@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3I_REAL_INSTALLED_REQUESTS_PROXY_AUTH_BOUNDARY_VERIFIED_RESEARCH_ONLY",
+  "date": "2026-11-02",
+  "repository": "Iniwura/falsum",
+  "merged_pr_url": "https://github.com/Iniwura/falsum/pull/6",
+  "verified_workflow_url": "https://github.com/Iniwura/falsum/actions/runs/41410209502",
+  "verification": "success",
+  "artifacts": {
+    "affected": "https://github.com/Iniwura/falsum/actions/runs/41410209502/artifacts/13125685119",
+    "patched": "https://github.com/Iniwura/falsum/actions/runs/41410209502/artifacts/13125665497",
+    "compare": "https://github.com/Iniwura/falsum/actions/runs/41410209502/artifacts/13124624290"
+  },
+  "case": {
+    "id": "real-requests-proxy-auth",
+    "repository": "psf/requests",
+    "advisory": "GHSA-j8r2-6x86-q33q",
+    "cve": "CVE-2023-32681",
+    "fix_commit": "74ea7cf7a6a27a4eeb2ae24e162bcc942a6706d5",
+    "upstream_source_blob": "dbcf2a7b0ee2898b72714b756e4b27fbbad4beab",
+    "upstream_regression_test_blob": "b420c44d73cde0c2ab7e7aa0e5182b345436f718"
+  },
+  "installed_runtime": {
+    "exact_affected_version": "2.30.0",
+    "exact_fixed_version": "2.31.0",
+    "real_requests_session_rebuild_proxies_executed": true,
+    "request_objects_generated_in_memory": true,
+    "http_requests_sent": 0,
+    "network_sockets_opened": 0,
+    "real_proxy_credentials_used": 0,
+    "real_customer_apps_inspected": 0,
+    "separate_exact_version_jobs_passed": 2,
+    "paired_cross_version_job_passed": true,
+    "observations": {
+      "https_credentialed_proxy": {
+        "affected_header_present": true,
+        "fixed_header_present": false
+      },
+      "http_credentialed_proxy": {
+        "affected_header_present": true,
+        "fixed_header_present": true
+      },
+      "https_anonymous_proxy": {
+        "affected_header_present": false,
+        "fixed_header_present": false
+      },
+      "https_without_proxy": {
+        "affected_header_present": false,
+        "fixed_header_present": false
+      },
+      "https_stale_header_without_proxy": {
+        "affected_header_present": false,
+        "fixed_header_present": false
+      }
+    }
+  },
+  "validation": {
+    "new_phase3i_adversarial_test_methods": 13,
+    "full_foundation_tests_python_versions": [
+      "3.11",
+      "3.12",
+      "3.13"
+    ],
+    "official_telegraph_data_diagnostic_gate": "success",
+    "independent_human_approved_labels": 0,
+    "accepted_anjoman_rows": 0,
+    "accepted_training_pairs": 0,
+    "real_model_scored_in_this_phase": false,
+    "registered_evaluator": false,
+    "network_eligible": false,
+    "model_release_veto_remains": true,
+    "previous_phase3d_context_reversal_success": "0/2"
+  },
+  "notice": "Historical real installed Requests proxy-header reconstruction behavior; no actual redirect transport, live credential leak, third-party application vulnerability, blind model evaluation, expert label or eligible evaluator submission. The comparison logs and temporary artifacts are evidence while retained; this checked-in summary is a regression-protected record, not independent attestation."
+}
