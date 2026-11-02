@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3M_HONEST_AI_DRAFT_PREFLIGHT_VERIFIED_POOL_STATUS_UNKNOWN",
+  "date": "2026-11-02",
+  "repository": "Iniwura/falsum",
+  "merged_pr_url": "https://github.com/Iniwura/falsum/pull/10",
+  "verified_ci_url": "https://github.com/Iniwura/falsum/actions/runs/41419551250",
+  "workflow_conclusion": "success",
+  "security_review_intent": "SECURITY_REVIEW_GENERAL",
+  "contribution_protocol": "https://anjoman.ai/docs/scoring/contribute-evaluation-data",
+  "code_scope": {
+    "ai_origin_source_kinds_supported": [
+      "llm",
+      "synthetic",
+      "generated",
+      "model"
+    ],
+    "ai_provenance_recorded_as": "unverified",
+    "explicit_opt_in_required": true,
+    "human_review_statements_not_fabricated": true,
+    "human_review_still_required_for_claimed_human_origin": true,
+    "mixed_ai_and_human_origin_batches_rejected": true,
+    "private_output_directory_posix_mode": "0700",
+    "private_output_file_posix_mode": "0600",
+    "synthetic_only_new_phase3m_test_methods": 14,
+    "fully_passing_python_versions": [
+      "3.11",
+      "3.12",
+      "3.13"
+    ],
+    "user_secret_or_private_key_used": false,
+    "network_signature_or_upload_implemented": false
+  },
+  "public_pool_read": {
+    "only_fixed_public_intent_status_endpoint": true,
+    "workflow_requested_live_status": true,
+    "actual_live_status": "UNAVAILABLE_HTTP_ERROR",
+    "public_eligible_rows_count": null,
+    "public_eligible_submitters": null,
+    "pool_threshold_verified": false,
+    "falsum_owned_rows_checked": false,
+    "note": "A GitHub-hosted HTTPS GET returned HTTPError and the safe status reporter recorded UNKNOWN. This is not evidence of zero eligible rows."
+  },
+  "network_qualification": {
+    "newly_confirmed_falsum_eligible_rows": 0,
+    "newly_submitted_rows_by_implementation": 0,
+    "independent_human_approved_labels": 0,
+    "claimed_contributor_wallet_signatures": 0,
+    "registered_evaluator_modules": 0,
+    "known_network_submission_receipts": 0
+  },
+  "private_content_policy": "Actual submission candidates and answer keys remain outside the public GitHub repository. Public evidence contains neither row text nor their content hashes.",
+  "model_status": "Both prior LoRA checkpoints remain quarantined; Phase 3K showed zero improvement in 3-family contextual reversal transfer.",
+  "next_required_user_input": "Review private operator candidate batch and provide public Ethereum contribution address for an explicitly authorized, operator-signed network submission. Never provide private keys or seed phrases.",
+  "notice": "Green GitHub CI validates code and synthetic tests, not semantic security accuracy, actual contribution eligibility, or confirmation the public Anjoman pool is currently reachable."
+}
