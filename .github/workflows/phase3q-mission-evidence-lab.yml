@@ -1,0 +1,77 @@
+name: Phase 3Q - executable mission security-review evidence lab
+on:
+  push:
+    paths:
+      - 'src/falsum/phase3q_mission_lab.py'
+      - 'tests/test_phase3q_mission_lab.py'
+      - '.github/workflows/phase3q-mission-evidence-lab.yml'
+      - 'docs/PHASE3Q.md'
+  pull_request:
+    paths:
+      - 'src/falsum/phase3q_mission_lab.py'
+      - 'tests/test_phase3q_mission_lab.py'
+      - '.github/workflows/phase3q-mission-evidence-lab.yml'
+      - 'docs/PHASE3Q.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  executable-three-mission-proof:
+    name: Real local synthetic PR execution, Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Verify no dependency, account, network or hidden evaluation data needed
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m compileall -q src/falsum/phase3q_mission_lab.py tests/test_phase3q_mission_lab.py
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3q_mission_lab.py -v
+      - name: Execute genuine Python BEFORE/AFTER synthetic PR behavior in three mission workflows
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase3q_mission_lab \
+            --out-dir "$RUNNER_TEMP/phase3q-actual-execution"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          folder=Path(os.environ['RUNNER_TEMP'])/'phase3q-actual-execution'
+          report=json.loads((folder/'ACTUAL-SYNTHETIC-RUNTIME-PROOF.json').read_text())
+          assert report['status']=='PHASE3Q_EXECUTABLE_PUBLIC_SYNTHETIC_MISSION_PROOF_NOT_REAL_APP'
+          assert report['synthetic_before_after_executions']==6
+          assert report['synthetic_unwanted_actions_observed_before']==3
+          assert report['synthetic_unwanted_actions_blocked_after']==3
+          assert report['legitimate_controls_preserved_after']==3
+          assert report['actual_third_party_mission_apps_verified']==0
+          assert report['actual_evaluator_model_scoring_executed'] is False
+          assert report['network_private_cases_used'] is False
+          html=(folder/'index.html').read_text()
+          assert '<!doctype html>' in html
+          assert '<script type="application/json" id="proof-data">' in html
+          assert 'script-src' in html
+          assert 'connect-src' in html
+          assert 'fetch(' not in html
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              out.write('### FALSUM Phase 3Q — actual synthetic Python security-review PR behavior\n\n')
+              out.write('3 distinct fictional business workflows; 6 actual local BEFORE/AFTER function executions.\n\n')
+              out.write('**3/3 unwanted operations reproduced in synthetic pre-fix code; 3/3 blocked by synthetic patches; 3/3 legitimate controls preserved.**\n\n')
+              out.write('All source implementation SHA256 fingerprints and exact observed states are in the artifact. The interactive local HTML explorer reads these generated results.\n\n')
+              out.write('**NOT a real third-party mission integration, AI model evaluation, vulnerability certification, human label, hidden pool testcase, new eligibility row or hackathon final submission.**\n')
+          PY
+      - name: Preserve actual JSON proof and self-contained, responsive offline HTML demo
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3Q-EXECUTABLE-SYNTHETIC-MISSION-PROOF-PY${{ matrix.python-version }}
+          path: ${{ runner.temp }}/phase3q-actual-execution/
+          retention-days: 30
+          if-no-files-found: error
