@@ -1,0 +1,52 @@
+name: Phase 3N - contributor network eligibility gate and private receipt reduction
+on:
+  push:
+    paths:
+      - 'src/falsum/phase3n_eligibility_guard.py'
+      - 'tests/test_phase3n_eligibility_guard.py'
+      - 'docs/PHASE3N.md'
+      - '.github/workflows/phase3n-eligibility-guard.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase3n_eligibility_guard.py'
+      - 'tests/test_phase3n_eligibility_guard.py'
+      - 'docs/PHASE3N.md'
+      - '.github/workflows/phase3n-eligibility-guard.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  admission-not-eligibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11','3.12','3.13']
+    name: Protect row status claims on Python ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run synthetic-only private row attribution and eligibility state guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m compileall -q src/falsum/phase3n_eligibility_guard.py tests/test_phase3n_eligibility_guard.py
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3n_eligibility_guard.py' -v
+          PYTHONPATH=src:tests python - <<'PY'
+          from falsum.phase3n_eligibility_guard import recorded_screenshot_milestone
+          r=recorded_screenshot_milestone()
+          assert r["admitted_rows_visible"] == 20
+          assert r["eligible_rows_verified_by_this_screenshot"] == 0
+          assert r["network_owned_eligibility_queried"] is False
+          print("User UI supports 20 admitted, zero eligible VERIFIED, and no exposure of confidential rows")
+          PY
+      - name: Never publish user wallet, hidden row hashes or answer keys from local status input
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git ls-files 'private/**' 'evalpool-private/**' '*.evalpool-private.jsonl' 'data/private/**')"
+          echo "Phase 3N: actual /mine JSON is NEVER fetched or committed by CI" >> "$GITHUB_STEP_SUMMARY"
+          echo "Upload screenshot is held privately in conversation only; public code has only status counts, not identity." >> "$GITHUB_STEP_SUMMARY"
