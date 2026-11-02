@@ -49,7 +49,6 @@ class Phase3QEvidence(unittest.TestCase):
         self.assertIn(target,judge)
         self.assertIn(target,storyboard)
         self.assertIn("synthetic",lab.lower())
-        self.assertIn("not real mission integration",lab.lower() if False else lab.lower()) if False else None
         self.assertNotIn("0x9cBA6Cf",judge+lab+storyboard)
 
 
