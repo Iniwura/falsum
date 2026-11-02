@@ -38,6 +38,17 @@ PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3j_model_
 
 The complete model run is specified and pinned in [the Phase 3J Actions workflow](../.github/workflows/phase3j-real-model-two-families.yml), including the official runtime and model file identities. The full generated tokenizer-input and score artifacts are uploaded to GitHub Actions for review. Those temporary artifacts and CI run summaries, **not local test mock scores**, are the evidence for real inference.
 
+## Actual verified result — 2 November 2026
+
+[**Successful real model scoring CI**](https://github.com/Iniwura/falsum/actions/runs/41411984601) loaded the original SHA-verified LoRA on the official Foundation. Eight distinct inputs were each scored twice; **16 actual inferences** produced reproducible float32 score bits. [Permanent run-by-run evidence](../evidence/phase3j-2026-11-02.json) preserves all eight scores and the computed margins. The model scored correctly in only **2/4 researcher-provisional contexts** and **failed both 2/2 expected preference reversals**:
+
+| Known family | Actual model preference in affected context | Actual model preference in patched context | Correctly reverses? |
+| --- | --- | --- | --- |
+| Starlette static-file containment | Outside-path exposed (matches observation) | Outside-path exposed (contradicts patched observation) | **No** |
+| Requests HTTPS proxy authorization | Auth absent (contradicts affected observation) | Auth absent (matches observation) | **No** |
+
+These are **real model measurements**, not unit-test mock scores. Green CI means the original model ran and the measurements are authentic; **the observed model judgment is poor**. This confirms the original Phase 3D 0/2 counterfactual weakness across two additional previously studied libraries. **Do not register this LoRA**; no independent expert-reviewed labels, verified blind holdout, accepted Anjoman rows or live evaluator registration exist at this checkpoint.
+
 ## The next decision
 
 - If the original LoRA again fails counterfactual reversals, retire or retrain that checkpoint instead of polishing more static verification infrastructure.
