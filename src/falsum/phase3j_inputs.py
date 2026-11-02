@@ -86,7 +86,7 @@ def proof(root: Path) -> dict:
         or i.get("installed_runtime", {}).get("observations", {}).get("https_credentialed_proxy") != {
             "affected_header_present":True,"fixed_header_present":False,
         }
-        or h.get("verification", {}).get("independent_human_approved_labels") != 0
+        or h.get("verification", {}).get("independently_approved_appsec_labels") != 0
         or i.get("validation", {}).get("independent_human_approved_labels") != 0
         or h.get("verification", {}).get("network_eligible") is not False
         or i.get("validation", {}).get("network_eligible") is not False):
