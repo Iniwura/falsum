@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3L_OFFLINE_EVALPOOL_PREFLIGHT_VERIFIED_NO_NETWORK_ROWS_SUBMITTED",
+  "date": "2026-11-02",
+  "repository": "Iniwura/falsum",
+  "pull_request": "https://github.com/Iniwura/falsum/pull/9",
+  "merged_commit": "ab351b4fba6c091edf4c5db493c2e15b57871b83",
+  "verified_phase3l_ci": "https://github.com/Iniwura/falsum/actions/runs/41417864451",
+  "workflow_conclusion": "success",
+  "target_bounty": "https://github.com/telegraphprotocol/bounties/issues/96",
+  "target_intent": "SECURITY_REVIEW_GENERAL",
+  "protocol_documentation": "https://anjoman.ai/docs/scoring/contribute-evaluation-data",
+  "public_source_review_guidance": "https://docs.telegraphprotocol.com/docs/bounties/evaluation-material",
+  "shipped": {
+    "private_jsonl_standard_library_preflight": true,
+    "offline_exact_intent_label_kind_and_row_size_checks": true,
+    "within_batch_normalized_prompt_near_duplicate_check": true,
+    "human_origin_declaration_required_not_cryptographically_verified": true,
+    "public_https_source_url_required_content_not_verifiably_rechecked": true,
+    "local_sha256_per_row_review_claim_binding": true,
+    "byte_exact_unsigned_eip191_five_line_signing_message": true,
+    "exact_input_body_sha256": true,
+    "local_private_output_with_gitignore_protection": true,
+    "anonymous_synthetic_only_adversarial_test_methods": 17,
+    "passed_python_versions": [
+      "3.11",
+      "3.12",
+      "3.13"
+    ],
+    "no_wallet_credential_input_or_upload_implementation": true
+  },
+  "still_required": {
+    "actually_human_authored_and_accurate_private_eval_rows": true,
+    "real_independent_review_and_domain_expertise": true,
+    "operator_owned_ethereum_contributor_wallet_signature": true,
+    "explicit_operator_approved_private_upload": true,
+    "anjoman_per_row_eligible_status_and_epoch_activation": true,
+    "network_minimum_five_distinct_eligible_contributors": true
+  },
+  "zero_claims": {
+    "newly_independently_expert_verified_labels": 0,
+    "newly_uploaded_rows_by_phase3l": 0,
+    "confirmed_network_eligible_rows": 0,
+    "registered_evaluator_modules": 0,
+    "claimed_rankings": 0,
+    "accepted_network_training_pairs": 0
+  },
+  "note": "GitHub verification proves a private-handoff syntax and signature-message contract using 17 synthetic-only tests. No actual private evaluation material was authored, uploaded, adjudicated or admitted. Human review attestations can be claimed locally and are NOT authenticated proof of independence, expertise, factual correctness or network acceptance. Existing model release veto remains."
+}
