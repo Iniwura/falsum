@@ -1,0 +1,203 @@
+name: Phase 3K - REAL CPU research LoRA fact-sensitivity intervention and separate transfer comparison
+on:
+  push:
+    paths:
+      - 'src/falsum/phase3k_intervention.py'
+      - 'src/falsum/phase3k_transfer_compare.py'
+      - 'tests/test_phase3k_research_intervention.py'
+      - 'docs/PHASE3K.md'
+      - '.github/workflows/phase3k-context-research-training.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase3k_intervention.py'
+      - 'src/falsum/phase3k_transfer_compare.py'
+      - 'tests/test_phase3k_research_intervention.py'
+      - 'docs/PHASE3K.md'
+      - '.github/workflows/phase3k-context-research-training.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-research-finetune:
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    env:
+      PYTHONUNBUFFERED: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '4'
+      MKL_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify offline source-integrity, 52+8 training split and no-label claims first
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3k_research_intervention.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3j_evidence.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3h_evidence.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3i_evidence.py' -v
+          mkdir -p "$RUNNER_TEMP/falsum-3k" "$RUNNER_TEMP/falsum-3k-model"
+      - name: Checkout original pinned official V2 ModernBERT CPU trainer and node-compatible tokenizer
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 5fa5d68bbcf76aaa2093c5d0578f53462bc0e36e
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Retrieve old real research model and prior provenance, never replace it
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE2U-CONTEXT-LORA-RESEARCH
+          run-id: 41283929744
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/falsum-3k-prior
+      - name: Install real CPU Torch and official pinned training dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r telegraph-kit/requirements.txt 'transformers>=4.48,<5' 'numpy>=1.26,<3' 'peft>=0.14,<1'
+          python -m pip freeze > "$RUNNER_TEMP/falsum-3k/EXACT-PYTHON-DEPENDENCIES.txt"
+      - name: Recreate 52 verified-source original training examples and distinct holdout/validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/falsum-3k"
+          PYTHONPATH=src python -m falsum.advisory_corpus data/advisory-queue.json --out "$d"
+          PYTHONPATH=src python -m falsum.review_gate data/advisory-queue.json "$d/DRAFT-ONLY-corpus.json" --audit-only
+          PYTHONPATH=src python -m falsum.grounded_eval data/advisory-queue.json "$d/DRAFT-ONLY-corpus.json" --out "$d/grounded"
+          PYTHONPATH=src python -m falsum.research_pilot data/advisory-queue.json "$d" --manifest "$d/QUARANTINED-BASELINE-MANIFEST.json"
+      - name: Build eight balanced opposite-context training pairs from PREVIOUSLY KNOWN runtime cases
+        shell: bash
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/falsum-3k"
+          PYTHONPATH=src python -m falsum.phase3k_intervention \
+            --root "$GITHUB_WORKSPACE" \
+            --base "$d/grounded/DRAFT-grounded-train.jsonl" \
+            --out "$d/RESEARCH-ONLY-TRAIN-60.jsonl" \
+            --manifest "$d/PHASE3K-RESEARCH-TRAIN-MANIFEST.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          from transformers import AutoTokenizer
+          from falsum.model_eval import render
+          d=Path(os.environ["RUNNER_TEMP"])/"falsum-3k"
+          rows=[json.loads(x) for x in (d/"RESEARCH-ONLY-TRAIN-60.jsonl").read_text().splitlines()]
+          assert len(rows)==60
+          tokenizer=AutoTokenizer.from_pretrained("answerdotai/ModernBERT-base")
+          lengths=[len(tokenizer.encode(render(row["prompt"],row[k]),truncation=False))
+                   for row in rows[-8:] for k in ("chosen","rejected")]
+          assert len(lengths)==16 and max(lengths)<=512, "New research Task/Answer exceeds actual node cap"
+          (d/"REAL-TRAIN-INPUT-TOKEN-COUNTS.json").write_text(json.dumps({
+              "tested":len(lengths),"max_tokens":max(lengths),"node_cap":512,
+              "no_truncation":True,"research_only":True,"human_approved_labels":0
+          },indent=2)+"\n")
+          PY
+        env:
+          PYTHONPATH: src
+      - name: Official V2 trainer data/shortcut gate MUST pass, independent of LoRA performance
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=telegraph-kit python -m wide_runtime.train_adapter \
+            --intent SECURITY_REVIEW_GENERAL \
+            --data "$RUNNER_TEMP/falsum-3k/RESEARCH-ONLY-TRAIN-60.jsonl" --check-data \
+            2>&1 | tee "$RUNNER_TEMP/falsum-3k/OFFICIAL-SHORTCUT-GATE-LOG.txt"
+      - name: Train actual 1-epoch ModernBERT LoRA, record FAIL as FAIL not release
+        id: train
+        shell: bash
+        run: |
+          set +e
+          set -o pipefail
+          PYTHONPATH=telegraph-kit python -m wide_runtime.train_adapter \
+            --intent SECURITY_REVIEW_GENERAL \
+            --data "$RUNNER_TEMP/falsum-3k/RESEARCH-ONLY-TRAIN-60.jsonl" \
+            --val-data "$RUNNER_TEMP/falsum-3k/grounded/DRAFT-grounded-validation.jsonl" \
+            --test-data "$RUNNER_TEMP/falsum-3k/grounded/DRAFT-grounded-holdout.jsonl" \
+            --max-length 512 --batch-size 1 --eval-batch 1 --grad-accum 8 --epochs 1 \
+            --out "$RUNNER_TEMP/falsum-3k-model/SECURITY_REVIEW_GENERAL" \
+            2>&1 | tee "$RUNNER_TEMP/falsum-3k/ACTUAL-TRAINING-LOG.txt"
+          code=$?
+          echo "trainer_code=$code" >> "$GITHUB_OUTPUT"
+          echo "Real official V2 training exit code: $code (0=trainer pass, 1=research quality gate fail, >1=tool failure). NO registration authorized." >> "$GITHUB_STEP_SUMMARY"
+          if [ "$code" -gt 1 ]; then exit "$code"; fi
+          exit 0
+      - name: Rebuild three other source projects with authenticated upstream pre/post fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/falsum-3k"
+          mkdir -p "$d/private"
+          PYTHONPATH=src python -m falsum.phase2u_fresh_transfer \
+            --spec data/phase2u-fresh-transfer-cases.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --old-queue data/real-fix-queue.json \
+            --prior-advisories data/advisory-queue.json \
+            --public-out "$d/THREE-SEPARATE-PROJECT-QUESTIONS.json" \
+            --key-out "$d/private/THREE-SEPARATE-PROJECT-AI-PROVISIONAL-KEY.json" \
+            --token-out "$d/THREE-SEPARATE-PROJECT-TOKEN-REPORT.json"
+      - name: Score authentic baseline and new trained checkpoint on separately sourced research prompts
+        shell: bash
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/falsum-3k"
+          find_one() {
+            local root="$1" basename="$2" found
+            found="$(find "$root" -type f -name "$basename")"
+            test -n "$found" && test "$(printf '%s\n' "$found" | wc -l)" -eq 1
+            printf '%s' "$found"
+          }
+          old="$(dirname "$(find_one "$RUNNER_TEMP/falsum-3k-prior" adapter_config.json)")"
+          old_train="$(find_one "$RUNNER_TEMP/falsum-3k-prior" PHASE2U-TRAIN-MANIFEST.json)"
+          new="$RUNNER_TEMP/falsum-3k-model/SECURITY_REVIEW_GENERAL/adapter"
+          test -s "$old/adapter_model.safetensors"
+          test -s "$new/adapter_model.safetensors"
+          PYTHONPATH="$GITHUB_WORKSPACE/src:$GITHUB_WORKSPACE/telegraph-kit" \
+            python -m falsum.phase3k_transfer_compare \
+              --public "$d/THREE-SEPARATE-PROJECT-QUESTIONS.json" \
+              --private "$d/private/THREE-SEPARATE-PROJECT-AI-PROVISIONAL-KEY.json" \
+              --old-train-manifest "$old_train" \
+              --new-train-manifest "$d/PHASE3K-RESEARCH-TRAIN-MANIFEST.json" \
+              --before-adapter "$old" \
+              --after-adapter "$new" \
+              --out "$d/ACTUAL-OLD-VS-NEW-SEPARATE-PROJECT-SCORES.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"falsum-3k/ACTUAL-OLD-VS-NEW-SEPARATE-PROJECT-SCORES.json"
+          r=json.loads(p.read_text())
+          assert r["not_trained_on_any_transfer_project"] is True
+          assert r["source_separated_but_previous_models_inspected_this_comparison"] is True
+          assert r["human_approved_labels"]==0 and r["accepted_anjoman_rows"]==0
+          assert r["original_release_veto_still_applies"] is True and r["network_eligible"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as out:
+              out.write("### FALSUM Phase 3K: *actual* new-versus-old research LoRA on already inspected separated source projects\n\n")
+              out.write(f'Before: {r["before_ai_provisional_contexts_matched"]}/6 provisional preferences; {r["before_complete_reversals"]}/3 complete families.\n')
+              out.write(f'After: {r["after_ai_provisional_contexts_matched"]}/6 provisional preferences; {r["after_complete_reversals"]}/3 complete families.\n')
+              out.write("**NOT sealed/blind, NOT expert-approved, NOT official WASI inference, NOT registration-ready.** This result can be positive or negative without causing CI data integrity failure.\n")
+          PY
+      - name: Preserve all research logs and the trained quarantine adapter for analysis only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE3K-ACTUAL-CONTEXT-TRAINING-AND-SEPARATED-COMPARISON
+          path: |
+            ${{ runner.temp }}/falsum-3k/QUARANTINED-BASELINE-MANIFEST.json
+            ${{ runner.temp }}/falsum-3k/PHASE3K-RESEARCH-TRAIN-MANIFEST.json
+            ${{ runner.temp }}/falsum-3k/REAL-TRAIN-INPUT-TOKEN-COUNTS.json
+            ${{ runner.temp }}/falsum-3k/OFFICIAL-SHORTCUT-GATE-LOG.txt
+            ${{ runner.temp }}/falsum-3k/ACTUAL-TRAINING-LOG.txt
+            ${{ runner.temp }}/falsum-3k/EXACT-PYTHON-DEPENDENCIES.txt
+            ${{ runner.temp }}/falsum-3k/THREE-SEPARATE-PROJECT-TOKEN-REPORT.json
+            ${{ runner.temp }}/falsum-3k/ACTUAL-OLD-VS-NEW-SEPARATE-PROJECT-SCORES.json
+            ${{ runner.temp }}/falsum-3k-model/SECURITY_REVIEW_GENERAL/result.json
+            ${{ runner.temp }}/falsum-3k-model/SECURITY_REVIEW_GENERAL/adapter/
+          retention-days: 14
+          if-no-files-found: warn
