@@ -1,0 +1,121 @@
+name: Phase 3H - real Starlette 0.26.1 vs 0.27.0 isolated behavior
+on:
+  push:
+    paths:
+      - 'src/falsum/phase3h_starlette_runtime.py'
+      - 'tests/test_phase3h_starlette_runtime.py'
+      - 'data/real-fix-train-candidates.json'
+      - 'docs/PHASE3H.md'
+      - '.github/workflows/phase3h-starlette-real-delta.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase3h_starlette_runtime.py'
+      - 'tests/test_phase3h_starlette_runtime.py'
+      - 'data/real-fix-train-candidates.json'
+      - 'docs/PHASE3H.md'
+      - '.github/workflows/phase3h-starlette-real-delta.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolated-real-library-releases:
+    name: Installed Starlette ${{ matrix.version }} real bounded behavior
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ['0.26.1', '0.27.0']
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+      PIP_DISABLE_PIP_VERSION_CHECK: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline evidence schema and tampering tests, BEFORE installing historical package
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m compileall -q src/falsum/phase3h_starlette_runtime.py tests/test_phase3h_starlette_runtime.py
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3h_starlette_runtime.py -v
+      - name: Install exact declared historical upstream Starlette version
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install "starlette==${{ matrix.version }}"
+          mkdir -p "$RUNNER_TEMP/falsum-3h"
+          python -m pip freeze > "$RUNNER_TEMP/falsum-3h/INSTALLED-PACKAGES.txt"
+          python - <<'PY'
+          import importlib.metadata
+          assert importlib.metadata.version("starlette") == "${{ matrix.version }}"
+          print("Actual pinned installed Starlette:", importlib.metadata.version("starlette"))
+          PY
+      - name: Call real StaticFiles.get_path and get_response using only temporary synthetic files
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase3h_starlette_runtime run \
+            --version "${{ matrix.version }}" \
+            --queue data/real-fix-train-candidates.json \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --out "$RUNNER_TEMP/falsum-3h/STARLETTE-${{ matrix.version }}-REAL-RUNTIME.json"
+      - name: Publish exact-version evidence, not real user files
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3H-RUNTIME-${{ matrix.version }}
+          path: ${{ runner.temp }}/falsum-3h/
+          if-no-files-found: error
+          retention-days: 14
+  compare:
+    name: Fail closed unless actual installed vulnerable/patched behaviors diverge
+    needs: isolated-real-library-releases
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: FALSUM-PHASE3H-RUNTIME-*
+          path: ${{ runner.temp }}/falsum-3h-results
+          merge-multiple: false
+      - name: Require exact before/after behavior, including unchanged negative controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-3h-delta"
+          PYTHONPATH=src python -m falsum.phase3h_starlette_runtime compare \
+            --old "$RUNNER_TEMP/falsum-3h-results/FALSUM-PHASE3H-RUNTIME-0.26.1/STARLETTE-0.26.1-REAL-RUNTIME.json" \
+            --fixed "$RUNNER_TEMP/falsum-3h-results/FALSUM-PHASE3H-RUNTIME-0.27.0/STARLETTE-0.27.0-REAL-RUNTIME.json" \
+            --out "$RUNNER_TEMP/falsum-3h-delta/REAL-VERSION-CONTRAST-RESEARCH-ONLY.json"
+          python - <<'PY'
+          from pathlib import Path
+          import json, os
+          base=Path(os.environ["RUNNER_TEMP"])/"falsum-3h-delta"
+          r=json.loads((base/"REAL-VERSION-CONTRAST-RESEARCH-ONLY.json").read_text())
+          assert r["controlled_sibling_visible_before"] is True
+          assert r["controlled_sibling_blocked_after"] is True
+          assert r["unchanged_safe_and_negative_controls"]==3
+          assert r["trained_model_tested"] is False
+          assert r["independently_validated_expert_labels"]==0
+          assert r["accepted_anjoman_rows"]==0
+          assert r["network_eligible"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as out:
+              out.write("### Phase 3H: actually installed historical Starlette security boundary\n\n")
+              out.write("Real `StaticFiles.get_path/get_response` called under **0.26.1 (affected)** and **0.27.0 (fixed)** with synthetic temp files, without any HTTP listener.\n\n")
+              out.write("| Bounded local test | Starlette 0.26.1 | Starlette 0.27.0 |\n| --- | --- | --- |\n")
+              out.write("| Allowed in-root file | 200 | 200 |\n| Missing file | 404 | 404 |\n| Nonmatching sibling | 404 | 404 |\n| Same-prefix sibling | **200** | **404** |\n\n")
+              out.write("This is a real historical *library* behavior contrast, not a new live exploit, independent AppSec label, model evaluation, or network acceptance.\n")
+          PY
+      - name: Upload cross-version contrast report
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3H-VERIFIED-STARLETTE-BEFORE-AFTER-NOT-A-MODEL-BENCHMARK
+          path: ${{ runner.temp }}/falsum-3h-delta/
+          if-no-files-found: error
+          retention-days: 14
