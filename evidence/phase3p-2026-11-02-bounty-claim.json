@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3P_PUBLIC_BOUNTY_SUBMIT_POSTED_PENDING_MAINTAINER_REVIEW",
+  "verified_on": "2026-11-02",
+  "target_intent": "SECURITY_REVIEW_GENERAL",
+  "bounty_issue_url": "https://github.com/telegraphprotocol/bounties/issues/96",
+  "public_submission_url": "https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396",
+  "submission_comment_id": 6588168396,
+  "comment_author": "Iniwura",
+  "posted_at_utc": "2026-11-02T20:52:18Z",
+  "public_comment_verified_via": "GitHub REST issue-comment ID 6588168396",
+  "user_ui_eligibility_checkpoint": "https://github.com/Iniwura/falsum/blob/main/evidence/phase3o-2026-11-02-20-eligible.json",
+  "user_ui_reported_eligible_rows": 20,
+  "human_source_verification_claim": "AI-assisted provenance source_kind llm. Network eligible status is not independent human label certification.",
+  "deliverable": "Evaluation material contribution only",
+  "repo_url": "https://github.com/Iniwura/falsum",
+  "bounty_acceptance": "PENDING_NOT_YET_INDEPENDENTLY_VERIFIED",
+  "bounty_issue_open_at_verification": true,
+  "bounty_bot_acknowledgment_seen_after_submit": false,
+  "maintainer_acceptance_seen_after_submit": false,
+  "evaluator_adapter_registered": false,
+  "season_two_hackathon_entry_submitted": false,
+  "winner_verified": false,
+  "privacy": {
+    "private_eval_questions_published": false,
+    "private_answer_keys_published": false,
+    "private_row_hashes_published": false,
+    "contributor_wallet_already_in_public_bounty_comment": true,
+    "contributor_wallet_repeated_in_repository": false
+  },
+  "next_gate": "Wait for bounty maintainer confirmation, meanwhile submit separate official Season II Evaluators track entry with safe 2-5 minute real demo and reproducible judge instructions by Dec 1 2026 23:59 UTC. No qualifying evaluator adapter is being claimed.",
+  "note": "This record establishes the publicly posted /submit comment and its author, not a maintainer-approved bounty, evaluator model performance, final competition entry or prize. The public comment contains the contributor's disclosed address; this derived JSON intentionally does not duplicate it."
+}
