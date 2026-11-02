@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3Q_REAL_EXECUTED_SYNTHETIC_PR_SECURITY_REVIEW_LAB_VERIFIED",
+  "checked_date": "2026-11-03",
+  "repository": "https://github.com/Iniwura/falsum",
+  "merged_pr": "https://github.com/Iniwura/falsum/pull/14",
+  "merge_sha": "a2a03f6406d3cdf1674ccd37f9d25b55095f8da4",
+  "verified_ci": "https://github.com/Iniwura/falsum/actions/runs/41547305623",
+  "workflow_conclusion": "success",
+  "artifacts": {
+    "python_3_11": "https://github.com/Iniwura/falsum/actions/runs/41547305623/artifacts/13188299577",
+    "python_3_12": "https://github.com/Iniwura/falsum/actions/runs/41547305623/artifacts/13188169702",
+    "python_3_13": "https://github.com/Iniwura/falsum/actions/runs/41547305623/artifacts/13188209658"
+  },
+  "verified_observations": {
+    "fictional_mission_workflows": [
+      "EXCHANGE",
+      "MODEL ECONOMY",
+      "WEB3 NATIVE & DEFI"
+    ],
+    "real_executed_before_after_python_implementations": 6,
+    "unsafe_operations_reproduced_in_local_prepatch_fixtures": 3,
+    "unsafe_operations_blocked_in_local_postpatch_fixtures": 3,
+    "legitimate_operations_preserved_in_local_patched_fixtures": 3,
+    "unobserved_contexts_remained_insufficient_evidence": 3,
+    "source_function_sha256_reported": true,
+    "standalone_offline_html_demo_artifact": true,
+    "synthetic_only_new_targeted_tests": 15,
+    "passing_python_versions": [
+      "3.11",
+      "3.12",
+      "3.13"
+    ]
+  },
+  "scope": {
+    "network_or_real_payments_in_demo": false,
+    "real_mission_partner_integrations_verified": 0,
+    "model_inferences_executed": 0,
+    "new_eligible_network_material_from_demo": 0,
+    "source_questions_from_private_evalpool_used": false,
+    "independently_expert_approved_security_labels": 0,
+    "evaluator_adapter_live": false,
+    "previous_20_eligible_rows_unchanged": true,
+    "bounty_submit_maintainer_approval_unknown": true
+  },
+  "limitations": "Real Python code has been executed in synthetic fictional scenarios, but not in three actual external applications. The positive/negative labels are constructed test expectations, not a model quality measurement, independent human certification, or verified real mission adoption. HTML visualizes captured JSON, it does not execute security probes in the browser.",
+  "next_action": "Demonstrate in publicly accessible demo and get real independent external review/reproduction, then prepare H2 final entry. Do not fabricate adoption or validator approval."
+}
