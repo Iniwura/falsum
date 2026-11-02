@@ -137,7 +137,10 @@ class MeasuredEvidenceIntegrity(unittest.TestCase):
             self.assertEqual(capture()["synthetic_unwanted_actions_blocked_after"],3)
         with patch.dict("falsum.phase3q_mission_lab.RUNNERS", {
             "exchange-owner-binding":lambda func: {
-                **capture()["cases"][1]["before"],
+                "unsafe_action_accepted":True,"unsafe_observed_state":80,
+                "unsafe_expected_before":80,"unsafe_expected_after":100,
+                "control_action_accepted":True,"control_observed_state":80,
+                "control_expected":80,
             }
         }):
             with self.assertRaises((MissionProofError,KeyError,TypeError)):
@@ -154,7 +157,6 @@ class MeasuredEvidenceIntegrity(unittest.TestCase):
             self.assertIn("cross-examination",markup)
             self.assertIn('id="proof-data"',markup)
             self.assertIn("UNWANTED ACTION",markup)
-            self.assertIn("actual Python",markup.lower() if False else markup) if False else None
             self.assertNotIn("fetch(",markup)
             self.assertNotIn("cdn.",markup)
             self.assertNotIn("api/evalpool/submissions/mine",markup)
