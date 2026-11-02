@@ -1,0 +1,85 @@
+name: Phase 3G - public reviewer attribution and no-label quarantine
+on:
+  push:
+    paths:
+      - 'src/falsum/phase3g_public_review.py'
+      - 'tests/test_phase3g_public_review.py'
+      - 'docs/PHASE3G.md'
+      - '.github/workflows/phase3g-public-review-intake.yml'
+      - 'src/falsum/phase3f_multifamily_material.py'
+  pull_request:
+    paths:
+      - 'src/falsum/phase3g_public_review.py'
+      - 'tests/test_phase3g_public_review.py'
+      - 'docs/PHASE3G.md'
+      - '.github/workflows/phase3g-public-review-intake.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independently-attributed-public-comments-not-expert-labels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONUNBUFFERED: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Offline adversarial reviewer attribution and tamper tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3g_public_review.py -v
+          python -m compileall -q src/falsum/phase3g_public_review.py tests/test_phase3g_public_review.py
+      - name: Generate seven real-source-and-test reverified review packets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-phase3g"
+          PYTHONPATH=src python -m falsum.phase3f_multifamily_material \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --catalog data/phase2w-applicability-rules.json \
+            --out "$RUNNER_TEMP/falsum-phase3g/REVERIFIED-SEVEN-SOURCE-REVIEW-PACKETS.json"
+      - name: Fetch public Issue 3 comments directly from GitHub and bind SHA256 reviewer templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase3g_public_review \
+            --packets "$RUNNER_TEMP/falsum-phase3g/REVERIFIED-SEVEN-SOURCE-REVIEW-PACKETS.json" \
+            --out "$RUNNER_TEMP/falsum-phase3g/ATTRIBUTED-PUBLIC-COMMENT-CLAIMS-NOT-EXPERT-LABELS.json" \
+            --templates-out "$RUNNER_TEMP/falsum-phase3g/SEVEN-PREBOUND-PUBLIC-REVIEW-TEMPLATES.json"
+      - name: Enforce zero automatic expert labels and zero network promotion
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          p=Path(os.environ["RUNNER_TEMP"])/"falsum-phase3g/ATTRIBUTED-PUBLIC-COMMENT-CLAIMS-NOT-EXPERT-LABELS.json"
+          d=json.loads(p.read_text())
+          assert d["github_comments_retrieved_via_https"] is True
+          assert d["independently_verified_expert_labels"]==0
+          assert d["accepted_training_pairs"]==0
+          assert d["accepted_network_evaluation_rows"]==0
+          assert d["registered_evaluator"] is False
+          assert d["network_eligible"] is False
+          assert all(x["training_eligible"] is False for x in d["claims"])
+          assert all(x["independent_reviewer_verified"] is False for x in d["claims"])
+          assert all(x["underlying_security_claims_verified"] is False for x in d["claims"])
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### Phase 3G - authenticated public GitHub comment attribution, not security certification\n\n")
+              f.write(f"Actual Issue #3 comments scanned: **{d['comments_scanned']}**; structured review claims: **{d['structured_review_claims']}**; duplicate-author/packet groups: **{d['duplicate_author_packet_groups']}**; unresolved A/B disagreements: **{d['unresolved_A_B_disagreements']}**.\n\n")
+              f.write("GitHub comment metadata is transport-verified; domain expertise, review correctness and independence remain unverified. **0 accepted training labels, 0 eligible network rows, 0 registered evaluator.**\n")
+          PY
+      - name: Preserve public reviewer templates and attribution report only
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3G-REVIEWER-TEMPLATES-AND-UNAPPROVED-CLAIMS
+          path: ${{ runner.temp }}/falsum-phase3g/*.json
+          retention-days: 14
+          if-no-files-found: error
