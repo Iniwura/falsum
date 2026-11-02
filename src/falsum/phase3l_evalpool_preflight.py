@@ -13,6 +13,7 @@ import argparse
 import hashlib
 import ipaddress
 import json
+import os
 import re
 import secrets
 import unicodedata
@@ -87,7 +88,7 @@ def _read_private(path: Path) -> bytes:
     return body
 
 
-def validate_rows(body: bytes) -> tuple[list[dict], list[str]]:
+def validate_rows(body: bytes, *, allow_unverified_ai: bool = False) -> tuple[list[dict], list[str]]:
     """Strict local heuristic, NOT the node's curator or semantic accuracy test."""
     if not isinstance(body, bytes) or not body or len(body) > MAX_BODY:
         raise EvalpoolError("body missing or over the 32 MiB node limit")
@@ -96,7 +97,7 @@ def validate_rows(body: bytes) -> tuple[list[dict], list[str]]:
     lines = body.splitlines(keepends=True)
     if len(lines) > MAX_ROWS:
         raise EvalpoolError("conservative 5000-row daily contributor cap exceeded")
-    rows, hashes, seen_prompts, seen_rejected = [], [], [], set()
+    rows, hashes, seen_prompts, seen_rejected, source_kinds = [], [], [], set(), set()
     for n, line in enumerate(lines, 1):
         if len(line) > MAX_ROW:
             raise EvalpoolError(f"row {n}: exceeds 64 KiB")
@@ -132,9 +133,14 @@ def validate_rows(body: bytes) -> tuple[list[dict], list[str]]:
         seen_prompts.append(key)
         prov = item.get("provenance")
         if (not isinstance(prov, dict) or set(prov) != {"source_kind", "source_url"}
-                or prov.get("source_kind") != "human"
                 or not isinstance(prov.get("source_url"), str)):
-            raise EvalpoolError(f"row {n}: explicitly human-authored and publicly sourced material only")
+            raise EvalpoolError(f"row {n}: complete provenance.source_kind/source_url required")
+        kind = prov.get("source_kind")
+        if kind != "human" and not (allow_unverified_ai and kind in ("llm", "synthetic", "generated", "model")):
+            raise EvalpoolError(f"row {n}: unverified AI provenance requires explicit --allow-unverified-ai")
+        source_kinds.add(kind)
+        if "human" in source_kinds and len(source_kinds) > 1:
+            raise EvalpoolError("do not mix claimed human and unverified AI rows in one handoff")
         _url(prov["source_url"])
         rows.append(item)
         hashes.append(_hash(line.rstrip(b"\n")))
@@ -193,25 +199,36 @@ def sign_message(body: bytes, nonce: str, chain_id: int) -> str:
             f"chain_id: {chain_id}")
 
 
-def build(files: Path, review_path: Path, output_dir: Path,
-          address: str, nonce: str, chain_id: int) -> dict:
+def build(files: Path, review_path: Path | None, output_dir: Path,
+          address: str, nonce: str, chain_id: int, *, allow_unverified_ai: bool = False) -> dict:
     if not isinstance(address, str) or not ADDRESS.fullmatch(address):
         raise EvalpoolError("contributor address must be an Ethereum 0x/40-hex address")
     body = _read_private(files)
-    rows, row_hashes = validate_rows(body)
-    if not review_path.is_file() or review_path.is_symlink():
-        raise EvalpoolError("local non-symlink review file required")
-    attestations = json.loads(review_path.read_text(encoding="utf-8"))
-    review = check_attestations(attestations, row_hashes)
+    rows, row_hashes = validate_rows(body, allow_unverified_ai=allow_unverified_ai)
+    kinds = {r["provenance"]["source_kind"] for r in rows}
+    ai_only = "human" not in kinds
+    if ai_only:
+        if review_path is not None:
+            raise EvalpoolError("do not attach human verification statements to unverified AI draft handoff")
+        review = {"submitted_review_statements": 0, "reviewer_identity_authenticated": False,
+                  "independent_expertise_verified": False, "material_accuracy_certified": False}
+    else:
+        if review_path is None or not review_path.is_file() or review_path.is_symlink():
+            raise EvalpoolError("human-origin submission requires a local non-symlink review file")
+        attestations = json.loads(review_path.read_text(encoding="utf-8"))
+        review = check_attestations(attestations, row_hashes)
     message = sign_message(body, nonce, chain_id)
     if output_dir.is_symlink() or output_dir.exists():
         raise EvalpoolError("choose a new private output directory; no overwriting")
-    if files.resolve().is_relative_to(output_dir.resolve()) or review_path.resolve().is_relative_to(output_dir.resolve()):
+    if files.resolve().is_relative_to(output_dir.resolve()) or (review_path is not None and review_path.resolve().is_relative_to(output_dir.resolve())):
         raise EvalpoolError("source and output must not overlap")
     summary = {
         "schema_version": 1, "status": STATUS, "intent_id": INTENT,
         "body_sha256": _hash(body), "body_bytes": len(body), "row_count": len(rows),
         "review_statement_check": review,
+        "origin_declarations": sorted(kinds),
+        "provenance_class": "unverified" if ai_only else "attested_if_source_url_is_valid",
+        "operator_review_required_before_optional_upload": True,
         "contributor_address": address, "chain_id": chain_id,
         "signed": False, "uploaded": False, "network_received": 0,
         "network_admitted": 0, "network_eligible_rows": 0,
@@ -219,11 +236,16 @@ def build(files: Path, review_path: Path, output_dir: Path,
         "network_eligibility_checked": False,
         "notice": "Local syntax/source URL/review statement preflight only. Private row material remains unsubmitted. Human and network semantic review, EIP-191 signing, actual upload and eligibility checking are still required."
     }
-    output_dir.mkdir(parents=True)
-    (output_dir / "PRIVATE-EVALPOOL-ROWS.jsonl").write_bytes(body)
-    (output_dir / "EIP191-MESSAGE-TO-SIGN.txt").write_bytes(message.encode("utf-8"))
-    (output_dir / "UNSIGNED-HANDOFF.json").write_text(
-        json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    output_dir.mkdir(parents=True, mode=0o700)
+    os.chmod(output_dir, 0o700)
+    for name, raw in (
+        ("PRIVATE-EVALPOOL-ROWS.jsonl", body),
+        ("EIP191-MESSAGE-TO-SIGN.txt", message.encode("utf-8")),
+        ("UNSIGNED-HANDOFF.json", (json.dumps(summary, indent=2, sort_keys=True) + "\n").encode("utf-8")),
+    ):
+        fd = os.open(output_dir / name, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(raw)
     return summary
 
 
@@ -232,12 +254,15 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(dest="cmd", required=True)
     check = sub.add_parser("inspect", help="offline private row constraints only; stdout counts and hashes, no material")
     check.add_argument("--file", type=Path, required=True)
+    check.add_argument("--allow-unverified-ai", action="store_true", help="explicitly accept honestly labeled AI draft provenance")
     index = sub.add_parser("review-index", help="write local row SHA index for a human reviewer")
     index.add_argument("--file", type=Path, required=True)
+    index.add_argument("--allow-unverified-ai", action="store_true")
     index.add_argument("--out", type=Path, required=True)
     package = sub.add_parser("prepare", help="write unsigned, unsubmitted local handoff, never network")
     package.add_argument("--file", type=Path, required=True)
-    package.add_argument("--review-attestations", type=Path, required=True)
+    package.add_argument("--review-attestations", type=Path)
+    package.add_argument("--allow-unverified-ai", action="store_true")
     package.add_argument("--out-dir", type=Path, required=True)
     package.add_argument("--address", required=True)
     package.add_argument("--nonce")
@@ -246,9 +271,10 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.cmd in ("inspect", "review-index"):
             body = _read_private(args.file)
-            rows, hashes = validate_rows(body)
+            rows, hashes = validate_rows(body, allow_unverified_ai=args.allow_unverified_ai)
             if args.cmd == "inspect":
                 result = {"status": STATUS, "rows": len(rows), "body_sha256": _hash(body),
+                          "provenance_source_kinds": sorted({r["provenance"]["source_kind"] for r in rows}),
                           "eligible": False, "human_accuracy_verified": False}
             else:
                 if args.out.exists() or args.out.is_symlink() or args.out.resolve() == args.file.resolve():
@@ -259,7 +285,8 @@ def main(argv: list[str] | None = None) -> int:
                 result = {"status": STATUS, "rows": len(rows), "review_index_written": True}
         else:
             result = build(args.file, args.review_attestations, args.out_dir, args.address,
-                           args.nonce or secrets.token_hex(16), args.chain_id)
+                           args.nonce or secrets.token_hex(16), args.chain_id,
+                           allow_unverified_ai=args.allow_unverified_ai)
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0
     except (EvalpoolError, OSError, UnicodeError, ValueError, TypeError, KeyError) as exc:
