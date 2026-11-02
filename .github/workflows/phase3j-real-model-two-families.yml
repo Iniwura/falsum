@@ -1,0 +1,184 @@
+name: Phase 3J - actual original Foundation LoRA on two verified historical families
+on:
+  push:
+    paths:
+      - '.github/workflows/phase3j-real-model-two-families.yml'
+      - 'src/falsum/phase3j_inputs.py'
+      - 'src/falsum/phase3j_model_report.py'
+      - 'tests/test_phase3j_model_diagnostics.py'
+      - 'evidence/phase3h-2026-11-02.json'
+      - 'evidence/phase3i-2026-11-02.json'
+      - 'docs/PHASE3J.md'
+  pull_request:
+    paths:
+      - '.github/workflows/phase3j-real-model-two-families.yml'
+      - 'src/falsum/phase3j_inputs.py'
+      - 'src/falsum/phase3j_model_report.py'
+      - 'tests/test_phase3j_model_diagnostics.py'
+      - 'evidence/phase3h-2026-11-02.json'
+      - 'evidence/phase3i-2026-11-02.json'
+      - 'docs/PHASE3J.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-real-model-two-families:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      PYTHONUNBUFFERED: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen research task identities, real-runtime source anchors, adversarial no-label gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3j_model_diagnostics.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3h_evidence.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3i_evidence.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3d_quality_gate.py -v
+          mkdir -p "$RUNNER_TEMP/falsum-3j/reports"
+      - name: Checkout immutable official Telegraph baseline scoring/runtime toolchain
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Download existing original quarantined trained LoRA (NO retraining)
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE3B-RESEARCH-DELTA-NOT-NETWORK-REGISTERED
+          run-id: 41304788714
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/falsum-3j/old-real-model
+      - name: Verify exact original LoRA SHA256 and keep model quarantined
+        shell: bash
+        run: |
+          set -euo pipefail
+          pkg="$(find "$RUNNER_TEMP/falsum-3j/old-real-model" -type f -name SECURITY_REVIEW.safetensors -print -quit)"
+          test -n "$pkg"
+          echo "3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc  $pkg" | sha256sum -c -
+          echo "REAL_MODEL_PACKAGE=$pkg" >> "$GITHUB_ENV"
+          echo "Original quarantined unmodified rank-8 LoRA model SHA256 verified. Not a new model." >> "$GITHUB_STEP_SUMMARY"
+      - name: Get exact official 599MB Foundation, WASI runtime, and tokenizer; check original hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-3j/foundation"
+          prefix='https://github.com/telegraphprotocol/telegraph-foundation/releases/download/modernbert-base-lora16-v1'
+          for asset in foundation.json foundation_engine.wasm foundation_lora_fp32.onnx tokenizer.json; do
+            curl --fail --location --silent --show-error --retry 3 \
+              "$prefix/$asset" -o "$RUNNER_TEMP/falsum-3j/foundation/$asset"
+          done
+          (
+            cd "$RUNNER_TEMP/falsum-3j/foundation"
+            printf '%s  %s\n' \
+              f7de64b999acd3f735118fbe5999abf251fdf188f9797e3a4e36c54ee9e4dbbe foundation.json \
+              77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de foundation_engine.wasm \
+              0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6 foundation_lora_fp32.onnx \
+              67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456 tokenizer.json \
+              | sha256sum -c -
+          )
+      - name: Freeze four opposed contexts and eight real input tokens, no answer mutations
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install 'tokenizers==0.22.2'
+          PYTHONPATH=src python -m falsum.phase3j_inputs \
+            --tokenizer "$RUNNER_TEMP/falsum-3j/foundation/tokenizer.json" \
+            --root "$GITHUB_WORKSPACE" \
+            --out "$RUNNER_TEMP/falsum-3j/reports/FROZEN-KNOWN-FAMILY-MODEL-INPUTS.json"
+      - name: Build pinned official Go adapterbuild executable
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd telegraph-kit
+          go build -o "$RUNNER_TEMP/falsum-3j/adapterbuild" ./cmd/adapterbuild
+      - name: Run actual full Foundation ONNX and WASI inference twice for EACH eight frozen input
+        shell: bash
+        run: |
+          set -euo pipefail
+          f="$RUNNER_TEMP/falsum-3j/foundation"
+          d="$RUNNER_TEMP/falsum-3j/reports"
+          python - "$d/FROZEN-KNOWN-FAMILY-MODEL-INPUTS.json" <<'PY' > "$d/CASE-IDS.txt"
+          import json,sys
+          x=json.load(open(sys.argv[1]))
+          assert len(x["inputs"])==8
+          for r in x["inputs"]:
+              assert r["id"].replace("-","").isalnum()
+              print(r["id"])
+          PY
+          test "$(wc -l < "$d/CASE-IDS.txt")" -eq 8
+          while IFS= read -r id; do
+            test -n "$id"
+            mkdir -p "$d/$id"
+            "$RUNNER_TEMP/falsum-3j/adapterbuild" lora \
+              --intent SECURITY_REVIEW \
+              --package "$REAL_MODEL_PACKAGE" \
+              --foundation "$f/foundation.json" \
+              --foundation-onnx "$f/foundation_lora_fp32.onnx" \
+              --engine "$f/foundation_engine.wasm" \
+              --engine-hash 77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de \
+              --input "$d/SCORE-$id.json" \
+              --out "$d/$id" \
+              > "$d/$id/OFFICIAL-SCORE.json" \
+              2> "$d/$id/OFFICIAL-ENGINE-LOG.txt"
+            python - "$d/$id/OFFICIAL-SCORE.json" <<'PY'
+          import json,sys
+          x=json.load(open(sys.argv[1]))
+          assert x["manifest"]["verification"]["stage1"] is True
+          assert x["manifest"]["verification"]["loaded"] is True
+          assert x["manifest"]["verification"]["repeats"]==2
+          assert x["score_hex"]
+          print("Genuine model score:",sys.argv[1],x["score_hex"],flush=True)
+          PY
+          done < "$d/CASE-IDS.txt"
+      - name: Audit actual model preferences and enforce perpetual holdout/training/registration veto
+        shell: bash
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/falsum-3j/reports"
+          PYTHONPATH=src python -m falsum.phase3j_model_report \
+            --inputs "$d/FROZEN-KNOWN-FAMILY-MODEL-INPUTS.json" \
+            --scores-dir "$d" \
+            --root "$GITHUB_WORKSPACE" \
+            --out "$d/ACTUAL-REAL-MODEL-SECURITY-CONTEXT-MARGINS.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=Path(os.environ["RUNNER_TEMP"])/"falsum-3j/reports"
+          r=json.loads((d/"ACTUAL-REAL-MODEL-SECURITY-CONTEXT-MARGINS.json").read_text())
+          assert r["real_official_foundation_loaded"] is True
+          assert r["real_model_score_inputs"]==8
+          assert r["real_inference_calls_including_repeats"]==16
+          assert len(r["context_families"])==2
+          assert r["model_release_veto_remains"] is True
+          assert r["automatic_registration_permitted"] is False
+          assert r["blind_independent_holdout"] is False
+          assert r["expert_approved_labels"]==0
+          assert r["eligible_anjoman_rows"]==0
+          assert r["network_eligible"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as output:
+              output.write("### FALSUM Phase 3J: genuine original LoRA scores on two *known* historical families\n\n")
+              output.write("Original verified model, official Foundation/ONNX/WASI engine, eight distinct inputs, two runs each.\n\n")
+              for fam in r["context_families"]:
+                  output.write(f'**{fam["family"]}**: reversed={fam["reversed_preference_on_changed_runtime_fact"]}; both provisional contexts matched={fam["both_contexts_match_provisional_runtime_rule"]}\n\n')
+                  for x in fam["contexts"]:
+                      output.write(f'- {x["context"]}: observed margin {x["margin_answer_1_minus_answer_2"]:.8f}; model {x["model_preferred"]}; provisional rule {x["provisional_runtime_rule_preferred"]}; match {x["matches_provisional_runtime_rule"]}\n')
+                  output.write("\n")
+              output.write("**Release blocked, regardless of result.** These are already-researched projects and AI-provisional preferences, not blinded fresh projects or independently validated labels. The Phase 3D 0/2 failure remains recorded.\n")
+          PY
+      - name: Always retain negative scores and exact tokenizer inputs, not 600MB model downloads
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE3J-REAL-KNOWN-FAMILY-MODEL-DIAGNOSTICS-NO-RELEASE
+          path: ${{ runner.temp }}/falsum-3j/reports/
+          retention-days: 14
+          if-no-files-found: warn
