@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import ipaddress
 import json
 import re
 import secrets
@@ -62,7 +63,12 @@ def _url(source: str) -> None:
         _ = u.port
     except ValueError as exc:
         raise EvalpoolError("invalid provenance.source_url") from exc
+    try:
+        ip = ipaddress.ip_address(host)
+    except ValueError:
+        ip = None
     if (u.scheme != "https" or not host or u.username or u.password
+            or (ip is not None and not ip.is_global)
             or host in ("localhost", "metadata.google.internal")
             or host.endswith((".local", ".internal", ".localhost"))
             or any(c.isspace() for c in source)):
