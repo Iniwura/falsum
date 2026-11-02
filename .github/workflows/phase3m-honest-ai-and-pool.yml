@@ -1,0 +1,92 @@
+name: Phase 3M - honest AI-origin evaluation drafts and read-only pool status
+on:
+  push:
+    paths:
+      - 'src/falsum/phase3l_evalpool_preflight.py'
+      - 'src/falsum/phase3m_public_pool_status.py'
+      - 'tests/test_phase3l_evalpool_preflight.py'
+      - 'tests/test_phase3m_honest_ai_and_pool.py'
+      - 'docs/PHASE3M.md'
+      - '.github/workflows/phase3m-honest-ai-and-pool.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase3l_evalpool_preflight.py'
+      - 'src/falsum/phase3m_public_pool_status.py'
+      - 'tests/test_phase3l_evalpool_preflight.py'
+      - 'tests/test_phase3m_honest_ai_and_pool.py'
+      - 'docs/PHASE3M.md'
+      - '.github/workflows/phase3m-honest-ai-and-pool.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  honest-provenance-and-contract:
+    name: No false provenance or ownership, Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run both human-path regression and explicit AI-draft privacy guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m compileall -q src/falsum/phase3l_evalpool_preflight.py src/falsum/phase3m_public_pool_status.py tests/test_phase3m_honest_ai_and_pool.py
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3l_evalpool_preflight.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3m_honest_ai_and_pool.py' -v
+      - name: No actual private evaluation questions in public tracked files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git ls-files 'private/**' 'evalpool-private/**' '*.evalpool-private.jsonl' 'data/private/**')"
+  public-intent-status-observation:
+    name: Fetch live public intent status only; never address or row contents
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    needs: honest-provenance-and-contract
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: GET allowlisted public aggregate status, preserve UNKNOWN on outage
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-phase3m"
+          PYTHONPATH=src python -m falsum.phase3m_public_pool_status \
+            --out "$RUNNER_TEMP/falsum-phase3m/PUBLIC-INTENT-POOL-STATUS-NOT-USER-OWNERSHIP.json"
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"falsum-phase3m/PUBLIC-INTENT-POOL-STATUS-NOT-USER-OWNERSHIP.json"
+          s=json.loads(p.read_text())
+          assert s["intent_id"]=="SECURITY_REVIEW_GENERAL"
+          assert s["own_submission_checked"] is False
+          assert s["status"] in (
+              "PUBLIC_INTENT_NODE_STATUS_UNAVAILABLE_NOT_ZERO",
+              "READ_ONLY_PUBLIC_ANJOMAN_INTENT_POOL_STATUS_NOT_USER_CONTRIBUTION"
+          )
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as out:
+              out.write("### Phase 3M public Anjoman intent-level status (NOT a FALSUM submission)\n\n")
+              out.write(f'Status: **{s["status"]}**.\n\n')
+              if s["status"].startswith("READ_ONLY"):
+                  out.write(f'Eligible rows across ALL contributors: **{s["public_eligible_rows_in_intent"]}**.\n\n')
+                  out.write(f'Eligible submitters across ALL contributors: **{s["eligible_submitters"]}** / minimum {s["minimum_submitters_for_pool"]}.\n\n')
+              else:
+                  out.write("Node status unavailable; do NOT infer zero counts from this failure.\n\n")
+              out.write("0 user-owned rows verified; 0 network posts performed; no keys used.\n")
+          PY
+      - name: Publish status-only observability artifact, never private row contents
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3M-PUBLIC-INTENT-STATUS-NOT-OWNED-ROWS
+          path: ${{ runner.temp }}/falsum-phase3m/*.json
+          if-no-files-found: error
+          retention-days: 14
