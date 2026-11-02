@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3H_REAL_INSTALLED_HISTORICAL_STARLETTE_RUNTIME_DELTA_VERIFIED_RESEARCH_ONLY",
+  "date": "2026-11-02",
+  "repository": "Iniwura/falsum",
+  "merged_pr_url": "https://github.com/Iniwura/falsum/pull/5",
+  "successful_workflow_url": "https://github.com/Iniwura/falsum/actions/runs/41409503521",
+  "workflow_conclusion": "success",
+  "artifacts": {
+    "vulnerable_report": "https://github.com/Iniwura/falsum/actions/runs/41409503521/artifacts/13125140933",
+    "patched_report": "https://github.com/Iniwura/falsum/actions/runs/41409503521/artifacts/13124548379",
+    "verified_contrast": "https://github.com/Iniwura/falsum/actions/runs/41409503521/artifacts/13124736869"
+  },
+  "historical_case": {
+    "case_id": "real-starlette-commonprefix-traversal",
+    "advisory": "GHSA-v5gw-mw7f-84px",
+    "cve": "CVE-2023-29159",
+    "repository": "Kludex/starlette",
+    "upstream_security_fix_commit": "1797de464124b090f10cf570441e8292936d63e3",
+    "original_upstream_source_blob": "4c856063c2945d93f1b79505f9d8de7919b947aa",
+    "original_upstream_regression_test_blob": "23d0b57fc2b23fbc5f23734ce856980a3d4ae064"
+  },
+  "real_runtime": {
+    "vulnerable_installed_version": "0.26.1",
+    "patched_installed_version": "0.27.0",
+    "separate_exact_version_install_jobs_passed": 2,
+    "cross_version_comparison_job_passed": true,
+    "synthetic_fixtures_only": true,
+    "in_process_calls_to_actual_Starlette_get_path_and_get_response": true,
+    "new_http_server_started": false,
+    "production_applications_tested": 0,
+    "private_user_files_read": 0,
+    "controls": {
+      "inside_file": {
+        "vulnerable_http_status": 200,
+        "patched_http_status": 200
+      },
+      "missing_file": {
+        "vulnerable_http_status": 404,
+        "patched_http_status": 404
+      },
+      "unrelated_sibling": {
+        "vulnerable_http_status": 404,
+        "patched_http_status": 404
+      },
+      "same_prefix_outside_root_sibling": {
+        "vulnerable_http_status": 200,
+        "patched_http_status": 404
+      }
+    }
+  },
+  "verification": {
+    "focused_offline_adversarial_test_methods": 16,
+    "framework_runtime_matrix_jobs_passed": 2,
+    "cross_version_assertion_passed": true,
+    "foundation_test_matrix_passed": true,
+    "official_telegraph_diagnostic_gate_passed": true,
+    "real_model_scored_in_phase": false,
+    "model_retrained_in_phase": false,
+    "independently_approved_appsec_labels": 0,
+    "accepted_training_pairs": 0,
+    "accepted_anjoman_evaluation_rows": 0,
+    "registered_evaluator": false,
+    "network_eligible": false,
+    "model_release_veto_remains": true,
+    "previous_phase3d_context_reversal_success": "0/2"
+  },
+  "limitations": "Only the historical Starlette installed-library boundary was executed with three safe/negative controls and one known historical regression scenario; not a live application vulnerability, a blind holdout, independent expert-adjudicated ground truth, model accuracy, Anjoman eligible rows or registered evaluator. The Github Actions logs and artifacts prove executions while available; this checked-in summary is a regression-protected record of those observations, not independent cryptographic attestation."
+}
