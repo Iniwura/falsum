@@ -79,7 +79,7 @@ async def _observe(app, label: str, uri: str, intended_path: Path | None) -> dic
     # Real get_path is part of the library and retains the intended .. segment.
     path = app.get_path({"path": uri})
     try:
-        response = await app.get_response(path, {"method": "GET"})
+        response = await app.get_response(path, {"type": "http", "method": "GET", "headers": []})
     except HTTPException as exc:
         if exc.status_code != 404:
             raise RuntimeError3H(f"{label}: unexpected HTTPException {exc.status_code}") from exc
