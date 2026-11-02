@@ -25,6 +25,20 @@ FALSUM fills a specific intelligence measurement need: a `SECURITY_REVIEW_GENERA
 - [Original LoRA on official Foundation](PHASE3J.md): 16 real repeated inference calls; **0/2 complete history-sensitive reversal families** and **2/4 provisional context expectations**. Adapter remains quarantined.
 - [New real research LoRA training](PHASE3K.md): official trainer's internal 6/6 **does not transfer**; both actual before/after checkpoints matched **3/6** prior-inspected separate-project provisional preferences, **0/3** complete reversals. Training success **is not** model improvement.
 
+## New: executable mission-based evidence lab (Phase 3Q)
+
+The [Phase 3Q executable demo](PHASE3Q.md) upgrades FALSUM's judge-facing public proof: a **self-contained interactive dark-mode HTML evidence board**, produced by actual Python execution across **three fictional PRs** inspired by *Exchange*, *Model Economy*, and *Web3 Native & DeFi*. It runs six real before/after Python implementations, catches three unsafe behaviors, shows each prevented after patching, and preserves three legitimate controls. **This is not real mission integration or AI scoring accuracy.** It uses NO hidden eligible Anjoman questions and no network access or credentials.
+
+Reproduce a 3-workflow demonstration and open the visual evidence report:
+
+```bash
+PYTHONPATH=src python -m falsum.phase3q_mission_lab --out-dir phase3q-demo
+# Open phase3q-demo/index.html in a browser.
+# Machine proof: phase3q-demo/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json
+```
+
+[Actual successful 3.11/3.12/3.13 CI](https://github.com/Iniwura/falsum/actions/runs/41547305623) provides downloadable HTML/JSON artifacts. [Permanent counters and constraints](../evidence/phase3q-2026-11-03.json) explicitly record zero verified external mission integrations and zero AI model scored runs. This fills the previously missing **working demonstration** requirement without inventing third-party adoption.
+
 ## How a judge can reproduce safely
 
 Prerequisites: Git, Python 3.11–3.13 and a clone of this public repository. For offline test suites no wallet, secret, payment, Anjoman hidden material or account access is needed.
