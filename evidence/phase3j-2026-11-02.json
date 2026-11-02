@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3J_VERIFIED_REAL_FOUNDATION_MODEL_KNOWN_FAMILY_CONTEXT_FAILURE_NOT_HOLDOUT",
+  "date": "2026-11-02",
+  "repository": "Iniwura/falsum",
+  "merged_pr": "https://github.com/Iniwura/falsum/pull/7",
+  "real_scoring_ci": "https://github.com/Iniwura/falsum/actions/runs/41411984601",
+  "real_scoring_artifact": "https://github.com/Iniwura/falsum/actions/runs/41411984601/artifacts/13125239273",
+  "real_ci_job_conclusion": "success",
+  "original_model_sha256": "3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc",
+  "original_model_retrained_in_phase": false,
+  "shared_foundation_version": "modernbert-base-lora16-v1",
+  "source_runtime_workflows": {
+    "starlette": "https://github.com/Iniwura/falsum/actions/runs/41409503521",
+    "requests": "https://github.com/Iniwura/falsum/actions/runs/41410209502"
+  },
+  "observed": {
+    "genuine_input_scores": 8,
+    "repeated_inference_calls": 16,
+    "float32_score_bits_by_input": {
+      "starlette-path-boundary--affected--outside-path-blocked": "0xbf546c54",
+      "starlette-path-boundary--affected--outside-path-exposed": "0xbf296b7b",
+      "starlette-path-boundary--fixed--outside-path-blocked": "0xbf62c1b7",
+      "starlette-path-boundary--fixed--outside-path-exposed": "0xbf3a3b54",
+      "requests-proxy-auth--affected--https-auth-absent": "0xbf1d54ec",
+      "requests-proxy-auth--affected--https-auth-present": "0xbf2891d8",
+      "requests-proxy-auth--fixed--https-auth-absent": "0xbf2ade2a",
+      "requests-proxy-auth--fixed--https-auth-present": "0xbf373a5a"
+    },
+    "human_provisional_preference_contexts": 4,
+    "contexts_matching_researcher_provisional_runtime_rules": 2,
+    "families_tested": 2,
+    "families_reversing_on_changed_runtime_fact": 0,
+    "families_matching_both_researcher_provisional_runtime_rules": 0,
+    "families": [
+      {
+        "family": "starlette-path-boundary",
+        "contexts": [
+          {
+            "context": "affected",
+            "score_first_answer_f32": -0.8297779560089111,
+            "score_second_answer_f32": -0.6617962718009949,
+            "margin_first_minus_second": -0.16798168420791626,
+            "model_preferred": "outside-path-exposed",
+            "provisional_runtime_expected": "outside-path-exposed",
+            "matched_provisional": true
+          },
+          {
+            "context": "fixed",
+            "score_first_answer_f32": -0.8857683539390564,
+            "score_second_answer_f32": -0.7274677753448486,
+            "margin_first_minus_second": -0.15830057859420776,
+            "model_preferred": "outside-path-exposed",
+            "provisional_runtime_expected": "outside-path-blocked",
+            "matched_provisional": false
+          }
+        ],
+        "ranking_reversed": false,
+        "both_contexts_matched": false
+      },
+      {
+        "family": "requests-proxy-auth",
+        "contexts": [
+          {
+            "context": "affected",
+            "score_first_answer_f32": -0.614577054977417,
+            "score_second_answer_f32": -0.658475399017334,
+            "margin_first_minus_second": 0.04389834403991699,
+            "model_preferred": "https-auth-absent",
+            "provisional_runtime_expected": "https-auth-present",
+            "matched_provisional": false
+          },
+          {
+            "context": "fixed",
+            "score_first_answer_f32": -0.6674524545669556,
+            "score_second_answer_f32": -0.7157341241836548,
+            "margin_first_minus_second": 0.04828166961669922,
+            "model_preferred": "https-auth-absent",
+            "provisional_runtime_expected": "https-auth-absent",
+            "matched_provisional": true
+          }
+        ],
+        "ranking_reversed": false,
+        "both_contexts_matched": false
+      }
+    ]
+  },
+  "independent_expert_labels": 0,
+  "blind_untouched_holdout": false,
+  "accepted_anjoman_evaluation_rows": 0,
+  "accepted_training_pairs": 0,
+  "model_security_accuracy_certified": false,
+  "existing_phase3d_reversals_passed": "0/2",
+  "automatic_model_registration_permitted": false,
+  "registered_evaluator": false,
+  "network_eligible": false,
+  "next_action": "STOP_MODEL_RELEASE_REDESIGN_AND_TRAIN_WITH_REAL_ADJUDICATED_CONTEXT_EXAMPLES_AND_PROJECT_DISJOINT_HOLDOUT",
+  "limits": "Original exact SHA-verified LoRA was evaluated using the genuine official pinned Foundation/ONNX/WASI scoring runtime. Both historically studied framework families are known and researcher-authored; expectations derive from safe runtime observations rather than independent AppSec judgments. This diagnostic cannot establish heldout security accuracy or protocol eligibility. Green CI means truthful score integrity, NOT model quality. Source artifacts expire."
+}
