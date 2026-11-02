@@ -1,0 +1,61 @@
+name: Phase 3L - private evalpool preflight contract and synthetic-only security tests
+on:
+  push:
+    paths:
+      - 'src/falsum/phase3l_evalpool_preflight.py'
+      - 'tests/test_phase3l_evalpool_preflight.py'
+      - 'docs/PHASE3L.md'
+      - '.github/workflows/phase3l-private-evalpool.yml'
+      - '.gitignore'
+  pull_request:
+    paths:
+      - 'src/falsum/phase3l_evalpool_preflight.py'
+      - 'tests/test_phase3l_evalpool_preflight.py'
+      - 'docs/PHASE3L.md'
+      - '.github/workflows/phase3l-private-evalpool.yml'
+      - '.gitignore'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-private-handoff-contract:
+    name: Synthetic-only preflight tests, Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Check real implementation compiles and synthetic-only adversarial tests pass
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m compileall -q src/falsum/phase3l_evalpool_preflight.py tests/test_phase3l_evalpool_preflight.py
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3l_evalpool_preflight.py' -v
+      - name: Confirm no private evaluation handoffs were committed
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git ls-files 'private/**' 'evalpool-private/**' '*.evalpool-private.jsonl' 'data/private/**')"
+          python - <<'PY'
+          from pathlib import Path
+          p=Path("src/falsum/phase3l_evalpool_preflight.py").read_text()
+          assert "X-Evalpool-Signature" not in p, "Tool must not handle live signatures or upload"
+          assert "/api/evalpool/submissions?" not in p, "Tool must not implement network uploads"
+          assert "subprocess.run" not in p, "Tool must not call wallet tooling"
+          print("Public CI contains no private evaluation rows, wallet signatures or upload path")
+          PY
+      - name: Public summary, never publish question/answer content
+        shell: bash
+        run: |
+          printf '%s\n' "### FALSUM Phase 3L private evaluation preflight" >> "$GITHUB_STEP_SUMMARY"
+          printf '%s\n' "Offline JSONL format checks, duplicate protection, per-row local review SHA binding, and exact five-line EIP-191 message construction tested with fabricated synthetic inputs only." >> "$GITHUB_STEP_SUMMARY"
+          printf '%s\n' "**NO actual hidden evaluation material, reviewer identity verification, signer, upload, accepted rows, or model registration.**" >> "$GITHUB_STEP_SUMMARY"

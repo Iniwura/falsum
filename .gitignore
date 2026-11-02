@@ -15,3 +15,8 @@ runs/
 .env.*
 !*.env.example
 /data/private/
+
+# Phase 3L: exact evaluation prompts and answer keys stay local, never public GitHub
+/private/
+/evalpool-private/
+*.evalpool-private.jsonl
