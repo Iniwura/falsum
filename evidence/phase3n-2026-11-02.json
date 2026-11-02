@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3N_USER_OBSERVED_NETWORK_ADMISSION_20_NOT_YET_ELIGIBLE",
+  "date": "2026-11-02",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "repository": "https://github.com/Iniwura/falsum",
+  "merged_pr": "https://github.com/Iniwura/falsum/pull/11",
+  "merge_sha": "d112881edf989cd499ae223cc7218d35158df003",
+  "verified_premerge_ci": "https://github.com/Iniwura/falsum/actions/runs/41427881336",
+  "source_of_admission": "User-supplied signed-in Anjoman account UI screenshot in private ChatGPT conversation, not independent read of /mine API",
+  "screenshot_or_wallet_published": false,
+  "user_submission_reported": {
+    "rows_received_and_stored": 20,
+    "rows_already_there": 0,
+    "rows_refused_on_upload": 0,
+    "rows_displayed_admitted": 20,
+    "rows_confirmed_eligible_at_time_of_report": 0
+  },
+  "node_state_semantics": {
+    "admitted": "Passed initial curation; joins frozen pool at next epoch rollover",
+    "eligible": "In frozen snapshot; can count toward bounty evaluation material contribution",
+    "bounty_submit_appropriate_now": false,
+    "public_source": "https://anjoman.ai/docs/scoring/contribute-evaluation-data"
+  },
+  "pending": {
+    "next_anjoman_epoch_rollover": true,
+    "authoritative_contributor_status_eligible_check": true,
+    "maintainer_verified_bounty_submission": true,
+    "final_hackathon_submission": true
+  },
+  "privacy": {
+    "hidden_prompts_and_answers_published": false,
+    "contributor_address_or_email_published": false,
+    "row_hashes_published": false,
+    "screenshot_uploaded_to_public_github": false
+  },
+  "evaluator": {
+    "prior_model_eligible_for_registration": false,
+    "new_retrained_model_eligible_for_registration": false,
+    "registered_modules": 0,
+    "independently_approved_labels": 0
+  },
+  "note": "Green CI and user UI prove a successful 20-row upload/initial admission, NOT 20 eligible rows or winnings. Eligible counts must be verified after an epoch freeze. No extra upload should be made on identical prompts."
+}
