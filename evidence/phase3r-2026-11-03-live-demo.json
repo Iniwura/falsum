@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3R_VERCEL_PRODUCTION_PUBLIC_EVIDENCE_LAB_HTTP200_VERIFIED",
+  "verified_on": "2026-11-03",
+  "repository": "https://github.com/Iniwura/falsum",
+  "merged_pr": "https://github.com/Iniwura/falsum/pull/15",
+  "source_commit": "b2188fb45d56c20ee199a3495279c04ce40b451e",
+  "vercel_project": "falsum-evidence-lab",
+  "deployment_id": "dpl_EfAN3V7S7sjKKEYb9xYoi5JFTB74",
+  "deployment_state": "READY",
+  "deployment_target": "production",
+  "production_url": "https://falsum-evidence-lab.vercel.app",
+  "machine_readable_report_url": "https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json",
+  "remote_http_verification": {
+    "verification_method": "Vercel authenticated web fetch of public URL; both origin responses report HTTP 200",
+    "home_status_code": 200,
+    "json_status_code": 200,
+    "external_browsing_service_fetch_succeeded": false,
+    "production_project_sso_protection_enabled": false,
+    "homepage_contains_source_link": true,
+    "homepage_contains_explicit_synthetic_scope": true,
+    "json_total_fictional_mission_workflows": 3,
+    "json_unsafe_actions_reproduced_in_before_fixtures": 3,
+    "json_unwanted_actions_blocked_in_after_fixtures": 3,
+    "json_legitimate_actions_preserved_after_fixtures": 3
+  },
+  "hosting": {
+    "framework": null,
+    "build_command": "PYTHONPATH=src python3 -m falsum.phase3q_mission_lab --out-dir public",
+    "output_directory": "public",
+    "backend_server": false,
+    "authentication_required": false,
+    "runtime_secrets_required": false
+  },
+  "qualification_limits": {
+    "real_third_party_mission_integrations_verified": 0,
+    "actual_evaluator_model_inference_executed": 0,
+    "independent_expert_security_label_count": 0,
+    "hidden_anjoman_questions_used": false,
+    "new_anajoman_eligible_rows_generated": 0,
+    "registered_evaluator_model": false,
+    "existing_eligible_network_contribution_rows": 20,
+    "hackathon_final_entry_submitted": false,
+    "bounty_maintainer_accepted": false,
+    "winning_claimed": false
+  },
+  "remaining_actions": [
+    "Invite genuine independent developer to reproduce real-safe test and report their own findings; do not fabricate usage",
+    "Record a true 2–5 minute demo of the working public site and Anjoman integration",
+    "Register and submit separately to the official Season II site by 2026-12-01T23:59:00Z",
+    "Retain any actual bounty maintainer review or rejection evidence without inventing approval"
+  ],
+  "note": "200 responses were verified by the connected Vercel web-fetch service; an unrelated external browsing service could not resolve this newly created domain. No browser click-level or mobile screenshot QA is claimed. The application is static and displays real prior Python execution against synthetic local fixtures, not runtime browser security probes."
+}
