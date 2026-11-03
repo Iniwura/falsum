@@ -221,6 +221,9 @@ def fetch_live_issues(*, opener=None) -> tuple[list[dict], int]:
                 if len(payload) > 2000000:
                     raise ReviewClaimError("oversized GitHub issues response")
             decoded = json.loads(payload)
+        except ReviewClaimError:
+            # Preserve exact safety failures (redirect/oversized response), never obscure them.
+            raise
         except (OSError, ValueError, TypeError) as exc:
             raise ReviewClaimError("unable to verify GitHub public issue list") from exc
         if not isinstance(decoded, list):
