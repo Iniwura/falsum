@@ -1,0 +1,84 @@
+name: Phase 3S - reference-led editorial evidence lab
+on:
+  push:
+    paths:
+      - 'src/falsum/phase3q_mission_lab.py'
+      - 'src/falsum/templates/firma_editorial_evidence_lab.html'
+      - 'tests/test_phase3q_mission_lab.py'
+      - 'tests/test_phase3r_deployment.py'
+      - 'tests/test_phase3s_editorial_evidence_lab.py'
+      - '.github/workflows/phase3s-editorial-ui.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase3q_mission_lab.py'
+      - 'src/falsum/templates/firma_editorial_evidence_lab.html'
+      - 'tests/test_phase3q_mission_lab.py'
+      - 'tests/test_phase3r_deployment.py'
+      - 'tests/test_phase3s_editorial_evidence_lab.py'
+      - '.github/workflows/phase3s-editorial-ui.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    name: Editorial site and source-proof integrity, Python ${{ matrix.python-version }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run security evidence, static deployment, editorial UI test suites
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m compileall -q src/falsum/phase3q_mission_lab.py tests/test_phase3s_editorial_evidence_lab.py
+          for test in test_phase3q_mission_lab.py test_phase3r_deployment.py test_phase3s_editorial_evidence_lab.py; do
+            PYTHONPATH=src:tests python -m unittest discover -s tests -p "$test" -v
+          done
+      - name: Execute Python fixtures; build HTML and verify source-code fingerprints and JS
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase3q_mission_lab --out-dir "$RUNNER_TEMP/phase3s-site"
+          python - <<'PY'
+          import os,json,re,hashlib
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"phase3s-site"
+          html=(p/"index.html").read_text()
+          data=json.loads((p/"ACTUAL-SYNTHETIC-RUNTIME-PROOF.json").read_text())
+          assert html.startswith("<!doctype html>")
+          assert len(data["cases"])==3
+          assert data["synthetic_unwanted_actions_blocked_after"]==3
+          assert data["legitimate_controls_preserved_after"]==3
+          assert all(x in html for x in ("beyond the","claim.","font-family:var(--serif)","prefers-reduced-motion:reduce"))
+          assert html.count('id="proof-data"')==1
+          for case in data["cases"]:
+              for phase in ("before","after"):
+                  assert hashlib.sha256(case[phase+"_code"].encode()).hexdigest()==case[phase+"_source_sha256"]
+          assert "__FALSUM_DATA__" not in html
+          assert "0x9cBA6Cf" not in html
+          assert "PRIVATE-EVALPOOL-ROWS" not in html
+          assert "fetch(" not in html
+          scripts=re.findall(r'<script(?:\s+[^>]*)?>(.*?)</script>',html,re.S)
+          assert len(scripts)==2
+          (p/"BROWSER-SCRIPT-CHECK.js").write_text(scripts[1])
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as out:
+              out.write("### Phase 3S editorial redesign with real Python source and results\n\n")
+              out.write("3 unsafe synthetic prepatch operations blocked, 3 controls preserved. No live model, hidden network questions or external application audits.\n")
+          PY
+          node --check "$RUNNER_TEMP/phase3s-site/BROWSER-SCRIPT-CHECK.js"
+          rm "$RUNNER_TEMP/phase3s-site/BROWSER-SCRIPT-CHECK.js"
+      - name: Preserve live-proof HTML and source-bound JSON for reviewers
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3S-FIRMA-EDITORIAL-EVIDENCE-PY${{ matrix.python-version }}
+          path: ${{ runner.temp }}/phase3s-site/
+          retention-days: 30
+          if-no-files-found: error
