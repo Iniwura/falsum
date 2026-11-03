@@ -27,7 +27,7 @@ class GuidedSecurityReviewDemo(unittest.TestCase):
             'id="scene-explain"',
             'id="answer-a"',
             'id="show-proof"',
-            "Which review should pass?",
+            'class="answers"',
             'id="answer-a"',
             'id="answer-b"',
             'id="show-proof"',
