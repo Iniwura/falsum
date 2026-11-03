@@ -25,6 +25,14 @@ FALSUM fills a specific intelligence measurement need: a `SECURITY_REVIEW_GENERA
 - [Original LoRA on official Foundation](PHASE3J.md): 16 real repeated inference calls; **0/2 complete history-sensitive reversal families** and **2/4 provisional context expectations**. Adapter remains quarantined.
 - [New real research LoRA training](PHASE3K.md): official trainer's internal 6/6 **does not transfer**; both actual before/after checkpoints matched **3/6** prior-inspected separate-project provisional preferences, **0/3** complete reversals. Training success **is not** model improvement.
 
+## Phase 3S — Reference-led editorial presentation, real code inspection
+
+The [live FALSUM site](https://falsum-evidence-lab.vercel.app/) now uses an original editorial design inspired by the high-quality [Firma Framer reference](https://firma-template.framer.website/): large serif headings, white/ink contrast, generous space, oversized brand typography and full-scale project case studies. The new interaction is substantive: select any of the three fictional PR cases, switch **Before patch / After patch**, and inspect the *exact executed Python function source* and SHA-256, derived from the [recorded runtime proof](https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json).
+
+[PR #17](https://github.com/Iniwura/falsum/pull/17) passed 21 checks across Python 3.11, 3.12, 3.13 and the official data gate. [Live production evidence](../evidence/phase3s-2026-11-03-live-editorial.json) records Vercel READY, HTTP 200 on HTML and JSON, and Playwright smoke tests on desktop and mobile. Mobile had no horizontal overflow and no browser page errors in the verified session. The screenshot captures were not preserved as public artifacts and no manual pixel-by-pixel design approval is asserted.
+
+**Scope remains unchanged:** this is a safe local synthetic exhibit, not an actual application security integration, deployed scanner, registered LoRA scorer, independent security label set or confirmed prize. Private Anjoman evaluation content remains protected. The previously eligible 20 network rows are a distinct deliverable.
+
 ## Live judge-ready evidence site — Phase 3R
 
 **[Open the FALSUM public Evidence Lab](https://falsum-evidence-lab.vercel.app)** · [Exact machine-readable captured runtime results](https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json) · [Production HTTP 200 check](../evidence/phase3r-2026-11-03-live-demo.json)
