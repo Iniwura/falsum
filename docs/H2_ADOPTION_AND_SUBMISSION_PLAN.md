@@ -11,7 +11,7 @@
 
 ## What matters for the prize
 
-Read the [official Season II rules](https://hackathon.telegraphprotocol.com/rules). The Evaluators track prizes include four **$300 verified-delivery awards** and three excellence rankings ($500, $300, $800? Verify official current distribution before quoting publicly). The **minimum winning score is 70/100**, and the Evaluators-specific technical minimum must also be met. The rules allocate **20 points** to useful education, adoption friction, organic distribution and genuine independent developer actions:
+Read the [official Season II rules](https://hackathon.telegraphprotocol.com/rules). The Evaluators track has four **$300 verified-delivery awards** ($1,200 total), plus **$500 first place and $300 second place** for excellence ($800 total), per the current official prize table. The **minimum winning score is 70/100**, and the Evaluators-specific technical minimum must also be met. The rules allocate **20 points** to useful education, adoption friction, organic distribution and genuine independent developer actions:
 
 | Part | Max points | FALSUM-specific honest route |
 | --- | ---: | --- |
