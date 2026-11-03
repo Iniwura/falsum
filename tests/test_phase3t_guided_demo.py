@@ -24,9 +24,9 @@ class GuidedSecurityReviewDemo(unittest.TestCase):
         expected=(
             "Two security reviews. One real test.",
             "No coding needed.",
-            "01</span><div class=\"step-copy\">Read the situation",
-            "02</span><div class=\"step-copy\">Choose a security review",
-            "03</span><div class=\"step-copy\">Reveal the real proof",
+            "01</span><div class=step-copy>Read the situation",
+            "02</span><div class=step-copy>Choose a security review",
+            "03</span><div class=step-copy>Reveal the real proof",
             "Which security review should pass?",
             'id="answer-a"',
             'id="answer-b"',
