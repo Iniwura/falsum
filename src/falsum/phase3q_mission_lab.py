@@ -256,13 +256,13 @@ def _page(report: dict) -> str:
 :root{color-scheme:dark;--bg:#060a12;--p:#0c1320;--bd:#263348;--txt:#ebf3ff;--mut:#99a9c0;--blue:#548dff;--mint:#8af4d6;--red:#ff8e99;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 72% -15%,#183b70 0,transparent 48%),var(--bg);color:var(--txt);min-height:100vh}
 .container{max-width:1290px;margin:auto;padding:28px clamp(18px,4vw,50px) 80px}
-nav{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--bd);padding-bottom:25px}
+nav{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--bd);padding-bottom:25px}.nav-actions{display:flex;align-items:center;gap:16px}.nav-actions a{color:var(--mint);font-size:12px;text-decoration:none;font-weight:750}.nav-actions a:hover,.nav-actions a:focus-visible{text-decoration:underline}
 .logo{font-size:19px;font-weight:850;letter-spacing:.18em}.logo i{font-style:normal;color:var(--blue)}
 .tag{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:1px solid #39537c;color:#b4cffa;border-radius:50px;padding:8px 13px}
 .hero{display:grid;grid-template-columns:1.4fr .6fr;gap:38px;align-items:end;margin:80px 0 48px}
 .overline{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase}
 h1{font-size:clamp(40px,6vw,82px);letter-spacing:-.065em;line-height:1.03;margin:16px 0 20px;max-width:830px}
-h1 span{color:var(--blue)}.lead{color:#b0bed0;font-size:17px;max-width:660px;line-height:1.7}
+h1 span{color:var(--blue)}.lead{color:#b0bed0;font-size:17px;max-width:660px;line-height:1.7}.hero-link{display:inline-block;margin-top:18px;padding:12px 17px;border:1px solid #507ac0;border-radius:10px;background:#162a47;text-decoration:none;color:#d8e8ff;font-size:13px;font-weight:750}.hero-link:hover,.hero-link:focus-visible{background:#203b63;outline:2px solid #628dcb;outline-offset:2px}
 .note{padding:22px;border:1px solid #32435d;border-radius:18px;background:#0e1727;color:#c0d0e6;font-size:14px;line-height:1.7}
 .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:20px;overflow:hidden;margin-bottom:48px}
 .metric{padding:25px 22px;background:#0d1523}.metric strong{font-size:35px;display:block;letter-spacing:-.05em}.metric small{display:block;color:var(--mut);margin-top:5px;font-size:12px}
@@ -284,21 +284,21 @@ code{font:11px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:#a8cffc;
 .footer{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;margin-top:42px;padding-top:23px;border-top:1px solid var(--bd);font-size:12px;color:var(--mut)}
 .status{color:var(--mint)}.fail{color:var(--red)}
 @media(max-width:850px){.hero{grid-template-columns:1fr;margin:55px 0 35px}.lab{grid-template-columns:1fr}.nav-col{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.metrics{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){.nav-col{grid-template-columns:1fr}.results{grid-template-columns:1fr}.fact{grid-template-columns:1fr;gap:2px}.hero{margin-top:46px}}
+@media(max-width:560px){nav{align-items:flex-start;flex-wrap:wrap}.nav-actions{flex-wrap:wrap}.nav-col{grid-template-columns:1fr}.results{grid-template-columns:1fr}.fact{grid-template-columns:1fr;gap:2px}.hero{margin-top:46px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style></head>
 <body><div class="container">
-<nav><div class="logo">FALSUM<i>.</i></div><div class="tag">Public synthetic evidence lab / 01</div></nav>
+<nav><div class="logo">FALSUM<i>.</i></div><div class="nav-actions"><a href="https://github.com/Iniwura/falsum" rel="noopener noreferrer" target="_blank">GitHub + tests</a><div class="tag">Public synthetic evidence lab / 01</div></div></nav>
 <section class="hero"><div><div class="overline">Security / Evaluators / Proof of behavior</div>
 <h1>Security claims deserve a <span>cross-examination.</span></h1>
-<p class="lead">Three fictional pull requests. Six real local Python executions. Each finding changes when the code is fixed, while legitimate behavior stays intact.</p>
+<p class="lead">Three fictional pull requests. Six real local Python executions. Each finding changes when the code is fixed, while legitimate behavior stays intact.</p><a class="hero-link" href="#lab">Explore measured results ↓</a>
 </div><div class="note"><b>What this proves</b><p>Actual Python code ran against in-memory fixtures. This is a reproducible demonstration of evidence-aware security review, <b>not</b> a deployed product audit, trained AI scorer, or third-party integration.</p></div></section>
 <div class="metrics"><div class="metric"><strong id="mission-count">3</strong><small>Synthetic mission workflows</small></div>
 <div class="metric"><strong id="blocked">3/3</strong><small>Unwanted actions blocked after patch</small></div>
 <div class="metric"><strong id="preserved">3/3</strong><small>Legitimate controls preserved</small></div>
 <div class="metric"><strong id="unknown">3</strong><small>Unverified contexts kept unknown</small></div></div>
 <div class="section-heading">01 / Inspection chamber — measured results</div>
-<section class="lab"><div class="nav-col" id="navitems" aria-label="Select a mission">
+<section class="lab" id="lab"><div class="nav-col" id="navitems" aria-label="Select a mission">
 <button type="button" class="mission" aria-pressed="true" data-index="0"><small>EXCHANGE</small><strong>Withdrawal actor binding</strong></button>
 <button type="button" class="mission" aria-pressed="false" data-index="1"><small>MODEL ECONOMY</small><strong>Callback authenticity</strong></button>
 <button type="button" class="mission" aria-pressed="false" data-index="2"><small>WEB3 NATIVE & DEFI</small><strong>Relayer replay control</strong></button></div>
@@ -314,7 +314,7 @@ code{font:11px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:#a8cffc;
 <div class="fact"><span>Original function SHA-256</span><code id="hash-before">Local source hash</code></div>
 <div class="fact"><span>Patched function SHA-256</span><code id="hash-after">Local source hash</code></div>
 <div class="fact"><span>Scope / limitations</span><span id="scope">Synthetic program only</span></div></div>
-</div></section><div class="footer"><span>FALSUM · SECURITY_REVIEW_GENERAL · OFFLINE PUBLIC FIXTURES</span><span>Re-run: <code>PYTHONPATH=src python -m falsum.phase3q_mission_lab --out-dir /tmp/falsum-proof</code></span></div>
+</div></section><div class="footer"><span>FALSUM · SECURITY_REVIEW_GENERAL · PUBLIC SYNTHETIC FIXTURES · NOT A LIVE SCORER</span><span><a href="https://github.com/Iniwura/falsum/blob/main/docs/PHASE3Q.md" target="_blank" rel="noopener noreferrer" style="color:#a8cffc">How to reproduce + verify</a></span><span>Re-run: <code>PYTHONPATH=src python -m falsum.phase3q_mission_lab --out-dir /tmp/falsum-proof</code></span></div>
 </div><script type="application/json" id="proof-data">""" + raw + """</script>
 <script>
 "use strict";
