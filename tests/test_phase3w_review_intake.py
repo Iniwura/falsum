@@ -7,6 +7,7 @@ from __future__ import annotations
 import copy
 import io
 import json
+import tempfile
 from pathlib import Path
 import unittest
 from unittest.mock import patch
@@ -146,14 +147,19 @@ class Phase3WExternalReviewGates(unittest.TestCase):
         self.assertEqual(result["accepted_training_pairs"], 0)
 
     def test_source_queue_tampering_blocks_a_review(self):
-        row = self.rows["real-jinja-attr-sandbox"]
-        tampered = copy.deepcopy(self.rows)
-        tampered[row["id"]]["source_blob"] = "0" * 40
-        # The actual reviewer case builder must derive identities from fixed code pins.
-        self.assertNotEqual(tampered[row["id"]]["source_blob"], next(x[3] for x in PINS if x[0] == row["id"]))
-        with self.assertRaises(ReviewClaimError):
-            altered_root = ROOT / "missing-review-source-files"
-            reviewer_cases(altered_root)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "data").mkdir()
+            for filename in ("real-fix-queue.json", "real-fix-train-candidates.json"):
+                source = ROOT / "data" / filename
+                data = json.loads(source.read_text(encoding="utf-8"))
+                if filename == "real-fix-queue.json":
+                    for case in data["cases"]:
+                        if case["id"] == "real-jinja-attr-sandbox":
+                            case["source_blob"] = "f" * 40
+                (root / "data" / filename).write_text(json.dumps(data), encoding="utf-8")
+            with self.assertRaisesRegex(ReviewClaimError, "identity drift"):
+                reviewer_cases(root)
 
     def test_unrelated_and_self_issued_issue_is_not_auto_review(self):
         base = fixture(self.rows["real-requests-proxy-auth"])
