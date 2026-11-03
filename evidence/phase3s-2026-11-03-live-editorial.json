@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3S_FIRMA_REFERENCE_EDITORIAL_DEMO_MERGED_AND_VERCEL_PRODUCTION_VERIFIED",
+  "verified_date": "2026-11-03",
+  "repo": "https://github.com/Iniwura/falsum",
+  "pr": "https://github.com/Iniwura/falsum/pull/17",
+  "merged_commit": "f863b7552804e98ec3d87143b50e075139446d31",
+  "reference": "https://firma-template.framer.website/",
+  "reference_use": "Visual principles only: warm off-white paper, black editorial serif display, large cropped brand, generous whitespace, asymmetric project pages and subtle accents. No source assets, trademark, photos or copyrighted design elements duplicated.",
+  "code_changes": {
+    "template": "src/falsum/templates/firma_editorial_evidence_lab.html",
+    "generator": "src/falsum/phase3q_mission_lab.py",
+    "read_source_of_executed_functions": "inspect.getsource",
+    "per_version_code_sha256_verified": true,
+    "interactive_workflow_cases": 3,
+    "real_local_before_after_functions_executed": 6,
+    "actual_python_executions_blocked_all_unsafe": 3,
+    "legitimate_controls_preserved": 3,
+    "protected_single_json_placeholder": true,
+    "html_injection_characters_escaped": true,
+    "external_cdn_or_image_dependencies": 0,
+    "reduced_motion_respected": true
+  },
+  "pre_merge_validation": {
+    "all_21_checks_green": true,
+    "phase3s_python311_312_313_ci": "https://github.com/Iniwura/falsum/actions/runs/41615130355",
+    "phase3q_execution_ci": "https://github.com/Iniwura/falsum/actions/runs/41615130635",
+    "official_telegraph_data_gate": "https://github.com/Iniwura/falsum/actions/runs/41615130498",
+    "browser_click_smoke": {
+      "source": "Ephemeral Vercel sandbox running genuine Playwright Chromium; screenshot files captured but not saved as public artifacts; no independent manual pixel-by-pixel visual review",
+      "desktop_viewport": "1440x900",
+      "mobile_viewport": "390x844",
+      "three_case_buttons_count": 3,
+      "case_two_clicked_and_title_changed": true,
+      "after_toggle_changed_actual_source_code": true,
+      "sha256_bearing_source_in_page": true,
+      "case_three_mobile_clicked_and_result_updated": true,
+      "mobile_horizontal_overflow_px": 0,
+      "browser_page_errors": 0,
+      "mobile_before_after_interactions_passed": true
+    }
+  },
+  "vercel": {
+    "project": "falsum-evidence-lab",
+    "deployment_id": "dpl_82fZz4pCvJj7yHi33Ht3XxbTocup",
+    "state": "READY",
+    "target": "production",
+    "source_commit": "f863b7552804e98ec3d87143b50e075139446d31",
+    "url": "https://falsum-evidence-lab.vercel.app/",
+    "proof_url": "https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json",
+    "verified_home_http_status": 200,
+    "verified_json_http_status": 200,
+    "hero_editorial_content_present": true,
+    "responsive_styles_present": true,
+    "three_interactive_cases_present": true,
+    "before_after_controls_present": true,
+    "real_source_snippets_present": true,
+    "historical_private_row_content_not_present": true,
+    "unexpected_live_external_model_inference": false
+  },
+  "bounds": {
+    "synthetic_local_fixtures_not_actual_mission_apps": true,
+    "network_eligible_contribution_rows_previously_confirmed": 20,
+    "new_network_rows_created_by_redesign": 0,
+    "evaluator_model_registered": false,
+    "third_party_mission_apps_verified": 0,
+    "independent_security_expert_reviews": 0,
+    "hackathon_final_entry_submitted": false,
+    "bounty_maintainer_approval_confirmed": false,
+    "winning_claimed": false
+  },
+  "next_quality_gap": "Independent external developer reproduction and official 2–5 minute demo recording with actual UI. Manual cross-browser visual review beyond automated 1440 and 390 checks not yet persisted."
+}
