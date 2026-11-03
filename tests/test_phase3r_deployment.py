@@ -43,7 +43,7 @@ class PublicDemoReleaseReadiness(unittest.TestCase):
             self.assertIn("FALSUM — Security review", html)
             self.assertIn("firma_editorial_evidence_lab", str(ROOT / "src/falsum/templates/firma_editorial_evidence_lab.html"))
             self.assertIn("PICK THE", html)
-            self.assertIn("Which review should pass?", html)
+            self.assertIn('aria-label="Choose the better review"', html)
             self.assertIn("Reveal result", html)
             self.assertIn("The examples above are written for this demo", html)
             self.assertIn("https://github.com/Iniwura/falsum", html)
