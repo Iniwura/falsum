@@ -1,0 +1,102 @@
+name: Phase 3V — real recorded evaluator model decisions
+on:
+  push:
+    paths:
+      - 'src/falsum/phase3v_recorded_model_demo.py'
+      - 'src/falsum/templates/phase3v_recorded_model_demo.html'
+      - 'tests/test_phase3v_actual_model_demo.py'
+      - 'tests/browser/phase3v_real_model_demo.cjs'
+      - '.github/workflows/phase3v-real-model-proof.yml'
+      - 'docs/PHASE3V.md'
+  pull_request:
+    paths:
+      - 'src/falsum/phase3v_recorded_model_demo.py'
+      - 'src/falsum/templates/phase3v_recorded_model_demo.html'
+      - 'tests/test_phase3v_actual_model_demo.py'
+      - 'tests/browser/phase3v_real_model_demo.cjs'
+      - '.github/workflows/phase3v-real-model-proof.yml'
+      - 'docs/PHASE3V.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-real-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11','3.12','3.13']
+    name: Rebuild actual historical model-score evidence, Python ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Verify historic evidence, source anchors, no fake promotion
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3v_actual_model_demo.py' -v
+          PYTHONPATH=src python -m falsum.phase3v_recorded_model_demo --out-dir "$RUNNER_TEMP/phase3v-recorded-model-proof"
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          folder=Path(os.environ['RUNNER_TEMP'])/'phase3v-recorded-model-proof'
+          data=json.loads((folder/'recorded-model-evidence.json').read_text())
+          assert data['recorded_inference_not_live'] is True
+          assert data['recorded_actual_model_inference_calls']==16
+          assert data['unique_model_scored_inputs']==8
+          assert data['provisional_context_matches']==2
+          assert data['families_with_correct_changed_fact_reversal']==0
+          assert data['independent_expert_labels']==0
+          assert data['model_registered'] is False
+          assert data['user_private_eligible_pool_rows_used'] is False
+          assert (folder/'index.html').is_file()
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as output:
+              output.write("### FALSUM real recorded evaluator model proof\n\n")
+              output.write("16 previous genuine official Foundation inference calls, 8 unique model inputs, 2 known installed-library families, 2/4 researcher-provisional context matches, 0/2 fully correct changed-context reversal families. All are *recorded*, not newly generated.\n\n")
+              output.write("No independently human-approved labels, registered evaluator, new eligible pool cases or live scoring claimed.\n")
+          PY
+      - name: Upload independent reproducible data-only preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3V-RECORDED-REAL-MODEL-SCORES-PY${{ matrix.python-version }}
+          path: ${{ runner.temp }}/phase3v-recorded-model-proof/
+          retention-days: 30
+          if-no-files-found: error
+  browser-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    name: Chromium fact switch on 1440px desktop and 390/320px mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-audit --no-fund playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Build from original stored actual model scores and check browser
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase3v_recorded_model_demo --out-dir real-model-preview
+          node --check tests/browser/phase3v_real_model_demo.cjs
+          MODEL_DEMO_DIR=real-model-preview node tests/browser/phase3v_real_model_demo.cjs
+      - name: Preserve actual model-score snapshots and mobile screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3V-REAL-MODEL-DECISIONS-CHROMIUM-PREVIEW
+          path: |
+            real-model-preview/index.html
+            real-model-preview/recorded-model-evidence.json
+            real-model-preview/phase3v-*.png
+          retention-days: 30
+          if-no-files-found: warn
