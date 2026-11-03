@@ -29,7 +29,7 @@ class EditorialEvidenceLabTests(unittest.TestCase):
             'font-family:var(--display)',
             "PICK THE",
             "BETTER",
-            "Which review should pass?",
+            'class="answers"',
             "The examples above are written for this demo",
             "@media(max-width:1000px)",
             "@media(max-width:650px)",
