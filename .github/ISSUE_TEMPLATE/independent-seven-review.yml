@@ -1,0 +1,74 @@
+name: Review one FALSUM security case
+description: Give an independent evidence-grounded assessment of a public upstream fix. No automatic labels or payouts.
+title: "[FALSUM external review] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Pick one published case from [the one-page review guide](https://github.com/Iniwura/falsum/blob/main/docs/REVIEW_ONE_CASE.md). Read the pinned source, regression test, and advisory before choosing. A, B, and ABSTAIN are all valid. The author's draft preference and old model scores are intentionally not presented in the guide.
+
+        This is a genuine external review request for Telegraph Season II. No incentive is offered for endorsements. Do not include private system access, credentials, customer files, sensitive exploit instructions or unpublished vulnerabilities; use responsible disclosure for those. A GitHub issue is a *claim*, not automatically accepted independent AppSec ground truth.
+  - type: dropdown
+    id: case
+    attributes:
+      label: Public case
+      options:
+        - real-requests-proxy-auth
+        - real-jinja-attr-sandbox
+        - real-axios-absolute-baseurl
+        - real-starlette-commonprefix-traversal
+        - real-urllib3-redirect-header-case
+        - real-django-intcomma-recursive-dos
+        - real-express-malformed-redirect-host
+    validations:
+      required: true
+  - type: dropdown
+    id: preference
+    attributes:
+      label: Evidence-based preference
+      description: Choose A, B, or ABSTAIN if neither authored answer is adequately established.
+      options:
+        - A
+        - B
+        - ABSTAIN
+    validations:
+      required: true
+  - type: textarea
+    id: citations
+    attributes:
+      label: Pinned source and regression-test lines
+      description: Link exact lines in the original immutable 40-character fix commit's source and test files. Also link the primary advisory.
+      placeholder: |
+        Source: https://github.com/owner/repo/blob/<full-fix-sha>/path/to/source.py#L10-L15
+        Test: https://github.com/owner/repo/blob/<full-fix-sha>/path/to/test.py#L20-L30
+        Advisory: https://github.com/owner/repo/security/advisories/GHSA-xxxx-xxxx-xxxx
+    validations:
+      required: true
+  - type: textarea
+    id: analysis
+    attributes:
+      label: Independent analysis
+      description: Explain the exact security boundary, why the chosen answer is best-supported, and what the fix or test shows. If both are weak, explain why.
+      placeholder: My assessment based on the pinned source and regression test is...
+    validations:
+      required: true
+  - type: textarea
+    id: limits
+    attributes:
+      label: Missing deployment facts
+      description: Identify preconditions and uncertainty such as affected installed versions, reachable routes, caller influence, and untested environments.
+      placeholder: The upstream fix does not establish whether a real deployment has...
+    validations:
+      required: true
+  - type: checkboxes
+    id: attestation
+    attributes:
+      label: Review attestation
+      options:
+        - label: I personally inspected the primary public source and test evidence, and my analysis is not copied or AI-generated work presented as independent expert judgment.
+          required: true
+        - label: I understand my review is an unverified public contribution, not an accepted security label, evaluator registration, or confirmed Telegraph prize.
+          required: true
+        - label: I have not included private credentials, nonpublic security findings, or sensitive customer information.
+          required: true
