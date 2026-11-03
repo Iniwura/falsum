@@ -83,7 +83,7 @@ class EditorialEvidenceLabTests(unittest.TestCase):
             self.assertIn('"before_code":', html)
             self.assertIn('"after_code":', html)
             self.assertIn("does <strong>not</strong> run a live AI evaluator", html)
-            self.assertIn("public synthetic", html.lower())
+            self.assertIn("public fictional example", html.lower())
             self.assertEqual(report["actual_third_party_mission_apps_verified"], 0)
             self.assertFalse(report["actual_evaluator_model_scoring_executed"])
             for sensitive in (
