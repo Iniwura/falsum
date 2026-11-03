@@ -6,6 +6,14 @@
 
 The [official Season II rules](https://hackathon.telegraphprotocol.com/rules) allow **evaluation material, an adapter, or both** in Evaluators. The final entry is **separate from GitHub bounty claims**, due **1 December 2026, 23:59 UTC**. Main competition awards include an Evaluators-track **verified-delivery** category and **excellence** category. Winning is not guaranteed by network `eligible` status or a passing unit test.
 
+## Phase 3W — working public independent-review onramp (3 November 2026)
+
+[Review one of 7 source-pinned public security cases](REVIEW_ONE_CASE.md) · [Open the one-click GitHub independent-review form](https://github.com/Iniwura/falsum/issues/new?template=independent-seven-review.yml) · [CI evidence](https://github.com/Iniwura/falsum/actions/runs/41639783646) · [Verified zero-review baseline](../evidence/phase3w-2026-11-03-external-review-intake.json)
+
+This work addresses review friction: independent developers no longer need to download a CI artifact or edit internal JSON hashes. Seven public historical source/test fixes are presented with two **researcher-authored, unapproved** responses and a one-click A/B/ABSTAIN GitHub form. Source+test line citations, original analysis, limitations and independent attestation are required. Duplicate GitHub accounts and malformed source links are rejected at a format level.
+
+**Evidence ceiling:** 20 pre-merge checks passed, including Python 3.11–3.13, previous reviewer intake tests and a real GitHub API audit. That audit found **zero actual external review submissions** and zero independently certified expert labels. No material was promoted into model training or Telegraph's evaluation pool, no existing eligible rows were modified, and the deployed UI is unchanged. This improves developer-accessibility infrastructure, **not measured model quality, adoption or an accepted independent assessment**.
+
 ## Latest real model evidence — Phase 3V
 
 [**Separate recorded-model judge preview**](PHASE3V.md) · [Original actual scoring run](https://github.com/Iniwura/falsum/actions/runs/41411984601) · [Real source-runtime evidence](PHASE3J.md) · [Verified preview and browser screenshots](https://github.com/Iniwura/falsum/actions/runs/41633233483/artifacts/13229975336)
