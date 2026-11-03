@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3V_RECORDED_REAL_FOUNDATION_MODEL_DIAGNOSTIC_PREVIEW_MERGED",
+  "verified_at_date": "2026-11-03",
+  "repository": "https://github.com/Iniwura/falsum",
+  "merged_pr": "https://github.com/Iniwura/falsum/pull/20",
+  "merge_commit": "d64ce6e3a419b364b0729285bd44a78496d457c4",
+  "original_real_model_scoring_ci": "https://github.com/Iniwura/falsum/actions/runs/41411984601",
+  "original_stored_model_record": "evidence/phase3j-2026-11-02.json",
+  "model_sha256": "3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc",
+  "score_recorded_not_newly_inferred": true,
+  "original_scored_input_count": 8,
+  "original_model_inference_calls": 16,
+  "historical_runtime_projects": [
+    "Kludex/starlette",
+    "psf/requests"
+  ],
+  "real_original_runtime_ci": [
+    "https://github.com/Iniwura/falsum/actions/runs/41409503521",
+    "https://github.com/Iniwura/falsum/actions/runs/41410209502"
+  ],
+  "provisional_runtime_context_matches": 2,
+  "provisional_runtime_context_count": 4,
+  "complete_ranking_reversals": 0,
+  "total_known_families": 2,
+  "new_verification": {
+    "github_run": "https://github.com/Iniwura/falsum/actions/runs/41633233483",
+    "all_checks_green": 20,
+    "python_versions": [
+      "3.11",
+      "3.12",
+      "3.13"
+    ],
+    "browser_preview_artifact": "https://github.com/Iniwura/falsum/actions/runs/41633233483/artifacts/13229975336",
+    "browser_tested_dimensions": [
+      "1440x900",
+      "390x844",
+      "320x720"
+    ],
+    "real_result_fails_visible_on_open": true,
+    "flipping_versions_verified": true,
+    "switching_model_families_verified": true,
+    "no_mobile_horizontal_overflow": true,
+    "no_uncaught_js_errors": true,
+    "screenshots_manually_inspected": true,
+    "new_live_production_deployment": false
+  },
+  "boundaries": {
+    "candidate_review_texts_researcher_authored_not_model_generated": true,
+    "expected_security_label_provisional_not_expert_adjudicated": true,
+    "blind_unseen_holdout": false,
+    "registered_model": false,
+    "independent_expert_approved_labels": 0,
+    "public_hidden_anjoman_evaluation_questions": false,
+    "new_anjoman_network_rows_created": 0,
+    "previous_eligible_anjoman_rows": 20,
+    "bounty_maintainer_approved": false,
+    "final_season_ii_entry_submitted": false,
+    "improved_model_scoring_demonstrated": false
+  },
+  "next_step": "Independent security adjudication on new public source-backed tasks followed by sealed project-disjoint evaluation. Only retry model training with real judge-measured improvements. Keep the separate preview and production site distinct until reviewed."
+}
