@@ -87,6 +87,12 @@ The same `SECURITY_REVIEW_GENERAL` intent can help evaluate security-review inte
 
 The [official judging rules](https://hackathon.telegraphprotocol.com/rules) prioritize distinct verified mission workflows, independent tests and demonstrable new evaluation coverage. Delivery awards for Evaluators select qualifying groups based on such evidence, and excellence ties consider measurement improvement or useful new coverage. Do not label a mission `verified` merely because it appears on a slide or map.
 
+## Open independent test invitation and honest growth plan
+
+[GitHub issue #16](https://github.com/Iniwura/falsum/issues/16) requests independent developers to run the public synthetic PR lab, verify actual results, report regressions or offer meaningful new coverage. **An open issue is not evidence that a third party has already tested or integrated the system.** Only actual issue replies, separate reproductions or merged contributions can support community activation claims.
+
+The [Season II adoption and final submission plan](H2_ADOPTION_AND_SUBMISSION_PLAN.md) maps the current official 20-point education/distribution rubric to clear, unposted technical updates and recorded independent developer actions. No outbound social posts or final H2 registration are claimed.
+
 ## Before final H2 entry
 
 1. **Maintainer review:** collect real verified response to the [submitted claim](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396). Don't equate GitHub's acceptance of a comment with protocol or bounty approval.
