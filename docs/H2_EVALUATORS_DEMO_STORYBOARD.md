@@ -1,5 +1,17 @@
 # FALSUM — Evaluators track, 3-minute honest demo storyboard
 
+**Current recommended video direction (Phase 3T):** Use the actual [guided review challenge](https://falsum-evidence-lab.vercel.app/) as the centerpiece. The older code-first storyboard below is historical supplementary footage, not the preferred opening. **Do not claim that the authored A/B reviews are live AI output.**
+
+Recommended genuine 3-minute recording:
+
+- **0:00–0:20:** Show “AI can sound certain. The proof decides.” Explain in one sentence: “FALSUM measures whether AI security reviews are backed by facts, not just persuasive wording.”
+- **0:20–1:15:** Open case one (Mallory and Alice's fictional money). Choose the deliberately weak **A** review. Show the *Not quite* feedback, then press **Reveal the actual test**. Explain that source-executed local Python lets unauthorized funds move before the fix and blocks them afterward, while real owner access still succeeds.
+- **1:15–1:55:** Complete the forged agent callback and relayer replay cases. Choose the stronger reviews; show proof briefly and then the **2/3 score** and reset option. Do not confuse game points with model accuracy.
+- **1:55–2:30:** Show the user's real Anjoman Evaluators account status `Eligible: 20`, with account identifiers and private question content hidden. Cut to the [posted public bounty /submit](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396), explicitly noting maintainer approval is pending.
+- **2:30–3:00:** Show the [GitHub source](https://github.com/Iniwura/falsum), [successful browser E2E](https://github.com/Iniwura/falsum/actions/runs/41619426486) and [judge guide](H2_EVALUATORS_JUDGE_PACK.md). End with clear limitations: three fictional examples, authored review choices, no registered live AI scorer or external mission adoption.
+
+This is a shooting outline, **not evidence a video was already recorded**.
+
 **Judging format:** Official Season II requires a **2–5 minute video or accessible equivalent**. This is a **shooting script**, NOT a claim that a video has already been recorded. Recording must use real observed screens, no invented network messages and no protected evaluation content.
 
 **Target duration:** approximately 3 minutes 15 seconds. Presenter voice calm, precise, not overly technical; show live browser and terminal rather than generic promotional animation.
