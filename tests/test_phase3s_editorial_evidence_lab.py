@@ -26,7 +26,7 @@ class EditorialEvidenceLabTests(unittest.TestCase):
         for expected in (
             "color-scheme:dark",
             "--bg:#0e0e0e",
-            'font-family:var(--serif)',
+            'font-family:var(--display)',
             "PICK THE",
             "BETTER",
             "Which review should pass?",
