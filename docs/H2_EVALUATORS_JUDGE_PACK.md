@@ -6,6 +6,18 @@
 
 The [official Season II rules](https://hackathon.telegraphprotocol.com/rules) allow **evaluation material, an adapter, or both** in Evaluators. The final entry is **separate from GitHub bounty claims**, due **1 December 2026, 23:59 UTC**. Main competition awards include an Evaluators-track **verified-delivery** category and **excellence** category. Winning is not guaranteed by network `eligible` status or a passing unit test.
 
+## Live interactive demo — Phase 3U
+
+[**Open FALSUM**](https://falsum-evidence-lab.vercel.app/) · [Browser/production evidence](../evidence/phase3u-2026-11-03-minimal-live.json) · [Implementation](PHASE3U.md)
+
+The newest interface removes the earlier marketing hero and step-by-step explanation. A visitor immediately sees **PICK THE BETTER REVIEW** and a concrete fictional incident, then chooses A or B. Feedback identifies the missing security context; **Reveal result** shows actual before/after Python fixture outcomes, including the legitimate control that still works. Optional source and SHA256 details are available without imposing code on nontechnical judges. All three cases, result scoring and restart remain functional.
+
+The design direction comes from [Jett](https://gojett.framer.website/): near-black, oversized condensed typography and restrained presentation. It is original FALSUM UI, not copied Framer artwork or source. [PR #19](https://github.com/Iniwura/falsum/pull/19) passed **25 checks**. Actual desktop/mobile Chromium screenshots were inspected; the three-case journey, 390/320px narrow layouts, keyboard, touch and restart passed. Production HTML and proof JSON returned HTTP 200 and match source commit `6e77cd7`.
+
+**Critical distinction:** A/B reviews are authored public examples, not AI-inference output or hidden network questions. The three Python examples are fictional, not independently adopted mission software. Separately, 20 contributor rows are eligible in Anjoman. No evaluator model is registered; the bounty approval and final hackathon entry are still pending.
+
+The subsequent Phase 3T/3S/3R presentation notes document earlier releases and should not override this current demo path.
+
 ## The precise contribution
 
 FALSUM fills a specific intelligence measurement need: a `SECURITY_REVIEW_GENERAL` model response should distinguish **source-backed code weaknesses** from **proven, reachable security impact**. A safe reviewer should differentiate fixed versus affected dependency releases, distinguish vulnerable code from active exploit, and avoid making up secret leakage or customer impact.
