@@ -35,7 +35,7 @@ class EditorialEvidenceLabTests(unittest.TestCase):
             "@media(max-width:840px)",
             "@media(max-width:620px)",
             "prefers-reduced-motion:reduce",
-            "Case 01" if False else 'data-open-case="0"',
+            'data-open-case="0"',
             'data-open-case="1"',
             'data-open-case="2"',
             'data-case-index="0"',
@@ -115,7 +115,6 @@ class EditorialEvidenceLabTests(unittest.TestCase):
                 write_outputs(target, capture())
                 page = (target / "index.html").read_text()
         self.assertIn('button.addEventListener("click"', page)
-        self.assertIn('data.caseIndex', page) if False else None
         self.assertIn("window.matchMedia", page)
         self.assertIn('data-phase="after"', page)
         self.assertIn("scrollIntoView", page)
