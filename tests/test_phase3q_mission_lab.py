@@ -159,7 +159,7 @@ class MeasuredEvidenceIntegrity(unittest.TestCase):
             markup=(out/"index.html").read_text()
             self.assertIn("FALSUM — Security review",markup)
             self.assertIn("PICK THE",markup)
-            self.assertIn("Which review should pass?",markup)
+            self.assertIn('aria-label="Choose the better review"',markup)
             self.assertIn("BETTER",markup)
             self.assertIn('id="proof-data"',markup)
             self.assertIn('id="show-proof"',markup)
