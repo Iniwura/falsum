@@ -20,32 +20,31 @@ TEMPLATE = ROOT / "src/falsum/templates/firma_editorial_evidence_lab.html"
 
 
 class EditorialEvidenceLabTests(unittest.TestCase):
-    def test_single_file_light_editorial_structure_and_responsive_layout(self):
+    def test_single_file_accessible_guided_review_structure_and_responsive_layout(self):
         template = TEMPLATE.read_text(encoding="utf-8")
         self.assertEqual(template.count("__FALSUM_DATA__"), 1)
         for expected in (
-            "color-scheme:light",
-            "--paper:#f7f7f3",
+            "color-scheme:dark",
+            "--bg:#0a0d15",
             'font-family:var(--serif)',
-            "Look",
-            "beyond the",
-            "<em>claim.</em>",
-            "The facts",
-            "code <em>actually</em> does",
-            "@media(max-width:840px)",
-            "@media(max-width:620px)",
+            "AI can sound certain.",
+            "The proof decides.",
+            "Which security review should pass?",
+            "These are short, written-for-demo examples",
+            "@media(max-width:1000px)",
+            "@media(max-width:670px)",
             "prefers-reduced-motion:reduce",
-            'data-open-case="0"',
-            'data-open-case="1"',
-            'data-open-case="2"',
-            'data-case-index="0"',
-            'data-case-index="1"',
-            'data-case-index="2"',
-            'data-phase="before"',
-            'data-phase="after"',
-            'id="case-hash"',
-            'id="code-view"',
-            'id="result-outcome"',
+            'data-answer="0"',
+            'data-answer="1"',
+            'id="show-proof"',
+            'id="next-case"',
+            'id="try-again"',
+            'id="proof-before-title"',
+            'id="proof-after-title"',
+            'id="hash-before"',
+            'id="hash-after"',
+            'id="code-before"',
+            'id="code-after"',
             'aria-live="polite"',
         ):
             with self.subTest(expected=expected):
@@ -83,7 +82,7 @@ class EditorialEvidenceLabTests(unittest.TestCase):
             self.assertEqual(body, report)
             self.assertIn('"before_code":', html)
             self.assertIn('"after_code":', html)
-            self.assertIn("model checkpoint is not being run", html)
+            self.assertIn("does <strong>not</strong> run a live AI evaluator", html)
             self.assertIn("public synthetic", html.lower())
             self.assertEqual(report["actual_third_party_mission_apps_verified"], 0)
             self.assertFalse(report["actual_evaluator_model_scoring_executed"])
@@ -115,8 +114,8 @@ class EditorialEvidenceLabTests(unittest.TestCase):
                 write_outputs(target, capture())
                 page = (target / "index.html").read_text()
         self.assertIn('button.addEventListener("click"', page)
-        self.assertIn("window.matchMedia", page)
-        self.assertIn('data-phase="after"', page)
+        self.assertIn("matchMedia(", page)
+        self.assertIn('data-answer="1"', page)
         self.assertIn("scrollIntoView", page)
 
 
