@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3T_GUIDED_SECURITY_REVIEW_CHALLENGE_LIVE_PRODUCTION_BROWSER_E2E_PASS",
+  "verified_date": "2026-11-03",
+  "source_repo": "https://github.com/Iniwura/falsum",
+  "pr": "https://github.com/Iniwura/falsum/pull/18",
+  "merge_sha": "dec98bd183c18b2d4fb522e4c4910a73e6218adc",
+  "live_url": "https://falsum-evidence-lab.vercel.app/",
+  "proof_url": "https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json",
+  "vercel_deployment_id": "dpl_BXp1EFZqxS73CHHt1FRqFYK8hRV5",
+  "vercel_state": "READY",
+  "vercel_exact_source_sha": "dec98bd183c18b2d4fb522e4c4910a73e6218adc",
+  "public_site_http": 200,
+  "public_proof_json_http": 200,
+  "user_feedback_problem": "Old interface was difficult to understand. New demo must foreground choosing trustworthy security-review wording and evidence, not dense code or confusing portfolio visuals.",
+  "visitor_journey": [
+    "Read a clear fictional incident",
+    "Choose one of two explicitly hand-authored AI-style review samples",
+    "Receive honest right/wrong feedback explaining key missing context",
+    "Reveal real prior Python local before/after test including valid control",
+    "Advance across three cases, view score, restart"
+  ],
+  "quality": {
+    "github_pr_checks_green": 29,
+    "browser_run": "https://github.com/Iniwura/falsum/actions/runs/41619426486",
+    "browser_artifact": "https://github.com/Iniwura/falsum/actions/runs/41619426486/artifacts/13222159774",
+    "real_browser_journey_completed": true,
+    "intentional_wrong_choice_explained": true,
+    "later_good_choices_confirmed": true,
+    "final_score_verified": "2/3",
+    "restart_verified": true,
+    "browser_desktop_viewport": "1440x900",
+    "browser_mobile_viewports": [
+      "390x844",
+      "320x720"
+    ],
+    "mobile_width_match_viewport": true,
+    "mobile_keyboard_choice": true,
+    "mobile_touch_reveal": true,
+    "uncaught_browser_errors": 0,
+    "local_python_source_and_sha256_shown": true,
+    "real_python_before_unsafe_ops": 3,
+    "real_python_after_unsafe_ops_blocked": 3,
+    "safe_positive_controls_still_work": 3
+  },
+  "scope": {
+    "demo_sample_reviews_written_by_project": true,
+    "live_ai_model_scoring": false,
+    "model_registered": false,
+    "hidden_anjoman_evalpool_rows_in_demo": false,
+    "actual_external_mission_integrations_verified": 0,
+    "existing_anjoman_eligible_rows_reported_in_contributor_UI": 20,
+    "bounty_maintainer_approval_confirmed": false,
+    "seasonII_final_entry_submitted": false,
+    "prize_won": false
+  },
+  "verification_limits": "CI performs real click-level Chromium QA with desktop, mobile and narrow-mobility screenshots uploaded as private-to-workflow artifacts. External Vercel tool confirms production is ready and both URLs return HTTP 200 with expected controls/data, but no second manual pixel-by-pixel independent art-direction signoff is claimed.",
+  "next_actions": "User review of new simple demo and genuine independent developer reproduction; separately record 2–5 minute demo and submit Telegraph Season II entry by deadline. Winning requires official judging."
+}
