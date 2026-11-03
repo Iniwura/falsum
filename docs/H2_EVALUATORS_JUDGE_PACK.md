@@ -25,6 +25,18 @@ FALSUM fills a specific intelligence measurement need: a `SECURITY_REVIEW_GENERA
 - [Original LoRA on official Foundation](PHASE3J.md): 16 real repeated inference calls; **0/2 complete history-sensitive reversal families** and **2/4 provisional context expectations**. Adapter remains quarantined.
 - [New real research LoRA training](PHASE3K.md): official trainer's internal 6/6 **does not transfer**; both actual before/after checkpoints matched **3/6** prior-inspected separate-project provisional preferences, **0/3** complete reversals. Training success **is not** model improvement.
 
+## NEW Phase 3T — the demo judges can actually understand
+
+[**Open the live FALSUM security-review challenge**](https://falsum-evidence-lab.vercel.app/) · [Verified release](../evidence/phase3t-2026-11-03-guided-live.json) · [Code and limitations](PHASE3T.md) · [Browser E2E proof](https://github.com/Iniwura/falsum/actions/runs/41619426486)
+
+**The story, with no coding required:** You are reviewing a fictional withdrawal, forged agent completion or duplicated event. Read two short AI-style security reviews. Choose which is evidence-grounded, and FALSUM explains your answer. Reveal actual **previously executed local Python before/after test results**, including a legitimate control that still works. Finish three cases and view a result out of three. All sample reviews are **handwritten original public examples**, not current model inference, user-uploaded hidden network questions, or real partner app events.
+
+**Judge quick path:** Visit the site → click **Try the 3-case demo** → choose review A or B → click **Reveal the actual test** → inspect Before and After → **Next case**. The optional source code and SHA256 are under a developer disclosure, so non-developers can understand the risk without reading Python.
+
+**Verified:** 29 green PR checks, actual Chromium end-to-end tests of an intentional wrong answer, later correct choices, shown source and proof, 2/3 score and restart, keyboard and touch, 390px and 320px mobile with zero horizontal overflow and zero browser errors. Vercel production source matched the exact merge commit, both HTML and JSON returned HTTP 200.
+
+**Truth boundary:** This is a guided educational representation of the *security evaluation problem*, not a trained FALSUM reward model run live or a working Telegraph evaluator adapter. FALSUM's actual Anjoman delivery remains 20 eligible preference rows with a filed bounty claim still pending maintainer verification.
+
 ## Phase 3S — Reference-led editorial presentation, real code inspection
 
 The [live FALSUM site](https://falsum-evidence-lab.vercel.app/) now uses an original editorial design inspired by the high-quality [Firma Framer reference](https://firma-template.framer.website/): large serif headings, white/ink contrast, generous space, oversized brand typography and full-scale project case studies. The new interaction is substantive: select any of the three fictional PR cases, switch **Before patch / After patch**, and inspect the *exact executed Python function source* and SHA-256, derived from the [recorded runtime proof](https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json).
