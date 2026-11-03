@@ -42,6 +42,9 @@ class PublicDemoReleaseReadiness(unittest.TestCase):
                 self.assertNotIn("source_kind: llm", content)
             self.assertIn("FALSUM — Evidence Lab", html)
             self.assertIn("Public synthetic evidence lab", html)
+            self.assertIn("Explore measured results", html)
+            self.assertIn("https://github.com/Iniwura/falsum", html)
+            self.assertIn("How to reproduce + verify", html)
             self.assertEqual(report["actual_third_party_mission_apps_verified"], 0)
             self.assertFalse(report["actual_evaluator_model_scoring_executed"])
 
