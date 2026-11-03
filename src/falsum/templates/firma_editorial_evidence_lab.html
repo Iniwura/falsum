@@ -3,195 +3,269 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f7f7f3">
-<meta name="description" content="FALSUM — evidence-aware security-review research. Explore three reproducible synthetic before-and-after code cases.">
+<meta name="theme-color" content="#0a0d15">
+<meta name="description" content="FALSUM — Can you tell a confident AI security review from an evidence-backed one? Try three guided public security cases, then see real Python proof.">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'none'; connect-src 'none'; font-src 'none'; base-uri 'none'; form-action 'none'">
-<title>FALSUM — Evidence Lab</title>
+<title>FALSUM — Can you trust this security review?</title>
 <style>
-:root{color-scheme:light;--paper:#f7f7f3;--ink:#181816;--soft:#f0efe9;--line:#d8d8d0;--accent:#e45a45;--mute:#797971;--night:#161818;--safe:#d8f3dc;--unsafe:#fae0d8;--max:1540px;--serif:"Iowan Old Style","Baskerville","Palatino Linotype","Book Antiqua",Georgia,serif;--sans:"Helvetica Neue",Arial,system-ui,sans-serif}
-*,*:before,*:after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}button,a{-webkit-tap-highlight-color:transparent}button{font:inherit}a{color:inherit}::selection{background:#e45a45;color:white}:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
-.shell{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,5vw,82px)}.caps{font-size:10px;font-weight:700;letter-spacing:.17em;text-transform:uppercase}.muted{color:var(--mute)}.accent{color:var(--accent)}.serif{font-family:var(--serif);font-weight:400}.italic{font-family:var(--serif);font-style:italic;font-weight:400}
-a{transition:opacity .2s ease}a:hover{opacity:.68}
-.topbar{min-height:87px;display:flex;align-items:center;justify-content:space-between;gap:28px;border-bottom:1px solid var(--line);position:relative;z-index:4}.brand{font-family:var(--sans);font-weight:900;letter-spacing:-.065em;font-size:25px;text-decoration:none;line-height:1}.brand sup{color:var(--accent);font-size:17px;font-weight:800}.toplinks{display:flex;align-items:center;gap:clamp(16px,2.3vw,40px)}.toplinks a{text-decoration:none;font-size:12px;font-weight:650}.top-action{display:inline-flex;align-items:center;gap:22px;text-decoration:none;border:1px solid var(--ink);padding:13px 14px 13px 18px;border-radius:50px;font-size:11px;font-weight:700;white-space:nowrap}.top-action span{font-size:19px;line-height:0}
-.hero{padding-top:clamp(35px,7vh,75px);position:relative}.hero-meta{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:clamp(45px,7vh,90px)}.hero-meta .id{display:flex;align-items:center;gap:10px}.red-dot{display:inline-block;width:7px;height:7px;background:var(--accent);border-radius:100%}
-.hero-layout{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(260px,.55fr);align-items:end;gap:clamp(24px,4vw,85px)}.hero-title{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(75px,10vw,174px);letter-spacing:-.105em;line-height:.83;max-width:1030px}.hero-title em{display:inline-block;font-style:italic;color:var(--accent);font-size:.99em;letter-spacing:-.095em;transform:translateX(.025em)}.hero-title .line{display:block;white-space:nowrap}.hero-sub{max-width:560px;font-size:clamp(16px,1.5vw,21px);line-height:1.5;letter-spacing:-.026em;margin:39px 0 0}.hero-sub strong{font-weight:750}
-.hero-aside{padding:0 0 clamp(12px,3vh,47px);max-width:360px;justify-self:end}.hero-aside .divider{height:1px;background:var(--ink);margin:0 0 23px}.aside-label{font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;gap:20px}.aside-quote{font-family:var(--serif);font-size:clamp(24px,2.9vw,40px);letter-spacing:-.055em;line-height:1.06;margin:22px 0 25px}.aside-note{font-size:12px;line-height:1.65;color:#656560;margin:0;max-width:310px}
-.hero-bottom{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:42px 0 27px;border-bottom:1px solid var(--line)}.underlined-cta{display:inline-flex;align-items:center;gap:48px;padding:0 0 7px;border-bottom:1px solid currentColor;text-decoration:none;font-size:12px;font-weight:800;letter-spacing:.02em}.underlined-cta .arrow{font-size:20px;font-weight:400}.hero-bottom .foot-note{color:var(--mute);text-align:right;font-size:11px;line-height:1.5}
-.billboard{margin:25px auto 0;position:relative;overflow:hidden;height:clamp(260px,36vw,510px);background:#e5e9e0;color:var(--ink);isolation:isolate;border-radius:2px}.billboard:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 73% 24%,#c9e5da,transparent 46%),radial-gradient(ellipse at 15% 100%,#edd0be,transparent 45%),linear-gradient(110deg,#edf2ec,#d3dcd7);z-index:-2}
-.billboard-grid{position:absolute;inset:0;background-image:linear-gradient(#0000000b 1px,transparent 1px),linear-gradient(90deg,#0000000b 1px,transparent 1px);background-size:50px 50px;mask-image:linear-gradient(90deg,transparent,black,transparent);opacity:.55;z-index:-1}
-.orbit{position:absolute;width:min(47vw,520px);height:min(47vw,520px);right:4%;top:-24%;border:1px solid #232c2e5e;border-radius:50%;box-shadow:0 0 0 50px #ffffff20,0 0 0 102px #ffffff20,0 0 0 155px #ffffff12;transform:rotate(-16deg)}.orbit:before,.orbit:after{content:"";position:absolute;border-radius:50%;border:1px solid #232c2e88}.orbit:before{width:42%;height:42%;left:29%;top:29%;background:#e1ede6bb}.orbit:after{width:9px;height:9px;background:var(--accent);left:12%;top:9%;border:0}
-.billboard-top{position:absolute;top:22px;left:clamp(20px,3vw,52px);right:clamp(20px,3vw,52px);display:flex;align-items:center;justify-content:space-between;gap:20px;z-index:2}.billboard-brand{position:absolute;left:-.018em;right:-.1em;bottom:-.31em;white-space:nowrap;font-size:clamp(155px,27.1vw,530px);font-family:var(--sans);font-weight:950;line-height:1;letter-spacing:-.105em;color:#1f2521;user-select:none;pointer-events:none;z-index:1}.billboard-index{position:absolute;bottom:22px;right:clamp(20px,3vw,52px);display:flex;align-items:center;gap:12px;z-index:2;color:#f8faf6}.billboard-index .line{width:42px;height:1px;background:currentColor}
-.ticker{border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:24px;align-items:baseline;padding:48px 0 58px}.ticker-intro{max-width:430px;font-size:15px;line-height:1.5;letter-spacing:-.02em}.ticker-stats{display:flex;gap:clamp(22px,4vw,76px);align-items:flex-start}.metric-value{font-family:var(--serif);font-size:clamp(46px,6vw,90px);line-height:.95;letter-spacing:-.09em}.metric-value sup{font-family:var(--sans);font-size:14px;letter-spacing:-.03em;vertical-align:top;margin-left:5px}.metric-label{margin-top:12px;color:var(--mute);font-size:10px;line-height:1.45;font-weight:650;max-width:140px}
-.section-intro{display:grid;grid-template-columns:.34fr 1fr;gap:50px;padding:120px 0 64px}.section-intro .caps{padding-top:18px}.section-intro h2{font-family:var(--serif);font-size:clamp(54px,7vw,108px);font-weight:400;letter-spacing:-.088em;line-height:.93;margin:0;max-width:1000px}.section-intro h2 em{font-weight:400;color:var(--accent)}.section-intro p{max-width:570px;font-size:15px;color:#676762;line-height:1.65;margin:28px 0 0}
-.cases{border-top:1px solid var(--ink)}.case{border-bottom:1px solid var(--ink)}.case-button{border:0;background:transparent;padding:clamp(32px,4.3vw,72px) 0;display:grid;grid-template-columns:100px minmax(0,1fr) minmax(190px,.6fr) 70px;gap:clamp(14px,2vw,40px);align-items:center;width:100%;text-align:left;cursor:pointer;color:var(--ink);min-height:280px}.case-index{align-self:start;font-size:11px;font-weight:750}.case-title{font-family:var(--serif);font-weight:400;font-size:clamp(45px,5.9vw,94px);line-height:.94;letter-spacing:-.08em;display:block;transition:transform .3s ease}.case-title em{font-style:italic}.case-desc{display:block;font-size:12px;line-height:1.65;color:#777770;max-width:380px;margin-top:20px}.case-button:hover .case-title{transform:translateX(9px)}.case-tag{font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:750;color:#76766d}.case-art{height:clamp(150px,17vw,245px);background:#e6e5e0;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:3px}.case-art .circle{position:absolute;width:160px;height:160px;border:1px solid #14141470;border-radius:50%;box-shadow:0 0 0 24px #ffffff52,0 0 0 55px #ffffff5c;transition:transform .45s ease}.case-button:hover .circle{transform:scale(1.17) rotate(20deg)}.case-art .symbol{position:relative;font-family:var(--serif);font-size:clamp(70px,10vw,158px);letter-spacing:-.13em;line-height:1}.case:nth-child(2) .case-art{background:#e1e7e2}.case:nth-child(3) .case-art{background:#dce5eb}.case:nth-child(2) .symbol{font-style:italic;color:#263f3b}.case:nth-child(3) .symbol{font-size:clamp(54px,8vw,126px);color:#34516c}.case-go{align-self:center;justify-self:end;border:1px solid var(--ink);width:57px;height:57px;border-radius:50%;display:grid;place-items:center;font-size:24px;transition:background .2s ease,color .2s ease,transform .2s ease}.case-button:hover .case-go{background:var(--ink);color:white;transform:rotate(45deg)}.case-button:focus-visible{outline:2px solid var(--accent);outline-offset:-6px}
-.transition-strip{padding:90px 0 70px;display:flex;justify-content:space-between;gap:40px;align-items:center}.transition-strip .strip-mark{font-family:var(--serif);font-size:clamp(25px,4vw,48px);letter-spacing:-.055em;line-height:1.05;max-width:570px}.transition-strip .strip-aside{max-width:350px;color:#73736e;line-height:1.6;font-size:12px}
-.lab-zone{background:#1c201d;color:#f8f9f4;padding:110px 0 116px;position:relative}.lab-zone::before{content:"";position:absolute;inset:0 0 auto;height:1px;background:#4c5850}.lab-heading{display:grid;grid-template-columns:.34fr 1fr;gap:50px}.lab-heading .caps{color:#c4cdc5;padding-top:16px}.lab-heading h2{font-family:var(--serif);font-weight:400;font-size:clamp(58px,7.8vw,121px);letter-spacing:-.085em;line-height:.93;margin:0}.lab-heading h2 em{color:#cce7d6;font-weight:400}.lab-heading p{color:#aebbb1;font-size:14px;line-height:1.7;max-width:490px;margin:24px 0 0}
-.workbench{border:1px solid #536058;margin-top:75px;border-radius:3px;background:#242923;overflow:hidden}.bench-nav{display:flex;justify-content:space-between;gap:20px;align-items:center;border-bottom:1px solid #536058;padding:20px 29px;flex-wrap:wrap}.bench-nav .caps{color:#e5ecdf}.live-indicator{display:inline-flex;align-items:center;gap:8px;color:#adbcaf;font-size:10px;letter-spacing:.08em}.live-indicator .red-dot{background:#e4a98b}.scenario-tabs{display:flex;border-bottom:1px solid #536058;overflow-x:auto}.scenario-tab{flex:1 0 auto;min-width:130px;border:0;border-right:1px solid #536058;background:transparent;color:#aeb9ae;font-size:12px;text-align:left;cursor:pointer;padding:22px 28px;transition:background .2s ease,color .2s ease}.scenario-tab span{font-size:10px;display:block;margin-bottom:9px;color:#9cac9b;font-weight:700}.scenario-tab[aria-pressed=true]{background:#f6f7ef;color:#18201b}.scenario-tab[aria-pressed=true] span{color:#aa5d46}.scenario-tab:hover:not([aria-pressed=true]){background:#353c34;color:white}
-.bench-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(270px,.78fr)}.bench-main{padding:clamp(23px,4vw,55px);border-right:1px solid #536058}.bench-aside{padding:clamp(23px,4vw,47px);background:#222621}.bench-kicker{color:#b6c6b8;font-size:10px;font-weight:750;letter-spacing:.17em;text-transform:uppercase}.bench-main h3{font-family:var(--serif);font-size:clamp(37px,4.8vw,74px);letter-spacing:-.07em;line-height:1.04;font-weight:400;margin:18px 0 15px}.bench-description{font-size:13px;line-height:1.7;color:#a9b3a9;max-width:570px;min-height:44px}
-.mode-nav{display:inline-flex;border:1px solid #667265;border-radius:100px;padding:4px;margin-top:28px}.mode-button{border:0;border-radius:100px;color:#c7d2c7;background:transparent;padding:11px 17px;font-size:11px;font-weight:750;cursor:pointer;transition:background .2s ease}.mode-button[aria-pressed=true]{background:#eef2e7;color:#1d231f}.mode-button:hover:not([aria-pressed=true]){color:white}
-.result-panel{min-height:190px;margin-top:22px;background:#ebece5;color:#1d211f;padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:22px;border-radius:3px;transition:background .25s ease}.result-panel.before{background:#efd7cf}.result-panel.after{background:#dbe7d8}.result-top{display:flex;justify-content:space-between;gap:20px;align-items:center;font-size:11px;font-weight:700}.result-mark{display:flex;align-items:center;gap:8px}.result-mark i{display:block;width:7px;height:7px;background:#a44230;border-radius:50%}.result-panel.after .result-mark i{background:#28734c}.result-outcome{font-family:var(--serif);font-size:clamp(28px,3vw,47px);letter-spacing:-.055em;line-height:1.05;max-width:480px}.result-detail{font:11px/1.6 "SFMono-Regular",Consolas,monospace;overflow-wrap:anywhere;color:#5a615b}
-.code-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:30px}.code-head .caps{color:#a6b4a9}.code-source{font-size:10px;color:#b8c5b7;white-space:nowrap}.code-view{display:block;max-width:100%;font:11px/1.72 "SFMono-Regular",Consolas,monospace;color:#dbe7d9;background:#171d18;border:1px solid #414f43;padding:19px 21px;overflow:auto;white-space:pre;margin:14px 0 0;min-height:120px;tab-size:4}
-.proof-list{margin-top:26px;display:flex;flex-direction:column;gap:0}.proof-row{border-bottom:1px solid #566057;padding:18px 0}.proof-row:first-child{border-top:1px solid #566057}.proof-key{font-size:10px;color:#a8b4a7;letter-spacing:.11em;text-transform:uppercase;font-weight:750}.proof-value{margin-top:11px;font-size:13px;line-height:1.6;color:#e7eee5;overflow-wrap:anywhere}.proof-value.hash{font:10px/1.5 "SFMono-Regular",Consolas,monospace;color:#aee3bd}
-.proof-help{font-size:11px;line-height:1.7;color:#a5b2a8;margin-top:28px}.proof-help strong{color:#edf4ec}.download-proof{margin-top:25px;display:inline-flex;justify-content:space-between;gap:24px;align-items:center;background:#e9f0e8;color:#1b211c;padding:16px 19px;text-decoration:none;font-size:12px;font-weight:800;width:100%;border-radius:3px}.download-proof .arrow{font-size:18px;font-weight:400}
-.underlab{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;color:#9aa99f;font-size:11px;margin-top:25px;line-height:1.5}
-.ethos{padding:145px 0 170px}.ethos-top{display:grid;grid-template-columns:.34fr 1fr;gap:50px}.ethos-top h2{font-family:var(--serif);font-weight:400;letter-spacing:-.09em;line-height:.95;font-size:clamp(58px,8vw,126px);margin:0}.ethos-top h2 em{color:var(--accent)}.ethos-quote{display:grid;grid-template-columns:.34fr 1fr;gap:50px;padding-top:65px;max-width:100%}.ethos-quote p{font-family:var(--serif);font-size:clamp(23px,3.4vw,46px);line-height:1.18;letter-spacing:-.048em;max-width:930px;margin:0}.ethos-quote .caps{color:var(--mute)}
-.proof-columns{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink);margin-top:75px}.proof-column{min-height:250px;padding:28px 25px 18px 0;border-right:1px solid var(--line)}.proof-column:not(:first-child){padding-left:25px}.proof-column:last-child{border-right:0}.proof-column h3{font-family:var(--serif);font-size:clamp(25px,3vw,42px);font-weight:400;letter-spacing:-.055em;margin:42px 0 13px}.proof-column p{color:#6f6f69;font-size:12px;line-height:1.7;max-width:340px}.proof-column a{display:inline-flex;align-items:center;gap:20px;font-size:11px;font-weight:800;text-decoration:none;border-bottom:1px solid;margin-top:12px;padding-bottom:8px}
-.final-footer{background:#e3e8de;padding:52px 0 0;overflow:hidden}.footer-head{display:flex;justify-content:space-between;align-items:center;gap:20px;border-bottom:1px solid #9da99b;padding-bottom:26px}.footer-head a{font-size:12px;font-weight:700;text-decoration:none}.footer-message{display:grid;grid-template-columns:1fr .42fr;gap:35px;margin-top:78px}.footer-message h2{font-family:var(--serif);font-size:clamp(65px,9vw,150px);font-weight:400;letter-spacing:-.09em;line-height:.91;margin:0}.footer-message em{color:#507360}.footer-message p{color:#555f55;font-size:13px;max-width:285px;line-height:1.6;align-self:end}.footer-oversize{font-size:clamp(160px,27vw,530px);font-weight:950;line-height:.75;letter-spacing:-.11em;white-space:nowrap;margin:100px 0 -0.03em -0.025em;user-select:none;color:#27352a}
-.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
-@media(max-width:1120px){.case-button{grid-template-columns:65px minmax(0,1fr) minmax(185px,.65fr) 50px;gap:18px}.case-go{width:48px;height:48px}.hero-title{font-size:clamp(68px,9vw,120px)}.hero-aside{max-width:300px}.ticker{flex-direction:column}.ticker-stats{gap:48px}.billboard-brand{font-size:28vw}}
-@media(max-width:840px){.hero-layout{grid-template-columns:1fr}.hero-title{font-size:clamp(69px,12.4vw,125px)}.hero-aside{max-width:510px;justify-self:start;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;padding-top:28px}.hero-aside .divider{display:none}.aside-quote{margin:0}.hero-aside .aside-note{margin-top:2px}.case-button{grid-template-columns:43px minmax(0,1fr) minmax(170px,.6fr)}.case-go{display:none}.section-intro,.lab-heading,.ethos-top,.ethos-quote{grid-template-columns:1fr;gap:22px}.section-intro,.ethos{padding-top:90px}.bench-body{grid-template-columns:1fr}.bench-main{border-right:0;border-bottom:1px solid #536058}.bench-aside{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px}.bench-aside .proof-list{grid-column:1/-1;margin-top:0}.bench-aside .proof-help,.bench-aside .download-proof{grid-column:1/-1}.footer-message{grid-template-columns:1fr}}
-@media(max-width:620px){.shell{padding:0 20px}.topbar{min-height:70px}.toplinks{display:none}.brand{font-size:23px}.top-action{font-size:10px;padding:11px 13px}.hero-meta{margin-bottom:49px}.hero-meta .caps:last-child{font-size:9px}.hero-title{font-size:clamp(63px,15.2vw,102px);letter-spacing:-.09em}.hero-title .line{white-space:normal}.hero-sub{margin-top:28px;font-size:16px}.hero-aside{grid-template-columns:1fr;padding:18px 0 3px}.aside-quote{font-size:29px}.hero-bottom{padding:37px 0 25px}.hero-bottom .foot-note{display:none}.billboard{height:280px;margin-top:16px}.billboard-brand{font-size:33vw;bottom:-.20em}.orbit{width:350px;height:350px;right:-100px;top:-90px}.billboard-top{top:18px}.ticker{padding:38px 0}.ticker-intro{font-size:14px}.ticker-stats{width:100%;justify-content:space-between;gap:14px}.metric-value{font-size:48px}.metric-label{font-size:9px}.section-intro{padding:85px 0 42px}.section-intro h2{font-size:clamp(53px,11.7vw,85px)}.case-button{grid-template-columns:38px minmax(0,1fr);gap:12px;min-height:0;padding:36px 0}.case-art{grid-column:2;height:170px;margin-top:15px}.case-title{font-size:clamp(41px,10vw,60px)}.case-desc{margin-top:16px}.transition-strip{padding:62px 0;display:block}.transition-strip .strip-aside{margin-top:27px}.lab-zone{padding:75px 0 85px}.lab-heading h2{font-size:clamp(55px,11.6vw,83px)}.workbench{margin-top:43px}.bench-nav{padding:16px}.scenario-tab{padding:17px 12px;font-size:11px}.bench-main,.bench-aside{padding:22px}.bench-aside{grid-template-columns:1fr}.bench-aside .proof-list,.bench-aside .proof-help,.bench-aside .download-proof{grid-column:1}.bench-main h3{font-size:48px}.ethos{padding:92px 0 110px}.ethos-top h2{font-size:clamp(58px,12vw,88px)}.ethos-quote{padding-top:38px}.proof-columns{grid-template-columns:1fr;margin-top:50px}.proof-column{border-right:0;border-bottom:1px solid var(--line);min-height:200px;padding:23px 0}.proof-column:not(:first-child){padding-left:0}.proof-column h3{margin:26px 0 10px}.footer-message{margin-top:55px}.footer-message h2{font-size:clamp(62px,13vw,95px)}.footer-oversize{font-size:33vw;margin-top:88px}.footer-head{flex-wrap:wrap}.footer-head a{font-size:11px}}
+:root{color-scheme:dark;--bg:#0a0d15;--panel:#121725;--panel2:#161d2f;--line:#2c354a;--bright:#f7f8ff;--muted:#a7b1c6;--blue:#9bbcff;--blue2:#627eff;--green:#b7f0c9;--red:#ffbab3;--sans:"Helvetica Neue",Arial,system-ui,sans-serif;--serif:Georgia,"Iowan Old Style",Baskerville,serif}
+*,*:before,*:after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--bright);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}button{font:inherit;cursor:pointer}a{color:inherit;text-decoration:none}a:hover{text-decoration:underline}button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}button:disabled{cursor:not-allowed;opacity:.5}::selection{color:#081326;background:#9bbcff}
+[hidden]{display:none!important}.shell{max-width:1370px;margin:0 auto;padding:0 clamp(19px,4.5vw,68px)}.eyebrow{font-size:11px;text-transform:uppercase;font-weight:800;letter-spacing:.16em}.muted{color:var(--muted)}.divider{height:1px;background:var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;height:85px;border-bottom:1px solid var(--line)}.brand{font-size:25px;font-weight:950;letter-spacing:-.08em;line-height:1}.brand span{color:var(--blue)}.navlinks{display:flex;align-items:center;gap:30px}.navlinks a{font-size:12px;font-weight:650;color:#dbe4f5}.nav-badge{border:1px solid var(--line);padding:12px 15px;border-radius:100px;font-size:10px;font-weight:850;letter-spacing:.09em;white-space:nowrap}.nav-badge i{display:inline-block;width:7px;height:7px;border-radius:100%;background:var(--blue);margin-right:8px}
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(260px,.6fr);gap:45px;padding:clamp(58px,8vw,110px) 0 76px;align-items:center}.hero:before{content:"";z-index:-1;position:absolute;top:-120px;left:25%;width:860px;height:630px;background:radial-gradient(ellipse,#233e8350,transparent 66%);pointer-events:none}.hero .intro{display:flex;align-items:center;gap:13px;color:#c6d3f6;margin-bottom:30px}.hero .intro .star{width:8px;height:8px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 5px #9bbcff20}.hero h1{font-size:clamp(51px,6.65vw,101px);max-width:930px;letter-spacing:-.077em;line-height:1.045;margin:0;font-weight:850}.hero h1 em{font-family:var(--serif);font-weight:400;color:var(--blue);letter-spacing:-.075em}.hero p{color:#c7d0e0;font-size:clamp(16px,1.52vw,20px);max-width:660px;line-height:1.62;margin:29px 0 0}.hero .cta{display:inline-flex;align-items:center;gap:36px;border-radius:100px;background:var(--blue);color:#081224;font-size:13px;font-weight:850;padding:18px 21px;margin-top:32px;box-shadow:0 13px 35px #668bff23;transition:transform .18s ease,background .18s}.hero .cta:hover{transform:translateY(-3px);background:#c2d4ff;text-decoration:none}.cta .arrow{font-size:19px;line-height:0}
+.signal{position:relative;border:1px solid #3c4e72;border-radius:24px;padding:30px;min-height:365px;background:linear-gradient(145deg,#182844,#111827);box-shadow:0 35px 100px #00000045;overflow:hidden}.signal:before{content:"";position:absolute;width:400px;height:400px;right:-230px;top:-210px;border:1px solid #bed0ff40;border-radius:50%;box-shadow:0 0 0 49px #bed0ff0a,0 0 0 104px #bed0ff08}.signal-top{display:flex;align-items:center;justify-content:space-between;color:#c9d8f3;gap:12px}.signal-top .dots{display:flex;gap:5px}.signal-top .dots span{width:5px;height:5px;border-radius:50%;background:#b6c4e2}.signal-bad{font-family:var(--serif);font-style:italic;font-size:clamp(31px,3.5vw,52px);line-height:1.06;letter-spacing:-.07em;margin-top:66px;max-width:330px}.signal-bad span{color:#ffb1ad}.signal-line{height:1px;background:#526080;margin:23px 0}.signal-good{font-family:var(--serif);font-size:clamp(25px,2.6vw,37px);letter-spacing:-.05em;color:#d8e5ff;line-height:1.12;max-width:320px}.signal-stamp{font-size:10px;font-weight:750;letter-spacing:.14em;color:#a9bbe1;margin-top:22px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:15px;overflow:hidden;background:#101522;margin:0 0 75px}.step{padding:20px 25px;display:flex;align-items:center;gap:15px;border-right:1px solid var(--line)}.step:last-child{border:0}.step-number{font-size:12px;font-weight:800;color:var(--blue);min-width:30px}.step-copy{font-size:13px;color:#d9e1f0;font-weight:750}.step-copy small{display:block;font-weight:500;font-size:11px;line-height:1.5;color:#9ea9be;margin-top:3px}
+.challenge{scroll-margin-top:24px;padding-bottom:104px}.challenge-head{display:flex;align-items:end;justify-content:space-between;gap:25px;margin-bottom:23px}.challenge-head h2{font-size:clamp(32px,4vw,57px);line-height:1.04;letter-spacing:-.065em;margin:10px 0 0}.challenge-head h2 em{font-family:var(--serif);color:var(--blue);font-weight:400}.challenge-label{color:#a1b2d7}.counter{font-family:var(--serif);font-size:48px;letter-spacing:-.085em;line-height:1}.counter span{font-size:21px;color:#79879f}
+.stage{background:#111728;border:1px solid #34405a;border-radius:22px;overflow:hidden;box-shadow:0 40px 110px #00000025}.stage-top{padding:23px 30px;display:flex;align-items:center;justify-content:space-between;gap:22px;border-bottom:1px solid #303d56}.stage-top-title{font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.15em;color:#d9e4fe}.stage-top-label{font-size:10px;color:#a4b3d0;letter-spacing:.09em}.progress{height:4px;background:#252f43;display:flex}.progress>span{display:block;background:var(--blue);width:33.333%;transition:width .32s ease}
+.stage-grid{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr)}.scene{padding:clamp(24px,3vw,45px);background:linear-gradient(155deg,#18233a,#111b2c);border-right:1px solid #334158;min-height:520px}.scene-tag{display:inline-flex;border:1px solid #4b648b;color:#bacdf3;border-radius:100px;padding:10px 12px;font-size:10px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}.scene h3{font-size:clamp(30px,3vw,47px);line-height:1.1;letter-spacing:-.065em;margin:27px 0 15px}.scene-explain{font-size:14px;line-height:1.7;color:#bbc9df;max-width:400px}.scene-machine{margin-top:36px;border:1px solid #3e5174;border-radius:16px;padding:22px;background:#0c1527;position:relative}.scene-machine .machine-title{display:flex;align-items:center;justify-content:space-between;gap:13px;font-size:10px;letter-spacing:.11em;color:#8fa9ce;font-weight:850;text-transform:uppercase}.machine-dot{width:7px;height:7px;background:#94b6ff;border-radius:100%;display:inline-block}.machine-facts{margin-top:24px}.machine-fact{display:flex;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid #2e3d59;font-size:13px}.machine-fact:last-child{border-bottom:none}.machine-fact span{color:#a0b3d3}.machine-fact strong{font-size:14px;text-align:right;color:#f0f4ff}.scene-privacy{font-size:11px;color:#99add0;margin-top:17px;line-height:1.5}
+.choice-area{padding:clamp(24px,3.3vw,47px)}.choice-heading{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.question-number{color:var(--blue);font-size:11px;letter-spacing:.11em;font-weight:850}.choice-area h3{font-size:clamp(28px,3vw,41px);letter-spacing:-.058em;line-height:1.15;margin:17px 0 13px}.choice-instruction{font-size:13px;line-height:1.6;color:#a9b6ce;margin:0 0 25px;max-width:610px}.answers{display:grid;gap:13px}.answer{border:1px solid #3a4862;background:#1c2538;border-radius:14px;padding:23px 25px;display:flex;align-items:flex-start;gap:17px;text-align:left;color:#e4ebfc;transition:border .15s,transform .15s,background .15s;min-height:121px;width:100%}.answer:hover:not(:disabled){border-color:#b2c6f8;transform:translateX(4px)}.answer .letter{flex:none;display:grid;place-items:center;border:1px solid #556687;width:35px;height:35px;border-radius:10px;font-size:13px;font-weight:850;color:#d4e3ff}.answer .answer-text{font-size:15px;line-height:1.6;letter-spacing:-.011em;max-width:580px}.answer[aria-pressed=true]{border-color:var(--blue);background:#24395d}.answer.correct{border-color:#80c6a3;background:#193b31}.answer.wrong{border-color:#e39896;background:#463036}.answer:disabled{opacity:1}
+.feedback{margin-top:20px;border-radius:13px;padding:19px 21px;line-height:1.65;background:#20364a;border:1px solid #496280;font-size:13px}.feedback strong{display:block;color:#f2f7ff;font-size:16px;margin-bottom:5px}.feedback.success{background:#16382d;border-color:#3e8565}.feedback.miss{background:#3c2930;border-color:#9e6062}
+.stage-actions{border-top:1px solid #303d56;padding:22px 30px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}.stage-hint{color:#aab9d5;font-size:11px;line-height:1.6;max-width:450px}.action-button{display:inline-flex;align-items:center;gap:32px;border:0;border-radius:100px;padding:15px 20px;background:var(--blue);color:#07111e;font-size:13px;font-weight:850;min-height:48px;transition:transform .15s,background .15s}.action-button:hover:not(:disabled){transform:translateY(-2px);background:#c3d5ff}.action-button.secondary{background:#e9f0ff}.action-button .arrow{font-size:21px}
+.proof{border-top:1px solid #3a4860;padding:30px;background:#0c1322}.proof-header{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:22px;flex-wrap:wrap}.proof-header h3{font-size:clamp(25px,3vw,36px);letter-spacing:-.06em;margin:0}.proof-tag{font-size:10px;font-weight:750;color:#b5c7e5}.proof-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}.proof-card{border:1px solid #78575b;background:#34232e;padding:24px;border-radius:14px}.proof-card.safe{border-color:#3d735d;background:#1b312a}.proof-card .label{font-size:10px;font-weight:850;letter-spacing:.13em;color:#f7bbb6}.proof-card.safe .label{color:#bdf6c6}.proof-card strong{display:block;font-size:clamp(21px,2.3vw,30px);letter-spacing:-.045em;line-height:1.16;margin-top:21px}.proof-card p{color:#cfbec8;font-size:12px;line-height:1.6;margin:13px 0 0}.proof-card.safe p{color:#bad5c4}.proof-control{margin-top:17px;padding:17px 19px;border-radius:12px;border:1px solid #3b4b6b;color:#cfddf5;font-size:12px;line-height:1.65}.proof-control b{color:#e5f5ff}.code-details{margin-top:20px;border:1px solid #384863;border-radius:13px;background:#121b2d}.code-details summary{padding:19px;cursor:pointer;list-style:none;font-size:12px;font-weight:800;color:#d8e5ff;display:flex;align-items:center;justify-content:space-between;gap:15px}.code-details summary::-webkit-details-marker{display:none}.code-details summary:after{content:"＋";color:var(--blue);font-size:20px}.code-details[open] summary:after{content:"−"}.code-cols{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #384863}.code-col{min-width:0;padding:18px}.code-col+ .code-col{border-left:1px solid #384863}.code-col label{color:#bed1ef;font-size:10px;font-weight:850;letter-spacing:.09em}.code-col pre{max-width:100%;font:11px/1.7 Consolas,"SFMono-Regular",monospace;white-space:pre-wrap;overflow-wrap:anywhere;color:#cddbf3;margin:16px 0}.code-col .hash{color:#8eafeb;font:10px/1.6 Consolas,monospace;overflow-wrap:anywhere}
+.finished{padding:60px clamp(24px,6vw,70px);text-align:center}.finished .big-mark{display:grid;place-items:center;width:78px;height:78px;border-radius:50%;background:#223e5b;color:#bcd6ff;font-size:34px;font-weight:700;margin:0 auto 25px}.finished h3{font-size:clamp(40px,6vw,76px);letter-spacing:-.075em;line-height:1.06;max-width:750px;margin:15px auto}.finished h3 em{font-family:var(--serif);font-weight:400;color:var(--blue)}.finished p{color:#c2cee0;line-height:1.7;font-size:15px;max-width:620px;margin:18px auto 26px}.finished .score{font-family:var(--serif);font-size:clamp(70px,9vw,125px);letter-spacing:-.08em;color:var(--blue);margin:26px 0 6px}.finish-actions{display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap}.finish-actions a{color:#d0dcfa;text-decoration:underline;font-size:12px;font-weight:750}
+.why{padding:84px 0 100px;border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:60px}.why h2{font-size:clamp(38px,5vw,76px);line-height:1.05;letter-spacing:-.075em;margin:20px 0 0}.why h2 em{color:var(--blue);font-family:var(--serif);font-weight:400}.why-copy{padding-top:13px}.why-copy p{font-size:15px;color:#c0cbe0;line-height:1.85;margin:0 0 20px}.why-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:30px}.why-fact{border:1px solid #2e3a51;border-radius:13px;padding:16px}.why-fact b{font-size:29px;letter-spacing:-.05em;color:#c7d9ff}.why-fact small{display:block;font-size:10px;line-height:1.5;color:#99aac7;margin-top:9px}.links-row{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0}.links-row a{border:1px solid #45567a;border-radius:100px;padding:12px 16px;font-size:12px;font-weight:750}.links-row a:hover{background:#172644;text-decoration:none}
+.footer{border-top:1px solid var(--line);padding:29px 0 48px;display:flex;justify-content:space-between;gap:25px;align-items:center}.footer p{font-size:11px;color:#9aa6bd;margin:0;line-height:1.65}.footer .brand{font-size:20px}
+@media(max-width:1000px){.hero{grid-template-columns:1fr}.hero h1{max-width:790px}.signal{display:none}.scene{min-height:auto}.stage-grid{grid-template-columns:1fr}.scene{border-right:0;border-bottom:1px solid #34435f}.scene-machine{max-width:670px}.why{grid-template-columns:1fr;gap:20px}}
+@media(max-width:670px){.shell{padding:0 18px}.nav{height:72px}.navlinks{display:none}.nav-badge{font-size:9px;padding:10px 11px}.hero{padding:57px 0 45px}.hero h1{font-size:clamp(45px,11.5vw,72px)}.hero p{font-size:16px}.steps{grid-template-columns:1fr;margin-bottom:50px}.step{padding:15px 19px;border-right:0;border-bottom:1px solid var(--line)}.step:last-child{border-bottom:0}.challenge-head h2{font-size:36px}.counter{font-size:36px}.counter span{font-size:18px}.stage-top{padding:18px}.scene,.choice-area{padding:22px 18px}.scene h3{font-size:38px}.scene-machine{margin-top:22px}.choice-area h3{font-size:31px}.answer{padding:18px;min-height:100px;gap:13px}.answer .answer-text{font-size:14px}.answer .letter{width:30px;height:30px}.stage-actions{padding:18px;align-items:stretch}.stage-hint{max-width:none}.action-button{width:100%;justify-content:space-between}.proof{padding:20px 16px}.proof-cards,.code-cols{grid-template-columns:1fr}.code-col+ .code-col{border-left:0;border-top:1px solid #384863}.why{padding:65px 0}.why-facts{grid-template-columns:1fr 1fr}.footer{align-items:flex-start}.footer .brand{display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 <div class="shell">
-<header class="topbar">
-<a class="brand" href="#top" aria-label="FALSUM home">FALSUM<sup>*</sup></a>
-<nav class="toplinks" aria-label="Primary navigation"><a href="#cases">Cases (03)</a><a href="#lab">Evidence Lab</a><a href="#method">Method</a></nav>
-<a class="top-action" href="https://github.com/Iniwura/falsum" target="_blank" rel="noopener noreferrer">Explore source <span aria-hidden="true">↗</span></a>
+<header class="nav">
+<a class="brand" href="#top" aria-label="FALSUM home">FALSUM<span>.</span></a>
+<nav class="navlinks" aria-label="Primary navigation"><a href="#challenge">Try the demo</a><a href="#why">What is FALSUM?</a><a href="https://github.com/Iniwura/falsum" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav>
+<span class="nav-badge"><i aria-hidden="true"></i>TELEGRAPH / EVALUATORS</span>
 </header>
 <main>
-<section class="hero" id="top" aria-labelledby="hero-title">
-<div class="hero-meta"><span class="id caps"><i class="red-dot" aria-hidden="true"></i>Security review · Evidence first</span><span class="caps muted">Telegraph / Season II · 2026</span></div>
-<div class="hero-layout">
+<section class="hero" id="top">
 <div>
-<h1 class="hero-title" id="hero-title"><span class="line">Look</span><span class="line">beyond the</span><span class="line"><em>claim.</em></span></h1>
-<p class="hero-sub">The most dangerous security answer is the one that <strong>sounds certain without the evidence.</strong> We test the difference.</p>
+<div class="intro eyebrow"><i class="star" aria-hidden="true"></i> Public interactive security-review challenge</div>
+<h1>AI can sound certain.<br><em>The proof decides.</em></h1>
+<p>Two security reviews. One real test. <strong>You decide which answer deserves to be trusted.</strong> No coding needed.</p>
+<a class="cta" href="#challenge">Try the 3-case demo <span class="arrow" aria-hidden="true">↗</span></a>
 </div>
-<aside class="hero-aside"><div class="divider"></div><p class="aside-quote">Proof should change the conclusion.</p><p class="aside-note">FALSUM is a public research and evaluation-material project. These interactive examples use <strong>real local Python execution</strong> in deliberately fictional apps, not live security testing.</p></aside>
-</div>
-<div class="hero-bottom"><a class="underlined-cta" href="#cases">Explore selected evidence <span class="arrow" aria-hidden="true">↘</span></a><div class="foot-note">01 — 03 &nbsp; / &nbsp; Public synthetic evidence lab<br>Real outputs. Honest boundaries.</div></div>
-</section>
-</div>
-<div class="billboard" aria-hidden="true"><div class="billboard-grid"></div><div class="orbit"></div><div class="billboard-top"><span class="caps">Research / Evaluation / Accountability</span><span class="caps">001 — 026</span></div><div class="billboard-brand">FALSUM</div><div class="billboard-index caps"><span class="line"></span> Evidenced. Not assumed.</div></div>
-<div class="shell">
-<section class="ticker" aria-label="Evidence snapshot">
-<p class="ticker-intro">Twenty evaluation pairs have reached the eligible pool. The public lab below shows why security judgments need context—not confidence alone.</p>
-<div class="ticker-stats">
-<div><div class="metric-value">20<sup>*</sup></div><div class="metric-label">Anjoman-eligible pairs<br>Account UI evidence</div></div>
-<div><div class="metric-value" id="metric-blocked">03</div><div class="metric-label">Unsafe synthetic behaviors<br>blocked by fixes</div></div>
-<div><div class="metric-value" id="metric-controls">03</div><div class="metric-label">Legitimate operations<br>preserved after fixes</div></div>
+<div class="signal" aria-hidden="true">
+<div class="signal-top eyebrow"><span>SECURITY REVIEW / 001</span><span class="dots"><span></span><span></span><span></span></span></div>
+<div class="signal-bad">“Looks safe.<br><span>Ship it.”</span></div>
+<div class="signal-line"></div>
+<div class="signal-good">But what does<br>the code prove?</div>
+<div class="signal-stamp">CONFIDENCE ≠ EVIDENCE</div>
 </div>
 </section>
-<section id="cases" aria-labelledby="cases-heading">
-<div class="section-intro"><span class="caps">01 / Selected evidence</span><div><h2 id="cases-heading">The facts<br>change the <em>verdict.</em></h2><p>Each case starts with an actual Python behavior. Change the code, repeat the same input, and the result must change—without breaking the legitimate control.</p></div></div>
-<div class="cases">
-<article class="case">
-<button type="button" class="case-button" data-open-case="0" aria-label="Explore case one, exchange withdrawal authorization">
-<span class="case-index caps">01 / 03</span><span><span class="case-tag">Exchange / identity boundary</span><strong class="case-title">Who owns<br><em>the funds?</em></strong><span class="case-desc">A request names an account owner. Does the handler check who is actually making the request?</span></span>
-<span class="case-art"><span class="circle"></span><span class="symbol">A≠B</span></span><span class="case-go" aria-hidden="true">↗</span>
-</button></article>
-<article class="case">
-<button type="button" class="case-button" data-open-case="1" aria-label="Explore case two, agent webhook callback authenticity">
-<span class="case-index caps">02 / 03</span><span><span class="case-tag">Model economy / callback integrity</span><strong class="case-title">Can you trust<br><em>the signal?</em></strong><span class="case-desc">A completion event arrives. A signature is present—but is it actually valid for these bytes?</span></span>
-<span class="case-art"><span class="circle"></span><span class="symbol">↝</span></span><span class="case-go" aria-hidden="true">↗</span>
-</button></article>
-<article class="case">
-<button type="button" class="case-button" data-open-case="2" aria-label="Explore case three, off-chain DeFi event replay">
-<span class="case-index caps">03 / 03</span><span><span class="case-tag">Web3 & DeFi / replay prevention</span><strong class="case-title">Once is<br><em>enough.</em></strong><span class="case-desc">A previously processed event is delivered twice. Is the fictional balance credited twice?</span></span>
-<span class="case-art"><span class="circle"></span><span class="symbol">1×</span></span><span class="case-go" aria-hidden="true">↗</span>
-</button></article>
+<div class="steps" aria-label="How the demo works">
+<div class="step"><span class="step-number">01</span><div class="step-copy">Read the situation<small>Understand the risk in plain English</small></div></div>
+<div class="step"><span class="step-number">02</span><div class="step-copy">Choose a security review<small>Which answer is actually trustworthy?</small></div></div>
+<div class="step"><span class="step-number">03</span><div class="step-copy">Reveal the real proof<small>See what the test found and the fix changed</small></div></div>
 </div>
-<div class="transition-strip"><div class="strip-mark">Not a simulation of a conclusion.<br><span class="italic accent">A measurement of behavior.</span></div><p class="strip-aside">All three examples are fictional. The code was really executed, and the evidence below comes from the resulting captured output. No third-party app, hidden network cases or trained evaluator are involved.</p></div>
+<section class="challenge" id="challenge" aria-labelledby="challenge-title">
+<div class="challenge-head"><div><div class="eyebrow challenge-label">Try it yourself / No account needed</div><h2 id="challenge-title">Can you spot the <em>better review?</em></h2></div><div class="counter" aria-label="Case progress"><span id="case-counter">01</span><span>/03</span></div></div>
+<div class="stage">
+<div id="stage-view">
+<div class="stage-top"><span class="stage-top-title" id="stage-case-id">CASE 01 / THE WITHDRAWAL</span><span class="stage-top-label">GUIDED DEMO · SAMPLE REVIEWS</span></div>
+<div class="progress" aria-hidden="true"><span id="progress-fill"></span></div>
+<div class="stage-grid">
+<div class="scene">
+<div class="scene-tag" id="scene-tag">01 / EXCHANGE</div>
+<h3 id="scene-title">Someone else's money.</h3>
+<p class="scene-explain" id="scene-explain">A withdrawal is requested for another person's fictional balance. Should the service approve it?</p>
+<div class="scene-machine">
+<div class="machine-title"><span>WHAT THE SERVICE SEES</span><i class="machine-dot" aria-hidden="true"></i></div>
+<div class="machine-facts">
+<div class="machine-fact"><span id="fact1-label">Signed-in user</span><strong id="fact1-value">Mallory</strong></div>
+<div class="machine-fact"><span id="fact2-label">Account owner</span><strong id="fact2-value">Alice</strong></div>
+<div class="machine-fact"><span id="fact3-label">Amount</span><strong id="fact3-value">$20 (fake)</strong></div>
+</div>
+</div>
+<div class="scene-privacy">Public fictional example. No customer account, real money or private Anjoman evaluation row.</div>
+</div>
+<div class="choice-area">
+<div class="choice-heading"><span class="question-number">YOUR TURN</span><span class="eyebrow muted">STEP 02 / 03</span></div>
+<h3>Which security review should pass?</h3>
+<p class="choice-instruction">These are short, written-for-demo examples of AI-style reviews. Neither was generated by a live model. Pick the answer that best matches the evidence.</p>
+<div class="answers" role="group" aria-label="Choose the stronger security review">
+<button id="answer-a" type="button" class="answer" data-answer="0" aria-pressed="false"><span class="letter">A</span><span class="answer-text" id="answer-a-text">The service checks the balance, so it is safe.</span></button>
+<button id="answer-b" type="button" class="answer" data-answer="1" aria-pressed="false"><span class="letter">B</span><span class="answer-text" id="answer-b-text">The user must match the owner before withdrawal.</span></button>
+</div>
+<div id="feedback" class="feedback" role="status" aria-live="polite" hidden><strong id="feedback-head"></strong><span id="feedback-body"></span></div>
+</div>
+</div>
+<div id="proof" class="proof" hidden>
+<div class="proof-header"><h3>Here's what actually happened.</h3><span class="proof-tag">MEASURED IN A REAL LOCAL PYTHON TEST · FICTIONAL APP</span></div>
+<div class="proof-cards">
+<div class="proof-card"><span class="label">BEFORE THE FIX / UNSAFE</span><strong id="proof-before-title">Unauthorized withdrawal succeeds</strong><p id="proof-before-detail">Alice's fake balance drops from $100 to $80.</p></div>
+<div class="proof-card safe"><span class="label">AFTER THE FIX / SAFER</span><strong id="proof-after-title">Unauthorized withdrawal blocked</strong><p id="proof-after-detail">Alice's fake balance stays $100.</p></div>
+</div>
+<div class="proof-control" id="proof-control"><b>Good news:</b> Legitimate actions still work after the fix.</div>
+<details class="code-details">
+<summary>For developers: view the real Python code and SHA-256 proof</summary>
+<div class="code-cols">
+<div class="code-col"><label>BEFORE THE FIX</label><pre><code id="code-before"></code></pre><div class="hash" id="hash-before"></div></div>
+<div class="code-col"><label>AFTER THE FIX</label><pre><code id="code-after"></code></pre><div class="hash" id="hash-after"></div></div>
+</div>
+</details>
+</div>
+<div class="stage-actions">
+<div class="stage-hint" id="stage-hint">Choose A or B first. Then reveal the test evidence.</div>
+<button id="show-proof" class="action-button" type="button" disabled>Reveal the actual test <span class="arrow" aria-hidden="true">↗</span></button>
+<button id="next-case" class="action-button secondary" type="button" hidden>Next case <span class="arrow" aria-hidden="true">→</span></button>
+</div>
+</div>
+<div id="finish-view" class="finished" hidden aria-live="polite">
+<div class="big-mark" aria-hidden="true">✓</div>
+<div class="eyebrow muted">THREE REAL LOCAL TESTS / THREE SECURITY DECISIONS</div>
+<h3>You checked the claim.<br><em>Now trust the evidence.</em></h3>
+<div id="final-score" class="score">3/3</div>
+<p id="final-description">You identified the stronger reviews. FALSUM's purpose is to make evidence-backed evaluation repeatable, not to reward confident-sounding answers.</p>
+<p>These were original public learning examples and precomputed real Python tests. This site does <strong>not</strong> run a live AI evaluator or inspect third-party systems.</p>
+<div class="finish-actions"><button id="try-again" type="button" class="action-button">Try all three again ↻</button><a href="https://github.com/Iniwura/falsum/blob/main/docs/PHASE3Q.md" target="_blank" rel="noopener noreferrer">See how the real tests work ↗</a></div>
+</div>
+</div>
 </section>
+<section class="why" id="why">
+<div><div class="eyebrow muted">WHAT IS FALSUM?</div><h2>Evidence over<br><em>confidence.</em></h2></div>
+<div class="why-copy">
+<p>FALSUM is a security-review evaluation project for Telegraph's <strong>SECURITY_REVIEW_GENERAL</strong> intent. We want evaluation questions to reward answers that identify what the code actually proves, rather than what sounds convincing.</p>
+<p>Our separate Anjoman contribution contains 20 AI-assisted preference pairs reported as <strong>Eligible</strong> in the contributor account. They are kept private. These three public learning examples are different and do not expose those questions.</p>
+<div class="why-facts">
+<div class="why-fact"><b>20</b><small>Eligible network pairs, per contributor account UI</small></div>
+<div class="why-fact"><b>03</b><small>Public reproducible Python cases</small></div>
+<div class="why-fact"><b>00</b><small>Registered live evaluator models</small></div>
 </div>
-<section class="lab-zone" id="lab" aria-labelledby="lab-heading">
-<div class="shell">
-<div class="lab-heading"><div class="caps">02 / Inspection chamber</div><div><h2 id="lab-heading">See what the<br>code <em>actually</em> does.</h2><p>Choose a case. Compare the observed behavior before and after the patch, inspect the actual function used, and verify the source fingerprint.</p></div></div>
-<div class="workbench">
-<div class="bench-nav"><span class="caps">FALSUM / Evidence Lab <span class="accent">●</span></span><span class="live-indicator"><i class="red-dot"></i>CAPTURED REAL PYTHON EXECUTION · SYNTHETIC</span></div>
-<div class="scenario-tabs" role="group" aria-label="Choose a security scenario">
-<button class="scenario-tab" type="button" data-case-index="0" aria-pressed="true"><span>01 / EXCHANGE</span>Actor binding</button>
-<button class="scenario-tab" type="button" data-case-index="1" aria-pressed="false"><span>02 / MODEL ECONOMY</span>Callback HMAC</button>
-<button class="scenario-tab" type="button" data-case-index="2" aria-pressed="false"><span>03 / DEFI</span>Event replay</button>
-</div>
-<div class="bench-body">
-<div class="bench-main">
-<div class="bench-kicker" id="case-id">CASE 01 / EXCHANGE</div><h3 id="case-title">Withdrawals without actor binding</h3><p id="case-description" class="bench-description">A caller-controlled owner field bypasses the authenticated actor.</p>
-<div class="mode-nav" role="group" aria-label="Compare code versions"><button type="button" class="mode-button" data-phase="before" aria-pressed="true">Before patch</button><button type="button" class="mode-button" data-phase="after" aria-pressed="false">After patch</button></div>
-<div class="result-panel before" id="result-panel" aria-live="polite" aria-atomic="true">
-<div class="result-top"><span>Observed result / real local fixture</span><span class="result-mark"><i></i><span id="result-label">Unsafe operation accepted</span></span></div>
-<div class="result-outcome" id="result-outcome">Unwanted action passed.</div><div class="result-detail" id="result-detail">actual local state</div>
-</div>
-<div class="code-head"><span class="caps">Source / executed function</span><span class="code-source" id="source-version">PRE-PATCH PYTHON</span></div>
-<pre class="code-view"><code id="code-view">Code from the checked source will appear here.</code></pre>
-</div>
-<aside class="bench-aside">
-<div><span class="bench-kicker">The question</span><p class="proof-value" id="case-question">Can actor B withdraw synthetic funds from owner A's account?</p></div>
-<div><span class="bench-kicker">The boundary</span><p class="proof-value" id="case-boundary">Authenticated actor and requested owner differ.</p></div>
-<div class="proof-list">
-<div class="proof-row"><div class="proof-key">Positive control / both versions</div><div class="proof-value" id="case-control">Legitimate action still accepted.</div></div>
-<div class="proof-row"><div class="proof-key">Unobserved evidence</div><div class="proof-value" id="case-unknown">INSUFFICIENT_EVIDENCE — cannot infer risk or safety.</div></div>
-<div class="proof-row"><div class="proof-key">Actual source SHA-256</div><div class="proof-value hash" id="case-hash">Source fingerprint.</div></div>
-<div class="proof-row"><div class="proof-key">Scope / what this doesn't prove</div><div class="proof-value" id="case-scope">Fictional local implementation only.</div></div>
-</div>
-<p class="proof-help"><strong>Why this matters.</strong> The model checkpoint is not being run here. These are captured real Python fixture results. A separate evaluator model and actual third-party mission integration have not been validated.</p>
-<a class="download-proof" href="./ACTUAL-SYNTHETIC-RUNTIME-PROOF.json" download>Inspect the machine-readable proof <span class="arrow" aria-hidden="true">↗</span></a>
-</aside>
-</div>
-</div>
-<div class="underlab"><span>03 cases / 06 source implementations / 00 production apps assessed</span><span>Public synthetic evidence lab · No wallet required</span></div>
-</div></section>
-<section class="shell ethos" id="method" aria-labelledby="method-heading">
-<div class="ethos-top"><span class="caps">03 / The standard</span><h2 id="method-heading">A reason to<br><em>believe.</em></h2></div>
-<div class="ethos-quote"><span class="caps">Our position ↗</span><p>“A patch is evidence that code changed. It is not, by itself, evidence that your customers were exploited.”</p></div>
-<div class="proof-columns">
-<div class="proof-column"><span class="caps">/ 01 &nbsp; Source</span><h3>Inspect the actual fix.</h3><p>Every illustrated outcome has a real source-function fingerprint and reproducible before-and-after execution.</p><a href="https://github.com/Iniwura/falsum/blob/main/docs/PHASE3Q.md" target="_blank" rel="noopener noreferrer">How to reproduce <span aria-hidden="true">↗</span></a></div>
-<div class="proof-column"><span class="caps">/ 02 &nbsp; Network</span><h3>Contribute meaningful cases.</h3><p>20 source-referenced AI-assisted preference pairs show Eligible in the contributor's Anjoman account. Bounty maintainer review is still pending.</p><a href="https://github.com/telegraphprotocol/bounties/issues/96" target="_blank" rel="noopener noreferrer">Public bounty receipt <span aria-hidden="true">↗</span></a></div>
-<div class="proof-column"><span class="caps">/ 03 &nbsp; Limitations</span><h3>Say what isn't known.</h3><p>No actual external partner integration, registered evaluator model or independently certified expert security labels are claimed.</p><a href="https://github.com/Iniwura/falsum/issues/16" target="_blank" rel="noopener noreferrer">Challenge our evidence <span aria-hidden="true">↗</span></a></div>
+<div class="links-row"><a href="https://github.com/Iniwura/falsum" target="_blank" rel="noopener noreferrer">Source and methodology ↗</a><a href="https://github.com/Iniwura/falsum/issues/16" target="_blank" rel="noopener noreferrer">Challenge the test ↗</a><a href="./ACTUAL-SYNTHETIC-RUNTIME-PROOF.json">Raw runtime evidence ↗</a></div>
+<p class="muted" style="font-size:12px">These are safe, fictional Python fixtures executed during the website build and shown here as captured evidence. No AI model is scored live, no real funds or credentials are used, and no external mission integration is claimed. The bounty submission remains subject to maintainer review.</p>
 </div>
 </section>
 </main>
+<footer class="footer"><a class="brand" href="#top">FALSUM<span>.</span></a><p>SECURITY_REVIEW_GENERAL · TELEGRAPH EVALUATORS<br>Public interactive learning example · Falsifiable evidence, not fabricated confidence.</p></footer>
 </div>
-<footer class="final-footer"><div class="shell"><div class="footer-head"><span class="caps">FALSUM / TELEGRAPH SEASON II / EVALUATORS</span><a href="#top">Back to top ↑</a></div><div class="footer-message"><h2>Keep asking<br><em>for proof.</em></h2><p>Independent research. Public reproducibility. No invented certainty.<br><br><a href="https://github.com/Iniwura/falsum" target="_blank" rel="noopener noreferrer">View the research on GitHub ↗</a></p></div><div class="footer-oversize" aria-hidden="true">FALSUM</div></div></footer>
 <script type="application/json" id="proof-data">__FALSUM_DATA__</script>
 <script>
 "use strict";
-(function () {
-const data = JSON.parse(document.getElementById("proof-data").textContent);
-const cases = Array.isArray(data.cases) ? data.cases : [];
-const get = id => document.getElementById(id);
-const caseTabs = Array.from(document.querySelectorAll("[data-case-index]"));
-const phaseTabs = Array.from(document.querySelectorAll("[data-phase]"));
-let activeCase = 0;
-let phase = "before";
-function put(id, value){ const target = get(id); if(target) target.textContent = String(value); }
-function textOr(value, fallback){ return value == null ? fallback : value; }
-function render(){
-const item = cases[activeCase]; if(!item) return;
-const observation = item[phase];
-const isBefore = phase === "before";
-caseTabs.forEach((b,i) => b.setAttribute("aria-pressed", String(i===activeCase)));
-phaseTabs.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.phase===phase)));
-put("case-id", "CASE " + String(activeCase+1).padStart(2,"0") + " / " + item.mission);
-put("case-title", item.title);
-put("case-description", item.summary);
-put("case-question", item.question);
-put("case-boundary", isBefore ? item.unsafe_fact : item.control_fact);
-put("case-control", item.control_fact + " Legitimate control accepted: " + String(observation.control_action_accepted) + ". State: " + String(observation.control_observed_state));
-put("case-unknown", item.missing_evidence_review);
-put("case-scope", item.scope);
-put("case-hash", item[phase+"_source_sha256"]);
-put("source-version", isBefore ? "PRE-PATCH PYTHON" : "PATCHED PYTHON");
-put("code-view", textOr(item[phase+"_code"], "Source not embedded; see repository."));
-const resultPanel = get("result-panel");
-resultPanel.classList.toggle("before", isBefore);
-resultPanel.classList.toggle("after", !isBefore);
-const accepted = observation.unsafe_action_accepted === true;
-put("result-label", accepted ? "Unsafe operation accepted" : "Unsafe operation blocked");
-put("result-outcome", accepted ? "The unsafe operation passed." : "The unsafe operation was blocked.");
-put("result-detail", observation.unsafe_state_name + " = " + String(observation.unsafe_observed_state));
-}
-caseTabs.forEach((button,i) => button.addEventListener("click", () => { activeCase=i;phase="before";render(); }));
-phaseTabs.forEach(button => button.addEventListener("click", () => { phase = button.dataset.phase; render(); }));
-document.querySelectorAll("[data-open-case]").forEach(button => button.addEventListener("click", () => {
- activeCase=Number(button.dataset.openCase);phase="before";render();
- get("lab").scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
-}));
-put("metric-blocked", String(data.synthetic_unwanted_actions_blocked_after).padStart(2,"0"));
-put("metric-controls", String(data.legitimate_controls_preserved_after).padStart(2,"0"));
-render();
+(() => {
+  const report = JSON.parse(document.getElementById("proof-data").textContent);
+  const cases = report.cases;
+  const examples = [
+    {
+      id:"exchange-owner-binding", tag:"01 / EXCHANGE", name:"THE WITHDRAWAL",
+      title:"Someone else's money.",
+      description:"Mallory is logged in. The withdrawal asks to take $20 from Alice's fictional account. Should this be allowed?",
+      facts:[["Signed-in user","Mallory"],["Account owner","Alice"],["Requested withdrawal","$20 (fictional)"]],
+      reviews:[
+        "The service checks whether Alice has enough money. That means the withdrawal is authorized and safe.",
+        "The logged-in user doesn't match the account owner. The handler must check identity, not just the balance."
+      ], correct:1,
+      reason:"A balance check is not an authorization check. The real local test shows Mallory can reduce Alice's balance before the patch.",
+      before:"A different user can take the money.", after:"The wrong user is refused.",
+      beforeDetail:caseData => "Alice's fake balance falls from $100 to $" + caseData.before.unsafe_observed_state + ".",
+      afterDetail:caseData => "Alice's fake balance stays at $" + caseData.after.unsafe_observed_state + ".",
+      control:caseData => "Alice can still withdraw her own $20. Her fictional balance becomes $" + caseData.after.control_observed_state + "."
+    },
+    {
+      id:"model-agent-callback-integrity",tag:"02 / MODEL ECONOMY",name:"THE FAKE CALLBACK",
+      title:"A message that looks real.",
+      description:"An agent receives a message saying a job is finished. But the signature on that message doesn't match. Should it trust the message?",
+      facts:[["Incoming event","job.completed"],["Message signature","Invalid (fictional)"],["Claimed result","Work finished"]],
+      reviews:[
+        "The message claims job.completed, but the handler must verify the signature before trusting it. A forged event can pass before the fix.",
+        "The JSON says the job is completed. That's sufficient to mark it successful."
+      ],correct:0,
+      reason:"A familiar event name doesn't prove who sent it. Our Python test shows the fake completion passes before signature verification is added.",
+      before:"Fake completion accepted.",after:"Fake completion rejected.",
+      beforeDetail:caseData => "Actual local result: " + caseData.before.unsafe_observed_state.replaceAll("_"," ") + ".",
+      afterDetail:caseData => "Actual local result: " + caseData.after.unsafe_observed_state.replaceAll("_"," ") + ".",
+      control:caseData => "A correctly signed job completion still passes the patched handler (" + caseData.after.control_observed_state.replaceAll("_"," ") + ")."
+    },
+    {
+      id:"web3-relayer-replay",tag:"03 / WEB3 & DEFI",name:"THE DOUBLE CREDIT",
+      title:"Paid twice. One event.",
+      description:"A fictional relayer receives the same payment event twice. Should the service credit the balance again?",
+      facts:[["Event ID","fictional-event-1"],["Second delivery","Same ID (replay)"],["Credit per event","12 fake units"]],
+      reviews:[
+        "The event includes an ID, so the system automatically knows not to count it twice.",
+        "An ID only helps if the handler checks whether it was already processed. The old code can credit the same event twice."
+      ],correct:1,
+      reason:"Having an event ID is different from checking it. The Python test repeats the same ID and observes a second credit in the old code.",
+      before:"The same event credits twice.",after:"The replay is ignored.",
+      beforeDetail:caseData => "Repeated event produces " + caseData.before.unsafe_observed_state + " fictional credit units instead of 12.",
+      afterDetail:caseData => "Repeated event stays at " + caseData.after.unsafe_observed_state + " fictional credit units.",
+      control:caseData => "Two different valid events still credit " + caseData.after.control_observed_state + " units altogether."
+    }
+  ];
+  if (!Array.isArray(cases) || cases.length !== 3 || examples.some((e,i)=>cases[i].id!==e.id)) throw Error("Proof does not match the public guided examples.");
+  const $=id=>document.getElementById(id);
+  const chooseButtons = Array.from(document.querySelectorAll("[data-answer]"));
+  let current=0, selected=null, revealed=false;
+  const picks = [null,null,null];
+  function put(id,value){ $(id).textContent=String(value); }
+  function safeScroll(node){node.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});}
+  function render(){
+    const e=examples[current], c=cases[current];
+    selected=picks[current];revealed=false;
+    put("case-counter",String(current+1).padStart(2,"0"));
+    put("stage-case-id","CASE "+String(current+1).padStart(2,"0")+" / "+e.name);
+    put("scene-tag",e.tag);put("scene-title",e.title);put("scene-explain",e.description);
+    e.facts.forEach((pair,i)=>{put("fact"+(i+1)+"-label",pair[0]);put("fact"+(i+1)+"-value",pair[1]);});
+    put("answer-a-text",e.reviews[0]);put("answer-b-text",e.reviews[1]);
+    $("progress-fill").style.width=((current+1)/3*100)+"%";
+    chooseButtons.forEach((button,i)=>{
+      button.disabled=selected!==null;
+      button.classList.remove("correct","wrong");
+      button.setAttribute("aria-pressed",String(selected===i));
+      if(selected!==null && i===e.correct)button.classList.add("correct");
+      if(selected===i && i!==e.correct)button.classList.add("wrong");
+    });
+    $("feedback").hidden=selected===null;
+    $("feedback").className="feedback "+(selected===e.correct?"success":"miss");
+    if(selected!==null){
+      put("feedback-head",selected===e.correct?"Good catch. That's the stronger review.":"Not quite. This answer missed the key risk.");
+      put("feedback-body",e.reason);
+    }
+    $("proof").hidden=true;
+    $("show-proof").hidden=false;
+    $("show-proof").disabled=selected===null;
+    $("next-case").hidden=true;
+    put("stage-hint",selected===null?"First choose A or B. No coding required.":"Now reveal what the actual local Python test found.");
+    put("proof-before-title",e.before);put("proof-after-title",e.after);
+    put("proof-before-detail",e.beforeDetail(c));put("proof-after-detail",e.afterDetail(c));
+    put("proof-control","Legitimate behavior still works: "+e.control(c));
+    put("code-before",c.before_code);put("code-after",c.after_code);
+    put("hash-before",c.before_source_sha256);put("hash-after",c.after_source_sha256);
+    document.querySelector(".code-details").open=false;
+  }
+  chooseButtons.forEach((button,i)=>button.addEventListener("click",()=>{
+    if(picks[current]!==null)return;
+    picks[current]=i;
+    render();
+  }));
+  $("show-proof").addEventListener("click",()=>{
+    if(picks[current]===null)return;
+    revealed=true;
+    $("proof").hidden=false;
+    $("show-proof").hidden=true;
+    $("next-case").hidden=false;
+    put("stage-hint","The outcome above was measured by executing this public Python code in a local fictional fixture.");
+    put("next-case",current===2?"See your results →":"Next case →");
+    safeScroll($("proof"));
+  });
+  $("next-case").addEventListener("click",()=>{
+    if(!revealed)return;
+    if(current===2){
+      $("stage-view").hidden=true;
+      $("finish-view").hidden=false;
+      const score=picks.reduce((total,p,i)=>total+(p===examples[i].correct?1:0),0);
+      put("final-score",score+"/3");
+      put("final-description",score===3?"You chose all three evidence-backed reviews. The goal is to reward what the code proves, not a confident guess.":"You chose "+score+" of 3 stronger reviews. Each mistake shows why evidence, not confidence, should determine the security verdict.");
+      safeScroll($("challenge"));
+    }else{current++;render();safeScroll($("challenge"));}
+  });
+  $("try-again").addEventListener("click",()=>{
+    current=0;selected=null;revealed=false;picks.fill(null);
+    $("finish-view").hidden=true;$("stage-view").hidden=false;
+    render();safeScroll($("challenge"));
+  });
+  render();
 })();
 </script>
-</body></html>
+</body>
+</html>
