@@ -56,7 +56,7 @@ jobs:
           assert len(data["cases"])==3
           assert data["synthetic_unwanted_actions_blocked_after"]==3
           assert data["legitimate_controls_preserved_after"]==3
-          assert all(x in html for x in ("AI can sound certain.","The proof decides.","Which security review should pass?","font-family:var(--serif)","prefers-reduced-motion:reduce"))
+          assert all(x in html for x in ("PICK THE","BETTER","data-answer","--display:Impact","prefers-reduced-motion:reduce"))
           assert html.count('id="proof-data"')==1
           for case in data["cases"]:
               for phase in ("before","after"):
