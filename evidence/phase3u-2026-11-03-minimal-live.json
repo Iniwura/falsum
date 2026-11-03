@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3U_MINIMAL_REVIEW_UI_MERGED_AND_VERCEL_PRODUCTION_VERIFIED",
+  "verified_on": "2026-11-03",
+  "repo": "https://github.com/Iniwura/falsum",
+  "pr": "https://github.com/Iniwura/falsum/pull/19",
+  "merge_sha": "6e77cd767613215efb700eb099ff94a878dcdb5a",
+  "reference": "https://gojett.framer.website/",
+  "reference_principles": "Near-black high contrast, oversized editorial condensed type, generous whitespace, minimal chrome, work-led narrative. Original product design; no copy of Jett images, branding, code or template.",
+  "design_intent": "One obvious task, no banner/tagline, extra marketing hero, tutorial stepper, redundant question, colored dashboard cards or fake metrics; preserve all core app behavior.",
+  "live_site": "https://falsum-evidence-lab.vercel.app/",
+  "live_json": "https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json",
+  "production": {
+    "vercel_deployment": "dpl_DPfmPvNCoTNw6M1Yrjsv9GCtPj5d",
+    "state": "READY",
+    "source_sha": "6e77cd767613215efb700eb099ff94a878dcdb5a",
+    "source_ref": "main",
+    "homepage_http": 200,
+    "json_http": 200,
+    "public_protection_enabled": false,
+    "private_evaluation_payload_in_site": false
+  },
+  "browser_qa": {
+    "run": "https://github.com/Iniwura/falsum/actions/runs/41625454146",
+    "artifact": "https://github.com/Iniwura/falsum/actions/runs/41625454146/artifacts/13225239594",
+    "all_pr_checks_green": 25,
+    "manual_reviewed_desktop_and_mobile_screenshots": true,
+    "desktop_viewport": "1440x900",
+    "mobile_viewports": [
+      "390x844",
+      "320x720"
+    ],
+    "full_three_cases_completed": true,
+    "wrong_answer_explanation": true,
+    "real_source_and_hash_present": true,
+    "final_score": "2/3",
+    "restart": true,
+    "keyboard": true,
+    "touch": true,
+    "mobile_overflow_px": 0,
+    "javascript_uncaught_errors": 0
+  },
+  "security_scope": {
+    "actual_python_fixture_pairs": 3,
+    "unsafe_before": 3,
+    "blocked_after": 3,
+    "legitimate_controls_after": 3,
+    "live_model_scoring": false,
+    "third_party_missions_verified": 0,
+    "public_sample_reviews_handwritten": true,
+    "private_pool_rows_shown": false,
+    "existing_eligible_anjoman_rows": 20,
+    "model_registered": false,
+    "bounty_maintainer_verified": false,
+    "seasonII_final_entry_submitted": false
+  },
+  "remaining": "Gather actual independent developer reproduction, record real 2–5 minute walkthrough, and submit separate Season II entry. This public synthetic exhibit and eligible contribution do not imply evaluator adapter certification or prize."
+}
