@@ -96,7 +96,7 @@ class GuidedSecurityReviewDemo(unittest.TestCase):
         self.assertIn('selected===e.correct',t)
         self.assertIn('document.querySelector(".code-details").open=false',t)
         self.assertIn('button.disabled=selected!==null',t)
-        self.assertIn('role="status" aria-live="polite"',t)
+        self.assertIn('aria-live="polite" role="status"',t)
 
     def test_accessibility_mobile_motion_and_private_data_guard(self):
         t=TEMPLATE.read_text()
