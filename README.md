@@ -1,8 +1,8 @@
 # FALSUM
 
-[**Open demo**](https://falsum-evidence-lab.vercel.app/) · [**Actual Python evidence**](https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json) · [**Reproduce locally**](docs/PHASE3Q.md)
+[**Current public demo — synthetic examples**](https://falsum-evidence-lab.vercel.app/) · [**Real recorded model-score proof (Phase 3V)**](docs/PHASE3V.md) · [**Reproduce historical library behavior**](docs/PHASE3J.md)
 
-FALSUM contributes evaluation material for `SECURITY_REVIEW_GENERAL`. The public demo asks one question: **Which security review is better supported by evidence?** Choose A or B, see the explanation, and reveal the real before-and-after results from three isolated fictional Python examples.
+FALSUM contributes evaluation material for `SECURITY_REVIEW_GENERAL`. **The separate [Phase 3V model proof](docs/PHASE3V.md)** shows genuine official Foundation/LoRA scores from 16 previously recorded inference calls, with 2/4 provisional context preferences and 0/2 complete reversals. It demonstrates a model failure, not a registered or improved evaluator; the two scored candidate answers were researcher-authored. The public synthetic demo asks one question: **Which security review is better supported by evidence?** Choose A or B, see the explanation, and reveal the real before-and-after results from three isolated fictional Python examples.
 
 The original public A/B reviews are written examples, **not live AI outputs**. The demo is not a registered evaluator or external application audit. Separately, the contributor's Anjoman account shows **20 eligible preference pairs**. The [public bounty submission](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) is awaiting maintainer verification.
 
