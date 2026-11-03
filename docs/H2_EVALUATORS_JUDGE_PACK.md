@@ -25,6 +25,14 @@ FALSUM fills a specific intelligence measurement need: a `SECURITY_REVIEW_GENERA
 - [Original LoRA on official Foundation](PHASE3J.md): 16 real repeated inference calls; **0/2 complete history-sensitive reversal families** and **2/4 provisional context expectations**. Adapter remains quarantined.
 - [New real research LoRA training](PHASE3K.md): official trainer's internal 6/6 **does not transfer**; both actual before/after checkpoints matched **3/6** prior-inspected separate-project provisional preferences, **0/3** complete reversals. Training success **is not** model improvement.
 
+## Live judge-ready evidence site — Phase 3R
+
+**[Open the FALSUM public Evidence Lab](https://falsum-evidence-lab.vercel.app)** · [Exact machine-readable captured runtime results](https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json) · [Production HTTP 200 check](../evidence/phase3r-2026-11-03-live-demo.json)
+
+Judges can now try the Evidence Lab in a normal browser without a local Python setup. Select the three **fictional PR** scenarios and inspect real captured before/after execution states, proper control preservation and function source SHA256s. The Vercel site is static: **selection changes the visualized fixture, not a live Python application or an AI model**. For actual independent code reproduction, run the Phase 3Q CLI locally and compare the generated JSON to the site.
+
+**Current proof ceiling:** HTTP 200 on production HTML and JSON and successful Python CI. No external developer adoption yet, no actually connected third-party mission application, no model improvement and no separate official H2 entry yet. Do not report any of those as accomplished.
+
 ## New: executable mission-based evidence lab (Phase 3Q)
 
 The [Phase 3Q executable demo](PHASE3Q.md) upgrades FALSUM's judge-facing public proof: a **self-contained interactive dark-mode HTML evidence board**, produced by actual Python execution across **three fictional PRs** inspired by *Exchange*, *Model Economy*, and *Web3 Native & DeFi*. It runs six real before/after Python implementations, catches three unsafe behaviors, shows each prevented after patching, and preserves three legitimate controls. **This is not real mission integration or AI scoring accuracy.** It uses NO hidden eligible Anjoman questions and no network access or credentials.
