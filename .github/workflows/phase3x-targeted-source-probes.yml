@@ -1,0 +1,128 @@
+name: Phase 3X - targeted real upstream source counterfactual probes
+on:
+  push:
+    paths:
+      - "tests/phase3x_axios_source_probe.cjs"
+      - "tests/phase3x_django_source_probe.py"
+      - "tests/test_phase3x_counterfactuals.py"
+      - "src/falsum/phase3x_hard_cases.py"
+      - "docs/PHASE3X.md"
+      - ".github/workflows/phase3x-targeted-source-probes.yml"
+  pull_request:
+    paths:
+      - "tests/phase3x_axios_source_probe.cjs"
+      - "tests/phase3x_django_source_probe.py"
+      - "tests/test_phase3x_counterfactuals.py"
+      - "src/falsum/phase3x_hard_cases.py"
+      - "docs/PHASE3X.md"
+      - ".github/workflows/phase3x-targeted-source-probes.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pinned-source-counterfactuals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    name: Execute pinned real upstream source functions (never external requests)
+    steps:
+      - name: Checkout FALSUM code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout vulnerable Axios Git commit (sparse)
+        uses: actions/checkout@v4
+        with:
+          repository: axios/axios
+          ref: 8603e677c09fb81bd106999c194308dd230bc596
+          path: upstream/axios-before
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /lib/core/buildFullPath.js
+            /lib/helpers/isAbsoluteURL.js
+            /lib/helpers/combineURLs.js
+      - name: Checkout patched Axios Git commit (sparse)
+        uses: actions/checkout@v4
+        with:
+          repository: axios/axios
+          ref: 02c3c69ced0f8fd86407c23203835892313d7fde
+          path: upstream/axios-after
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /lib/core/buildFullPath.js
+            /lib/helpers/isAbsoluteURL.js
+            /lib/helpers/combineURLs.js
+      - name: Checkout vulnerable Django Git commit (sparse)
+        uses: actions/checkout@v4
+        with:
+          repository: django/django
+          ref: 9cefdfc43f0bae696b56fa5a0bf22346f85affff
+          path: upstream/django-before
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /django/contrib/humanize/templatetags/humanize.py
+      - name: Checkout patched Django Git commit (sparse)
+        uses: actions/checkout@v4
+        with:
+          repository: django/django
+          ref: 55519d6cf8998fe4c8f5c8abffc2b10a7c3d14e9
+          path: upstream/django-after
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /django/contrib/humanize/templatetags/humanize.py
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify source blobs and execute real Axios helper without requests
+        env:
+          AXIOS_BEFORE_DIR: ${{ github.workspace }}/upstream/axios-before
+          AXIOS_AFTER_DIR: ${{ github.workspace }}/upstream/axios-after
+          PHASE3X_AXIOS_OUT: ${{ github.workspace }}/evidence-run/axios-probe.json
+        run: |
+          set -euo pipefail
+          mkdir -p evidence-run
+          node --check tests/phase3x_axios_source_probe.cjs
+          node tests/phase3x_axios_source_probe.cjs
+      - name: Verify Django source blobs and execute isolated long-input counterfactual
+        run: |
+          set -euo pipefail
+          python tests/phase3x_django_source_probe.py \
+            --before upstream/django-before/django/contrib/humanize/templatetags/humanize.py \
+            --after upstream/django-after/django/contrib/humanize/templatetags/humanize.py \
+            --out evidence-run/django-probe.json
+      - name: Validate observed source-derived hard examples and measurement boundaries
+        env:
+          PYTHONPATH: src:tests
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p "test_phase3x_counterfactuals.py" -v
+          python -m falsum.phase3x_hard_cases \
+            --axios evidence-run/axios-probe.json \
+            --django evidence-run/django-probe.json \
+            --out evidence-run/phase3x-hard-diagnostics.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("evidence-run/phase3x-hard-diagnostics.json").read_text())
+          assert r["independent_human_labels"] == 0
+          assert r["trainable_pairs"] == []
+          assert r["registered_evaluator"] is False
+          assert r["network_eligible"] is False
+          assert r["actual_model_scoring_run"] is False
+          assert r["cases"] and len(r["cases"])>=4
+          PY
+      - name: Preserve exact source-execution counterfactual results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3X-TRUE-SOURCE-COUNTERFACTUALS-UNADJUDICATED
+          path: |
+            evidence-run/*.json
+          if-no-files-found: warn
+          retention-days: 30
