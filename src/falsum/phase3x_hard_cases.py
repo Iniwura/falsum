@@ -58,12 +58,22 @@ def validate_report(axios: dict, django: dict) -> None:
         or django.get("full_installed_django_runtime") is not False
         or django.get("http_server_or_production_dos_executed") is not False
         or django.get("localization_disabled_for_isolation") is not True
-        or len(django.get("cases", [])) != 2
-        or [c.get("digits") for c in django["cases"]] != [12, 3600]
+        or len(django.get("cases", [])) != 3
+        or [c.get("digits") for c in django["cases"]] != [13, 12, 3601]
         or django["cases"][0]["before"]["outcome"] != "returned"
         or django["cases"][0]["after"]["outcome"] != "returned"
-        or django["cases"][1]["before"]["outcome"] != "RecursionError"
+        or django["cases"][0]["before_matches_grouping_oracle"] is not True
+        or django["cases"][0]["after_matches_grouping_oracle"] is not True
+        or django["cases"][1]["before"]["outcome"] != "returned"
         or django["cases"][1]["after"]["outcome"] != "returned"
+        or django["cases"][1]["before"]["starts_with_comma"] is not False
+        or django["cases"][1]["after"]["starts_with_comma"] is not True
+        or django["cases"][1]["before_matches_grouping_oracle"] is not True
+        or django["cases"][1]["after_matches_grouping_oracle"] is not False
+        or django["cases"][2]["before"]["outcome"] != "RecursionError"
+        or django["cases"][2]["after"]["outcome"] != "returned"
+        or django["cases"][2]["after_matches_grouping_oracle"] is not True
+        or django.get("patched_12_digit_localization_disabled_leading_comma_observed") is not True
     ):
         raise ValueError("Django report lacks verified bounded pre/post source behavior")
 
@@ -136,6 +146,28 @@ def build(axios: dict, django: dict) -> dict:
                 "independent_expert_label": None,
                 "training_authorized": False
             })
+    # A separate, observable correctness mismatch: with localization disabled,
+    # this exact pinned fixed source revision prefixes 12-digit output with a comma.
+    # This is NOT an installed-Django release claim and is not the recursion test.
+    for version, field in (("parent", "before"), ("patched", "after")):
+        observed = django["cases"][1][field]["starts_with_comma"]
+        cases.append({
+            "id": "django-12-digit-leading-comma-" + version,
+            "family": "django-intcomma",
+            "upstream_version": version,
+            "changed_fact": "source revision, same 12-digit input, localization disabled",
+            "question": ("For the pinned " + version + " intcomma source function with "
+                         "use_l10n=False, what was the first character "
+                         "of the returned, grouped 12-digit string?"),
+            "candidate_answers": [
+                {"id":"A", "text":"The output begins with the first digit of the original number."},
+                {"id":"B", "text":"The output begins with a separator before its first digit."}
+            ],
+            "research_source_expected": "B" if observed else "A",
+            "observed_first_character_is_comma": observed,
+            "independent_expert_label":None,
+            "training_authorized":False
+        })
     # An ABSTAIN is appropriate when the code probe doesn't establish claims
     # about the real deployed system. Neither alternative is evidence-backed.
     cases.extend([
