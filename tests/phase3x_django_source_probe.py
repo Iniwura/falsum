@@ -77,10 +77,11 @@ def worker(path: Path, length: int):
             "length": len(output),
             "sha256": hashlib.sha256(output.encode()).hexdigest(),
             "comma_count": output.count(","),
+            "starts_with_comma": output.startswith(","),
         }
     except RecursionError:
         return {"outcome": "RecursionError", "length": None, "sha256": None,
-                "comma_count": None}
+                "comma_count": None, "starts_with_comma": None}
 
 
 def child_run(path: Path, length: int, timeout: int = 12):
@@ -105,6 +106,7 @@ def expected_grouping(length: int) -> dict:
         "length": len(grouped),
         "sha256": hashlib.sha256(grouped.encode()).hexdigest(),
         "comma_count": grouped.count(","),
+        "starts_with_comma": grouped.startswith(","),
     }
 
 
@@ -136,8 +138,8 @@ def main(argv=None):
             raise AssertionError("Patched source must preserve oracle grouping in these two lengths")
         if length in (12, 13) and old_result != expected:
             raise AssertionError("Pre-fix short ordinary formatting must still work")
-        if length == 12 and fixed_result == expected:
-            raise AssertionError("Pinned patched source no longer reproduces its observed leading-comma formatting discrepancy")
+        if length == 12 and (fixed_result == expected or fixed_result["starts_with_comma"] is not True):
+            raise AssertionError("Pinned patched source no longer reproduces observed leading-comma formatting discrepancy")
         if length == MAX_INPUT_DIGITS and old_result["outcome"] != "RecursionError":
             raise AssertionError("Long-input recursion did not reproduce with default Python recursion limit")
         cases.append({"digits":length, "before":old_result, "after":fixed_result,
