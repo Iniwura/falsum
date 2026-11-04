@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3X_TARGETED_UPSTREAM_SOURCES_EXECUTED_AND_UNADJUDICATED_HARD_CASES_BUILT",
+  "verified_date": "2026-11-04",
+  "pr": "https://github.com/Iniwura/falsum/pull/22",
+  "merge_commit": "07d80a544953249740534c4d7836b87ad5e61729",
+  "workflow": "https://github.com/Iniwura/falsum/actions/runs/41874616439",
+  "workflow_success": true,
+  "all_check_runs_before_merge_green": 14,
+  "artifact": "https://github.com/Iniwura/falsum/actions/runs/41874616439/artifacts/13345413321",
+  "source_execution": {
+    "axios": {
+      "upstream": "axios/axios",
+      "parent": "8603e677c09fb81bd106999c194308dd230bc596",
+      "fixed": "02c3c69ced0f8fd86407c23203835892313d7fde",
+      "tested_scenarios": 6,
+      "changed_origin_scenarios": 2,
+      "primary_and_helper_git_blobs_verified": true,
+      "full_axios_request_sent": false
+    },
+    "django": {
+      "upstream": "django/django",
+      "parent": "9cefdfc43f0bae696b56fa5a0bf22346f85affff",
+      "fixed": "55519d6cf8998fe4c8f5c8abffc2b10a7c3d14e9",
+      "source_function_ast_extracted_from_verified_blob": true,
+      "full_django_package_run": false,
+      "inputs_digits": [
+        13,
+        12,
+        3601
+      ],
+      "recursion_limit_normalized": 1000,
+      "short_old_returns": true,
+      "long_old_recursion_error": true,
+      "long_fixed_returns": true,
+      "fixed_12_digit_localization_disabled_leading_comma_observed": true,
+      "production_security_impact_inferred": false
+    }
+  },
+  "internal_diagnostics": {
+    "count": 18,
+    "families": 2,
+    "includes_real_changed_fact_preference_reversals": true,
+    "abstention_cases": 2,
+    "candidate_texts_researcher_authored": true,
+    "no_new_model_scores": true,
+    "independent_human_labels": 0,
+    "trainable_pairs": 0,
+    "network_eligible": false,
+    "new_anjoman_rows": 0,
+    "registered_evaluator": false,
+    "known_not_blind": true
+  },
+  "confidentiality": {
+    "private_network_questions_not_published": true,
+    "previous_eligible_anjoman_rows_unchanged": 20,
+    "live_production_ui_modified": false,
+    "bounty_approval_unverified": true
+  },
+  "next": "Independent human source assessment and frozen project-disjoint evaluation before any scorer retune; run real model and baseline on same approved held-out material, preserve failures."
+}
