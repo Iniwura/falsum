@@ -1,0 +1,177 @@
+name: Phase 3Y - actual original Foundation LoRA on eight harder source cases
+on:
+  push:
+    paths:
+      - 'src/falsum/phase3y_hard_model_probe.py'
+      - 'tests/test_phase3y_hard_model_probe.py'
+      - '.github/workflows/phase3y-real-hard-model-diagnostic.yml'
+      - 'docs/PHASE3Y.md'
+  pull_request:
+    paths:
+      - 'src/falsum/phase3y_hard_model_probe.py'
+      - 'tests/test_phase3y_hard_model_probe.py'
+      - '.github/workflows/phase3y-real-hard-model-diagnostic.yml'
+      - 'docs/PHASE3Y.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  authentic-original-model-hard-source-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    env:
+      PYTHONUNBUFFERED: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fail-closed synthetic parser tests; no fake model result can pass as evidence
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3y_hard_model_probe.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3x_counterfactuals.py -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3j_model_diagnostics.py -v
+      - name: Fetch genuinely executed fixed-run pinned Axios and Django source evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: FALSUM-PHASE3X-TRUE-SOURCE-COUNTERFACTUALS-UNADJUDICATED
+          run-id: 41874616439
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/phase3y/source
+      - name: Verify real source reports, not mock fixtures
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/phase3y/source"
+          test -s "$d/axios-probe.json"
+          test -s "$d/django-probe.json"
+          PYTHONPATH=src python - "$d/axios-probe.json" "$d/django-probe.json" <<'PY'
+          import json,sys
+          from falsum.phase3y_hard_model_probe import load_cases
+          a,d=(json.load(open(p)) for p in sys.argv[1:])
+          _,cases=load_cases(a,d)
+          assert len(cases)==8
+          print('8 predeclared counterfactual source-based cases from Phase3X real CI')
+          PY
+      - name: Checkout exact Telegraph official Go Foundation scoring toolchain
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Fetch ORIGINAL quarantined LoRA, never train or register
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE3B-RESEARCH-DELTA-NOT-NETWORK-REGISTERED
+          run-id: 41304788714
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/phase3y/model
+      - name: Verify exact unchanged research LoRA bytes
+        run: |
+          set -euo pipefail
+          pkg="$(find "$RUNNER_TEMP/phase3y/model" -type f -name SECURITY_REVIEW.safetensors -print -quit)"
+          test -n "$pkg"
+          echo "3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc  $pkg" | sha256sum -c -
+          echo "MODEL_PACKAGE=$pkg" >> "$GITHUB_ENV"
+      - name: Retrieve official Foundation and WASI assets with exact checksums
+        run: |
+          set -euo pipefail
+          f="$RUNNER_TEMP/phase3y/foundation"
+          mkdir -p "$f" "$RUNNER_TEMP/phase3y/results"
+          base='https://github.com/telegraphprotocol/telegraph-foundation/releases/download/modernbert-base-lora16-v1'
+          for asset in foundation.json foundation_engine.wasm foundation_lora_fp32.onnx tokenizer.json; do
+            curl --fail --location --silent --show-error --retry 3 "$base/$asset" -o "$f/$asset"
+          done
+          (
+            cd "$f"
+            printf '%s  %s\n' \
+              f7de64b999acd3f735118fbe5999abf251fdf188f9797e3a4e36c54ee9e4dbbe foundation.json \
+              77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de foundation_engine.wasm \
+              0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6 foundation_lora_fp32.onnx \
+              67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456 tokenizer.json \
+              | sha256sum -c -
+          )
+      - name: Generate 16 pinned A/B inputs, refuse truncation, no abstain-as-binary
+        run: |
+          set -euo pipefail
+          python -m pip install 'tokenizers==0.22.2'
+          PYTHONPATH=src python -m falsum.phase3y_hard_model_probe \
+            --axios "$RUNNER_TEMP/phase3y/source/axios-probe.json" \
+            --django "$RUNNER_TEMP/phase3y/source/django-probe.json" \
+            --tokenizer "$RUNNER_TEMP/phase3y/foundation/tokenizer.json" \
+            --out "$RUNNER_TEMP/phase3y/results/FROZEN-KNOWN-HARD-INPUTS.json"
+      - name: Compile pinned official Go scorer
+        run: |
+          set -euo pipefail
+          cd telegraph-kit
+          go build -o "$RUNNER_TEMP/phase3y/adapterbuild" ./cmd/adapterbuild
+      - name: Actual Foundation ONNX plus WASI inference, twice for each of 16 inputs
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/phase3y/results"
+          f="$RUNNER_TEMP/phase3y/foundation"
+          python - "$d/FROZEN-KNOWN-HARD-INPUTS.json" <<'PY' > "$d/INPUT-IDS.txt"
+          import json,re,sys
+          x=json.load(open(sys.argv[1]))
+          assert x['status']=='PHASE3Y_FROZEN_KNOWN_HARD_MODEL_INPUTS_NOT_A_BLIND_HOLDOUT'
+          assert len(x['inputs'])==16
+          for row in x['inputs']:
+              assert re.fullmatch(r'[a-z0-9-]+--[AB]',row['id'])
+              print(row['id'])
+          PY
+          while IFS= read -r id; do
+            test -n "$id"
+            mkdir -p "$d/$id"
+            "$RUNNER_TEMP/phase3y/adapterbuild" lora \
+              --intent SECURITY_REVIEW \
+              --package "$MODEL_PACKAGE" \
+              --foundation "$f/foundation.json" \
+              --foundation-onnx "$f/foundation_lora_fp32.onnx" \
+              --engine "$f/foundation_engine.wasm" \
+              --engine-hash 77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de \
+              --input "$d/SCORE-$id.json" \
+              --out "$d/$id" \
+              > "$d/$id/OFFICIAL-SCORE.json" \
+              2> "$d/$id/OFFICIAL-ENGINE-LOG.txt"
+          done < "$d/INPUT-IDS.txt"
+      - name: Audit actual scores and document negative results without lifting release veto
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/phase3y/results"
+          PYTHONPATH=src python -m falsum.phase3y_hard_model_probe \
+            --axios "$RUNNER_TEMP/phase3y/source/axios-probe.json" \
+            --django "$RUNNER_TEMP/phase3y/source/django-probe.json" \
+            --inputs "$d/FROZEN-KNOWN-HARD-INPUTS.json" \
+            --scores-dir "$d" \
+            --out "$d/ACTUAL-KNOWN-HARD-MODEL-RESULTS.json"
+          python - "$d/ACTUAL-KNOWN-HARD-MODEL-RESULTS.json" <<'PY'
+          import json,os,sys
+          x=json.load(open(sys.argv[1]))
+          assert x['actual_official_foundation_inference'] is True
+          assert x['real_inference_calls_including_repeats']==32
+          assert x['independent_expert_labels']==0
+          assert x['blind_holdout'] is False
+          assert x['model_release_veto_remains'] is True
+          assert x['registered_evaluator'] is False
+          assert x['automatic_registration_permitted'] is False
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              out.write('### Real original FALSUM LoRA on eight known hard source conditions\n\n')
+              out.write(f"Actual score inputs: 16; repeat-verified inferences: 32; provisional matches: {x['provisional_matches']}/8; complete provisional reversals: {x['complete_provisional_reversals']}/4.\n\n")
+              out.write('Constant-A and constant-B baselines: 4/8 each. These are *researcher source rules*, NOT independently reviewed accuracy labels.\n\n')
+              out.write('**DO NOT REGISTER.** Existing model quality veto remains. Known public source families, no blind holdout, no new Anjoman rows or human verdicts.\n')
+          PY
+      - name: Preserve real model inputs, source provenance and negative results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3Y-ACTUAL-ORIGINAL-MODEL-HARD-COUNTERFACTUAL-NO-RELEASE
+          path: |
+            ${{ runner.temp }}/phase3y/source/*.json
+            ${{ runner.temp }}/phase3y/results/*
+          retention-days: 14
+          if-no-files-found: warn
