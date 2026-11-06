@@ -6,12 +6,18 @@ on:
       - 'tests/test_phase3y_hard_model_probe.py'
       - '.github/workflows/phase3y-real-hard-model-diagnostic.yml'
       - 'docs/PHASE3Y.md'
+      - 'src/falsum/phase3y_recorded_evidence.py'
+      - 'tests/test_phase3y_recorded_evidence.py'
+      - 'evidence/phase3y-2026-11-05-real-model-failure.json'
   pull_request:
     paths:
       - 'src/falsum/phase3y_hard_model_probe.py'
       - 'tests/test_phase3y_hard_model_probe.py'
       - '.github/workflows/phase3y-real-hard-model-diagnostic.yml'
       - 'docs/PHASE3Y.md'
+      - 'src/falsum/phase3y_recorded_evidence.py'
+      - 'tests/test_phase3y_recorded_evidence.py'
+      - 'evidence/phase3y-2026-11-05-real-model-failure.json'
   workflow_dispatch:
 permissions:
   contents: read
@@ -165,6 +171,13 @@ jobs:
               out.write('Constant-A and constant-B baselines: 4/8 each. These are *researcher source rules*, NOT independently reviewed accuracy labels.\n\n')
               out.write('**DO NOT REGISTER.** Existing model quality veto remains. Known public source families, no blind holdout, no new Anjoman rows or human verdicts.\n')
           PY
+      - name: Reconcile exact REAL score bits to permanent pinned failure record
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase3y_recorded_evidence.py -v
+          PYTHONPATH=src python -m falsum.phase3y_recorded_evidence \
+            --ledger evidence/phase3y-2026-11-05-real-model-failure.json \
+            --artifact-root "$RUNNER_TEMP/phase3y"
       - name: Preserve real model inputs, source provenance and negative results
         if: always()
         uses: actions/upload-artifact@v4
