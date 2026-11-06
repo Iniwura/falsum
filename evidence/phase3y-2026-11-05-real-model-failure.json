@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3Y_REAL_MODEL_FAILED_ALL_CONTEXT_REVERSALS_RESEARCH_ONLY",
+  "date": "2026-11-05",
+  "source": "https://github.com/Iniwura/falsum/actions/runs/42105873138",
+  "artifact_url": "https://github.com/Iniwura/falsum/actions/runs/42105873138/artifacts/13450729962",
+  "artifact_sha256": "a0437518e12838017b3e0731cb02bb3a11de2965d524e39ac279a77d1f842605",
+  "artifact_file_sha256": {
+    "source/axios-probe.json": "c0e0d7accd42e6daeb49c9b74cef7da3e21fbc19901c70e9ce2bdba0db715b89",
+    "source/django-probe.json": "18e0e95f12e6cfbb22da89c8b11261af4967ba3634da4cbb099a3f963f85ebbc",
+    "results/FROZEN-KNOWN-HARD-INPUTS.json": "284148feaa5319d459654e421bb706e7c096764c8cdbdcb5592fcfe353e4a392",
+    "results/ACTUAL-KNOWN-HARD-MODEL-RESULTS.json": "ee6c707609c3a7762b45dfba80a46c32b9f5e0bfb1f007a3d3e4e519776257bf"
+  },
+  "score_bits_by_input": {
+    "axios-01--A": "0xbfa602b6",
+    "axios-01--B": "0xbfaa198b",
+    "axios-02--A": "0xbfa7c494",
+    "axios-02--B": "0xbfad996d",
+    "axios-07--A": "0xbfa73c64",
+    "axios-07--B": "0xbfac3dd1",
+    "axios-08--A": "0xbfab1ba1",
+    "axios-08--B": "0xbfafac9c",
+    "django-3601-parent--A": "0xbebc562c",
+    "django-3601-parent--B": "0xbf149d9d",
+    "django-3601-patched--A": "0xbefff974",
+    "django-3601-patched--B": "0xbf380e10",
+    "django-12-digit-leading-comma-parent--A": "0xbf3a630a",
+    "django-12-digit-leading-comma-parent--B": "0xbf25c478",
+    "django-12-digit-leading-comma-patched--A": "0xbf5b5634",
+    "django-12-digit-leading-comma-patched--B": "0xbf493b55"
+  },
+  "verified_audit": {
+    "actual_official_foundation_inference": true,
+    "automatic_registration_permitted": false,
+    "blind_holdout": false,
+    "case_results": [
+      {
+        "case_id": "axios-01",
+        "family": "axios-buildFullPath",
+        "margin_a_minus_b": 0.031946778297424316,
+        "matches_provisional": true,
+        "model_preferred": "A",
+        "source_executed_provisional_preference": "A"
+      },
+      {
+        "case_id": "axios-02",
+        "family": "axios-buildFullPath",
+        "margin_a_minus_b": 0.04555809497833252,
+        "matches_provisional": false,
+        "model_preferred": "A",
+        "source_executed_provisional_preference": "B"
+      },
+      {
+        "case_id": "axios-07",
+        "family": "axios-buildFullPath",
+        "margin_a_minus_b": 0.039106011390686035,
+        "matches_provisional": true,
+        "model_preferred": "A",
+        "source_executed_provisional_preference": "A"
+      },
+      {
+        "case_id": "axios-08",
+        "family": "axios-buildFullPath",
+        "margin_a_minus_b": 0.035674452781677246,
+        "matches_provisional": false,
+        "model_preferred": "A",
+        "source_executed_provisional_preference": "B"
+      },
+      {
+        "case_id": "django-3601-parent",
+        "family": "django-intcomma",
+        "margin_a_minus_b": 0.21268504858016968,
+        "matches_provisional": false,
+        "model_preferred": "A",
+        "source_executed_provisional_preference": "B"
+      },
+      {
+        "case_id": "django-3601-patched",
+        "family": "django-intcomma",
+        "margin_a_minus_b": 0.21901452541351318,
+        "matches_provisional": true,
+        "model_preferred": "A",
+        "source_executed_provisional_preference": "A"
+      },
+      {
+        "case_id": "django-12-digit-leading-comma-parent",
+        "family": "django-intcomma",
+        "margin_a_minus_b": -0.08054459095001221,
+        "matches_provisional": false,
+        "model_preferred": "B",
+        "source_executed_provisional_preference": "A"
+      },
+      {
+        "case_id": "django-12-digit-leading-comma-patched",
+        "family": "django-intcomma",
+        "margin_a_minus_b": -0.07072252035140991,
+        "matches_provisional": true,
+        "model_preferred": "B",
+        "source_executed_provisional_preference": "B"
+      }
+    ],
+    "complete_provisional_reversals": 0,
+    "constant_A_baseline_matches": 4,
+    "constant_B_baseline_matches": 4,
+    "counterfactual_groups": [
+      {
+        "group": "axios-strict-absolute",
+        "both_source_rules_match": false,
+        "model_preference_reverses": false,
+        "source_rule_reverses": true
+      },
+      {
+        "group": "axios-strict-protocol-relative",
+        "both_source_rules_match": false,
+        "model_preference_reverses": false,
+        "source_rule_reverses": true
+      },
+      {
+        "group": "django-long-input",
+        "both_source_rules_match": false,
+        "model_preference_reverses": false,
+        "source_rule_reverses": true
+      },
+      {
+        "group": "django-leading-comma",
+        "both_source_rules_match": false,
+        "model_preference_reverses": false,
+        "source_rule_reverses": true
+      }
+    ],
+    "foundation_sha256": "0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6",
+    "frozen_inputs_sha256": "6243a199286367280b557d9f0ba1a9fcadde1f7741ff591fa05355b772e3a060",
+    "independent_expert_labels": 0,
+    "model_release_veto_remains": true,
+    "network_eligible": false,
+    "notice": "Actual model preferences on known source-executed research cases, compared only with researcher-provisional source observation. The result may fail. No expert validation, measured security accuracy, new material submission, or registration is claimed.",
+    "official_tokenizer_sha256": "67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456",
+    "original_model_sha256": "3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc",
+    "prior_known_source_families": 2,
+    "provisional_matches": 4,
+    "real_inference_calls_including_repeats": 32,
+    "real_score_inputs": 16,
+    "registered_evaluator": false,
+    "schema_version": 1,
+    "status": "PHASE3Y_REAL_QUARANTINED_MODEL_HARD_SOURCE_DIAGNOSTIC_ONLY"
+  },
+  "truth_boundaries": {
+    "real_official_model_inference": true,
+    "known_source_families_only": true,
+    "human_approved_labels": 0,
+    "new_network_rows": 0,
+    "no_retraining": true,
+    "model_registration_permitted": false,
+    "model_quality_passed": false,
+    "impact_on_production_ui": false,
+    "existing_20_eligible_anjoman_rows_untouched": true
+  }
+}
