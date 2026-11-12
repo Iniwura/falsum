@@ -1,0 +1,125 @@
+name: Phase 4B - source-grounded reference judge and abstention stress test
+on:
+  push:
+    paths:
+      - 'src/falsum/phase4b_reference_judge.py'
+      - 'tests/test_phase4b_reference_judge.py'
+      - '.github/workflows/phase4b-reference-judge.yml'
+      - 'docs/PHASE4B.md'
+      - 'examples/phase4b-evidence-check-requests.json'
+  pull_request:
+    paths:
+      - 'src/falsum/phase4b_reference_judge.py'
+      - 'tests/test_phase4b_reference_judge.py'
+      - '.github/workflows/phase4b-reference-judge.yml'
+      - 'docs/PHASE4B.md'
+      - 'examples/phase4b-evidence-check-requests.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  verify-source-claims-and-no-unsupported-vulnerability-assertions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic adversarial tests - no model-accuracy claims
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase4b_reference_judge.py' -v
+      - name: Fetch pinned REAL upstream Github Advisory and PyPI verification evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: FALSUM-PHASE3Z-THREE-REAL-ADVISORY-PACKAGES-SIX-VERSION-CASES-NOT-LABELS
+          run-id: 43286926731
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/phase4b/source
+      - name: Confirm authentic public-source SHA256 and existing real model failure provenance
+        run: |
+          set -euo pipefail
+          src="$RUNNER_TEMP/phase4b/source/PHASE3Z-REAL-SOURCE-CATALOGUE-VERSION-REVERSALS-UNREVIEWED.json"
+          test -s "$src"
+          echo "82347910cb443f2b1cbde565107dbbd280f40e884ca45f2abfd501a8a5d108a8  $src" | sha256sum -c -
+          PYTHONPATH=src python -m falsum.phase4a_recorded_evidence \
+            --ledger evidence/phase4a-2026-11-12-real-original-model-failure.json
+      - name: Evaluate 36 authentic source-grounded claims, false claims and abstentions
+        run: |
+          set -euo pipefail
+          mkdir -p evidence-run
+          PYTHONPATH=src python -m falsum.phase4b_reference_judge \
+            --source "$RUNNER_TEMP/phase4b/source/PHASE3Z-REAL-SOURCE-CATALOGUE-VERSION-REVERSALS-UNREVIEWED.json" \
+            --old-model-ledger evidence/phase4a-2026-11-12-real-original-model-failure.json \
+            --out evidence-run/PHASE4B-REAL-SOURCE-GROUNDED-REFERENCE-36-CLAIMS-NOT-AN-ADAPTER.json
+      - name: Replay public developer sample claims, including malformed evidence and missing facts
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase4b_reference_judge \
+            --source "$RUNNER_TEMP/phase4b/source/PHASE3Z-REAL-SOURCE-CATALOGUE-VERSION-REVERSALS-UNREVIEWED.json" \
+            --claims examples/phase4b-evidence-check-requests.json \
+            --out evidence-run/PHASE4B-REAL-DEVELOPER-SAMPLE-INPUTS.json
+          python - <<'PY'
+          import json
+          data=json.load(open("evidence-run/PHASE4B-REAL-DEVELOPER-SAMPLE-INPUTS.json"))
+          assert data["total_claims"] == 5
+          assert [r["judgement"]["verdict"] for r in data["cases"]] == [
+              "SUPPORTED","CONTRADICTED","ABSTAIN","ABSTAIN","ABSTAIN"]
+          assert data["source_derived_fixture_count"] == 0
+          assert data["not_telegraph_network_adapter"] is True
+          assert data["registered_evaluator"] is False
+          print("Real developer example: 1 support, 1 contradiction, 3 abstentions; zero invented gold labels")
+          PY
+      - name: Fail if source-derived coverage, abuse controls or historical comparisons are misstated
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,hashlib,os
+          from pathlib import Path
+          p=Path("evidence-run/PHASE4B-REAL-SOURCE-GROUNDED-REFERENCE-36-CLAIMS-NOT-AN-ADAPTER.json")
+          raw=p.read_bytes()
+          x=json.loads(raw)
+          assert x["status"]=="PHASE4B_SOURCE_GROUNDED_REFERENCE_JUDGE_OFFLINE_RESEARCH_ONLY"
+          assert x["source_sha256"]=="82347910cb443f2b1cbde565107dbbd280f40e884ca45f2abfd501a8a5d108a8"
+          assert x["verified_advisory_package_projects"]==3
+          assert (x["total_claims"],x["supported"],x["contradicted"],x["abstained"]) == (36,6,6,24)
+          assert x["source_derived_fixture_agreement"]==x["source_derived_fixture_count"]==36
+          assert x["not_a_semantic_security_review_model"] is True
+          assert x["not_telegraph_network_adapter"] is True
+          assert x["not_an_independent_or_blind_model_quality_test"] is True
+          assert x["independent_expert_labels"]==0 and x["network_eligible_rows"]==0
+          assert x["registered_evaluator"] is False
+          assert x["model_training_or_release_authorized"] is False
+          h=x["historical_old_model"]
+          assert (h["verified_source_fact_matches"],h["total_binary_comparisons"],h["complete_version_fact_reversals"]) == (3,6,0)
+          assert h["model_release_authorized"] is False
+          assert h["not_comparable_to_abstention_stress_tests"] is True
+          for row in x["cases"]:
+              assert row["judgement"]["independent_expert_label"] is False
+              assert row["judgement"]["deployment_exploitability_assessed"] is False
+              assert row["judgement"]["registered_evaluator"] is False
+          digest=hashlib.sha256(raw).hexdigest()
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### FALSUM offline GHSA source-reference checker (not a network adapter)\n\n")
+              f.write("6 supported catalogue facts; 6 contradicted catalogue facts; "
+                      "24 safe abstentions for unsupported deployment/safety claims or unverified evidence/versions.\n\n")
+              f.write("36/36 known SOURCE-DERIVED fixture rulings correct **by construction**. "
+                      "This is NOT independent model security accuracy or sealed generalization.\n\n")
+              f.write("The unchanged real LoRA scored 3/6 on the **six comparable binary inputs**; "
+                      "0/3 context reversals. It has NOT been replaced, retrained or registered.\n\n")
+              f.write("Actual source-bound reference report SHA256: "+digest+"\n")
+          print("Verified public-source reference report SHA256:",digest)
+          PY
+      - name: Preserve reproducible source-grounded report through hackathon judging
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE4B-36-PUBLIC-SOURCE-FACT-AND-ABSTAIN-CASES-NOT-A-TELEGRAPH-ADAPTER
+          path: |
+            evidence-run/*.json
+            ${{ runner.temp }}/phase4b/source/*.json
+          retention-days: 90
+          if-no-files-found: error

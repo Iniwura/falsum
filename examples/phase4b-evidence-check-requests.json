@@ -1,0 +1,72 @@
+[
+  {
+    "test_id": "docling-affected-source-supported",
+    "claim": {
+      "package": "docling-core",
+      "version": "2.48.3",
+      "advisory": "GHSA-vqxf-v2gg-x3hc",
+      "claim_type": "IN_NAMED_GHSA_RANGE",
+      "evidence": {
+        "pinned_advisory_sha256": "7837586cf082bd918be2aaca15f6137c2e8b28ce9d953644197c8766d8e7540a",
+        "pypi_release_metadata_sha256": "d3c6e8e71dd558c7c8062d9e589fe432e7c42fb80a40e8a096f0c98b7c58cb88",
+        "pypi_release_url": "https://pypi.org/pypi/docling-core/2.48.3/json"
+      }
+    }
+  },
+  {
+    "test_id": "hydra-fixed-version-refutes-in-range",
+    "claim": {
+      "package": "hydra-core",
+      "version": "1.3.8",
+      "advisory": "GHSA-wf6j-7hvr-gr93",
+      "claim_type": "IN_NAMED_GHSA_RANGE",
+      "evidence": {
+        "pinned_advisory_sha256": "9e3d1cb339b3e9eb177326d42f916216da755bb629eecc313170edb39fcbc3d2",
+        "pypi_release_metadata_sha256": "5bb9a082162b0ef5e7b8ac78b6473fd6933505157a295c17d1d58f33d4cf8d64",
+        "pypi_release_url": "https://pypi.org/pypi/hydra-core/1.3.8/json"
+      }
+    }
+  },
+  {
+    "test_id": "multipart-fixed-is-not-global-safety",
+    "claim": {
+      "package": "python-multipart",
+      "version": "0.0.26",
+      "advisory": "GHSA-mj87-hwqh-73pj",
+      "claim_type": "GUARANTEED_APPLICATION_SAFE",
+      "evidence": {
+        "pinned_advisory_sha256": "5d34e7e9046fc498499e11fa59fe87f9b0c09a67d4dae790c8bbe9f14342b9c7",
+        "pypi_release_metadata_sha256": "636e046567bcb06a4ffb80e42b65ba1155bbea80a074d4fb9e08f3898813d374",
+        "pypi_release_url": "https://pypi.org/pypi/python-multipart/0.0.26/json"
+      }
+    }
+  },
+  {
+    "test_id": "docling-tampered-advisory-proof",
+    "claim": {
+      "package": "docling-core",
+      "version": "2.48.3",
+      "advisory": "GHSA-vqxf-v2gg-x3hc",
+      "claim_type": "IN_NAMED_GHSA_RANGE",
+      "evidence": {
+        "pinned_advisory_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "pypi_release_metadata_sha256": "d3c6e8e71dd558c7c8062d9e589fe432e7c42fb80a40e8a096f0c98b7c58cb88",
+        "pypi_release_url": "https://pypi.org/pypi/docling-core/2.48.3/json"
+      }
+    }
+  },
+  {
+    "test_id": "multipart-unverified-new-version",
+    "claim": {
+      "package": "python-multipart",
+      "version": "0.0.27",
+      "advisory": "GHSA-mj87-hwqh-73pj",
+      "claim_type": "OUTSIDE_NAMED_GHSA_RANGE",
+      "evidence": {
+        "pinned_advisory_sha256": "5d34e7e9046fc498499e11fa59fe87f9b0c09a67d4dae790c8bbe9f14342b9c7",
+        "pypi_release_metadata_sha256": "636e046567bcb06a4ffb80e42b65ba1155bbea80a074d4fb9e08f3898813d374",
+        "pypi_release_url": "https://pypi.org/pypi/python-multipart/0.0.26/json"
+      }
+    }
+  }
+]
