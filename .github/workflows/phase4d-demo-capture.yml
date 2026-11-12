@@ -56,6 +56,11 @@ jobs:
         run: |
           set -euo pipefail
           node tests/browser/phase4d_authentic_demo_capture.cjs
+      - name: Install FFmpeg metadata validator
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
       - name: Validate video and source claims with ffprobe
         run: |
           set -euo pipefail
