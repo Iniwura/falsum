@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "status": "PHASE3Z_PINNED_REAL_GHSA_AND_PYPI_SOURCE_RECEIPT_NOT_A_MODEL_SCORE",
+  "verified_at": "2026-11-12",
+  "source_run_url": "https://github.com/Iniwura/falsum/actions/runs/43286926731",
+  "source_artifact_url": "https://github.com/Iniwura/falsum/actions/runs/43286926731/artifacts/13975646173",
+  "source_artifact_zip_sha256": "0726bd28306da96f5172aaf7b71bf2074e800d129a26333c029b2d8f7cfc4173",
+  "source_artifact_report_member": "PHASE3Z-REAL-SOURCE-CATALOGUE-VERSION-REVERSALS-UNREVIEWED.json",
+  "source_artifact_report_sha256": "82347910cb443f2b1cbde565107dbbd280f40e884ca45f2abfd501a8a5d108a8",
+  "pinned_advisory_database_commit": "b2a0c7d47ab94089f8774eacdc65ad80f2457170",
+  "advisory_source_sha256": {
+    "GHSA-vqxf-v2gg-x3hc": "7837586cf082bd918be2aaca15f6137c2e8b28ce9d953644197c8766d8e7540a",
+    "GHSA-wf6j-7hvr-gr93": "9e3d1cb339b3e9eb177326d42f916216da755bb629eecc313170edb39fcbc3d2",
+    "GHSA-mj87-hwqh-73pj": "5d34e7e9046fc498499e11fa59fe87f9b0c09a67d4dae790c8bbe9f14342b9c7"
+  },
+  "observed_case_count": 6,
+  "verified_distinct_source_package_count": 3,
+  "verified_affected_fixed_reversal_groups": 3,
+  "observed_correct_catalogue_order": [
+    "A",
+    "B",
+    "A",
+    "B",
+    "A",
+    "B"
+  ],
+  "source_release_facts": [
+    {
+      "package": "docling-core",
+      "advisory": "GHSA-vqxf-v2gg-x3hc",
+      "affected_release": "2.48.3",
+      "fixed_release": "2.48.4"
+    },
+    {
+      "package": "hydra-core",
+      "advisory": "GHSA-wf6j-7hvr-gr93",
+      "affected_release": "1.3.7",
+      "fixed_release": "1.3.8"
+    },
+    {
+      "package": "python-multipart",
+      "advisory": "GHSA-mj87-hwqh-73pj",
+      "affected_release": "0.0.25",
+      "fixed_release": "0.0.26"
+    }
+  ],
+  "actual_model_scoring_run": false,
+  "blind_holdout": false,
+  "external_human_expert_review_count": 0,
+  "new_network_eligible_rows": 0,
+  "registered_evaluator": false,
+  "training_allowed": false,
+  "notice": "This receipt records actual version and catalogue source identity checks from the linked successful GitHub Actions run. The six expected answer choices reflect mechanically extracted advisory boundaries, not a model's measured decisions or independently adjudicated live vulnerability claims."
+}
