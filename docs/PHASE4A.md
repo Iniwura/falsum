@@ -40,6 +40,26 @@ PYTHONPATH=src python -m unittest discover -s tests -p test_phase4a_real_model_p
 
 The unit test intentionally uses **synthetic tokens and fake scores** to challenge all parser and release boundaries. These are NOT actual model measurements. Only the genuine source-bound official inference workflow's report can establish observed old-model preferences.
 
+
+## Actual original-model observations — 12 November 2026
+
+**Original runtime success ≠ model quality success.** The actual [Foundation ONNX/WASI scoring workflow](https://github.com/Iniwura/falsum/actions/runs/43289770022) completed with **12 genuine model score packets / 24 bit-consistent inferences**. [Original official output artifact](https://github.com/Iniwura/falsum/actions/runs/43289770022/artifacts/13976527819) contains the frozen input IDs, official manifest, individual f32 bit-encoded scores, and final auditor report. [Permanent bit-exact failure record](../evidence/phase4a-2026-11-12-real-original-model-failure.json) is independently checked by the release-blocking CI stage.
+
+| Package | Source-affected version (expected A) | Source-fixed version (expected B) | Model choice on both | Correct context reversal |
+| --- | --- | --- | --- | --- |
+| docling-core | 2.48.3 | 2.48.4 | A / A | **Fail** |
+| hydra-core | 1.3.7 | 1.3.8 | A / A | **Fail** |
+| python-multipart | 0.0.25 | 0.0.26 | A / A | **Fail** |
+
+- **3/6** agreement with the narrow, mechanically derived GHSA advisory-version facts.
+- **0/3** complete affected-to-fixed preference reversals; the model did not change its winner in any of the three changed-version groups.
+- **3/6** matches for constant-A **and** constant-B trivial baselines on this balanced test.
+- Exact result JSON SHA-256: **9a7dc55b7838fba00504663ea2a06fba3fddb8b344f003f5c57565af0d8361df**. Source report SHA-256: **82347910cb443f2b1cbde565107dbbd280f40e884ca45f2abfd501a8a5d108a8**.
+
+This result is **not** evidence that 50% is general AppSec accuracy. It is a measured tendency to choose the same answer text despite an explicit dependency-version change, on three public, source-verified examples. These were previously unstudied by our source-case pipeline but are public and not demonstrably absent from model pretraining.
+
+**Decision: failed quality gate; do not register the original LoRA.** A model that only matches a constant-choice heuristic here is not ready. For the November 17 finish line, focus on stronger independently verifiable evaluation material and genuine external review. A replacement evaluator must be evaluated on new, sealed and independently adjudicated material, without using these public failed examples as an invisible holdout.
+
 ## Release decision
 
 Until independent review, a new project-disjoint sealed test set, and satisfactory comparative model results exist, the original LoRA remains quarantined. **Phase 4A never retrains or registers** anything. It does not alter the 20 previously Anjoman-eligible user material rows, mint new network-eligible records, or modify the production UI. Phase 4A is a diagnostic step toward a robust evaluation-material submission, not independent evidence of security accuracy or a better evaluator.
