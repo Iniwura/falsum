@@ -52,7 +52,7 @@ class Phase4CJudgeReleaseTests(unittest.TestCase):
                      'aria-label="Choose a version"', 'id="version-0"', 'id="version-1"',
                      'id="advisory-link"', 'id="score-a"', 'id="score-b"',
                      'id="verdict"', 'type="application/json"', 'prefers-reduced-motion',
-                     'max-width:360px', "No registered evaluator", "0/3"):
+                     'max-width:360px', "Not a registered evaluator", "0/3"):
             self.assertIn(text,markup)
         self.assertNotIn("fetch(",markup)
         self.assertNotIn("https://cdn.",markup)
