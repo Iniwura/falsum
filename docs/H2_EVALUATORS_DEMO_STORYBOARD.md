@@ -20,6 +20,16 @@ Telegraph Season II / Evaluators / SECURITY_REVIEW_GENERAL. Aim for 3:00–3:20 
 | **2:45–3:05** | Show the bounty contribution's genuine public [GitHub /submit](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396). If safely accessible, show the contributor account's real **20 Eligible** status with private account details and prompt text hidden. | “FALSUM also submitted 20 source-referenced evaluation pairs to Telegraph's Anjoman contributor flow. They appeared eligible in our account. Maintainer acceptance and an active scoring adapter are not claimed.” |
 | **3:05–3:20** | Show the repo README's first screen, website links and [review invitation](https://github.com/Iniwura/falsum/issues/25). Finish on real proof page. | “FALSUM is evaluation material built for scrutiny. Review the evidence, run the examples, and tell us what fails. We want better measurements, not confident guesses.” |
 
+## Live-fixture verification before recording
+
+The final site is built with the combined Phase 4C static release. For an independent reproduction of **only the original three fictional Python workflows**, the previous entrypoint remains available:
+
+~~~bash
+PYTHONPATH=src python -m falsum.phase3q_mission_lab --out-dir original-lab-only
+~~~
+
+The official submission asks for a **2–5 minute** real-screen demo or accessible equivalent. This script targets roughly 3:20 within that requirement.
+
 ## Recording rules
 
 **Do not**:
