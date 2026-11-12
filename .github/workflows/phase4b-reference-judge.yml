@@ -6,12 +6,14 @@ on:
       - 'tests/test_phase4b_reference_judge.py'
       - '.github/workflows/phase4b-reference-judge.yml'
       - 'docs/PHASE4B.md'
+      - 'examples/phase4b-evidence-check-requests.json'
   pull_request:
     paths:
       - 'src/falsum/phase4b_reference_judge.py'
       - 'tests/test_phase4b_reference_judge.py'
       - '.github/workflows/phase4b-reference-judge.yml'
       - 'docs/PHASE4B.md'
+      - 'examples/phase4b-evidence-check-requests.json'
   workflow_dispatch:
 permissions:
   contents: read
@@ -54,6 +56,24 @@ jobs:
             --source "$RUNNER_TEMP/phase4b/source/PHASE3Z-REAL-SOURCE-CATALOGUE-VERSION-REVERSALS-UNREVIEWED.json" \
             --old-model-ledger evidence/phase4a-2026-11-12-real-original-model-failure.json \
             --out evidence-run/PHASE4B-REAL-SOURCE-GROUNDED-REFERENCE-36-CLAIMS-NOT-AN-ADAPTER.json
+      - name: Replay public developer sample claims, including malformed evidence and missing facts
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase4b_reference_judge \
+            --source "$RUNNER_TEMP/phase4b/source/PHASE3Z-REAL-SOURCE-CATALOGUE-VERSION-REVERSALS-UNREVIEWED.json" \
+            --claims examples/phase4b-evidence-check-requests.json \
+            --out evidence-run/PHASE4B-REAL-DEVELOPER-SAMPLE-INPUTS.json
+          python - <<'PY'
+          import json
+          data=json.load(open("evidence-run/PHASE4B-REAL-DEVELOPER-SAMPLE-INPUTS.json"))
+          assert data["total_claims"] == 5
+          assert [r["judgement"]["verdict"] for r in data["cases"]] == [
+              "SUPPORTED","CONTRADICTED","ABSTAIN","ABSTAIN","ABSTAIN"]
+          assert data["source_derived_fixture_count"] == 0
+          assert data["not_telegraph_network_adapter"] is True
+          assert data["registered_evaluator"] is False
+          print("Real developer example: 1 support, 1 contradiction, 3 abstentions; zero invented gold labels")
+          PY
       - name: Fail if source-derived coverage, abuse controls or historical comparisons are misstated
         run: |
           set -euo pipefail
