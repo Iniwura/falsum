@@ -15,6 +15,7 @@ A good security review must change its conclusion when important facts change. F
 | [Review challenge](https://falsum-evidence-lab.vercel.app/) | Interactive A/B reviews backed by genuinely executed before/after Python code across three **fictional** PRs | Live model inference or real partner application testing |
 | [Real model proof](https://falsum-evidence-lab.vercel.app/proof/) | Inspect the original LoRA's **recorded official Foundation float32 scores** while switching affected vs fixed library releases | A registered evaluator, newly generated model answers or general security accuracy |
 | [Reference checker](docs/PHASE4B.md) | Offline verified GHSA/PyPI version facts, contradiction detection and safe ABSTAIN outcomes | A trained semantic security model or Telegraph network-compatible scoring adapter |
+| [Seven-family real patch review pack](docs/PHASE4E_FIRST_PLACE_REVIEW.md) | Reverified seven **existing** diverse upstream security-fix source/test cases, with 14 position-balanced review displays and an independent GitHub source-review form | Fourteen independent gold labels, new eligible rows, a sealed model holdout or verified exploitability |
 
 The public source material includes three previously unstudied packages, six affected/fixed version conditions, and 36 constructed reference-check scenarios. Every source uses pinned GitHub-reviewed advisory records and published PyPI release evidence.
 
