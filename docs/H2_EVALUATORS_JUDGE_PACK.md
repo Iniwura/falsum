@@ -47,6 +47,16 @@ PYTHONPATH=src python3 -m falsum.phase4b_reference_judge \
 
 Expected five results in order: **SUPPORTED, CONTRADICTED, ABSTAIN, ABSTAIN, ABSTAIN**. A changed version outside the frozen six or a forged source digest must abstain. The checker is intentionally limited to published one-GHSA version-boundary checks; it is not an LLM or general AppSec scanner.
 
+### Original Phase 3Q reproduction, preserved
+
+The combined Phase 4C command above builds both public pages. To independently reproduce **only the original fictional synthetic Python challenge**, its stable historical entrypoint still works:
+
+~~~bash
+PYTHONPATH=src python -m falsum.phase3q_mission_lab --out-dir original-phase3q-only
+~~~
+
+Earlier visual releases are preserved as technical history: [Phase 3S original Firma-inspired editorial interface](PHASE3S.md) preceded the current minimal interactive Phase 3U layout. These are UI stages, not external security-review certification or additional live model capability.
+
 ## Proof directory
 
 | Claim | Machine-checkable evidence | Limit |
