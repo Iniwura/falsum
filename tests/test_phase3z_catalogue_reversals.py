@@ -145,5 +145,29 @@ class Phase3ZNewFamilyTests(unittest.TestCase):
             self.assertEqual(patched["mechanically_source_derived_preference"], "B")
             self.assertIn("Do not infer application exploitability", old["question"])
 
+    def test_permanent_real_source_receipt_is_provenance_bound_and_not_a_model_result(self):
+        from pathlib import Path
+        record = json.loads((Path(__file__).resolve().parents[1]
+                             / "evidence/phase3z-2026-11-12-pinned-real-advisory-receipt.json").read_text())
+        self.assertEqual(record["schema_version"], 1)
+        self.assertEqual(record["verified_at"], "2026-11-12")
+        self.assertIn("/actions/runs/43286926731", record["source_run_url"])
+        self.assertIn("13975646173", record["source_artifact_url"])
+        self.assertEqual(record["source_artifact_report_sha256"],
+                         "82347910cb443f2b1cbde565107dbbd280f40e884ca45f2abfd501a8a5d108a8")
+        self.assertEqual(record["pinned_advisory_database_commit"], mod.PINNED_DB_COMMIT)
+        self.assertEqual(set(record["advisory_source_sha256"]),
+                         {pin[0] for pin in mod.PINS})
+        self.assertEqual([x["package"] for x in record["source_release_facts"]],
+                         [pin[3] for pin in mod.PINS])
+        self.assertEqual(record["observed_correct_catalogue_order"], ["A", "B"]*3)
+        self.assertEqual(record["external_human_expert_review_count"], 0)
+        self.assertEqual(record["new_network_eligible_rows"], 0)
+        self.assertFalse(record["actual_model_scoring_run"])
+        self.assertFalse(record["blind_holdout"])
+        self.assertFalse(record["training_allowed"])
+        self.assertFalse(record["registered_evaluator"])
+
+
 if __name__ == "__main__":
     unittest.main()
