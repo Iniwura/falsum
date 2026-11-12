@@ -1,0 +1,107 @@
+name: Phase 4F - actual independent-review census and quality gate
+on:
+  push:
+    paths:
+      - 'src/falsum/phase4f_review_evidence_gate.py'
+      - 'tests/test_phase4f_review_evidence_gate.py'
+      - '.github/workflows/phase4f-review-evidence-gate.yml'
+      - 'docs/PHASE4F_BENCHMARK_GATE.md'
+  pull_request:
+    paths:
+      - 'src/falsum/phase4f_review_evidence_gate.py'
+      - 'tests/test_phase4f_review_evidence_gate.py'
+      - '.github/workflows/phase4f-review-evidence-gate.yml'
+      - 'docs/PHASE4F_BENCHMARK_GATE.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: read
+jobs:
+  source-reverified-public-review-census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Synthetic adversarial proof of strict gold-label and metric withholding
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase4f_review_evidence_gate.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3w_review_intake.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase4e_counterbalanced_reviews.py' -v
+      - name: Verify seven actual source families against eight immutable upstream source AND regression-test patch commits
+        run: |
+          set -euo pipefail
+          mkdir -p evidence-run
+          PYTHONPATH=src python -m falsum.phase3f_multifamily_material \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --catalog data/phase2w-applicability-rules.json \
+            --out evidence-run/REAL-SEVEN-FAMILY-SOURCE-REPORT-UNREVIEWED.json
+          PYTHONPATH=src python -m falsum.phase4e_counterbalanced_reviews \
+            --input evidence-run/REAL-SEVEN-FAMILY-SOURCE-REPORT-UNREVIEWED.json \
+            --out evidence-run/REAL-SEVEN-SOURCE-CASES-FOURTEEN-PRESENTATIONS-UNREVIEWED.json
+      - name: Fetch actual public independent reviewer issues, with no self-label acceptance
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase3w_review_intake \
+            --out evidence-run/ACTUAL-PUBLIC-GITHUB-REVIEW-CLAIM-CENSUS-NOT-EXPERT-LABELS.json
+      - name: Audit source-bound reviewer coverage and withhold benchmark quality claims pending verified gold labels
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase4f_review_evidence_gate \
+            --source-pack evidence-run/REAL-SEVEN-SOURCE-CASES-FOURTEEN-PRESENTATIONS-UNREVIEWED.json \
+            --review-audit evidence-run/ACTUAL-PUBLIC-GITHUB-REVIEW-CLAIM-CENSUS-NOT-EXPERT-LABELS.json \
+            --out evidence-run/ACTUAL-INDEPENDENT-REVIEW-BENCHMARK-READINESS-NOT-MODEL-ACCURACY.json
+          python - <<'PY'
+          import json,hashlib,os
+          from pathlib import Path
+          p=Path('evidence-run/ACTUAL-INDEPENDENT-REVIEW-BENCHMARK-READINESS-NOT-MODEL-ACCURACY.json')
+          x=json.loads(p.read_text())
+          assert x['status']=='PHASE4F_REVIEW_EVIDENCE_REGISTER_UNADJUDICATED_QUALITY_WITHHELD'
+          assert x['review_intake_fetched_live'] is True
+          assert x['source_verified_case_count']==7
+          assert x['distinct_upstream_project_count']==7
+          assert x['counterbalanced_display_conditions']==14
+          assert x['total_public_format_valid_claims']>=0
+          assert x['independent_expert_adjudications_accepted']==0
+          assert x['gold_labeled_cases']==0
+          assert x['actual_model_scored_cases_on_this_review_pack']==0
+          assert x['source_grounded_model_accuracy'] is None
+          assert x['constant_A_baseline_accuracy'] is None
+          assert x['constant_B_baseline_accuracy'] is None
+          assert x['constant_ABSTAIN_baseline_accuracy'] is None
+          assert x['model_position_invariance_score'] is None
+          assert x['relative_evaluator_improvement'] is None
+          assert x['release_ready_to_claim_measured_improvement'] is False
+          assert x['no_model_registration_or_training'] is True
+          assert x['new_anjoman_eligible_pairs']==0
+          assert len(x['cases'])==7
+          checksum=hashlib.sha256(p.read_bytes()).hexdigest()
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              out.write('### Real independent-review readiness, without manufactured gold labels\n\n')
+              out.write('Seven actual upstream code-fix cases, fourteen A/B placements; ')
+              out.write('**'+str(x['total_public_format_valid_claims'])+'** format-valid public reviewer claims observed. ')
+              out.write('Format-valid does NOT mean an expert-adjudicated finding.\n\n')
+              out.write('**0 confirmed expert labels, 0 scored-model cases in this pack, all accuracy/baseline/improvement metrics withheld.** ')
+              out.write('FALSUM research LoRA remains blocked.\n\n')
+              out.write('Actual public GitHub claim register/report SHA256: '+checksum+'\n')
+          print('Actual public reviewer register sha256:',checksum)
+          PY
+      - name: Archive authentic upstream source records, public review census and benchmark block evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE4F-REAL-SEVEN-FAMILY-REVIEW-CENSUS-QUALITY-WITHHELD
+          path: evidence-run/*.json
+          if-no-files-found: warn
+          retention-days: 90
