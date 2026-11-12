@@ -1,41 +1,60 @@
-# FALSUM — Evaluators track, 3-minute honest demo storyboard
+# FALSUM — real 3-minute final demo
 
-**Current recommended video direction (Phase 3T):** Use the actual [guided review challenge](https://falsum-evidence-lab.vercel.app/) as the centerpiece. The older code-first storyboard below is historical supplementary footage, not the preferred opening. **Do not claim that the authored A/B reviews are live AI output.**
+**Working storyboard and narration, NOT a recorded or uploaded video.**  
+Telegraph Season II / Evaluators / SECURITY_REVIEW_GENERAL. Aim for 3:00–3:20 at 1080p, 16:9. Use **real captured browser interactions and GitHub evidence**, not invented model calls or simulated Anjoman receipts.
 
-Recommended genuine 3-minute recording:
+## The story in one line
 
-- **0:00–0:20:** Show “AI can sound certain. The proof decides.” Explain in one sentence: “FALSUM measures whether AI security reviews are backed by facts, not just persuasive wording.”
-- **0:20–1:15:** Open case one (Mallory and Alice's fictional money). Choose the deliberately weak **A** review. Show the *Not quite* feedback, then press **Reveal the actual test**. Explain that source-executed local Python lets unauthorized funds move before the fix and blocks them afterward, while real owner access still succeeds.
-- **1:15–1:55:** Complete the forged agent callback and relayer replay cases. Choose the stronger reviews; show proof briefly and then the **2/3 score** and reset option. Do not confuse game points with model accuracy.
-- **1:55–2:30:** Show the user's real Anjoman Evaluators account status `Eligible: 20`, with account identifiers and private question content hidden. Cut to the [posted public bounty /submit](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396), explicitly noting maintainer approval is pending.
-- **2:30–3:00:** Show the [GitHub source](https://github.com/Iniwura/falsum), [successful browser E2E](https://github.com/Iniwura/falsum/actions/runs/41619426486) and [judge guide](H2_EVALUATORS_JUDGE_PACK.md). End with clear limitations: three fictional examples, authored review choices, no registered live AI scorer or external mission adoption.
+**A security model chose the same answer after the evidence changed. FALSUM makes that failure visible, reproducible and harder to hide.**
 
-This is a shooting outline, **not evidence a video was already recorded**.
+## Timestamped screen recording
 
-**Judging format:** Official Season II requires a **2–5 minute video or accessible equivalent**. This is a **shooting script**, NOT a claim that a video has already been recorded. Recording must use real observed screens, no invented network messages and no protected evaluation content.
-
-**Target duration:** approximately 3 minutes 15 seconds. Presenter voice calm, precise, not overly technical; show live browser and terminal rather than generic promotional animation.
-
-| Segment | Footage and actual proof | Narration |
+| Time | What must appear on screen | Natural narration |
 | --- | --- | --- |
-| 0:00–0:25 — Problem | Title screen “FALSUM — Evaluate the evidence, not confidence.” Cut to **public** Starlette source/fix documentation; do not show private eligible rows. | “AI security reviewers can sound confident while getting the boundary wrong. A library patch doesn't prove your customer data leaked, and a source warning doesn't tell you whether an affected version is actually running.” |
-| 0:25–0:55 — Our work | GitHub README and [public historical runtime workflow](https://github.com/Iniwura/falsum/actions/runs/41409503521). Show Starlette vulnerable vs patched reproducible checks; display safe result only. | “FALSUM collects verified reference evidence. Here, two real Starlette versions behave differently on an isolated harmless file fixture. Every observation is tied to upstream code, not a fictional exploit.” |
-| 0:55–1:20 — Distinct coverage | [Requests runtime CI](https://github.com/Iniwura/falsum/actions/runs/41410209502). Show old/new in-memory header behavior and unchanged controls. | “A second independent family checks Requests' proxy-auth boundary. No credentials leave the runner and no network request is made. We can reproduce both the vulnerable and patched behavior.” |
-| 1:20–1:55 — Actual Telegraph integration | Show **account-owner Anjoman UI** on `SECURITY_REVIEW_GENERAL` with **Eligible: 20** badge. Crop account email and public wallet if filming for general distribution. Show [public bounty `/submit`](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396). | “We contributed 20 source-referenced, openly AI-assisted preference pairs. Anjoman's account now reports all 20 eligible after curation and pool rollover. We've filed the bounty claim; maintainer review is still pending. We're contributing evaluation material, not claiming an active scoring adapter.” |
-| 1:55–2:35 — **Actual runnable Evidence Lab** | In a terminal run `PYTHONPATH=src python -m falsum.phase3q_mission_lab --out-dir phase3q-demo`. Open the generated `index.html` in the browser. Click the **Exchange**, **Model Economy**, and **Web3 Native & DeFi** case tabs; show observed pre/post code behavior, legitimate controls and source fingerprints. **These are fictional local fixtures, not independent mission integrations or model inferences.** | “This part runs genuine code in three deliberately fictional business workflows. Here is an authorization mistake, a forged callback and a replayed credit. The patches stop all three without breaking legitimate activity. Unknown evidence stays unknown, and each measured result can be reproduced without a wallet or secret.” |
-| 2:35–3:00 — Hard limitation | Open [Phase 3J real model score evidence](../evidence/phase3j-2026-11-02.json) and [Phase 3K model evidence](../evidence/phase3k-2026-11-02.json). | “We tried actual reward-model fine-tuning, but the scores exposed weak context sensitivity. We blocked registration instead of submitting an unreliable evaluator. Honest measurement is the product.” |
-| 3:00–3:15 — Call to action | GitHub repo + [judge pack](H2_EVALUATORS_JUDGE_PACK.md) + public bounty URL. | “Try the public reproducible checks. If you're building intelligence for exchange reviews, agent platforms or DeFi APIs, help us test coverage. FALSUM gives security evaluation an evidence trail.” |
+| **0:00–0:20** | Open https://falsum-evidence-lab.vercel.app/proof/ . Show the actual large **THE MODEL MISSED THE FIX.** title and 3/6, 0/3 scoreboard. | “A good security reviewer should change its answer when the facts change. We tested that using Telegraph's real Foundation model scorer. The result exposed a failure.” |
+| **0:20–0:55** | Select **docling-core**. Show 2.48.3, then click 2.48.4. Pause on actual model **A** versus pinned source **B**. Show the real score bit IDs or evidence link briefly. | “Here the published advisory includes 2.48.3. The next release, 2.48.4, is outside that affected range. The source-supported answer flips from A to B. But our original model keeps choosing A.” |
+| **0:55–1:20** | Click **hydra-core** and select 1.3.8. Then **python-multipart** and select 0.0.26. | “The same behavior appeared on two other packages. Across six published version conditions, the model only matched three facts and failed every complete affected-to-fixed reversal. That's no better than always choosing one answer.” |
+| **1:20–1:50** | Switch to https://falsum-evidence-lab.vercel.app/ . On the fictional withdrawal, deliberately choose the weak review A. Show feedback, then click **Reveal result** to display actual local Python before/after outcome and preserved legitimate user control. | “We also built a public review challenge. These reviews are original examples, not live AI outputs. The code is really executed in a local Python fixture. The unsafe action succeeds before the patch, fails after it, and the authorized action still works.” |
+| **1:50–2:20** | Show [Phase 4B report](PHASE4B.md), then real GitHub CI workflow https://github.com/Iniwura/falsum/actions/runs/43297345188, including 36 source checks. | “Our reference checker verifies the named advisory and release evidence, rejects contradicted facts, and abstains when a claim exceeds the evidence. It passed 36 deliberately constructed checks. That is rule-based verification, not improved model accuracy.” |
+| **2:20–2:45** | Open actual [original model run](https://github.com/Iniwura/falsum/actions/runs/43291803205), [source run](https://github.com/Iniwura/falsum/actions/runs/43287674960) and [source ledger](../evidence/phase4a-2026-11-12-real-original-model-failure.json). | “These are genuine official Foundation ONNX and WASI scores, checked through repeat inference and recorded down to their float32 bits. Judges can reproduce the work and independently challenge our source facts.” |
+| **2:45–3:05** | Show the bounty contribution's genuine public [GitHub /submit](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396). If safely accessible, show the contributor account's real **20 Eligible** status with private account details and prompt text hidden. | “FALSUM also submitted 20 source-referenced evaluation pairs to Telegraph's Anjoman contributor flow. They appeared eligible in our account. Maintainer acceptance and an active scoring adapter are not claimed.” |
+| **3:05–3:20** | Show the repo README's first screen, website links and [review invitation](https://github.com/Iniwura/falsum/issues/25). Finish on real proof page. | “FALSUM is evaluation material built for scrutiny. Review the evidence, run the examples, and tell us what fails. We want better measurements, not confident guesses.” |
 
-## Shoot-quality requirements
+## Live-fixture verification before recording
 
-- Show real websites and terminal output, not a simulated Anjoman upload or invented eligible count.
-- Never display exact private network evaluation prompt text, best/worse answers, signing messages, secrets or hidden data in a recording.
-- Show actual installed version numbers, test pass or failure, and the public links the judges can click.
-- Keep onscreen labels readable, cursor movements deliberate, one claim per scene and captions that match narration.
-- Do not claim third-party adoption, network-paid usage, an approved GitHub bounty, improved model accuracy or an active evaluator registration.
-- Make a separate safe, **new synthetic** failure case for reviewers to try; do not reconstruct the 20 hidden eligibility rows. Screenshots of private user pages need explicit owner approval and should have wallet/account fields cropped.
-- Publish a video URL only after recording the real demo. No “demo complete” claim from this script alone.
+The final site is built with the combined Phase 4C static release. For an independent reproduction of **only the original three fictional Python workflows**, the previous entrypoint remains available:
 
-## Recording plan
+~~~bash
+PYTHONPATH=src python -m falsum.phase3q_mission_lab --out-dir original-lab-only
+~~~
 
-Capture the browser and terminal in 1080p landscape, include voice or readable subtitles, and ensure the final video plays end to end without public exposure of protected test material. Add the final recording URL to the [judge pack](H2_EVALUATORS_JUDGE_PACK.md) and the **separate H2 website submission** only after it exists. A bounty comment is not a hackathon submission.
+The official submission asks for a **2–5 minute** real-screen demo or accessible equivalent. This script targets roughly 3:20 within that requirement.
+
+## Recording rules
+
+**Do not**:
+- Claim these public reviews are generated by a running model.
+- Invent a training improvement, award, independent review, enrolled partner, purchased network request or registered adapter.
+- Expose any hidden Anjoman evaluation question, chosen/rejected row, account signature, wallet identifier, unpublished advisory or customer information.
+- Show a fake browser result as live app activity. The root demo runs Python at static-build time; the real model proof replays immutable prior inference.
+
+**Do**:
+- Record actual clicks and terminal/GitHub pages at full HD.
+- Keep score and version changes readable; cut only between authentic actions.
+- Explain that the 36 checks are **self-constructed source-grounded fixtures**, not certified model-quality improvements.
+- Distinguish **Eligible in contributor account** from **bounty accepted by maintainers** and the final **H2 website entry**.
+- Include an on-screen subtitle when the viewer sees old-model scores: “Recorded real ONNX/WASI inference, not live model.”
+- Keep original dark editorial design intact. Do not introduce random graphics, fake metrics, investor pitches, or long unnecessary taglines.
+
+## Quality checklist before publishing
+
+- Screen recording is 1080p or higher, readable on mobile and landscape desktop.
+- Human-sounding, calm voiceover is clearly mixed above any music, or equally clear timed captions are included.
+- Every on-screen numerical result corresponds to a real source record or GitHub Actions output.
+- The actual clip shows **at least one full click interaction** on the source-version fact reversal, one real Python fixture result, and the linked official scoring evidence.
+- The final file plays through without cut-off lines, unlicensed media, secret leakage or irrelevant UI.
+- Only after uploading the finished video should its true URL be inserted into [the H2 submission draft](H2_FINAL_ENTRY_DRAFT.md).
+
+## Deliverables and gates
+
+This document is the **script and shot list**. It is not evidence that a recording, voiceover, YouTube publication, Anjoman sign-in or official entry has happened. The producer must supply the actual playable video URL. The separate [final form draft](H2_FINAL_ENTRY_DRAFT.md) remains marked not submitted until the official H2 form confirms acceptance.

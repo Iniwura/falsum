@@ -1,76 +1,81 @@
-# FALSUM — Season II winning-track adoption and submission plan
+# FALSUM — final week adoption and technical communication
 
-**As of 3 November 2026.** This is an action plan, **not evidence that outreach, third-party testing, adoption, an accepted bounty or final submission has occurred**. FALSUM is competing in the **Evaluators** track, focusing on `SECURITY_REVIEW_GENERAL` evaluation material.
+**12 November 2026 · All social posts below are drafts, NOT verified as published.**  
+Track: Telegraph Season II / Evaluators · Intent: SECURITY_REVIEW_GENERAL · Internal quality target: November 17 · Official closing date: December 1, 23:59 UTC.
 
-## Proven today
+We earn credibility by publishing useful, reproducible work and inviting real developers to challenge it, not by padding engagement metrics or submitting unverified model claims.
 
-- **Network material:** 20 source-referenced, openly AI-assisted preference pairs appear `Eligible` in the contributing Anjoman account. The signed public [bounty /submit comment](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) exists; maintainer verification is not yet confirmed.
-- **Public demo:** [FALSUM Evidence Lab](https://falsum-evidence-lab.vercel.app) and [captured JSON proof](https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json), both externally served with HTTP 200 on Vercel. These are **actual Python executions against three fictional local apps**, not production mission integrations or an approved scoring adapter.
-- **Independent testers:** [Reproduction request issue #16](https://github.com/Iniwura/falsum/issues/16) is publicly open. There is **no independently verified external reproduction or adoption yet**.
-- **Models:** both experimental ModernBERT LoRAs fail full context-reversal checks and must remain unregistered.
+## Current measured evidence
 
-## What matters for the prize
+- The contributor reported 20 SECURITY_REVIEW_GENERAL AI-assisted preference pairs as Eligible in Anjoman and filed [a public bounty submission](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396); maintainer acceptance has **not** been confirmed. The bounty being claimed by others does not grant them control over our work.
+- [Live review challenge](https://falsum-evidence-lab.vercel.app/) executes fictional Python before/after scenarios during its static build. They are not actual network mission deployments.
+- [Actual recorded Foundation scoring](https://falsum-evidence-lab.vercel.app/proof/) covers three published affected/patched package pairs and shows original LoRA **3/6** source-fact matches, **0/3** complete context reversals.
+- [Offline public-source reference checks](PHASE4B.md): 36 source-derived test inputs (6 supported, 6 contradicted, 24 abstained). Agreement is expected by construction, **not proof of improved ML accuracy**.
+- [Independent review request](https://github.com/Iniwura/falsum/issues/25) is open. As of November 12: **0 confirmed independent AppSec reviews or completed partner integrations**. We must not backfill fictional review activity.
 
-Read the [official Season II rules](https://hackathon.telegraphprotocol.com/rules). The Evaluators track has four **$300 verified-delivery awards** ($1,200 total), plus **$500 first place and $300 second place** for excellence ($800 total), per the current official prize table. The **minimum winning score is 70/100**, and the Evaluators-specific technical minimum must also be met. The rules allocate **20 points** to useful education, adoption friction, organic distribution and genuine independent developer actions:
+## The official judging incentive
 
-| Part | Max points | FALSUM-specific honest route |
-| --- | ---: | --- |
-| Useful content and tutorial | 5 | Real demo and source-grounded tutorial, with failure cases and limitations |
-| Ease of adoption | 5 | Public site, one-command offline re-run, clear troubleshooting and prerequisites |
-| Organic distribution | 5 | At least three meaningful posts on separate dates, shared beyond own immediate team, genuinely answer questions |
-| Community activation | 5 | Reproducible independent developer report, useful PR or new separate integration; stars alone are not evidence |
+The [official rules](https://hackathon.telegraphprotocol.com/rules) score organic growth, education and developer activation on useful public content, adoption friction, original distribution and *actual actions by independent developers*. Publish thoughtful content across multiple dates and preserve real URLs. A social post, like or GitHub star alone is not a measured independent activation.
 
-**Do not confuse three fictional mission-inspired tests with three independently enabled external missions.** Real source-pinned coverage and a public working test help technical credibility, but the judges decide whether they fill a missing mission-critical evaluation need.
+We are preparing **three useful distinct posts on November 13, 14 and 16**, all before the November 17 internal target. They may be published on X, the relevant Telegraph Discord channels or appropriate developer communities, complying with each platform's rules. The dates are targets only; only timestamps from real published posts count. Disclose that FALSUM is a prize-entry project.
 
-## Three original public updates to publish on DIFFERENT dates
+### Public update A — proposed November 13 (the problem and real failure)
 
-These are **unpublished drafts**, not evidence of dissemination. The author must actually post them and retain the real URLs. Disclose hackathon participation and prize incentive.
+FALSUM is a Telegraph Season II Evaluators entry for SECURITY_REVIEW_GENERAL.
 
-### Update A — 3 Nov 2026: first actual milestone
+We checked the same original reward model against affected and fixed versions of three packages using the official Foundation ONNX/WASI scorer. It got only 3/6 narrow source facts right and **0/3 correct affected-to-fixed reversals**. It picked A every time.
 
-FALSUM has 20 `SECURITY_REVIEW_GENERAL` evaluation rows marked eligible in Anjoman. Our bounty claim is filed, pending maintainer review.
+Our point: security evaluations must change when the evidence changes. We published the actual float32 score proofs and pinned GHSA source records, and we blocked the model from registration.
 
-We also shipped a public Evidence Lab: three executable fictional security-review PR examples showing how a conclusion changes when an authentication or replay condition changes. The examples are safe and synthetic, not external customer audits or a trained model scoring system.
+Try the real recorded score explorer: https://falsum-evidence-lab.vercel.app/proof/
+Source and method: https://github.com/Iniwura/falsum/blob/main/docs/PHASE4A.md
 
-Try it: https://falsum-evidence-lab.vercel.app  
-Reproduce or challenge the code: https://github.com/Iniwura/falsum/issues/16
+We're competing for Telegraph Season II prizes, and welcome independent criticism of the result.
 
-Building in Telegraph Season II Evaluators track, which offers prizes. Feedback and failures are welcome. @Telegraphprotoc
+### Public update B — proposed November 14 (what can be verified and reproduced)
 
-### Update B — suggested 7 Nov 2026: technical breakdown
+Security review quality is not about confident phrasing. A patched package version does not automatically prove global application safety, and an affected version does not automatically prove an exploitable deployment.
 
-A source-level security warning and a demonstrated production exploit are not the same. In FALSUM we reproduced historical security behavior for real pinned Starlette and Requests library versions, then built a separate public synthetic PR lab for actor binding, webhook HMAC checking and relayer replay protection.
+We built an offline source-checking reference for three pinned GitHub-reviewed advisories. It verifies exact published PyPI versions, rejects contradicted fact claims and **abstains** when evidence is missing or a claim goes beyond its scope.
 
-The test checks that an unsafe action stops **without** breaking the legitimate one. Our original and retrained reward models still fail context-reversal quality tests, so we have not registered either as an evaluator.
+36 constructed source-check cases: 6 supported, 6 contradicted, 24 abstained. This is deterministic reference-checker coverage, not an ML accuracy benchmark.
 
-Source/methodology: https://github.com/Iniwura/falsum/blob/main/docs/PHASE3Q.md  
-Live demo: https://falsum-evidence-lab.vercel.app
+Five runnable examples + setup: https://github.com/Iniwura/falsum/blob/main/docs/PHASE4B.md
 
-This is a Telegraph Season II Evaluators submission project with prize eligibility; negative results are part of the proof. @Telegraphprotoc
+FALSUM is participating in Telegraph Season II Evaluators. Try breaking a provenance or version claim and tell us where our scope is wrong.
 
-### Update C — suggested 20 Nov 2026: community showcase
+### Public update C — proposed November 16 (invite actual external reproduction)
 
-I am looking for independent developers to reproduce FALSUM's safe security-review evidence experiment for Telegraph Season II's Evaluators track.
+I'm looking for independent developers to challenge FALSUM's security-review evaluation evidence before Telegraph Season II judging.
 
-You need Python 3.11+ and no account or wallet. Run the three synthetic PR cases, inspect captured before/after states and source fingerprints, then report what you observed. Incorrect, confusing or unreproducible results are useful feedback.
+Pick one public GHSA case: docling-core, hydra-core or python-multipart. Check the affected release, the fixed version and the two constant A/B answers. If a source record, assumption or wording is wrong, report it with its exact URL. ABSTAIN is welcome when the evidence doesn't justify a security conclusion.
 
-Try the demo: https://falsum-evidence-lab.vercel.app  
-Exact reproduction steps: https://github.com/Iniwura/falsum/issues/16
+One-click review request: https://github.com/Iniwura/falsum/issues/25
+Working interactive challenge: https://falsum-evidence-lab.vercel.app/
+Recorded real model scores: https://falsum-evidence-lab.vercel.app/proof/
 
-Participation is voluntary. This is a hackathon entry competing for prizes, and we will only count genuine independent work. @Telegraphprotoc
+This is a hackathon prize entry. We won't count an open issue as a completed review; genuine feedback, including negative results, will improve the evaluation material.
 
-## What should be captured without manipulating outcomes
+## Actual publication evidence register (do not guess URLs)
 
-Maintain links to *actual* public updates, real comments, external reproduction reports and the specific resulting fix PRs or tests. Require independent reviewer identity evidence where reasonable and respect developer privacy. Do not invent users, adoption, ratings, third-party mission workflows, payouts, or reviewer endorsements.
+| Item | Status on 12 Nov | Exact public URL once posted | Genuine responses / actions |
+| --- | --- | --- | --- |
+| Update A | Draft, unposted | **NONE** | **NONE VERIFIED** |
+| Update B | Draft, unposted | **NONE** | **NONE VERIFIED** |
+| Update C | Draft, unposted | **NONE** | **NONE VERIFIED** |
+| AppSec review or independent reproduction | Requested, not received | [Open issue](https://github.com/Iniwura/falsum/issues/25) | **0 CONFIRMED** |
+| Maintainer acceptance of bounty #96 | Pending | [Original /submit](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) | **NONE CONFIRMED** |
+| Final H2 submission and video | Not filed, no playable link | **NONE** | **NONE** |
 
-Do not publish hidden Anjoman evaluation questions, exact chosen/rejected answers, source credentials or customer cases. Safe synthetic demonstrations and broad coverage descriptions are permitted.
+Update this register only with actual observed public source records, post URLs, review reports or official organizer receipts. No fake testimonials, bought likes, backdated posts or self-reviews pretending to be independent.
 
-## Owner-controlled next actions
+## Owner actions remaining
 
-1. **Confirm registration** on the official [Season II site](https://hackathon.telegraphprotocol.com/). Signing in to Anjoman and filing GitHub bounty `/submit` do **not** prove the separate hackathon registration or final entry was completed.
-2. **Publish the first accurate technical update** using a genuinely owned public account, ideally X with `@Telegraphprotoc`, and preserve its actual link. The user controls external publishing and any required prize disclosure.
-3. **Record an actual 2–5 minute screen demo** showing the real Vercel site and Anjoman account status with private user fields cropped, plus a reproducible failure case. Do not present the storyboard as an existing recording.
-4. **Get independent tests** through GitHub issue #16 and relevant developers; preserve their actual findings, including failures.
-5. **Submit the complete Evaluators entry** through the official H2 website by **1 December 2026, 23:59 UTC**. Include demo link, video, GitHub, chosen Intent, real eligibility evidence, reproduction steps, exact limitations, community update URLs, and showcase permissions. GitHub bounty `/submit` is separate.
+1. Confirm the submitting GitHub account has starred telegraphprotocol/bounties, as required by the [official rules](https://hackathon.telegraphprotocol.com/rules).
+2. Confirm the Season II official registration and track/Intent selection; a bounty claim is not H2 registration.
+3. Publish the three technical updates on genuinely separate dates with authentic links, disclose prize incentive and respond usefully to technical questions.
+4. Invite independent review of [GHSA version facts](https://github.com/Iniwura/falsum/issues/25), explicitly allowing negative or abstaining results. Do not fabricate review receipts.
+5. Capture the actual 2–5 minute, real-screen video described in [the final storyboard](H2_EVALUATORS_DEMO_STORYBOARD.md). Protect hidden Anjoman prompts and private account data.
+6. File the official H2 entry using [the form-ready submission draft](H2_FINAL_ENTRY_DRAFT.md) and preserve the real completion receipt by December 1, 23:59 UTC.
 
-**The next evidence hinge:** a genuine third-party reproduction or a maintainer review of bounty #96. A positive result would be new, verifiable progress. Until it happens, record both statuses as pending.
+**Engineering can be marked ready on November 17 if all gates pass.** Independently reviewed material, organic distribution and actual official submission depend on real external actions and should never be marked completed automatically.

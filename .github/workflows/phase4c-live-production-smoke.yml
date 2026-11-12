@@ -1,0 +1,99 @@
+name: Phase 4C - live public production judge-route verification
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'vercel.json'
+      - 'src/falsum/phase4c_release.py'
+      - 'src/falsum/phase4c_judge_proof.py'
+      - 'src/falsum/templates/phase4c_judge_model_proof.html'
+      - 'src/falsum/templates/firma_editorial_evidence_lab.html'
+      - '.github/workflows/phase4c-live-production-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-judge-pages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Wait for real public Vercel production page to match merged model proof
+        run: |
+          set -euo pipefail
+          url="https://falsum-evidence-lab.vercel.app"
+          mkdir -p production-check
+          status=0
+          for n in $(seq 1 24); do
+            if curl --fail --silent --show-error --location --max-time 20 "$url/proof/ACTUAL-RECORDED-FOUNDATION-MODEL-SCORES.json" -o production-check/actual-model.json \
+              && PYTHONPATH=src python - <<'PY'
+          import json
+          from pathlib import Path
+          from falsum.phase4c_judge_proof import read_validated
+          live=json.loads(Path('production-check/actual-model.json').read_text())
+          local=read_validated()
+          assert live==local, 'Live scored data differs from exact merged immutable source and score ledger'
+          assert live['recorded_inference_not_live'] is True
+          assert live['model_registered_to_telegraph'] is False
+          assert live['model_matches_narrow_source_facts']==3
+          assert live['complete_factual_reversals']==0
+          print('Live model proof exactly matches merged source model bits and source receipt')
+          PY
+            then
+              status=1
+              break
+            fi
+            echo "Production proof not yet current; retry $n of 24"
+            sleep 12
+          done
+          test "$status" -eq 1
+      - name: Verify real public challenge and proof HTML/JSON; reject secret or fake-scoring claims
+        run: |
+          set -euo pipefail
+          site="https://falsum-evidence-lab.vercel.app"
+          for path in / /proof/ /ACTUAL-SYNTHETIC-RUNTIME-PROOF.json; do
+            case "$path" in
+              /) dest=production-check/challenge.html ;;
+              /proof/) dest=production-check/real-proof.html ;;
+              *) dest=production-check/synthetic-proof.json ;;
+            esac
+            curl --fail --silent --show-error --location --max-time 20 "$site$path" -o "$dest"
+            test -s "$dest"
+          done
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base=Path('production-check')
+          challenge=(base/'challenge.html').read_text()
+          proof=(base/'real-proof.html').read_text()
+          synthetic=json.loads((base/'synthetic-proof.json').read_text())
+          real=json.loads((base/'actual-model.json').read_text())
+          assert 'PICK THE' in challenge and 'BETTER' in challenge
+          assert 'href="/proof/"' in challenge
+          assert 'THE MODEL' in proof and 'MISSED THE FIX' in proof
+          assert 'id="proof-data"' in proof
+          assert real['model_matches_narrow_source_facts']==3
+          assert real['complete_factual_reversals']==0
+          assert real['model_registered_to_telegraph'] is False
+          assert real['recorded_inference_not_live'] is True
+          assert synthetic['synthetic_before_after_executions']==6
+          assert synthetic['actual_third_party_mission_apps_verified']==0
+          assert synthetic['actual_evaluator_model_scoring_executed'] is False
+          text=challenge+proof
+          for secret in ('PRIVATE-EVALPOOL-ROWS','EIP191-MESSAGE-TO-SIGN','0x9cBA6Cf'):
+              assert secret not in text, 'private material leaked into public UI'
+          print('Production public routes verified; model proof matches source-pinned real results.')
+          PY
+      - name: Keep public-health receipt with no private data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE4C-REAL-PRODUCTION-PUBLIC-ROUTE-SMOKE
+          path: production-check/
+          if-no-files-found: warn
+          retention-days: 45
