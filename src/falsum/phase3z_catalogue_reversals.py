@@ -71,7 +71,7 @@ def numeric_version(version: str) -> tuple[int, ...]:
     This is NOT a general PEP 440 / SemVer dependency range parser; prerelease
     ranges are explicitly excluded instead of being interpreted incorrectly.
     """
-    require(isinstance(version, str) and re.fullmatch(r"0|[1-9]\d*(?:\.(?:0|[1-9]\d*)){0,3}", version)
+    require(isinstance(version, str) and re.fullmatch(r"(?:0|[1-9]\d*)(?:\.(?:0|[1-9]\d*)){0,3}", version)
             is not None, "unsupported prerelease or nonnumeric version: " + repr(version))
     return tuple(int(x) for x in version.split("."))
 
