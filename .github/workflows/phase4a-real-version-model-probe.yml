@@ -4,14 +4,18 @@ on:
     paths:
       - 'src/falsum/phase4a_real_model_probe.py'
       - 'tests/test_phase4a_real_model_probe.py'
+      - 'src/falsum/phase4a_recorded_evidence.py'
+      - 'tests/test_phase4a_recorded_evidence.py'
+      - 'evidence/phase4a-2026-11-12-real-original-model-failure.json'
       - '.github/workflows/phase4a-real-version-model-probe.yml'
-      - 'docs/PHASE4A.md'
   pull_request:
     paths:
       - 'src/falsum/phase4a_real_model_probe.py'
       - 'tests/test_phase4a_real_model_probe.py'
+      - 'src/falsum/phase4a_recorded_evidence.py'
+      - 'tests/test_phase4a_recorded_evidence.py'
+      - 'evidence/phase4a-2026-11-12-real-original-model-failure.json'
       - '.github/workflows/phase4a-real-version-model-probe.yml'
-      - 'docs/PHASE4A.md'
   workflow_dispatch:
 permissions:
   contents: read
@@ -168,6 +172,13 @@ jobs:
               f.write("Constant A/B baselines 3/6 each. 12 real score inputs, 24 repeat-verified ONNX/WASI inferences. ")
               f.write("No independent human labels, no blind holdout, no model registration. Original LoRA stays blocked.\n")
           PY
+      - name: Reconcile exact real score bits against permanently published 3/6 and 0/3 failure record
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m unittest discover -s tests -p test_phase4a_recorded_evidence.py -v
+          PYTHONPATH=src python -m falsum.phase4a_recorded_evidence \
+            --ledger evidence/phase4a-2026-11-12-real-original-model-failure.json \
+            --report "$RUNNER_TEMP/phase4a/results/ACTUAL-ORIGINAL-MODEL-SIX-VERSION-FACT-RESULTS.json"
       - name: Archive real source, frozen inputs, actual score packets, results, including failures
         if: always()
         uses: actions/upload-artifact@v4
