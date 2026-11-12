@@ -118,6 +118,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: FALSUM-PHASE4B-36-PUBLIC-SOURCE-FACT-AND-ABSTAIN-CASES-NOT-A-TELEGRAPH-ADAPTER
-          path: evidence-run/*.json
+          path: |
+            evidence-run/*.json
+            ${{ runner.temp }}/phase4b/source/*.json
           retention-days: 90
           if-no-files-found: error
