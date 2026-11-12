@@ -1,0 +1,100 @@
+name: Phase 4E - seven real security-fix families, counterbalanced reviewer evidence
+on:
+  push:
+    paths:
+      - 'src/falsum/phase4e_counterbalanced_reviews.py'
+      - 'tests/test_phase4e_counterbalanced_reviews.py'
+      - '.github/workflows/phase4e-seven-family-review.yml'
+      - 'docs/PHASE4E_FIRST_PLACE_REVIEW.md'
+  pull_request:
+    paths:
+      - 'src/falsum/phase4e_counterbalanced_reviews.py'
+      - 'tests/test_phase4e_counterbalanced_reviews.py'
+      - '.github/workflows/phase4e-seven-family-review.yml'
+      - 'docs/PHASE4E_FIRST_PLACE_REVIEW.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  seven-real-upstream-patch-families:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify adversarial reviewer/label integrity with synthetic upstream fixtures
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase4e_counterbalanced_reviews.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3f_multifamily_material.py' -v
+      - name: Reverify EIGHT real upstream Git commits, source blobs, test blobs and actual patches
+        run: |
+          set -euo pipefail
+          mkdir -p evidence-run
+          PYTHONPATH=src python -m falsum.phase3f_multifamily_material \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --catalog data/phase2w-applicability-rules.json \
+            --out evidence-run/ACTUAL-SEVEN-REVERIFIED-SECURITY-FIX-FAMILIES-UNREVIEWED.json
+      - name: Build two counterbalanced A/B views per real public security-fix source
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase4e_counterbalanced_reviews \
+            --input evidence-run/ACTUAL-SEVEN-REVERIFIED-SECURITY-FIX-FAMILIES-UNREVIEWED.json \
+            --out evidence-run/SEVEN-SOURCE-FAMILIES-FOURTEEN-PRESENTATIONS-UNREVIEWED.json
+      - name: Guard real source identities, presentation balance and no independent approval claims
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,hashlib,os
+          from pathlib import Path
+          a=Path("evidence-run/ACTUAL-SEVEN-REVERIFIED-SECURITY-FIX-FAMILIES-UNREVIEWED.json")
+          b=Path("evidence-run/SEVEN-SOURCE-FAMILIES-FOURTEEN-PRESENTATIONS-UNREVIEWED.json")
+          source=json.loads(a.read_text())
+          report=json.loads(b.read_text())
+          assert source["status"]=="PHASE3F_SEVEN_DISTINCT_PUBLIC_SECURITY_PATCH_REVIEW_CASES_UNADJUDICATED"
+          assert source["external_source_revisions_verified"]==8
+          assert source["external_source_and_test_file_blob_pairs_verified"]==8
+          assert source["review_cases"]==7 and source["distinct_security_families"]==7
+          assert source["independent_human_labels"]==0
+          assert report["status"]=="PHASE4E_SOURCE_PINNED_COUNTERBALANCED_SEVEN_FAMILY_REVIEW_PACK_UNADJUDICATED"
+          assert report["source_backed_unique_review_cases"]==7
+          assert report["counterbalanced_presentation_count"]==14
+          assert report["security_families"]==7
+          assert len({r["upstream_repository"] for r in report["cases"]})==7
+          assert len({r["security_family"] for r in report["cases"]})==7
+          assert report["independent_gold_labels"]==0
+          assert report["new_eligible_anjoman_rows"]==0
+          assert report["registered_evaluator"] is False
+          assert report["training_allowed"] is False
+          assert report["general_model_accuracy_measured"] is False
+          assert report["not_a_blind_holdout"] is True
+          for case in report["cases"]:
+            left,right=case["two_counterbalanced_presentations"]
+            assert left["reviewer_display_answers"][0]["candidate_text_sha256"]==right["reviewer_display_answers"][1]["candidate_text_sha256"]
+            assert left["reviewer_display_answers"][1]["candidate_text_sha256"]==right["reviewer_display_answers"][0]["candidate_text_sha256"]
+            assert case["independently_approved_answer"] is None
+            assert case["independent_expert_reviewer_verified"] is False
+            assert case["training_authorized"] is False
+            assert case["live_application_exploit_verified"] is False
+          checksum=hashlib.sha256(b.read_bytes()).hexdigest()
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as out:
+            out.write("### FALSUM source-grounded review material ready for external judgment\n\n")
+            out.write("Reverified 8 immutable upstream fix commits and source + regression-test patches. ")
+            out.write("Produced 7 unique security-review families, two position-swapped presentations each (14 positions, **not 14 independent cases**).\n\n")
+            out.write("0 expert labels, 0 new Anjoman-eligible rows, 0 registered models and 0 verified deployed exploits. ")
+            out.write("Needs outside source review; passing CI alone does not establish evaluation quality.\n\n")
+            out.write("Review pack SHA256: "+checksum+"\n")
+          print("Actual seven-family source-derived review pack SHA256:",checksum)
+          PY
+      - name: Keep immutable-source reviewer evidence available through H2 judging
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-SEVEN-REAL-PATCH-FAMILIES-FOURTEEN-COUNTERBALANCED-REVIEW-PRESENTATIONS
+          path: evidence-run/*.json
+          if-no-files-found: error
+          retention-days: 90
