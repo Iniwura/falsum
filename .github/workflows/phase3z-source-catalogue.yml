@@ -1,0 +1,74 @@
+name: Phase 3Z - independently sourced GHSA package-version reversal coverage
+on:
+  push:
+    paths:
+      - 'src/falsum/phase3z_catalogue_reversals.py'
+      - 'tests/test_phase3z_catalogue_reversals.py'
+      - '.github/workflows/phase3z-source-catalogue.yml'
+      - 'docs/PHASE3Z.md'
+  pull_request:
+    paths:
+      - 'src/falsum/phase3z_catalogue_reversals.py'
+      - 'tests/test_phase3z_catalogue_reversals.py'
+      - '.github/workflows/phase3z-source-catalogue.yml'
+      - 'docs/PHASE3Z.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-verified-new-package-boundaries:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test adversarial source provenance and no-release guards
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase3z_catalogue_reversals.py' -v
+      - name: Verify immutable actual reviewed GitHub advisory records and actual PyPI releases
+        run: |
+          set -euo pipefail
+          mkdir -p evidence-run
+          PYTHONPATH=src python -m falsum.phase3z_catalogue_reversals \
+            --out evidence-run/PHASE3Z-REAL-SOURCE-CATALOGUE-VERSION-REVERSALS-UNREVIEWED.json
+      - name: Assert each fact reversal and all truth ceilings on genuine sources
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          p=Path('evidence-run/PHASE3Z-REAL-SOURCE-CATALOGUE-VERSION-REVERSALS-UNREVIEWED.json')
+          raw=p.read_bytes()
+          j=json.loads(raw)
+          assert j['status']=='PHASE3Z_REAL_PUBLIC_ADVISORY_VERSION_PAIRS_RESEARCH_ONLY'
+          assert j['distinct_package_projects']==3 and j['case_count']==6
+          assert j['catalogue_version_reversal_pairs']==3
+          assert [x['mechanically_source_derived_preference'] for x in j['cases']]==['A','B']*3
+          assert len({x['source_package'] for x in j['cases']})==3
+          assert j['not_blind_or_private_holdout'] is True
+          assert j['not_independent_expert_reviewed'] is True
+          assert j['not_model_pretraining_disjoint'] is True
+          assert j['independent_expert_labels']==0
+          assert j['new_network_eligible_rows']==0
+          assert j['model_scores_measured'] is False
+          assert j['registered_evaluator'] is False
+          assert j['automatic_registration_permitted'] is False
+          assert j['trainable_pairs']==[]
+          assert len(j['provenance'])==3
+          for source in j['provenance']:
+              assert source['pinned_advisory_json_sha256'] and len(source['verified_pypi_releases'])==2
+          print('Authenticated source-catalogue research artifact SHA256:', hashlib.sha256(raw).hexdigest())
+          print('Verified 3 real distinct package projects, 6 published version facts, no model results/approved labels.')
+          PY
+      - name: Retain real verified source identities and bounded case data for external reproduction
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE3Z-THREE-REAL-ADVISORY-PACKAGES-SIX-VERSION-CASES-NOT-LABELS
+          path: evidence-run/*.json
+          if-no-files-found: error
+          retention-days: 30
