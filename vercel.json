@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "buildCommand": "PYTHONPATH=src python3 -m falsum.phase3q_mission_lab --out-dir public",
+  "buildCommand": "PYTHONPATH=src python3 -m falsum.phase4c_release --out-dir public",
   "outputDirectory": "public",
   "installCommand": "python3 --version",
   "cleanUrls": true,
