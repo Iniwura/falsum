@@ -16,7 +16,7 @@ class PublicDemoReleaseReadiness(unittest.TestCase):
         self.assertEqual(config["outputDirectory"], "public")
         self.assertEqual(
             config["buildCommand"],
-            "PYTHONPATH=src python3 -m falsum.phase3q_mission_lab --out-dir public",
+            "PYTHONPATH=src python3 -m falsum.phase4c_release --out-dir public",
         )
         self.assertEqual(config["installCommand"], "python3 --version")
         self.assertEqual(config["headers"][0]["source"], "/(.*)")
