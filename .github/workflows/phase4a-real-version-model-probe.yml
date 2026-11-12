@@ -1,0 +1,180 @@
+name: Phase 4A - real original LoRA on six public GHSA version cases
+on:
+  push:
+    paths:
+      - 'src/falsum/phase4a_real_model_probe.py'
+      - 'tests/test_phase4a_real_model_probe.py'
+      - '.github/workflows/phase4a-real-version-model-probe.yml'
+      - 'docs/PHASE4A.md'
+  pull_request:
+    paths:
+      - 'src/falsum/phase4a_real_model_probe.py'
+      - 'tests/test_phase4a_real_model_probe.py'
+      - '.github/workflows/phase4a-real-version-model-probe.yml'
+      - 'docs/PHASE4A.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-original-model-version-facts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic fixtures (not evidence of real model inference)
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m unittest discover -s tests -p test_phase4a_real_model_probe.py -v
+      - name: Download exact live-verified Phase 3Z source artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: FALSUM-PHASE3Z-THREE-REAL-ADVISORY-PACKAGES-SIX-VERSION-CASES-NOT-LABELS
+          run-id: 43286926731
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/phase4a/source
+      - name: Verify actual GHSA and PyPI source artifact integrity before model scoring
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/phase4a"
+          f="$d/source/PHASE3Z-REAL-SOURCE-CATALOGUE-VERSION-REVERSALS-UNREVIEWED.json"
+          test -s "$f"
+          echo "82347910cb443f2b1cbde565107dbbd280f40e884ca45f2abfd501a8a5d108a8  $f" | sha256sum -c -
+          mkdir -p "$d/results"
+          PYTHONPATH=src python - "$f" <<'PY'
+          from pathlib import Path
+          from falsum.phase4a_real_model_probe import load_source
+          import sys
+          assert len(load_source(Path(sys.argv[1]).read_bytes())['cases'])==6
+          print("Verified source-bounded GHSA classification conditions; NOT security accuracy")
+          PY
+      - name: Checkout exact official Telegraph scoring runtime kit
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Fetch original quarantined LoRA (NOT trained or registered in this phase)
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE3B-RESEARCH-DELTA-NOT-NETWORK-REGISTERED
+          run-id: 41304788714
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/phase4a/model
+      - name: Verify original model SHA256 unchanged
+        run: |
+          set -euo pipefail
+          pkg="$(find "$RUNNER_TEMP/phase4a/model" -type f -name SECURITY_REVIEW.safetensors -print -quit)"
+          test -n "$pkg"
+          echo "3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc  $pkg" | sha256sum -c -
+          echo "MODEL_PACKAGE=$pkg" >> "$GITHUB_ENV"
+      - name: Retrieve official Foundation ONNX WASI tokenizer and verify byte-for-byte checksums
+        run: |
+          set -euo pipefail
+          f="$RUNNER_TEMP/phase4a/foundation"
+          mkdir -p "$f"
+          base='https://github.com/telegraphprotocol/telegraph-foundation/releases/download/modernbert-base-lora16-v1'
+          for asset in foundation.json foundation_engine.wasm foundation_lora_fp32.onnx tokenizer.json; do
+            curl --fail --location --silent --show-error --retry 3 "$base/$asset" -o "$f/$asset"
+          done
+          (
+            cd "$f"
+            printf '%s  %s\n' \
+              f7de64b999acd3f735118fbe5999abf251fdf188f9797e3a4e36c54ee9e4dbbe foundation.json \
+              77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de foundation_engine.wasm \
+              0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6 foundation_lora_fp32.onnx \
+              67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456 tokenizer.json \
+              | sha256sum -c -
+          )
+      - name: Freeze 12 genuine Foundation tokenizer inputs without truncation
+        run: |
+          set -euo pipefail
+          python -m pip install 'tokenizers==0.22.2'
+          d="$RUNNER_TEMP/phase4a"
+          PYTHONPATH=src python -m falsum.phase4a_real_model_probe \
+            --source "$d/source/PHASE3Z-REAL-SOURCE-CATALOGUE-VERSION-REVERSALS-UNREVIEWED.json" \
+            --tokenizer "$d/foundation/tokenizer.json" \
+            --out "$d/results/FROZEN-SIX-SOURCE-CASES-INPUTS.json"
+      - name: Compile unchanged official Go adapter scoring executable
+        run: |
+          set -euo pipefail
+          cd telegraph-kit
+          go build -o "$RUNNER_TEMP/phase4a/adapterbuild" ./cmd/adapterbuild
+      - name: Run actual official ONNX/WASI scorer for every input, with 2 repeat inferences
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/phase4a/results"
+          f="$RUNNER_TEMP/phase4a/foundation"
+          python - "$d/FROZEN-SIX-SOURCE-CASES-INPUTS.json" <<'PY' > "$d/INPUT-IDS.txt"
+          import json,re,sys
+          x=json.load(open(sys.argv[1]))
+          assert x["status"]=="PHASE4A_FROZEN_SIX_PUBLIC_GHSA_VERSION_CASES_NOT_BLIND"
+          assert len(x["inputs"])==12 and len({r["id"] for r in x["inputs"]})==12
+          for row in x["inputs"]:
+              assert re.fullmatch(r'[a-z0-9-]+--[AB]',row["id"])
+              print(row["id"])
+          PY
+          while IFS= read -r id; do
+            test -n "$id"
+            mkdir -p "$d/$id"
+            "$RUNNER_TEMP/phase4a/adapterbuild" lora \
+              --intent SECURITY_REVIEW \
+              --package "$MODEL_PACKAGE" \
+              --foundation "$f/foundation.json" \
+              --foundation-onnx "$f/foundation_lora_fp32.onnx" \
+              --engine "$f/foundation_engine.wasm" \
+              --engine-hash 77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de \
+              --input "$d/SCORE-$id.json" \
+              --out "$d/$id" \
+              > "$d/$id/OFFICIAL-SCORE.json" \
+              2> "$d/$id/OFFICIAL-ENGINE-LOG.txt"
+          done < "$d/INPUT-IDS.txt"
+      - name: Audit actual score bits, source fact reversals and strict release veto
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/phase4a"
+          PYTHONPATH=src python -m falsum.phase4a_real_model_probe \
+            --source "$d/source/PHASE3Z-REAL-SOURCE-CATALOGUE-VERSION-REVERSALS-UNREVIEWED.json" \
+            --inputs "$d/results/FROZEN-SIX-SOURCE-CASES-INPUTS.json" \
+            --scores-dir "$d/results" \
+            --out "$d/results/ACTUAL-ORIGINAL-MODEL-SIX-VERSION-FACT-RESULTS.json"
+          python - "$d/results/ACTUAL-ORIGINAL-MODEL-SIX-VERSION-FACT-RESULTS.json" <<'PY'
+          import json,os,sys
+          x=json.load(open(sys.argv[1]))
+          assert x["status"]=="PHASE4A_REAL_ORIGINAL_LORA_PUBLIC_VERSION_FACTS_DIAGNOSTIC_ONLY"
+          assert x["genuine_model_score_inputs"]==12
+          assert x["genuine_repeated_inference_calls"]==24
+          assert x["source_package_projects"]==3
+          assert x["independent_expert_labels"]==0
+          assert x["not_blind_or_private_holdout"] is True
+          assert x["network_accuracy_certified"] is False
+          assert x["registered_evaluator"] is False
+          assert x["automatic_registration_permitted"] is False
+          assert x["model_release_veto_remains"] is True
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("### Real old LoRA on new GHSA version cases\n\n")
+              f.write(f"Actual source-catalogue matches: **{x['catalogue_fact_matches']}/6**. "
+                      f"Complete changed-version reversals: **{x['complete_version_fact_reversals']}/3**. "
+                      f"Model-preference reversals: {x['model_preference_reversal_count']}/3.\n\n")
+              f.write("Constant A/B baselines 3/6 each. 12 real score inputs, 24 repeat-verified ONNX/WASI inferences. ")
+              f.write("No independent human labels, no blind holdout, no model registration. Original LoRA stays blocked.\n")
+          PY
+      - name: Archive real source, frozen inputs, actual score packets, results, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE4A-REAL-ORIGINAL-LORA-SIX-GHSA-VERSION-CASES-NOT-REGISTERED
+          path: |
+            ${{ runner.temp }}/phase4a/source/*.json
+            ${{ runner.temp }}/phase4a/results/*
+          if-no-files-found: warn
+          retention-days: 21
