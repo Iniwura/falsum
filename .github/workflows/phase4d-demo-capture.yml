@@ -1,0 +1,90 @@
+name: Phase 4D - actual 1080p judge demo screen capture
+on:
+  push:
+    paths:
+      - 'tests/browser/phase4d_authentic_demo_capture.cjs'
+      - '.github/workflows/phase4d-demo-capture.yml'
+      - 'src/falsum/phase4c_release.py'
+  pull_request:
+    paths:
+      - 'tests/browser/phase4d_authentic_demo_capture.cjs'
+      - '.github/workflows/phase4d-demo-capture.yml'
+      - 'src/falsum/phase4c_release.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-chromium-demo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser capture tools
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-audit --no-fund playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Rebuild verified production site without external model or hidden pool
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase4c_release --out-dir public
+          node --check tests/browser/phase4d_authentic_demo_capture.cjs
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('public/proof/ACTUAL-RECORDED-FOUNDATION-MODEL-SCORES.json').read_text())
+          assert d['real_model_score_inputs']==12
+          assert d['model_matches_narrow_source_facts']==3
+          assert d['complete_factual_reversals']==0
+          assert d['model_registered_to_telegraph'] is False
+          s=json.loads(Path('public/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json').read_text())
+          assert s['synthetic_before_after_executions']==6
+          assert s['actual_third_party_mission_apps_verified']==0
+          PY
+      - name: Record actual 1080p proof, switches, synthetic challenge and real results
+        env:
+          FALSUM_DEMO_SITE_DIR: ${{ github.workspace }}/public
+          FALSUM_DEMO_OUT: ${{ github.workspace }}/demo-capture
+        run: |
+          set -euo pipefail
+          node tests/browser/phase4d_authentic_demo_capture.cjs
+      - name: Validate video and source claims with ffprobe
+        run: |
+          set -euo pipefail
+          ffprobe -v error -select_streams v:0 -show_entries stream=width,height,codec_name -show_entries format=duration -of json demo-capture/FALSUM-REAL-BROWSER-CAPTURE.webm > demo-capture/video-metadata.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('demo-capture')
+          m=json.loads((p/'actual-browser-capture-manifest.json').read_text())
+          v=json.loads((p/'video-metadata.json').read_text())
+          streams=v['streams']
+          assert len(streams)==1
+          assert (streams[0]['width'],streams[0]['height'])==(1920,1080)
+          assert float(v['format']['duration']) > 130
+          assert m['video_recorded_from_real_browser_interactions'] is True
+          assert m['model_fact_matches']==3 and m['complete_version_reversals']==0
+          assert m['independent_network_evaluator'] is False
+          assert len(m['chapters'])==8 and m['errors']==[]
+          assert (p/'FALSUM-REAL-BROWSER-CAPTURE.webm').stat().st_size > 100000
+          print('1080p real-browser capture verified:',v['format']['duration'],'s')
+          PY
+      - name: Preserve playable browser footage and exact chapter metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE4D-AUTHENTIC-1080P-BROWSER-DEMO-PROOF-NOT-LIVE-MODEL
+          path: |
+            demo-capture/FALSUM-REAL-BROWSER-CAPTURE.webm
+            demo-capture/actual-browser-capture-manifest.json
+            demo-capture/video-metadata.json
+          retention-days: 90
+          if-no-files-found: warn
