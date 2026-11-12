@@ -129,8 +129,11 @@ class CounterbalancedSourceReviewerTests(unittest.TestCase):
         for case in pack["cases"]:
             self.assertEqual(len(case["researcher_prerequisites_need_review"]),2)
             self.assertEqual(len(case["review_rubric"]),5)
-            self.assertIn("regression",case["regression_test_file_url"] if False else
-                          "regression test and evidence")
+            self.assertEqual(len(case["regression_test_blob_sha1"]),40)
+            self.assertEqual(len(case["regression_test_patch_sha256"]),64)
+            self.assertTrue(case["regression_test_file_url"].startswith(
+                "https://github.com/"+case["upstream_repository"]+"/blob/"
+                +case["source_fix_commit"]+"/"))
             self.assertTrue(case["source_fix_commit_url"].startswith("https://github.com/"))
             self.assertTrue(case["advisory_url"].startswith("https://github.com/"))
             self.assertEqual(case["external_review_form_url"],
