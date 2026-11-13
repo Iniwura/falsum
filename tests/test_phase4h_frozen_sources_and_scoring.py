@@ -104,7 +104,7 @@ class FrozenSourceTests(unittest.TestCase):
         fake_tokenizer=b"synthetic-not-official-tokenizer"
         with patch("falsum.phase4h_real_model_probe.TOKENIZER_SHA256",sha(fake_tokenizer)):
             frozen=make_inputs(self.raw,fake,fake_tokenizer,
-                               lambda rendered:[50281,1,2,3,4,50282])
+                               lambda rendered:[50281,1,2,3,4,5,6,50282])
             self.assertEqual(frozen["status"],INPUT_STATUS)
             self.assertEqual(len(frozen["inputs"]),16)
             self.assertEqual(len({x["id"] for x in frozen["inputs"]}),16)
