@@ -1,0 +1,102 @@
+name: Phase 4G - hard source-specific security reasoning and shortcut audit
+on:
+  push:
+    paths:
+      - 'src/falsum/phase4g_reasoning_puzzles.py'
+      - 'src/falsum/phase4g_safe_microprobes.py'
+      - 'tests/test_phase4g_reasoning_puzzles.py'
+      - 'tests/browser/phase4g_source_logic_microprobes.cjs'
+      - 'docs/PHASE4G_HARD_SECURITY_REVIEW.md'
+      - '.github/workflows/phase4g-source-reasoning.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase4g_reasoning_puzzles.py'
+      - 'src/falsum/phase4g_safe_microprobes.py'
+      - 'tests/test_phase4g_reasoning_puzzles.py'
+      - 'tests/browser/phase4g_source_logic_microprobes.cjs'
+      - 'docs/PHASE4G_HARD_SECURITY_REVIEW.md'
+      - '.github/workflows/phase4g-source-reasoning.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-logic-and-language-shortcuts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Adversarial source-provenance, author-label and shortcut tests
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase4g_reasoning_puzzles.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase4e_counterbalanced_reviews.py' -v
+      - name: Execute safe standalone source-logic probes without upstream package side effects
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase4g_safe_microprobes
+          node --check tests/browser/phase4g_source_logic_microprobes.cjs
+          node tests/browser/phase4g_source_logic_microprobes.cjs
+      - name: Reverify the eight real public Git fix and regression-test source patches
+        run: |
+          set -euo pipefail
+          mkdir -p evidence-run
+          PYTHONPATH=src python -m falsum.phase3f_multifamily_material \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --catalog data/phase2w-applicability-rules.json \
+            --out evidence-run/REAL-VERIFIED-SEVEN-PROJECT-SOURCES-UNREVIEWED.json
+      - name: Generate harder, author-written review material without expert labels
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase4g_reasoning_puzzles \
+            --source evidence-run/REAL-VERIFIED-SEVEN-PROJECT-SOURCES-UNREVIEWED.json \
+            --out evidence-run/PHASE4G-FOURTEEN-CODE-SPECIFIC-REVIEW-CONDITIONS-UNREVIEWED.json \
+            --diagnostic evidence-run/PHASE4G-WORDING-BASELINE-NOT-ACCURACY.json
+      - name: Fail closed on author-label leakage and unsupported model improvement claims
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os,hashlib
+          from pathlib import Path
+          root=Path('evidence-run')
+          data=json.loads((root/'PHASE4G-FOURTEEN-CODE-SPECIFIC-REVIEW-CONDITIONS-UNREVIEWED.json').read_text())
+          baseline=json.loads((root/'PHASE4G-WORDING-BASELINE-NOT-ACCURACY.json').read_text())
+          assert data['status']=='PHASE4G_FOURTEEN_CODE_SPECIFIC_PUBLIC_RESEARCH_SCENARIOS_NOT_GOLD'
+          assert data['source_verified_upstream_projects']==7
+          assert data['new_author_written_reasoning_conditions']==14
+          assert data['position_swapped_display_conditions']==28
+          assert data['new_independent_human_gold_labels']==0
+          assert data['new_anjoman_eligible_rows']==0
+          assert data['actual_model_evaluations_on_this_set']==0
+          assert data['blind_project_holdout'] is False
+          assert data['network_registered_evaluator'] is False
+          assert baseline['author_A_positions']==7 and baseline['author_B_positions']==7
+          assert baseline['language_shortcut_author_agreements'] < 12
+          assert baseline['independent_ground_truth'] is False
+          assert baseline['model_quality_improvement'] is None
+          assert len(data['cases'])==14
+          sha=hashlib.sha256((root/'PHASE4G-FOURTEEN-CODE-SPECIFIC-REVIEW-CONDITIONS-UNREVIEWED.json').read_bytes()).hexdigest()
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as o:
+              o.write('### Phase 4G source-driven reasoning (research, not measured AI accuracy)\n\n')
+              o.write('7 prior upstream projects; 14 new researcher-written code-specific conditions; 28 A/B presentations.\n\n')
+              o.write('Simple lexical shortcut agreed with '+str(baseline['language_shortcut_author_agreements'])+'/14 author hypotheses; not expert truth or model accuracy.\n\n')
+              o.write('0 independent gold labels, 0 new Anjoman rows, 0 registered evaluators, no true blind holdout.\n\n')
+              o.write('Casebook SHA-256: '+sha+'\n')
+          print('Real-source casebook SHA-256:',sha)
+          PY
+      - name: Retain source records and research casebook for external scrutiny
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE4G-HARD-CODE-REASONING-AUTHOR-RESEARCH-NOT-EXPERT-GOLD
+          path: evidence-run/*.json
+          if-no-files-found: warn
+          retention-days: 90
