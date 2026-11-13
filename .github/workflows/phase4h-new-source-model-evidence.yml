@@ -1,0 +1,234 @@
+name: Phase 4H - four new source projects, original real Foundation model score
+on:
+  push:
+    paths:
+      - 'data/phase4h-frozen-four-new-source-projects.json'
+      - 'src/falsum/phase4h_frozen_source.py'
+      - 'src/falsum/phase4h_real_model_probe.py'
+      - 'tests/test_phase4h_frozen_sources_and_scoring.py'
+      - '.github/workflows/phase4h-new-source-model-evidence.yml'
+  pull_request:
+    paths:
+      - 'data/phase4h-frozen-four-new-source-projects.json'
+      - 'src/falsum/phase4h_frozen_source.py'
+      - 'src/falsum/phase4h_real_model_probe.py'
+      - 'tests/test_phase4h_frozen_sources_and_scoring.py'
+      - '.github/workflows/phase4h-new-source-model-evidence.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  actual-new-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Prove source-lock invariance with synthetic fixtures (NOT source evidence)
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase4h_frozen_sources_and_scoring.py -v
+      - name: Fetch FOUR real upstream fix commits, parent trees, source/test Git blobs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p source-proof
+          PYTHONPATH=src python -m falsum.phase4h_frozen_source \
+            --lock data/phase4h-frozen-four-new-source-projects.json \
+            --out source-proof/ACTUAL-FOUR-UNSEEN-REPOSITORY-FIX-AND-TEST-BLOB-PROOF.json
+      - name: Check real source had four original fixes but exactly two changed selected test files
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          x=json.loads(Path('source-proof/ACTUAL-FOUR-UNSEEN-REPOSITORY-FIX-AND-TEST-BLOB-PROOF.json').read_text())
+          assert x['status']=='PHASE4H_FOUR_PUBLIC_NEW_PROJECT_SOURCE_COMMITS_AND_TESTS_VERIFIED_NOT_GOLD'
+          assert x['source_repositories_verified']==4
+          assert x['source_revision_conditions']==8
+          assert x['source_parent_and_fix_file_blob_checks']==16
+          assert x['selected_test_files_changed_in_fix']==2
+          assert x['selected_test_files_unchanged_in_fix']==2
+          assert x['independent_appsec_gold_labels']==0
+          assert x['downloaded_public_patches_executed'] is False
+          assert x['model_scores_observed'] is False
+          print('Verified independent public upstream Git source files and test change gaps:',x['frozen_selection_sha256'])
+          PY
+      - name: Retain source, test and exact Git parent/fix records separately from model
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE4H-PRECOMMITTED-FOUR-REAL-REPO-SOURCE-PROOF
+          path: source-proof/*.json
+          if-no-files-found: error
+          retention-days: 90
+
+  actual-official-original-model:
+    needs: actual-new-source
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download actual new-project source proof from THIS run
+        uses: actions/download-artifact@v4
+        with:
+          name: FALSUM-PHASE4H-PRECOMMITTED-FOUR-REAL-REPO-SOURCE-PROOF
+          path: ${{ runner.temp }}/phase4h/source
+      - name: Verify all four source projects from frozen pre-score selection
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/phase4h"
+          mkdir -p "$d/results"
+          PYTHONPATH=src python - "$d/source/ACTUAL-FOUR-UNSEEN-REPOSITORY-FIX-AND-TEST-BLOB-PROOF.json" <<'PY'
+          import json,sys
+          from pathlib import Path
+          from falsum.phase4h_real_model_probe import load_source
+          source=Path(sys.argv[1]).read_bytes()
+          lock=Path('data/phase4h-frozen-four-new-source-projects.json').read_bytes()
+          _,proof,cases=load_source(lock,source)
+          assert len(cases)==8 and proof['commits_real_and_parent_verified'] is True
+          print('Frozen source project selection verified before original LoRA scoring.')
+          PY
+      - name: Checkout exact published Telegraph Go WASI scorer
+        uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd
+          path: telegraph-kit
+          persist-credentials: false
+      - name: Retrieve original quarantined LoRA from genuine prior model artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE3B-RESEARCH-DELTA-NOT-NETWORK-REGISTERED
+          run-id: 41304788714
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/phase4h/model
+      - name: Verify unchanged original LoRA model SHA256
+        run: |
+          set -euo pipefail
+          pkg="$(find "$RUNNER_TEMP/phase4h/model" -type f -name SECURITY_REVIEW.safetensors -print -quit)"
+          test -n "$pkg"
+          echo "3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc  $pkg" | sha256sum -c -
+          echo "MODEL_PACKAGE=$pkg" >> "$GITHUB_ENV"
+      - name: Download exact official Foundation WASI, ONNX and tokenizer assets
+        run: |
+          set -euo pipefail
+          f="$RUNNER_TEMP/phase4h/foundation"
+          mkdir -p "$f"
+          base="https://github.com/telegraphprotocol/telegraph-foundation/releases/download/modernbert-base-lora16-v1"
+          for name in foundation.json foundation_engine.wasm foundation_lora_fp32.onnx tokenizer.json; do
+            curl --fail --location --silent --show-error --retry 3 "$base/$name" -o "$f/$name"
+          done
+          (
+            cd "$f"
+            printf '%s  %s\n' \
+              f7de64b999acd3f735118fbe5999abf251fdf188f9797e3a4e36c54ee9e4dbbe foundation.json \
+              77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de foundation_engine.wasm \
+              0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6 foundation_lora_fp32.onnx \
+              67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456 tokenizer.json \
+              | sha256sum -c -
+          )
+      - name: Freeze 16 authentic official token inputs with no truncation
+        run: |
+          set -euo pipefail
+          python -m pip install 'tokenizers==0.22.2'
+          d="$RUNNER_TEMP/phase4h"
+          PYTHONPATH=src python -m falsum.phase4h_real_model_probe \
+            --lock data/phase4h-frozen-four-new-source-projects.json \
+            --source-report "$d/source/ACTUAL-FOUR-UNSEEN-REPOSITORY-FIX-AND-TEST-BLOB-PROOF.json" \
+            --tokenizer "$d/foundation/tokenizer.json" \
+            --out "$d/results/FROZEN-EIGHT-SOURCE-REVISION-TOKEN-INPUTS.json"
+      - name: Compile exact unchanged official Telegraph Go scoring executable
+        run: |
+          set -euo pipefail
+          cd telegraph-kit
+          go build -o "$RUNNER_TEMP/phase4h/adapterbuild" ./cmd/adapterbuild
+      - name: Run 16 real ONNX WASI scores using original model and official engine
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/phase4h/results"
+          f="$RUNNER_TEMP/phase4h/foundation"
+          python - "$d/FROZEN-EIGHT-SOURCE-REVISION-TOKEN-INPUTS.json" <<'PY' > "$d/INPUT-IDS.txt"
+          import json,re,sys
+          frozen=json.load(open(sys.argv[1]))
+          assert frozen['status']=='PHASE4H_FROZEN_EIGHT_NEW_REPO_SOURCE_CONDITIONS_OFFICIAL_INPUTS'
+          assert len(frozen['inputs'])==16
+          assert len({r['id'] for r in frozen['inputs']})==16
+          for row in frozen['inputs']:
+              assert re.fullmatch(r'[a-z][a-z0-9-]+--[AB]',row['id'])
+              print(row['id'])
+          PY
+          while IFS= read -r ident; do
+            test -n "$ident"
+            mkdir -p "$d/$ident"
+            "$RUNNER_TEMP/phase4h/adapterbuild" lora \
+              --intent SECURITY_REVIEW \
+              --package "$MODEL_PACKAGE" \
+              --foundation "$f/foundation.json" \
+              --foundation-onnx "$f/foundation_lora_fp32.onnx" \
+              --engine "$f/foundation_engine.wasm" \
+              --engine-hash 77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de \
+              --input "$d/SCORE-$ident.json" \
+              --out "$d/$ident" \
+              > "$d/$ident/OFFICIAL-SCORE.json" \
+              2> "$d/$ident/OFFICIAL-ENGINE-LOG.txt"
+          done < "$d/INPUT-IDS.txt"
+      - name: Audit exact real f32 bits, source hypotheses and baselines; keep model blocked
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/phase4h"
+          PYTHONPATH=src python -m falsum.phase4h_real_model_probe \
+            --lock data/phase4h-frozen-four-new-source-projects.json \
+            --source-report "$d/source/ACTUAL-FOUR-UNSEEN-REPOSITORY-FIX-AND-TEST-BLOB-PROOF.json" \
+            --inputs "$d/results/FROZEN-EIGHT-SOURCE-REVISION-TOKEN-INPUTS.json" \
+            --scores-dir "$d/results" \
+            --out "$d/results/ACTUAL-NEW-FOUR-PROJECTS-ORIGINAL-MODEL-REPORT.json"
+          python - "$d/results/ACTUAL-NEW-FOUR-PROJECTS-ORIGINAL-MODEL-REPORT.json" <<'PY'
+          import json,os,sys
+          x=json.load(open(sys.argv[1]))
+          assert x['status']=='PHASE4H_REAL_ORIGINAL_QUARANTINED_LORA_NEW_PROJECTS_NOT_NETWORK_QUALITY'
+          assert x['actual_official_foundation_inference'] is True
+          assert x['true_official_score_inputs']==16
+          assert x['actual_repeated_inference_calls']==32
+          assert x['four_new_repo_source_comparisons']==8
+          assert x['source_fact_pair_reversals']==4
+          assert x['constant_A_baseline_matches']==4
+          assert x['constant_B_baseline_matches']==4
+          assert x['independent_appsec_gold_labels']==0
+          assert x['not_blind_or_pretraining_disjoint'] is True
+          assert x['no_training_or_model_improvement_performed'] is True
+          assert x['automatic_registration_permitted'] is False
+          assert x['model_release_veto'] is True
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              out.write('### Real original LoRA on four new-to-FALSUM code-fix projects\n\n')
+              out.write('Real scores: **16 official inputs, 32 repeated inference calls**. ')
+              out.write('Provisional source-based agreements: **'+str(x['source_author_agreements'])+'/8**. ')
+              out.write('Complete paired source-revision reversals: **'+str(x['complete_author_source_fact_reversals'])+'/4**. ')
+              out.write('Model preference reversals: **'+str(x['model_preference_reversal_count'])+'/4**.\n\n')
+              out.write('Constant A/B baselines: 4/8 each. This is **not independently adjudicated model security accuracy**. ')
+              out.write('Model quarantined: no training or registration.\n')
+          print('Genuine official scores verified. Reversal count: ',x['complete_author_source_fact_reversals'])
+          PY
+      - name: Preserve source receipt, all real input packets, float32 scores and engine logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE4H-REAL-ORIGINAL-LORA-FOUR-NEW-PROJECT-CONTEXTS-NOT-REGISTERED
+          path: |
+            ${{ runner.temp }}/phase4h/source/*.json
+            ${{ runner.temp }}/phase4h/results/*
+          if-no-files-found: warn
+          retention-days: 90
