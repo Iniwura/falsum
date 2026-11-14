@@ -70,6 +70,33 @@ For genuine scoring, run or inspect the official [Phase 4H GitHub Actions workfl
 - No new accepted network material, model training, improved evaluator, registered adapter, external customer, or official H2 submission comes from this experiment.
 - Only a new, externally adjudicated and truly sealed test set could justify calling an improved model winning-ready. Do not register the prior failed LoRA by observing its behavior here.
 
-## Actual measured results
+## Actual measured results — 14 November 2026
 
-The authentic runner's observed counts, source and score manifest will be appended **only after** a successful official inference audit, with links to the exact GitHub Actions run and retained artifacts. No synthetic or predicted scores should be substituted if the model job fails.
+**Successful genuine original-Foundation scoring:** [real GitHub Actions run #43530363990](https://github.com/Iniwura/falsum/actions/runs/43530363990). [Source-proof artifact](https://github.com/Iniwura/falsum/actions/runs/43530363990/artifacts/14087635756) · [original score/model-input artifact](https://github.com/Iniwura/falsum/actions/runs/43530363990/artifacts/14087002554) · [permanent exact f32-bit ledger](../evidence/phase4h-2026-11-14-actual-original-model-source-8-conditions.json).
+
+The unchanged original research LoRA, still quarantined, executed **16 genuinely official Foundation score inputs and 32 repeat-verified inferences**. Its original checkpoint, Foundation, WASI engine and tokenizer were checksum-pinned and passed verification. All four source patches and 16 Git file blobs (source and test, parent and fix) were verified prior to scoring.
+
+| Project | Researcher-preferred source answer, parent → fixed | Original LoRA choice, parent → fixed | Both source fact conditions correct? |
+| --- | --- | --- | --- |
+| PyJWT | A → B | **A → B** | Yes |
+| Werkzeug | A → B | **B → B** | No |
+| MCP Python SDK | A → B | **B → B** | No |
+| Pillow | A → B | **B → B** | No |
+
+- **5/8** exact source-revision condition matches on researcher-authored provisional fact interpretations.
+- **1/4** complete before-to-after source-fact reversals (PyJWT only); 1/4 model-choice changes.
+- **4/8** for constant-A and **4/8** for constant-B baselines on the same conditions. The four groups each have the same two candidate answer texts across source revisions.
+- Model-score original real-report SHA256: `7b7c59b7b6ff3b1ea40a4f18bbad1eb6b85a712d2693589e7a468d51672bf0b5`; authentic source receipt SHA256: `295625b4bac3504d5c82e56a66f805339b09e244fc5e41104c9d2494cb127260`. Exact 16 float32 score bits and release veto are permanently recorded in the repository.
+- Two selected test files (Werkzeug and Pillow) were unchanged by their pinned security-fix commits; their authenticity was verified, but they cannot be claimed as newly added regression tests.
+
+**Interpretation:** this old model is modestly above the simple 4/8 constant-choice benchmark on these researcher-interpreted questions, and does change its preference for PyJWT. This is NOT independently validated security-review accuracy, a statistically established improvement, a better trained model, a cross-task comparison with Phase 4A's 3/6, or proof of an external reviewer. All code is public, so the set is **not a sealed model-pretraining holdout**. The model remains **blocked from network registration and training promotion**.
+
+Reproduction without any synthetic score substitution:
+
+~~~bash
+PYTHONPATH=src python -m falsum.phase4h_recorded_evidence \
+  --ledger evidence/phase4h-2026-11-14-actual-original-model-source-8-conditions.json
+~~~
+
+For full ZIP-level source/score verification, download the genuine Phase 4H scoring artifact from the run above and pass its unmodified ZIP file as `--archive /path/to/phase4h-artifact.zip`. The permanent checker validates the original real report SHA, source receipt SHA, tokenizer input hash, all 16 exact float32 bits, and the registration veto. The official CI also replays the real scoring path; synthetic unit fixtures are never presented as a model-quality result.
+
