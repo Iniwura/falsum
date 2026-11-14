@@ -32,6 +32,18 @@ The same tests and actual live GET probe run in [Phase 4K Actions](../.github/wo
 
 Input safety: exact known GitHub comment, verified public commenter, Intent and reported count; fixed allowlisted node endpoint; HTTPS only; strict nonredirecting reads; paginated rows with bounded length and duplicate protection; fixed allowed status names; aggregate-only export. Tests use **synthetic** wallet and row content, never privately held evaluation pairs.
 
+## First actual Phase 4K live observation — November 14, 2026
+
+[**Inspect the full read-only CI and 90-day aggregate artifact**](https://github.com/Iniwura/falsum/actions/runs/43619793133).
+
+The published public GitHub /submit comment was fetched successfully, and the Anjoman node's documented contributor-specific endpoint responded successfully **twice**: once with the exact published checksum-case address and once with the same address lowercased. **Both responses contained zero rows for that address**. The completed readback reported `normalized_lowercase_retry_used: true`, `current_total_rows_for_public_comment_address: 0`, and `current_eligible_rows_for_public_comment_address: 0`.
+
+As a separate live node-health check, the **Intent-wide pool** returned **199 eligible rows from 9 eligible submitters**, with an active snapshot present. Those 199 rows belong to the entire `SECURITY_REVIEW_GENERAL` pool and **must not be counted as FALSUM's contribution**. This is real evidence that the aggregate pool is operating, not proof that the bounty-comment account address is the same as the original signed-in contributor account.
+
+**Interpretation:** The earlier signed-in Anjoman account UI was reported to show 20 Eligible on November 2, while the current public API shows zero rows for the address actually published on GitHub. A wrong/mismatched published address, account identity ambiguity, a status data change or an undocumented backend distinction may explain it. **No 20-row independent confirmation is established; there is no evidence here that rows belonging to some other account were rejected or deleted.** Confirm the exact public contributor address from the original signed-in Anjoman account, compare it with the public bounty /submit address, and contact maintainers if the values are identical. Never provide a private key, seed, signatures or confidential question/answer material to troubleshoot this.
+
+The 13 synthetic adversarial tests also passed; that is a separate claim from the real network readback.
+
 ## What remains unproven
 
 A public comment claiming an address is **not cryptographic proof of address ownership**. A row appearing Eligible does **not** mean independent AppSec review, semantic correctness, maintainer bounty approval, inclusion in the active ranking snapshot, adapter registration, improved model accuracy or a submitted H2 entry.
