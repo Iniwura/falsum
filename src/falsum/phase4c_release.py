@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 from .phase3q_mission_lab import capture, write_outputs
 from .phase4c_judge_proof import write as write_real_proof, STATUS
+from .phase4i_evidence_comparison import write as write_model_comparison, STATUS as COMPARISON_STATUS
 
 
 def build(out_dir: Path) -> dict:
@@ -29,7 +30,21 @@ def build(out_dir: Path) -> dict:
             or recorded["complete_factual_reversals"] != 0
             or recorded["model_registered_to_telegraph"] is not False):
         raise ValueError("model proof misrepresented before deploying")
+    comparison = write_model_comparison(out_dir / "compare")
+    if (comparison["status"] != COMPARISON_STATUS
+            or comparison["model_source_author_matches"] != 5
+            or comparison["model_complete_reversals"] != 1
+            or comparison["constant_A_matches"] != 4
+            or comparison["constant_B_matches"] != 4
+            or comparison["independent_expert_gold_labels"] != 0
+            or comparison["model_registered"] is not False):
+        raise ValueError("source comparison evidence misrepresented before deploying")
     return {
+        "phase4i_source_comparison_project_count": 4,
+        "phase4i_frozen_source_conditions": 8,
+        "phase4i_model_fact_matches": 5,
+        "phase4i_model_complete_reversals": 1,
+        "source_comparison": str(out_dir / "compare/index.html"),
         "web_status": "FALSUM_SYNTHETIC_LAB_PLUS_AUTHENTIC_RECORDED_MODEL_PROOF_NOT_NETWORK_EVALUATOR",
         "root_synthetic_cases": 3,
         "root_real_python_fixture_pairs": 6,

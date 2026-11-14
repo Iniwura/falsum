@@ -1,0 +1,106 @@
+name: Phase 4I - authentic source comparison and judge browser evidence
+on:
+  push:
+    paths:
+      - 'src/falsum/phase4i_evidence_comparison.py'
+      - 'src/falsum/templates/phase4i_evidence_comparison.html'
+      - 'src/falsum/phase4c_release.py'
+      - 'src/falsum/templates/phase4c_judge_model_proof.html'
+      - 'src/falsum/templates/firma_editorial_evidence_lab.html'
+      - 'tests/test_phase4i_evidence_comparison.py'
+      - 'tests/browser/phase4i_evidence_comparison.cjs'
+      - 'docs/PHASE4I_JUDGE_COMPARISON.md'
+      - '.github/workflows/phase4i-judge-comparison.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase4i_evidence_comparison.py'
+      - 'src/falsum/templates/phase4i_evidence_comparison.html'
+      - 'src/falsum/phase4c_release.py'
+      - 'src/falsum/templates/phase4c_judge_model_proof.html'
+      - 'src/falsum/templates/firma_editorial_evidence_lab.html'
+      - 'tests/test_phase4i_evidence_comparison.py'
+      - 'tests/browser/phase4i_evidence_comparison.cjs'
+      - 'docs/PHASE4I_JUDGE_COMPARISON.md'
+      - '.github/workflows/phase4i-judge-comparison.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-bound-comparison:
+    name: Build and score integrity / Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Adversarial exact-model-score and comparison checks
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase4i_evidence_comparison.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase4h_recorded_evidence.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase4c_judge_release.py' -v
+      - name: Build actual offline three-route judge release
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase4c_release --out-dir public
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('public')
+          d=json.loads((root/'compare/ACTUAL-PHASE4H-FROZEN-SOURCE-MODEL-COMPARISON.json').read_text())
+          assert d['status']=='PHASE4I_FOUR_PROJECT_RECORDED_MODEL_COMPARISON_NOT_INDEPENDENT_ACCURACY'
+          assert d['case_count']==8 and d['project_count']==4 and d['model_f32_inputs']==16
+          assert d['model_source_author_matches']==5 and d['model_complete_reversals']==1
+          assert d['constant_A_matches']==4 and d['constant_B_matches']==4
+          assert d['source_aware_oracle_author_agreement']==8
+          assert d['source_aware_oracle_is_hardcoded_from_author_hypotheses'] is True
+          assert d['independent_expert_gold_labels']==0
+          assert d['model_quality_improvement_established'] is False
+          assert d['model_registered'] is False and d['current_live_inference'] is False
+          assert all((root/p).is_file() for p in ('compare/index.html','proof/index.html','index.html'))
+          print('Genuine model 5/8, 1/4 full source reversals, 4/8 constant baselines. No expert gold.')
+          PY
+
+  chromium-judges:
+    name: Chromium / desktop, mobile, keyboard, touch
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-audit --no-fund playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Verify source controls, all cases and no network
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m falsum.phase4c_release --out-dir public
+          TEST_SITE_DIR="$GITHUB_WORKSPACE/public" node tests/browser/phase4i_evidence_comparison.cjs
+          TEST_SITE_DIR="$GITHUB_WORKSPACE/public" node tests/browser/phase4c_judge_proof.cjs
+      - name: Archive genuine Chromium screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE4I-RESPONSIVE-SOURCE-COMPARISON
+          path: |
+            public/compare/*.png
+            public/proof/*.png
+          if-no-files-found: warn
+          retention-days: 90

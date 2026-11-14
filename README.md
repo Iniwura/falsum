@@ -4,7 +4,7 @@
 
 A good security review must change its conclusion when important facts change. FALSUM tests that requirement against real public software fixes and publishes the outcome, including failed model results.
 
-[**Try the review challenge**](https://falsum-evidence-lab.vercel.app/) · [**Inspect actual recorded model scores**](https://falsum-evidence-lab.vercel.app/proof/) · [**Run locally**](#reproduce-it) · [**Review the evidence**](https://github.com/Iniwura/falsum/issues/25)
+[**Try the review challenge**](https://falsum-evidence-lab.vercel.app/) · [**Version evidence**](https://falsum-evidence-lab.vercel.app/proof/) · [**Source revision comparison**](https://falsum-evidence-lab.vercel.app/compare/) · [**Run locally**](#reproduce-it) · [**Review the evidence**](https://github.com/Iniwura/falsum/issues/25)
 
 **Track:** Telegraph Season II / Evaluators. **Intent:** SECURITY_REVIEW_GENERAL.
 
@@ -12,6 +12,7 @@ A good security review must change its conclusion when important facts change. F
 
 | Component | What works | What it does not claim |
 | --- | --- | --- |
+| [Source revision comparison](docs/PHASE4I_JUDGE_COMPARISON.md) | Third judge route with four pinned public upstream parent/fix source pairs, 16 real recorded score inputs, and both constant-choice controls. **5/8** provisional source matches and **1/4** complete model reversals versus **4/8** constant-choice. | A better trained model, independent AppSec gold labels, or a reliable statistical accuracy increase |
 | [Review challenge](https://falsum-evidence-lab.vercel.app/) | Interactive A/B reviews backed by genuinely executed before/after Python code across three **fictional** PRs | Live model inference or real partner application testing |
 | [Real model proof](https://falsum-evidence-lab.vercel.app/proof/) | Inspect the original LoRA's **recorded official Foundation float32 scores** while switching affected vs fixed library releases | A registered evaluator, newly generated model answers or general security accuracy |
 | [Reference checker](docs/PHASE4B.md) | Offline verified GHSA/PyPI version facts, contradiction detection and safe ABSTAIN outcomes | A trained semantic security model or Telegraph network-compatible scoring adapter |
@@ -64,7 +65,7 @@ PYTHONPATH=src python3 -m unittest discover -s tests -p 'test_phase4c_judge_rele
 PYTHONPATH=src python3 -m unittest discover -s tests -p 'test_phase4b_reference_judge.py' -v
 ~~~
 
-**Expected:** three real Python-executed before/after fictional scenarios, plus six source-verified package-version conditions and the old model's **3/6** fact matches and **0/3** complete reversals. Invalid scores or source receipt identities fail the build. To rebuild, use a new output directory; existing evidence outputs cannot be overwritten.
+**Expected:** three real Python-executed before/after fictional scenarios, six original source-verified package-version conditions, and a third `local-judge/compare/index.html` source-revision comparison with four more public upstream project families, the unchanged old model's **5/8** provisional source matches and **1/4** full reversals (constant-choice **4/8**). The existing `/proof/` still shows **3/6** and **0/3** on a *different task*. Invalid scores or source receipt identities fail the build. To rebuild, use a new output directory; existing evidence outputs cannot be overwritten.
 
 To try the reference checker with **five real public example inputs**, download the successful [Phase 3Z verified-source artifact](https://github.com/Iniwura/falsum/actions/runs/43286926731), extract its single verified JSON, and run:
 

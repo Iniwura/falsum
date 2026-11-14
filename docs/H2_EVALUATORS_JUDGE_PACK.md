@@ -20,6 +20,17 @@ FALSUM contributes evaluation material for AI security-review quality. It checks
 
 **One-sentence result:** The unchanged model got **3/6** public, narrow version facts right and **0/3** full affected-to-fixed reversals, no better than the constant-A or constant-B baseline (**3/6**). The source-grounded reference tool correctly handles known GHSA fact, contradiction and abstention cases **by construction**, not by improved machine learning.
 
+## New 75-second source-revision comparison (Phase 4I)
+
+[**Open the live four-project comparison**](https://falsum-evidence-lab.vercel.app/compare/) · [**Read the exact experiment and controls**](PHASE4I_JUDGE_COMPARISON.md) · [**View the genuine scoring CI**](https://github.com/Iniwura/falsum/actions/runs/43530363990).
+
+- **0–15 seconds:** Read the exact result: the unchanged original LoRA matched **5/8** public source-fact interpretations, completed **1/4** proper before-to-after reversals, versus **4/8** for constant-A and constant-B controls on these *same* eight questions.
+- **15–35 seconds:** Select **PyJWT** and switch its pinned parent source to the fix. The model correctly changes its preference A → B; open the actual source patch and regression test.
+- **35–55 seconds:** Select **MCP Python SDK**, then **Werkzeug**. Both upstream source facts change A → B, but the original model stays with B across both revisions. The displayed float32 scores and source URLs are real, recorded and SHA-verified.
+- **55–75 seconds:** Verify the permanent source manifest, original model score artifact and exact model f32 bits. Note that the source-aware **8/8** control is *correct by construction from researcher expectations*, not a trained winning evaluator.
+
+This is a **different experiment** from the older /proof/ page's 3/6, 0/3 public GHSA version conditions. Both used the same failed research LoRA, so neither result is evidence that FALSUM trained a better model. The source-fact expected choices remain **unadjudicated by independent AppSec experts**; the original LoRA remains quarantined. The new third route is also built by the exact same zero-credential command below and produces `judge-output/compare/index.html`.
+
 ## Reproduce without an account, wallet, model or keys
 
 Python 3.11–3.13; the clone step needs internet, but build/test does not.
