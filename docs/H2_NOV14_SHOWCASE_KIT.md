@@ -17,9 +17,9 @@
 
 **FALSUM | When the source changes, should the security verdict change?**
 
-We're building FALSUM for **Telegraph Season II / Evaluators**, serving `SECURITY_REVIEW_GENERAL`. A security-review evaluator should notice when a real upstream fix changes the relevant security facts, rather than rewarding whichever answer sounds more confident.
+I'm building FALSUM for **Telegraph Season II / Evaluators**, serving `SECURITY_REVIEW_GENERAL`. A security-review evaluator should notice when a real upstream fix changes the relevant security facts, rather than rewarding whichever answer sounds more confident.
 
-We've shipped an interactive source comparison using four pinned public upstream fixes. We tested the **same unchanged Telegraph Foundation LoRA** on their before/after versions. The original model matched **5 of 8 researcher-interpreted source conditions**, but completed only **1 of 4** correct before-to-after reversals. Constant A and B each match 4/8. These are authentic **recorded** model scores with reproducible source and score evidence, **not** evidence of a better trained scorer.
+I've shipped an interactive source comparison using four pinned public upstream fixes. I tested the **same unchanged Telegraph Foundation LoRA** on their before/after versions. The original model matched **5 of 8 researcher-interpreted source conditions**, but completed only **1 of 4** correct before-to-after reversals. Constant A and B each match 4/8. These are authentic **recorded** model scores with reproducible source and score evidence, **not** evidence of a better trained scorer.
 
 **Try it:** https://falsum-evidence-lab.vercel.app/compare/
 
@@ -27,13 +27,13 @@ We've shipped an interactive source comparison using four pinned public upstream
 
 **Challenge or correct one public source case:** https://github.com/Iniwura/falsum/issues/25
 
-We separately contributed 20 source-referenced, AI-assisted preference pairs to Anjoman and reported them Eligible in the contributor account; maintainer acceptance and network scorer registration are not claimed. We're looking for genuine independent source checks and constructive criticism. You can select a public case, inspect its fixed commit/regression test, and send an A/B/ABSTAIN verdict with exact citations.
+I separately contributed 20 source-referenced, AI-assisted preference pairs to Anjoman and reported them Eligible in my contributor account; maintainer acceptance and network scorer registration are not claimed. I'm looking for genuine independent source checks and constructive criticism. You can select a public case, inspect its fixed commit/regression test, and send an A/B/ABSTAIN verdict with exact citations.
 
 This is an entry in the prize-bearing **Telegraph Season II hackathon**. No hidden evaluation prompts or customer material are published.
 
 ## Short public technical update draft (NOT POSTED)
 
-We tested an unchanged Telegraph Foundation reward model on real upstream security fixes: PyJWT, Werkzeug, MCP Python SDK and Pillow. In 8 before/after source conditions, the model matched 5 researcher source expectations but correctly reversed its answer for only 1 of 4 fixes. Always-A and always-B each achieve 4/8. FALSUM publishes the actual score bits and pinned code/test/advisory evidence, including negative results. This is **not** independently adjudicated model accuracy or a newly improved adapter.
+I tested an unchanged Telegraph Foundation reward model on real upstream security fixes: PyJWT, Werkzeug, MCP Python SDK and Pillow. In 8 before/after source conditions, the model matched 5 researcher source expectations but correctly reversed its answer for only 1 of 4 fixes. Always-A and always-B each achieve 4/8. FALSUM publishes the actual score bits and pinned code/test/advisory evidence, including negative results. This is **not** independently adjudicated model accuracy or a newly improved adapter.
 
 Try the interactive comparison: https://falsum-evidence-lab.vercel.app/compare/
 Reproduce or challenge it: https://github.com/Iniwura/falsum/blob/main/docs/PHASE4I_JUDGE_COMPARISON.md
