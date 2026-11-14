@@ -20,6 +20,25 @@ MODEL_SHA="3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc"
 FOUNDATION_SHA="0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6"
 TOKENIZER_SHA="67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456"
 GROUPS=("pyjwt","werkzeug","mcp-python","pillow")
+EXPECTED_SCORE_BITS = {
+    "mcp-python-fixed--A": "0xbfaac074",
+    "mcp-python-fixed--B": "0xbf911984",
+    "mcp-python-parent--A": "0xbf86d966",
+    "mcp-python-parent--B": "0xbf84d2ba",
+    "pillow-fixed--A": "0xbf4f51b7",
+    "pillow-fixed--B": "0xbf294cb4",
+    "pillow-parent--A": "0xbf4ebd3a",
+    "pillow-parent--B": "0xbf379a5e",
+    "pyjwt-fixed--A": "0xbf93ad6c",
+    "pyjwt-fixed--B": "0xbf917a5d",
+    "pyjwt-parent--A": "0xbf8d8722",
+    "pyjwt-parent--B": "0xbf8e7507",
+    "werkzeug-fixed--A": "0xbea837d7",
+    "werkzeug-fixed--B": "0xbe26ed78",
+    "werkzeug-parent--A": "0xbf19f6cc",
+    "werkzeug-parent--B": "0xbee0c7a0",
+}
+
 
 class EvidenceError(ValueError):
     pass
@@ -70,6 +89,8 @@ def validate_ledger(d:dict):
     ids={p+"-"+r+"--"+a for p in GROUPS for r in ("parent","fixed") for a in ("A","B")}
     require(isinstance(scores,dict) and len(scores)==16 and set(scores)==ids,
             "exact sixteen official scores missing")
+    require(scores == EXPECTED_SCORE_BITS,
+            "one or more original official float32 score bits were altered")
     decisions={}
     agreements=0
     reversed_groups=[]
