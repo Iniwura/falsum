@@ -55,7 +55,7 @@ const {chromium}=require("playwright");
    assert.equal(await page.locator("#test-link").getAttribute("href"),data.groups[i].revisions[1].test_url);
    assert.equal(await page.locator("#advisory-link").getAttribute("href"),data.groups[i].advisory);
    assert.ok((await page.locator("#bits-b").textContent()).includes(data.groups[i].revisions[1].score_b_f32));
-   assert.equal((await page.locator("#group-result").textContent()).includes("Complete"),true);
+   assert.equal((await page.locator("#group-result").textContent()).startsWith("Complete"), data.groups[i].complete_source_consistent_reversal);
   }
   assert.match(await page.locator("#test-caveat").textContent(),/did NOT change/);
   const phone=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
