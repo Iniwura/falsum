@@ -84,9 +84,7 @@ def _validate_page(data: object, address: str, previous_count: int | None) -> tu
     return count, rows
 
 
-def readback(fetch=_fetch_json) -> dict:
-    comment = fetch(COMMENT_URL, 100_000)
-    address, comment_sha = _extract_comment(comment)
+def _collect_status(address: str, fetch) -> tuple[Counter[str], int]:
     counts: Counter[str] = Counter()
     seen: set[str] = set()
     declared_total: int | None = None
@@ -114,6 +112,21 @@ def readback(fetch=_fetch_json) -> dict:
             raise ReadbackError("incomplete intermediate page")
     if declared_total is None or len(seen) != declared_total:
         raise ReadbackError("incomplete paginated network readback")
+    return counts, declared_total
+
+
+def readback(fetch=_fetch_json) -> dict:
+    comment = fetch(COMMENT_URL, 100_000)
+    address, comment_sha = _extract_comment(comment)
+    counts, declared_total = _collect_status(address, fetch)
+    normalized_lowercase_retry_used = False
+    if declared_total == 0 and address != address.lower():
+        # Ethereum addresses are case-insensitive for lookup, but some node
+        # indices may store lowercase strings. Never silently infer from zero.
+        lower_counts, lower_total = _collect_status(address.lower(), fetch)
+        normalized_lowercase_retry_used = True
+        if lower_total > 0:
+            counts, declared_total = lower_counts, lower_total
     eligible = counts["eligible"]
     if eligible == REPORTED_ROWS:
         status = "PUBLIC_SUBMITTER_ROW_COUNT_MATCHES_REPORTED_20_ELIGIBLE"
@@ -134,6 +147,7 @@ def readback(fetch=_fetch_json) -> dict:
         "current_eligible_rows_for_public_comment_address": eligible,
         "current_status_counts": {k: counts[k] for k in sorted(ALLOWED_STATUSES)},
         "live_readback_completed": True,
+        "normalized_lowercase_retry_used": normalized_lowercase_retry_used,
         "comment_is_cryptographic_address_ownership_proof": False,
         "row_content_or_identifiers_in_report": False,
         "independent_expert_semantic_validation": False,
