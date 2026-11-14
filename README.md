@@ -96,6 +96,10 @@ Public case source records are known and not independently demonstrated to be ab
 
 FALSUM's original implementation includes source material and runtime tooling built with pinned official [Telegraph WASI/scoring code](https://github.com/telegraphprotocol/telegraph-wasm-baseline), the shared ModernBERT Foundation, public advisories and PyPI metadata. Third-party licenses remain applicable. No private network test questions are copied here.
 
+## November 14 milestone and community showcase
+
+The [evidence-safe November 14 showcase kit](docs/H2_NOV14_SHOWCASE_KIT.md) contains the real Phase 4I result, a ready-to-review Discord #showcase draft, a 20 November walkthrough, an honest publication-evidence register, and independent-review requests. **Drafts are not published posts or judge-verified developer activation.** The November 14 integration milestone is not an Evaluators submission deadline. The final H2 submission remains due **December 1 at 23:59 UTC**.
+
 ## For judges and developers
 
 [**90-second judge walkthrough**](docs/H2_EVALUATORS_JUDGE_PACK.md) · [**3-minute real demo recording plan**](docs/H2_EVALUATORS_DEMO_STORYBOARD.md) · [**Complete form-ready H2 submission draft**](docs/H2_FINAL_ENTRY_DRAFT.md) · [**Full engineering history**](docs/DEVELOPMENT_HISTORY.md)
