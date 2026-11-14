@@ -53,6 +53,7 @@ jobs:
               out.write(f"- Live readback completed: **{d['live_readback_completed']}**\n")
               out.write(f"- Status: **{d['status']}**\n")
               out.write(f"- Eligible rows for address already stated in owner's /submit: **{d['current_eligible_rows_for_public_comment_address']}**\n")
+              out.write(f"- Public Intent pool status: {pool['status']}; Intent-wide eligible: {pool.get('public_eligible_rows_in_intent')} (NOT this contributor).\n")
               out.write("- Hidden row contents, hashes, IDs and wallet address never enter this summary.\n")
               out.write("- A status count does not prove maintainer approval, reviewer validity, ownership of a key or a registered evaluator.\n")
           PY
