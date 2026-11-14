@@ -13,6 +13,7 @@
 
 - **Live interactive evidence challenge:** https://falsum-evidence-lab.vercel.app/
 - **Genuine recorded model-score judge experience:** https://falsum-evidence-lab.vercel.app/proof/
+- **Recorded code-revision model comparison:** https://falsum-evidence-lab.vercel.app/compare/ (four different public upstream source projects; 5/8 researcher-source matches, 1/4 complete reversals, 4/8 constant-choice controls, old checkpoint unchanged)
 - **Public repository and reproducible README:** https://github.com/Iniwura/falsum
 - **Original model inference verification:** https://github.com/Iniwura/falsum/actions/runs/43291803205
 - **Pinned upstream source verification:** https://github.com/Iniwura/falsum/actions/runs/43287674960
@@ -24,7 +25,7 @@
 **Still needed from owner:**
 - Official H2 registration and team/contact details: **UNVERIFIED**
 - GitHub username that actually starred telegraphprotocol/bounties: **UNVERIFIED**
-- Real publicly playable 2–5 minute demo URL: **NOT RECORDED/UPLOADED IN THIS EVIDENCE**
+- Publicly playable final 2–5 minute demo URL: **NOT UPLOADED OR VERIFIED**. A 2:56 authentic full-HD browser recording with captions exists as a local review artifact, but public publication and integrated professional voiceover remain outstanding.
 - Owner's public showcase and buyer-introduction permissions: **NOT SELECTED**
 - At least three published original technical progress URLs on different dates: **NOT VERIFIED**
 - Actual successful H2 form submission receipt and entry URL: **NONE YET**
@@ -41,7 +42,7 @@ The observed result was negative: **3/6** matches with narrowly verified source 
 
 Our separate **offline reference checker** verifies source-supported and contradicted advisory/version claims and abstains when evidence is missing or a security assertion goes beyond the source. Across 36 deliberately constructed scenarios it produced 6 supported, 6 contradicted and 24 abstained outcomes, agreeing with its own source-derived expectations **by construction**. This is **new reproducible evaluation coverage**, not a claim that a trained evaluator has reached 100% accuracy.
 
-A public website offers two clear experiences: a three-case interactive security-review challenge backed by real Python execution on **fictional** PR fixtures, and a separate interactive display of the original model's **recorded actual** scores and factual version reversals. Reviewers can reproduce the work offline without wallets, model credentials or paid inference.
+A public website now offers three clear experiences: a three-case interactive security-review challenge backed by real Python execution on **fictional** PR fixtures; an interactive display of the original model's **recorded actual** GHSA-version scores; and a source-revision comparison using four more historical security fixes. The same unchanged original LoRA matched **5/8** source-based researcher expectations and completed **1/4** correct before-to-after reversals against **4/8** for constant-choice baselines on the same eight questions. This is not independent expert-reviewed accuracy or an improved trained model. Reviewers can reproduce the work offline without wallets, model credentials or paid inference.
 
 FALSUM is an **evaluation-material contribution**, not a registered network scoring adapter. It has no claimed independently adjudicated expert labels, verified partner app integrations, production exploits, paying customers, accepted bounty or guaranteed prize. We invite independent reproduction and corrections so the measurement standard can improve.
 
