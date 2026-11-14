@@ -1,0 +1,74 @@
+name: Phase 4H - permanent real f32 score record and old-model veto
+on:
+  push:
+    paths:
+      - 'evidence/phase4h-2026-11-14-actual-original-model-source-8-conditions.json'
+      - 'src/falsum/phase4h_recorded_evidence.py'
+      - 'tests/test_phase4h_recorded_evidence.py'
+      - '.github/workflows/phase4h-permanent-model-evidence.yml'
+  pull_request:
+    paths:
+      - 'evidence/phase4h-2026-11-14-actual-original-model-source-8-conditions.json'
+      - 'src/falsum/phase4h_recorded_evidence.py'
+      - 'tests/test_phase4h_recorded_evidence.py'
+      - '.github/workflows/phase4h-permanent-model-evidence.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  exact-original-score-bit-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Permanent evidence integrity and all negative release gates
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p test_phase4h_recorded_evidence.py -v
+          PYTHONPATH=src python -m falsum.phase4h_recorded_evidence \
+            --ledger evidence/phase4h-2026-11-14-actual-original-model-source-8-conditions.json
+      - name: Download exact genuine original model score artifact, not synthetic mock data
+        uses: actions/download-artifact@v4
+        with:
+          name: FALSUM-PHASE4H-REAL-ORIGINAL-LORA-FOUR-NEW-PROJECT-CONTEXTS-NOT-REGISTERED
+          run-id: 43530363990
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/verified-original-scores
+      - name: Cross-check actual report bytes, source and frozen tokenizer IDs with permanent f32 ledger
+        run: |
+          set -euo pipefail
+          base="$RUNNER_TEMP/verified-original-scores"
+          echo "7b7c59b7b6ff3b1ea40a4f18bbad1eb6b85a712d2693589e7a468d51672bf0b5  $base/results/ACTUAL-NEW-FOUR-PROJECTS-ORIGINAL-MODEL-REPORT.json" | sha256sum -c -
+          echo "295625b4bac3504d5c82e56a66f805339b09e244fc5e41104c9d2494cb127260  $base/source/ACTUAL-FOUR-UNSEEN-REPOSITORY-FIX-AND-TEST-BLOB-PROOF.json" | sha256sum -c -
+          PYTHONPATH=src python - "$base" <<'PY'
+          import json,hashlib,sys,os
+          from pathlib import Path
+          from falsum.phase4h_recorded_evidence import validate_original_report
+          base=Path(sys.argv[1])
+          ledger=json.loads(Path('evidence/phase4h-2026-11-14-actual-original-model-source-8-conditions.json').read_text())
+          report=(base/'results/ACTUAL-NEW-FOUR-PROJECTS-ORIGINAL-MODEL-REPORT.json').read_bytes()
+          validate_original_report(ledger,report)
+          freeze=json.loads((base/'results/FROZEN-EIGHT-SOURCE-REVISION-TOKEN-INPUTS.json').read_bytes())
+          canonical=json.dumps(freeze,sort_keys=True,separators=(",",":")).encode()
+          assert hashlib.sha256(canonical).hexdigest()=='24d5d0a8b3b3db49e0dded1c8598b50625e336094dfbc6f0b93efc12fcfa43a6'
+          assert freeze['model_inputs']==16
+          assert freeze['independent_appsec_gold_labels']==0
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('### Genuine original Foundation LoRA: 5/8 provisional matches, 1/4 full source reversals\n\n')
+              f.write('This is **real score evidence** from unchanged checkpoint, not trained improvement or expert accuracy. ')
+              f.write('Four public projects new to prior FALSUM source probes; two selected test files unchanged. ')
+              f.write('Original model RELEASE VETO preserved; no network registration or new eligible rows.\n')
+          print('All 16 real float32 scores, original source and official tokenizer inputs reconciled.')
+          PY
+      - name: Preserve verification receipt, not a rewritten model score
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE4H-PERMANENT-REAL-MODEL-LEDGER-INDEPENDENTLY-RECONCILED
+          path: evidence/phase4h-2026-11-14-actual-original-model-source-8-conditions.json
+          retention-days: 90
