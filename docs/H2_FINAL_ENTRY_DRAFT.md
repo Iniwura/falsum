@@ -22,6 +22,8 @@
 - **Independent review invitation:** https://github.com/Iniwura/falsum/issues/25
 - **Judge reproduction:** https://github.com/Iniwura/falsum/blob/main/docs/H2_EVALUATORS_JUDGE_PACK.md
 
+**14 November evidence update:** A real [Phase 4K live readback](https://github.com/Iniwura/falsum/actions/runs/43619793133) found **0 current rows for the public bounty-comment contributor address** (checksum-case and lowercase), while the active Intent-wide pool contained **199 eligible rows across 9 eligible submitters**. The historical contributor-account screenshot reporting 20 Eligible remains an accurate description of what was shown earlier, but its identity has **not** been reconciled with the public address. Do **not** state that 20 rows are currently independently network-verified. [Reproduction and limitation](PHASE4K_LIVE_SUBMISSION_READBACK.md).
+
 **Still needed from owner:**
 - Official H2 registration and team/contact details: **UNVERIFIED**
 - GitHub username that actually starred telegraphprotocol/bounties: **UNVERIFIED**
