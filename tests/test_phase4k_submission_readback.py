@@ -66,6 +66,24 @@ class ReadbackTests(unittest.TestCase):
         self.assertEqual(record["current_status_counts"]["eligible"], 17)
         self.assertEqual(record["current_status_counts"]["quarantine"], 1)
 
+    def test_public_mixed_case_address_can_use_lowercase_node_index(self):
+        from urllib.parse import parse_qs, urlsplit
+        mixed = "0x" + "Aa" * 20
+        comment = sample_comment()
+        comment["body"] = comment["body"].replace(ADDRESS, mixed)
+        def fetch(url, limit):
+            if url == COMMENT_URL:
+                return comment
+            query = parse_qs(urlsplit(url).query)
+            address = query["submitter"][0]
+            rows = sample_rows(["eligible"] * 20) if address == mixed.lower() else []
+            return {"submitter": address, "count": len(rows), "rows": rows}
+        record = readback(fetch)
+        self.assertTrue(record["normalized_lowercase_retry_used"])
+        self.assertEqual(record["current_eligible_rows_for_public_comment_address"], 20)
+        self.assertNotIn(mixed, json.dumps(record))
+        self.assertNotIn(mixed.lower(), json.dumps(record))
+
     def test_more_rows_does_not_claim_exact_20(self):
         self.assertIn("MORE", readback(mock_network(["eligible"] * 21))["status"])
 
