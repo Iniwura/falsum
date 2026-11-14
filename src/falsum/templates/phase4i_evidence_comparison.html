@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0d0c">
+<meta name="description" content="FALSUM: genuine precommitted source-revision model scores, a fair constant-choice control and complete reversal evidence.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'none'; font-src 'none'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>FALSUM — Source changes. Does the answer?</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0d0c;--ink:#f2f2eb;--muted:#a5aaa3;--line:#343b36;--panel:#141915;--panel2:#1d251f;--accent:#d9f6a0;--red:#f1ad9a;--mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace;--sans:Inter,"Helvetica Neue",Arial,sans-serif;--display:Impact,"Arial Narrow","Helvetica Neue",Arial,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}a{color:inherit;text-underline-offset:4px}a:hover{color:var(--accent)}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:4px}::selection{color:#0b0d0c;background:var(--accent)}.wrap{max-width:1500px;margin:auto;padding:0 clamp(16px,4.6vw,72px)}.mono{font:500 11px/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase}.muted{color:var(--muted)}.eyebrow{color:var(--accent)}.nav{height:84px;display:flex;align-items:center;justify-content:space-between;gap:15px;border-bottom:1px solid var(--line)}.brand{font-size:26px;letter-spacing:-.08em;font-weight:900;text-decoration:none}.brand sup{vertical-align:super;font-size:10px;letter-spacing:0}.navitems{display:flex;gap:clamp(14px,2.8vw,40px);align-items:center}.navitems a{font-size:12px;font-weight:740;text-decoration:none}.navitems a.active{color:var(--accent)}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.34fr);gap:clamp(16px,5vw,70px);padding:clamp(55px,8vw,130px) 0 clamp(52px,7vw,100px);border-bottom:1px solid var(--line)}.hero h1{font:900 clamp(68px,9.9vw,156px)/.85 var(--display);text-transform:uppercase;letter-spacing:-.048em;margin:24px 0 0;max-width:1120px}.hero h1 em{font-style:normal;color:#8d968b}.hero p{font-size:clamp(18px,1.9vw,26px);line-height:1.35;letter-spacing:-.035em;margin:36px 0 0;max-width:680px}.side-meta{display:flex;flex-direction:column;justify-content:flex-end;gap:15px;border-left:1px solid var(--line);padding-left:30px;min-width:0}.side-meta .record{border-top:1px solid var(--line);padding-top:18px}.side-meta .record:first-child{border-top:0}.side-meta strong{display:block;font-size:15px;line-height:1.5;overflow-wrap:anywhere;font-weight:750;margin-top:7px}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:1px solid var(--line)}.metric{min-width:0;border-right:1px solid var(--line);padding:clamp(20px,3vw,44px) clamp(12px,2.8vw,40px)}.metric:first-child{padding-left:0}.metric:last-child{border-right:0}.metric strong{font:900 clamp(46px,5.7vw,92px)/.9 var(--display);letter-spacing:-.03em}.metric strong.bad{color:var(--red)}.metric strong.good{color:var(--accent)}.metric span{display:block;color:var(--muted);font-size:12px;line-height:1.42;margin-top:14px;max-width:230px}
+.section{padding:clamp(56px,7vw,112px) 0;border-bottom:1px solid var(--line)}.section-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,.35fr);align-items:end;gap:35px;margin-bottom:32px}.section-head h2{font:900 clamp(44px,6.9vw,100px)/.89 var(--display);letter-spacing:-.03em;text-transform:uppercase;margin:14px 0 0}.section-head p{margin:0;color:#c9cec7;font-size:15px;line-height:1.55;max-width:375px}
+.project-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-bottom:0}.project-tab{background:transparent;color:var(--ink);border:0;border-right:1px solid var(--line);padding:20px 19px 21px;text-align:left;min-width:0;min-height:110px}.project-tab:last-child{border-right:0}.project-tab[aria-pressed=true]{background:#222b23;box-shadow:inset 0 3px var(--accent)}.project-tab small{display:block;color:var(--muted);font:11px var(--mono);margin-bottom:10px}.project-tab span{display:block;font-size:clamp(15px,1.55vw,21px);font-weight:800;line-height:1.1;letter-spacing:-.035em;overflow-wrap:anywhere}.project-tab[aria-pressed=true] small{color:var(--accent)}
+.explorer{border:1px solid var(--line);background:var(--panel)}.explorer-top{padding:18px clamp(17px,2.5vw,34px);border-bottom:1px solid var(--line);display:flex;gap:15px;justify-content:space-between;flex-wrap:wrap;align-items:center}.explorer-top .mono{color:var(--muted)}.result{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:730}.dot{height:8px;width:8px;border-radius:50%;background:var(--accent);display:inline-block}.dot.wrong{background:var(--red)}
+.explorer-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.99fr)}.question-pane{border-right:1px solid var(--line);padding:clamp(19px,3.6vw,52px)}.score-pane{padding:clamp(19px,3.6vw,52px)}h3{font-size:clamp(31px,3.7vw,51px);line-height:1.02;letter-spacing:-.05em;margin:18px 0 24px}.revision-tabs{display:flex;gap:8px;margin:22px 0}.revision-btn{border:1px solid var(--line);color:var(--ink);background:var(--bg);padding:14px 18px;text-align:left;min-height:72px;flex:1}.revision-btn[aria-pressed=true]{background:#253021;border-color:var(--accent)}.revision-btn strong{display:block;font-size:14px}.revision-btn small{display:block;margin-top:6px;color:var(--muted);font:10px/1.2 var(--mono)}.revision-btn[aria-pressed=true] small{color:var(--accent)}
+.context-card{padding:24px;border:1px solid var(--line);background:#0d100e;min-width:0}.context-card .question{line-height:1.56;letter-spacing:-.01em;font-size:clamp(15px,1.7vw,19px);margin:14px 0 0;white-space:pre-wrap}.source-snippet{font:12px/1.7 var(--mono);background:#1c241d;color:var(--accent);border:1px solid #445a42;padding:14px;overflow-wrap:anywhere;margin:20px 0 0;white-space:pre-wrap}.source-links{display:flex;gap:14px 25px;flex-wrap:wrap;margin-top:23px}.source-links a{font-size:12px;font-weight:700;overflow-wrap:anywhere}.caveat{margin:24px 0 0;color:var(--muted);font-size:12px;line-height:1.58}
+.decision{display:grid;grid-template-columns:1fr 1fr;gap:18px;border-bottom:1px solid var(--line);padding:20px 0 25px}.decision strong{font:900 clamp(58px,5.9vw,96px)/.9 var(--display);display:block}.decision .source strong{color:var(--accent)}.decision .model.mismatch strong{color:var(--red)}.decision span{display:block;color:var(--muted);font-size:11px;margin-top:10px;line-height:1.4}.answer{border-bottom:1px solid var(--line);padding:20px 0}.answer-head{display:flex;align-items:start;justify-content:space-between;gap:20px;font:12px var(--mono)}.answer-head strong{font-size:15px;color:var(--accent)}.answer p{font-size:14px;line-height:1.5;color:#d1d5cf;margin:12px 0 16px}.score-bar{height:5px;background:#343a35;overflow:hidden}.score-fill{height:100%;width:50%;background:var(--muted);transition:width .2s ease}.answer[data-winning=true] .score-fill{background:var(--accent)}.score-bits{font:11px/1.6 var(--mono);color:var(--muted);margin-top:6px;overflow-wrap:anywhere}.verdict{padding:18px;margin-top:25px;background:#28201c;color:#e9af9c;line-height:1.5;font-size:14px;border-left:3px solid var(--red)}.verdict.ok{border-color:var(--accent);background:#253022;color:var(--accent)}.below{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.tag{padding:8px 10px;border:1px solid var(--line);font:10px var(--mono);color:var(--muted);line-height:1.45}
+.compare{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--line)}.method{padding:clamp(24px,3vw,43px);border-right:1px solid var(--line);min-width:0}.method:last-child{border-right:0}.method .kind{font:11px var(--mono);color:var(--accent)}.method h3{font-size:clamp(26px,2.7vw,41px);margin:19px 0 22px}.method .figure{font:900 clamp(49px,6vw,83px)/.93 var(--display);letter-spacing:-.02em}.method p{font-size:13px;line-height:1.6;color:#c2c7bf;margin:18px 0 0}.method .disclosure{border-top:1px solid var(--line);padding-top:16px;margin-top:26px;font-size:11px;color:var(--muted)}.method .bad{color:var(--red)}
+.reproduce{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:45px;align-items:start}.reproduce h2{font:900 clamp(43px,6vw,90px)/.9 var(--display);text-transform:uppercase;letter-spacing:-.03em;margin:14px 0}.reproduce p{max-width:480px;color:#cbd0c8;line-height:1.7;font-size:15px}.checks{border-top:1px solid var(--line)}.check{padding:20px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:130px 1fr;gap:20px;font-size:13px;line-height:1.6}.check strong{color:var(--accent);font:11px/1.8 var(--mono);overflow-wrap:anywhere}.check a{font-weight:650}.check span{color:#d7ddd3}
+.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:30px 0 45px;font:11px var(--mono);color:var(--muted)}
+@media(max-width:1020px){.hero{grid-template-columns:1fr}.side-meta{border-left:0;border-top:1px solid var(--line);padding:20px 0 0;flex-direction:row;flex-wrap:wrap}.side-meta .record{flex:1 1 180px;border-top:0}.explorer-grid,.reproduce{grid-template-columns:1fr}.question-pane{border-right:0;border-bottom:1px solid var(--line)}}
+@media(max-width:680px){.nav{height:69px}.navitems{gap:12px}.navitems a{font-size:11px}.navitems a:nth-child(2){display:none}.hero{padding:50px 0 54px}.hero h1{font-size:clamp(56px,15vw,88px)}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--line)}.metric:nth-child(3){padding-left:0}.metric strong{font-size:clamp(48px,14vw,70px)}.section-head{grid-template-columns:1fr;gap:20px}.project-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.project-tab{min-height:89px}.project-tab:nth-child(2){border-right:0}.project-tab:nth-child(-n+2){border-bottom:1px solid var(--line)}.score-pane,.question-pane{padding:22px 17px}.context-card{padding:17px}.compare{grid-template-columns:1fr}.method{border-right:0;border-bottom:1px solid var(--line)}.method:last-child{border-bottom:0}.check{grid-template-columns:1fr;gap:6px}.section{padding:55px 0}.hero p{margin-top:22px}}
+@media(max-width:360px){.navitems a{font-size:10px}.brand{font-size:24px}.project-tab{padding:13px 11px}.revision-btn{padding:12px 11px}.decision strong{font-size:64px}.source-links{gap:12px}.answer-head{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.score-fill{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="nav" aria-label="Main navigation"><a class="brand" href="/">FALSUM<sup>®</sup></a><div class="navitems"><a href="/">Challenge</a><a href="/proof/">Version evidence</a><a href="/compare/" class="active" aria-current="page">Source comparison</a></div></nav>
+<main>
+<section class="hero" aria-labelledby="hero-title">
+<div><div class="mono eyebrow">TELEGRAPH / EVALUATORS — EXPERIMENT 04</div><h1 id="hero-title">THE CODE<br><em>CHANGED.</em><br>DID THE MODEL?</h1><p>We changed one verified source fact at a time. The original reward model changed its answer correctly just once.</p></div>
+<div class="side-meta"><div class="record"><div class="mono muted">Research model</div><strong>Original Foundation LoRA, unchanged</strong></div><div class="record"><div class="mono muted">Evidence type</div><strong>Real ONNX / WASI scores · recorded, not live</strong></div><div class="record"><div class="mono muted">Ground truth boundary</div><strong>Public source interpretation · not independent expert labels</strong></div></div>
+</section>
+<section class="metrics" aria-label="Measured source sensitivity">
+<div class="metric"><strong>5/8</strong><span>Model choices matching our pinned source interpretations</span></div>
+<div class="metric"><strong class="bad">1/4</strong><span>Complete before-to-after answer reversals</span></div>
+<div class="metric"><strong>4/8</strong><span>Constant-A or constant-B control, on the same eight questions</span></div>
+<div class="metric"><strong class="good">16</strong><span>Authentic official score inputs · 32 repeat-verified inferences</span></div>
+</section>
+<section class="section" aria-labelledby="explore-title">
+<div class="section-head"><div><div class="mono eyebrow">01 / SOURCE-CONTROLLED EXPERIMENT</div><h2 id="explore-title">CHANGE THE<br>CONTEXT.</h2></div><p>Select a project and switch its exact upstream commit. The two candidate answers stay the same. The source evidence changes.</p></div>
+<div id="project-tabs" class="project-tabs" aria-label="Choose source project"><button type="button" data-case="0" class="project-tab" aria-pressed="true"><small>01 / SECURITY FIX</small><span>PyJWT</span></button><button type="button" data-case="1" class="project-tab" aria-pressed="false"><small>02 / SECURITY FIX</small><span>Werkzeug</span></button><button type="button" data-case="2" class="project-tab" aria-pressed="false"><small>03 / SECURITY FIX</small><span>MCP Python SDK</span></button><button type="button" data-case="3" class="project-tab" aria-pressed="false"><small>04 / SECURITY FIX</small><span>Pillow</span></button></div>
+<div class="explorer">
+<div class="explorer-top"><span class="mono" id="source-label">PYJWT / EXCEPTION HANDLING</span><div class="result" aria-live="polite"><span class="dot" id="status-dot"></span><span id="group-result">Source-aware reversal</span></div></div>
+<div class="explorer-grid">
+<div class="question-pane">
+<div class="mono muted">EXACT PINNED SOURCE / PUBLIC HISTORY</div><h3 id="source-project">PyJWT</h3>
+<div class="revision-tabs" aria-label="Choose source revision"><button type="button" class="revision-btn" id="revision-parent" data-revision="0" aria-pressed="true"><strong>Before fix</strong><small id="parent-hash">171062d2</small></button><button type="button" class="revision-btn" id="revision-fixed" data-revision="1" aria-pressed="false"><strong>After fix</strong><small id="fixed-hash">5fde08a6</small></button></div>
+<div class="context-card"><div class="mono muted">SOURCE QUESTION</div><p class="question" id="case-question">What does the pinned code do?</p><div class="source-snippet" id="source-anchor">except ValueError as e:</div><div class="source-links"><a id="source-link" href="https://github.com/jpadilla/pyjwt" target="_blank" rel="noopener noreferrer">View exact source</a><a id="test-link" href="https://github.com/jpadilla/pyjwt" target="_blank" rel="noopener noreferrer">Regression test</a><a id="fix-link" href="https://github.com/jpadilla/pyjwt" target="_blank" rel="noopener noreferrer">Security fix</a><a id="advisory-link" href="https://github.com/advisories/GHSA-42vr-xj54-vc7v" target="_blank" rel="noopener noreferrer">Advisory</a></div></div>
+<p class="caveat" id="test-caveat">Selected regression test is part of the pinned fix. All interpretations are limited to this source behavior, not a live deployment.</p>
+</div>
+<div class="score-pane" aria-live="polite" aria-atomic="false">
+<div class="mono muted">ORIGINAL MODEL / REAL FLOAT32 SCORES</div><div class="decision"><div class="model" id="model-decision"><strong id="model-answer">A</strong><span>Recorded model chose</span></div><div class="source"><strong id="source-answer">A</strong><span>Researcher source interpretation</span></div></div>
+<div class="answer" id="answer-a"><div class="answer-head"><strong>ANSWER A</strong><span id="score-a">-0.00</span></div><p id="text-a">Source explanation A.</p><div class="score-bar" aria-hidden="true"><div id="bar-a" class="score-fill"></div></div><div class="score-bits" id="bits-a">float32: 0x</div></div>
+<div class="answer" id="answer-b"><div class="answer-head"><strong>ANSWER B</strong><span id="score-b">-0.00</span></div><p id="text-b">Source explanation B.</p><div class="score-bar" aria-hidden="true"><div id="bar-b" class="score-fill"></div></div><div class="score-bits" id="bits-b">float32: 0x</div></div>
+<div class="verdict" id="verdict">Inspect the exact source to assess this choice.</div><div class="below"><span class="tag">RECORDED / NOT LIVE</span><span class="tag">NO VERIFIED EXPERT GOLD</span><span class="tag">MODEL NOT REGISTERED</span></div>
+</div>
+</div>
+</div>
+</section>
+<section class="section" aria-labelledby="compare-title">
+<div class="section-head"><div><div class="mono eyebrow">02 / SAME QUESTIONS. DIFFERENT METHODS.</div><h2 id="compare-title">WHAT THE<br>BASELINES SHOW.</h2></div><p>These controls make it difficult to mistake an impressive-looking score for a genuine improvement in security reasoning.</p></div>
+<div class="compare">
+<div class="method"><div class="kind">01 / CONTENT-INVARIANT RULE</div><h3>Always A<br>or always B.</h3><div class="figure">4/8</div><p>Each project keeps the same answer text across its two source revisions. A fixed-choice rule matches one of those conditions, not both. It makes <strong>0/4</strong> correct full reversals.</p><div class="disclosure">FAIR SIMPLE CONTROL · EIGHT SAME SOURCE QUESTIONS</div></div>
+<div class="method"><div class="kind">02 / GENUINE ORIGINAL FOUNDATION</div><h3>Recorded<br>LoRA.</h3><div class="figure bad">5/8</div><p>The unchanged model exceeds the constant-choice result by one researcher-interpreted condition. It makes only <strong>1/4</strong> complete source-revision reversals. This difference is not validated as a statistically meaningful gain.</p><div class="disclosure">REAL INFERENCE · 16 SCORE INPUTS · NO MODEL RETRAINING</div></div>
+<div class="method"><div class="kind">03 / SOURCE-KNOWN RESEARCH ORACLE</div><h3>Answer key<br>given.</h3><div class="figure">8/8</div><p>A rule supplied with the source author's own answer key necessarily matches all eight conditions and four reversals. That is <strong>correct by construction</strong>, not a learned model or a meaningful accuracy competitor.</p><div class="disclosure">AUTHOR-DERIVED CONTROL · NOT INDEPENDENT OR COMPETITIVE ACCURACY</div></div>
+</div>
+</section>
+<section class="section reproduce" aria-labelledby="repro-title">
+<div><div class="mono eyebrow">03 / VERIFY, DON'T TRUST</div><h2 id="repro-title">THE RECEIPTS<br>ARE PUBLIC.</h2><p>Every displayed number comes from an immutable source-selection manifest and the actual original model's preserved float32 score bits. No simulated model output is used here.</p><p>The four selected source projects were new to this FALSUM scoring campaign, but public code is not a sealed pretraining holdout. Independent AppSec labels, accepted bounty status, evaluator registration and downstream customer impact remain unverified.</p></div>
+<div class="checks">
+<div class="check"><strong>01 / BEFORE</strong><span><a href="https://github.com/Iniwura/falsum/blob/main/data/phase4h-frozen-four-new-source-projects.json" target="_blank" rel="noopener noreferrer">Frozen selection, question texts and source SHA identities</a>. The selection was committed before genuine inference.</span></div>
+<div class="check"><strong>02 / SOURCE</strong><span><a href="https://github.com/Iniwura/falsum/actions/runs/43530363990" target="_blank" rel="noopener noreferrer">Upstream source and regression-test verification</a>: four parent/fix projects and sixteen source/test Git blobs. Selected test file unchanged in two patches.</span></div>
+<div class="check"><strong>03 / MODEL</strong><span><a href="https://github.com/Iniwura/falsum/blob/main/evidence/phase4h-2026-11-14-actual-original-model-source-8-conditions.json" target="_blank" rel="noopener noreferrer">All sixteen exact float32 scores</a>; <a href="https://github.com/Iniwura/falsum/actions/runs/43532118459" target="_blank" rel="noopener noreferrer">post-merge replay</a> using the unchanged Foundation checkpoint and runtime.</span></div>
+<div class="check"><strong>04 / REPRODUCE</strong><span><a href="/compare/ACTUAL-PHASE4H-FROZEN-SOURCE-MODEL-COMPARISON.json">Machine-readable comparison</a>, <a href="https://github.com/Iniwura/falsum/blob/main/docs/PHASE4H_NEW_PROJECT_DIAGNOSTIC.md" target="_blank" rel="noopener noreferrer">full procedure</a> and <a href="https://github.com/Iniwura/falsum/issues/25" target="_blank" rel="noopener noreferrer">open independent review invitation</a>.</span></div>
+</div>
+</section>
+</main>
+<footer class="foot"><span>FALSUM / SECURITY_REVIEW_GENERAL</span><span>TELEGRAPH SEASON II · EVALUATION MATERIAL, NOT A REGISTERED SCORER</span></footer>
+</div>
+<script id="comparison-data" type="application/json">__FALSUM_PHASE4I_DATA__</script>
+<script>
+"use strict";
+(()=>{
+const d=JSON.parse(document.getElementById("comparison-data").textContent);
+if(d.status!=="PHASE4I_FOUR_PROJECT_RECORDED_MODEL_COMPARISON_NOT_INDEPENDENT_ACCURACY"||d.groups.length!==4||d.model_source_author_matches!==5||d.model_complete_reversals!==1||d.model_registered!==false||d.independent_expert_gold_labels!==0)throw Error("Invalid source-bound comparison evidence");
+let active=0,revision=0;const el=id=>document.getElementById(id);
+const tabs=Array.from(document.querySelectorAll("[data-case]"));
+const revisionButtons=Array.from(document.querySelectorAll("[data-revision]"));
+function draw(){
+ const g=d.groups[active],v=g.revisions[revision];
+ tabs.forEach((b,i)=>b.setAttribute("aria-pressed",String(i===active)));
+ revisionButtons.forEach((b,i)=>b.setAttribute("aria-pressed",String(i===revision)));
+ el("source-label").textContent=g.name.toUpperCase()+" / "+g.issue.toUpperCase();
+ el("source-project").textContent=g.name;
+ el("parent-hash").textContent=g.revisions[0].commit.slice(0,11);
+ el("fixed-hash").textContent=g.revisions[1].commit.slice(0,11);
+ el("case-question").textContent=v.question;
+ el("source-anchor").textContent=v.source_anchor;
+ el("source-link").href=v.source_url;el("test-link").href=v.test_url;el("fix-link").href=g.fix_url;el("advisory-link").href=g.advisory;
+ el("test-caveat").textContent=(g.chosen_test_file_changed_by_fix?"The pinned fix changed the selected test file.":"The selected regression-test file did NOT change in this fix.")+" This is a source-behavior comparison, not evidence of production exploitability.";
+ el("model-answer").textContent=v.model_chose;el("source-answer").textContent=v.source_expected_author_only;
+ el("model-decision").classList.toggle("mismatch",!v.matches_researcher_source_expectation);
+ el("text-a").textContent=g.answer_a;el("text-b").textContent=g.answer_b;
+ el("score-a").textContent=v.score_a.toFixed(7);el("score-b").textContent=v.score_b.toFixed(7);
+ el("bits-a").textContent="Official float32: "+v.score_a_f32;
+ el("bits-b").textContent="Official float32: "+v.score_b_f32;
+ el("answer-a").dataset.winning=String(v.model_chose==="A");
+ el("answer-b").dataset.winning=String(v.model_chose==="B");
+ const delta=v.score_a-v.score_b;
+ const power=Math.min(.36,Math.max(.025,Math.abs(delta)));
+ const selectedWidth=54+Math.round((power/.36)*40);
+ el("bar-a").style.width=(delta>=0?selectedWidth:100-selectedWidth)+"%";
+ el("bar-b").style.width=(delta<=0?selectedWidth:100-selectedWidth)+"%";
+ const verdict=el("verdict");verdict.classList.toggle("ok",v.matches_researcher_source_expectation);
+ verdict.textContent=v.matches_researcher_source_expectation?"Matches the researcher-interpreted fact at this source revision.":"The model prefers the other answer for this pinned source revision. Inspect the source patch and test before making a security claim.";
+ el("status-dot").classList.toggle("wrong",!g.complete_source_consistent_reversal);
+ el("group-result").textContent=g.complete_source_consistent_reversal?"Complete A → B reversal":"Did not complete A → B reversal";
+}
+tabs.forEach((b,i)=>b.addEventListener("click",()=>{active=i;revision=0;draw();}));
+revisionButtons.forEach((b,i)=>b.addEventListener("click",()=>{revision=i;draw();}));
+draw();
+})();
+</script>
+</body>
+</html>
