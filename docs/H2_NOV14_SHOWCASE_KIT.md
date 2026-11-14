@@ -61,7 +61,7 @@ Keep FALSUM in the **Evaluators track**. Do not claim an Apps mission was comple
 | Evidence | Status at document creation | Publication / verification reference |
 | --- | --- | --- |
 | Phase 4I merged and CI passing | Verified | [PR #35](https://github.com/Iniwura/falsum/pull/35), [CI](https://github.com/Iniwura/falsum/actions/runs/43537201172) |
-| November 14 Discord #showcase | **Draft only** | None |
+| November 14 Discord #showcase | **User reported posted on November 14; public message URL not independently verified** | URL not yet provided |
 | First public technical update (dated) | **Not verified** | None |
 | Second public technical update (different date) | **Not verified** | None |
 | Third public technical update (different date) | **Not verified** | None |
