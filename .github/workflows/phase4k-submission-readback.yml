@@ -1,0 +1,58 @@
+name: Phase 4K - read-only contributor network status witness
+on:
+  push:
+    paths:
+      - 'src/falsum/phase4k_submission_readback.py'
+      - 'tests/test_phase4k_submission_readback.py'
+      - 'docs/PHASE4K_LIVE_SUBMISSION_READBACK.md'
+      - '.github/workflows/phase4k-submission-readback.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase4k_submission_readback.py'
+      - 'tests/test_phase4k_submission_readback.py'
+      - 'docs/PHASE4K_LIVE_SUBMISSION_READBACK.md'
+      - '.github/workflows/phase4k-submission-readback.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  live-readback:
+    name: Synthetic safeguards and actual public row-state readback
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    env:
+      PYTHONPATH: src:tests
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run all Phase 4K safety tests with synthetic data only
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase4k_submission_readback.py' -v
+      - name: Read public comment and public Anjoman row states (GET only)
+        run: |
+          set -euo pipefail
+          python -m falsum.phase4k_submission_readback --out phase4k-public-aggregate.json
+      - name: Record exact outcome without wallet or row identities
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path("phase4k-public-aggregate.json").read_text())
+          summary=Path(__import__("os").environ["GITHUB_STEP_SUMMARY"])
+          with summary.open("a",encoding="utf-8") as out:
+              out.write("## FALSUM Phase 4K: Anjoman read-only contributor status\n")
+              out.write(f"- Live readback completed: **{d['live_readback_completed']}**\n")
+              out.write(f"- Status: **{d['status']}**\n")
+              out.write(f"- Eligible rows for address already stated in owner's /submit: **{d['current_eligible_rows_for_public_comment_address']}**\n")
+              out.write("- Hidden row contents, hashes, IDs and wallet address never enter this summary.\n")
+              out.write("- A status count does not prove maintainer approval, reviewer validity, ownership of a key or a registered evaluator.\n")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase4k-public-aggregate-readback
+          path: phase4k-public-aggregate.json
+          retention-days: 90
