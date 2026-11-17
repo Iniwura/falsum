@@ -66,6 +66,14 @@ def inspect_public_docs(contents: dict[str, str], root: Path | None = None) -> d
               "source-fix model and constant baseline evidence missing")
         check("not" in low and ("trained" in low or "adapter" in low),
               "unproven model improvement may be promoted")
+    for document in (entry, judge, readme):
+        lower = document.lower()
+        check("november 17" in lower and "332" in lower
+              and "10" in lower and "unknown" in lower,
+              "latest live 17 November public pool and UNKNOWN contributor state omitted")
+        check(("http error" in lower or "httperror" in lower)
+              and ("network-wide" in lower or "intent-wide" in lower),
+              "current contributor HTTP failure must not be conflated with entire Intent pool")
     check("phase 4l" in entry.lower() and "phase 4l" in judge.lower()
           and "phase 4l" in readme.lower(),
           "external PR Guard evidence omitted or miscontextualized")
