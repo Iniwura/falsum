@@ -73,3 +73,61 @@ jobs:
           name: phase4m-research-release-audit-py${{ matrix.python }}
           path: phase4m-release-audit-py${{ matrix.python }}.json
           retention-days: 90
+
+  read-only-network-state:
+    name: Live contributor-address and Intent-pool status — no private row material
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Query only publicly published contributor-address status, get aggregate counts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase4k_submission_readback --out phase4m-live-public-contributor-status.json
+      - name: Query the public Intent-wide pool separately as a health control
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase3m_public_pool_status --out phase4m-live-intent-pool-status.json
+      - name: Cross-check source identity without misattributing the pool to FALSUM
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          own=json.loads(Path('phase4m-live-public-contributor-status.json').read_text())
+          pool=json.loads(Path('phase4m-live-intent-pool-status.json').read_text())
+          assert own['intent_id']=='SECURITY_REVIEW_GENERAL'
+          assert pool['intent_id']=='SECURITY_REVIEW_GENERAL'
+          assert own.get('maintainer_approval_verified') is False
+          assert own.get('registered_adapter_verified') is False
+          assert pool.get('own_submission_checked') is False
+          if not own['live_readback_completed']:
+              assert own.get('current_eligible_rows_for_public_comment_address') is None
+          f=Path(os.environ['GITHUB_STEP_SUMMARY'])
+          with f.open('a') as out:
+              out.write('## Phase 4M live public node status (independent of offline model check)\n')
+              out.write(f"- Public /submit-address API readback: {own['status']}\n")
+              out.write(f"- Eligible rows for this exact published address: **{own.get('current_eligible_rows_for_public_comment_address')}** (null means UNKNOWN)\n")
+              out.write(f"- Intent-wide pool status: {pool['status']}\n")
+              out.write(f"- Intent-wide eligible rows: **{pool.get('public_eligible_rows_in_intent')}** (NEVER a FALSUM-owned count)\n")
+              out.write('- No wallet addresses, row identifiers, private prompts, chosen/rejected pairs, signer, uploads or H2 entries are emitted.\n')
+              out.write('- A zero for the public comment address does **not** prove another account owns zero Eligible rows.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase4m-live-public-anjo-status-aggregate-only
+          path: |
+            phase4m-live-public-contributor-status.json
+            phase4m-live-intent-pool-status.json
+          retention-days: 90
