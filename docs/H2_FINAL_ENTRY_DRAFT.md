@@ -29,6 +29,8 @@
 
 **November 17 live evidence update:** A new [read-only GitHub Actions probe](https://github.com/Iniwura/falsum/actions/runs/44181080455) returned **HTTPError / contributor status unavailable** for the address in the public /submit; this is **UNKNOWN**, not evidence of zero currently. Separately, the healthy **Intent-wide** node showed **332 Eligible rows across 10 eligible contributors**. Those are NOT FALSUM-owned records. The November 14 zero-row result remains a genuine dated observation, not a claim about the present. The contributor identity and whether my actual Anjoman account's rows remain Eligible are **unresolved**.
 
+**November 17 successful retry:** A later [source-checking CI run](https://github.com/Iniwura/falsum/actions/runs/44181734533) returned **0 rows for the public bounty-comment wallet**, while the overall Intent pool still showed **332 Eligible rows across 10 contributors**. The earlier HTTP error remains part of the audit record. The user-account-to-public-address identity is **unverified**; this is not evidence that all rows in my signed-in Anjoman account vanished or were rejected. Do not report current FALSUM-owned 20 Eligible as confirmed.
+
 **Still needed from owner:**
 - Official H2 registration and team/contact details: **UNVERIFIED**
 - GitHub username that actually starred telegraphprotocol/bounties: **UNVERIFIED**
