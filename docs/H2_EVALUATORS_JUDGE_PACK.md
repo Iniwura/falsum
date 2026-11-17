@@ -11,6 +11,8 @@ FALSUM contributes evaluation material for AI security-review quality. It checks
 
 **November 17 network audit:** The new [public read-only probe](https://github.com/Iniwura/falsum/actions/runs/44181080455) received an **HTTP error** for the contributor-specific address, so **today's current row count is UNKNOWN**. The public Intent-wide status reports **332 Eligible rows across 10 eligible contributors**; those counts are not FALSUM-owned. This does not disprove the November 2 signed-in account screen or erase the historical November 14 zero-row API result. The mismatch remains unresolved. The status is **not** a verified contribution or award.
 
+**Later November 17 successful recheck:** The [public readback](https://github.com/Iniwura/falsum/actions/runs/44181734533) now returned **0 rows for the published bounty-comment address** after the preceding probe's HTTP error; the overall pool still reported 332 Eligible rows across 10 eligible submitters. No address/account ownership match is established. Both dated outcomes remain in the evidence record, and neither establishes that the user-visible signed-in account's 20 rows were rejected.
+
 ## 90-second judge walkthrough
 
 | Time | Action | What it establishes |
