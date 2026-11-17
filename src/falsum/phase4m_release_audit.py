@@ -66,13 +66,20 @@ def inspect_public_docs(contents: dict[str, str], root: Path | None = None) -> d
               "source-fix model and constant baseline evidence missing")
         check("not" in low and ("trained" in low or "adapter" in low),
               "unproven model improvement may be promoted")
-    for document in (entry, judge, readme):
-        lower = document.lower()
-        check("november 17" in lower and "332" in lower
-              and "10" in lower and "unknown" in lower,
+    latest_markers = {
+        "docs/H2_FINAL_ENTRY_DRAFT.md": "**November 17 live evidence update:**",
+        "docs/H2_EVALUATORS_JUDGE_PACK.md": "**November 17 network audit:**",
+        "README.md": "**Latest read-only network check (November 17):**",
+    }
+    for path, marker in latest_markers.items():
+        document = contents[path]
+        check(document.count(marker) == 1,
+              "missing or duplicated latest network audit section " + path)
+        latest = document.split(marker, 1)[1].split("\n\n", 1)[0].lower()
+        check("332" in latest and "10" in latest and "unknown" in latest,
               "latest live 17 November public pool and UNKNOWN contributor state omitted")
-        check(("http error" in lower or "httperror" in lower)
-              and ("network-wide" in lower or "intent-wide" in lower),
+        check(("http error" in latest or "httperror" in latest)
+              and ("network-wide" in latest or "intent-wide" in latest),
               "current contributor HTTP failure must not be conflated with entire Intent pool")
     check("phase 4l" in entry.lower() and "phase 4l" in judge.lower()
           and "phase 4l" in readme.lower(),
