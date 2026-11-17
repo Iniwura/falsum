@@ -46,7 +46,7 @@ FALSUM's target is the **SECURITY_REVIEW_GENERAL** Intent (adapter family **SECU
 
 **Current network verification warning (14 November):** A [real privacy-safe Anjoman node readback](https://github.com/Iniwura/falsum/actions/runs/43619793133) returned **0 rows for the contributor address in the existing public /submit**, including a lowercase query. The independently observed **199 eligible rows / 9 eligible contributors** are **pool-wide**, not FALSUM-owned. The earlier **20 Eligible** figure is a historical **signed-in account UI report**, not independently reconfirmed today. The address/account discrepancy must be resolved before claiming a verified FALSUM network contribution. [Method and evidence](docs/PHASE4K_LIVE_SUBMISSION_READBACK.md).
 
-**Important:** the bounty submission exists, but final maintainer acceptance is **not verified**. It is separate from the Season II competition entry. Hidden evaluation prompts, selected answers, row hashes and private account data remain out of the public site and repository. The current public checker is **not registered on the Telegraph network** and there is no independently verified external customer or H2 mission-app use.
+**Important:** the original bounty #96 was closed during the November 15 mission migration; its earlier /submit remains on record but is **not maintainer acceptance**. The relevant open mission thread is [Model Economy #198](https://github.com/telegraphprotocol/bounties/issues/198). It is separate from the Season II competition entry. Hidden evaluation prompts, selected answers, row hashes and private account data remain out of the public site and repository. The current public checker is **not registered on the Telegraph network** and there is no independently verified external customer or H2 mission-app use.
 
 ### Why it matters
 
@@ -110,6 +110,6 @@ The [evidence-safe November 14 showcase kit](docs/H2_NOV14_SHOWCASE_KIT.md) cont
 
 [**90-second judge walkthrough**](docs/H2_EVALUATORS_JUDGE_PACK.md) · [**3-minute real demo recording plan**](docs/H2_EVALUATORS_DEMO_STORYBOARD.md) · [**Complete form-ready H2 submission draft**](docs/H2_FINAL_ENTRY_DRAFT.md) · [**Full engineering history**](docs/DEVELOPMENT_HISTORY.md)
 
-FALSUM is being prepared for **Telegraph Season II / Evaluators**. **Official deadline: December 1, 2026 at 23:59 UTC.** Internal quality target: **November 17**. The **official H2 website entry and 2–5 minute recording are not yet submitted or verified**; a GitHub bounty comment does not submit the hackathon entry.
+FALSUM is being prepared for **Telegraph Season II / Evaluators**. **Official deadline: December 1, 2026 at 23:59 UTC.** Internal completion target: **Sunday, November 22, 2026, subject to audit gates**. The **official H2 website entry and 2–5 minute recording are not yet submitted or verified**; a GitHub bounty comment does not submit the hackathon entry.
 
 Developer feedback should include a real source URL, exact version, reproducible command and the observed result. The team records genuine reviews, corrections and abstentions, including negative findings. No purchased or fabricated developer activity is counted.
