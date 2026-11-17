@@ -67,6 +67,18 @@ class H2SubmissionIntegrityTests(unittest.TestCase):
         with self.assertRaisesRegex(gate.ReleaseAuditError, "zero-row"):
             gate.inspect_public_docs(docs)
 
+    def test_rejects_current_http_error_silently_promoted_to_verified(self):
+        docs = self.modified("docs/H2_FINAL_ENTRY_DRAFT.md",
+                             "332 Eligible rows", "20 FALSUM-owned verified rows")
+        with self.assertRaisesRegex(gate.ReleaseAuditError, "latest live"):
+            gate.inspect_public_docs(docs)
+
+    def test_rejects_missing_unknown_current_account_status(self):
+        docs = self.modified("README.md",
+                             "UNKNOWN", "VERIFIED AND ACCEPTED")
+        with self.assertRaisesRegex(gate.ReleaseAuditError, "latest live"):
+            gate.inspect_public_docs(docs)
+
     def test_rejects_outdated_nov17_internal_target(self):
         docs = self.modified("docs/H2_FINAL_ENTRY_DRAFT.md",
                              "Sunday, November 22", "Tuesday, November 17")
