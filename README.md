@@ -34,6 +34,10 @@ The public source material includes three previously unstudied packages, six aff
 
 The Phase 4H four-project 5/8 is a different, newly selected source task on the **unchanged failed LoRA**, not a trained improvement over Phase 4A's 3/6. The reference checker's 36/36 and the model's 3/6 are **different tasks**. This is *not* a 100% AI improvement. There are **zero externally adjudicated expert labels** in this public reference set, no sealed benchmark, and no demonstrated improved trained LoRA. We keep the failing research checkpoints quarantined.
 
+## Phase 4L — real external PR Guard miner receipts (research-only)
+
+A separate Season II developer documented a concrete `SECURITY_REVIEW_GENERAL` routing failure in [PR Guard / bounty #187](https://github.com/telegraphprotocol/bounties/issues/187). FALSUM's new [Phase 4L reproducible link-only evidence audit](docs/PHASE4L_PR_GUARD_REAL_MINER_EVIDENCE.md) verifies three *public, immutable GitHub response captures* against their original Git blob SHA and confirms they contain the **same input diff**. It distinguishes routed off-target miner 77003, direct Verity #5530 and cross-Intent ChainSight #302, while **completely excluding the contributor's Sentinel #731001 answers**. It does not copy third-party responses into the dataset, establish AppSec expert gold labels, independently verify onchain receipts, or demonstrate a trained evaluator improvement. All compared routes have different transport/Intent contexts, so this is a reproducible **integration failure diagnostic**, not a fair same-Intent performance leaderboard.
+
 ## The Telegraph contribution
 
 FALSUM's target is the **SECURITY_REVIEW_GENERAL** Intent (adapter family **SECURITY_REVIEW**). The contributor reported **20 source-referenced, explicitly AI-assisted preference pairs marked Eligible** in their actual Anjoman account after rollover.
