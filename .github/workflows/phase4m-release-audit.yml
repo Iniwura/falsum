@@ -1,0 +1,75 @@
+name: Phase 4M - strict evidence and release-claim quality audit
+on:
+  push:
+    paths:
+      - 'src/falsum/phase4m_release_audit.py'
+      - 'tests/test_phase4m_release_audit.py'
+      - 'docs/H2_FINAL_ENTRY_DRAFT.md'
+      - 'docs/H2_EVALUATORS_JUDGE_PACK.md'
+      - 'README.md'
+      - '.github/workflows/phase4m-release-audit.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase4m_release_audit.py'
+      - 'tests/test_phase4m_release_audit.py'
+      - 'docs/H2_FINAL_ENTRY_DRAFT.md'
+      - 'docs/H2_EVALUATORS_JUDGE_PACK.md'
+      - 'README.md'
+      - '.github/workflows/phase4m-release-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-and-claims:
+    name: Original model source-bits and public release integrity / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    env:
+      PYTHONPATH: src:tests
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Run Phase 4M adversarial actual-source and publication-claims tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase4m_release_audit.py' -v
+      - name: Generate explicitly NOT READY evidence-aware release report
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase4m_release_audit --out "phase4m-release-audit-py${{ matrix.python }}.json"
+      - name: Verify green CI cannot be presented as contest readiness
+        shell: bash
+        run: |
+          python - <<'PY'
+          import glob,json,os
+          from pathlib import Path
+          files=glob.glob('phase4m-release-audit-py*.json')
+          assert len(files)==1
+          d=json.loads(Path(files[0]).read_text())
+          assert d['released_ready'] is False
+          assert d['methodology_verified']['quality_improvement_proven'] is False
+          assert d['methodology_verified']['expert_independent_gold_labels']==0
+          assert d['publication_claims_checked']['solo_builder_public_copy'] is True
+          assert d['publication_claims_checked']['local_document_links_verified'] > 10
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Phase 4M: strict release evidence audit\n\n')
+              f.write('Original immutable old-model scores: **5/8** researcher-source matches, **1/4** complete reversals, **4/8** constant A/B.\n\n')
+              f.write('Verified frozen source/model ledger, no public broken links in final packet, solo project authorship and historical 20-eligible versus 0-live-address-readback disclosure.\n\n')
+              f.write('**NOT READY**: independent expert gold, true heldout, accepted network rows, official registration/star, final demo and H2 submission are not externally established.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase4m-research-release-audit-py${{ matrix.python }}
+          path: phase4m-release-audit-py${{ matrix.python }}.json
+          retention-days: 90
