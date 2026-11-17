@@ -27,6 +27,8 @@
 
 **17 November program audit:** The `SECURITY_REVIEW_GENERAL` evaluation-material path, real source scores, and [Phase 4L external PR Guard failure evidence](PHASE4L_PR_GUARD_REAL_MINER_EVIDENCE.md) are distinct. FALSUM has not integrated a live scorer with PR Guard, authenticated the third-party payment receipts, achieved expert-reviewed gold labels, or proven an improvement over the original model. [Mission 10 Model Economy](https://github.com/telegraphprotocol/bounties/issues/198) is an open mission discussion, not FALSUM's confirmed mission delivery. The original [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96) was closed November 15 due to mission migration; its earlier comments remain visible and are not an acceptance decision.
 
+**November 17 live evidence update:** A new [read-only GitHub Actions probe](https://github.com/Iniwura/falsum/actions/runs/44181080455) returned **HTTPError / contributor status unavailable** for the address in the public /submit; this is **UNKNOWN**, not evidence of zero currently. Separately, the healthy **Intent-wide** node showed **332 Eligible rows across 10 eligible contributors**. Those are NOT FALSUM-owned records. The November 14 zero-row result remains a genuine dated observation, not a claim about the present. The contributor identity and whether my actual Anjoman account's rows remain Eligible are **unresolved**.
+
 **Still needed from owner:**
 - Official H2 registration and team/contact details: **UNVERIFIED**
 - GitHub username that actually starred telegraphprotocol/bounties: **UNVERIFIED**
