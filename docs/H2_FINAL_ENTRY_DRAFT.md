@@ -6,7 +6,7 @@
 **Track:** Evaluators  
 **Intent:** SECURITY_REVIEW_GENERAL (shared scoring family SECURITY_REVIEW)  
 **Project:** FALSUM  
-**Internal submission-quality target:** Tuesday, November 17, 2026  
+**Internal completion target:** Sunday, November 22, 2026. This date does not authorize lowering technical standards.  
 **Actual official deadline:** December 1, 2026 at 23:59 UTC
 
 ## Verified project links
@@ -18,16 +18,19 @@
 - **Original model inference verification:** https://github.com/Iniwura/falsum/actions/runs/43291803205
 - **Pinned upstream source verification:** https://github.com/Iniwura/falsum/actions/runs/43287674960
 - **Source-grounded reference checks:** https://github.com/Iniwura/falsum/actions/runs/43297345188
-- **Actual public contributor submission:** https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396
+- **Historical public contributor submission (bounty #96 closed during mission migration, not accepted):** https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396
 - **Independent review invitation:** https://github.com/Iniwura/falsum/issues/25
 - **Judge reproduction:** https://github.com/Iniwura/falsum/blob/main/docs/H2_EVALUATORS_JUDGE_PACK.md
 
 **14 November evidence update:** A real [Phase 4K live readback](https://github.com/Iniwura/falsum/actions/runs/43619793133) found **0 current rows for the public bounty-comment contributor address** (checksum-case and lowercase), while the active Intent-wide pool contained **199 eligible rows across 9 eligible submitters**. The historical contributor-account screenshot reporting 20 Eligible remains an accurate description of what was shown earlier, but its identity has **not** been reconciled with the public address. Do **not** state that 20 rows are currently independently network-verified. [Reproduction and limitation](PHASE4K_LIVE_SUBMISSION_READBACK.md).
 
+
+**17 November program audit:** The `SECURITY_REVIEW_GENERAL` evaluation-material path, real source scores, and [external PR Guard failure evidence](PHASE4L_PR_GUARD_REAL_MINER_EVIDENCE.md) are distinct. FALSUM has not integrated a live scorer with PR Guard, authenticated the third-party payment receipts, achieved expert-reviewed gold labels, or proven an improvement over the original model. [Mission 10 Model Economy](https://github.com/telegraphprotocol/bounties/issues/198) is an open mission discussion, not FALSUM's confirmed mission delivery. The original [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96) was closed November 15 due to mission migration; its earlier comments remain visible and are not an acceptance decision.
+
 **Still needed from owner:**
 - Official H2 registration and team/contact details: **UNVERIFIED**
 - GitHub username that actually starred telegraphprotocol/bounties: **UNVERIFIED**
-- Publicly playable final 2–5 minute demo URL: **NOT UPLOADED OR VERIFIED**. A 2:56 authentic full-HD browser recording with captions exists as a local review artifact, but public publication and integrated professional voiceover remain outstanding.
+- Publicly playable final 2–5 minute demo URL: **NOT UPLOADED OR VERIFIED**. No video work is authorized during the technical audit; this gate remains pending.
 - Owner's public showcase and buyer-introduction permissions: **NOT SELECTED**
 - At least three published original technical progress URLs on different dates: **NOT VERIFIED**
 - Actual successful H2 form submission receipt and entry URL: **NONE YET**
@@ -36,17 +39,17 @@
 
 **FALSUM evaluates security evidence rather than the confidence of an AI answer.** It contributes source-backed evaluation material for Telegraph's SECURITY_REVIEW_GENERAL Intent, where a security review must distinguish published vulnerabilities from reachable application impact and change its verdict when the relevant facts change.
 
-We submitted 20 explicitly AI-assisted, source-referenced preference pairs to Telegraph's Anjoman contributor flow. The contributing account reported 20 of them **Eligible** after rollover. We also filed the genuine public GitHub bounty submission. **Independent maintainer acceptance is pending, and these private evaluation records are not exposed publicly.**
+I uploaded 20 explicitly AI-assisted, source-referenced preference pairs through Anjoman. My signed-in account displayed 20 **Eligible** after the November 2 rollover, and I posted a public bounty submission. **However, the November 14 read-only node query returned zero records for the address published in that submission, including lowercase normalization. The address/account discrepancy is unresolved; I do not claim 20 rows are currently independently network-verified or accepted by maintainers.** The private evaluation material is not published.
 
-FALSUM's public research makes the evaluation problem falsifiable. We pinned real GitHub-reviewed advisory and PyPI version records for docling-core, hydra-core and python-multipart. We used the official Telegraph Foundation ONNX/WASI runtime to score the **same unchanged original LoRA** on six affected-versus-fixed version conditions, with 12 authentic scores and 24 repeat-verified inferences.
+FALSUM's public research makes the evaluation problem falsifiable. I pinned real GitHub-reviewed advisory and PyPI version records for docling-core, hydra-core and python-multipart. I used the official Telegraph Foundation ONNX/WASI runtime to score the **same unchanged original LoRA** on six affected-versus-fixed version conditions, with 12 authentic scores and 24 repeat-verified inferences.
 
-The observed result was negative: **3/6** matches with narrowly verified source facts and **0/3** complete version-sensitive answer reversals. The model preferred A on all six conditions, matching a trivial constant-A baseline of 3/6. The full bit-exact evidence and source records are public. We refused to register or promote the failing model.
+The observed result was negative: **3/6** matches with narrowly verified source facts and **0/3** complete version-sensitive answer reversals. The model preferred A on all six conditions, matching a trivial constant-A baseline of 3/6. The full bit-exact evidence and source records are public. I have not registered or promoted the failing model.
 
-Our separate **offline reference checker** verifies source-supported and contradicted advisory/version claims and abstains when evidence is missing or a security assertion goes beyond the source. Across 36 deliberately constructed scenarios it produced 6 supported, 6 contradicted and 24 abstained outcomes, agreeing with its own source-derived expectations **by construction**. This is **new reproducible evaluation coverage**, not a claim that a trained evaluator has reached 100% accuracy.
+FALSUM's separate **offline reference checker** verifies source-supported and contradicted advisory/version claims and abstains when evidence is missing or a security assertion goes beyond the source. Across 36 deliberately constructed scenarios it produced 6 supported, 6 contradicted and 24 abstained outcomes, agreeing with its own source-derived expectations **by construction**. This is **new reproducible evaluation coverage**, not a claim that a trained evaluator has reached 100% accuracy.
 
 A public website now offers three clear experiences: a three-case interactive security-review challenge backed by real Python execution on **fictional** PR fixtures; an interactive display of the original model's **recorded actual** GHSA-version scores; and a source-revision comparison using four more historical security fixes. The same unchanged original LoRA matched **5/8** source-based researcher expectations and completed **1/4** correct before-to-after reversals against **4/8** for constant-choice baselines on the same eight questions. This is not independent expert-reviewed accuracy or an improved trained model. Reviewers can reproduce the work offline without wallets, model credentials or paid inference.
 
-FALSUM is an **evaluation-material contribution**, not a registered network scoring adapter. It has no claimed independently adjudicated expert labels, verified partner app integrations, production exploits, paying customers, accepted bounty or guaranteed prize. We invite independent reproduction and corrections so the measurement standard can improve.
+FALSUM is an **evaluation-material contribution**, not a registered network scoring adapter. It has no claimed independently adjudicated expert labels, verified partner app integrations, production exploits, paying customers, accepted bounty or guaranteed prize. I invite independent reproduction and corrections so the measurement standard can improve.
 
 ## Short public summary
 
@@ -54,11 +57,11 @@ FALSUM is an **evaluation-material contribution**, not a registered network scor
 
 A model that gives the same answer to an affected and patched version cannot be trusted for context-sensitive security review. FALSUM documents that failure through authentic Telegraph Foundation scoring, pinned open-source evidence and a reproducible version-sensitive reference checker.
 
-We also submitted 20 AI-assisted preference pairs marked Eligible in our Anjoman contributor account; external bounty acceptance remains unconfirmed.
+I also submitted 20 AI-assisted evaluation preference pairs. My contributor account reported 20 Eligible on November 2, but a later live readback found zero rows for the publicly submitted address. Ownership matching and maintainer acceptance remain unresolved.
 
 [Try the challenge](https://falsum-evidence-lab.vercel.app/) · [See actual model scores](https://falsum-evidence-lab.vercel.app/proof/) · [Run and review the evidence](https://github.com/Iniwura/falsum)
 
-This work is an entry for the prize-bearing Telegraph Season II Evaluators track. We welcome genuine independent tests and criticism; no confidential evaluation questions are published.
+This work is an entry for the prize-bearing Telegraph Season II Evaluators track. I welcome genuine independent tests and criticism; no confidential evaluation questions are published.
 
 ## What a judge can test
 
@@ -95,7 +98,7 @@ Current evidence: a public interactive challenge, reproducible source checker, a
 - Actual 2–5 minute video or accessible equivalent uploaded and playable.
 - Public repo, both real and synthetic pages, and instructions verified reachable by unauthenticated reviewers.
 - Full GitHub CI and build run green; source evidence and model score references correct; no private material exposed.
-- Honest explanation of the separate **20 Eligible** contributor account status versus external maintainer acceptance.
+- Disclose the **November 2 account UI: 20 Eligible** versus **November 14 public address API: zero rows** discrepancy; do not call the 20 independently verified.
 - Actual public update URLs and outside reproductions included only if they exist.
 - Owner grants or declines public showcase and buyer-introduction permissions.
 - Submit on the **official H2 site** (not just GitHub bounty) and preserve its real success receipt, timestamp and final entry URL.
