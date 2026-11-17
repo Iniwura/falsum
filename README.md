@@ -32,7 +32,7 @@ The public source material includes three previously unstudied packages, six aff
 | **Same unchanged original model** on four different public source-fix projects (PyJWT, Werkzeug, MCP SDK, Pillow), selection frozen before scoring | **5/8** researcher-source matches, **1/4** complete revision reversals, vs **4/8** each constant A/B. No independently expert-reviewed labels. | [Phase 4H full findings](docs/PHASE4H_NEW_PROJECT_DIAGNOSTIC.md) · [real 16-score run](https://github.com/Iniwura/falsum/actions/runs/43530363990) · [exact f32 proof](evidence/phase4h-2026-11-14-actual-original-model-source-8-conditions.json) |
 | Offline source-grounded reference tool | **6 supported, 6 contradicted, 24 abstained**; 36/36 on its **own source-derived fixtures by construction** | [Phase 4B report](docs/PHASE4B.md) · [Source CI](https://github.com/Iniwura/falsum/actions/runs/43297345188) |
 
-The Phase 4H four-project 5/8 is a different, newly selected source task on the **unchanged failed LoRA**, not a trained improvement over Phase 4A's 3/6. The reference checker's 36/36 and the model's 3/6 are **different tasks**. This is *not* a 100% AI improvement. There are **zero externally adjudicated expert labels** in this public reference set, no sealed benchmark, and no demonstrated improved trained LoRA. We keep the failing research checkpoints quarantined.
+The Phase 4H four-project 5/8 is a different, newly selected source task on the **unchanged failed LoRA**, not a trained improvement over Phase 4A's 3/6. The reference checker's 36/36 and the model's 3/6 are **different tasks**. This is *not* a 100% AI improvement. There are **zero externally adjudicated expert labels** in this public reference set, no sealed benchmark, and no demonstrated improved trained LoRA. The failing research checkpoints remain quarantined.
 
 ## Phase 4L — real external PR Guard miner receipts (research-only)
 
@@ -44,9 +44,13 @@ FALSUM's target is the **SECURITY_REVIEW_GENERAL** Intent (adapter family **SECU
 
 [Privacy-safe account-status evidence](evidence/phase3o-2026-11-02-20-eligible.json) · [Public bounty #96 /submit comment](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396)
 
-**Current network verification warning (14 November):** A [real privacy-safe Anjoman node readback](https://github.com/Iniwura/falsum/actions/runs/43619793133) returned **0 rows for the contributor address in the existing public /submit**, including a lowercase query. The independently observed **199 eligible rows / 9 eligible contributors** are **pool-wide**, not FALSUM-owned. The earlier **20 Eligible** figure is a historical **signed-in account UI report**, not independently reconfirmed today. The address/account discrepancy must be resolved before claiming a verified FALSUM network contribution. [Method and evidence](docs/PHASE4K_LIVE_SUBMISSION_READBACK.md).
+**Current network verification warning (14 November):** A [real privacy-safe Anjoman node readback](https://github.com/Iniwura/falsum/actions/runs/43619793133) returned **0 rows for the contributor address in the existing public /submit**, including a lowercase query. The independently observed **199 eligible rows / 9 eligible contributors** are **pool-wide**, not FALSUM-owned. The earlier **20 Eligible** figure is a historical **signed-in account UI report**, not independently reconfirmed today. The address/account discrepancy is unresolved and must be reconciled before claiming a verified FALSUM network contribution. [Method and evidence](docs/PHASE4K_LIVE_SUBMISSION_READBACK.md).
 
-**Important:** the bounty submission exists, but final maintainer acceptance is **not verified**. It is separate from the Season II competition entry. Hidden evaluation prompts, selected answers, row hashes and private account data remain out of the public site and repository. The current public checker is **not registered on the Telegraph network** and there is no independently verified external customer or H2 mission-app use.
+**Latest read-only network check (November 17):** The contributor-specific GET returned an **HTTP error**, so the current count for the public bounty-comment address is **UNKNOWN**, not zero. The independently queried **Intent-wide pool** showed **332 Eligible rows across 10 contributors**; these are network-wide and **must not be attributed to FALSUM**. This does not resolve the November 14 zero-row discrepancy. [Actual live CI and aggregate-only artifact](https://github.com/Iniwura/falsum/actions/runs/44181080455).
+
+**Subsequent successful November 17 recheck:** A separate [actual Phase 4M run](https://github.com/Iniwura/falsum/actions/runs/44181734533) did receive a valid contributor-specific response: **0 rows for the publicly posted bounty address**, after retrying lowercase. The separate overall Intent pool still contained 332 Eligible rows across 10 contributors. This does **not** establish that my original signed-in contributor account has zero rows because the wallet identity match remains unconfirmed. Both the earlier HTTP error and this later zero response are retained as dated evidence.
+
+**Important:** the original bounty #96 was closed during the November 15 mission migration; its earlier /submit remains on record but is **not maintainer acceptance**. The relevant open mission thread is [Model Economy #198](https://github.com/telegraphprotocol/bounties/issues/198). It is separate from the Season II competition entry. Hidden evaluation prompts, selected answers, row hashes and private account data remain out of the public site and repository. The current public checker is **not registered on the Telegraph network** and there is no independently verified external customer or H2 mission-app use.
 
 ### Why it matters
 
@@ -94,7 +98,7 @@ On Windows PowerShell, set the PYTHONPATH environment variable to src before usi
 4. [Source-executed local Python examples](docs/PHASE3Q.md) and [hosted synthetic fixture proof](https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json).
 5. [Independent reproduction and criticism invitation](https://github.com/Iniwura/falsum/issues/25). **No external AppSec review has been verified as completed.**
 
-The actual Phase 4A model artifact has extended retention through February 2027. The public site replays **recorded scores** and never pretends a model is computing them in the user's browser. Our tests explicitly block false model-release claims, tampered evidence, and misleading source assertions.
+The actual Phase 4A model artifact has extended retention through February 2027. The public site replays **recorded scores** and never pretends a model is computing them in the user's browser. Automated tests explicitly block false model-release claims, tampered evidence, and misleading source assertions.
 
 ### Trust boundaries
 
@@ -110,6 +114,6 @@ The [evidence-safe November 14 showcase kit](docs/H2_NOV14_SHOWCASE_KIT.md) cont
 
 [**90-second judge walkthrough**](docs/H2_EVALUATORS_JUDGE_PACK.md) · [**3-minute real demo recording plan**](docs/H2_EVALUATORS_DEMO_STORYBOARD.md) · [**Complete form-ready H2 submission draft**](docs/H2_FINAL_ENTRY_DRAFT.md) · [**Full engineering history**](docs/DEVELOPMENT_HISTORY.md)
 
-FALSUM is being prepared for **Telegraph Season II / Evaluators**. **Official deadline: December 1, 2026 at 23:59 UTC.** Internal quality target: **November 17**. The **official H2 website entry and 2–5 minute recording are not yet submitted or verified**; a GitHub bounty comment does not submit the hackathon entry.
+FALSUM is being prepared for **Telegraph Season II / Evaluators**. **Official deadline: December 1, 2026 at 23:59 UTC.** Internal completion target: **Sunday, November 22, 2026, subject to audit gates**. The **official H2 website entry and 2–5 minute recording are not yet submitted or verified**; a GitHub bounty comment does not submit the hackathon entry.
 
 Developer feedback should include a real source URL, exact version, reproducible command and the observed result. The team records genuine reviews, corrections and abstentions, including negative findings. No purchased or fabricated developer activity is counted.

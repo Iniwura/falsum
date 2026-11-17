@@ -1,13 +1,17 @@
 # FALSUM — Judge guide
 
 **Telegraph Season II / Evaluators / SECURITY_REVIEW_GENERAL**  
-**Evidence snapshot: 12 November 2026. Final H2 submission: NOT YET FILED.**
+**Evidence reviewed through 17 November 2026. Final H2 submission: NOT YET FILED.**
 
 ## What is FALSUM?
 
 FALSUM contributes evaluation material for AI security-review quality. It checks a simple but important requirement: when a dependency version, authorization condition or runtime observation changes, the evidence-supported security conclusion must change too. Its public work uses real historical upstream source, exact model score records, safe synthetic PR executions and strict abstention for unsupported claims.
 
-**Track contribution:** 20 Anjoman evaluation preference pairs previously reported Eligible by the contributor, with a [public bounty submission](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396); formal maintainer acceptance is **not verified**. This is **not** an active network scoring adapter, a confirmed independent expert benchmark, or an H2 submission receipt.
+**Track contribution:** 20 AI-assisted Anjoman evaluation preference pairs were reported Eligible in the contributor's signed-in account on November 2. A [public /submit](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) exists, but an actual [November 14 readback](https://github.com/Iniwura/falsum/actions/runs/43619793133) returned **zero rows** for its published address. This identity/status discrepancy is **unresolved**, and maintainer approval is **not verified**. The original bounty closed November 15 during migration to [mission #198](https://github.com/telegraphprotocol/bounties/issues/198), not as a documented acceptance or rejection. This is **not** an active network scoring adapter, a confirmed independent expert benchmark, or an H2 submission receipt.
+
+**November 17 network audit:** The new [public read-only probe](https://github.com/Iniwura/falsum/actions/runs/44181080455) received an **HTTP error** for the contributor-specific address, so **today's current row count is UNKNOWN**. The public Intent-wide status reports **332 Eligible rows across 10 eligible contributors**; those counts are not FALSUM-owned. This does not disprove the November 2 signed-in account screen or erase the historical November 14 zero-row API result. The mismatch remains unresolved. The status is **not** a verified contribution or award.
+
+**Later November 17 successful recheck:** The [public readback](https://github.com/Iniwura/falsum/actions/runs/44181734533) now returned **0 rows for the published bounty-comment address** after the preceding probe's HTTP error; the overall pool still reported 332 Eligible rows across 10 eligible submitters. No address/account ownership match is established. Both dated outcomes remain in the evidence record, and neither establishes that the user-visible signed-in account's 20 rows were rejected.
 
 ## 90-second judge walkthrough
 
@@ -77,8 +81,12 @@ Earlier visual releases are preserved as technical history: [Phase 3S original F
 | Source-grounded reference tool | [Phase 4B](PHASE4B.md) · [successful CI](https://github.com/Iniwura/falsum/actions/runs/43297345188) · [five developer inputs](../examples/phase4b-evidence-check-requests.json) | 36 fixtures are construction checks, not trained-model accuracy |
 | Real before/after Python of three fictional PRs | [Phase 3Q](PHASE3Q.md) · [public proof JSON](https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json) | No independent H2 mission integration |
 | Original researcher-trained LoRA comparison | [Phase 3K](PHASE3K.md) · [verified negative training evidence](../evidence/phase3k-2026-11-02.json) | Trained candidate made no measured source-transfer improvement |
-| Anjoman material contribution status | [Privacy-safe 20 Eligible record](../evidence/phase3o-2026-11-02-20-eligible.json) · [actual /submit](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) | Eligibility reported by contributor, not independently confirmed bounty acceptance |
+| Anjoman material contribution status | [Historical account UI report: 20 Eligible](../evidence/phase3o-2026-11-02-20-eligible.json) · [real zero-row address readback](https://github.com/Iniwura/falsum/actions/runs/43619793133) · [original /submit](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) | Public comment address returned zero; contributor identity mismatch unresolved; no maintainer approval |
 | Independent-source review | [Reviewer issue #25](https://github.com/Iniwura/falsum/issues/25) · [review guide](REVIEW_ONE_CASE.md) | External review and developer activation currently unverified |
+
+## Phase 4L external developer integration evidence (unscored)
+
+An independent H2 application builder documented that a canonical security-review request was routed to an unrelated advisory feed. FALSUM's [source-locked Phase 4L check](PHASE4L_PR_GUARD_REAL_MINER_EVIDENCE.md) verifies three public paid-response captures against their pinned Git blobs for the identical input diff, including Verity #5530 (direct alternate request) and ChainSight #302 (different Intent). The contributor's own Sentinel #731001 output was **not loaded or scored**. All three captures have unresolved response-versus-receipt miner-ID differences and the Verity fixture has a different recorded receipt Intent. This is a valuable **external problem report**, but it is **not** an independent validated gold label, same-Intent model ranking, verified payment settlement or proven FALSUM adoption.
 
 ## Network and cost truth
 
@@ -105,4 +113,4 @@ The original and retrained checkpoints remain quarantined after authentic negati
 
 Official Season II rules require working independently testable contribution, real Telegraph integration evidence, safe data handling, actual reproduction, and a star on the bounties repository. The Evaluators track may submit **evaluation material without a model adapter**. Any excellence or delivery award still requires independent judges to accept technical validity and value; neither this guide nor an Eligible badge guarantees a prize.
 
-Official deadline: **December 1, 2026 at 23:59 UTC**. Our internal target: **Tuesday, November 17**, provided quality and actual submission gates pass. The [final form draft](H2_FINAL_ENTRY_DRAFT.md) and [real video storyboard](H2_EVALUATORS_DEMO_STORYBOARD.md) are ready for the remaining owner-controlled steps.
+Official deadline: **December 1, 2026 at 23:59 UTC**. Solo-builder target: **Sunday, November 22**, contingent on valid technical and submission evidence; no downgrade for timing. The [final form draft](H2_FINAL_ENTRY_DRAFT.md) and [real video storyboard](H2_EVALUATORS_DEMO_STORYBOARD.md) are ready for the remaining owner-controlled steps.
