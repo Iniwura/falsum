@@ -210,7 +210,8 @@ def inspect_fixture(role: str, spec: dict, raw: bytes) -> dict:
     }
 
 
-def report(fetch=fetch_bytes, specs: dict | None = None) -> dict:
+def report(fetch=None, specs: dict | None = None) -> dict:
+    fetch = fetch_bytes if fetch is None else fetch
     definitions = SPECS if specs is None else specs
     require(set(definitions) == set(SPECS), "only three precommitted roles are allowed")
     rows = []
