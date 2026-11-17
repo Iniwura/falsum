@@ -32,7 +32,7 @@ The public source material includes three previously unstudied packages, six aff
 | **Same unchanged original model** on four different public source-fix projects (PyJWT, Werkzeug, MCP SDK, Pillow), selection frozen before scoring | **5/8** researcher-source matches, **1/4** complete revision reversals, vs **4/8** each constant A/B. No independently expert-reviewed labels. | [Phase 4H full findings](docs/PHASE4H_NEW_PROJECT_DIAGNOSTIC.md) · [real 16-score run](https://github.com/Iniwura/falsum/actions/runs/43530363990) · [exact f32 proof](evidence/phase4h-2026-11-14-actual-original-model-source-8-conditions.json) |
 | Offline source-grounded reference tool | **6 supported, 6 contradicted, 24 abstained**; 36/36 on its **own source-derived fixtures by construction** | [Phase 4B report](docs/PHASE4B.md) · [Source CI](https://github.com/Iniwura/falsum/actions/runs/43297345188) |
 
-The Phase 4H four-project 5/8 is a different, newly selected source task on the **unchanged failed LoRA**, not a trained improvement over Phase 4A's 3/6. The reference checker's 36/36 and the model's 3/6 are **different tasks**. This is *not* a 100% AI improvement. There are **zero externally adjudicated expert labels** in this public reference set, no sealed benchmark, and no demonstrated improved trained LoRA. We keep the failing research checkpoints quarantined.
+The Phase 4H four-project 5/8 is a different, newly selected source task on the **unchanged failed LoRA**, not a trained improvement over Phase 4A's 3/6. The reference checker's 36/36 and the model's 3/6 are **different tasks**. This is *not* a 100% AI improvement. There are **zero externally adjudicated expert labels** in this public reference set, no sealed benchmark, and no demonstrated improved trained LoRA. The failing research checkpoints remain quarantined.
 
 ## Phase 4L — real external PR Guard miner receipts (research-only)
 
@@ -94,7 +94,7 @@ On Windows PowerShell, set the PYTHONPATH environment variable to src before usi
 4. [Source-executed local Python examples](docs/PHASE3Q.md) and [hosted synthetic fixture proof](https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json).
 5. [Independent reproduction and criticism invitation](https://github.com/Iniwura/falsum/issues/25). **No external AppSec review has been verified as completed.**
 
-The actual Phase 4A model artifact has extended retention through February 2027. The public site replays **recorded scores** and never pretends a model is computing them in the user's browser. Our tests explicitly block false model-release claims, tampered evidence, and misleading source assertions.
+The actual Phase 4A model artifact has extended retention through February 2027. The public site replays **recorded scores** and never pretends a model is computing them in the user's browser. Automated tests explicitly block false model-release claims, tampered evidence, and misleading source assertions.
 
 ### Trust boundaries
 
