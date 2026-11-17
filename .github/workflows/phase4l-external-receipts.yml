@@ -1,0 +1,76 @@
+name: Phase 4L - pinned PR Guard public paid-response evidence
+on:
+  pull_request:
+    paths:
+      - 'src/falsum/phase4l_external_receipt_evidence.py'
+      - 'tests/test_phase4l_external_receipt_evidence.py'
+      - 'docs/PHASE4L_PR_GUARD_REAL_MINER_EVIDENCE.md'
+      - '.github/workflows/phase4l-external-receipts.yml'
+      - 'README.md'
+  push:
+    paths:
+      - 'src/falsum/phase4l_external_receipt_evidence.py'
+      - 'tests/test_phase4l_external_receipt_evidence.py'
+      - 'docs/PHASE4L_PR_GUARD_REAL_MINER_EVIDENCE.md'
+      - '.github/workflows/phase4l-external-receipts.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-source-verification:
+    name: Adversarial tests and genuine pinned GitHub fixture replay
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      PYTHONPATH: src:tests
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Offline synthetic adversarial tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase4l_external_receipt_evidence.py' -v
+      - name: Fetch only three pinned public PR Guard files and emit aggregate-only audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase4l_external_receipt_evidence --out phase4l-public-capture-audit.json
+      - name: Require complete, independent-of-sentinel source facts and explicit proof boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import os
+          d=json.loads(Path('phase4l-public-capture-audit.json').read_text())
+          assert d['captured_paid_response_records'] == 3
+          assert len(d['comparison_roles']) == 3
+          assert not d['excluded_miner_answers_loaded_or_scored']
+          assert not d['same_intent_equal_router_comparison']
+          assert not d['receipt_cryptographic_or_onchain_verification_established']
+          assert not d['trained_evaluator_improvement_established']
+          assert d['quality_gold_labels'] == 0
+          assert d['comparison_roles'][0]['observed_response_structure'] == '100-item-GHSA-feed-not-target-specific-review'
+          assert len({r['request_input_sha256'] for r in d['comparison_roles']}) == 1
+          summary=Path(os.environ['GITHUB_STEP_SUMMARY'])
+          with summary.open('a') as out:
+              out.write('## FALSUM Phase 4L public paid-response comparison\n')
+              out.write('- Three **immutable Git blob verified** external capture files; same diff input across distinct routes\n')
+              out.write('- Routed 77003: advisory list, not a target security-review response\n')
+              out.write('- Direct 5530: two relevant heuristic rule IDs; NOT canonical Intent routing or an expert gold label\n')
+              out.write('- Routed 302: CODE_REVIEW_GENERAL, not same-Intent ranking data\n')
+              out.write('- PR Guard Sentinel 731001: **excluded; no answers accessed or scored**\n')
+              out.write('- Captured receipt hashes/flags are present, but onchain verification and identifier semantics are **not verified**\n')
+              out.write('- Score improvements, external expert gold, independent model accuracy: **not claimed**\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase4l-prguard-public-aggregate-only
+          path: phase4l-public-capture-audit.json
+          retention-days: 90
