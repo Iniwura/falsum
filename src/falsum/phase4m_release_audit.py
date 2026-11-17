@@ -69,7 +69,6 @@ def inspect_public_docs(contents: dict[str, str], root: Path | None = None) -> d
     check("phase 4l" in entry.lower() and "phase 4l" in judge.lower()
           and "phase 4l" in readme.lower(),
           "external PR Guard evidence omitted or miscontextualized")
-    check("31" not in entry[:200], "implausible release metadata") if False else None
     local_links_checked = 0
     if root is not None:
         root_abs = root.resolve()
