@@ -9,6 +9,8 @@ FALSUM contributes evaluation material for AI security-review quality. It checks
 
 **Track contribution:** 20 AI-assisted Anjoman evaluation preference pairs were reported Eligible in the contributor's signed-in account on November 2. A [public /submit](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) exists, but an actual [November 14 readback](https://github.com/Iniwura/falsum/actions/runs/43619793133) returned **zero rows** for its published address. This identity/status discrepancy is **unresolved**, and maintainer approval is **not verified**. The original bounty closed November 15 during migration to [mission #198](https://github.com/telegraphprotocol/bounties/issues/198), not as a documented acceptance or rejection. This is **not** an active network scoring adapter, a confirmed independent expert benchmark, or an H2 submission receipt.
 
+**November 17 network audit:** The new [public read-only probe](https://github.com/Iniwura/falsum/actions/runs/44181080455) received an **HTTP error** for the contributor-specific address, so **today's current row count is UNKNOWN**. The public Intent-wide status reports **332 Eligible rows across 10 eligible contributors**; those counts are not FALSUM-owned. This does not disprove the November 2 signed-in account screen or erase the historical November 14 zero-row API result. The mismatch remains unresolved. The status is **not** a verified contribution or award.
+
 ## 90-second judge walkthrough
 
 | Time | Action | What it establishes |
