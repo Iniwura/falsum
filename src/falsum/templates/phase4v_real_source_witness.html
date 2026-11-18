@@ -148,7 +148,7 @@
      result.verdict==="SUPPORTED"?
        "The claim matches the observed upstream test outcome at this exact Git commit.":
        result.explanation;
-   $("observed").textContent=result.observed;
+   $("observed").textContent=result.verdict==="ABSTAIN"?"NOT ESTABLISHED BY THIS CLAIM":result.observed;
    $("verdict-provenance").textContent=result.reason+" · precomputed with FALSUM's source-witness checker · not live AI inference";
    box.hidden=false;
    box.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"nearest"});
