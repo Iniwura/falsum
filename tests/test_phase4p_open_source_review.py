@@ -71,6 +71,28 @@ class OpenSourceChallengeTests(unittest.TestCase):
                 self.assertTrue(a["test"]["modified_in_same_upstream_commit"])
                 self.assertEqual(a["source"]["git_blob_sha1"],stage["fixed_source_blob"])
 
+    def test_deletion_only_security_guard_removal_is_valid_source_change(self):
+        row=self.lock["cases"][0]
+        stage=row["patches"][0]
+        obj=fake_commit(row["repository"],stage)
+        obj["files"][0]["additions"]=0
+        obj["files"][0]["deletions"]=6
+        obj["files"][0]["patch"]="@@ -322,6 +322,0 @@\n-unsafe bypass branch\n-early return"
+        info=p.check_commit(stage,row["repository"],obj)
+        self.assertEqual(info["source"]["line_additions"],0)
+        self.assertEqual(info["source"]["line_deletions"],6)
+
+    def test_zero_change_source_or_test_is_rejected(self):
+        row=self.lock["cases"][0]
+        stage=row["patches"][0]
+        for i in (0,1):
+            obj=fake_commit(row["repository"],stage)
+            obj["files"][i]["additions"]=0
+            obj["files"][i]["deletions"]=0
+            with self.subTest(index=i),self.assertRaisesRegex(
+                    p.NewReviewError,"expected edited"):
+                p.check_commit(stage,row["repository"],obj)
+
     def test_false_parent_cannot_pass_source_change_audit(self):
         row=self.lock["cases"][0]
         obj=fake_commit(row["repository"],row["patches"][0])
