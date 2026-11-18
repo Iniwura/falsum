@@ -79,9 +79,14 @@ def verify_tree(row: dict, stage: dict, worktree: Path, version: str,
     require(_git(worktree, "rev-parse", "HEAD") == expected_ref,
             "executed upstream source does not match pinned exact commit")
     if version == "fixed":
-        parents = _git(worktree, "show", "-s", "--format=%P", "HEAD").split()
+        # Shallow Git checkouts deliberately hide parent traversal from log/show
+        # (their graft boundary makes %P empty). Inspect the authenticated
+        # commit object's RAW parent header instead, even under --depth=1.
+        object_text = _git(worktree, "cat-file", "-p", "HEAD")
+        headers = object_text.split("\n\n", 1)[0].splitlines()
+        parents = [line[7:] for line in headers if line.startswith("parent ")]
         require(parents == [stage["parent"]],
-                "executed fixed Git commit does not have exact direct parent")
+                "executed fixed Git commit raw object lacks exact direct parent")
     source_path = worktree / stage["source_path"]
     test_path = worktree / stage["test_path"]
     source = _read(source_path, MAX_SOURCE)
