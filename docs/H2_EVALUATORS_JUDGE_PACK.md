@@ -29,6 +29,10 @@ The new four-stage benchmark checks *real third-party upstream code and its own 
 
 This is **substantive new evaluation coverage**. It does **not** prove the original LoRA improved (it didn't), a public security patch is exploitable in a deployed app, a registered adapter, an independent human AppSec verdict, a private blind ML holdout, newly Eligible Anjoman rows or bounty acceptance. The earlier source-vetted A/B research has an unresolved question-overlap bias warning, so it remains barred from promotion as independent gold. A complete judge review should keep **source behavior evidence, 20 Eligible contributor submissions, source-authored reference checks, and original failed-model scores as four separate categories**.
 
+### Test FALSUM's typed review claim gate with no account or model
+
+[Run the seven real-source reviewer-claim examples](PHASE4U_SOURCE_REVIEW_CLAIM_GATE.md) against a **permanent authenticated public-source witness index**. The deterministic gate returns **2 source-supported, 2 source-contradicted and 3 evidence-limited abstention** results, including a deliberate wrong-hash claim. It can be invoked directly from the repository with Python only; no Telegraph network access or paid inference is required. The source facts come from the four actually executed upstream regression witnesses, not an invented “expert” label. A separate 32-case self-consistency suite is explicitly **correct by construction, not learned-model accuracy**.
+
 ## 90-second judge walkthrough
 
 | Time | Action | What it establishes |
