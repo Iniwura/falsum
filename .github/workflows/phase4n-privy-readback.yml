@@ -1,0 +1,67 @@
+name: Phase 4N - reconcile Anjoman Privy and historical bounty wallets
+on:
+  pull_request:
+    paths:
+      - 'src/falsum/phase4n_privy_account_readback.py'
+      - 'tests/test_phase4n_privy_account_readback.py'
+      - 'docs/PHASE4N_PRIVY_WALLET_RECONCILIATION.md'
+      - '.github/workflows/phase4n-privy-readback.yml'
+      - 'README.md'
+  push:
+    paths:
+      - 'src/falsum/phase4n_privy_account_readback.py'
+      - 'tests/test_phase4n_privy_account_readback.py'
+      - 'docs/PHASE4N_PRIVY_WALLET_RECONCILIATION.md'
+      - '.github/workflows/phase4n-privy-readback.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare-public-wallets:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      PYTHONPATH: src:tests
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run synthetic adversarial tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase4n_privy_account_readback.py' -v
+          python -m unittest discover -s tests -p 'test_phase4k_submission_readback.py' -v
+      - name: Inspect two distinct public contributor accounts with GET only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase4n_privy_account_readback --out phase4n-public-aggregate.json
+      - name: Require privacy safety, summarize without claiming owner verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads(Path('phase4n-public-aggregate.json').read_text())
+          assert d['private_rows_persisted_or_logged'] is False
+          assert d['status'].startswith('PHASE4N_')
+          assert d['accepted_bounty_verified'] is False
+          assert d['cryptographic_wallet_ownership_verified'] is False
+          with Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as summary:
+              summary.write('## Anjoman: two publicly supplied wallet identities\n\n')
+              summary.write('Outcome: **'+d['finding']+'**\n\n')
+              for name,role in (d.get('accounts') or {}).items():
+                  summary.write(f"- {name}: completed={role['readback_completed']}, total={role['current_total_rows']}, eligible={role['current_eligible_rows']}\n")
+              summary.write('\nNo original row bodies, account secrets or signed data are stored. Account association is operator-reported; maintainer approval remains unverified.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase4n-anjo-two-public-wallets-aggregate
+          path: phase4n-public-aggregate.json
+          retention-days: 90
