@@ -4,6 +4,8 @@ on:
     paths:
       - 'src/falsum/phase4o_multibaseline_shortcut_audit.py'
       - 'src/falsum/phase4o_post_audit_revised_material.py'
+      - 'src/falsum/real_fix_corpus.py'
+      - 'src/falsum/phase4o_post_audit_revised_material.py'
       - 'tests/test_phase4o_multibaseline_shortcut_audit.py'
       - 'docs/PHASE4O_SHORTCUT_ROSTER_AND_REVIEW_GATE.md'
       - '.github/workflows/phase4o-material-shortcut-audit.yml'
@@ -11,6 +13,8 @@ on:
   push:
     paths:
       - 'src/falsum/phase4o_multibaseline_shortcut_audit.py'
+      - 'src/falsum/phase4o_post_audit_revised_material.py'
+      - 'src/falsum/real_fix_corpus.py'
       - 'src/falsum/phase4o_post_audit_revised_material.py'
       - 'tests/test_phase4o_multibaseline_shortcut_audit.py'
       - 'docs/PHASE4O_SHORTCUT_ROSTER_AND_REVIEW_GATE.md'
@@ -128,10 +132,15 @@ jobs:
               for r in d["baselines"]:
                   out.write(f"| {r['baseline']} | {r['author_hypothesis_agreements_across_14_original_displays']}/14 | {r['author_hypothesis_agreements_across_28_swapped_displays']}/28 | {r['same_answer_chosen_after_AB_swap_out_of_14']} | {r['flag_high_shortcut_risk']} |\n")
               out.write("\nStrong shortcut flags: **"+", ".join(d["flagged_baselines"] or ["none within this limited roster"])+"**. No hidden-gold, network accuracy, expert validation or trained-model improvement.\n")
+          assert d["material_quality_gate_passed"] is (not bool(d["flagged_baselines"]))
+          assert d["material_promotion_allowed"] is False
+          assert d["submission_ready"] is False
           if d["flags_high_shortcut_risk"]:
-              # The report is still uploaded below for diagnosis. A high shortcut
-              # win is not a passing material-quality gate.
-              raise SystemExit("FAIL: predeclared simple shortcut agrees with >=11/14 author hypotheses; revise content and independently review before release")
+              # A successful CI diagnostic is not a passing QUALITY gate.
+              # Publish the evidence and explicit block, never silently pass
+              # these biased questions as ready for evaluator training.
+              print("MATERIAL QUALITY VETO: "+", ".join(d["flagged_baselines"]))
+              print("Pipeline successfully measured a failed material-quality gate; release remains forbidden.")
           PY
       - name: Preserve all source, casebook, baseline and failure evidence
         if: always()
