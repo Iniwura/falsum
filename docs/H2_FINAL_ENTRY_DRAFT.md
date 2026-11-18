@@ -31,6 +31,8 @@
 
 **November 17 successful retry:** A later [source-checking CI run](https://github.com/Iniwura/falsum/actions/runs/44181734533) returned **0 rows for the public bounty-comment wallet**, while the overall Intent pool still showed **332 Eligible rows across 10 contributors**. The earlier HTTP error remains part of the audit record. The user-account-to-public-address identity is **unverified**; this is not evidence that all rows in my signed-in Anjoman account vanished or were rejected. Do not report current FALSUM-owned 20 Eligible as confirmed.
 
+**November 18 verified account-address correction:** The operator's signed-in Anjoman dashboard displayed a **Privy Wallet different from the original GitHub /submit wallet**. A new [read-only Phase 4N CI run](https://github.com/Iniwura/falsum/actions/runs/44311491808) verified **20 Eligible out of 20 total rows** for the operator-provided Privy address, and **0 rows** for the incorrect historic bounty-comment address. The 20-row *network status for the Privy address* is independently corroborated; the association of the address with the operator is user-supplied screenshot evidence, not cryptographic ownership proof. The earlier zero-row observations are correct for the wrong address and are not contrary to this result. **Bounty maintainer acceptance remains unresolved**. [Methods and boundaries](PHASE4N_PRIVY_WALLET_RECONCILIATION.md).
+
 **Still needed from owner:**
 - Official H2 registration and team/contact details: **UNVERIFIED**
 - GitHub username that actually starred telegraphprotocol/bounties: **UNVERIFIED**
@@ -43,7 +45,7 @@
 
 **FALSUM evaluates security evidence rather than the confidence of an AI answer.** It contributes source-backed evaluation material for Telegraph's SECURITY_REVIEW_GENERAL Intent, where a security review must distinguish published vulnerabilities from reachable application impact and change its verdict when the relevant facts change.
 
-I uploaded 20 explicitly AI-assisted, source-referenced preference pairs through Anjoman. My signed-in account displayed 20 **Eligible** after the November 2 rollover, and I posted a public bounty submission. **However, the November 14 read-only node query returned zero records for the address published in that submission, including lowercase normalization. The address/account discrepancy is unresolved; I do not claim 20 rows are currently independently network-verified or accepted by maintainers.** The private evaluation material is not published.
+I uploaded 20 explicitly AI-assisted, source-referenced preference pairs through Anjoman. My signed-in account displayed 20 **Eligible** after the November 2 rollover. On November 18, an independent read-only node query confirmed **20 Eligible records for the public Privy Wallet address shown in my Anjoman account**. An earlier GitHub bounty /submit mistakenly named a different wallet, which explains why its prior API checks found zero. The public address-to-my-account association comes from my account screenshot, not independent cryptographic ownership proof, and **formal maintainer acceptance remains unresolved**. I do not publish hidden prompts, answers or row identifiers.
 
 FALSUM's public research makes the evaluation problem falsifiable. I pinned real GitHub-reviewed advisory and PyPI version records for docling-core, hydra-core and python-multipart. I used the official Telegraph Foundation ONNX/WASI runtime to score the **same unchanged original LoRA** on six affected-versus-fixed version conditions, with 12 authentic scores and 24 repeat-verified inferences.
 
@@ -61,7 +63,7 @@ FALSUM is an **evaluation-material contribution**, not a registered network scor
 
 A model that gives the same answer to an affected and patched version cannot be trusted for context-sensitive security review. FALSUM documents that failure through authentic Telegraph Foundation scoring, pinned open-source evidence and a reproducible version-sensitive reference checker.
 
-I also submitted 20 AI-assisted evaluation preference pairs. My contributor account reported 20 Eligible on November 2, but a later live readback found zero rows for the publicly submitted address. Ownership matching and maintainer acceptance remain unresolved.
+I submitted 20 AI-assisted evaluation preference pairs. The November 18 node readback confirmed **20 Eligible** for the operator-shown Privy Wallet; the original GitHub submission listed a different wallet and therefore returned zero. Formal bounty acceptance and independent expert review remain unverified.
 
 [Try the challenge](https://falsum-evidence-lab.vercel.app/) · [See actual model scores](https://falsum-evidence-lab.vercel.app/proof/) · [Run and review the evidence](https://github.com/Iniwura/falsum)
 
@@ -102,7 +104,7 @@ Current evidence: a public interactive challenge, reproducible source checker, a
 - Actual 2–5 minute video or accessible equivalent uploaded and playable.
 - Public repo, both real and synthetic pages, and instructions verified reachable by unauthenticated reviewers.
 - Full GitHub CI and build run green; source evidence and model score references correct; no private material exposed.
-- Disclose the **November 2 account UI: 20 Eligible** versus **November 14 public address API: zero rows** discrepancy; do not call the 20 independently verified.
+- Include the verified [Phase 4N correct-wallet readback](https://github.com/Iniwura/falsum/actions/runs/44311491808): **20 Eligible for the user-shown Privy Wallet, zero for the mistaken GitHub address**. Do not confuse node eligibility with maintainer acceptance, cryptographic address ownership or AppSec expert gold labels.
 - Actual public update URLs and outside reproductions included only if they exist.
 - Owner grants or declines public showcase and buyer-introduction permissions.
 - Submit on the **official H2 site** (not just GitHub bounty) and preserve its real success receipt, timestamp and final entry URL.
