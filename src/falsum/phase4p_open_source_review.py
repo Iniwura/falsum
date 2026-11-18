@@ -177,17 +177,25 @@ def check_commit(stage: dict, repo: str, commit: dict) -> dict:
         matches = [f for f in files if f.get("filename") == path]
         require(len(matches) == 1, "source/test file not uniquely present in patch")
         f = matches[0]
+        additions, deletions = f.get("additions"), f.get("deletions")
         require(f.get("status") == "modified" and f.get("sha") == blob
-                and f.get("additions", 0) > 0
-                and f.get("deletions", 0) >= 0,
+                and type(additions) is int and type(deletions) is int
+                and additions >= 0 and deletions >= 0
+                and additions + deletions > 0
+                and (kind != "test" or additions > 0),
                 "expected edited source/test Git blob not present in upstream patch")
         patch = f.get("patch")
         require(isinstance(patch, str) and len(patch) < 100_000
                 and patch.startswith("@@ ")
-                and any(line.startswith("+") and not line.startswith("+++") for line in patch.splitlines())
-                and (kind == "test" or any(
-                    line.startswith("-") and not line.startswith("---")
-                    for line in patch.splitlines())),
+                and (
+                    (kind == "test" and any(
+                        line.startswith("+") and not line.startswith("+++")
+                        for line in patch.splitlines()))
+                    or (kind == "source" and any(
+                        (line.startswith("+") and not line.startswith("+++"))
+                        or (line.startswith("-") and not line.startswith("---")
+                        for line in patch.splitlines()))
+                ),
                 "source/test patch evidence missing or empty")
         result[kind] = {
             "git_blob_sha1": blob, "patch_sha256": digest(patch.encode("utf-8")),
