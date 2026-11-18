@@ -46,8 +46,30 @@ def main(argv: list[str] | None = None) -> int:
     preflight = commands.add_parser("preflight", help="diagnose draft corpus against V2 dataset thresholds; NEVER eligible")
     preflight.add_argument("casebook", type=Path)
     preflight.add_argument("--diagnostic-dir", type=Path)
+    source_witness = commands.add_parser(
+        "verify-source-review",
+        help="check structured review claims against four real upstream code regression witnesses; NOT a trained adapter",
+    )
+    source_witness.add_argument("--index", type=Path, required=True,
+                                help="permanent public four-stage GitHub Actions witness-hash index")
+    source_witness.add_argument("--source-lock", type=Path, required=True,
+                                help="Phase 4P pinned Git source/test selection")
+    source_witness.add_argument("--requests", type=Path,
+                                help="typed review claim JSON; omitted means 32 by-construction safety tests")
+    source_witness.add_argument("--out", type=Path, required=True,
+                                help="new write-once public-safe source-review report")
     args = parser.parse_args(argv)
     try:
+        if args.command == "verify-source-review":
+            from .source_review_witness_gate import main as verify_main
+            params=[
+                "--index",str(args.index),
+                "--source-lock",str(args.source_lock),
+                "--out",str(args.out),
+            ]
+            if args.requests is not None:
+                params.extend(("--requests",str(args.requests)))
+            return verify_main(params)
         if args.command == "preflight":
             import json
             print(json.dumps(preflight_casebook(args.casebook, diagnostic_dir=args.diagnostic_dir), indent=2, sort_keys=True))

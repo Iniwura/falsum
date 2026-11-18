@@ -1,0 +1,163 @@
+<!-- Archived long-form README snapshot. Current judge-facing README is at ../README.md. Historical phase measurements are preserved, not promoted to improved trained-model performance. -->
+
+# FALSUM
+
+**Evidence-grounded security-review evaluation for Telegraph.**
+
+A good security review must change its conclusion when important facts change. FALSUM tests that requirement against real public software fixes and publishes the outcome, including failed model results.
+
+[**Try the review challenge**](https://falsum-evidence-lab.vercel.app/) · [**Version evidence**](https://falsum-evidence-lab.vercel.app/proof/) · [**Source revision comparison**](https://falsum-evidence-lab.vercel.app/compare/) · [**Run locally**](#reproduce-it) · [**Review the evidence**](https://github.com/Iniwura/falsum/issues/25)
+
+**Track:** Telegraph Season II / Evaluators. **Intent:** SECURITY_REVIEW_GENERAL.
+
+## What FALSUM actually delivers
+
+| Component | What works | What it does not claim |
+| --- | --- | --- |
+| [Source revision comparison](../docs/PHASE4I_JUDGE_COMPARISON.md) | Third judge route with four pinned public upstream parent/fix source pairs, 16 real recorded score inputs, and both constant-choice controls. **5/8** provisional source matches and **1/4** complete model reversals versus **4/8** constant-choice. | A better trained model, independent AppSec gold labels, or a reliable statistical accuracy increase |
+| [Review challenge](https://falsum-evidence-lab.vercel.app/) | Interactive A/B reviews backed by genuinely executed before/after Python code across three **fictional** PRs | Live model inference or real partner application testing |
+| [Real model proof](https://falsum-evidence-lab.vercel.app/proof/) | Inspect the original LoRA's **recorded official Foundation float32 scores** while switching affected vs fixed library releases | A registered evaluator, newly generated model answers or general security accuracy |
+| [Reference checker](../docs/PHASE4B.md) | Offline verified GHSA/PyPI version facts, contradiction detection and safe ABSTAIN outcomes | A trained semantic security model or Telegraph network-compatible scoring adapter |
+| [Independent review and benchmark gate](../docs/PHASE4F_BENCHMARK_GATE.md) | Live GitHub issue census, source-backed reviewer coverage and fail-closed evaluation-quality release controls; [first real audit](https://github.com/Iniwura/falsum/actions/runs/43316224561) observed **0 format-valid external reviews** | Expert-approved labels, model benchmark improvement, training approval or network eligibility |
+| [Harder code-specific security research](../docs/PHASE4G_HARD_SECURITY_REVIEW.md) | **14 new author-written, source-branch-specific conditions** across seven previously studied projects; 28 A/B positions, isolated source-logic probes and a wording-shortcut audit (7/14 author agreement vs former 7/7) | Independent gold labels, actual upstream integration tests, a sealed benchmark, improved LoRA accuracy, new Anjoman rows or model registration |
+| [Seven-family real patch review pack](../docs/PHASE4E_FIRST_PLACE_REVIEW.md) | Reverified seven **existing** diverse upstream security-fix source/test cases, with 14 position-balanced review displays and an independent GitHub source-review form | Fourteen independent gold labels, new eligible rows, a sealed model holdout or verified exploitability |
+
+The public source material includes three previously unstudied packages, six affected/fixed version conditions, and 36 constructed reference-check scenarios. Every source uses pinned GitHub-reviewed advisory records and published PyPI release evidence.
+
+### The real measured result
+
+| Experiment | Actual outcome | Inspect the proof |
+| --- | --- | --- |
+| Original model on earlier Axios/Django before/after facts | **4/8** provisional matches; **0/4** complete reversals | [Phase 3Y report](../docs/PHASE3Y.md) · [Official real inference CI](https://github.com/Iniwura/falsum/actions/runs/42145294551) |
+| Same unchanged model on six new public GHSA version conditions | **3/6** narrow source-fact matches; **0/3** complete affected-to-fixed reversals; always preferred A | [Phase 4A report](../docs/PHASE4A.md) · [Official real inference CI](https://github.com/Iniwura/falsum/actions/runs/43291803205) · [Exact score evidence](../evidence/phase4a-2026-11-12-real-original-model-failure.json) |
+| Constant-A and constant-B baselines on those six balanced source cases | **3/6** each | [Score audit](../docs/PHASE4A.md) |
+| **Same unchanged original model** on four different public source-fix projects (PyJWT, Werkzeug, MCP SDK, Pillow), selection frozen before scoring | **5/8** researcher-source matches, **1/4** complete revision reversals, vs **4/8** each constant A/B. No independently expert-reviewed labels. | [Phase 4H full findings](../docs/PHASE4H_NEW_PROJECT_DIAGNOSTIC.md) · [real 16-score run](https://github.com/Iniwura/falsum/actions/runs/43530363990) · [exact f32 proof](../evidence/phase4h-2026-11-14-actual-original-model-source-8-conditions.json) |
+| Offline source-grounded reference tool | **6 supported, 6 contradicted, 24 abstained**; 36/36 on its **own source-derived fixtures by construction** | [Phase 4B report](../docs/PHASE4B.md) · [Source CI](https://github.com/Iniwura/falsum/actions/runs/43297345188) |
+
+The Phase 4H four-project 5/8 is a different, newly selected source task on the **unchanged failed LoRA**, not a trained improvement over Phase 4A's 3/6. The reference checker's 36/36 and the model's 3/6 are **different tasks**. This is *not* a 100% AI improvement. There are **zero externally adjudicated expert labels** in this public reference set, no sealed benchmark, and no demonstrated improved trained LoRA. The failing research checkpoints remain quarantined.
+
+## Run FALSUM's evidence-bounded security-review claim check
+
+The [source-witness claim gate](../docs/PHASE4U_SOURCE_REVIEW_CLAIM_GATE.md) is an **offline, zero-key, developer-usable** way to test specific structured claims against the four **actually executed** upstream parent/fix security regressions. It distinguishes **SUPPORTED / CONTRADICTED / ABSTAIN**, refuses tampered or mismatched source/test Git hashes, and abstains on deployment exploitability or universal security guarantees. [Seven ready-to-run example claims](../examples/source-review-witness-claims.json) include both true and false assertions plus unsupported cases; the [permanent receipt-hash index](../evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json) anchors the original publicly completed GitHub Actions verification. **This is typed source-fact verification, not natural-language AI judging or independently validated model performance.**
+
+```bash
+PYTHONPATH=src python -m falsum.source_review_witness_gate \
+  --index evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json \
+  --source-lock data/phase4p-three-project-open-review-lock.json \
+  --requests examples/source-review-witness-claims.json \
+  --out source-review-results.json
+```
+
+## Actual source-regression proof — 4 historical fixes / 3 real projects
+
+**[Verify all four genuine upstream test runs in one place](../docs/PHASE4T_ONE_COMMAND_REAL_SOURCE_TEST_PROOF.md)** · [source-test CI Koa/Hono](https://github.com/Iniwura/falsum/actions/runs/44352329150) · [source-test CI LangChain](https://github.com/Iniwura/falsum/actions/runs/44353999011)
+
+FALSUM now has four **actual, upstream-authored security regression counterfactuals** across Koa, Hono, and LangChain Core (initial path validation plus a separate symlink follow-up). For each fixed historical code branch, the original legitimate upstream tests passed; the exact new upstream security regression **failed against its direct vulnerable parent for the expected security assertion**; and the same test passed against the pinned fix. All source and regression test Git blobs, source parent/fix SHAs, and raw process log hashes are bound to successful GitHub Actions receipts. The [Phase 4T judge verification workflow](../.github/workflows/phase4t-github-execution-proof.yml) consolidates the four real artifacts with strict source/run identity checks. This is substantially stronger than just linking a patch or writing a synthetic test.
+
+**Evidence boundaries remain strict:** this does *not* prove better trained-model accuracy, independent human gold labels, a registered Telegraph scorer, new Anjoman Eligible contributor rows, production exploitability or blind holdout quality. The original LoRA is unchanged and still failed source-sensitive evaluation. The four source branch tests are new useful *evaluation coverage*, not an alleged successful trained evaluator.
+
+## Phase 4R — executable upstream regression counterfactuals
+
+[Phase 4R](../docs/PHASE4R_EXECUTED_UPSTREAM_COUNTERFACTUALS.md) adds a [source-locked upstream runtime workflow](../.github/workflows/phase4r-real-upstream-regression.yml) for **Koa** and **Hono**. It checks that a **real upstream original suite passes**, the upstream fixed-version security regression **fails on the exact original vulnerable parent** with the expected behavioral assertion, and the **same regression passes on the exact fixed implementation**. All original and fixed source/test Git blobs, direct parent identities and actual process exit codes are checked, with raw log hashes preserved. This is new repeatable *source-behavior evidence*, not a fresh LoRA result, hidden model benchmark, independent AppSec expert label or new Anjoman Eligible row. The LangChain two-stage case remains source-verified but not included in this executed-test count.
+
+## Phase 4Q — AI-assisted adversarial source assessment (not independent human evidence)
+
+After re-reading all three new Phase 4P upstream fixes, the assistant recorded an explicitly [AI-generated source critique](../docs/PHASE4Q_AI_ADVERSARIAL_SOURCE_REVIEW.md): Koa's corrected redirect branch checks host equality rather than full origin; LangChain's symlink follow-up checks the resolved template **extension**, not a general directory-containment policy; Hono's `text/ping` regression tests simulate HTTP requests but do not reproduce a real browser's authenticated hyperlink audit.
+
+This is **not independently verified human gold**, not an external AppSec expert signature, not a new sealed holdout, and not a model accuracy result. It flags useful security-review counterexamples while keeping **zero** certified expert labels and a closed training/registration gate. Publishing it alongside the cases also means a future reviewer may see the analysis; that review must not be presented as blind without verified independent procedures.
+
+## Phase 4P — new source-disjoint, open-response security review challenges
+
+[Phase 4P](../docs/PHASE4P_OPEN_RESPONSE_SOURCE_REVIEW.md) freezes **three previously unscored public upstream projects** (Koa, LangChain Core, and Hono), **four historical source/test patch stages**, and **six open-ended security-review tasks**. The [real-source workflow](../.github/workflows/phase4p-source-open-review.yml) verifies the exact upstream fix commits, direct Git parents, both changed source and test files, and **16 parent/fixed Git source/test blob IDs**. In particular, the LangChain case explicitly includes an initial path-validation patch and a separate symlink/suffix follow-up, avoiding a misleading claim about the first patch's completeness.
+
+The tasks have **no A/B answer cues**, offer justified abstention, and require source citations plus application-level preconditions. A dedicated [external review form](https://github.com/Iniwura/falsum/issues/new?template=independent-phase4p-open-review.yml) requests independent judgment. These new cases are **not independent AppSec gold**, an established blind holdout, newly Eligible Anjoman rows, a trained/registered evaluator or confirmed live exploitation. Actual expert reviews still need to be received and validated. No demo work is included.
+
+## Phase 4O — adversarial evaluation-material shortcut audit (research-only)
+
+The existing seven source-verified patch projects support 14 researcher-authored source-branch reasoning conditions and 28 A/B presentations. [Phase 4O](../docs/PHASE4O_SHORTCUT_ROSTER_AND_REVIEW_GATE.md) now checks **14 predeclared source-blind shortcut strategies** (answer length, cautious/absolute wording, question overlap, technical-token cues and fixed-position baselines) against both presentations. The original material has a concrete answer-length leak (**13/14** author-preference matches by always choosing the longer answer). A separately versioned, explicitly post-audit six-answer rewrite reduces that shortcut to **7/14**, but an answer/query-word-overlap shortcut remains at the **11/14 high-risk threshold**. The CI *diagnostic* records this as **material-quality gate FAILED, release veto active**, even when the code tests pass. This is **not** independent AppSec gold, a blind holdout, newly Eligible Anjoman rows, trained-model improvement or a registered evaluator.
+
+## Phase 4L — real external PR Guard miner receipts (research-only)
+
+A separate Season II developer documented a concrete `SECURITY_REVIEW_GENERAL` routing failure in [PR Guard / bounty #187](https://github.com/telegraphprotocol/bounties/issues/187). FALSUM's new [Phase 4L reproducible link-only evidence audit](../docs/PHASE4L_PR_GUARD_REAL_MINER_EVIDENCE.md) verifies three *public, immutable GitHub response captures* against their original Git blob SHA and confirms they contain the **same input diff**. It distinguishes routed off-target miner 77003, direct Verity #5530 and cross-Intent ChainSight #302, while **completely excluding the contributor's Sentinel #731001 answers**. It does not copy third-party responses into the dataset, establish AppSec expert gold labels, independently verify onchain receipts, or demonstrate a trained evaluator improvement. All compared routes have different transport/Intent contexts, so this is a reproducible **integration failure diagnostic**, not a fair same-Intent performance leaderboard.
+
+## The Telegraph contribution
+
+FALSUM targets the **SECURITY_REVIEW_GENERAL** Intent (adapter family **SECURITY_REVIEW**). The operator's signed-in Anjoman account reported **20 explicitly AI-assisted, source-referenced preference pairs Eligible**. On November 18, a new **read-only public node query independently confirmed 20 Eligible rows for the operator-supplied Privy Wallet address**. This verifies the current *row status for that address*, not cryptographic address ownership, independent label correctness or maintainer acceptance.
+
+[Privacy-safe account-status evidence](../evidence/phase3o-2026-11-02-20-eligible.json) · [Public bounty #96 /submit comment](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396)
+
+**Historical readback, November 14 (using the wrong GitHub address):** A [real privacy-safe Anjoman node readback](https://github.com/Iniwura/falsum/actions/runs/43619793133) returned **0 rows for the contributor address in the existing public /submit**, including a lowercase query. The independently observed **199 eligible rows / 9 eligible contributors** are **pool-wide**, not FALSUM-owned. The earlier **20 Eligible** figure was a signed-in account report; the correct Privy account was independently rechecked on November 18 as described below. [Method and evidence](../docs/PHASE4K_LIVE_SUBMISSION_READBACK.md).
+
+**Latest read-only network check (November 17):** The contributor-specific GET returned an **HTTP error**, so the current count for the public bounty-comment address is **UNKNOWN**, not zero. The independently queried **Intent-wide pool** showed **332 Eligible rows across 10 contributors**; these are network-wide and **must not be attributed to FALSUM**. This does not resolve the November 14 zero-row discrepancy. [Actual live CI and aggregate-only artifact](https://github.com/Iniwura/falsum/actions/runs/44181080455).
+
+**Subsequent successful November 17 recheck:** A separate [actual Phase 4M run](https://github.com/Iniwura/falsum/actions/runs/44181734533) did receive a valid contributor-specific response: **0 rows for the publicly posted bounty address**, after retrying lowercase. The separate overall Intent pool still contained 332 Eligible rows across 10 contributors. This does **not** establish that my original signed-in contributor account has zero rows because the wallet identity match remains unconfirmed. Both the earlier HTTP error and this later zero response are retained as dated evidence.
+
+**Corrected network verification (November 18):** The [Phase 4N live dual-wallet readback](https://github.com/Iniwura/falsum/actions/runs/44311491808) queried the public Privy Wallet shown in the operator's Anjoman account and the different historical bounty-comment address. It returned **20 total rows, all 20 Eligible for the Privy Wallet**, versus **0 total rows for the incorrect bounty-comment address**. The previous zero was a **wrong-address lookup, not evidence that the Anjoman evaluation pairs disappeared**. The wallet association was supplied from the user's signed-in account panel and is not independently cryptographically authenticated. [Reproduce Phase 4N](../docs/PHASE4N_PRIVY_WALLET_RECONCILIATION.md). **Maintainer acceptance remains unresolved**, and there is no registered scoring adapter or independent AppSec gold benchmark.
+
+**Important:** the original bounty #96 was closed during the November 15 mission migration; its earlier /submit remains on record but is **not maintainer acceptance**. The relevant open mission thread is [Model Economy #198](https://github.com/telegraphprotocol/bounties/issues/198). It is separate from the Season II competition entry. Hidden evaluation prompts, selected answers, row hashes and private account data remain out of the public site and repository. The current public checker is **not registered on the Telegraph network** and there is no independently verified external customer or H2 mission-app use.
+
+### Why it matters
+
+Security-review intelligence should differentiate a published affected dependency version from a *reachable production exploit*, and should not certify an application safe merely because one dependency was patched. That is useful evaluation coverage for possible Exchange, Model Economy and Web3 software workflows, though **none of those separate mission integrations is verified yet**.
+
+## Reproduce it
+
+**Prerequisites:** Python 3.11–3.13 and Git. After cloning, the basic static build runs without credentials, wallet, model downloads, external API requests or spending.
+
+~~~bash
+git clone https://github.com/Iniwura/falsum.git
+cd falsum
+
+# Execute fictional PR fixtures and build the recorded real-model proof
+PYTHONPATH=src python3 -m falsum.phase4c_release --out-dir local-judge
+
+# Open local-judge/index.html (three-case synthetic challenge)
+# Open local-judge/proof/index.html (authentic previous model scores)
+
+# Fail-closed data integrity and source checking tests
+PYTHONPATH=src python3 -m unittest discover -s tests -p 'test_phase4c_judge_release.py' -v
+PYTHONPATH=src python3 -m unittest discover -s tests -p 'test_phase4b_reference_judge.py' -v
+~~~
+
+**Expected:** three real Python-executed before/after fictional scenarios, six original source-verified package-version conditions, and a third `local-judge/compare/index.html` source-revision comparison with four more public upstream project families, the unchanged old model's **5/8** provisional source matches and **1/4** full reversals (constant-choice **4/8**). The existing `/proof/` still shows **3/6** and **0/3** on a *different task*. Invalid scores or source receipt identities fail the build. To rebuild, use a new output directory; existing evidence outputs cannot be overwritten.
+
+To try the reference checker with **five real public example inputs**, download the successful [Phase 3Z verified-source artifact](https://github.com/Iniwura/falsum/actions/runs/43286926731), extract its single verified JSON, and run:
+
+~~~bash
+PYTHONPATH=src python3 -m falsum.phase4b_reference_judge \
+  --source ./PHASE3Z-REAL-SOURCE-CATALOGUE-VERSION-REVERSALS-UNREVIEWED.json \
+  --claims examples/phase4b-evidence-check-requests.json \
+  --out /tmp/falsum-checked-claims.json
+~~~
+
+Expected sequence: **SUPPORTED, CONTRADICTED, ABSTAIN, ABSTAIN, ABSTAIN**. Unknown versions, changed digests, missing evidence, blanket safety claims or unsupported deployment exploit assertions get ABSTAIN. [Reference-checker documentation](../docs/PHASE4B.md) explains input format, limitations, failures and how to add new independently verified source records.
+
+On Windows PowerShell, set the PYTHONPATH environment variable to src before using python -m. No token spending occurs in the public demo.
+
+## Verify the evidence independently
+
+1. [New GHSA/PyPI source cases](../docs/PHASE3Z.md) and [permanent SHA-bound receipt](../evidence/phase3z-2026-11-12-pinned-real-advisory-receipt.json). Real upstream source verification: [CI](https://github.com/Iniwura/falsum/actions/runs/43287674960).
+2. [Official original-model ONNX/WASI scores](../docs/PHASE4A.md) and [permanent 12-score-bit failure record](../evidence/phase4a-2026-11-12-real-original-model-failure.json). Real post-merge scoring: [CI](https://github.com/Iniwura/falsum/actions/runs/43291803205).
+3. [Offline deterministic source reference](../docs/PHASE4B.md): genuine data checks for 36 deliberately constructed claims. [CI](https://github.com/Iniwura/falsum/actions/runs/43297345188).
+4. [Source-executed local Python examples](../docs/PHASE3Q.md) and [hosted synthetic fixture proof](https://falsum-evidence-lab.vercel.app/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json).
+5. [Independent reproduction and criticism invitation](https://github.com/Iniwura/falsum/issues/25). **No external AppSec review has been verified as completed.**
+
+The actual Phase 4A model artifact has extended retention through February 2027. The public site replays **recorded scores** and never pretends a model is computing them in the user's browser. Automated tests explicitly block false model-release claims, tampered evidence, and misleading source assertions.
+
+### Trust boundaries
+
+Public case source records are known and not independently demonstrated to be absent from pretraining. Version-range inclusion does not prove deployment reachability, exploitability or broad application safety. The public three-case challenge tests only **fictional local code**. The online site is static and makes no live scoring or paid Telegraph request. Real Anjoman contribution status is separate, and the two research checkpoints are unregistered.
+
+FALSUM's original implementation includes source material and runtime tooling built with pinned official [Telegraph WASI/scoring code](https://github.com/telegraphprotocol/telegraph-wasm-baseline), the shared ModernBERT Foundation, public advisories and PyPI metadata. Third-party licenses remain applicable. No private network test questions are copied here.
+
+## November 14 milestone and community showcase
+
+The [evidence-safe November 14 showcase kit](../docs/H2_NOV14_SHOWCASE_KIT.md) contains the real Phase 4I result, a ready-to-review Discord #showcase draft, a 20 November walkthrough, an honest publication-evidence register, and independent-review requests. **Drafts are not published posts or judge-verified developer activation.** The November 14 integration milestone is not an Evaluators submission deadline. The final H2 submission remains due **December 1 at 23:59 UTC**.
+
+## For judges and developers
+
+[**90-second judge walkthrough**](../docs/H2_EVALUATORS_JUDGE_PACK.md) · [**3-minute real demo recording plan**](../docs/H2_EVALUATORS_DEMO_STORYBOARD.md) · [**Complete form-ready H2 submission draft**](../docs/H2_FINAL_ENTRY_DRAFT.md) · [**Full engineering history**](../docs/DEVELOPMENT_HISTORY.md)
+
+FALSUM is being prepared for **Telegraph Season II / Evaluators**. **Official deadline: December 1, 2026 at 23:59 UTC.** Internal completion target: **Sunday, November 22, 2026, subject to audit gates**. The **official H2 website entry and 2–5 minute recording are not yet submitted or verified**; a GitHub bounty comment does not submit the hackathon entry.
+
+Developer feedback should include a real source URL, exact version, reproducible command and the observed result. The team records genuine reviews, corrections and abstentions, including negative findings. No purchased or fabricated developer activity is counted.

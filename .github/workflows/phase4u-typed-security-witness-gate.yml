@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - 'src/falsum/source_review_witness_gate.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_source_review_cli_public_entrypoint.py'
       - 'tests/test_source_review_witness_gate.py'
       - 'evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json'
       - 'examples/source-review-witness-claims.json'
@@ -12,6 +14,8 @@ on:
   push:
     paths:
       - 'src/falsum/source_review_witness_gate.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_source_review_cli_public_entrypoint.py'
       - 'tests/test_source_review_witness_gate.py'
       - 'evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json'
       - 'examples/source-review-witness-claims.json'
@@ -43,7 +47,26 @@ jobs:
         run: |
           set -euo pipefail
           python -m unittest discover -s tests -p 'test_source_review_witness_gate.py' -v
+          python -m unittest discover -s tests -p 'test_source_review_cli_public_entrypoint.py' -v
           python -m unittest discover -s tests -p 'test_phase4t_four_stage_evidence.py' -v
+      - name: Verify standard pip-installable CLI works without PYTHONPATH
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --no-deps -e .
+          env -u PYTHONPATH falsum verify-source-review \
+            --index evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json \
+            --source-lock data/phase4p-three-project-open-review-lock.json \
+            --requests examples/source-review-witness-claims.json \
+            --out installed-cli-real-source-witness-results.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('installed-cli-real-source-witness-results.json').read_text())
+          assert (r['supported'],r['contradicted'],r['abstained'])==(2,2,3)
+          assert r['not_a_semantic_or_neural_security_evaluator'] is True
+          assert r['independent_appsec_expert_labels']==0
+          PY
       - name: Execute 32 by-construction typed evidence claim controls
         shell: bash
         run: |
