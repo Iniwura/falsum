@@ -34,6 +34,10 @@ The public source material includes three previously unstudied packages, six aff
 
 The Phase 4H four-project 5/8 is a different, newly selected source task on the **unchanged failed LoRA**, not a trained improvement over Phase 4A's 3/6. The reference checker's 36/36 and the model's 3/6 are **different tasks**. This is *not* a 100% AI improvement. There are **zero externally adjudicated expert labels** in this public reference set, no sealed benchmark, and no demonstrated improved trained LoRA. The failing research checkpoints remain quarantined.
 
+## Phase 4R — executable upstream regression counterfactuals
+
+[Phase 4R](docs/PHASE4R_EXECUTED_UPSTREAM_COUNTERFACTUALS.md) adds a [source-locked upstream runtime workflow](.github/workflows/phase4r-real-upstream-regression.yml) for **Koa** and **Hono**. It checks that a **real upstream original suite passes**, the upstream fixed-version security regression **fails on the exact original vulnerable parent** with the expected behavioral assertion, and the **same regression passes on the exact fixed implementation**. All original and fixed source/test Git blobs, direct parent identities and actual process exit codes are checked, with raw log hashes preserved. This is new repeatable *source-behavior evidence*, not a fresh LoRA result, hidden model benchmark, independent AppSec expert label or new Anjoman Eligible row. The LangChain two-stage case remains source-verified but not included in this executed-test count.
+
 ## Phase 4Q — AI-assisted adversarial source assessment (not independent human evidence)
 
 After re-reading all three new Phase 4P upstream fixes, the assistant recorded an explicitly [AI-generated source critique](docs/PHASE4Q_AI_ADVERSARIAL_SOURCE_REVIEW.md): Koa's corrected redirect branch checks host equality rather than full origin; LangChain's symlink follow-up checks the resolved template **extension**, not a general directory-containment policy; Hono's `text/ping` regression tests simulate HTTP requests but do not reproduce a real browser's authenticated hyperlink audit.
