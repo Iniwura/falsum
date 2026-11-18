@@ -21,6 +21,9 @@ import re
 from .phase4g_reasoning_puzzles import (
     SPECS, STATUS as CASEBOOK_STATUS, build as build_casebook,
 )
+from .phase4o_post_audit_revised_material import (
+    STATUS as REVISED_CASEBOOK_STATUS, build as build_revised_casebook,
+)
 
 STATUS = "PHASE4O_ADVERSARIAL_SHORTCUT_ROSTER_RESEARCHER_HYPOTHESES_NOT_GOLD"
 ROSTER_STATUS = "PREDECLARED_NO_TRAINING_OR_PROMPT_TUNING"
@@ -145,8 +148,15 @@ def _validated_packs(source_raw: bytes, casebook_raw: bytes):
     require(isinstance(source,dict) and isinstance(casebook,dict),
             "source or casebook is not a JSON object")
     canonical, original_wording_diagnostic = build_casebook(source)
-    require(casebook == canonical and casebook.get("status")==CASEBOOK_STATUS,
-            "casebook differs from canonical pinned source and researcher-authored material")
+    revised = build_revised_casebook(source)
+    if casebook == canonical and casebook.get("status")==CASEBOOK_STATUS:
+        material_version = "historical_original_phase4g"
+    elif casebook == revised and casebook.get("status")==REVISED_CASEBOOK_STATUS:
+        material_version = "post_audit_v2_not_blind"
+    else:
+        raise ShortcutAuditError(
+            "casebook differs from exact historical or published post-audit source-locked material"
+        )
     require(len(casebook["cases"])==14 and len(SPECS)==14 and
             set(rule[0] for rule in ROSTER)==set(EXPECTED_ROSTER_NAMES) and
             len(ROSTER)==len(EXPECTED_ROSTER_NAMES),
@@ -157,11 +167,11 @@ def _validated_packs(source_raw: bytes, casebook_raw: bytes):
                 case["network_eligible"] is False and
                 len(case["presentations"]) == 2
                 for case in casebook["cases"]), "author evidence promoted to gold")
-    return casebook, original_wording_diagnostic
+    return casebook, original_wording_diagnostic, material_version
 
 
 def audit(source_raw: bytes, casebook_raw: bytes) -> dict:
-    casebook, original_shortcut = _validated_packs(source_raw,casebook_raw)
+    casebook, original_shortcut, material_version = _validated_packs(source_raw,casebook_raw)
     canonical_author = {case_id:correct for case_id,_,_,_,_,correct,*_ in SPECS}
     measurements = []
     for rule in ROSTER:
@@ -225,6 +235,9 @@ def audit(source_raw: bytes, casebook_raw: bytes) -> dict:
         "schema_version":SCHEMA_VERSION,
         "status":STATUS,
         "audit_design":ROSTER_STATUS,
+        "material_version":material_version,
+        "post_audit_revision_is_not_blind":material_version=="post_audit_v2_not_blind",
+        "versioned_historical_source_not_overwritten":True,
         "source_report_sha256":sha256(source_raw),
         "casebook_sha256":sha256(casebook_raw),
         "source_cases":7,
