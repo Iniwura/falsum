@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "status": "PHASE4U_DERIVED_PERMANENT_INDEX_FROM_AUTHENTICATED_FOUR_STAGE_ACTIONS_NOT_GOLD",
+  "source_run": {
+    "url": "https://github.com/Iniwura/falsum/actions/runs/44356563508",
+    "artifact_id": 14452826588,
+    "original_artifact_name": "FALSUM-PHASE4T-FOUR-REAL-UPSTREAM-REGRESSIONS-NOT-EXPERT-GOLD",
+    "original_unmodified_extracted_json_sha256": "e033e98fe8649f9b27a53f4e0f183bfc086257dc87f15ead0ba060aabf4fbf1c",
+    "original_zip_sha256": "01d9113e3cd6a98a27ddb84cdd8f7f78779d61900b7a02356344693c25dcf701",
+    "extracted_json_is_not_stored_verbatim_here": true,
+    "source_selection_sha256": "957796c514970d1b92ac930d423757daf10826e0c83f4d993544550cec7010c7",
+    "source_run_manifest_sha256": "52ca4510e5e56a541e53726923fd489bf29cf37fe78e56958dcea3f6cf4e6436",
+    "verified_on": "2026-11-18"
+  },
+  "original_run_ids": [
+    44352329150,
+    44353999011
+  ],
+  "counts": {
+    "distinct_repositories": 3,
+    "upstream_historical_patches": 4,
+    "source_review_questions": 6,
+    "real_execution_original_pass_new_parent_test_fail_fixed_test_pass": 4
+  },
+  "assertions": {
+    "independent_expert_gold_labels": 0,
+    "new_anjoman_eligible_rows": 0,
+    "trained_model_improvement_proven": false,
+    "registered_evaluator": false,
+    "real_deployment_exploitability_proven": false,
+    "official_h2_submitted": false
+  },
+  "receipts": [
+    {
+      "id": "koa-redirect",
+      "repository": "koajs/koa",
+      "stage": "origin-check-guard",
+      "original_git_commit": "433b20c9e5954113e8d7a23a25e9d5bb750c3034",
+      "fixed_git_commit": "769fd75cc6b30d72493b370b5a3ae2332ca03c5b",
+      "original_source_git_blob": "35c82a08c3a5e7fbb88eef8b4f7d10df52517a0d",
+      "fixed_source_git_blob": "c516e0e134a423535d9362d173da1e9b163c9343",
+      "same_fixed_upstream_regression_test_git_blob": "f15772c16d04f05d3448238eb6fc3de8d2e83a82",
+      "raw_source_runtime_receipt_sha256": "a44fefd30362a794e1002001d234cfaf065b2f5e2b813cc4f01fc62425bfd9cb",
+      "run_url": "https://github.com/Iniwura/falsum/actions/runs/44352329150",
+      "original_upstream_test_passed": true,
+      "original_source_with_fixed_security_regression_failed_expected_assertion": true,
+      "fixed_source_with_same_regression_passed": true,
+      "independent_human_gold": false
+    },
+    {
+      "id": "hono-csrf",
+      "repository": "honojs/hono",
+      "stage": "text-ping-csrf-content-type",
+      "original_git_commit": "d88fab372415277a9e540e895650943dd08eef4a",
+      "fixed_git_commit": "bf16471913b5199212dac33f5d170f94745dd26a",
+      "original_source_git_blob": "12835b192371e46d92d5353304e496cddee40e24",
+      "fixed_source_git_blob": "afcaa3393d3ed6300112385bdafb02e42aa6f483",
+      "same_fixed_upstream_regression_test_git_blob": "d4893e1fd841adf96f27c402f00e902bacbd2eb9",
+      "raw_source_runtime_receipt_sha256": "7ed8b2407133ec620dee5510533af0782006a31766d520ef8f8ee916aa71fffe",
+      "run_url": "https://github.com/Iniwura/falsum/actions/runs/44352329150",
+      "original_upstream_test_passed": true,
+      "original_source_with_fixed_security_regression_failed_expected_assertion": true,
+      "fixed_source_with_same_regression_passed": true,
+      "independent_human_gold": false
+    },
+    {
+      "id": "langchain-path",
+      "repository": "langchain-ai/langchain",
+      "stage": "initial-default-path-validation",
+      "original_git_commit": "7563fceb40ce31165524f3f57ec65e487c02b1a7",
+      "fixed_git_commit": "27add913474e01e33bededf4096151130ba0d47c",
+      "original_source_git_blob": "2e7286dad88e62024ff762b778ee98b7c263dfc7",
+      "fixed_source_git_blob": "fa7e2923cb4fc6dab9558e54b81c57d66b4dca12",
+      "same_fixed_upstream_regression_test_git_blob": "8c2067a9688168765f7d4a1043caf13de29db8c2",
+      "raw_source_runtime_receipt_sha256": "14b82e58c12264aea9eb743c2659d27cbdf72110ab0a907a974a4b3822dc98f8",
+      "run_url": "https://github.com/Iniwura/falsum/actions/runs/44353999011",
+      "original_upstream_test_passed": true,
+      "original_source_with_fixed_security_regression_failed_expected_assertion": true,
+      "fixed_source_with_same_regression_passed": true,
+      "independent_human_gold": false
+    },
+    {
+      "id": "langchain-symlink",
+      "repository": "langchain-ai/langchain",
+      "stage": "followup-resolved-symlink-suffix",
+      "original_git_commit": "c9f51aef85e02fbaadcd5c6c37cf4ef01a49f86e",
+      "fixed_git_commit": "0b5f2c08ee256473e368372a803c5c92039c0a4e",
+      "original_source_git_blob": "fa7e2923cb4fc6dab9558e54b81c57d66b4dca12",
+      "fixed_source_git_blob": "d130f9d8714041409d72ea5fc3385229bf34ab91",
+      "same_fixed_upstream_regression_test_git_blob": "91af9257c0a1b51223c73052327d4b375acbe5da",
+      "raw_source_runtime_receipt_sha256": "c2fe815535477749df1243f43bc6af98198a157fd76a1673922abc1b2fb8b5e3",
+      "run_url": "https://github.com/Iniwura/falsum/actions/runs/44353999011",
+      "original_upstream_test_passed": true,
+      "original_source_with_fixed_security_regression_failed_expected_assertion": true,
+      "fixed_source_with_same_regression_passed": true,
+      "independent_human_gold": false
+    }
+  ]
+}
