@@ -72,7 +72,7 @@ class PrivyContributorReadbackTests(unittest.TestCase):
         serial = json.dumps(result)
         for secret in [PRIVY, OLD, "SENSITIVE-PRIVATE-PROMPT",
                        "SENSITIVE-PRIVATE-ANSWER", "SENSITIVE-PRIVATE-OTHER",
-                       "row_hash", "chosen", "rejected"]:
+                       "row_hash", "case_id", "private_row_body"]:
             self.assertNotIn(secret, serial)
         self.assertFalse(result["cryptographic_wallet_ownership_verified"])
         self.assertFalse(result["accepted_bounty_verified"])
