@@ -1,0 +1,185 @@
+name: Phase 4S - real LangChain initial and followup security regression replay
+on:
+  pull_request:
+    paths:
+      - 'src/falsum/phase4s_langchain_upstream_runtime.py'
+      - 'tests/test_phase4s_langchain_upstream_runtime.py'
+      - 'docs/PHASE4S_LANGCHAIN_TWO_REAL_FIX_STAGES.md'
+      - '.github/workflows/phase4s-langchain-two-stage-runtime.yml'
+  push:
+    paths:
+      - 'src/falsum/phase4s_langchain_upstream_runtime.py'
+      - 'tests/test_phase4s_langchain_upstream_runtime.py'
+      - 'docs/PHASE4S_LANGCHAIN_TWO_REAL_FIX_STAGES.md'
+      - '.github/workflows/phase4s-langchain-two-stage-runtime.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  actual-langchain-pytest:
+    name: Public LangChain regression, ${{ matrix.stage }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    strategy:
+      fail-fast: false
+      matrix:
+        stage: [initial, followup]
+    env:
+      PYTHONPATH: src:tests
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test fake-log rejection, raw source bytes and evidence boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase4s_langchain_upstream_runtime.py' -v
+          python -m unittest discover -s tests -p 'test_phase4p_open_source_review.py' -v
+      - name: Select precise historical upstream fix and its true parent
+        shell: bash
+        env:
+          FALSUM_STAGE: ${{ matrix.stage }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          from falsum.phase4p_open_source_review import load_lock
+          from falsum.phase4s_langchain_upstream_runtime import stage,STAGES
+          s=os.environ["FALSUM_STAGE"]
+          lock=load_lock(Path("data/phase4p-three-project-open-review-lock.json").read_bytes())
+          row,record=stage(lock,s)
+          if s=="initial":
+              query="test_load_template_rejects_absolute_path or test_load_template_rejects_traversal"
+          else:
+              query="test_symlink_txt_to_py_is_blocked"
+          with Path(os.environ["GITHUB_ENV"]).open("a") as o:
+              for k,v in {
+                  "LANGCHAIN_STAGE":s,
+                  "LANGCHAIN_PARENT":record["parent"],
+                  "LANGCHAIN_FIX":record["fix"],
+                  "LANGCHAIN_SOURCE_PATH":record["source_path"],
+                  "LANGCHAIN_TEST_PATH":record["test_path"],
+                  "LANGCHAIN_TEST_QUERY":query,
+              }.items():
+                  o.write(k+"="+v+"\n")
+          PY
+      - name: Sparse fetch actual public parent and fixed LangChain Git source
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/falsum-phase4s-${{ matrix.stage }}"
+          mkdir -p "$root/logs"
+          for kind in parent fixed; do
+            ref="$LANGCHAIN_PARENT"
+            if [ "$kind" = "fixed" ]; then ref="$LANGCHAIN_FIX"; fi
+            work="$root/$kind"
+            git init -q "$work"
+            git -C "$work" sparse-checkout init --cone
+            git -C "$work" sparse-checkout set libs/core
+            git -C "$work" remote add origin https://github.com/langchain-ai/langchain.git
+            git -C "$work" -c protocol.version=2 fetch --quiet --no-tags --depth=1 --filter=blob:none origin "$ref"
+            git -C "$work" -c advice.detachedHead=false checkout -q --detach "$ref"
+            test "$(git -C "$work" rev-parse HEAD)" = "$ref"
+          done
+          echo "FALSUM_LANGCHAIN_ROOT=$root" >> "$GITHUB_ENV"
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          from falsum.phase4p_open_source_review import load_lock,git_blob_sha1
+          from falsum.phase4s_langchain_upstream_runtime import stage
+          root=Path(os.environ["RUNNER_TEMP"])/("falsum-phase4s-"+os.environ["LANGCHAIN_STAGE"])
+          lock=load_lock(Path("data/phase4p-three-project-open-review-lock.json").read_bytes())
+          row,s=stage(lock,os.environ["LANGCHAIN_STAGE"])
+          for version in ("parent","fixed"):
+              for kind in ("source","test"):
+                  p=root/version/s[kind+"_path"]
+                  assert git_blob_sha1(p.read_bytes())==s[version+"_"+kind+"_blob"], "modified upstream Git source"
+          PY
+      - name: Install upstream package dependencies without executing project lifecycle scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check --quiet \
+            -e "$FALSUM_LANGCHAIN_ROOT/fixed/libs/core" \
+            "pytest>=8,<10" "pytest-mock>=3.10,<4" \
+            "blockbuster>=1.5.18,<1.6" "syrupy>=4,<6" \
+            "pytest-asyncio>=0.21,<2"
+      - name: Run original loading control and new upstream path security tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$FALSUM_LANGCHAIN_ROOT"
+          logs="$root/logs"
+          function run_test() {
+            local worktree="$1" stem="$2" selector="$3"
+            set +e
+            (cd "$worktree/libs/core" &&
+              PYTHONPATH="$worktree/libs/core" python -m pytest -o addopts= -vv \
+                tests/unit_tests/prompts/test_loading.py -k "$selector") \
+              > "$logs/$stem.log" 2>&1
+            exit_status=$?
+            set -e
+            printf "%s\n" "$exit_status" > "$logs/$stem.exit"
+          }
+          run_test "$root/parent" parent-original test_loading_from_yaml
+          test "$(cat "$logs/parent-original.exit")" = "0"
+          # Keep original source untouched. Overlay only the exact new official
+          # regression test file from the immutable fixed upstream Git commit.
+          cp "$root/fixed/$LANGCHAIN_TEST_PATH" "$root/parent/$LANGCHAIN_TEST_PATH"
+          run_test "$root/parent" parent-new-regression "$LANGCHAIN_TEST_QUERY"
+          run_test "$root/fixed" fixed-new-regression "$LANGCHAIN_TEST_QUERY"
+          python -m falsum.phase4s_langchain_upstream_runtime \
+            --lock data/phase4p-three-project-open-review-lock.json \
+            --stage "${{ matrix.stage }}" \
+            --parent "$root/parent" \
+            --fixed "$root/fixed" \
+            --logs "$logs" \
+            --out "phase4s-${{ matrix.stage }}-actual-langchain-upstream-proof.json"
+      - name: Print limited public-source diagnostics only if a test did not verify
+        if: failure()
+        shell: bash
+        run: |
+          root="$RUNNER_TEMP/falsum-phase4s-${{ matrix.stage }}/logs"
+          for name in parent-original parent-new-regression fixed-new-regression; do
+            echo "=== $name status ==="
+            cat "$root/$name.exit" 2>/dev/null || true
+            echo "=== last 28 lines, public upstream test log ==="
+            tail -n 28 "$root/$name.log" 2>/dev/null || true
+          done
+      - name: Show genuine parent-fail and fixed-pass results
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          stage=os.environ["LANGCHAIN_STAGE"]
+          x=json.loads(Path(f"phase4s-{stage}-actual-langchain-upstream-proof.json").read_text())
+          assert x["status"]=="PHASE4S_REAL_LANGCHAIN_TWO_STAGE_REGRESSIONS_NOT_HUMAN_GOLD"
+          assert x["real_original_upstream_python_tests_executed"] is True
+          assert x["original_functionality_control_passed"] is True
+          assert x["new_security_test_not_passing_old"] is True
+          assert x["new_security_test_passing_fixed"] is True
+          assert x["independently_verified_expert_gold"]==0
+          assert x["new_anjoman_eligible_rows"]==0
+          assert x["trained_evaluator_adapter"] is False
+          with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a") as out:
+              out.write(f"## Phase 4S — actual LangChain {stage} public-source regression\n\n")
+              out.write("Authentic old-version loading control PASSED. Same upstream fixed-commit regression FAILED on vulnerable parent for missing ValueError and PASSED at the fixed commit.\n\n")
+              out.write("Source/test SHA-1, raw fixed Git parent and test-process logs checked. **Not expert gold, not a trained model, not a live exploit.**\n")
+          PY
+      - name: Archive only public-safe source and test identity proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase4s-real-upstream-langchain-${{ matrix.stage }}-not-model-gold
+          path: phase4s-${{ matrix.stage }}-actual-langchain-upstream-proof.json
+          if-no-files-found: warn
+          retention-days: 90
