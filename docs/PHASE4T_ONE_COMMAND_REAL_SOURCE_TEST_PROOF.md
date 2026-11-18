@@ -4,7 +4,7 @@
 
 FALSUM tests whether a security verdict follows **observed code behavior**, rather than a confident but unsupported explanation. These are four authentic upstream fixes across three public repositories. Unlike fictional PRs or author-preferred A/B responses, each case includes the actual upstream project's source, original tests, new security regression and a direct parent/fix counterfactual.
 
-<escape>**Verification statement:**</escape> The original upstream tests passed. The real new security regression from the fixed revision failed on the original implementation with its expected security assertion. The identical new regression passed on the fixed implementation. This claim is scoped to the four named, historical test executions below.
+**Verification statement:** The original upstream tests passed. The real new security regression from the fixed revision failed on the original implementation with its expected security assertion. The identical new regression passed on the fixed implementation. This claim is scoped to the four named, historical test executions below.
 
 ## One-screen judge evidence
 
