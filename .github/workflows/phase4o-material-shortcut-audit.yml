@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'src/falsum/phase4o_multibaseline_shortcut_audit.py'
+      - 'src/falsum/phase4o_post_audit_revised_material.py'
       - 'tests/test_phase4o_multibaseline_shortcut_audit.py'
       - 'docs/PHASE4O_SHORTCUT_ROSTER_AND_REVIEW_GATE.md'
       - '.github/workflows/phase4o-material-shortcut-audit.yml'
@@ -10,6 +11,7 @@ on:
   push:
     paths:
       - 'src/falsum/phase4o_multibaseline_shortcut_audit.py'
+      - 'src/falsum/phase4o_post_audit_revised_material.py'
       - 'tests/test_phase4o_multibaseline_shortcut_audit.py'
       - 'docs/PHASE4O_SHORTCUT_ROSTER_AND_REVIEW_GATE.md'
       - '.github/workflows/phase4o-material-shortcut-audit.yml'
@@ -55,13 +57,28 @@ jobs:
             --source phase4o-evidence/real-source-proof.json \
             --out phase4o-evidence/source-casebook.json \
             --diagnostic phase4o-evidence/old-single-shortcut.json
-      - name: Compare fourteen predeclared lexical-only baselines
+      - name: Retain and audit the original biased casebook, unmodified
         shell: bash
         run: |
           set -euo pipefail
           python -m falsum.phase4o_multibaseline_shortcut_audit \
             --source phase4o-evidence/real-source-proof.json \
             --casebook phase4o-evidence/source-casebook.json \
+            --out phase4o-evidence/original-post-audit-shortcut-evidence.json
+      - name: Create explicitly post-audit versioned six-answer revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase4o_post_audit_revised_material \
+            --source phase4o-evidence/real-source-proof.json \
+            --out phase4o-evidence/post-audit-revised-casebook-not-blind.json
+      - name: Audit all fourteen predeclared lexical-only baselines again on v2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase4o_multibaseline_shortcut_audit \
+            --source phase4o-evidence/real-source-proof.json \
+            --casebook phase4o-evidence/post-audit-revised-casebook-not-blind.json \
             --out phase4o-evidence/multi-shortcut-hypotheses-not-gold.json
       - name: Publish true negative controls and block overstated evidence
         shell: bash
@@ -72,6 +89,17 @@ jobs:
           from pathlib import Path
           p=Path("phase4o-evidence/multi-shortcut-hypotheses-not-gold.json")
           d=json.loads(p.read_text())
+          original=json.loads(Path("phase4o-evidence/original-post-audit-shortcut-evidence.json").read_text())
+          v2=json.loads(Path("phase4o-evidence/post-audit-revised-casebook-not-blind.json").read_text())
+          assert original["material_version"]=="historical_original_phase4g"
+          assert original["flags_high_shortcut_risk"] is True
+          assert "longer_answer_chars" in original["flagged_baselines"]
+          assert v2["material_version"]=="post_audit_v2"
+          assert v2["modified_answer_cases"]==6
+          assert v2["independent_appsec_gold_labels"]==0
+          assert v2["blind_or_sealed_holdout"] is False
+          assert d["material_version"]=="post_audit_v2_not_blind"
+          assert d["post_audit_revision_is_not_blind"] is True
           assert d["shortcuts"]==14
           assert d["exact_AB_presentations"]==28
           assert d["source_cases"]==7
@@ -91,6 +119,9 @@ jobs:
               out.write("## Phase 4O | source-constrained lexical shortcut adversaries\n\n")
               out.write("All 8 pinned upstream fix and regression-test source checks and 14 source-specific research cases have been revalidated.\n\n")
               out.write("**Researcher hypotheses are NOT independent AppSec gold.** 14 predetermined cheap rules, 14 source conditions and 28 A/B displays.\n\n")
+              old_longer=next(r for r in original["baselines"] if r["baseline"]=="longer_answer_chars")
+              new_longer=next(r for r in d["baselines"] if r["baseline"]=="longer_answer_chars")
+              out.write(f"**Historical bias preserved:** the original longer-answer shortcut matched {old_longer['author_hypothesis_agreements_across_14_original_displays']}/14 author hypotheses; after six transparently versioned answer rephrasings, it matched {new_longer['author_hypothesis_agreements_across_14_original_displays']}/14. This is **post-audit editing, not a blind holdout, model gain or gold-label gain**.\n\n")
               out.write("| Shortcut baseline | Original 14 | Swapped 28 | Position-invariant /14 | High-risk? |\n|---|---:|---:|---:|---|\n")
               for r in d["baselines"]:
                   out.write(f"| {r['baseline']} | {r['author_hypothesis_agreements_across_14_original_displays']}/14 | {r['author_hypothesis_agreements_across_28_swapped_displays']}/28 | {r['same_answer_chosen_after_AB_swap_out_of_14']} | {r['flag_high_shortcut_risk']} |\n")
