@@ -25,7 +25,17 @@ Each of the 14 predetermined strategies has no upstream source access, no real T
 
 All fourteen strategies operate across **both A/B positions**. For each, the audit reports: agreement with **14 original researcher hypotheses**; agreement across **28 A/B displays**; and whether choosing the *same text* survives a letter swap. Ties select position A and the resulting position dependence is explicitly visible.
 
-The predeclared **material-quality warning threshold** is **11 of 14** original hypothetical winners, or **22 of 28** A/B displays for a baseline. Any such result **fails the material-quality CI gate**. This is a conservative operational trigger for review, not a statistical significance or security-validity test. A green result cannot prove no other shortcut exists.
+The predeclared **material-quality warning threshold** is **11 of 14** original hypothetical winners, or **22 of 28** A/B displays for a baseline. Any such result sets **`material_quality_gate_passed: false` and `material_promotion_allowed: false`**. The evidence-collection CI still succeeds when it correctly detects a failing material-quality gate: **green CI means the diagnostic ran, not that these cases were approved**. This is a conservative operational trigger, not a statistical significance or security-validity test. Even a passing roster does not prove there are no other shortcuts.
+
+## Observed post-audit results: the answers still need review
+
+The source-verified audit of the **original immutable Phase 4G** casebook exposed a severe answer-only shortcut: **choosing the longer answer agrees with 13 of 14 source-author hypotheses**. This is not a model result or an expert accuracy measurement.
+
+A separately versioned [post-audit six-answer revision](../src/falsum/phase4o_post_audit_revised_material.py) retains the same fourteen questions, exact Git source/test citations and original hypothesis positions, but makes six accurate explanations more concise. The historical casebook remains unchanged, with original and new SHA hashes recorded. This lowers the longer-answer shortcut from **13/14 to 7/14** author agreements.
+
+**However, the revised material is still not ready:** choosing the answer with the most content-word overlap with the question meets the **11/14 high-risk threshold**. That shortcut requires no reading of the code. Further adjustments against this already inspected test roster would overfit the measurement, so the automated quality flag remains **red**. Reviewer source-adjudication or a new independently set and frozen challenge design must follow.
+
+The edits were made **after** observing the length bias and the revision history itself can reveal the author's preference. Therefore neither version is blinded, source-independent gold, sealed holdout, an improved model, or verified Anjoman evaluation quality. FALSUM does not replace its 20 historical Eligible contributor pairs with this edited research material.
 
 ## Source and independence boundaries
 
@@ -57,6 +67,16 @@ PYTHONPATH=src python -m falsum.phase4o_multibaseline_shortcut_audit \
   --source /tmp/falsum-4o-source.json \
   --casebook /tmp/falsum-4o-casebook.json \
   --out /tmp/falsum-4o-shortcut-audit.json
+
+# A separately versioned, post-audit material revision (NOT blind)
+PYTHONPATH=src python -m falsum.phase4o_post_audit_revised_material \
+  --source /tmp/falsum-4o-source.json \
+  --out /tmp/falsum-4o-post-audit-v2-casebook.json
+
+PYTHONPATH=src python -m falsum.phase4o_multibaseline_shortcut_audit \
+  --source /tmp/falsum-4o-source.json \
+  --casebook /tmp/falsum-4o-post-audit-v2-casebook.json \
+  --out /tmp/falsum-4o-v2-shortcut-audit.json
 ```
 
 Use different output paths on subsequent runs; write-once evidence files cannot be silently overwritten. The [dedicated Actions workflow](../.github/workflows/phase4o-material-shortcut-audit.yml) publishes the full source proof, casebook, source-sensitive author-hypothesis diagnostic, and all baseline scores as one artifact.
