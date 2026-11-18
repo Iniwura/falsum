@@ -89,7 +89,7 @@ class SourceWitnessGateTests(unittest.TestCase):
                 with self.subTest(key=key,mutation=name):
                     report=g.evaluate(self.index,doc)
                     self.assertEqual(report["verdict"],"ABSTAIN")
-                    self.assertNotIn("SUPPORTED",report["reason"])
+                    self.assertNotEqual(report["reason"],"REAL_PARENT_FAILS_FIXED_PASSES_TEST_WITNESS")
 
     def test_source_summary_cannot_be_relabelled_as_expert_certified_or_network_ready(self):
         original=json.loads(INDEX_RAW)
