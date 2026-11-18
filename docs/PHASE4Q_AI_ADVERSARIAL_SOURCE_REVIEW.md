@@ -2,7 +2,7 @@
 
 **FALSUM · Telegraph Season II · `SECURITY_REVIEW_GENERAL` · November 18, 2026**
 
-**Provenance:** This is a deliberately skeptical **AI-generated technical review of public source code**, produced in the same ChatGPT-assisted build that authored FALSUM. It is **not** an independently hired or unaffiliated AppSec human review, not a separate human identity, not a professional certification, not source-independent gold, not an accepted Anjoman pair and not proof of model improvement. It must never be tallied as an independent human adjudication or training label. It does not introduce any A/B answer key or official scorer.
+**Provenance:** This is a deliberately skeptical **AI-generated technical review of public source code**, produced in the same ChatGPT-assisted build that authored FALSUM. It is not an independently hired or unaffiliated AppSec human review, not a separate human identity, not a professional certification, not source-independent gold, not an accepted Anjoman pair and not proof of model improvement. It must never be tallied as an independent human adjudication or training label. It does not introduce any A/B answer key or official scorer.
 
 **Review objective:** Challenge the six unlabelled open-response questions in [Phase 4P](PHASE4P_OPEN_RESPONSE_SOURCE_REVIEW.md), specifically by testing whether their premises and scope survive inspection of both historical before/after source and regression tests, plus the actual upstream advisories. The [frozen selection](../data/phase4p-three-project-open-review-lock.json) and [live integrity proof](https://github.com/Iniwura/falsum/actions/runs/44328799745) already establish exact four Git commits, their parents and 16 actual source/test blob hashes. A hash check alone does not verify the **security interpretation**.
 
@@ -60,6 +60,12 @@ All three are **valid open-review challenge topics**, subject to independent sou
 **Reviewer counterexamples:** (a) `csrf()` must actually protect a state-changing route; (b) the route's action must be possible with the fixed ping body or URL parameters; (c) a browser must send cookies or equivalent relevant authorization; (d) browser, SameSite and application-specific security controls matter; (e) the middleware permits requests if **either** configured fetch-site or Origin validation passes. Calling the change a fix for every type of CSRF bypass is unsupported.
 
 **Technical assessment:** this source and test evidence supports the content-type bypass and the narrow remediation. Real browser credential behavior and deployed exploitability remain **unverified** in FALSUM's own tests.
+
+## Reviewer abstention and source privacy
+
+A reviewer should explicitly choose **ABSTAIN** where a claimed real-world impact cannot be established from the historical patch and tests. A source-level explanation is not proof of exploitability in a third-party deployment. This review does not seek private or non-public evaluation content: **no private Anjoman prompts, answers, wallet credentials, secret configuration, or customer data were accessed or reproduced**.
+
+**Zero independent human adjudications are claimed.** The assistant's source reading is an internal adversarial audit with public source links, not a stand-in for an unrelated human reviewer or a blinded scoring authority.
 
 ## Operational decision and benchmark contamination
 
