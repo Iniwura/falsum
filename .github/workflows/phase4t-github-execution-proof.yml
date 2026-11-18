@@ -68,22 +68,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
-          import json,os
-          from pathlib import Path
-          m=json.loads(Path('data/phase4t-four-run-receipt-lock.json').read_text())
-          with Path(os.environ['GITHUB_ENV']).open('a') as f:
-              for item in m['receipts']:
-                  f.write('PHASE4T_'+item['id'].upper().replace('-','_')+'='+item['artifact_name']+'\n')
-          PY
           gh run download 44352329150 -R Iniwura/falsum \
-            --name "$PHASE4T_KOA_REDIRECT" --dir phase4t-input/receipts/koa-redirect
+            --name phase4r-real-upstream-koa-counterfactual-provenance --dir phase4t-input/receipts/koa-redirect
           gh run download 44352329150 -R Iniwura/falsum \
-            --name "$PHASE4T_HONO_CSRF" --dir phase4t-input/receipts/hono-csrf
+            --name phase4r-real-upstream-hono-counterfactual-provenance --dir phase4t-input/receipts/hono-csrf
           gh run download 44353999011 -R Iniwura/falsum \
-            --name "$PHASE4T_LANGCHAIN_PATH" --dir phase4t-input/receipts/langchain-path
+            --name phase4s-real-upstream-langchain-initial-not-model-gold --dir phase4t-input/receipts/langchain-path
           gh run download 44353999011 -R Iniwura/falsum \
-            --name "$PHASE4T_LANGCHAIN_SYMLINK" --dir phase4t-input/receipts/langchain-symlink
+            --name phase4s-real-upstream-langchain-followup-not-model-gold --dir phase4t-input/receipts/langchain-symlink
       - name: Validate every original/fixed source SHA, test SHA, run SHA, control and log hash
         shell: bash
         run: |
