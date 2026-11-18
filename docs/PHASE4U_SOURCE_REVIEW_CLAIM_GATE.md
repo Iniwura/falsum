@@ -12,7 +12,7 @@ FALSUM's core problem is not a lack of security-sounding advice. It is the gap b
 The input is a **typed machine-readable review claim**, not unrestricted natural-language text. For each of four executed security-fix stages (Koa redirect guard, Hono `text/ping` CSRF, and LangChain initial path validation and later symlink target suffix check), a reviewer specifies:
 
 - `case_id`, full historical `upstream_commit` SHA, and `claim_type`.
-- The actual `source_blob_sha1`, identical upstream regression `new_security_regression_test_blob_sha1), and the original `actual_execution_receipt_sha256`.
+- The actual `source_blob_sha1`, identical upstream regression `new_security_regression_test_blob_sha1`, and the original `actual_execution_receipt_sha256`.
 
 The checker verifies those values against the [permanent source witness index](../evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json). That index is a compact **derived, non-verbatim record** pinned to the actual [authenticated four-stage Actions artifact](https://github.com/Iniwura/falsum/actions/runs/44356563508). It includes the original CI report SHA-256 so the source report can be checked byte-for-byte while it remains downloadable. The permanent index is **not a replacement for replaying the original four upstream projects**; the original proof remains separately reproducible.
 
