@@ -34,6 +34,18 @@ The public source material includes three previously unstudied packages, six aff
 
 The Phase 4H four-project 5/8 is a different, newly selected source task on the **unchanged failed LoRA**, not a trained improvement over Phase 4A's 3/6. The reference checker's 36/36 and the model's 3/6 are **different tasks**. This is *not* a 100% AI improvement. There are **zero externally adjudicated expert labels** in this public reference set, no sealed benchmark, and no demonstrated improved trained LoRA. The failing research checkpoints remain quarantined.
 
+## Run FALSUM's evidence-bounded security-review claim check
+
+The [source-witness claim gate](docs/PHASE4U_SOURCE_REVIEW_CLAIM_GATE.md) is an **offline, zero-key, developer-usable** way to test specific structured claims against the four **actually executed** upstream parent/fix security regressions. It distinguishes **SUPPORTED / CONTRADICTED / ABSTAIN**, refuses tampered or mismatched source/test Git hashes, and abstains on deployment exploitability or universal security guarantees. [Seven ready-to-run example claims](examples/source-review-witness-claims.json) include both true and false assertions plus unsupported cases; the [permanent receipt-hash index](evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json) anchors the original publicly completed GitHub Actions verification. **This is typed source-fact verification, not natural-language AI judging or independently validated model performance.**
+
+```bash
+PYTHONPATH=src python -m falsum.source_review_witness_gate \
+  --index evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json \
+  --source-lock data/phase4p-three-project-open-review-lock.json \
+  --requests examples/source-review-witness-claims.json \
+  --out source-review-results.json
+```
+
 ## Actual source-regression proof — 4 historical fixes / 3 real projects
 
 **[Verify all four genuine upstream test runs in one place](docs/PHASE4T_ONE_COMMAND_REAL_SOURCE_TEST_PROOF.md)** · [source-test CI Koa/Hono](https://github.com/Iniwura/falsum/actions/runs/44352329150) · [source-test CI LangChain](https://github.com/Iniwura/falsum/actions/runs/44353999011)

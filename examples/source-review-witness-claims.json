@@ -1,0 +1,100 @@
+[
+  {
+    "test_id": "Koa original new regression actually fails",
+    "claim": {
+      "case_id": "koa-redirect",
+      "upstream_commit": "433b20c9e5954113e8d7a23a25e9d5bb750c3034",
+      "claim_type": "UPSTREAM_REGRESSION_FAILS",
+      "evidence": {
+        "source_blob_sha1": "35c82a08c3a5e7fbb88eef8b4f7d10df52517a0d",
+        "new_security_regression_test_blob_sha1": "f15772c16d04f05d3448238eb6fc3de8d2e83a82",
+        "actual_execution_receipt_sha256": "a44fefd30362a794e1002001d234cfaf065b2f5e2b813cc4f01fc62425bfd9cb"
+      }
+    },
+    "expected": "SUPPORTED"
+  },
+  {
+    "test_id": "Koa false new-regression pass on original parent",
+    "claim": {
+      "case_id": "koa-redirect",
+      "upstream_commit": "433b20c9e5954113e8d7a23a25e9d5bb750c3034",
+      "claim_type": "UPSTREAM_REGRESSION_PASSES",
+      "evidence": {
+        "source_blob_sha1": "35c82a08c3a5e7fbb88eef8b4f7d10df52517a0d",
+        "new_security_regression_test_blob_sha1": "f15772c16d04f05d3448238eb6fc3de8d2e83a82",
+        "actual_execution_receipt_sha256": "a44fefd30362a794e1002001d234cfaf065b2f5e2b813cc4f01fc62425bfd9cb"
+      }
+    },
+    "expected": "CONTRADICTED"
+  },
+  {
+    "test_id": "Hono fixed text-ping security regression passes",
+    "claim": {
+      "case_id": "hono-csrf",
+      "upstream_commit": "bf16471913b5199212dac33f5d170f94745dd26a",
+      "claim_type": "UPSTREAM_REGRESSION_PASSES",
+      "evidence": {
+        "source_blob_sha1": "afcaa3393d3ed6300112385bdafb02e42aa6f483",
+        "new_security_regression_test_blob_sha1": "d4893e1fd841adf96f27c402f00e902bacbd2eb9",
+        "actual_execution_receipt_sha256": "7ed8b2407133ec620dee5510533af0782006a31766d520ef8f8ee916aa71fffe"
+      }
+    },
+    "expected": "SUPPORTED"
+  },
+  {
+    "test_id": "Hono claim fixed implementation still fails its own test",
+    "claim": {
+      "case_id": "hono-csrf",
+      "upstream_commit": "bf16471913b5199212dac33f5d170f94745dd26a",
+      "claim_type": "UPSTREAM_REGRESSION_FAILS",
+      "evidence": {
+        "source_blob_sha1": "afcaa3393d3ed6300112385bdafb02e42aa6f483",
+        "new_security_regression_test_blob_sha1": "d4893e1fd841adf96f27c402f00e902bacbd2eb9",
+        "actual_execution_receipt_sha256": "7ed8b2407133ec620dee5510533af0782006a31766d520ef8f8ee916aa71fffe"
+      }
+    },
+    "expected": "CONTRADICTED"
+  },
+  {
+    "test_id": "LangChain initial patched source proves live production exploit",
+    "claim": {
+      "case_id": "langchain-path",
+      "upstream_commit": "27add913474e01e33bededf4096151130ba0d47c",
+      "claim_type": "CONFIRMED_PRODUCTION_EXPLOIT",
+      "evidence": {
+        "source_blob_sha1": "fa7e2923cb4fc6dab9558e54b81c57d66b4dca12",
+        "new_security_regression_test_blob_sha1": "8c2067a9688168765f7d4a1043caf13de29db8c2",
+        "actual_execution_receipt_sha256": "14b82e58c12264aea9eb743c2659d27cbdf72110ab0a907a974a4b3822dc98f8"
+      }
+    },
+    "expected": "ABSTAIN"
+  },
+  {
+    "test_id": "LangChain symlink followup guarantees all application paths safe",
+    "claim": {
+      "case_id": "langchain-symlink",
+      "upstream_commit": "0b5f2c08ee256473e368372a803c5c92039c0a4e",
+      "claim_type": "GUARANTEED_UNIVERSAL_APPLICATION_SAFETY",
+      "evidence": {
+        "source_blob_sha1": "d130f9d8714041409d72ea5fc3385229bf34ab91",
+        "new_security_regression_test_blob_sha1": "91af9257c0a1b51223c73052327d4b375acbe5da",
+        "actual_execution_receipt_sha256": "c2fe815535477749df1243f43bc6af98198a157fd76a1673922abc1b2fb8b5e3"
+      }
+    },
+    "expected": "ABSTAIN"
+  },
+  {
+    "test_id": "Koa wrong fixed regression source receipt must abstain",
+    "claim": {
+      "case_id": "koa-redirect",
+      "upstream_commit": "769fd75cc6b30d72493b370b5a3ae2332ca03c5b",
+      "claim_type": "UPSTREAM_REGRESSION_PASSES",
+      "evidence": {
+        "source_blob_sha1": "c516e0e134a423535d9362d173da1e9b163c9343",
+        "new_security_regression_test_blob_sha1": "f15772c16d04f05d3448238eb6fc3de8d2e83a82",
+        "actual_execution_receipt_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    "expected": "ABSTAIN"
+  }
+]
