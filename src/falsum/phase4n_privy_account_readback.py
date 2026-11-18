@@ -26,6 +26,7 @@ from .phase4k_submission_readback import (
 # PUBLIC wallet address shown by the user in Anjoman's Privy Wallet panel.
 # NOT a secret, signing key, smart-wallet address, or a verified owner proof.
 PRIVY_ADDRESS = "0xd2f5949cd950026a2960639ababa89a699ace4e6"
+PUBLIC_BOUNTY_ADDRESS = "0x9cBA6Cf94A42F72B1d4e0bDca151C1343d8DFa02"
 ADDR = re.compile(r"^0x[0-9a-fA-F]{40}$")
 STATUS = "PHASE4N_OPERATOR_PRIVY_VS_OLD_PUBLIC_SUBMITTER_READ_ONLY"
 MAX_ROWS = 5000
@@ -83,10 +84,25 @@ def report(fetch=None, *, privy_address: str = PRIVY_ADDRESS) -> dict:
         fetch = _fetch_json
     require(isinstance(privy_address, str) and ADDR.fullmatch(privy_address) is not None,
             "invalid operator-supplied public wallet address")
-    comment = fetch(COMMENT_URL, 100_000)
-    comment_address, comment_sha = _extract_comment(comment)
+    # A temporary unauthenticated GitHub API failure must not prevent the
+    # independently scoped Anjoman Privy-wallet query. Preserve the precise
+    # distinction: the historical public comment address was independently
+    # observed earlier, but its *current* comment readback may be unavailable.
+    comment_address = PUBLIC_BOUNTY_ADDRESS
+    comment_sha = None
+    comment_check = "GITHUB_COMMENT_FETCH_UNAVAILABLE_OR_CHANGED"
+    try:
+        comment = fetch(COMMENT_URL, 100_000)
+        current_address, comment_sha = _extract_comment(comment)
+        if current_address.lower() == PUBLIC_BOUNTY_ADDRESS.lower():
+            comment_check = "LIVE_COMMENT_MATCHES_ORIGINAL_RECORDED_ADDRESS"
+        else:
+            comment_check = "LIVE_COMMENT_ADDRESS_DIFFERENT_FROM_HISTORICAL"
+    except (ReadbackError, OSError, ValueError, TypeError,
+            UnicodeError, json.JSONDecodeError):
+        pass
     require(comment_address.lower() != privy_address.lower(),
-            "public /submit address and operator Privy address must be distinct here")
+            "historical bounty address and operator Privy address must differ")
     results = {}
     for role, address in (("signed_in_privy_wallet_user_observed", privy_address),
                           ("historical_bounty_comment_wallet", comment_address)):
@@ -111,6 +127,7 @@ def report(fetch=None, *, privy_address: str = PRIVY_ADDRESS) -> dict:
         "observed_utc": datetime.now(timezone.utc).isoformat(),
         "source_comment_url": COMMENT_PUBLIC_LINK,
         "source_comment_sha256": comment_sha,
+        "current_comment_verification_status": comment_check,
         "historical_account_displayed_eligible_rows_reported_by_user": REPORTED_ROWS,
         "addresses_distinct": True,
         "accounts": results,
@@ -160,6 +177,7 @@ def main(argv: list[str] | None = None) -> int:
         out.write("\n")
     public_summary = {
         "status": data["status"], "finding": data["finding"],
+        "error_type": data.get("error_type"),
         "intent_id": INTENT, "private_rows_persisted_or_logged": False,
         "report_file_written": str(args.out),
     }
