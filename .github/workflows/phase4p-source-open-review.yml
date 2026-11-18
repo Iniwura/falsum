@@ -6,6 +6,8 @@ on:
       - 'src/falsum/phase4p_open_source_review.py'
       - 'tests/test_phase4p_open_source_review.py'
       - 'docs/PHASE4P_OPEN_RESPONSE_SOURCE_REVIEW.md'
+      - 'docs/PHASE4Q_AI_ADVERSARIAL_SOURCE_REVIEW.md'
+      - 'tests/test_phase4q_ai_review_provenance.py'
       - '.github/ISSUE_TEMPLATE/independent-phase4p-open-review.yml'
       - '.github/workflows/phase4p-source-open-review.yml'
       - 'README.md'
@@ -15,6 +17,8 @@ on:
       - 'src/falsum/phase4p_open_source_review.py'
       - 'tests/test_phase4p_open_source_review.py'
       - 'docs/PHASE4P_OPEN_RESPONSE_SOURCE_REVIEW.md'
+      - 'docs/PHASE4Q_AI_ADVERSARIAL_SOURCE_REVIEW.md'
+      - 'tests/test_phase4q_ai_review_provenance.py'
       - '.github/ISSUE_TEMPLATE/independent-phase4p-open-review.yml'
       - '.github/workflows/phase4p-source-open-review.yml'
   workflow_dispatch:
@@ -41,6 +45,7 @@ jobs:
         run: |
           set -euo pipefail
           python -m unittest discover -s tests -p 'test_phase4p_open_source_review.py' -v
+          python -m unittest discover -s tests -p 'test_phase4q_ai_review_provenance.py' -v
       - name: Verify real GitHub commit parents, source and tests at parent/fix
         shell: bash
         env:
@@ -83,6 +88,7 @@ jobs:
               out.write('Verified **three previously unscored GitHub repositories**, **four real historical security-fix commits**, **16 source/test parent-and-fixed Git blobs**, and **six open-ended review questions**.\n\n')
               out.write('Koa redirect-origin boundary, LangChain initial + symlink follow-up prompt-path validation, and Hono cross-origin text/ping CSRF.\n\n')
               out.write('These are new project-disjoint public-source challenge *candidates*, NOT a sealed holdout. **Zero independent gold labels; no real Foundation scoring; no new Anjoman rows; no trained evaluator; source code patch authenticity does not itself prove production exploitability.**\n')
+              out.write('A separately published Phase 4Q AI-assisted adversarial source critique is **not an external human expert review** and **does not change the 0 independently validated labels**. Public analysis is not a sealed independent holdout.\n')
           PY
       - name: Archive real upstream source proof and reviewer questions only
         if: always()
