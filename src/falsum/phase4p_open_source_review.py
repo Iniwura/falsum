@@ -193,7 +193,7 @@ def check_commit(stage: dict, repo: str, commit: dict) -> dict:
                         for line in patch.splitlines()))
                     or (kind == "source" and any(
                         (line.startswith("+") and not line.startswith("+++"))
-                        or (line.startswith("-") and not line.startswith("---")
+                        or (line.startswith("-") and not line.startswith("---"))
                         for line in patch.splitlines()))
                 ),
                 "source/test patch evidence missing or empty")
