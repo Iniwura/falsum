@@ -1,0 +1,101 @@
+name: Phase 4U - authenticated source-regression review claims, not a model adapter
+on:
+  pull_request:
+    paths:
+      - 'src/falsum/source_review_witness_gate.py'
+      - 'tests/test_source_review_witness_gate.py'
+      - 'evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json'
+      - 'examples/source-review-witness-claims.json'
+      - 'docs/PHASE4U_SOURCE_REVIEW_CLAIM_GATE.md'
+      - '.github/workflows/phase4u-typed-security-witness-gate.yml'
+      - 'README.md'
+  push:
+    paths:
+      - 'src/falsum/source_review_witness_gate.py'
+      - 'tests/test_source_review_witness_gate.py'
+      - 'evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json'
+      - 'examples/source-review-witness-claims.json'
+      - 'docs/PHASE4U_SOURCE_REVIEW_CLAIM_GATE.md'
+      - '.github/workflows/phase4u-typed-security-witness-gate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  actual-source-bounded-claim-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    env:
+      PYTHONPATH: src:tests
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify exact public source witnesses and adversarial abstention regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_source_review_witness_gate.py' -v
+          python -m unittest discover -s tests -p 'test_phase4t_four_stage_evidence.py' -v
+      - name: Execute 32 by-construction typed evidence claim controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.source_review_witness_gate \
+            --index evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json \
+            --source-lock data/phase4p-three-project-open-review-lock.json \
+            --out constructed-source-witness-results.json
+      - name: Execute seven human-readable example source/contradiction/abstention claims
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.source_review_witness_gate \
+            --index evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json \
+            --source-lock data/phase4p-three-project-open-review-lock.json \
+            --requests examples/source-review-witness-claims.json \
+            --out source-witness-examples-results.json
+      - name: Enforce provenance, four-stage scope and NEVER promote to real model accuracy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          a=json.loads(Path('constructed-source-witness-results.json').read_text())
+          b=json.loads(Path('source-witness-examples-results.json').read_text())
+          for x in (a,b):
+              assert x['status']=='FALSUM_SOURCE_WITNESS_TYPED_CLAIM_CHECKER_OFFLINE_NOT_NETWORK_ADAPTER'
+              assert x['four_verified_upstream_regression_stages']==4
+              assert x['distinct_repositories']==3
+              assert x['independent_appsec_expert_labels']==0
+              assert x['new_anjo_network_evaluation_rows']==0
+              assert x['not_a_telegraph_network_adapter'] is True
+              assert x['not_a_semantic_or_neural_security_evaluator'] is True
+              assert x['not_an_independent_human_gold_benchmark'] is True
+              assert x['trained_model_improvement_proven'] is False
+              assert x['official_hackathon_submission_confirmed'] is False
+          assert (a['claims_evaluated'],a['supported'],a['contradicted'],a['abstained'])==(32,8,8,16)
+          assert a['constructed_fixtures_checked']==a['constructed_fixture_matches']==32
+          assert (b['claims_evaluated'],b['supported'],b['contradicted'],b['abstained'])==(7,2,2,3)
+          assert b['constructed_fixtures_checked']==b['constructed_fixture_matches']==7
+          with Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as out:
+              out.write('## Source-grounded structured security-review evidence gate\n\n')
+              out.write('4 original real upstream source regression witnesses, 3 repositories, exact Git source/test blob and original Actions receipt digest validation.\n\n')
+              out.write('**32 automatically CONSTRUCTED negative controls:** 8 supported, 8 contradicted, 16 abstained; this is by construction, **NOT learned model accuracy**.\n\n')
+              out.write('**7 example reviewer claims:** 2 supported, 2 contradicted, 3 abstained, including incorrect source receipts and unverified deployed vulnerability consequences.\n\n')
+              out.write('The gate only handles **typed source+test claims**, not natural-language semantics. 0 qualified external expert gold labels, 0 new Anjoman rows, 0 adapter registrations.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase4u-public-source-witness-controls-PY${{ matrix.python }}-NOT-trained-model-scores
+          path: |
+            constructed-source-witness-results.json
+            source-witness-examples-results.json
+          retention-days: 90
