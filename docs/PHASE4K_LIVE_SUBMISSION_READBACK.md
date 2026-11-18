@@ -44,6 +44,10 @@ As a separate live node-health check, the **Intent-wide pool** returned **199 el
 
 The 13 synthetic adversarial tests also passed; that is a separate claim from the real network readback.
 
+## November 18 correction (Phase 4N)
+
+A new [read-only dual-wallet CI run](https://github.com/Iniwura/falsum/actions/runs/44311491808) resolved the old-address confusion: the Privy Wallet shown in the signed-in Anjoman account was **not the same address** as the one originally posted in bounty #96. The node API returned **20 total rows, all 20 Eligible for the operator-shown Privy address**, and **0 total rows for the mistaken GitHub-comment address**. This means the November 14 zero-row result remains a correct observation **about the wrong address**, not missing evaluation material. The account/address association comes from a user-supplied screenshot, not cryptographic owner verification. Eligible does not mean independently gold-labeled or accepted for the hackathon. [New methodology](PHASE4N_PRIVY_WALLET_RECONCILIATION.md).
+
 ## What remains unproven
 
 A public comment claiming an address is **not cryptographic proof of address ownership**. A row appearing Eligible does **not** mean independent AppSec review, semantic correctness, maintainer bounty approval, inclusion in the active ranking snapshot, adapter registration, improved model accuracy or a submitted H2 entry.
