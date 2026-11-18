@@ -7,6 +7,7 @@ on:
       - 'src/falsum/real_fix_corpus.py'
       - 'src/falsum/phase4o_post_audit_revised_material.py'
       - 'tests/test_phase4o_multibaseline_shortcut_audit.py'
+      - 'tests/test_real_fix_corpus.py'
       - 'docs/PHASE4O_SHORTCUT_ROSTER_AND_REVIEW_GATE.md'
       - '.github/workflows/phase4o-material-shortcut-audit.yml'
       - 'README.md'
@@ -17,6 +18,7 @@ on:
       - 'src/falsum/real_fix_corpus.py'
       - 'src/falsum/phase4o_post_audit_revised_material.py'
       - 'tests/test_phase4o_multibaseline_shortcut_audit.py'
+      - 'tests/test_real_fix_corpus.py'
       - 'docs/PHASE4O_SHORTCUT_ROSTER_AND_REVIEW_GATE.md'
       - '.github/workflows/phase4o-material-shortcut-audit.yml'
   workflow_dispatch:
@@ -42,6 +44,7 @@ jobs:
         run: |
           set -euo pipefail
           python -m unittest discover -s tests -p 'test_phase4o_multibaseline_shortcut_audit.py' -v
+          python -m unittest discover -s tests -p 'test_real_fix_corpus.py' -v
           python -m unittest discover -s tests -p 'test_phase4g_reasoning_puzzles.py' -v
       - name: Revalidate exact public source and regression-test commit blobs
         shell: bash
