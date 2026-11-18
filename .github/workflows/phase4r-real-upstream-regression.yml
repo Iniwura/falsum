@@ -136,7 +136,7 @@ jobs:
           if [ "${{ matrix.target }}" = "koa" ]; then
             run_test "$parent" parent-original node --test "$UPSTREAM_TEST_PATH"
           else
-            run_test "$parent" parent-original pnpm exec vitest run --project main "$UPSTREAM_TEST_PATH"
+            run_test "$parent" parent-original pnpm exec vitest run --project main --reporter=verbose "$UPSTREAM_TEST_PATH"
           fi
           test "$(cat "$logs/parent-original.exit")" = "0"
           cp "$fixed/$UPSTREAM_TEST_PATH" "$parent/$UPSTREAM_TEST_PATH"
@@ -144,8 +144,8 @@ jobs:
             run_test "$parent" parent-regression node --test --test-name-pattern="should fix Trailing Double-Slash security issue" "$UPSTREAM_TEST_PATH"
             run_test "$fixed" fixed-regression node --test --test-name-pattern="should fix Trailing Double-Slash security issue" "$UPSTREAM_TEST_PATH"
           else
-            run_test "$parent" parent-regression pnpm exec vitest run --project main "$UPSTREAM_TEST_PATH" -t "hyperlink auditing"
-            run_test "$fixed" fixed-regression pnpm exec vitest run --project main "$UPSTREAM_TEST_PATH" -t "hyperlink auditing"
+            run_test "$parent" parent-regression pnpm exec vitest run --project main --reporter=verbose "$UPSTREAM_TEST_PATH" -t "hyperlink auditing"
+            run_test "$fixed" fixed-regression pnpm exec vitest run --project main --reporter=verbose "$UPSTREAM_TEST_PATH" -t "hyperlink auditing"
           fi
           python -m falsum.phase4r_real_upstream_regression \
             --lock data/phase4p-three-project-open-review-lock.json \
