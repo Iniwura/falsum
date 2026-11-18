@@ -56,8 +56,8 @@ def setup(target:str,root:Path):
     def git(wt,*args):
         if args==("rev-parse","HEAD"):
             return stage["parent"] if wt==parent else stage["fix"]
-        if args==("show","-s","--format=%P","HEAD"):
-            return stage["parent"]
+        if args==("cat-file","-p","HEAD"):
+            return "tree "+("f"*40)+"\nparent "+stage["parent"]+"\nauthor synthetic <source@invalid.example>\n\nmessage"
         raise AssertionError("Unexpected git invocation: "+str(args))
     return lock,parent,fixed,logs,git,stage
 
@@ -137,8 +137,8 @@ class RealUpstreamEvidenceProofTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             lock,parent,fixed,logs,git,stage=setup("hono",Path(d))
             def wrong_git(wt,*args):
-                if wt==fixed and args==("show","-s","--format=%P","HEAD"):
-                    return "0"*40
+                if wt==fixed and args==("cat-file","-p","HEAD"):
+                    return "tree "+("f"*40)+"\nparent "+("0"*40)+"\n\nwrong parent"
                 return git(wt,*args)
             with patch.object(r,"load_lock",return_value=lock),patch.object(r,"_git",side_effect=wrong_git):
                 with self.assertRaisesRegex(r.RuntimeEvidenceError,"exact direct parent"):
