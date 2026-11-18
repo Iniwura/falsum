@@ -58,7 +58,7 @@ def network(privy=None, old=None, *, offline_for=None, public_comment=None):
 class PrivyContributorReadbackTests(unittest.TestCase):
     def test_both_distinct_wallets_are_queried_and_no_private_row_content_leaks(self):
         fetch, urls = network(privy=["eligible"] * 20, old=[])
-        result = n.report(fetch, privy_address=PRIVY)
+        result = n.report(fetch, privy_address=PRIVY, bounty_address=OLD)
         self.assertTrue(result["addresses_distinct"])
         self.assertTrue(result["operator_association_is_based_on_user_provided_anjo_wallet_panel"])
         self.assertEqual(result["finding"],
@@ -81,7 +81,7 @@ class PrivyContributorReadbackTests(unittest.TestCase):
 
     def test_account_has_fewer_than_historical_reported_eligible(self):
         fetch, _ = network(privy=["eligible"] * 16 + ["admitted"] * 4, old=["eligible"])
-        result = n.report(fetch, privy_address=PRIVY)
+        result = n.report(fetch, privy_address=PRIVY, bounty_address=OLD)
         self.assertIn("DIFFERS_FROM_HISTORICAL", result["finding"])
         privy = result["accounts"]["signed_in_privy_wallet_user_observed"]
         self.assertEqual(privy["current_eligible_rows"], 16)
@@ -90,7 +90,7 @@ class PrivyContributorReadbackTests(unittest.TestCase):
 
     def test_privy_unavailable_retains_old_status_and_does_not_infer_zero(self):
         fetch, _ = network(old=[], offline_for=PRIVY)
-        result = n.report(fetch, privy_address=PRIVY)
+        result = n.report(fetch, privy_address=PRIVY, bounty_address=OLD)
         self.assertEqual(result["finding"],
                          "OPERATOR_SHOWN_PRIVY_ADDRESS_LIVE_READBACK_UNAVAILABLE_UNKNOWN")
         self.assertIsNone(result["accounts"]["signed_in_privy_wallet_user_observed"]["current_eligible_rows"])
@@ -99,7 +99,7 @@ class PrivyContributorReadbackTests(unittest.TestCase):
 
     def test_old_wallet_unavailable_cannot_be_reported_zero(self):
         fetch, _ = network(privy=["eligible"] * 20, offline_for=OLD)
-        result = n.report(fetch, privy_address=PRIVY)
+        result = n.report(fetch, privy_address=PRIVY, bounty_address=OLD)
         self.assertIsNone(result["accounts"]["historical_bounty_comment_wallet"]["current_total_rows"])
         self.assertTrue(result["accounts"]["signed_in_privy_wallet_user_observed"]["readback_completed"])
 
@@ -107,14 +107,23 @@ class PrivyContributorReadbackTests(unittest.TestCase):
         fetch, _ = network()
         for wrong in (None, "not-an-address", "0x" + "g" * 40, OLD):
             with self.subTest(wrong=wrong), self.assertRaises(n.ContributorReadbackError):
-                n.report(fetch, privy_address=wrong)
+                n.report(fetch, privy_address=wrong, bounty_address=OLD)
 
-    def test_modified_or_wrong_author_submission_is_not_trusted(self):
+    def test_modified_or_wrong_author_submission_is_flagged_not_misrepresented(self):
         obj = comment()
         obj["user"]["login"] = "an-impostor"
-        fetch, _ = network(public_comment=obj)
-        with self.assertRaises(Exception):
-            n.report(fetch, privy_address=PRIVY)
+        fetch, _ = network(privy=["eligible"] * 20, public_comment=obj)
+        result = n.report(fetch, privy_address=PRIVY, bounty_address=OLD)
+        self.assertEqual(result["current_comment_verification_status"],
+                         "GITHUB_COMMENT_FETCH_UNAVAILABLE_OR_CHANGED")
+        self.assertEqual(result["accounts"]["signed_in_privy_wallet_user_observed"]["current_eligible_rows"], 20)
+        self.assertFalse(result["accepted_bounty_verified"])
+
+    def test_live_public_comment_matches_explicit_old_wallet(self):
+        fetch, _ = network()
+        result = n.report(fetch, privy_address=PRIVY, bounty_address=OLD)
+        self.assertEqual(result["current_comment_verification_status"],
+                         "LIVE_COMMENT_MATCHES_ORIGINAL_RECORDED_ADDRESS")
 
     def test_mutation_of_intent_fails_independently_on_both_wallets(self):
         fetch, _ = network(privy=["eligible"] * 20, old=["eligible"] * 3)
@@ -123,7 +132,7 @@ class PrivyContributorReadbackTests(unittest.TestCase):
             if url != COMMENT_URL:
                 obj["rows"] = [dict(row, intent_id="SOME_OTHER_INTENT") for row in obj["rows"]]
             return obj
-        result = n.report(wrong, privy_address=PRIVY)
+        result = n.report(wrong, privy_address=PRIVY, bounty_address=OLD)
         for role in result["accounts"].values():
             self.assertIsNone(role["current_eligible_rows"])
             self.assertFalse(role["readback_completed"])
@@ -136,7 +145,7 @@ class PrivyContributorReadbackTests(unittest.TestCase):
                 if len(obj["rows"]) > 1:
                     obj["rows"][1]["row_hash"] = obj["rows"][0]["row_hash"]
             return obj
-        result = n.report(duplicate, privy_address=PRIVY)
+        result = n.report(duplicate, privy_address=PRIVY, bounty_address=OLD)
         self.assertFalse(result["accounts"]["signed_in_privy_wallet_user_observed"]["readback_completed"])
         self.assertEqual(result["accounts"]["historical_bounty_comment_wallet"]["current_eligible_rows"], 1)
 
@@ -144,7 +153,7 @@ class PrivyContributorReadbackTests(unittest.TestCase):
         fetch, _ = network(privy=["eligible"] * 20, old=[])
         with tempfile.TemporaryDirectory() as workdir:
             out = Path(workdir) / "report.json"
-            with patch.object(n, "report", return_value=n.report(fetch, privy_address=PRIVY)):
+            with patch.object(n, "report", return_value=n.report(fetch, privy_address=PRIVY, bounty_address=OLD)):
                 self.assertEqual(n.main(["--out", str(out)]), 0)
             body = out.read_text()
             self.assertNotIn(PRIVY, body)
