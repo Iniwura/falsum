@@ -25,6 +25,16 @@ from .phase4t_four_stage_evidence import EXPECTED_IDS, EXPECTED_RUNS
 SOURCE_SHA256 = "957796c514970d1b92ac930d423757daf10826e0c83f4d993544550cec7010c7"
 MANIFEST_SHA256 = "52ca4510e5e56a541e53726923fd489bf29cf37fe78e56958dcea3f6cf4e6436"
 ORIGINAL_FOUR_STAGE_PROOF_SHA256 = "e033e98fe8649f9b27a53f4e0f183bfc086257dc87f15ead0ba060aabf4fbf1c"
+EXPECTED_RECEIPTS = {
+    "koa-redirect": ("koajs/koa","origin-check-guard",44352329150,
+                     "a44fefd30362a794e1002001d234cfaf065b2f5e2b813cc4f01fc62425bfd9cb"),
+    "hono-csrf": ("honojs/hono","text-ping-csrf-content-type",44352329150,
+                  "7ed8b2407133ec620dee5510533af0782006a31766d520ef8f8ee916aa71fffe"),
+    "langchain-path": ("langchain-ai/langchain","initial-default-path-validation",44353999011,
+                       "14b82e58c12264aea9eb743c2659d27cbdf72110ab0a907a974a4b3822dc98f8"),
+    "langchain-symlink": ("langchain-ai/langchain","followup-resolved-symlink-suffix",44353999011,
+                          "c2fe815535477749df1243f43bc6af98198a157fd76a1673922abc1b2fb8b5e3"),
+}
 STATUS = "FALSUM_SOURCE_WITNESS_TYPED_CLAIM_CHECKER_OFFLINE_NOT_NETWORK_ADAPTER"
 EVIDENCE_STATUS = "PHASE4U_DERIVED_PERMANENT_INDEX_FROM_AUTHENTICATED_FOUR_STAGE_ACTIONS_NOT_GOLD"
 CLAIMS = (
@@ -73,6 +83,10 @@ def validated_index(index_raw: bytes, lock_raw: bytes) -> dict:
             data.get("schema_version")==1 and
             data.get("status")==EVIDENCE_STATUS,
             "unapproved or missing permanent source-execution index")
+    require(set(data)=={
+        "schema_version","status","source_run","original_run_ids","counts",
+        "assertions","receipts"
+    }, "permanent source index has unexpected private or unapproved fields")
     orig=data.get("source_run",{})
     require(isinstance(orig,dict) and
             orig.get("original_unmodified_extracted_json_sha256") ==
@@ -94,6 +108,7 @@ def validated_index(index_raw: bytes, lock_raw: bytes) -> dict:
             and counts.get("real_execution_original_pass_new_parent_test_fail_fixed_test_pass")==4,
             "upstream source execution counts not authenticated")
     limits=data.get("assertions",{})
+    require(isinstance(limits,dict),"malformed source-only proof limits")
     require(limits.get("independent_expert_gold_labels")==0
             and limits.get("new_anjoman_eligible_rows")==0
             and limits.get("trained_model_improvement_proven") is False
@@ -107,6 +122,23 @@ def validated_index(index_raw: bytes, lock_raw: bytes) -> dict:
             "expected four immutable executed source witnesses not found")
     index={}
     for entry in records:
+        require(isinstance(entry,dict) and set(entry)=={
+            "id","repository","stage","original_git_commit","fixed_git_commit",
+            "original_source_git_blob","fixed_source_git_blob",
+            "same_fixed_upstream_regression_test_git_blob",
+            "raw_source_runtime_receipt_sha256","run_url",
+            "original_upstream_test_passed",
+            "original_source_with_fixed_security_regression_failed_expected_assertion",
+            "fixed_source_with_same_regression_passed","independent_human_gold"
+        }, "unapproved source witness record fields")
+        require(entry["id"] in EXPECTED_RECEIPTS,
+                "source witness case not in four authenticated runs")
+        repo,stage_name,run_id,receipt_sha=EXPECTED_RECEIPTS[entry["id"]]
+        require(entry["repository"]==repo and entry["stage"]==stage_name
+                and entry["run_url"]==
+                f"https://github.com/Iniwura/falsum/actions/runs/{run_id}"
+                and entry["raw_source_runtime_receipt_sha256"]==receipt_sha,
+                "source witness original GitHub execution SHA or case identity changed")
         matches=[r for r in lock["cases"] if r["repository"]==entry["repository"]]
         require(len(matches)==1, "source-execution case from unverified repository")
         row=matches[0]
@@ -198,6 +230,10 @@ def evaluate(index:dict, claim:dict) -> dict:
         result["reason"]="UNSUPPORTED_GIT_REVISION"
         return result
     evidence=claim["evidence"]
+    if not all(isinstance(value,str) and len(value)<=80
+               for value in evidence.values()):
+        result["reason"]="MALFORMED_OR_MISSING_PRIMARY_EVIDENCE"
+        return result
     if (evidence.get("source_blob_sha1")!=source
             or evidence.get("new_security_regression_test_blob_sha1") !=
             witness["same_fixed_upstream_regression_test_git_blob"]
