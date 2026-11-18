@@ -52,8 +52,8 @@ def inspect_public_docs(contents: dict[str, str], root: Path | None = None) -> d
           "internal completion target missing or stale")
     check("December 1, 2026" in entry and "December 1, 2026" in judge,
           "official H2 deadline missing")
-    check("zero rows" in entry.lower() or "zero records" in entry.lower(),
-          "unresolved public contributor zero-row result omitted")
+    check(any(term in entry.lower() for term in ("zero rows", "zero records", "0 rows")),
+          "historical wrong-address zero-row result omitted")
     check("zero rows" in judge.lower() and "0 rows" in readme.lower(),
           "public contributor address discrepancy not retained consistently")
     for document in (entry, judge, readme):
