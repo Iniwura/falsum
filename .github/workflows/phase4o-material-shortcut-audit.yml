@@ -1,0 +1,155 @@
+name: Phase 4O - source-verified security-evaluation material shortcut audit
+on:
+  pull_request:
+    paths:
+      - 'src/falsum/phase4o_multibaseline_shortcut_audit.py'
+      - 'src/falsum/phase4o_post_audit_revised_material.py'
+      - 'src/falsum/real_fix_corpus.py'
+      - 'src/falsum/phase4o_post_audit_revised_material.py'
+      - 'tests/test_phase4o_multibaseline_shortcut_audit.py'
+      - 'tests/test_real_fix_corpus.py'
+      - 'docs/PHASE4O_SHORTCUT_ROSTER_AND_REVIEW_GATE.md'
+      - '.github/workflows/phase4o-material-shortcut-audit.yml'
+      - 'README.md'
+  push:
+    paths:
+      - 'src/falsum/phase4o_multibaseline_shortcut_audit.py'
+      - 'src/falsum/phase4o_post_audit_revised_material.py'
+      - 'src/falsum/real_fix_corpus.py'
+      - 'src/falsum/phase4o_post_audit_revised_material.py'
+      - 'tests/test_phase4o_multibaseline_shortcut_audit.py'
+      - 'tests/test_real_fix_corpus.py'
+      - 'docs/PHASE4O_SHORTCUT_ROSTER_AND_REVIEW_GATE.md'
+      - '.github/workflows/phase4o-material-shortcut-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-locked-multibaseline-audit:
+    name: Reverify 7 original upstream fixes and inspect 14 adversarial shortcuts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    env:
+      PYTHONPATH: src:tests
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Offline adversarial 4O and 4G casebook tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase4o_multibaseline_shortcut_audit.py' -v
+          python -m unittest discover -s tests -p 'test_real_fix_corpus.py' -v
+          python -m unittest discover -s tests -p 'test_phase4g_reasoning_puzzles.py' -v
+      - name: Revalidate exact public source and regression-test commit blobs
+        shell: bash
+        env:
+          FALSUM_GITHUB_SOURCE_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p phase4o-evidence
+          python -m falsum.phase3f_multifamily_material \
+            --old-queue data/real-fix-queue.json \
+            --train-queue data/real-fix-train-candidates.json \
+            --catalog data/phase2w-applicability-rules.json \
+            --out phase4o-evidence/real-source-proof.json
+      - name: Rebuild original unadjudicated 14 source-specific questions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase4g_reasoning_puzzles \
+            --source phase4o-evidence/real-source-proof.json \
+            --out phase4o-evidence/source-casebook.json \
+            --diagnostic phase4o-evidence/old-single-shortcut.json
+      - name: Retain and audit the original biased casebook, unmodified
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase4o_multibaseline_shortcut_audit \
+            --source phase4o-evidence/real-source-proof.json \
+            --casebook phase4o-evidence/source-casebook.json \
+            --out phase4o-evidence/original-post-audit-shortcut-evidence.json
+      - name: Create explicitly post-audit versioned six-answer revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase4o_post_audit_revised_material \
+            --source phase4o-evidence/real-source-proof.json \
+            --out phase4o-evidence/post-audit-revised-casebook-not-blind.json
+      - name: Audit all fourteen predeclared lexical-only baselines again on v2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase4o_multibaseline_shortcut_audit \
+            --source phase4o-evidence/real-source-proof.json \
+            --casebook phase4o-evidence/post-audit-revised-casebook-not-blind.json \
+            --out phase4o-evidence/multi-shortcut-hypotheses-not-gold.json
+      - name: Publish true negative controls and block overstated evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path("phase4o-evidence/multi-shortcut-hypotheses-not-gold.json")
+          d=json.loads(p.read_text())
+          original=json.loads(Path("phase4o-evidence/original-post-audit-shortcut-evidence.json").read_text())
+          v2=json.loads(Path("phase4o-evidence/post-audit-revised-casebook-not-blind.json").read_text())
+          assert original["material_version"]=="historical_original_phase4g"
+          assert original["flags_high_shortcut_risk"] is True
+          assert "longer_answer_chars" in original["flagged_baselines"]
+          assert v2["material_version"]=="post_audit_v2"
+          assert v2["modified_answer_cases"]==6
+          assert v2["independent_appsec_gold_labels"]==0
+          assert v2["blind_or_sealed_holdout"] is False
+          assert d["material_version"]=="post_audit_v2_not_blind"
+          assert d["post_audit_revision_is_not_blind"] is True
+          assert d["shortcuts"]==14
+          assert d["exact_AB_presentations"]==28
+          assert d["source_cases"]==7
+          assert d["author_written_reasoning_conditions"]==14
+          assert d["independent_appsec_gold_labels"]==0
+          assert d["new_anjoman_rows"]==0
+          assert d["foundation_model_called"] is False
+          assert d["model_improvement_or_network_ranking_proven"] is False
+          assert d["researcher_hypotheses_not_gold"] is True
+          assert d["trained_evaluator"] is False
+          assert d["no_new_project_holdout"] is True
+          assert d["registered_evaluator"] is False
+          idx={x["baseline"]:x for x in d["baselines"]}
+          assert idx["constant_A"]["author_hypothesis_agreements_across_28_swapped_displays"]==14
+          assert idx["constant_B"]["author_hypothesis_agreements_across_28_swapped_displays"]==14
+          with Path(os.environ["GITHUB_STEP_SUMMARY"]).open("a") as out:
+              out.write("## Phase 4O | source-constrained lexical shortcut adversaries\n\n")
+              out.write("All 8 pinned upstream fix and regression-test source checks and 14 source-specific research cases have been revalidated.\n\n")
+              out.write("**Researcher hypotheses are NOT independent AppSec gold.** 14 predetermined cheap rules, 14 source conditions and 28 A/B displays.\n\n")
+              old_longer=next(r for r in original["baselines"] if r["baseline"]=="longer_answer_chars")
+              new_longer=next(r for r in d["baselines"] if r["baseline"]=="longer_answer_chars")
+              out.write(f"**Historical bias preserved:** the original longer-answer shortcut matched {old_longer['author_hypothesis_agreements_across_14_original_displays']}/14 author hypotheses; after six transparently versioned answer rephrasings, it matched {new_longer['author_hypothesis_agreements_across_14_original_displays']}/14. This is **post-audit editing, not a blind holdout, model gain or gold-label gain**.\n\n")
+              out.write("| Shortcut baseline | Original 14 | Swapped 28 | Position-invariant /14 | High-risk? |\n|---|---:|---:|---:|---|\n")
+              for r in d["baselines"]:
+                  out.write(f"| {r['baseline']} | {r['author_hypothesis_agreements_across_14_original_displays']}/14 | {r['author_hypothesis_agreements_across_28_swapped_displays']}/28 | {r['same_answer_chosen_after_AB_swap_out_of_14']} | {r['flag_high_shortcut_risk']} |\n")
+              out.write("\nStrong shortcut flags: **"+", ".join(d["flagged_baselines"] or ["none within this limited roster"])+"**. No hidden-gold, network accuracy, expert validation or trained-model improvement.\n")
+          assert d["material_quality_gate_passed"] is (not bool(d["flagged_baselines"]))
+          assert d["material_promotion_allowed"] is False
+          assert d["submission_ready"] is False
+          if d["flags_high_shortcut_risk"]:
+              # A successful CI diagnostic is not a passing QUALITY gate.
+              # Publish the evidence and explicit block, never silently pass
+              # these biased questions as ready for evaluator training.
+              print("MATERIAL QUALITY VETO: "+", ".join(d["flagged_baselines"]))
+              print("Pipeline successfully measured a failed material-quality gate; release remains forbidden.")
+          PY
+      - name: Preserve all source, casebook, baseline and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase4o-source-locked-shortcut-material-research-not-expert-gold
+          path: phase4o-evidence/*.json
+          if-no-files-found: warn
+          retention-days: 90

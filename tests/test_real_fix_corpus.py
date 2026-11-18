@@ -1,6 +1,7 @@
 """Offline integrity and tampering tests. Public patches are not expert labels."""
 import copy
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -8,6 +9,7 @@ from unittest.mock import patch
 
 from falsum.real_fix_corpus import (
     RealFixError, assemble, load_queue, main, reviewer_packet, verify_commit,
+    fetch_github_commit,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -139,6 +141,54 @@ class RealFixTests(unittest.TestCase):
         report["independent_human_reviews"] = 1
         with self.assertRaisesRegex(RealFixError, "unreviewed"):
             reviewer_packet(report)
+
+    def test_source_fetch_auth_is_limited_to_valid_commit_api_and_uses_safe_header(self):
+        row=self.queue["cases"][0]
+        url=f'https://api.github.com/repos/{row["repository"]}/commits/{row["commit"]}'
+        calls=[]
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self,*args): return False
+            def geturl(self): return url
+            def read(self,_cap): return b'{"sha":"fixed-public-test-data"}'
+        def fake_urlopen(request,timeout):
+            calls.append(request)
+            self.assertEqual(timeout,20)
+            return Response()
+        with patch.dict(os.environ, {"FALSUM_GITHUB_SOURCE_TOKEN":"ghs_SafePublicRead123"}, clear=False):
+            with patch("falsum.real_fix_corpus.urllib.request.urlopen",side_effect=fake_urlopen):
+                result=fetch_github_commit(url)
+        self.assertEqual(result["sha"],"fixed-public-test-data")
+        self.assertEqual(len(calls),1)
+        self.assertEqual(calls[0].get_header("Authorization"),"Bearer ghs_SafePublicRead123")
+        self.assertEqual(calls[0].full_url,url)
+
+    def test_source_fetch_token_header_injection_denied_without_http(self):
+        row=self.queue["cases"][0]
+        url=f'https://api.github.com/repos/{row["repository"]}/commits/{row["commit"]}'
+        for token in ("ghs_OK\r\nX-Evil: injected","ghs_OK\n", "unsafe space token",
+                      "ghs_ü", "x"*5000):
+            with self.subTest(token_repr=repr(token)):
+                with patch.dict(os.environ, {"FALSUM_GITHUB_SOURCE_TOKEN":token}, clear=False):
+                    with patch("falsum.real_fix_corpus.urllib.request.urlopen") as web:
+                        with self.assertRaisesRegex(RealFixError,"unsafe header"):
+                            fetch_github_commit(url)
+                        web.assert_not_called()
+
+    def test_source_fetch_rejects_other_hosts_before_auth_header_or_network(self):
+        row=self.queue["cases"][0]
+        valid=f'https://api.github.com/repos/{row["repository"]}/commits/{row["commit"]}'
+        for bad in (
+            valid.replace("api.github.com","api.evil.example"),
+            valid.replace("https://","http://"),
+            valid.replace("/commits/","/issues/"),
+        ):
+            with self.subTest(url=bad):
+                with patch.dict(os.environ, {"FALSUM_GITHUB_SOURCE_TOKEN":"ghs_SafePublicRead123"},clear=False):
+                    with patch("falsum.real_fix_corpus.urllib.request.urlopen") as web:
+                        with self.assertRaisesRegex(RealFixError,"untrusted"):
+                            fetch_github_commit(bad)
+                        web.assert_not_called()
 
     def test_cli_creates_distinct_outputs_no_overwrite(self):
         with tempfile.TemporaryDirectory() as d:
