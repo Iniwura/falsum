@@ -79,22 +79,25 @@ def unavailable_readback(address: str, exc: Exception) -> dict:
     }
 
 
-def report(fetch=None, *, privy_address: str = PRIVY_ADDRESS) -> dict:
+def report(fetch=None, *, privy_address: str = PRIVY_ADDRESS,
+           bounty_address: str = PUBLIC_BOUNTY_ADDRESS) -> dict:
     if fetch is None:
         fetch = _fetch_json
     require(isinstance(privy_address, str) and ADDR.fullmatch(privy_address) is not None,
             "invalid operator-supplied public wallet address")
+    require(isinstance(bounty_address, str) and ADDR.fullmatch(bounty_address) is not None,
+            "invalid historical public bounty address")
     # A temporary unauthenticated GitHub API failure must not prevent the
     # independently scoped Anjoman Privy-wallet query. Preserve the precise
     # distinction: the historical public comment address was independently
     # observed earlier, but its *current* comment readback may be unavailable.
-    comment_address = PUBLIC_BOUNTY_ADDRESS
+    comment_address = bounty_address
     comment_sha = None
     comment_check = "GITHUB_COMMENT_FETCH_UNAVAILABLE_OR_CHANGED"
     try:
         comment = fetch(COMMENT_URL, 100_000)
         current_address, comment_sha = _extract_comment(comment)
-        if current_address.lower() == PUBLIC_BOUNTY_ADDRESS.lower():
+        if current_address.lower() == bounty_address.lower():
             comment_check = "LIVE_COMMENT_MATCHES_ORIGINAL_RECORDED_ADDRESS"
         else:
             comment_check = "LIVE_COMMENT_ADDRESS_DIFFERENT_FROM_HISTORICAL"
