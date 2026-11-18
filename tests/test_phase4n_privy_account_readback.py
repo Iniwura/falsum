@@ -20,7 +20,7 @@ def comment():
         "user": {"login": "Iniwura"},
         "body": (
             f"/submit\n\n**FALSUM — {INTENT} evaluation-material contribution**\n\n"
-            f"**Contributor wallet:** \`{OLD}\`\n\n"
+            f"**Contributor wallet:** `{OLD}`\n\n"
             f"I contributed **{REPORTED_ROWS} source-referenced evaluation preference pairs**.\n"
         ),
     }
