@@ -122,14 +122,18 @@ def load_lock(raw: bytes) -> dict:
                         for q in questions)
                 and all("?" in q or "explain" in q.lower() or "what" in q.lower()
                         for q in questions), "two substantive open-ended questions required")
-        require("answer" not in row and "expert_label" not in row
-                and "correct" not in row and "training_label" not in row,
-                "public review source lock contains answer key")
+        require(set(row) == {"id", "repository", "advisory_url", "security_family",
+                             "language", "questions", "patches"},
+                "public review source lock contains answer key or undeclared case field")
         stages = row.get("patches")
         require(isinstance(stages, list)
                 and tuple(stage.get("stage") for stage in stages) == STAGE_IDS[idx],
                 "exact staged source and follow-up patch identities required")
         for stage in stages:
+            require(set(stage) == {"stage", "parent", "fix", "source_path",
+                                   "test_path", "parent_source_blob", "fixed_source_blob",
+                                   "parent_test_blob", "fixed_test_blob"},
+                    "undeclared patch labels or unexpected metadata forbidden")
             for key in ("parent", "fix", "parent_source_blob", "fixed_source_blob",
                         "parent_test_blob", "fixed_test_blob"):
                 require(isinstance(stage.get(key), str)
