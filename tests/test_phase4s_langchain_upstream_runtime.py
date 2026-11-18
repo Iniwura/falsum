@@ -113,7 +113,7 @@ class LangChainTwoStageRuntimeProofTests(unittest.TestCase):
                     path=dirs["fixed"]/stage[kind+"_path"]
                     old=path.read_bytes();path.write_bytes(old+b"malicious")
                     with patch_loader(src,git),self.assertRaisesRegex(
-                            s.TwoStageEvidenceError,"blob mismatch"):
+                            s.TwoStageEvidenceError,"frozen Git blob|blob mismatch"):
                         s.verify(LOCK.read_bytes(),key,dirs["parent"],dirs["fixed"],dirs["logs"])
                     path.write_bytes(old)
 
