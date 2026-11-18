@@ -1,0 +1,122 @@
+name: Phase 4T - one authenticated judge proof of four real upstream security regressions
+on:
+  pull_request:
+    paths:
+      - 'data/phase4t-four-run-receipt-lock.json'
+      - 'src/falsum/phase4t_four_stage_evidence.py'
+      - 'tests/test_phase4t_four_stage_evidence.py'
+      - 'docs/PHASE4T_ONE_COMMAND_REAL_SOURCE_TEST_PROOF.md'
+      - '.github/workflows/phase4t-github-execution-proof.yml'
+      - 'README.md'
+      - 'docs/H2_EVALUATORS_JUDGE_PACK.md'
+      - 'docs/H2_FINAL_ENTRY_DRAFT.md'
+  push:
+    paths:
+      - 'data/phase4t-four-run-receipt-lock.json'
+      - 'src/falsum/phase4t_four_stage_evidence.py'
+      - 'tests/test_phase4t_four_stage_evidence.py'
+      - 'docs/PHASE4T_ONE_COMMAND_REAL_SOURCE_TEST_PROOF.md'
+      - '.github/workflows/phase4t-github-execution-proof.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  independent-four-stage-source-test-index:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PYTHONPATH: src:tests
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify synthetic-only adversarial lock and negative-control tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase4t_four_stage_evidence.py' -v
+          python -m unittest discover -s tests -p 'test_phase4r_real_upstream_regression.py' -v
+          python -m unittest discover -s tests -p 'test_phase4s_langchain_upstream_runtime.py' -v
+      - name: Authenticate two successful exact historical source-execution workflow runs
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p phase4t-input/runs phase4t-input/receipts phase4t-proof
+          gh api "repos/Iniwura/falsum/actions/runs/44352329150" \
+            --jq '{databaseId:.id,headSha:.head_sha,status:.status,conclusion:.conclusion,event:.event,workflowName:.name,url:.html_url}' \
+            > phase4t-input/runs/phase4r.json
+          gh api "repos/Iniwura/falsum/actions/runs/44353999011" \
+            --jq '{databaseId:.id,headSha:.head_sha,status:.status,conclusion:.conclusion,event:.event,workflowName:.name,url:.html_url}' \
+            > phase4t-input/runs/phase4s.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from falsum.phase4t_four_stage_evidence import validate_manifest,verify_run
+          m=validate_manifest(Path('data/phase4t-four-run-receipt-lock.json').read_bytes())
+          for key,expected in m['runs'].items():
+              got=json.loads(Path(f'phase4t-input/runs/{key}.json').read_text())
+              verified=verify_run(expected,got)
+              print('Authenticated public upstream workflow:',verified['successful_public_run_url'])
+          PY
+      - name: Retrieve four immutable source test result archives from authenticated GitHub Actions
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh run download 44352329150 -R Iniwura/falsum \
+            --name phase4r-real-upstream-koa-counterfactual-provenance --dir phase4t-input/receipts/koa-redirect
+          gh run download 44352329150 -R Iniwura/falsum \
+            --name phase4r-real-upstream-hono-counterfactual-provenance --dir phase4t-input/receipts/hono-csrf
+          gh run download 44353999011 -R Iniwura/falsum \
+            --name phase4s-real-upstream-langchain-initial-not-model-gold --dir phase4t-input/receipts/langchain-path
+          gh run download 44353999011 -R Iniwura/falsum \
+            --name phase4s-real-upstream-langchain-followup-not-model-gold --dir phase4t-input/receipts/langchain-symlink
+      - name: Validate every original/fixed source SHA, test SHA, run SHA, control and log hash
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase4t_four_stage_evidence \
+            --lock data/phase4p-three-project-open-review-lock.json \
+            --manifest data/phase4t-four-run-receipt-lock.json \
+            --runs-dir phase4t-input/runs \
+            --receipts-dir phase4t-input/receipts \
+            --out phase4t-proof/FOUR-REAL-UPSTREAM-SECURITY-REGRESSIONS-NOT-MODEL-GOLD.json
+      - name: Publish readable authenticated summary and block misrepresented gold/model claims
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          x=json.loads(Path('phase4t-proof/FOUR-REAL-UPSTREAM-SECURITY-REGRESSIONS-NOT-MODEL-GOLD.json').read_text())
+          assert x['status']=='PHASE4T_FOUR_EXECUTED_UPSTREAM_SECURITY_REGRESSIONS_VERIFIED_NOT_MODEL_GOLD'
+          assert x['distinct_upstream_repositories']==3
+          assert x['historical_distinct_fixed_commit_stages']==4
+          assert x['actual_upstream_original_pass_parent_new_test_fail_fixed_new_test_pass']==4
+          assert x['source_grounded_open_review_questions']==6
+          assert x['independent_human_appsec_gold_labels']==0
+          assert x['new_anjo_network_evaluation_rows']==0
+          assert x['trained_model_improvement_proven'] is False
+          assert x['live_network_evaluator_registered'] is False
+          assert x['official_hackathon_submission_confirmed'] is False
+          with Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as out:
+              out.write('## FALSUM: one-source-of-truth actual upstream security regression verification\n\n')
+              out.write('**4 exact historical source-fix regression tests across 3 distinct real software projects.** The genuine upstream original suite PASSED, exact newer regression FAILED on original code with its intended assertion, and the exact same new regression PASSED on fixed code.\n\n')
+              out.write('| Project/stage | Original Git commit | Fixed Git commit | Source/test result |\n| --- | --- | --- | --- |\n')
+              for r in x['receipts']:
+                  out.write(f"| {r['case_id']} | {r['original_git_sha'][:12]} | {r['fixed_git_sha'][:12]} | parent original PASS / new test FAIL / fixed PASS |\n")
+              out.write('\nBoth GitHub Actions run IDs, exact source/test Git blobs, original fixed regression identity, and archived real process-log SHA-256 receipts verified. **Source execution does not prove model improvement, independent AppSec gold labels, new Anjoman network rows, real application exploitability, or H2 registration.**\n')
+          PY
+      - name: Preserve only bounded public source-execution proof and run identities
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE4T-FOUR-REAL-UPSTREAM-REGRESSIONS-NOT-EXPERT-GOLD
+          path: phase4t-proof/*.json
+          if-no-files-found: warn
+          retention-days: 90
