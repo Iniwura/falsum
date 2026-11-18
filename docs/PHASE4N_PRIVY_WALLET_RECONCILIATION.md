@@ -17,6 +17,8 @@ A successful query can confirm the network's current eligible-row count for the 
 
 **Original historical observations:** November 2 signed-in dashboard 20 Eligible; November 14 and November 17 old /submit address 0 Eligible; November 17 separate old-address readback also intermittently failed HTTP. These results are not contradictory once the distinct addresses are recognized.
 
+**Real independent public API outcome, November 18:** [Phase 4N GitHub Actions run](https://github.com/Iniwura/falsum/actions/runs/44311491808) completed successfully after the synthetic safeguards. It observed **20 total/20 Eligible** on the public Privy Wallet supplied by the operator and **0 total/0 Eligible** on the mistaken historical bounty wallet. The check confirms the network count on the named wallet; it does not establish legal identity, signed ownership, gold-label correctness or maintainer acceptance. The original address mismatch has been explained; any remaining procedural correction is to update the bounty discussion.
+
 **Next:** Check the actual live Phase 4N [Actions workflow](../.github/workflows/phase4n-privy-readback.yml); if it independently reports 20 for the Privy Wallet, accurately update the H2 judge packet and clarify the address publicly in the bounty/mission thread without re-uploading private evaluation material. If the query fails or disagrees, retain UNKNOWN/difference and seek maintainer clarification. Do not alter the immutable original /submit evidence or falsely claim bounty acceptance.
 
 No demo work is included in this phase.
