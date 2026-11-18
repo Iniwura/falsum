@@ -37,7 +37,7 @@ jobs:
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3t_guided_demo.py' -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3s_editorial_evidence_lab.py' -v
   browser-judge-flow:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     name: Real Chromium guided quiz and responsive layout
     steps:
