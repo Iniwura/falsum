@@ -61,9 +61,11 @@ class H2SubmissionIntegrityTests(unittest.TestCase):
 
     def test_rejects_removed_live_zero_record_discrepancy(self):
         docs = self.modified("docs/H2_FINAL_ENTRY_DRAFT.md",
-                             "zero rows", "unknown result")
-        docs["docs/H2_FINAL_ENTRY_DRAFT.md"] = docs[
-            "docs/H2_FINAL_ENTRY_DRAFT.md"].replace("zero records", "unknown records")
+                             "0 rows", "unknown results")
+        docs["docs/H2_FINAL_ENTRY_DRAFT.md"] = (
+            docs["docs/H2_FINAL_ENTRY_DRAFT.md"]
+            .replace("zero rows", "unknown results")
+            .replace("zero records", "unknown records"))
         with self.assertRaisesRegex(gate.ReleaseAuditError, "zero-row"):
             gate.inspect_public_docs(docs)
 
