@@ -35,6 +35,10 @@ The official [Season II rules](https://anjoman.ai/dashboard/hackathon/season-2/r
 
 The sole operator must compare the **complete public contributor address** shown by their signed-in Anjoman account to the address in the old GitHub `/submit`. No private keys, seed phrases, signatures, hidden questions or answers are necessary. If the addresses match, request a maintainer explanation of the inconsistent API response while keeping the full row content private.
 
+## November 18 evidence correction (later than this original audit)
+
+The earlier P0 *row-status* uncertainty was caused by the wrong wallet address in the public bounty comment. A [new read-only dual-address query](https://github.com/Iniwura/falsum/actions/runs/44311491808) independently observed **20 Eligible out of 20 total** under the user's Anjoman-dashboard Privy Wallet (from operator-provided screenshots) and **zero rows** for the *different* wallet historically posted to GitHub. There is no evidence the 20 rows disappeared. The earlier results and their dates remain authentic for that mistaken address. **Account-to-address ownership was identified from the operator's user-provided panel, not independently cryptographically proven.** Formal bounty acceptance, a public corrected-address acknowledgement, an independently validated AppSec gold benchmark and H2 entry remain unverified. Treat the P0 wording below as the *November 17 snapshot*, superseded only for the dated row-count observation.
+
 ## Remaining risks by severity
 
 **P0 — qualification and evidence integrity**
