@@ -1,0 +1,84 @@
+name: Independent open-ended Phase 4P source review
+description: Assess one pinned public upstream security fix without A/B choices, labels, or incentives.
+title: "[FALSUM Phase 4P source review] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for inspecting an upstream security fix independently.
+
+        [Read the three exact-source challenges](https://github.com/Iniwura/falsum/blob/main/docs/PHASE4P_OPEN_RESPONSE_SOURCE_REVIEW.md). Please use the immutable parent and fixed commit source code, the changed regression test, and the official advisory. No answer key or model preference is supplied.
+
+        **An issue is a public reviewer claim, not an automatic expert label.** I cannot pay, certify, or promise a prize for a review. Source corrections, disagreements and ABSTAIN are welcome. Do not include credentials, private Anjoman material, internal application configurations, unpublished flaws or sensitive exploit instructions.
+  - type: dropdown
+    id: case
+    attributes:
+      label: Pinned upstream case
+      options:
+        - phase4p-koa-referer-redirect
+        - phase4p-langchain-prompt-path
+        - phase4p-hono-hyperlink-csrf
+    validations:
+      required: true
+  - type: dropdown
+    id: assessment
+    attributes:
+      label: Source conclusion
+      description: Your own finding, not a FALSUM model score or an A/B preference.
+      options:
+        - SOURCE_CHANGE_SUPPORTED_WITH_LIMITS
+        - SOURCE_CHANGE_CONTRADICTED_OR_INCOMPLETE
+        - ABSTAIN_NEEDS_MORE_PRIMARY_EVIDENCE
+    validations:
+      required: true
+  - type: textarea
+    id: citations
+    attributes:
+      label: Immutable source, test, parent and advisory citations
+      description: Include exact github.com owner/repo/blob/full40sha/path#L1-L9 line references; for LangChain cite initial and follow-up.
+      placeholder: |
+        Parent source at exact commit and lines:
+        Changed source at exact fix commit and lines:
+        Changed regression test at exact fix commit and lines:
+        Advisory:
+    validations:
+      required: true
+  - type: textarea
+    id: mechanism
+    attributes:
+      label: Open challenge 1 - exact source mechanism
+      description: Answer the first question of the pinned Phase 4P case. Give source/test evidence, not generic CVE text.
+      placeholder: I read the fixed source and regression test. The precise branch behavior is...
+    validations:
+      required: true
+  - type: textarea
+    id: limits
+    attributes:
+      label: Open challenge 2 - deployment preconditions and remaining uncertainty
+      description: Identify affected configuration, user control, version or browser/cookie conditions; ABSTAIN if unsure.
+      placeholder: To apply this source finding to a real deployment I would still need to verify...
+    validations:
+      required: true
+  - type: textarea
+    id: conflicts
+    attributes:
+      label: Reviewer independence and relevant experience
+      description: Describe your relevant experience and any relationships to FALSUM, Telegraph, the upstream projects or other contest entries. A GitHub account alone cannot verify expertise.
+      placeholder: |
+        Experience inspecting security patches:
+        Potential conflicts:
+        Whether this work was independently performed or assisted by tooling:
+    validations:
+      required: true
+  - type: checkboxes
+    id: declarations
+    attributes:
+      label: Public evidence and review declarations
+      options:
+        - label: I inspected the linked public source and test myself. I have explained any tool assistance or conflicts rather than asserting false independent expert status.
+          required: true
+        - label: I understand my issue will be an unadjudicated public claim until its substance and independence are checked. No network eligibility, model validation or compensation is promised.
+          required: true
+        - label: I have included no secrets, restricted security details, private evaluation prompts or customer data.
+          required: true

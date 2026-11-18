@@ -1,0 +1,94 @@
+name: Phase 4P - source-disjoint open-response AppSec evaluation challenges
+on:
+  pull_request:
+    paths:
+      - 'data/phase4p-three-project-open-review-lock.json'
+      - 'src/falsum/phase4p_open_source_review.py'
+      - 'tests/test_phase4p_open_source_review.py'
+      - 'docs/PHASE4P_OPEN_RESPONSE_SOURCE_REVIEW.md'
+      - '.github/ISSUE_TEMPLATE/independent-phase4p-open-review.yml'
+      - '.github/workflows/phase4p-source-open-review.yml'
+      - 'README.md'
+  push:
+    paths:
+      - 'data/phase4p-three-project-open-review-lock.json'
+      - 'src/falsum/phase4p_open_source_review.py'
+      - 'tests/test_phase4p_open_source_review.py'
+      - 'docs/PHASE4P_OPEN_RESPONSE_SOURCE_REVIEW.md'
+      - '.github/ISSUE_TEMPLATE/independent-phase4p-open-review.yml'
+      - '.github/workflows/phase4p-source-open-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-three-upstream-projects:
+    name: Four live upstream patches and 16 immutable source-test Git blobs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: src:tests
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Synthetic lock and integrity attack tests, not expert security labels
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase4p_open_source_review.py' -v
+      - name: Verify real GitHub commit parents, source and tests at parent/fix
+        shell: bash
+        env:
+          FALSUM_GITHUB_SOURCE_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p phase4p-live-proof
+          python -m falsum.phase4p_open_source_review \
+            --lock data/phase4p-three-project-open-review-lock.json \
+            --out phase4p-live-proof/four-real-upstream-source-and-regression-patches.json
+      - name: Assert the public source proof without inventing expert judgments
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          p=Path('phase4p-live-proof/four-real-upstream-source-and-regression-patches.json')
+          x=json.loads(p.read_text())
+          assert x['status']=='PHASE4P_FOUR_SOURCE_TEST_PATCHES_VERIFIED_THREE_OPEN_REVIEW_PROJECTS_NOT_GOLD'
+          assert x['distinct_new_upstream_projects']==3
+          assert x['distinct_security_families']==3
+          assert x['commit_parent_paths_and_test_changes_verified']==4
+          assert x['raw_parent_and_fixed_source_and_test_blob_pairs_verified']==16
+          assert x['open_ended_review_questions']==6
+          assert x['answer_candidates_present']==0
+          assert x['expert_verified_reviewers']==0
+          assert x['new_anjoman_eligible_rows']==0
+          assert x['not_a_blind_holdout_of_model_pretraining'] is True
+          assert x['actual_telegraph_foundation_inference'] is False
+          assert x['trained_evaluator_registered'] is False
+          assert x['ready_to_train_or_claim_model_improvement'] is False
+          assert len(x['cases'])==3
+          assert all(c['answer_key'] is None and c['independent_expert_label'] is None
+                     and c['training_authorized'] is False for c in x['cases'])
+          assert sum(len(c['verified_patch_stages']) for c in x['cases'])==4
+          assert all(len(c['open_questions'])==2 for c in x['cases'])
+          with Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as out:
+              out.write('## Phase 4P: new source-only open review challenges\n\n')
+              out.write('Verified **three previously unscored GitHub repositories**, **four real historical security-fix commits**, **16 source/test parent-and-fixed Git blobs**, and **six open-ended review questions**.\n\n')
+              out.write('Koa redirect-origin boundary, LangChain initial + symlink follow-up prompt-path validation, and Hono cross-origin text/ping CSRF.\n\n')
+              out.write('These are new project-disjoint public-source challenge *candidates*, NOT a sealed holdout. **Zero independent gold labels; no real Foundation scoring; no new Anjoman rows; no trained evaluator; source code patch authenticity does not itself prove production exploitability.**\n')
+          PY
+      - name: Archive real upstream source proof and reviewer questions only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE4P-REAL-THREE-NEW-PROJECTS-OPEN-REVIEW-NOT-GOLD
+          path: phase4p-live-proof/*.json
+          if-no-files-found: warn
+          retention-days: 90

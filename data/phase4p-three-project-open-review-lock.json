@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "status": "PHASE4P_FROZEN_THREE_NEW_PUBLIC_PROJECTS_OPEN_REVIEW_NOT_GOLD",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "frozen_prior_to_any_falsum_model_scoring_on_these_cases": true,
+  "no_answer_candidates_or_author_golden_verdicts": true,
+  "open_ended_not_A_B": true,
+  "no_expert_labels": true,
+  "not_a_sealed_or_model_pretraining_blind_holdout": true,
+  "no_new_anjoman_rows": true,
+  "registered_evaluator": false,
+  "cases": [
+    {
+      "id": "phase4p-koa-referer-redirect",
+      "repository": "koajs/koa",
+      "advisory_url": "https://github.com/koajs/koa/security/advisories/GHSA-g8mr-fgfg-5qpc",
+      "security_family": "protocol-relative-redirect-origin",
+      "language": "javascript",
+      "questions": [
+        "At the pinned parent and fix, what does Koa back() do with Referer values that begin with //? Explain the source branch change and cite the edited regression test; do not assume any particular live application uses this path.",
+        "What must be true about user influence on Referer, redirect reachability, and downstream navigation before the advisory would apply to a real app? State important unverified assumptions, counterexamples, or ABSTAIN."
+      ],
+      "patches": [
+        {
+          "stage": "origin-check-guard",
+          "parent": "433b20c9e5954113e8d7a23a25e9d5bb750c3034",
+          "fix": "769fd75cc6b30d72493b370b5a3ae2332ca03c5b",
+          "source_path": "lib/response.js",
+          "test_path": "__tests__/response/back.test.js",
+          "parent_source_blob": "35c82a08c3a5e7fbb88eef8b4f7d10df52517a0d",
+          "fixed_source_blob": "c516e0e134a423535d9362d173da1e9b163c9343",
+          "parent_test_blob": "302fcc3a04cb56bfd24fe104bb74516bed313832",
+          "fixed_test_blob": "f15772c16d04f05d3448238eb6fc3de8d2e83a82"
+        }
+      ]
+    },
+    {
+      "id": "phase4p-langchain-prompt-path",
+      "repository": "langchain-ai/langchain",
+      "advisory_url": "https://github.com/langchain-ai/langchain/security/advisories/GHSA-qh6h-p6c9-ff54",
+      "security_family": "prompt-loader-file-path-escaping",
+      "language": "python",
+      "questions": [
+        "Using the two pinned patch stages and both regression-test edits, explain which path inputs are restricted by the legacy prompt loader and how the later symlink/suffix change affects the scope of the initial patch. Do not imply a single initial commit is the complete final repair.",
+        "What caller-controlled configuration and file-extension/symlink assumptions are needed to apply this finding to a deployment? Distinguish trusted allow_dangerous_paths opt-in from a default mitigation, and identify what cannot be established from these patches alone."
+      ],
+      "patches": [
+        {
+          "stage": "initial-default-path-validation",
+          "parent": "7563fceb40ce31165524f3f57ec65e487c02b1a7",
+          "fix": "27add913474e01e33bededf4096151130ba0d47c",
+          "source_path": "libs/core/langchain_core/prompts/loading.py",
+          "test_path": "libs/core/tests/unit_tests/prompts/test_loading.py",
+          "parent_source_blob": "2e7286dad88e62024ff762b778ee98b7c263dfc7",
+          "fixed_source_blob": "fa7e2923cb4fc6dab9558e54b81c57d66b4dca12",
+          "parent_test_blob": "b830fbbe6da8161b2956c3f15cad8471a54b2e19",
+          "fixed_test_blob": "8c2067a9688168765f7d4a1043caf13de29db8c2"
+        },
+        {
+          "stage": "followup-resolved-symlink-suffix",
+          "parent": "c9f51aef85e02fbaadcd5c6c37cf4ef01a49f86e",
+          "fix": "0b5f2c08ee256473e368372a803c5c92039c0a4e",
+          "source_path": "libs/core/langchain_core/prompts/loading.py",
+          "test_path": "libs/core/tests/unit_tests/prompts/test_loading.py",
+          "parent_source_blob": "fa7e2923cb4fc6dab9558e54b81c57d66b4dca12",
+          "fixed_source_blob": "d130f9d8714041409d72ea5fc3385229bf34ab91",
+          "parent_test_blob": "8c2067a9688168765f7d4a1043caf13de29db8c2",
+          "fixed_test_blob": "91af9257c0a1b51223c73052327d4b375acbe5da"
+        }
+      ]
+    },
+    {
+      "id": "phase4p-hono-hyperlink-csrf",
+      "repository": "honojs/hono",
+      "advisory_url": "https://github.com/honojs/hono/security/advisories/GHSA-46wx-v44x-9hh2",
+      "security_family": "csrf-hyperlink-auditing-content-type",
+      "language": "typescript",
+      "questions": [
+        "At the exact parent and fix, explain how the csrf() middleware treats a cross-origin POST with Content-Type text/ping. Cite the conditional code and the added regression cases, including case variation, without assuming it runs in any particular user's deployment.",
+        "What browser, credential, cookie SameSite, handler side-effect, and CSRF configuration prerequisites remain before claiming a practical application exploit? Note limits in the published advisory or choose ABSTAIN if evidence is insufficient."
+      ],
+      "patches": [
+        {
+          "stage": "text-ping-csrf-content-type",
+          "parent": "d88fab372415277a9e540e895650943dd08eef4a",
+          "fix": "bf16471913b5199212dac33f5d170f94745dd26a",
+          "source_path": "src/middleware/csrf/index.ts",
+          "test_path": "src/middleware/csrf/index.test.ts",
+          "parent_source_blob": "12835b192371e46d92d5353304e496cddee40e24",
+          "fixed_source_blob": "afcaa3393d3ed6300112385bdafb02e42aa6f483",
+          "parent_test_blob": "0fd8bedb29f77502fc1837b2b3d55f8dee606936",
+          "fixed_test_blob": "d4893e1fd841adf96f27c402f00e902bacbd2eb9"
+        }
+      ]
+    }
+  ]
+}
