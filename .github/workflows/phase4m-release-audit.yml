@@ -65,7 +65,7 @@ jobs:
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
               f.write('## Phase 4M: strict release evidence audit\n\n')
               f.write('Original immutable old-model scores: **5/8** researcher-source matches, **1/4** complete reversals, **4/8** constant A/B.\n\n')
-              f.write('Verified frozen source/model ledger, no public broken links in final packet, solo project authorship and historical 20-eligible versus 0-live-address-readback disclosure.\n\n')
+              f.write('Verified frozen source/model ledger, no public broken links in final packet, solo project authorship and Nov18 independently confirmed 20 eligible under operator-supplied Privy Wallet versus 0 for mistaken old bounty address; no maintainer acceptance.\n\n')
               f.write('**NOT READY**: independent expert gold, true heldout, accepted network rows, official registration/star, final demo and H2 submission are not externally established.\n')
           PY
       - uses: actions/upload-artifact@v4

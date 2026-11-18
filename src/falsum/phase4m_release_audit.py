@@ -52,8 +52,8 @@ def inspect_public_docs(contents: dict[str, str], root: Path | None = None) -> d
           "internal completion target missing or stale")
     check("December 1, 2026" in entry and "December 1, 2026" in judge,
           "official H2 deadline missing")
-    check("zero rows" in entry.lower() or "zero records" in entry.lower(),
-          "unresolved public contributor zero-row result omitted")
+    check(any(term in entry.lower() for term in ("zero rows", "zero records", "0 rows")),
+          "historical wrong-address zero-row result omitted")
     check("zero rows" in judge.lower() and "0 rows" in readme.lower(),
           "public contributor address discrepancy not retained consistently")
     for document in (entry, judge, readme):
@@ -81,6 +81,23 @@ def inspect_public_docs(contents: dict[str, str], root: Path | None = None) -> d
         check(("http error" in latest or "httperror" in latest)
               and ("network-wide" in latest or "intent-wide" in latest),
               "current contributor HTTP failure must not be conflated with entire Intent pool")
+    # Later evidence supersedes the earlier mistaken-address assumption,
+    # without erasing the original November 14/17 readback events.
+    corrected_markers = {
+        "README.md": "**Corrected network verification (November 18):**",
+        "docs/H2_FINAL_ENTRY_DRAFT.md": "**November 18 verified account-address correction:**",
+        "docs/H2_EVALUATORS_JUDGE_PACK.md": "**November 18 account reconciliation:**",
+    }
+    for path, marker in corrected_markers.items():
+        document = contents[path]
+        check(document.count(marker) == 1,
+              "Nov 18 corrected Privy wallet source disclosure missing")
+        excerpt = document.split(marker, 1)[1].split("\n\n", 1)[0].lower()
+        check("20" in excerpt and "eligible" in excerpt
+              and "privy" in excerpt and ("0" in excerpt or "zero" in excerpt),
+              "Phase 4N confirmed 20 eligible on correct wallet must not disappear")
+        check("maintainer" in excerpt and ("not" in excerpt or "unresolved" in excerpt),
+              "Phase 4N row eligibility cannot be presented as bounty acceptance")
     check("phase 4l" in entry.lower() and "phase 4l" in judge.lower()
           and "phase 4l" in readme.lower(),
           "external PR Guard evidence omitted or miscontextualized")
@@ -108,6 +125,7 @@ def inspect_public_docs(contents: dict[str, str], root: Path | None = None) -> d
         "local_document_links_verified": local_links_checked,
         "solo_builder_public_copy": True,
         "historical_20_ui_vs_zero_live_node_discrepancy_disclosed": True,
+        "correct_wallet_20_eligible_and_wrong_wallet_zero_documented_with_source": True,
         "unproven_model_improvement_claim_blocked": True,
         "official_entry_not_falsely_marked_submitted": True,
     }
@@ -168,8 +186,8 @@ def run(root: Path = ROOT) -> dict:
         "external_review_source_validation_separate_phase4l": True,
         "source_grounded_36_checks_is_not_model_accuracy": True,
         "qualification_blockers_still_unverified": [
-            "signed_in_anjoman_contributor_wallet_matches_public_submit_address",
-            "current_eligible_rows_for_actual_contributor_account",
+            "corrected_contributor_address_clarification_acknowledged_by_maintainer",
+            "user_privy_wallet_ownership_cryptographically_verified_if_required",
             "public_h2_registration_and_bounties_star",
             "final_2_to_5_minute_real_demo_or_accessible_equivalent",
             "actual_official_h2_submission_and_receipt",

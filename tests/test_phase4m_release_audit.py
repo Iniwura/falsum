@@ -61,10 +61,28 @@ class H2SubmissionIntegrityTests(unittest.TestCase):
 
     def test_rejects_removed_live_zero_record_discrepancy(self):
         docs = self.modified("docs/H2_FINAL_ENTRY_DRAFT.md",
-                             "zero rows", "unknown result")
-        docs["docs/H2_FINAL_ENTRY_DRAFT.md"] = docs[
-            "docs/H2_FINAL_ENTRY_DRAFT.md"].replace("zero records", "unknown records")
+                             "0 rows", "unknown results")
+        docs["docs/H2_FINAL_ENTRY_DRAFT.md"] = (
+            docs["docs/H2_FINAL_ENTRY_DRAFT.md"]
+            .replace("zero rows", "unknown results")
+            .replace("zero records", "unknown records"))
         with self.assertRaisesRegex(gate.ReleaseAuditError, "zero-row"):
+            gate.inspect_public_docs(docs)
+
+    def test_nov18_correct_wallet_verification_cannot_disappear(self):
+        docs = self.modified(
+            "README.md",
+            "**Corrected network verification (November 18):**",
+            "**Earlier evidence superseded:**")
+        with self.assertRaisesRegex(gate.ReleaseAuditError, "Nov 18 corrected Privy"):
+            gate.inspect_public_docs(docs)
+
+    def test_nov18_wallet_eligibility_not_equal_to_maintainer_approval(self):
+        docs = self.modified(
+            "docs/H2_EVALUATORS_JUDGE_PACK.md",
+            "This independently corroborates the latest **eligible row count for that user-reported address**, not expert correctness, cryptographic user ownership or final maintainer approval.",
+            "20 Eligible means Anjoman formally approved FALSUM and its model.")
+        with self.assertRaisesRegex(gate.ReleaseAuditError, "bounty acceptance"):
             gate.inspect_public_docs(docs)
 
     def test_rejects_current_http_error_silently_promoted_to_verified(self):

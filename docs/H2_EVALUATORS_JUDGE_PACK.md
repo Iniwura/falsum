@@ -1,17 +1,19 @@
 # FALSUM — Judge guide
 
 **Telegraph Season II / Evaluators / SECURITY_REVIEW_GENERAL**  
-**Evidence reviewed through 17 November 2026. Final H2 submission: NOT YET FILED.**
+**Evidence reviewed through 18 November 2026. Final H2 submission: NOT YET FILED.**
 
 ## What is FALSUM?
 
 FALSUM contributes evaluation material for AI security-review quality. It checks a simple but important requirement: when a dependency version, authorization condition or runtime observation changes, the evidence-supported security conclusion must change too. Its public work uses real historical upstream source, exact model score records, safe synthetic PR executions and strict abstention for unsupported claims.
 
-**Track contribution:** 20 AI-assisted Anjoman evaluation preference pairs were reported Eligible in the contributor's signed-in account on November 2. A [public /submit](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) exists, but an actual [November 14 readback](https://github.com/Iniwura/falsum/actions/runs/43619793133) returned **zero rows** for its published address. This identity/status discrepancy is **unresolved**, and maintainer approval is **not verified**. The original bounty closed November 15 during migration to [mission #198](https://github.com/telegraphprotocol/bounties/issues/198), not as a documented acceptance or rejection. This is **not** an active network scoring adapter, a confirmed independent expert benchmark, or an H2 submission receipt.
+**Track contribution:** FALSUM submitted 20 AI-assisted Anjoman preference pairs. Their **Eligible status for the public Privy Wallet shown by the solo operator's signed-in dashboard was independently confirmed 20/20 by the live read-only node on November 18**. The original [bounty /submit](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) accidentally provided a different address and its API checks therefore found **zero rows**. This wallet association rests on operator-provided screenshot evidence, not cryptographic ownership proof; **maintainer acceptance remains unresolved**. Bounty #96 was closed during migration to [mission #198](https://github.com/telegraphprotocol/bounties/issues/198), not because the contribution was accepted or rejected. This is **not** a registered scorer, an independently verified AppSec gold benchmark or an H2 entry receipt.
 
 **November 17 network audit:** The new [public read-only probe](https://github.com/Iniwura/falsum/actions/runs/44181080455) received an **HTTP error** for the contributor-specific address, so **today's current row count is UNKNOWN**. The public Intent-wide status reports **332 Eligible rows across 10 eligible contributors**; those counts are not FALSUM-owned. This does not disprove the November 2 signed-in account screen or erase the historical November 14 zero-row API result. The mismatch remains unresolved. The status is **not** a verified contribution or award.
 
 **Later November 17 successful recheck:** The [public readback](https://github.com/Iniwura/falsum/actions/runs/44181734533) now returned **0 rows for the published bounty-comment address** after the preceding probe's HTTP error; the overall pool still reported 332 Eligible rows across 10 eligible submitters. No address/account ownership match is established. Both dated outcomes remain in the evidence record, and neither establishes that the user-visible signed-in account's 20 rows were rejected.
+
+**November 18 account reconciliation:** [Phase 4N real CI](https://github.com/Iniwura/falsum/actions/runs/44311491808) queried the operator-shown public **Privy Wallet address** and the distinct old /submit address: **20 total, 20 Eligible** for the actual dashboard address; **0 total** for the incorrectly submitted address. No hidden row material was exported. This independently corroborates the latest **eligible row count for that user-reported address**, not expert correctness, cryptographic user ownership or final maintainer approval. [Full read-only verification and constraints](PHASE4N_PRIVY_WALLET_RECONCILIATION.md).
 
 ## 90-second judge walkthrough
 
