@@ -56,7 +56,7 @@ Each stage is a counterfactual using the third-party project's **own original re
 
 The [Phase 4T verification workflow](.github/workflows/phase4t-github-execution-proof.yml) independently retrieved all four immutable GitHub Actions evidence artifacts and verified the source/test Git SHA pins, original run SHAs, outcome statuses and process log digests. The [permanent hash snapshot](evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json) preserves core receipt identities even after GitHub's downloadable artifacts expire; authentic replays remain available through the pinned source workflows.
 
-A [source-level adversarial AI review](docs/PHASE4Q_AI_ADVERSARIAL_SOURCE_REVIEW.md) identifies limits in Koa's host-only comparison, LangChain's template-suffix check and Hono's simulated `app.request()` coverage. **This internal AI assessment is not an independent human AppSec gold label.**
+A [source-level adversarial AI review](docs/PHASE4Q_AI_ADVERSARIAL_SOURCE_REVIEW.md) identifies limits in Koa's host-only comparison, LangChain's template-suffix check and Hono's simulated `app.request()` coverage. **This internal AI assessment is not independently verified human gold or an external AppSec label.**
 
 ## Security-review decisions
 
