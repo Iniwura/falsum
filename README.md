@@ -34,6 +34,12 @@ The public source material includes three previously unstudied packages, six aff
 
 The Phase 4H four-project 5/8 is a different, newly selected source task on the **unchanged failed LoRA**, not a trained improvement over Phase 4A's 3/6. The reference checker's 36/36 and the model's 3/6 are **different tasks**. This is *not* a 100% AI improvement. There are **zero externally adjudicated expert labels** in this public reference set, no sealed benchmark, and no demonstrated improved trained LoRA. The failing research checkpoints remain quarantined.
 
+## Phase 4Q — AI-assisted adversarial source assessment (not independent human evidence)
+
+After re-reading all three new Phase 4P upstream fixes, the assistant recorded an explicitly [AI-generated source critique](docs/PHASE4Q_AI_ADVERSARIAL_SOURCE_REVIEW.md): Koa's corrected redirect branch checks host equality rather than full origin; LangChain's symlink follow-up checks the resolved template **extension**, not a general directory-containment policy; Hono's `text/ping` regression tests simulate HTTP requests but do not reproduce a real browser's authenticated hyperlink audit.
+
+This is **not independently verified human gold**, not an external AppSec expert signature, not a new sealed holdout, and not a model accuracy result. It flags useful security-review counterexamples while keeping **zero** certified expert labels and a closed training/registration gate. Publishing it alongside the cases also means a future reviewer may see the analysis; that review must not be presented as blind without verified independent procedures.
+
 ## Phase 4P — new source-disjoint, open-response security review challenges
 
 [Phase 4P](docs/PHASE4P_OPEN_RESPONSE_SOURCE_REVIEW.md) freezes **three previously unscored public upstream projects** (Koa, LangChain Core, and Hono), **four historical source/test patch stages**, and **six open-ended security-review tasks**. The [real-source workflow](.github/workflows/phase4p-source-open-review.yml) verifies the exact upstream fix commits, direct Git parents, both changed source and test files, and **16 parent/fixed Git source/test blob IDs**. In particular, the LangChain case explicitly includes an initial path-validation patch and a separate symlink/suffix follow-up, avoiding a misleading claim about the first patch's completeness.
