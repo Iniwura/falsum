@@ -11,6 +11,9 @@ import unittest
 from falsum.phase3f_multifamily_material import generate
 from falsum.phase4g_reasoning_puzzles import build
 from falsum import phase4o_multibaseline_shortcut_audit as o
+from falsum.phase4o_post_audit_revised_material import (
+    build as build_revised, CHANGES, STATUS as REVISED_STATUS,
+)
 from test_phase3f_multifamily_material import inputs, mock_commit
 
 
@@ -48,6 +51,72 @@ class ShortcutRosterTests(unittest.TestCase):
         self.assertFalse(evidence["registered_evaluator"])
         self.assertTrue(evidence["expert_source_review_still_needed"])
         self.assertFalse(evidence["no_new_project_holdout"] is False)
+
+    def test_original_longer_answer_shortcut_is_genuine_material_bias(self):
+        original=o.audit(self.sraw,self.craw)
+        longer=next(x for x in original["baselines"] if x["baseline"]=="longer_answer_chars")
+        self.assertEqual(original["material_version"],"historical_original_phase4g")
+        self.assertEqual(longer["author_hypothesis_agreements_across_14_original_displays"],13)
+        self.assertGreaterEqual(longer["author_hypothesis_agreements_across_28_swapped_displays"],22)
+        self.assertTrue(longer["flag_high_shortcut_risk"])
+        self.assertTrue(original["flags_high_shortcut_risk"])
+
+    def test_v2_fully_versioned_post_audit_revision_preserves_every_question_source_and_swap(self):
+        revised=build_revised(self.source)
+        self.assertEqual(revised["status"],REVISED_STATUS)
+        self.assertEqual(revised["material_version"],"post_audit_v2")
+        self.assertTrue(revised["post_audit_bias_selection_and_author_preference_possible_leak"])
+        self.assertFalse(revised["blind_or_sealed_holdout"])
+        self.assertEqual(revised["modified_answer_cases"],6)
+        self.assertEqual(len(revised["cases"]),14)
+        self.assertEqual(len(revised["revisions"]),6)
+        self.assertEqual({e["case_id"] for e in revised["revisions"]},set(CHANGES))
+        for original_case,revised_case in zip(self.casebook["cases"],revised["cases"]):
+            self.assertEqual(original_case["question"],revised_case["question"])
+            self.assertEqual(original_case["source_file_url"],revised_case["source_file_url"])
+            self.assertEqual(original_case["regression_test_file_url"],revised_case["regression_test_file_url"])
+            self.assertEqual(original_case["fix_commit"],revised_case["fix_commit"])
+            self.assertEqual(original_case["advisory_url"],revised_case["advisory_url"])
+            self.assertEqual(original_case["expert_label"],revised_case["expert_label"])
+            for case in (original_case,revised_case):
+                x,y=case["presentations"]
+                self.assertEqual([a["sha256"] for a in x["candidate_answers"]],
+                                 list(reversed([a["sha256"] for a in y["candidate_answers"]])))
+                self.assertIsNone(case["expert_label"])
+                self.assertFalse(case["trainable"])
+                self.assertFalse(case["network_eligible"])
+        # The generator is pure and does not rewrite historical canonical bytes.
+        self.assertEqual(raw(self.casebook),self.craw)
+
+    def test_v2_audit_reports_reduced_length_leak_without_claiming_model_accuracy(self):
+        revised=build_revised(self.source)
+        audit=o.audit(self.sraw,raw(revised))
+        self.assertEqual(audit["material_version"],"post_audit_v2_not_blind")
+        self.assertTrue(audit["post_audit_revision_is_not_blind"])
+        self.assertEqual(audit["independent_appsec_gold_labels"],0)
+        self.assertFalse(audit["trained_evaluator"])
+        self.assertFalse(audit["model_improvement_or_network_ranking_proven"])
+        shorter=next(x for x in audit["baselines"] if x["baseline"]=="shorter_answer_chars")
+        longer=next(x for x in audit["baselines"] if x["baseline"]=="longer_answer_chars")
+        self.assertEqual(longer["author_hypothesis_agreements_across_14_original_displays"],7)
+        self.assertLess(shorter["author_hypothesis_agreements_across_14_original_displays"],11)
+        self.assertFalse(longer["flag_high_shortcut_risk"])
+
+    def test_v2_modification_or_reverted_one_edit_is_rejected_not_relabelled(self):
+        revised=build_revised(self.source)
+        revised["cases"][0]["presentations"][0]["candidate_answers"][0]["text"]+=" "
+        with self.assertRaises(ValueError):
+            o.audit(self.sraw,raw(revised))
+
+    def test_v2_cannot_be_called_independent_gold_or_blind_holdout(self):
+        revised=build_revised(self.source)
+        for key,value in (("blind_or_sealed_holdout",True),
+                          ("independent_appsec_gold_labels",1),
+                          ("new_network_eligible_rows",20)):
+            mutated=copy.deepcopy(revised)
+            mutated[key]=value
+            with self.subTest(key=key),self.assertRaises(ValueError):
+                o.audit(self.sraw,raw(mutated))
 
     def test_a_b_constants_cannot_gamble_better_than_seven_original_or_fourteen_swaps(self):
         result=o.audit(self.sraw,self.craw)
