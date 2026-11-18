@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import urllib.error
 import urllib.parse
@@ -102,10 +103,20 @@ def fetch_github_commit(url: str) -> dict:
     if parsed.scheme != "https" or parsed.netloc != "api.github.com" or not re.fullmatch(
             r"/repos/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/commits/[a-f0-9]{40}", parsed.path):
         raise RealFixError("untrusted commit API destination")
-    req = urllib.request.Request(url, headers={
+    headers = {
         "Accept": "application/vnd.github+json", "User-Agent": "FALSUM-source-audit/1.0",
         "X-GitHub-Api-Version": "2022-11-28",
-    })
+    }
+    # GitHub Actions reads only eight immutable public upstream commits.
+    # Authenticated read-only API calls avoid the 60/hour anonymous rate cap.
+    # The token is never put into URLs, results, logs, or report artifacts.
+    # Authentication is used ONLY after the strict github.com commit-path check.
+    token = os.environ.get("FALSUM_GITHUB_SOURCE_TOKEN")
+    if token:
+        if not re.fullmatch(r"[A-Za-z0-9_-]{10,300}", token):
+            raise RealFixError("GitHub source read token has invalid syntax")
+        headers["Authorization"] = "Bearer " + token
+    req = urllib.request.Request(url, headers=headers)
     try:
         with urllib.request.urlopen(req, timeout=20) as resp:
             final = urllib.parse.urlsplit(resp.geturl())
