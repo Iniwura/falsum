@@ -33,7 +33,21 @@ This is **substantive new evaluation coverage**. It does **not** prove the origi
 
 [Run the seven real-source reviewer-claim examples](PHASE4U_SOURCE_REVIEW_CLAIM_GATE.md) against a **permanent authenticated public-source witness index**. The deterministic gate returns **2 source-supported, 2 source-contradicted and 3 evidence-limited abstention** results, including a deliberate wrong-hash claim. It can be invoked directly from the repository with Python only; no Telegraph network access or paid inference is required. The source facts come from the four actually executed upstream regression witnesses, not an invented “expert” label. A separate 32-case self-consistency suite is explicitly **correct by construction, not learned-model accuracy**.
 
-## 90-second judge walkthrough
+## 90-second judge walkthrough — actual source-test evidence
+
+**[Start with the working real-source reviewer lab](https://falsum-evidence-lab.vercel.app/witness/)** · [Build-time Python verification](PHASE4V_REAL_SOURCE_WITNESS_WEB_LAB.md) · [Actual four-stage execution receipts](https://github.com/Iniwura/falsum/actions/runs/44356563508)
+
+| Time | Judge action | What it proves |
+| --- | --- | --- |
+| **0:00–0:20** | Open `/witness/`, select Koa, choose **Vulnerable parent**, assert **The security regression passes**, then verify. | **CONTRADICTED**. The exact newly authored upstream test failed against the original parent for the expected assertion. |
+| **0:20–0:35** | Change to **Fixed commit** with the same claim; verify again. | **SUPPORTED**. The same regression passed against the pinned fixed source, not a fictitious security result. |
+| **0:35–0:50** | Change to **Wrong receipt**; then try **This proves a production exploit**. | Both **ABSTAIN**, for separate reasons. Forged receipt hashes cannot be promoted, and a unit test cannot prove deployed exploitation. |
+| **0:50–1:15** | Inspect Hono and both LangChain repair stages; open the original source, upstream regression test and exact executed CI. | Four authentic source reversals across three independent repositories; the second LangChain fix is not miscounted as a fourth project. |
+| **1:15–1:30** | Open `/compare/` and the corrected [Anjoman Privy wallet verification](https://github.com/Iniwura/falsum/actions/runs/44311491808). | The unchanged LoRA **did not improve** (5/8 and 1/4 reversal versus constant-choice 4/8). Separately, 20/20 existing contributor rows were Eligible; neither is external expert gold or final acceptance. |
+
+The web page precomputes **64 deterministic claim/evidence combinations** using the repository's actual Python evidence checker and original Git SHA/CI receipt values. It runs no browser-time source tests, live scoring, network calls or private evaluation prompts. Source results must not be presented as ML accuracy or independent human AppSec assessment.
+
+## Historical recorded-model and fictional-lab walkthrough (secondary)
 
 | Time | Action | What it establishes |
 | --- | --- | --- |

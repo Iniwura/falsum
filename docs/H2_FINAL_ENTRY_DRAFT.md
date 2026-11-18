@@ -11,6 +11,7 @@
 
 ## Verified project links
 
+- **Real upstream security-review verifier (strongest current public technical result):** https://falsum-evidence-lab.vercel.app/witness/ (four actual source-fix stages across Koa, Hono and LangChain; 64 precomputed typed evidence checks, original upstream Git/test and CI receipts)
 - **Live interactive evidence challenge:** https://falsum-evidence-lab.vercel.app/
 - **Genuine recorded model-score judge experience:** https://falsum-evidence-lab.vercel.app/proof/
 - **Recorded code-revision model comparison:** https://falsum-evidence-lab.vercel.app/compare/ (four different public upstream source projects; 5/8 researcher-source matches, 1/4 complete reversals, 4/8 constant-choice controls, old checkpoint unchanged)
@@ -21,6 +22,8 @@
 - **Historical public contributor submission (bounty #96 closed during mission migration, not accepted):** https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396
 - **Independent review invitation:** https://github.com/Iniwura/falsum/issues/25
 - **Judge reproduction:** https://github.com/Iniwura/falsum/blob/main/docs/H2_EVALUATORS_JUDGE_PACK.md
+
+**Browser-verifiable current public build (November 18):** The [live-source test reviewer](https://falsum-evidence-lab.vercel.app/witness/) is a self-contained, no-key public interface to the real Phase 4R/4S/4T/4U upstream proof chain. A judge can switch among four historical patch stages, compare vulnerable parent and fixed revisions, assert a regression result, corrupt a receipt digest or overclaim production exploitability. The displayed SUPPORTED / CONTRADICTED / ABSTAIN results come from 64 **Python-precomputed source-bound checks**, not live model inference or human expert labels. [Complete evidence provenance and browser acceptance](PHASE4V_REAL_SOURCE_WITNESS_WEB_LAB.md). The three-case fictional review challenge remains separate and explicitly labeled; it is not offered as real upstream integration.
 
 **Runnable evaluation process:** I provide a [typed source-witness claim gate](PHASE4U_SOURCE_REVIEW_CLAIM_GATE.md) that accepts code/test provenance and chooses SUPPORTED, CONTRADICTED or ABSTAIN for narrowly defined historical test claims. Seven public examples cover true and false regression assertions and unsupported production claims. The 32 additional source-derived regression fixtures are deliberately *correct by construction*, **not a neural evaluator benchmark, independent expert gold, network scoring adapter or registered model improvement**. The four original true regression witnesses were obtained through live upstream executions and pinned by original GitHub artifact hashes.
 

@@ -4,6 +4,10 @@ on:
     paths:
       - 'src/falsum/phase4c_judge_proof.py'
       - 'src/falsum/phase4c_release.py'
+      - 'src/falsum/phase4v_real_source_witness_site.py'
+      - 'src/falsum/templates/phase4v_real_source_witness.html'
+      - 'tests/test_phase4v_real_source_witness_site.py'
+      - 'tests/browser/phase4v_real_source_witness.cjs'
       - 'src/falsum/templates/phase4c_judge_model_proof.html'
       - 'src/falsum/templates/firma_editorial_evidence_lab.html'
       - 'tests/test_phase4c_judge_release.py'
@@ -18,6 +22,10 @@ on:
     paths:
       - 'src/falsum/phase4c_judge_proof.py'
       - 'src/falsum/phase4c_release.py'
+      - 'src/falsum/phase4v_real_source_witness_site.py'
+      - 'src/falsum/templates/phase4v_real_source_witness.html'
+      - 'tests/test_phase4v_real_source_witness_site.py'
+      - 'tests/browser/phase4v_real_source_witness.cjs'
       - 'src/falsum/templates/phase4c_judge_model_proof.html'
       - 'src/falsum/templates/firma_editorial_evidence_lab.html'
       - 'tests/test_phase4c_judge_release.py'
@@ -51,6 +59,7 @@ jobs:
         run: |
           set -euo pipefail
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase4c_judge_release.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase4v_real_source_witness_site.py' -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase3q_mission_lab.py' -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase4a_recorded_evidence.py' -v
           PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase4b_reference_judge.py' -v
@@ -73,7 +82,15 @@ jobs:
           assert source['actual_third_party_mission_apps_verified']==0
           assert source['actual_evaluator_model_scoring_executed'] is False
           assert (r/'index.html').is_file() and (r/'proof/index.html').is_file()
-          print('Two honest, static judge experiences verified.')
+          witness=json.loads((r/'witness/FOUR-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json').read_text())
+          assert witness['status']=='PHASE4V_STATIC_FOUR_REAL_SOURCE_EXECUTIONS_PRECOMPUTED_CLAIMS_NOT_MODEL_ACCURACY'
+          assert witness['precomputed_python_evaluations']==64
+          assert witness['by_construction_verdict_counts']=={'SUPPORTED':8,'CONTRADICTED':8,'ABSTAIN':48}
+          assert witness['independent_appsec_expert_gold_labels']==0
+          assert witness['trained_model_improvement_proven'] is False
+          assert witness['network_evaluator_registered'] is False
+          assert (r/'witness/index.html').is_file()
+          print('Four honest static judge experiences, including the real upstream source witness lab, verified.')
           PY
   browser-acceptance:
     name: Chromium / desktop, mobile, keyboard and touch
@@ -99,6 +116,7 @@ jobs:
           set -euo pipefail
           PYTHONPATH=src python -m falsum.phase4c_release --out-dir public
           node --check tests/browser/phase4c_judge_proof.cjs
+          node --check tests/browser/phase4v_real_source_witness.cjs
           node --check tests/browser/phase3t_judge_flow.cjs
       - name: Test unchanged three-case challenge and new recorded-model proof
         env:
@@ -107,6 +125,7 @@ jobs:
           set -euo pipefail
           node tests/browser/phase3t_judge_flow.cjs
           node tests/browser/phase4c_judge_proof.cjs
+          node tests/browser/phase4v_real_source_witness.cjs
       - name: Archive real evidence displays and 1440/390/320 screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -118,6 +137,9 @@ jobs:
             public/ACTUAL-SYNTHETIC-RUNTIME-PROOF.json
             public/proof/ACTUAL-RECORDED-FOUNDATION-MODEL-SCORES.json
             public/proof/phase4c-*.png
+            public/witness/index.html
+            public/witness/FOUR-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json
+            public/witness/phase4v-*.png
             public/phase3t-*.png
           if-no-files-found: warn
           retention-days: 90

@@ -4,12 +4,21 @@
 
 A reliable security review changes when the evidence changes. FALSUM tests that requirement against real vulnerable and fixed open-source code, distinguishes source-supported facts from unsupported security claims, and publishes failures as well as successful checks.
 
-[**Try a source-backed review**](#run-the-check) · [**Verify the four real security regressions**](docs/PHASE4T_ONE_COMMAND_REAL_SOURCE_TEST_PROOF.md) · [**Recorded model results**](https://falsum-evidence-lab.vercel.app/compare/) · [**Independent review invitation**](https://github.com/Iniwura/falsum/issues/25)
+[**Explore real code and tests**](https://falsum-evidence-lab.vercel.app/witness/) · [**Run locally**](#run-the-check) · [**See genuine model results**](https://falsum-evidence-lab.vercel.app/compare/) · [**Verify the four executions**](docs/PHASE4T_ONE_COMMAND_REAL_SOURCE_TEST_PROOF.md)
+
+## Try the real upstream verification lab
+
+**[Open the interactive source-evidence workbench](https://falsum-evidence-lab.vercel.app/witness/)**
+
+Choose a real Koa, Hono or LangChain security fix. Switch between the exact vulnerable parent and fixed Git commits. Assert that its security test passes or fails, then inspect the source-backed **SUPPORTED / CONTRADICTED / ABSTAIN** verdict. Try a deliberately **wrong execution receipt SHA**: FALSUM abstains rather than endorsing bad evidence. A production exploit or universal-safety claim also abstains because upstream unit tests cannot prove either.
+
+The workbench presents **64 exact outcomes precomputed by FALSUM's independently rerunnable Python source-witness checker** from four authenticated GitHub Actions regression artifacts. It is not a second trained model, 64 independent reviews, a network evaluator, a live production scan, or expert-reviewed gold. [How the evidence and UI are connected](docs/PHASE4V_REAL_SOURCE_WITNESS_WEB_LAB.md).
 
 ## What works
 
 | Verifiable result | Evidence | Boundary |
 | --- | --- | --- |
+| **Interactive public source review** at [the real-code lab](https://falsum-evidence-lab.vercel.app/witness/) | Four original upstream test cases, two exact Git revisions, claim and receipt-integrity controls, 64 precomputed source-grounded outcomes. [Chromium QA and code](docs/PHASE4V_REAL_SOURCE_WITNESS_WEB_LAB.md) | Historical source-test behavior, **not** real-time model inference or arbitrary-prose scoring |
 | **4 real parent/fix regression reversals across 3 upstream projects** | [One authenticated GitHub Actions proof](https://github.com/Iniwura/falsum/actions/runs/44356563508) · [Permanent digest index](evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json) | Reproducible *source behavior*, not a measured model quality increase |
 | **Typed source-witness checker** with SUPPORT / CONTRADICTION / ABSTENTION | [Run seven example claims](examples/source-review-witness-claims.json) · [Source checker](src/falsum/source_review_witness_gate.py) | Evaluates structured claims, not arbitrary natural-language reviews |
 | **20 out of 20 Anjoman evaluation pairs marked Eligible** for the operator-shown Privy Wallet | [Read-only corrected-wallet verification](https://github.com/Iniwura/falsum/actions/runs/44311491808) · [GitHub bounty submission](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) | Eligibility status is verified for the public address; **maintainer acceptance remains unresolved** |
