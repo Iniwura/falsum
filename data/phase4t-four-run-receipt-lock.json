@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "status": "PHASE4T_FOUR_PUBLIC_UPSTREAM_RUN_RECEIPTS_PINNED_2026_11_18",
+  "source_lock": "data/phase4p-three-project-open-review-lock.json",
+  "competition_intent": "SECURITY_REVIEW_GENERAL",
+  "contributor_status_is_separate_from_runtime_proof": true,
+  "not_new_network_evaluation_material": true,
+  "no_human_expert_gold_labels": true,
+  "not_a_model_accuracy_or_scoring_adapter_proof": true,
+  "runs": {
+    "phase4r": {
+      "id": 44352329150,
+      "head_sha": "250ca68cee1d8769c61aa84d8930519c2fa70f1c",
+      "path": ".github/workflows/phase4r-real-upstream-regression.yml",
+      "name": "Phase 4R - actual vulnerable-parent versus fixed upstream security tests",
+      "event": "pull_request"
+    },
+    "phase4s": {
+      "id": 44353999011,
+      "head_sha": "e3f84187ccbd44e76ca182202565b412197bfa0b",
+      "path": ".github/workflows/phase4s-langchain-two-stage-runtime.yml",
+      "name": "Phase 4S - real LangChain initial and followup security regression replay",
+      "event": "pull_request"
+    }
+  },
+  "receipts": [
+    {
+      "id": "koa-redirect",
+      "source_case": "phase4p-koa-referer-redirect",
+      "patch_stage": "origin-check-guard",
+      "kind": "phase4r",
+      "target": "koa",
+      "run": "phase4r",
+      "artifact_name": "phase4r-real-upstream-koa-counterfactual-provenance",
+      "file": "phase4r-koa-runtime-proof.json"
+    },
+    {
+      "id": "hono-csrf",
+      "source_case": "phase4p-hono-hyperlink-csrf",
+      "patch_stage": "text-ping-csrf-content-type",
+      "kind": "phase4r",
+      "target": "hono",
+      "run": "phase4r",
+      "artifact_name": "phase4r-real-upstream-hono-counterfactual-provenance",
+      "file": "phase4r-hono-runtime-proof.json"
+    },
+    {
+      "id": "langchain-path",
+      "source_case": "phase4p-langchain-prompt-path",
+      "patch_stage": "initial-default-path-validation",
+      "kind": "phase4s",
+      "target": "initial",
+      "run": "phase4s",
+      "artifact_name": "phase4s-real-upstream-langchain-initial-not-model-gold",
+      "file": "phase4s-initial-actual-langchain-upstream-proof.json"
+    },
+    {
+      "id": "langchain-symlink",
+      "source_case": "phase4p-langchain-prompt-path",
+      "patch_stage": "followup-resolved-symlink-suffix",
+      "kind": "phase4s",
+      "target": "followup",
+      "run": "phase4s",
+      "artifact_name": "phase4s-real-upstream-langchain-followup-not-model-gold",
+      "file": "phase4s-followup-actual-langchain-upstream-proof.json"
+    }
+  ]
+}
