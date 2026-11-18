@@ -60,6 +60,9 @@ class ShortcutRosterTests(unittest.TestCase):
         self.assertGreaterEqual(longer["author_hypothesis_agreements_across_28_swapped_displays"],22)
         self.assertTrue(longer["flag_high_shortcut_risk"])
         self.assertTrue(original["flags_high_shortcut_risk"])
+        self.assertFalse(original["material_quality_gate_passed"])
+        self.assertFalse(original["material_promotion_allowed"])
+        self.assertFalse(original["submission_ready"])
 
     def test_v2_fully_versioned_post_audit_revision_preserves_every_question_source_and_swap(self):
         revised=build_revised(self.source)
@@ -101,6 +104,11 @@ class ShortcutRosterTests(unittest.TestCase):
         self.assertEqual(longer["author_hypothesis_agreements_across_14_original_displays"],7)
         self.assertLess(shorter["author_hypothesis_agreements_across_14_original_displays"],11)
         self.assertFalse(longer["flag_high_shortcut_risk"])
+        self.assertIn("more_question_overlap",audit["flagged_baselines"])
+        self.assertFalse(audit["material_quality_gate_passed"])
+        self.assertFalse(audit["material_promotion_allowed"])
+        self.assertFalse(audit["submission_ready"])
+        self.assertEqual(audit["independent_appsec_gold_labels"],0)
 
     def test_v2_modification_or_reverted_one_edit_is_rejected_not_relabelled(self):
         revised=build_revised(self.source)
