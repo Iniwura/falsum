@@ -113,8 +113,9 @@ def fetch_github_commit(url: str) -> dict:
     # Authentication is used ONLY after the strict github.com commit-path check.
     token = os.environ.get("FALSUM_GITHUB_SOURCE_TOKEN")
     if token:
-        if not re.fullmatch(r"[A-Za-z0-9_-]{10,300}", token):
-            raise RealFixError("GitHub source read token has invalid syntax")
+        if not (10 <= len(token) <= 4096 and token.isascii()
+                and all(33 <= ord(ch) <= 126 for ch in token)):
+            raise RealFixError("GitHub source token contains unsafe header characters")
         headers["Authorization"] = "Bearer " + token
     req = urllib.request.Request(url, headers=headers)
     try:
