@@ -66,10 +66,8 @@ CASE_COPY = {
 }
 
 REASON_COPY = {
-    "REAL_PARENT_FAILS_FIXED_PASSES_TEST_WITNESS": (
-        "The claim agrees with the exact upstream regression result."
-        if False else "The regression record provides a direct PASS/FAIL answer for this Git revision."
-    ),
+    "REAL_PARENT_FAILS_FIXED_PASSES_TEST_WITNESS":
+        "The regression record provides a direct PASS/FAIL answer for this exact Git revision.",
     "INCOMPLETE_OR_TAMPERED_PRIMARY_EVIDENCE":
         "The provided execution receipt digest does not match the original upstream CI artifact. A verdict cannot be trusted.",
     "DEPLOYED_IMPACT_OR_GLOBAL_SECURITY_NOT_TESTED":
