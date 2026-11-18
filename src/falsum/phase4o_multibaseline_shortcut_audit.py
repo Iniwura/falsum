@@ -248,6 +248,13 @@ def audit(source_raw: bytes, casebook_raw: bytes) -> dict:
         "predeclared_high_risk_threshold_swapped_correct_or_more":2*THRESHOLD_OUT_OF_14,
         "flags_high_shortcut_risk":bool(flagged),
         "flagged_baselines":flagged,
+        "material_quality_gate_passed":not bool(flagged),
+        "material_promotion_allowed":False,
+        "submission_ready":False,
+        "reason_material_not_promotable":(
+            "high source-blind shortcut agreement and zero independent gold"
+            if flagged else "zero independent AppSec gold and no sealed test holdout"
+        ),
         "baselines":measurements,
         "original_phase4g_simple_cue_rule_agreement_out_of_14":
             original_shortcut["language_shortcut_author_agreements"],
@@ -295,6 +302,8 @@ def main(argv: list[str] | None = None) -> int:
             "author_written_reasoning_conditions":data["author_written_reasoning_conditions"],
             "shortcuts":data["shortcuts"],
             "flagged_baselines":data["flagged_baselines"],
+            "material_quality_gate_passed":data["material_quality_gate_passed"],
+            "material_promotion_allowed":False,
             "independent_appsec_gold_labels":0,
             "trained_evaluator":False,
             "report_written":str(args.out),
