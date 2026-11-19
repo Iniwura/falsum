@@ -48,6 +48,8 @@ The seven included examples yield **2 SUPPORTED, 2 CONTRADICTED, 3 ABSTAIN**. Th
 
 Omit `--requests` and choose another unique output filename to generate **32 deterministic, source-derived test fixtures**: 8 supported, 8 contradicted, 16 abstained. The checker agrees with its own 32 construction expectations **by construction**. That is a regression suite for the checking logic and guards, **not 100% model accuracy**, not independent gold and not a credible basis for release as a hybrid LoRA or network evaluator.
 
+**Adversarial review correction (November 19, Phase 5B):** A user-supplied JSON request may include an `expected` verdict. Such an assertion is now explicitly marked **unverified caller expectation**, whether it agrees with the source-derived result or not. It can never increase `constructed_fixtures_checked` or `constructed_fixture_matches`, because only FALSUM's internally generated 32 controls are considered constructed fixtures. This closes a provenance confusion where caller-chosen labels could previously be presented using the stronger constructed-fixture terminology. Neither internally constructed matches nor matching caller assertions establish machine-learning accuracy, expert human approval or a blind benchmark.
+
 Run adversarial tests across the Python versions with [Phase 4U CI](../.github/workflows/phase4u-typed-security-witness-gate.yml).
 
 ## Evidence provenance and limitations
