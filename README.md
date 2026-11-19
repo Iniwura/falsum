@@ -4,6 +4,8 @@
 
 A reliable security review changes when the evidence changes. FALSUM tests that requirement against real vulnerable and fixed open-source code, distinguishes source-supported facts from unsupported security claims, and publishes failures as well as successful checks.
 
+**Public deployment status (Nov 19):** The merged source and CI now support five authenticated historical fixes, including Flask. The Vercel production alias still serves an older four-case commit because the account reached its free daily deployment cap. The [strict source-freshness release gate](docs/PHASE5E_PRODUCTION_FRESHNESS_GATE.md) and [tracked release blocker](https://github.com/Iniwura/falsum/issues/61) remain open. **Do not claim the fifth case is live until the actual alias passes that gate.**
+
 [**Explore real code and tests**](https://falsum-evidence-lab.vercel.app/witness/) · [**Run locally**](#run-the-check) · [**See genuine model results**](https://falsum-evidence-lab.vercel.app/compare/) · [**Verify the four executions**](docs/PHASE4T_ONE_COMMAND_REAL_SOURCE_TEST_PROOF.md)
 
 ## Try the real upstream verification lab

@@ -1,0 +1,89 @@
+name: Phase 5E - strict current five-source public workbench freshness
+on:
+  pull_request:
+    paths:
+      - 'src/falsum/phase5e_production_freshness.py'
+      - 'tests/test_phase5e_production_freshness.py'
+      - 'docs/PHASE5E_PRODUCTION_FRESHNESS_GATE.md'
+      - '.github/workflows/phase5e-live-production-source-freshness.yml'
+  push:
+    paths:
+      - 'src/falsum/phase5e_production_freshness.py'
+      - 'tests/test_phase5e_production_freshness.py'
+      - 'docs/PHASE5E_PRODUCTION_FRESHNESS_GATE.md'
+      - '.github/workflows/phase5e-live-production-source-freshness.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  release-gate-self-tests:
+    name: Source authenticity, stale-alias and non-live-fixture regression tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify exact five-source public release checker, mocked network only
+        shell: bash
+        env:
+          PYTHONPATH: src:tests
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5e_production_freshness.py' -v
+          python -m unittest discover -s tests -p 'test_phase5c_fifth_source_witness.py' -v
+  actual-public-alias-release-check:
+    name: Check public alias only on manual release verification (strict, may fail while stale)
+    if: github.event_name == 'workflow_dispatch'
+    needs: release-gate-self-tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compare live actual site to all locally verified exact source cases
+        shell: bash
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/falsum-live-witness"
+          python -m falsum.phase5e_production_freshness \
+            --root . \
+            --out "$RUNNER_TEMP/falsum-live-witness/FIVE-SOURCE-PUBLIC-RELEASE-EXACT-MATCH.json"
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          file=Path(os.environ['RUNNER_TEMP'])/'falsum-live-witness/FIVE-SOURCE-PUBLIC-RELEASE-EXACT-MATCH.json'
+          result=json.loads(file.read_text())
+          assert result['actual_production_content_verified'] is True
+          assert result['input_provenance']=='PUBLIC_HTTPS_VERCEL_ALIAS'
+          assert result['original_source_fix_stages']==5
+          assert result['constructed_source_checks']==80
+          assert result['by_construction_verdict_counts']=={'SUPPORTED':10,'CONTRADICTED':10,'ABSTAIN':60}
+          assert result['independent_human_appsec_gold_labels']==0
+          assert result['registered_telegraph_scorer'] is False
+          assert result['official_h2_entry_submitted'] is False
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as summary:
+              summary.write('### Actual FALSUM production witness verified\n\n')
+              summary.write('Five source-authenticated historical test cases exactly match the public HTTPS alias, including the original Flask source proof. 80 by-construction typed review outcomes; NOT learned model performance.\n')
+          PY
+      - name: Archive actual public source witness verification, never an offline fixture
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: FALSUM-PHASE5E-PRODUCTION-FIVE-SOURCE-EXACT-MATCH
+          path: ${{ runner.temp }}/falsum-live-witness/FIVE-SOURCE-PUBLIC-RELEASE-EXACT-MATCH.json
+          retention-days: 90
+          if-no-files-found: error
