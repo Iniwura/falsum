@@ -58,10 +58,13 @@ def main(argv: list[str] | None = None) -> int:
                                 help="typed review claim JSON; omitted means 32 by-construction safety tests")
     source_witness.add_argument("--out", type=Path, required=True,
                                 help="new write-once public-safe source-review report")
+    source_witness.add_argument("--flask-lock", type=Path,
+                                help="optional immutable Flask source/test selection for fifth historical witness")
+    source_witness.add_argument("--flask-proof-b64", type=Path,
+                                help="optional original GitHub Actions Flask ZIP in pinned portable base64 form")
     args = parser.parse_args(argv)
     try:
         if args.command == "verify-source-review":
-            from .source_review_witness_gate import main as verify_main
             params=[
                 "--index",str(args.index),
                 "--source-lock",str(args.source_lock),
@@ -69,6 +72,14 @@ def main(argv: list[str] | None = None) -> int:
             ]
             if args.requests is not None:
                 params.extend(("--requests",str(args.requests)))
+            if (args.flask_lock is None) != (args.flask_proof_b64 is None):
+                parser.error("--flask-lock and --flask-proof-b64 must be provided together")
+            if args.flask_lock is not None:
+                from .phase5c_fifth_source_witness import main as verify_extended
+                params.extend(("--flask-lock",str(args.flask_lock),
+                               "--flask-proof-b64",str(args.flask_proof_b64)))
+                return verify_extended(params)
+            from .source_review_witness_gate import main as verify_main
             return verify_main(params)
         if args.command == "preflight":
             import json
