@@ -48,6 +48,8 @@ def inspect(draft: str, entry: str, readme: str) -> dict:
     for item in expected:
         if item.lower() not in low:
             raise ValueError("public entry precondition missing or misrepresented: " + item[:75])
+    if "**Submission state: NOT SUBMITTED." not in draft:
+        raise ValueError("official competition has no submission receipt")
     if "**STATUS: NOT SUBMITTED.**" not in entry:
         raise ValueError("final H2 entry falsely promoted")
     if "maintainer acceptance remains unresolved" not in entry.lower():
