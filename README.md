@@ -10,9 +10,9 @@ A reliable security review changes when the evidence changes. FALSUM tests that 
 
 **[Open the interactive source-evidence workbench](https://falsum-evidence-lab.vercel.app/witness/)**
 
-Choose a real Koa, Hono or LangChain security fix. Switch between the exact vulnerable parent and fixed Git commits. Assert that its security test passes or fails, then inspect the source-backed **SUPPORTED / CONTRADICTED / ABSTAIN** verdict. Try a deliberately **wrong execution receipt SHA**: FALSUM abstains rather than endorsing bad evidence. A production exploit or universal-safety claim also abstains because upstream unit tests cannot prove either.
+Choose a real Koa, Hono, LangChain or Flask security fix. Switch between the exact vulnerable parent and fixed Git commits. Assert that its security test passes or fails, then inspect the source-backed **SUPPORTED / CONTRADICTED / ABSTAIN** verdict. Try a deliberately **wrong execution receipt SHA**: FALSUM abstains rather than endorsing bad evidence. A production exploit or universal-safety claim also abstains because upstream unit tests cannot prove either.
 
-The workbench presents **64 exact outcomes precomputed by FALSUM's independently rerunnable Python source-witness checker** from four authenticated GitHub Actions regression artifacts. It is not a second trained model, 64 independent reviews, a network evaluator, a live production scan, or expert-reviewed gold. [How the evidence and UI are connected](docs/PHASE4V_REAL_SOURCE_WITNESS_WEB_LAB.md).
+The current five-source workbench presents **80 exact outcomes precomputed by FALSUM's independently rerunnable Python source-witness checker** from four original authenticated regression receipts and the separately archived real Flask Actions proof. It is not a second trained model, 64 independent reviews, a network evaluator, a live production scan, or expert-reviewed gold. [How the five-case UI is verified](docs/PHASE5D_FIVE_CASE_PREMIUM_JUDGE_WORKBENCH.md).
 
 ## What works
 
