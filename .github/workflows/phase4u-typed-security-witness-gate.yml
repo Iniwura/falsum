@@ -107,12 +107,15 @@ jobs:
           assert (a['claims_evaluated'],a['supported'],a['contradicted'],a['abstained'])==(32,8,8,16)
           assert a['constructed_fixtures_checked']==a['constructed_fixture_matches']==32
           assert (b['claims_evaluated'],b['supported'],b['contradicted'],b['abstained'])==(7,2,2,3)
-          assert b['constructed_fixtures_checked']==b['constructed_fixture_matches']==7
+          assert b['constructed_fixtures_checked']==b['constructed_fixture_matches']==0
+          assert b['external_caller_expectations_seen']==7
+          assert b['expectation_provenance']=='EXTERNAL_INPUT_UNVERIFIED_CALLER_EXPECTATIONS'
+          assert a['expectation_provenance']=='INTERNAL_SOURCE_DERIVED_REGRESSION_FIXTURES'
           with Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as out:
               out.write('## Source-grounded structured security-review evidence gate\n\n')
               out.write('4 original real upstream source regression witnesses, 3 repositories, exact Git source/test blob and original Actions receipt digest validation.\n\n')
               out.write('**32 automatically CONSTRUCTED negative controls:** 8 supported, 8 contradicted, 16 abstained; this is by construction, **NOT learned model accuracy**.\n\n')
-              out.write('**7 example reviewer claims:** 2 supported, 2 contradicted, 3 abstained, including incorrect source receipts and unverified deployed vulnerability consequences.\n\n')
+              out.write('**7 external-input example claims:** 2 supported, 2 contradicted, 3 abstained. The 7 supplied expected labels are UNVERIFIED CALLER ASSERTIONS and contribute zero constructed-fixture matches; examples include forged source receipts and unverified deployed vulnerability claims.\n\n')
               out.write('The gate only handles **typed source+test claims**, not natural-language semantics. 0 qualified external expert gold labels, 0 new Anjoman rows, 0 adapter registrations.\n')
           PY
       - uses: actions/upload-artifact@v4

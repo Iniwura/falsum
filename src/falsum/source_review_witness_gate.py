@@ -284,7 +284,11 @@ def stress_cases(index:dict)->list[dict]:
 
 def run(index_raw:bytes,lock_raw:bytes,*,examples:list|None=None)->dict:
     index=validated_index(index_raw,lock_raw)
-    requests=stress_cases(index) if examples is None else examples
+    # Only the internal source-derived suite can create "constructed" receipts.
+    # A caller's expected field is merely an unverified assertion, even when
+    # the asserted result happens to agree with a deterministic source witness.
+    internally_constructed = examples is None
+    requests=stress_cases(index) if internally_constructed else examples
     require(isinstance(requests,list) and 1<=len(requests)<=MAX_REQUESTS,
             "source review requests missing or oversized")
     ids=set()
@@ -301,10 +305,16 @@ def run(index_raw:bytes,lock_raw:bytes,*,examples:list|None=None)->dict:
         row={"test_id":ident,"judgement":verdict}
         if "expected" in item:
             require(item["expected"] in RESULTS, "invalid source fixture expected class")
-            row["constructed_expectation"]=item["expected"]
-            row["matches_source_derived_expectation"]=item["expected"]==verdict["verdict"]
+            if internally_constructed:
+                row["constructed_expectation"]=item["expected"]
+                row["matches_source_derived_expectation"]=item["expected"]==verdict["verdict"]
+            else:
+                row["unverified_caller_expected_verdict"]=item["expected"]
+                row["matches_unverified_caller_expectation"]=item["expected"]==verdict["verdict"]
         outcomes.append(row)
-    checked=all("matches_source_derived_expectation" in x for x in outcomes)
+    checked=internally_constructed and all(
+        "matches_source_derived_expectation" in x for x in outcomes
+    )
     if checked:
         require(all(x["matches_source_derived_expectation"] for x in outcomes),
                 "source-grounded constructed control violated")
@@ -322,7 +332,16 @@ def run(index_raw:bytes,lock_raw:bytes,*,examples:list|None=None)->dict:
         "constructed_fixtures_checked":len(outcomes) if checked else 0,
         "constructed_fixture_matches":sum(
             x.get("matches_source_derived_expectation") is True for x in outcomes
+        ) if internally_constructed else 0,
+        "expectation_provenance":(
+            "INTERNAL_SOURCE_DERIVED_REGRESSION_FIXTURES" if internally_constructed
+            else "EXTERNAL_INPUT_UNVERIFIED_CALLER_EXPECTATIONS"
         ),
+        "external_caller_expectations_seen":(
+            0 if internally_constructed else
+            sum("unverified_caller_expected_verdict" in x for x in outcomes)
+        ),
+        "caller_expectations_not_gold_or_model_accuracy":True,
         "not_a_semantic_or_neural_security_evaluator":True,
         "not_a_telegraph_network_adapter":True,
         "not_an_independent_human_gold_benchmark":True,
