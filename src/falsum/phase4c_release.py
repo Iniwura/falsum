@@ -42,19 +42,19 @@ def build(out_dir: Path) -> dict:
         raise ValueError("source comparison evidence misrepresented before deploying")
     witness = write_real_witness(out_dir / "witness")
     if (witness["status"] != WITNESS_STATUS
-            or witness["source_fix_stage_count"] != 4
-            or witness["upstream_project_count"] != 3
-            or witness["precomputed_python_evaluations"] != 64
+            or witness["source_fix_stage_count"] != 5
+            or witness["upstream_project_count"] != 4
+            or witness["precomputed_python_evaluations"] != 80
             or witness["by_construction_verdict_counts"] !=
-            {"SUPPORTED": 8, "CONTRADICTED": 8, "ABSTAIN": 48}
+            {"SUPPORTED": 10, "CONTRADICTED": 10, "ABSTAIN": 60}
             or witness["independent_appsec_expert_gold_labels"] != 0
             or witness["trained_model_improvement_proven"] is not False
             or witness["network_evaluator_registered"] is not False):
         raise ValueError("real upstream source witness proof failed or incorrectly promoted")
     return {
         "real_upstream_witness_experience": str(out_dir / "witness/index.html"),
-        "real_upstream_source_stages": 4,
-        "precomputed_source_witness_verdicts": 64,
+        "real_upstream_source_stages": 5,
+        "precomputed_source_witness_verdicts": 80,
         "independent_witness_expert_labels": 0,
         "no_live_source_scoring": True,
         "phase4i_source_comparison_project_count": 4,
