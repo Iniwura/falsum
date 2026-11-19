@@ -91,6 +91,12 @@ No expert-validated gold labels, sealed model holdout, documented external appli
 
 [**Reproduce the cross-family historical replay**](docs/PHASE4Y_CROSS_FAMILY_RELIABILITY.md): the new CI runs installed affected/fixed Starlette and Requests versions on synthetic inputs, alongside authentication of the original four-source proof. These two additional projects were **already researched earlier**; this is new combined execution coverage, **not an unseen holdout, model improvement, or independent expert gold**. See the linked CI status before claiming a successful new replay.
 
+## Phase 4Z: verified new Flask source project
+
+[**New original upstream security regression**](docs/PHASE4Z_FLASK_NEW_SOURCE_CASE.md) · [Passing real source-test workflow](https://github.com/Iniwura/falsum/actions/runs/44524997174)
+
+At exact Flask historical source/test Git revisions, its upstream-authored permanent-session `Vary: Cookie` regression **fails on the vulnerable parent for the expected missing-header behavior and passes on the fixed commit**, while the old control passes. This adds **one new public upstream project** beyond the four authenticated source-witness stages and two older historical library-method replays. It was **researcher-selected**, not a blind model holdout or independent expert-reviewed gold. The original four-case typed checker has **not** learned to judge Flask by virtue of this proof.
+
 ## Independent review welcome
 
 **[Review one real upstream security fix](docs/REVIEW_FOUR_EXECUTED_CASES.md)** · [Open the source-cited review form](https://github.com/Iniwura/falsum/issues/new?template=independent-executed-source-review.yml)
