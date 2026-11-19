@@ -1,0 +1,90 @@
+name: Phase 5C - authentic fifth source-test witness, no ML gold
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5c_fifth_source_witness.py'
+      - 'tests/test_phase5c_fifth_source_witness.py'
+      - 'evidence/phase5c-original-phase4z-github-artifact.zip.b64'
+      - 'docs/PHASE5C_AUTHENTIC_FLASK_FIFTH_WITNESS.md'
+      - '.github/workflows/phase5c-authenticated-fifth-source-witness.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5c_fifth_source_witness.py'
+      - 'tests/test_phase5c_fifth_source_witness.py'
+      - 'evidence/phase5c-original-phase4z-github-artifact.zip.b64'
+      - 'docs/PHASE5C_AUTHENTIC_FLASK_FIFTH_WITNESS.md'
+      - '.github/workflows/phase5c-authenticated-fifth-source-witness.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  historical-source-proof-extension:
+    name: Original GitHub Flask ZIP SHA, five witnesses, adversarial source tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Run five-witness source test, real artifact and malicious input checks
+        shell: bash
+        env:
+          PYTHONPATH: src:tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5c_fifth_source_witness.py' -v
+          python -m unittest discover -s tests -p 'test_source_review_witness_gate.py' -v
+          python -m unittest discover -s tests -p 'test_phase4z_flask_upstream_runtime.py' -v
+      - name: Execute exact original source evidence verifier with four plus Flask witness
+        shell: bash
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          python -m falsum.phase5c_fifth_source_witness \
+            --index evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json \
+            --source-lock data/phase4p-three-project-open-review-lock.json \
+            --flask-lock data/phase4z-flask-new-source-lock.json \
+            --flask-proof-b64 evidence/phase5c-original-phase4z-github-artifact.zip.b64 \
+            --out five-source-witness-controls.json
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          from falsum.phase5c_fifth_source_witness import ARCHIVE_SHA256, REPORT_SHA256
+          result=json.loads(Path('five-source-witness-controls.json').read_text())
+          assert result['source_case_count']==5
+          assert result['distinct_upstream_projects']==4
+          assert (result['supported'],result['contradicted'],result['abstained'])==(10,10,20)
+          assert result['internally_constructed_controls']==40
+          assert result['internally_constructed_controls_matching']==40
+          assert result['new_flask_original_actions_archive_sha256']==ARCHIVE_SHA256
+          assert result['new_flask_original_actions_report_sha256']==REPORT_SHA256
+          assert result['new_flask_original_actions_artifact_id']==14529512891
+          assert result['learned_model_generalization_scored'] is False
+          assert result['truly_blind_new_case_evaluation'] is False
+          assert result['independent_human_expert_gold_labels']==0
+          assert result['new_anjoman_eligible_rows']==0
+          assert result['registered_telegraph_evaluator'] is False
+          assert result['official_h2_submission_confirmed'] is False
+          summary=os.environ.get('GITHUB_STEP_SUMMARY')
+          if summary:
+              with open(summary,'a') as out:
+                  out.write('### FALSUM actual upstream source-test extension\n\n')
+                  out.write('**5 exact source-stage receipts across 4 historical projects:** original Koa/Hono/LangChain four + actual Flask source-test artifact downloaded from run 44524997174, archive digest locked.\n\n')
+                  out.write('**40 constructed source consistency controls:** 10 supported, 10 contradicted, 20 abstained. NOT trained-model accuracy or independent gold.\n\n')
+                  out.write('**0 human expert labels, 0 new network rows, 0 registered scorer, 0 blind holdout.**\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5c-five-original-executed-source-witness-claims-PY${{ matrix.python }}-NOT-ML-scores
+          path: five-source-witness-controls.json
+          retention-days: 90
+          if-no-files-found: error
