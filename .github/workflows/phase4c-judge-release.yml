@@ -5,6 +5,9 @@ on:
       - 'src/falsum/phase4c_judge_proof.py'
       - 'src/falsum/phase4c_release.py'
       - 'src/falsum/phase4v_real_source_witness_site.py'
+      - 'src/falsum/phase5c_fifth_source_witness.py'
+      - 'data/phase4z-flask-new-source-lock.json'
+      - 'evidence/phase5c-original-phase4z-github-artifact.zip.b64'
       - 'src/falsum/templates/phase4v_real_source_witness.html'
       - 'tests/test_phase4v_real_source_witness_site.py'
       - 'tests/browser/phase4v_real_source_witness.cjs'
@@ -23,6 +26,9 @@ on:
       - 'src/falsum/phase4c_judge_proof.py'
       - 'src/falsum/phase4c_release.py'
       - 'src/falsum/phase4v_real_source_witness_site.py'
+      - 'src/falsum/phase5c_fifth_source_witness.py'
+      - 'data/phase4z-flask-new-source-lock.json'
+      - 'evidence/phase5c-original-phase4z-github-artifact.zip.b64'
       - 'src/falsum/templates/phase4v_real_source_witness.html'
       - 'tests/test_phase4v_real_source_witness_site.py'
       - 'tests/browser/phase4v_real_source_witness.cjs'
@@ -82,10 +88,10 @@ jobs:
           assert source['actual_third_party_mission_apps_verified']==0
           assert source['actual_evaluator_model_scoring_executed'] is False
           assert (r/'index.html').is_file() and (r/'proof/index.html').is_file()
-          witness=json.loads((r/'witness/FOUR-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json').read_text())
-          assert witness['status']=='PHASE4V_STATIC_FOUR_REAL_SOURCE_EXECUTIONS_PRECOMPUTED_CLAIMS_NOT_MODEL_ACCURACY'
-          assert witness['precomputed_python_evaluations']==64
-          assert witness['by_construction_verdict_counts']=={'SUPPORTED':8,'CONTRADICTED':8,'ABSTAIN':48}
+          witness=json.loads((r/'witness/FIVE-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json').read_text())
+          assert witness['status']=='PHASE5D_STATIC_FIVE_REAL_SOURCE_EXECUTIONS_PRECOMPUTED_CLAIMS_NOT_MODEL_ACCURACY'
+          assert witness['precomputed_python_evaluations']==80
+          assert witness['by_construction_verdict_counts']=={'SUPPORTED':10,'CONTRADICTED':10,'ABSTAIN':60}
           assert witness['independent_appsec_expert_gold_labels']==0
           assert witness['trained_model_improvement_proven'] is False
           assert witness['network_evaluator_registered'] is False
@@ -138,8 +144,9 @@ jobs:
             public/proof/ACTUAL-RECORDED-FOUNDATION-MODEL-SCORES.json
             public/proof/phase4c-*.png
             public/witness/index.html
-            public/witness/FOUR-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json
+            public/witness/FIVE-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json
             public/witness/phase4v-*.png
+            public/witness/phase5d-*.png
             public/phase3t-*.png
           if-no-files-found: warn
           retention-days: 90
