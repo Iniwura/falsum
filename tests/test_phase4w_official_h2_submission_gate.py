@@ -50,6 +50,12 @@ def inspect(draft: str, entry: str, readme: str) -> dict:
             raise ValueError("public entry precondition missing or misrepresented: " + item[:75])
     if "**Submission state: NOT SUBMITTED." not in draft:
         raise ValueError("official competition has no submission receipt")
+    if "| Independent qualified AppSec gold labels | **ZERO confirmed** |" not in draft:
+        raise ValueError("self-review must not be upgraded to independent expert gold")
+    if "| Star the bounties repository | **UNKNOWN** |" not in draft:
+        raise ValueError("signed-in GitHub star has not been independently confirmed")
+    if "| Season II registration | **LIKELY, NOT FORMALLY CONFIRMED** |" not in draft:
+        raise ValueError("registered email alone does not prove signed-in H2 participation")
     if "**STATUS: NOT SUBMITTED.**" not in entry:
         raise ValueError("final H2 entry falsely promoted")
     if "maintainer acceptance remains unresolved" not in entry.lower():
