@@ -9,6 +9,9 @@ on:
       - 'docs/PHASE4Q_AI_ADVERSARIAL_SOURCE_REVIEW.md'
       - 'tests/test_phase4q_ai_review_provenance.py'
       - '.github/ISSUE_TEMPLATE/independent-phase4p-open-review.yml'
+      - '.github/ISSUE_TEMPLATE/independent-executed-source-review.yml'
+      - 'docs/REVIEW_FOUR_EXECUTED_CASES.md'
+      - 'tests/test_phase4x_independent_four_source_review.py'
       - '.github/workflows/phase4p-source-open-review.yml'
       - 'README.md'
   push:
@@ -20,6 +23,9 @@ on:
       - 'docs/PHASE4Q_AI_ADVERSARIAL_SOURCE_REVIEW.md'
       - 'tests/test_phase4q_ai_review_provenance.py'
       - '.github/ISSUE_TEMPLATE/independent-phase4p-open-review.yml'
+      - '.github/ISSUE_TEMPLATE/independent-executed-source-review.yml'
+      - 'docs/REVIEW_FOUR_EXECUTED_CASES.md'
+      - 'tests/test_phase4x_independent_four_source_review.py'
       - '.github/workflows/phase4p-source-open-review.yml'
   workflow_dispatch:
 permissions:
@@ -46,6 +52,7 @@ jobs:
           set -euo pipefail
           python -m unittest discover -s tests -p 'test_phase4p_open_source_review.py' -v
           python -m unittest discover -s tests -p 'test_phase4q_ai_review_provenance.py' -v
+          python -m unittest discover -s tests -p 'test_phase4x_independent_four_source_review.py' -v
       - name: Verify real GitHub commit parents, source and tests at parent/fix
         shell: bash
         env:

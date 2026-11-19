@@ -33,6 +33,12 @@ This is **substantive new evaluation coverage**. It does **not** prove the origi
 
 [Run the seven real-source reviewer-claim examples](PHASE4U_SOURCE_REVIEW_CLAIM_GATE.md) against a **permanent authenticated public-source witness index**. The deterministic gate returns **2 source-supported, 2 source-contradicted and 3 evidence-limited abstention** results, including a deliberate wrong-hash claim. It can be invoked directly from the repository with Python only; no Telegraph network access or paid inference is required. The source facts come from the four actually executed upstream regression witnesses, not an invented “expert” label. A separate 32-case self-consistency suite is explicitly **correct by construction, not learned-model accuracy**.
 
+## Open, source-first independent review
+
+The **[four-stage independent reviewer guide](REVIEW_FOUR_EXECUTED_CASES.md)** and [single-case GitHub review form](https://github.com/Iniwura/falsum/issues/new?template=independent-executed-source-review.yml) let an external developer inspect Koa, Hono, LangChain initial, or LangChain symlink follow-up directly from the **original immutable parent/fixed code, upstream test and advisory**. The prompt does not provide a model preference answer. It explicitly accepts source-grounded disagreement or ABSTAIN and asks reviewers to disclose actual expertise, conflicts and tooling.
+
+At the time this guide was prepared, [the existing public review invitation](https://github.com/Iniwura/falsum/issues/25) had **no independent reviewer replies**, and **zero independent AppSec expert gold labels were verified**. Neither the new form nor the model's own critique is evidence of external acceptance. The reviewer form is an invitation, not a completed assessment or paid adoption.
+
 ## 90-second judge walkthrough — actual source-test evidence
 
 **[Start with the working real-source reviewer lab](https://falsum-evidence-lab.vercel.app/witness/)** · [Build-time Python verification](PHASE4V_REAL_SOURCE_WITNESS_WEB_LAB.md) · [Actual four-stage execution receipts](https://github.com/Iniwura/falsum/actions/runs/44356563508)

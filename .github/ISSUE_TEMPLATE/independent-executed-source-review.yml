@@ -1,0 +1,108 @@
+name: Independently review one executed security regression
+description: Review one real Koa, Hono or LangChain security fix; source-cited disagreement and abstention welcome.
+title: "[FALSUM independent executed-source review] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Choose one of the four real historical upstream repair stages from [the short source-first reviewer guide](https://github.com/Iniwura/falsum/blob/main/docs/REVIEW_FOUR_EXECUTED_CASES.md). This is an **open-ended review**, not a multiple-choice answer key or a survey about the FALSUM model.
+
+        Please inspect the parent and fixed source, newly added upstream regression and published advisory **before** viewing FALSUM's own answers. Explain what the source actually establishes and where it stops. The original test runs are available to reproduce, but passing CI does not certify deployed exploitability.
+
+        Your issue is an **unadjudicated public source assessment**, not automatically verified human expertise, an independent gold label, model accuracy, network-eligible training material or a bounty payment. Do not include secrets, exploit payloads, private Anjoman data, unpublished bugs or customer configurations.
+  - type: dropdown
+    id: case
+    attributes:
+      label: Exact historical upstream repair stage
+      description: Choose one stage. The two LangChain fixes are separate historical stages, not four different repositories.
+      options:
+        - koa-redirect
+        - hono-csrf
+        - langchain-path
+        - langchain-symlink
+    validations:
+      required: true
+  - type: dropdown
+    id: conclusion
+    attributes:
+      label: Independent source assessment
+      description: Does the actual changed code and regression test support the narrow claimed source behavior?
+      options:
+        - SOURCE_CHANGE_SUPPORTED_WITH_LIMITS
+        - SOURCE_CHANGE_INCOMPLETE_OR_CONTRADICTED
+        - ABSTAIN_NEEDS_MORE_PRIMARY_EVIDENCE
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Immutable parent and fixed code references
+      description: Provide full 40-character Git SHA source links and relevant line numbers; name the exact changed conditional or operation.
+      placeholder: |
+        Parent source: https://github.com/owner/repo/blob/<full-parent-commit>/path#L10-L20
+        Fixed source: https://github.com/owner/repo/blob/<full-fixed-commit>/path#L10-L20
+    validations:
+      required: true
+  - type: textarea
+    id: test
+    attributes:
+      label: Actual upstream regression test and observed evidence
+      description: Cite exact fixed-commit upstream-authored test source, assertion and any independently reproduced logs. Identify what the test does NOT exercise.
+      placeholder: |
+        Upstream regression: https://github.com/owner/repo/blob/<full-fixed-commit>/tests/test_file.py#L20-L30
+        What does the test assert? What setup is missing?
+        I ran it myself: YES / NO. If YES, cite the run.
+    validations:
+      required: true
+  - type: textarea
+    id: mechanism
+    attributes:
+      label: Reviewer's original security analysis
+      description: Explain precisely why the old and fixed source differ. Do not copy the existing FALSUM verdict into this field.
+      placeholder: |
+        When X condition holds, the original code branches to Y. The changed code branches to Z. Here is the source evidence...
+    validations:
+      required: true
+  - type: textarea
+    id: applicability
+    attributes:
+      label: Missing deployment and attacker preconditions
+      description: Specify the prerequisites and facts that the pinned upstream source test cannot establish. ABSTAIN is useful.
+      placeholder: |
+        The public source test does not establish whether a real deployment uses the affected version or exposes the path. Additional checks would include...
+    validations:
+      required: true
+  - type: textarea
+    id: limitations
+    attributes:
+      label: Weaknesses, counterexamples or disagreements
+      description: Challenge the regression's test coverage, source interpretation, scope or unsupported claims. A negative finding is not a failed review.
+      placeholder: |
+        Possible missing edge case or test limitation:
+        Exact source/test citation:
+        Why I disagree, or why I abstain:
+    validations:
+      required: true
+  - type: textarea
+    id: independence
+    attributes:
+      label: Relevant experience, conflicts and AI assistance
+      description: State AppSec/review experience, any collaboration with FALSUM or contest entries, and whether tooling or AI assisted this report. GitHub identity alone proves none of these.
+      placeholder: |
+        Relevant security review experience:
+        Relationship to FALSUM/Telegraph/upstream:
+        Whether this analysis was personally performed; AI/tool assistance:
+    validations:
+      required: true
+  - type: checkboxes
+    id: declarations
+    attributes:
+      label: Review integrity
+      options:
+        - label: I inspected original public upstream code/test myself and disclosed assistance or conflicts rather than asserting unearned independent expert status.
+          required: true
+        - label: I understand this issue is a public source claim requiring separate adjudication, not an accepted gold label, training approval, formal H2 entry or paid endorsement.
+          required: true
+        - label: My submission excludes secrets, private evaluation prompts, customer data and restricted unpublished security details.
+          required: true
