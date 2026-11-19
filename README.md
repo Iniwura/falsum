@@ -87,6 +87,12 @@ This process does **not** parse natural-language security reviews, establish app
 
 No expert-validated gold labels, sealed model holdout, documented external application adoption, improved registered model, or official H2 submission receipt is claimed.
 
+## Independent review welcome
+
+**[Review one real upstream security fix](docs/REVIEW_FOUR_EXECUTED_CASES.md)** · [Open the source-cited review form](https://github.com/Iniwura/falsum/issues/new?template=independent-executed-source-review.yml)
+
+A developer can independently inspect **one** of the four executed Koa, Hono and LangChain historical fixes using immutable parent/fixed source, the actual upstream test, and an open-ended question. The reviewer can disagree or **ABSTAIN**; no account, wallet, model access or hidden evaluation answers are needed. **No independently validated external AppSec gold labels are claimed**. A submitted GitHub review remains an unadjudicated source claim until its substance, author independence and expertise are separately checked.
+
 ## Official Season II submission status
 
 **[Check the verified evidence against the current official competition requirements](docs/H2_NOV19_RULES_AND_SUBMISSION_GATE.md)**. This separates the real four-stage source execution, the 20/20 Eligible public-Privy-address readback and the negative old-model scores from **unverified owner-only requirements**: confirmed Season II registration, GitHub bounties star, genuine independent review, published progress-update URLs, the authorized 2–5 minute demo or accessible equivalent, showcase permissions and the actual official H2 submission receipt. **No completed entry, acceptance or prize is claimed.**
