@@ -16,23 +16,23 @@ ROOT = v.ROOT
 
 
 class ActualSourceWitnessBrowserTests(unittest.TestCase):
-    def test_64_precomputed_verdicts_from_authenticated_upstream_source_evidence(self):
+    def test_80_precomputed_verdicts_from_authenticated_upstream_source_evidence(self):
         result = v.assemble()
         self.assertEqual(result["status"],v.STATUS)
         self.assertEqual(result["intent"],"SECURITY_REVIEW_GENERAL")
-        self.assertEqual(result["source_fix_stage_count"],4)
-        self.assertEqual(result["upstream_project_count"],3)
-        self.assertEqual(result["precomputed_python_evaluations"],64)
+        self.assertEqual(result["source_fix_stage_count"],5)
+        self.assertEqual(result["upstream_project_count"],4)
+        self.assertEqual(result["precomputed_python_evaluations"],80)
         self.assertEqual(result["by_construction_verdict_counts"],{
-            "SUPPORTED":8,"CONTRADICTED":8,"ABSTAIN":48})
+            "SUPPORTED":10,"CONTRADICTED":10,"ABSTAIN":60})
         self.assertEqual(result["independent_appsec_expert_gold_labels"],0)
         self.assertEqual(result["new_anjoman_eligible_rows"],0)
         self.assertFalse(result["trained_model_improvement_proven"])
         self.assertFalse(result["network_evaluator_registered"])
         self.assertFalse(result["official_h2_submission_confirmed"])
         self.assertTrue(result["no_live_browser_tests_or_model_inference"])
-        self.assertEqual(len(result["cases"]),4)
-        self.assertEqual(len({c["repository"] for c in result["cases"]}),3)
+        self.assertEqual(len(result["cases"]),5)
+        self.assertEqual(len({c["repository"] for c in result["cases"]}),4)
 
     def test_every_case_tracks_real_public_git_parent_fix_and_exact_test_source(self):
         data=v.assemble()
@@ -123,11 +123,11 @@ class ActualSourceWitnessBrowserTests(unittest.TestCase):
     def test_wrong_index_blob_refuses_to_build_an_impressive_but_unsupported_page(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp)
-            for path in (v.LOCK,v.INDEX):
+            for path in (v.LOCK,v.INDEX,v.FLASK_LOCK,v.FLASK_ARCHIVE):
                 file=root/path;file.parent.mkdir(parents=True,exist_ok=True)
                 file.write_bytes((ROOT/path).read_bytes())
             normal=v.assemble(root)
-            self.assertEqual(normal["precomputed_python_evaluations"],64)
+            self.assertEqual(normal["precomputed_python_evaluations"],80)
             source=root/v.INDEX
             corrupt=json.loads(source.read_text())
             corrupt["receipts"][0]["original_source_git_blob"]="0"*40
@@ -142,8 +142,8 @@ class ActualSourceWitnessBrowserTests(unittest.TestCase):
             with patch.object(socket.socket,"connect",
                               side_effect=AssertionError("unexpected network during public build")):
                 release=build(output)
-            self.assertEqual(release["real_upstream_source_stages"],4)
-            self.assertEqual(release["precomputed_source_witness_verdicts"],64)
+            self.assertEqual(release["real_upstream_source_stages"],5)
+            self.assertEqual(release["precomputed_source_witness_verdicts"],80)
             self.assertEqual(release["independent_witness_expert_labels"],0)
             self.assertTrue(release["no_live_source_scoring"])
             self.assertFalse(release["registered_evaluator"])
@@ -155,8 +155,8 @@ class ActualSourceWitnessBrowserTests(unittest.TestCase):
             self.assertIn('href="/compare/"',html)
             self.assertTrue((output/"proof/index.html").is_file())
             self.assertTrue((output/"compare/index.html").is_file())
-            report=json.loads((output/"witness/FOUR-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json").read_text())
-            self.assertEqual(report["precomputed_python_evaluations"],64)
+            report=json.loads((output/"witness/FIVE-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json").read_text())
+            self.assertEqual(report["precomputed_python_evaluations"],80)
             with self.assertRaisesRegex(ValueError,"refuse to overwrite"):
                 build(output)
 
@@ -164,9 +164,9 @@ class ActualSourceWitnessBrowserTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             dest=Path(tmp)/"witness"
             r=v.write(dest)
-            self.assertEqual(r["source_fix_stage_count"],4)
+            self.assertEqual(r["source_fix_stage_count"],5)
             self.assertTrue((dest/"index.html").is_file())
-            self.assertTrue((dest/"FOUR-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json").is_file())
+            self.assertTrue((dest/"FIVE-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json").is_file())
             with self.assertRaisesRegex(v.BrowserWitnessError,"refuse overwrite"):
                 v.write(dest)
 
