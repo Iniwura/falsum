@@ -97,6 +97,10 @@ No expert-validated gold labels, sealed model holdout, documented external appli
 
 At exact Flask historical source/test Git revisions, its upstream-authored permanent-session `Vary: Cookie` regression **fails on the vulnerable parent for the expected missing-header behavior and passes on the fixed commit**, while the old control passes. This adds **one new public upstream project** beyond the four authenticated source-witness stages and two older historical library-method replays. It was **researcher-selected**, not a blind model holdout or independent expert-reviewed gold. The original four-case typed checker has **not** learned to judge Flask by virtue of this proof.
 
+## Phase 5A: independently checkable external review intake
+
+[**Read the four-source review census protocol**](docs/PHASE5A_PUBLIC_EXECUTED_REVIEW_INTAKE.md). The live read-only GitHub issue scanner validates external review-form structure against immutable Koa, Hono and LangChain parent/fixed/test source pins. It distinguishes format-valid claims and disagreements from independently authenticated AppSec judgments. **Zero expert gold is inferred from GitHub identity, checkboxes, or agreement.** The former four-case research intake remains separate.
+
 ## Independent review welcome
 
 **[Review one real upstream security fix](docs/REVIEW_FOUR_EXECUTED_CASES.md)** · [Open the source-cited review form](https://github.com/Iniwura/falsum/issues/new?template=independent-executed-source-review.yml)
