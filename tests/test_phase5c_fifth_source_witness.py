@@ -161,6 +161,44 @@ class OriginalHistoricalFifthSourceWitnessTests(unittest.TestCase):
                 {"test_id":"invalid","claim":claim,"external_gold":True}
             ])
 
+    def test_standard_installed_cli_can_expand_to_fifth_source_without_changing_default(self):
+        from falsum.cli import main as public_main
+        with tempfile.TemporaryDirectory() as tmp:
+            out=Path(tmp)/"extended.json"
+            self.assertEqual(public_main([
+                "verify-source-review",
+                "--index",str(INDEX_FILE),
+                "--source-lock",str(ORIGINAL_LOCK_FILE),
+                "--flask-lock",str(FLASK_LOCK_FILE),
+                "--flask-proof-b64",str(ARCHIVE_FILE),
+                "--out",str(out),
+            ]),0)
+            report=json.loads(out.read_text())
+            self.assertEqual(report["source_case_count"],5)
+            self.assertEqual(report["internally_constructed_controls_matching"],40)
+            self.assertEqual(report["independent_human_expert_gold_labels"],0)
+            original_out=Path(tmp)/"unchanged-original.json"
+            self.assertEqual(public_main([
+                "verify-source-review","--index",str(INDEX_FILE),
+                "--source-lock",str(ORIGINAL_LOCK_FILE),"--out",str(original_out),
+            ]),0)
+            self.assertEqual(json.loads(original_out.read_text())["constructed_fixtures_checked"],32)
+
+    def test_standard_cli_rejects_half_of_extended_provenance_flags(self):
+        from falsum.cli import main as public_main
+        with tempfile.TemporaryDirectory() as tmp:
+            for flag,value in (
+                ("--flask-lock",FLASK_LOCK_FILE),
+                ("--flask-proof-b64",ARCHIVE_FILE),
+            ):
+                with self.subTest(flag=flag),self.assertRaises(SystemExit):
+                    public_main([
+                        "verify-source-review","--index",str(INDEX_FILE),
+                        "--source-lock",str(ORIGINAL_LOCK_FILE),
+                        flag,str(value),"--out",str(Path(tmp)/"absent.json"),
+                    ])
+            self.assertFalse((Path(tmp)/"absent.json").exists())
+
     def test_cli_exact_github_archive_and_one_time_output(self):
         with tempfile.TemporaryDirectory() as tmp:
             out=Path(tmp)/"report.json"
