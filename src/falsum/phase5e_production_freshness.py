@@ -76,7 +76,6 @@ def compare(expected: dict, raw_json: bytes, raw_html: bytes, *, live: bool) -> 
             "PHASE5D_STATIC_FIVE_REAL_SOURCE_EXECUTIONS" in html
             and "FIVE-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json" in html
             and "FIVE PINNED PATCH STAGES" in html
-            and "Flask" not in ("this field must not be a guard",)
             and "__FALSUM_REAL_WITNESS_DATA__" not in html,
             "production HTML is stale or contains an unpopulated witness app")
     cases = actual.get("cases")
