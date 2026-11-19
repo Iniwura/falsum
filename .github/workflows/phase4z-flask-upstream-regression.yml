@@ -104,6 +104,13 @@ jobs:
           cp "$root/fixed/tests/test_basic.py" "$root/parent/tests/test_basic.py"
           run_case "$root/parent" parent-regression "tests/test_basic.py::test_session_refresh_vary"
           run_case "$root/fixed" fixed-regression "tests/test_basic.py::test_session_refresh_vary"
+          # All three logs are PUBLIC historical source tests with only fake fixtures.
+          # Never convert a setup/import failure into a valid security regression.
+          for name in parent-original parent-regression fixed-regression; do
+            echo "===== $name ====="
+            printf "exit=%s\\n" "$(cat "$root/logs/$name.exit")"
+            tail -n 110 "$root/logs/$name.log"
+          done
         env:
           PYTHONPATH: src
       - name: Verify exact source, direct parent, upstream test, and expected regression assertion
