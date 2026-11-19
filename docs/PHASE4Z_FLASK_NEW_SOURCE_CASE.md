@@ -2,7 +2,7 @@
 
 **FALSUM · Telegraph Season II · Evaluators · `SECURITY_REVIEW_GENERAL` · November 19, 2026**
 
-**Status: proposed source case until the actual new GitHub Actions run passes.** This case was selected by the FALSUM researcher after previous model-development work. It is **not an independent reviewer nomination, a blind model holdout or scored model generalization**.
+**Status: actual historical upstream source execution VERIFIED in [passing GitHub Actions CI](https://github.com/Iniwura/falsum/actions/runs/44524997174) (November 19, 2026).** This case was selected by the FALSUM researcher after previous model-development work. It is **not an independent reviewer nomination, a blind model holdout or scored model generalization**.
 
 [Authentic upstream Flask patch](https://github.com/pallets/flask/commit/8705dd39c4fa563ea0fe0bf84c85da8fcc98b88d) · [Published GHSA-m2qf-hxjv-5gpq](https://github.com/pallets/flask/security/advisories/GHSA-m2qf-hxjv-5gpq) · [Frozen source/test selection](../data/phase4z-flask-new-source-lock.json) · [Actual execution workflow](../.github/workflows/phase4z-flask-upstream-regression.yml) · [Verifier](../src/falsum/phase4z_flask_upstream_runtime.py).
 
@@ -41,7 +41,7 @@ Run the adversarial integrity checks locally, without installing Flask:
 PYTHONPATH=src:tests python -m unittest discover -s tests -p 'test_phase4z_flask_upstream_runtime.py' -v
 ```
 
-**This command alone does not reproduce the actual Flask fix.** For source-execution proof, check the new GitHub Actions run and its real checkout, pytest, return-code and verifier logs. Do not turn a synthetic/mock unit fixture into live proof. A failed or missing CI run means the new case is **unverified**.
+**This command alone does not reproduce the actual Flask fix.** For source-execution proof, check the new GitHub Actions run and its real checkout, pytest, return-code and verifier logs. Do not turn a synthetic/mock unit fixture into live proof. A failed or missing future replay means that later run is **unverified**, regardless of this original passing historical proof. A successful source replay remains distinct from model reliability or external security adjudication.
 
 ## Evaluation limits that cannot be skipped
 
