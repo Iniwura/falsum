@@ -1,7 +1,7 @@
 # FALSUM — Judge guide
 
 **Telegraph Season II / Evaluators / SECURITY_REVIEW_GENERAL**  
-**Evidence reviewed through 18 November 2026. Final H2 submission: NOT YET FILED.**
+**Evidence reviewed through 19 November 2026. Final H2 submission: NOT YET FILED.**
 
 ## What is FALSUM?
 
