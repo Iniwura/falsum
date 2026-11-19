@@ -30,7 +30,7 @@ The original ZIP has been preserved byte-for-byte, base64-encoded into [a portab
 The new checker works **fully offline** with Python 3.11+ and the four existing source receipts:
 
 ~~~bash
-PYTHONPATH=src python -m falsum.phase5c_fifth_source_witness \
+falsum verify-source-review \
   --index evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json \
   --source-lock data/phase4p-three-project-open-review-lock.json \
   --flask-lock data/phase4z-flask-new-source-lock.json \
@@ -38,7 +38,7 @@ PYTHONPATH=src python -m falsum.phase5c_fifth_source_witness \
   --out five-original-source-witness-results.json
 ~~~
 
-The original four-case command continues to work unchanged. The new command verifies **5 historical source-test repair stages in 4 distinct upstream projects**. Its 40 source-derived constructed controls test: 10 supported claims, 10 contradicted claims, and 20 abstentions for unsupported production/global-security assertions.
+The original four-case command continues to work unchanged when the two Flask flags are omitted. The same installed FALSUM CLI with both optional Flask flags verifies **5 historical source-test repair stages in 4 distinct upstream projects**. Its 40 source-derived constructed controls test: 10 supported claims, 10 contradicted claims, and 20 abstentions for unsupported production/global-security assertions.
 
 For caller-chosen structured review claims, pass --requests PATH (a JSON array using Phase 4U's schema). Both genuine Flask revisions can now be evaluated. But any external "expected" verdict remains an **unverified caller assertion**, not an internally generated reference label. Arbitrary unknown projects, wrong Git revisions, incorrect test blob SHA, forged evidence receipt, or unsupported production claims do not receive source-supported verdicts.
 
