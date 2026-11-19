@@ -87,6 +87,10 @@ This process does **not** parse natural-language security reviews, establish app
 
 No expert-validated gold labels, sealed model holdout, documented external application adoption, improved registered model, or official H2 submission receipt is claimed.
 
+## Phase 4Y: two additional real historical replay families
+
+[**Reproduce the cross-family historical replay**](docs/PHASE4Y_CROSS_FAMILY_RELIABILITY.md): the new CI runs installed affected/fixed Starlette and Requests versions on synthetic inputs, alongside authentication of the original four-source proof. These two additional projects were **already researched earlier**; this is new combined execution coverage, **not an unseen holdout, model improvement, or independent expert gold**. See the linked CI status before claiming a successful new replay.
+
 ## Independent review welcome
 
 **[Review one real upstream security fix](docs/REVIEW_FOUR_EXECUTED_CASES.md)** · [Open the source-cited review form](https://github.com/Iniwura/falsum/issues/new?template=independent-executed-source-review.yml)

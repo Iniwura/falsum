@@ -1,0 +1,161 @@
+name: Phase 4Y - real cross-family historical replay, not blind model gold
+on:
+  push:
+    paths:
+      - 'src/falsum/phase4y_cross_family_replay.py'
+      - 'tests/test_phase4y_cross_family_replay.py'
+      - 'docs/PHASE4Y_CROSS_FAMILY_RELIABILITY.md'
+      - '.github/workflows/phase4y-cross-family-replay.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase4y_cross_family_replay.py'
+      - 'tests/test_phase4y_cross_family_replay.py'
+      - 'docs/PHASE4Y_CROSS_FAMILY_RELIABILITY.md'
+      - '.github/workflows/phase4y-cross-family-replay.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-schema-regression:
+    name: Mutation and non-blind evidence contract
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify all three source validators without installed historical frameworks
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH=src:tests
+          python -m unittest discover -s tests -p 'test_phase3h_starlette_runtime.py' -v
+          python -m unittest discover -s tests -p 'test_phase3i_requests_runtime.py' -v
+          python -m unittest discover -s tests -p 'test_phase4y_cross_family_replay.py' -v
+
+  actual-installed-versions:
+    name: Actual historical ${{ matrix.family }} ${{ matrix.version }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - family: starlette
+            version: '0.26.1'
+          - family: starlette
+            version: '0.27.0'
+          - family: requests
+            version: '2.30.0'
+          - family: requests
+            version: '2.31.0'
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PIP_DISABLE_PIP_VERSION_CHECK: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact historical library and record resolved runtime
+        shell: bash
+        env:
+          FAMILY: ${{ matrix.family }}
+          VERSION: ${{ matrix.version }}
+        run: |
+          set -euo pipefail
+          python -m pip install "$FAMILY==$VERSION"
+          mkdir -p "$RUNNER_TEMP/phase4y"
+          python -m pip freeze > "$RUNNER_TEMP/phase4y/RESOLVED-INSTALLED-PACKAGES.txt"
+          python - <<'PY'
+          import importlib.metadata
+          import os
+          assert importlib.metadata.version(os.environ['FAMILY']) == os.environ['VERSION']
+          print('Installed real', os.environ['FAMILY'], os.environ['VERSION'])
+          PY
+      - name: Call original historical library implementation with synthetic inputs only
+        shell: bash
+        env:
+          FAMILY: ${{ matrix.family }}
+          VERSION: ${{ matrix.version }}
+        run: |
+          set -euo pipefail
+          if [ "$FAMILY" = starlette ]; then
+            PYTHONPATH=src python -m falsum.phase3h_starlette_runtime run \
+              --version "$VERSION" --queue data/real-fix-train-candidates.json \
+              --repo-root "$GITHUB_WORKSPACE" \
+              --out "$RUNNER_TEMP/phase4y/STARLETTE-$VERSION-REAL-RUNTIME.json"
+          elif [ "$FAMILY" = requests ]; then
+            PYTHONPATH=src python -m falsum.phase3i_requests_runtime run \
+              --version "$VERSION" --queue data/real-fix-queue.json \
+              --repo-root "$GITHUB_WORKSPACE" \
+              --out "$RUNNER_TEMP/phase4y/REQUESTS-$VERSION-REAL-RUNTIME.json"
+          else
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase4y-runtime-${{ matrix.family }}-${{ matrix.version }}
+          path: ${{ runner.temp }}/phase4y/
+          retention-days: 90
+          if-no-files-found: error
+
+  compare-real-executions:
+    name: Verify two outside-four real reversals and four-stage source receipts
+    needs: [source-schema-regression, actual-installed-versions]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: phase4y-runtime-*
+          path: ${{ runner.temp }}/phase4y-inputs
+          merge-multiple: false
+      - name: Fail closed on changed version, source blob, test or negative control
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/phase4y-inputs"
+          PYTHONPATH=src python -m falsum.phase4y_cross_family_replay \
+            --source-index evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json \
+            --source-lock data/phase4p-three-project-open-review-lock.json \
+            --starlette-queue data/real-fix-train-candidates.json \
+            --requests-queue data/real-fix-queue.json \
+            --starlette-before "$root/phase4y-runtime-starlette-0.26.1/STARLETTE-0.26.1-REAL-RUNTIME.json" \
+            --starlette-after "$root/phase4y-runtime-starlette-0.27.0/STARLETTE-0.27.0-REAL-RUNTIME.json" \
+            --requests-before "$root/phase4y-runtime-requests-2.30.0/REQUESTS-2.30.0-REAL-RUNTIME.json" \
+            --requests-after "$root/phase4y-runtime-requests-2.31.0/REQUESTS-2.31.0-REAL-RUNTIME.json" \
+            --out "$RUNNER_TEMP/phase4y-cross-family-actual-replay.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'phase4y-cross-family-actual-replay.json'
+          d=json.loads(p.read_text())
+          assert d['cross_family_replayed_boundaries'] == 2
+          assert d['total_distinct_historical_projects_across_two_evidence_methods'] == 5
+          assert d['genuinely_pre_registered_unseen_projects_tested'] == 0
+          assert d['independent_human_appsec_labels'] == 0
+          assert d['trained_model_generalization_proven'] is False
+          with Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as f:
+              f.write('## Phase 4Y: actual installed-library replay\n\n')
+              f.write('Real Starlette 0.26.1 to 0.27.0 and Requests 2.30.0 to 2.31.0 method executions reproduced in four isolated jobs. Original affected/fixed behavior reversal and negative controls validated.\n\n')
+              f.write('These are **two additional but previously researched** historical projects beyond the existing four upstream regression stages. **Zero fresh blind holdouts, independent human gold, trained-model quality scores or new Anjoman rows.**\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase4y-actual-cross-family-comparison-not-blind-model-accuracy
+          path: ${{ runner.temp }}/phase4y-cross-family-actual-replay.json
+          retention-days: 90
+          if-no-files-found: error
