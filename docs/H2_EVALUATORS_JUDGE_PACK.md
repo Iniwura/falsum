@@ -39,6 +39,27 @@ The **[four-stage independent reviewer guide](REVIEW_FOUR_EXECUTED_CASES.md)** a
 
 At the time this guide was prepared, [the existing public review invitation](https://github.com/Iniwura/falsum/issues/25) had **no independent reviewer replies**, and **zero independent AppSec expert gold labels were verified**. Neither the new form nor the model's own critique is evidence of external acceptance. The reviewer form is an invitation, not a completed assessment or paid adoption.
 
+## November 19 technical addendum — expanded source evidence and real external-review intake
+
+**New actually reproduced historical upstream source case:** [Flask's original session `Vary: Cookie` fix](PHASE4Z_FLASK_NEW_SOURCE_CASE.md) · [passing GitHub Actions original/parent/fix tests](https://github.com/Iniwura/falsum/actions/runs/44524997174). The original framework test passed, the fixed author's security regression failed on the unchanged vulnerable parent for the missing-header assertion, and the same regression passed on the fixed commit. This is one **researcher-selected public source project**, not new independent semantic ground truth or a blind-model test.
+
+**Additional historic real-runtime coverage:** [Phase 4Y Starlette and Requests](PHASE4Y_CROSS_FAMILY_RELIABILITY.md) · [passing cross-family execution](https://github.com/Iniwura/falsum/actions/runs/44522695727). Two earlier-researched projects show controlled historical affected/fixed boundary reversals using their real installed-library methods. These are *different evidence methods* from the four author-written upstream regression witnesses. Do not report seven equivalent source regressions or seven expert-validated model predictions.
+
+**Actual public AppSec reviewer census:** [Phase 5A protocol](PHASE5A_PUBLIC_EXECUTED_REVIEW_INTAKE.md) · [successful live GitHub review check](https://github.com/Iniwura/falsum/actions/runs/44614197855). The scanner now processes the official four-executed-case GitHub issue form, checks pinned source/test Git line links, and retains disagreement and ABSTAIN. It does not conflate the old four research cases with the newer Koa/Hono/LangChain stages. As of the November 19 live run, **0 format-valid external submissions to this specific form and 0 independently verified human AppSec labels** are reported. These are observed limitations, not missing metrics silently counted as success.
+
+| Strict evaluation result | Current evidence |
+| --- | --- |
+| Original upstream-authored historical parent/fix regression stages | 4, Koa/Hono/two LangChain |
+| Real earlier historical installed-library behavior comparisons | 2, Starlette and Requests |
+| New researcher-selected original upstream-authored regression | 1, Flask |
+| Distinct public projects across all three execution groupings | 6 |
+| Real independent AppSec human gold labels | 0 confirmed |
+| Genuine learned evaluator improvement on fresh, adjudicated cases | **Not demonstrated** |
+| Original quarantined LoRA result | **5/8 source matches; 1/4 complete reversals; unchanged negative result** |
+| Official H2 entry receipt and accepted provider/evaluator status | **Not established** |
+
+**Judging relevance:** The additional cases strengthen repeatable *security-behavior coverage* and show how FALSUM handles authentic source receipts without inventing production impact. They do **not** prove that the current four-case deterministic checker correctly assesses unseen issues. Until a real independent source review and a separately specified new-case semantic evaluation exist, do not make model-generalization, independent-expert-approval, mission-app-adoption or registered-network-adapter claims. The [external review invitation](https://github.com/Iniwura/falsum/issues/25) and [new independent case challenge](https://github.com/Iniwura/falsum/issues/54) remain open.
+
 ## 90-second judge walkthrough — actual source-test evidence
 
 **[Start with the working real-source reviewer lab](https://falsum-evidence-lab.vercel.app/witness/)** · [Build-time Python verification](PHASE4V_REAL_SOURCE_WITNESS_WEB_LAB.md) · [Actual four-stage execution receipts](https://github.com/Iniwura/falsum/actions/runs/44356563508)
