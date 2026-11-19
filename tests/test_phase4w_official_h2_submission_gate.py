@@ -109,12 +109,21 @@ class OfficialSeason2ReleaseEvidenceGateTests(unittest.TestCase):
         self.assertFalse(result["submission_complete"])
         self.assertFalse(result["operator_permission_to_share_public_assets_verified"])
 
-    def test_genuine_four_stage_source_bundle_is_independent_of_unsubmitted_competition(self):
+    def test_original_four_stage_report_and_new_five_stage_web_evidence_remain_distinct(self):
         report = build_real_source_proof()
         status = inspect(self.text, self.entry, self.readme)
-        self.assertEqual(report["source_fix_stage_count"],status["recorded_executable_source_fix_stages"])
-        self.assertEqual(report["precomputed_python_evaluations"],status["recorded_source_review_verdicts"])
-        self.assertEqual(report["upstream_project_count"],3)
+        # The original Nov 19 H2 audit recorded four historical stages and 64
+        # UI choices. A real, separately SHA-authenticated Flask source stage
+        # was then admitted in Phase 5C and displayed in Phase 5D.
+        # Never rewrite a historical status entry retroactively.
+        self.assertEqual(status["recorded_executable_source_fix_stages"],4)
+        self.assertEqual(status["recorded_source_review_verdicts"],64)
+        self.assertEqual(report["source_fix_stage_count"],5)
+        self.assertEqual(report["precomputed_python_evaluations"],80)
+        self.assertEqual(report["upstream_project_count"],4)
+        self.assertEqual(report["by_construction_verdict_counts"],
+                         {"SUPPORTED":10,"CONTRADICTED":10,"ABSTAIN":60})
+        self.assertEqual(report["cases"][4]["id"],"flask-session-cookie-vary")
         self.assertEqual(report["independent_appsec_expert_gold_labels"],0)
         self.assertFalse(report["trained_model_improvement_proven"])
         self.assertFalse(report["official_h2_submission_confirmed"])
