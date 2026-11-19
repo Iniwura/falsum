@@ -10,18 +10,18 @@ const {chromium}=require("playwright");
  const root=process.env.TEST_SITE_DIR||path.join(process.cwd(),"public");
  const folder=path.join(root,"witness");
  const file=path.join(folder,"index.html");
- const data=JSON.parse(fs.readFileSync(path.join(folder,"FOUR-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json"),"utf8"));
- assert.equal(data.status,"PHASE4V_STATIC_FOUR_REAL_SOURCE_EXECUTIONS_PRECOMPUTED_CLAIMS_NOT_MODEL_ACCURACY");
- assert.equal(data.source_fix_stage_count,4);
- assert.equal(data.upstream_project_count,3);
- assert.equal(data.precomputed_python_evaluations,64);
- assert.deepEqual(data.by_construction_verdict_counts,{ABSTAIN:48,CONTRADICTED:8,SUPPORTED:8});
+ const data=JSON.parse(fs.readFileSync(path.join(folder,"FIVE-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json"),"utf8"));
+ assert.equal(data.status,"PHASE5D_STATIC_FIVE_REAL_SOURCE_EXECUTIONS_PRECOMPUTED_CLAIMS_NOT_MODEL_ACCURACY");
+ assert.equal(data.source_fix_stage_count,5);
+ assert.equal(data.upstream_project_count,4);
+ assert.equal(data.precomputed_python_evaluations,80);
+ assert.deepEqual(data.by_construction_verdict_counts,{ABSTAIN:60,CONTRADICTED:10,SUPPORTED:10});
  assert.equal(data.trained_model_improvement_proven,false);
  assert.equal(data.independent_appsec_expert_gold_labels,0);
  assert.equal(data.new_anjoman_eligible_rows,0);
  assert.equal(data.network_evaluator_registered,false);
  assert.equal(data.no_live_browser_tests_or_model_inference,true);
- assert.equal(data.cases.length,4);
+ assert.equal(data.cases.length,5);
 
  const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
  const errors=[];
@@ -33,7 +33,7 @@ const {chromium}=require("playwright");
   await page.goto(pathToFileURL(file).href);
   assert.match(await page.title(),/Real source evidence/);
   assert.equal(await page.locator("h1").count(),1);
-  assert.equal(await page.locator("#case-list button").count(),4);
+  assert.equal(await page.locator("#case-list button").count(),5);
   assert.equal(await page.locator("#claim-list button").count(),4);
   assert.equal(await page.locator("#case-list button[aria-pressed=true]").count(),1);
   assert.equal(await page.locator("#claim-list button[aria-pressed=true]").count(),1);
@@ -79,7 +79,7 @@ const {chromium}=require("playwright");
   await page.locator("#verify").click();
   assert.equal(await page.locator("#verdict-word").textContent(),"ABSTAIN");
 
-  for(let i=0;i<4;i++){
+  for(let i=0;i<5;i++){
     const record=data.cases[i];
     await page.locator('#case-list button[data-case="'+i+'"]').click();
     assert.equal(await page.locator("#case-title").textContent(),record.title);
@@ -98,7 +98,25 @@ const {chromium}=require("playwright");
     assert.equal(await page.locator("#verdict-word").textContent(),"SUPPORTED");
     assert.equal(await page.locator("#observed").textContent(),"PASSES");
   }
-  await page.screenshot({path:path.join(folder,"phase4v-desktop-langchain-symlink.png"),fullPage:true});
+  await page.screenshot({path:path.join(folder,"phase5d-desktop-flask.png"),fullPage:true});
+  // Fifth case independently pins Flask source and a separately recovered original Actions ZIP.
+  const flask=data.cases[4];
+  assert.equal(flask.id,"flask-session-cookie-vary");
+  assert.equal(flask.repository,"pallets/flask");
+  assert.equal(flask.original_execution_receipt_sha256,
+    "65150bc4d196d715386bd758d37ad0b41dc8b2f242bd8628825b3158da15efb5");
+  assert.equal(await page.locator("#case-title").textContent(),flask.title);
+  assert.equal(await page.locator("#run-link").getAttribute("href"),
+    "https://github.com/Iniwura/falsum/actions/runs/44524997174");
+  await page.locator("#integrity-tampered").click();
+  await page.locator("#verify").click();
+  assert.equal(await page.locator("#verdict-word").textContent(),"ABSTAIN");
+  await page.locator("#integrity-original").click();
+  await page.locator("#revision-fixed").click();
+  await page.locator('[data-claim="UPSTREAM_REGRESSION_PASSES"]').click();
+  await page.locator("#verify").click();
+  assert.equal(await page.locator("#verdict-word").textContent(),"SUPPORTED");
+  
 
   const phone=await browser.newPage({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
   phone.on("pageerror",pageError);phone.on("request",request);
@@ -133,7 +151,7 @@ const {chromium}=require("playwright");
 
   assert.deepEqual(errors,[]);
   console.log(JSON.stringify({
-    passed:true,realSourceStages:4,precomputedPythonVerdicts:64,
+    passed:true,realSourceStages:5,precomputedPythonVerdicts:80,
     authenticSourceAndTestLinks:true,parentFailFixedPassAcrossAll:true,
     wrongReceiptAbstains:true,unprovenProductionClaimsAbstain:true,
     mobile390:true,mobile320:true,keyboard:true,touch:true,

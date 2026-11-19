@@ -60,6 +60,10 @@ At the time this guide was prepared, [the existing public review invitation](htt
 
 **Judging relevance:** The additional cases strengthen repeatable *security-behavior coverage* and show how FALSUM handles authentic source receipts without inventing production impact. They do **not** prove that the current four-case deterministic checker correctly assesses unseen issues. Until a real independent source review and a separately specified new-case semantic evaluation exist, do not make model-generalization, independent-expert-approval, mission-app-adoption or registered-network-adapter claims. The [external review invitation](https://github.com/Iniwura/falsum/issues/25) and [new independent case challenge](https://github.com/Iniwura/falsum/issues/54) remain open.
 
+## Current premium witness workbench extension (Phase 5D)
+
+[Five-source evidence and QA specification](PHASE5D_FIVE_CASE_PREMIUM_JUDGE_WORKBENCH.md) · [Original fifth-source ZIP and reproducible CLI](PHASE5C_AUTHENTIC_FLASK_FIFTH_WITNESS.md). The existing /witness/ experience now builds **five historical source-test stages in four projects**, with **80 constructed source-bounded checks: 10 supported, 10 contradicted, 60 abstained**. The original four historical stages remain unchanged, and Flask is admitted only from the genuine Phase 4Z archived Actions ZIP. **Not model accuracy, independent AppSec adjudication, a blind holdout, network registration or deployed exploit evidence.** Verify the updated public Vercel alias before declaring the extended page live.
+
 ## 90-second judge walkthrough — actual source-test evidence
 
 **[Start with the working real-source reviewer lab](https://falsum-evidence-lab.vercel.app/witness/)** · [Build-time Python verification](PHASE4V_REAL_SOURCE_WITNESS_WEB_LAB.md) · [Actual four-stage execution receipts](https://github.com/Iniwura/falsum/actions/runs/44356563508)
