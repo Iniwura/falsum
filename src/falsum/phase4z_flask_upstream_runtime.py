@@ -135,27 +135,49 @@ def verify_log_evidence(original: str, parent_reg: str, fixed_reg: str,
                         exits: tuple[int, int, int]) -> None:
     require(exits[0] == 0 and exits[1] != 0 and exits[2] == 0,
             "must observe original parent PASS, new regression parent FAIL, new regression fix PASS")
-    require("test_session_vary_cookie" in original and "passed" in original.lower(),
+    # pytest -q -v can show only "tests/test_basic.py ." rather than
+    # the individual test's name. The CI command pins the exact selector.
+    baseline_passed = (
+        re.search(r"\b1 passed\b", original.lower()) is not None
+        and "tests/test_basic.py" in original
+        and ("test_session_vary_cookie" in original or
+             "collected 1 item" in original)
+    )
+    require(baseline_passed,
             "original upstream session behavior test did not pass")
-    # The test name itself includes "vary": it MUST NOT satisfy the
-    # assertion evidence. Require the missing header in an actual failure
-    # diagnostic line instead of merely co-occurring in the pytest output.
+
+    # Never use "test_session_refresh_vary" as proof of a Vary assertion.
+    # Old Flask with Werkzeug 2.3 emits a BadRequestKeyError without
+    # the missing header name *on the error line*. Its real traceback
+    # contains both the attempted rv.headers["Vary"] assertion and
+    # the separate "key = 'Vary'" fixture detail.
     assertion_lines = [
         line.strip() for line in parent_reg.splitlines()
         if re.search(r"(?:keyerror|assertionerror)", line, re.IGNORECASE)
     ]
-    vary_assertion = any(
+    direct_vary_error = any(
         re.search(r"\b(?:keyerror|assertionerror)\b", line, re.IGNORECASE)
         and re.search(r"\bvary\b", line, re.IGNORECASE)
         for line in assertion_lines
     )
-    require("test_session_refresh_vary" in parent_reg and
+    werkzeug_missing_header = (
+        "badrequestkeyerror" in parent_reg.lower()
+        and re.search(r"(?m)^\s*key = ['\"]Vary['\"]", parent_reg) is not None
+        and any('assert rv.headers["Vary"] == "Cookie"' in line
+                for line in parent_reg.splitlines())
+    )
+    require(("test_session_refresh_vary" in parent_reg) and
             ("failed" in parent_reg.lower() or "failures" in parent_reg.lower())
-            and vary_assertion,
+            and (direct_vary_error or werkzeug_missing_header),
             "parent failed for a setup/import error rather than session Vary assertion")
-    require("test_session_refresh_vary" in fixed_reg and
-            re.search(r"\b1 passed\b", fixed_reg.lower()) is not None
-            and "failed" not in fixed_reg.lower(),
+    fixed_passed = (
+        re.search(r"\b1 passed\b", fixed_reg.lower()) is not None
+        and "tests/test_basic.py" in fixed_reg
+        and ("test_session_refresh_vary" in fixed_reg or
+             "collected 1 item" in fixed_reg)
+        and "failed" not in fixed_reg.lower()
+    )
+    require(fixed_passed,
             "fixed original upstream security regression did not pass")
 
 
