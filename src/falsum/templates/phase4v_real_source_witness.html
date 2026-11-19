@@ -31,17 +31,17 @@
 <main>
 <section class="hero" aria-labelledby="hero-title">
 <div><span class="eyebrow">FALSUM / Executed evidence / 18.11.26</span><h1 id="hero-title">DON'T<br>TRUST.<br><span>VERIFY.</span></h1></div>
-<div class="hero-side"><p class="lead">Four real security fixes. The exact tests that exposed them. Challenge a claim and inspect what the code actually proved.</p><div class="meta"><span>PUBLIC UPSTREAM SOURCE</span><span>NO LIVE MODEL</span><span>ZERO KEYS REQUIRED</span></div></div>
+<div class="hero-side"><p class="lead">Five real security fixes. The exact tests that exposed them. Challenge a claim and inspect what the code actually proved.</p><div class="meta"><span>PUBLIC UPSTREAM SOURCE</span><span>NO LIVE MODEL</span><span>ZERO KEYS REQUIRED</span></div></div>
 </section>
 <div class="metric-strip" aria-label="Proof coverage">
-<div class="metric"><strong>04</strong><span>Historical fixes executed</span></div>
-<div class="metric"><strong>03</strong><span>Real open-source projects</span></div>
-<div class="metric"><strong>64</strong><span>Source-bound claim checks</span></div>
+<div class="metric"><strong>05</strong><span>Historical fixes executed</span></div>
+<div class="metric"><strong>04</strong><span>Real open-source projects</span></div>
+<div class="metric"><strong>80</strong><span>Source-bound claim checks</span></div>
 </div>
 <section id="workbench" aria-labelledby="workbench-title">
 <div class="section-head"><div><span class="eyebrow">01 / INTERACTIVE VERIFICATION</span><h2 id="workbench-title">CHALLENGE A CLAIM.</h2></div><p>Pick a real source revision, state what its security test proves, then verify against recorded upstream execution.</p></div>
 <div class="workbench">
-<aside class="case-nav" aria-label="Select upstream project and fix"><p class="case-nav-head">FOUR PINNED PATCH STAGES</p><div id="case-list" class="cases" role="group" aria-label="Choose a real source case"></div><p class="case-note"><b>Authentic upstream tests.</b> Not fictional code, fabricated model answers or simulated GitHub receipts.</p></aside>
+<aside class="case-nav" aria-label="Select upstream project and fix"><p class="case-nav-head">FIVE PINNED PATCH STAGES</p><div id="case-list" class="cases" role="group" aria-label="Choose a real source case"></div><p class="case-note"><b>Authentic upstream tests.</b> Not fictional code, fabricated model answers or simulated GitHub receipts.</p></aside>
 <div class="work-main">
 <div class="case-hero"><div class="case-pretitle"><span id="case-tag">OPEN REDIRECT</span><span id="repo-name">koajs/koa</span></div><h3 id="case-title">When a redirect becomes an escape.</h3><p id="case-plain"></p></div>
 <div class="verify-grid">
@@ -71,7 +71,7 @@
 </div>
 </div>
 </section>
-<section class="bottom" aria-labelledby="bottom-heading"><div><span class="eyebrow">02 / WHY IT MATTERS</span><h2 id="bottom-heading">A PASS ISN'T<br>A SECURITY<br>GUARANTEE.</h2></div><div class="bottom-copy"><p>FALSUM checks whether a specific source-level review is consistent with authentic test evidence. A fixed upstream regression supports a narrow conclusion. It does not prove a real deployment is secure or that a vulnerability is exploitable by a particular attacker.</p><p>All 64 possible choices on this page were classified by the repository's Python source-witness checker during the static build. The original test executions are publicly reproducible. No private Anjoman questions, model inference, wallet, network request or independent human gold labels are used.</p><div class="a-row"><a href="https://github.com/Iniwura/falsum/blob/main/docs/PHASE4T_ONE_COMMAND_REAL_SOURCE_TEST_PROOF.md" target="_blank" rel="noopener noreferrer">Reproduce all four ↗</a><a href="https://github.com/Iniwura/falsum/blob/main/docs/PHASE4U_SOURCE_REVIEW_CLAIM_GATE.md" target="_blank" rel="noopener noreferrer">Understand the verification rules ↗</a><a href="./FOUR-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json">Download public source result JSON ↗</a></div></div></section>
+<section class="bottom" aria-labelledby="bottom-heading"><div><span class="eyebrow">02 / WHY IT MATTERS</span><h2 id="bottom-heading">A PASS ISN'T<br>A SECURITY<br>GUARANTEE.</h2></div><div class="bottom-copy"><p>FALSUM checks whether a specific source-level review is consistent with authentic test evidence. A fixed upstream regression supports a narrow conclusion. It does not prove a real deployment is secure or that a vulnerability is exploitable by a particular attacker.</p><p>All 80 possible choices on this page were classified by the repository's Python source-witness checker during the static build. The original test executions are publicly reproducible. No private Anjoman questions, model inference, wallet, network request or independent human gold labels are used.</p><div class="a-row"><a href="https://github.com/Iniwura/falsum/blob/main/docs/PHASE4T_ONE_COMMAND_REAL_SOURCE_TEST_PROOF.md" target="_blank" rel="noopener noreferrer">Reproduce the first four ↗</a><a href="https://github.com/Iniwura/falsum/blob/main/docs/PHASE4U_SOURCE_REVIEW_CLAIM_GATE.md" target="_blank" rel="noopener noreferrer">Understand the verification rules ↗</a><a href="https://github.com/Iniwura/falsum/blob/main/docs/PHASE5C_AUTHENTIC_FLASK_FIFTH_WITNESS.md" target="_blank" rel="noopener noreferrer">Reproduce fifth Flask evidence ↗</a><a href="./FIVE-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json">Download public source result JSON ↗</a></div></div></section>
 </main>
 <footer class="footer"><span>FALSUM / TELEGRAPH H2 EVALUATORS<br>Recorded evidence · Not a registered scoring adapter · 0 independent expert labels</span><a href="#hero-title">Back to top ↑</a></footer>
 </div>
@@ -80,7 +80,7 @@
 "use strict";
 (function(){
  const evidence=JSON.parse(document.getElementById("witness-data").textContent);
- if(evidence.status!=="PHASE4V_STATIC_FOUR_REAL_SOURCE_EXECUTIONS_PRECOMPUTED_CLAIMS_NOT_MODEL_ACCURACY"||evidence.cases.length!==4||evidence.precomputed_python_evaluations!==64)throw new Error("invalid source-bound evidence bundle");
+ if(evidence.status!=="PHASE5D_STATIC_FIVE_REAL_SOURCE_EXECUTIONS_PRECOMPUTED_CLAIMS_NOT_MODEL_ACCURACY"||evidence.cases.length!==5||evidence.precomputed_python_evaluations!==80)throw new Error("invalid source-bound evidence bundle");
  const state={caseIndex:0,revision:"parent",claim:"UPSTREAM_REGRESSION_PASSES",integrity:"original"};
  const $=id=>document.getElementById(id);
  const current=()=>evidence.cases[state.caseIndex];
