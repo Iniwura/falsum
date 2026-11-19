@@ -135,6 +135,50 @@ class SourceWitnessGateTests(unittest.TestCase):
         self.assertNotIn("prompt",json.dumps(report).lower())
         self.assertNotIn("vulnerable private user",json.dumps(report).lower())
 
+    def test_external_caller_supplied_correct_label_does_not_count_as_constructed_proof(self):
+        witness=self.index["koa-redirect"]
+        c=g.canonical_claim(witness,"fixed","UPSTREAM_REGRESSION_PASSES")
+        report=g.run(INDEX_RAW,SOURCE_RAW,examples=[{
+            "test_id":"caller-chose-passing-label",
+            "claim":c,"expected":"SUPPORTED",
+        }])
+        self.assertEqual(report["supported"],1)
+        self.assertEqual(report["constructed_fixtures_checked"],0)
+        self.assertEqual(report["constructed_fixture_matches"],0)
+        self.assertEqual(report["external_caller_expectations_seen"],1)
+        self.assertEqual(report["expectation_provenance"],
+                         "EXTERNAL_INPUT_UNVERIFIED_CALLER_EXPECTATIONS")
+        row=report["cases"][0]
+        self.assertEqual(row["unverified_caller_expected_verdict"],"SUPPORTED")
+        self.assertTrue(row["matches_unverified_caller_expectation"])
+        self.assertNotIn("constructed_expectation",row)
+        self.assertNotIn("matches_source_derived_expectation",row)
+        self.assertFalse(report["trained_model_improvement_proven"])
+
+    def test_external_caller_supplied_incorrect_label_is_not_treated_as_gold(self):
+        witness=self.index["hono-csrf"]
+        c=g.canonical_claim(witness,"parent","UPSTREAM_REGRESSION_FAILS")
+        report=g.run(INDEX_RAW,SOURCE_RAW,examples=[{
+            "test_id":"caller-chose-incorrect-label",
+            "claim":c,"expected":"CONTRADICTED",
+        }])
+        self.assertEqual(report["supported"],1)
+        self.assertEqual(report["external_caller_expectations_seen"],1)
+        self.assertFalse(report["cases"][0]["matches_unverified_caller_expectation"])
+        self.assertEqual(report["constructed_fixture_matches"],0)
+        self.assertEqual(report["constructed_fixtures_checked"],0)
+        self.assertEqual(report["independent_appsec_expert_labels"],0)
+        self.assertEqual(report["cases"][0]["judgement"]["verdict"],"SUPPORTED")
+
+    def test_internal_source_derived_suite_keeps_independent_provenance_marker(self):
+        report=g.run(INDEX_RAW,SOURCE_RAW)
+        self.assertEqual(report["expectation_provenance"],
+                         "INTERNAL_SOURCE_DERIVED_REGRESSION_FIXTURES")
+        self.assertEqual(report["external_caller_expectations_seen"],0)
+        self.assertEqual(report["constructed_fixtures_checked"],32)
+        self.assertEqual(report["constructed_fixture_matches"],32)
+        self.assertNotIn("unverified_caller_expected_verdict",report["cases"][0])
+
     def test_malformed_extra_request_fields_or_repeated_test_id_fails_closed(self):
         witness=self.index["koa-redirect"]
         valid=g.canonical_claim(witness,"fixed","UPSTREAM_REGRESSION_PASSES")
