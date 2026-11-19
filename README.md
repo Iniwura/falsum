@@ -48,6 +48,10 @@ Omit `--requests` and use a different output filename to run **32 automatically 
 
 [Checker specification and limitations](docs/PHASE4U_SOURCE_REVIEW_CLAIM_GATE.md) · [Source-backed regression tests](.github/workflows/phase4u-typed-security-witness-gate.yml)
 
+## Additional authenticated source-case replay (Phase 5C)
+
+**[Reproduce a fifth historical source witness, Flask](docs/PHASE5C_AUTHENTIC_FLASK_FIFTH_WITNESS.md).** The five-case offline checker preserves the original four immutable Koa/Hono/LangChain receipts and admits Flask's real upstream parent-fail/fix-pass session `Vary: Cookie` regression only from its **original, GitHub-SHA-256-pinned Actions ZIP artifact**. Its 40 constructed controls cover 10 supported, 10 contradicted and 20 abstained typed source claims across 4 distinct upstream repositories. These are **source-test consistency checks, not learned-model accuracy, independent expert labels or blind new-case generalization**. The existing four-witness command above remains unchanged.
+
 ## Four real upstream regression witnesses
 
 Each stage is a counterfactual using the third-party project's **own original regression test**:
