@@ -87,6 +87,10 @@ This process does **not** parse natural-language security reviews, establish app
 
 No expert-validated gold labels, sealed model holdout, documented external application adoption, improved registered model, or official H2 submission receipt is claimed.
 
+## Official Season II submission status
+
+**[Check the verified evidence against the current official competition requirements](docs/H2_NOV19_RULES_AND_SUBMISSION_GATE.md)**. This separates the real four-stage source execution, the 20/20 Eligible public-Privy-address readback and the negative old-model scores from **unverified owner-only requirements**: confirmed Season II registration, GitHub bounties star, genuine independent review, published progress-update URLs, the authorized 2–5 minute demo or accessible equivalent, showcase permissions and the actual official H2 submission receipt. **No completed entry, acceptance or prize is claimed.**
+
 ## Reproduce and review
 
 - [Real-source evidence, one-page judge guide](docs/PHASE4T_ONE_COMMAND_REAL_SOURCE_TEST_PROOF.md)
