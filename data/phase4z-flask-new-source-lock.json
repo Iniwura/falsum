@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "status": "PHASE4Z_RESEARCHER_SELECTED_PUBLIC_FLASK_CASE_NOT_BLIND_EXPERT_GOLD",
+  "selection_date": "2026-11-19",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "case_id": "flask-session-cookie-vary",
+  "repository": "pallets/flask",
+  "security_family": "session-cookie-response-cache-variation",
+  "advisory": "GHSA-m2qf-hxjv-5gpq",
+  "fixed_commit": "8705dd39c4fa563ea0fe0bf84c85da8fcc98b88d",
+  "direct_parent": "9532cba45d2339e90ebf04f178b1e4f2064e7328",
+  "source_path": "src/flask/sessions.py",
+  "test_path": "tests/test_basic.py",
+  "parent_source_blob": "1334184eb0110d400fd741e8e3b80c0ee9b5c725",
+  "fixed_source_blob": "e5650d6862ba235cda3f935e21679cc9d866958c",
+  "parent_test_blob": "32b41b637810f10a139657a5e02d950733cbf41f",
+  "fixed_test_blob": "ca373dcae35d60b23c70cfd1a473d59616c1c1f5",
+  "original_upstream_test_selector": "tests/test_basic.py::test_session_vary_cookie",
+  "new_upstream_security_regression_selector": "tests/test_basic.py::test_session_refresh_vary",
+  "facts": {
+    "fix_source_changes_vary_cookie_on_permanent_session_refresh": true,
+    "synthetic_in_process_flask_test_client_only": true,
+    "external_network_and_customer_data_used": false,
+    "researcher_selected_not_external_independent": true,
+    "no_blind_trained_model_holdout_claim": true,
+    "independent_human_gold_labels": 0,
+    "new_anjoman_evaluation_rows": 0,
+    "network_evaluator_registered": false
+  }
+}
