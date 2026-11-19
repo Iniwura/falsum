@@ -80,6 +80,30 @@ class FlaskSourceFirstSecurityCaseTests(unittest.TestCase):
             with self.subTest(report=reports[1][:70]), self.assertRaises(p.FlaskEvidenceError):
                 p.verify_log_evidence(*reports, (0, 1, 0))
 
+    def test_actual_pytest_quiet_verbose_output_is_parsed_without_fake_success(self):
+        # The real GitHub historical suite prints "tests/test_basic.py .",
+        # not the individual test selector, when -q and -v are combined.
+        original = ("collected 1 item\n"
+                    "tests/test_basic.py . [100%]\n"
+                    "1 passed in 0.12s")
+        parent = ("tests/test_basic.py F [100%]\n"
+                  "test_session_refresh_vary\n"
+                  '>       assert rv.headers["Vary"] == "Cookie"\n'
+                  "key = 'Vary', _get_mode = False\n"
+                  "E werkzeug.exceptions.BadRequestKeyError: 400 Bad Request\n"
+                  "FAILED tests/test_basic.py::test_session_refresh_vary\n"
+                  "1 failed in 0.15s")
+        fixed = ("collected 1 item\n"
+                 "tests/test_basic.py . [100%]\n"
+                 "1 passed in 0.12s")
+        p.verify_log_evidence(original, parent, fixed, (0, 1, 0))
+        with self.assertRaises(p.FlaskEvidenceError):
+            p.verify_log_evidence(original, parent.replace(
+                "key = 'Vary'", "key = 'Other'"), fixed, (0, 1, 0))
+        with self.assertRaises(p.FlaskEvidenceError):
+            p.verify_log_evidence(original, parent.replace(
+                'assert rv.headers["Vary"]', "assert True"), fixed, (0, 1, 0))
+
     def test_wrong_test_exit_states_not_accepted(self):
         for statuses in ((1, 1, 0), (0, 0, 0), (0, 1, 1), (0, 0, 1)):
             with self.subTest(exits=statuses), self.assertRaises(p.FlaskEvidenceError):
