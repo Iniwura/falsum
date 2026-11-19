@@ -71,7 +71,7 @@ class CrossFamilyReplayTests(unittest.TestCase):
         changes = (
             ("starlette_before", lambda d: d["results"][3].update(status=404)),
             ("starlette_after", lambda d: d.update(independent_human_labels=1)),
-            ("starlette_after", lambda d: d.update(runtime_source_sha256="c" * 64)),
+            ("starlette_after", lambda d: d.update(runtime_source_sha256="x" * 64)),
             ("requests_before", lambda d: d["observations"][0].update(
                 proxy_authorization_header_after_rebuild=False)),
             ("requests_after", lambda d: d.update(accepted_anjoman_rows=1)),
