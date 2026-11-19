@@ -171,7 +171,10 @@ class FourExecutedSourceReviewCensusTests(unittest.TestCase):
         variants = (
             lambda x: x.update(body=x["body"].replace("- [x]", "- [ ]", 1)),
             lambda x: x.update(body=x["body"] + "\n\n### Independent source assessment\n\nABSTAIN"),
-            lambda x: x.update(body=x["body"].replace("My source analysis", "Tiny")),
+            lambda x: x.update(body=x["body"].replace(
+                "My source analysis traces the changed branch through its old behavior and the new "
+                "test assertion. The precise behavior is conditional on the source path used. "
+                "I found this by inspecting the exact historical Git patch rather than a model verdict.", "N/A")),
             lambda x: x.update(body=x["body"].replace(
                 "The existing regression leaves open alternate configurations and untested "
                 "deployment routing. I would abstain on blanket security guarantees.", "N/A")),
