@@ -1,10 +1,10 @@
-"""Phase 4V: browser interface to *pre-evaluated*, real upstream source-test claims.
+"""Phases 4V/5D: browser interface to *pre-evaluated*, real source-test claims.
 
 Nothing on the page performs or impersonates a fresh security test, model
 inference, independent expert certification or Anjoman network request.
-All 64 possible case/revision/claim/evidence combinations are evaluated by
+All 80 possible case/revision/claim/evidence combinations are evaluated by
 FALSUM's exact source-review witness Python checker at *build time*, after
-verifying its four public upstream source/receipt digests.
+verifying the four original digests and the exact real Flask proof ZIP SHA.
 
 Static browser only presents these immutable, source-bound results.
 """
@@ -15,6 +15,8 @@ import json
 from pathlib import Path
 
 from .phase4p_open_source_review import load_lock
+from .phase4z_flask_upstream_runtime import load_lock as load_flask_lock
+from .phase5c_fifth_source_witness import source_index
 from .source_review_witness_gate import (
     CLAIMS, STATUS as GATE_STATUS, canonical_claim, evaluate, read,
     validated_index,
@@ -23,8 +25,10 @@ from .source_review_witness_gate import (
 ROOT = Path(__file__).resolve().parents[2]
 INDEX = "evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json"
 LOCK = "data/phase4p-three-project-open-review-lock.json"
+FLASK_LOCK = "data/phase4z-flask-new-source-lock.json"
+FLASK_ARCHIVE = "evidence/phase5c-original-phase4z-github-artifact.zip.b64"
 TEMPLATE = Path(__file__).parent / "templates" / "phase4v_real_source_witness.html"
-STATUS = "PHASE4V_STATIC_FOUR_REAL_SOURCE_EXECUTIONS_PRECOMPUTED_CLAIMS_NOT_MODEL_ACCURACY"
+STATUS = "PHASE5D_STATIC_FIVE_REAL_SOURCE_EXECUTIONS_PRECOMPUTED_CLAIMS_NOT_MODEL_ACCURACY"
 
 CASE_COPY = {
     "koa-redirect": {
@@ -63,6 +67,15 @@ CASE_COPY = {
         "boundary": "Checking resolved file suffix is not proof that every possible directory or symlink escape is blocked.",
         "tag": "SYMLINK",
     },
+    "flask-session-cookie-vary": {
+        "label": "Flask", "short": "Session cache header",
+        "title": "A silent session refresh matters.",
+        "plain": "Flask's historical permanent-session refresh could set a cookie without adding Vary: Cookie to the response.",
+        "question": "Did the new session-refresh Vary header security regression pass at this revision?",
+        "regression": "test_session_refresh_vary",
+        "boundary": "An in-process Flask test does not establish that a production shared cache exposed user session cookies.",
+        "tag": "CACHE HEADER",
+    },
 }
 
 REASON_COPY = {
@@ -94,18 +107,32 @@ def require(ok: bool, why: str) -> None:
 def assemble(root: Path = ROOT) -> dict:
     raw_index = read(root / INDEX)
     raw_lock = read(root / LOCK)
-    source = validated_index(raw_index, raw_lock)
+    flask_lock_raw = read(root / FLASK_LOCK)
+    flask_archive_raw = read(root / FLASK_ARCHIVE)
+    source = source_index(raw_index, raw_lock, flask_lock_raw, flask_archive_raw)
     canonical = load_lock(raw_lock)
+    flask_lock = load_flask_lock(flask_lock_raw)
     require(tuple(source) == tuple(CASE_COPY), "case order or upstream evidence set changed")
     cases = []
     totals = {"SUPPORTED": 0, "CONTRADICTED": 0, "ABSTAIN": 0}
     for cid, witness in source.items():
         public = CASE_COPY[cid]
-        rows = [x for x in canonical["cases"] if x["repository"] == witness["repository"]]
-        require(len(rows) == 1, "multiple or missing upstream project rows")
-        stages = [x for x in rows[0]["patches"] if x["stage"] == witness["stage"]]
-        require(len(stages) == 1, "missing precise public patch stage")
-        stage = stages[0]
+        if cid == flask_lock["case_id"]:
+            stage = {
+                "source_path": flask_lock["source_path"],
+                "test_path": flask_lock["test_path"],
+                "parent": flask_lock["direct_parent"],
+                "fix": flask_lock["fixed_commit"],
+                "parent_source_blob": flask_lock["parent_source_blob"],
+                "fixed_source_blob": flask_lock["fixed_source_blob"],
+                "fixed_test_blob": flask_lock["fixed_test_blob"],
+            }
+        else:
+            rows = [x for x in canonical["cases"] if x["repository"] == witness["repository"]]
+            require(len(rows) == 1, "multiple or missing upstream project rows")
+            stages = [x for x in rows[0]["patches"] if x["stage"] == witness["stage"]]
+            require(len(stages) == 1, "missing precise public patch stage")
+            stage = stages[0]
         decisions: dict[str, dict] = {}
         for revision in ("parent", "fixed"):
             for claim_type in CLAIMS:
@@ -170,15 +197,15 @@ def assemble(root: Path = ROOT) -> dict:
             "actions_run_url": witness["run_url"],
             "decisions": decisions,
         })
-    require(len(cases) == 4 and totals == {
-        "SUPPORTED": 8, "CONTRADICTED": 8, "ABSTAIN": 48
-    }, "64 source-evidence evaluations changed or absent")
+    require(len(cases) == 5 and totals == {
+        "SUPPORTED": 10, "CONTRADICTED": 10, "ABSTAIN": 60
+    }, "80 source-evidence evaluations changed or absent")
     return {
         "schema_version": 1,
         "status": STATUS,
         "intent": "SECURITY_REVIEW_GENERAL",
         "verification_method": GATE_STATUS,
-        "source_provenance": "four authentic, pinned original upstream regression executions",
+        "source_provenance": "four original upstream fixes plus one separately archived original Flask test regression",
         "replay_proof_url": "https://github.com/Iniwura/falsum/actions/runs/44356563508",
         "no_live_browser_tests_or_model_inference": True,
         "trained_model_improvement_proven": False,
@@ -186,9 +213,9 @@ def assemble(root: Path = ROOT) -> dict:
         "new_anjoman_eligible_rows": 0,
         "network_evaluator_registered": False,
         "official_h2_submission_confirmed": False,
-        "upstream_project_count": 3,
-        "source_fix_stage_count": 4,
-        "precomputed_python_evaluations": 64,
+        "upstream_project_count": 4,
+        "source_fix_stage_count": 5,
+        "precomputed_python_evaluations": 80,
         "by_construction_verdict_counts": totals,
         "claim_options": [
             {"value": k, "label": CLAIM_COPY[k]} for k in CLAIMS
@@ -199,10 +226,10 @@ def assemble(root: Path = ROOT) -> dict:
 
 def render(report: dict, template: str) -> str:
     require(report.get("status") == STATUS
-            and report.get("source_fix_stage_count") == 4
-            and report.get("precomputed_python_evaluations") == 64
+            and report.get("source_fix_stage_count") == 5
+            and report.get("precomputed_python_evaluations") == 80
             and report.get("by_construction_verdict_counts") ==
-            {"SUPPORTED": 8, "CONTRADICTED": 8, "ABSTAIN": 48}
+            {"SUPPORTED": 10, "CONTRADICTED": 10, "ABSTAIN": 60}
             and report.get("independent_appsec_expert_gold_labels") == 0
             and report.get("network_evaluator_registered") is False
             and report.get("trained_model_improvement_proven") is False,
@@ -224,7 +251,7 @@ def write(out_dir: Path, root: Path = ROOT) -> dict:
     html = render(report, TEMPLATE.read_text(encoding="utf-8"))
     out_dir.mkdir(parents=True, exist_ok=False)
     (out_dir / "index.html").write_text(html, encoding="utf-8")
-    (out_dir / "FOUR-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json").write_text(
+    (out_dir / "FIVE-AUTHENTIC-UPSTREAM-SOURCE-REGRESSIONS.json").write_text(
         json.dumps(report, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
@@ -239,8 +266,8 @@ def main(argv: list[str] | None = None) -> int:
         output = write(args.out_dir)
         print(json.dumps({
             "status": output["status"],
-            "historical_real_source_stages": 4,
-            "precomputed_python_verdicts": 64,
+            "historical_real_source_stages": 5,
+            "precomputed_python_verdicts": 80,
             "independent_gold": 0,
             "trained_model_gain": False,
             "site": str(args.out_dir / "index.html"),
