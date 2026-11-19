@@ -95,7 +95,7 @@ No expert-validated gold labels, sealed model holdout, documented external appli
 
 [**New original upstream security regression**](docs/PHASE4Z_FLASK_NEW_SOURCE_CASE.md) · [Passing real source-test workflow](https://github.com/Iniwura/falsum/actions/runs/44524997174)
 
-At exact Flask historical source/test Git revisions, its upstream-authored permanent-session `Vary: Cookie` regression **fails on the vulnerable parent for the expected missing-header behavior and passes on the fixed commit**, while the old control passes. This adds **one new public upstream project** beyond our four authenticated source-witness stages and two older historical library-method replays. It was **researcher-selected**, not a blind model holdout or independent expert-reviewed gold. The original four-case typed checker has **not** learned to judge Flask by virtue of this proof.
+At exact Flask historical source/test Git revisions, its upstream-authored permanent-session `Vary: Cookie` regression **fails on the vulnerable parent for the expected missing-header behavior and passes on the fixed commit**, while the old control passes. This adds **one new public upstream project** beyond the four authenticated source-witness stages and two older historical library-method replays. It was **researcher-selected**, not a blind model holdout or independent expert-reviewed gold. The original four-case typed checker has **not** learned to judge Flask by virtue of this proof.
 
 ## Independent review welcome
 
