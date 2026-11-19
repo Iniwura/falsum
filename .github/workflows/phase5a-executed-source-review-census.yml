@@ -1,0 +1,83 @@
+name: Phase 5A - live independent executed-source review claim census
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5a_executed_review_census.py'
+      - 'tests/test_phase5a_executed_review_census.py'
+      - 'docs/PHASE5A_PUBLIC_EXECUTED_REVIEW_INTAKE.md'
+      - '.github/workflows/phase5a-executed-source-review-census.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5a_executed_review_census.py'
+      - 'tests/test_phase5a_executed_review_census.py'
+      - 'docs/PHASE5A_PUBLIC_EXECUTED_REVIEW_INTAKE.md'
+      - '.github/workflows/phase5a-executed-source-review-census.yml'
+  issues:
+    types: [opened, edited, reopened, closed]
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: read
+jobs:
+  live-four-witness-review-census:
+    name: Exact four-stage GitHub reviewer claims, never human gold
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run adversarial source-citation and independent-review-laundering tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src:tests python -m unittest discover -s tests \
+            -p 'test_phase5a_executed_review_census.py' -v
+          PYTHONPATH=src:tests python -m unittest discover -s tests \
+            -p 'test_phase4x_independent_four_source_review.py' -v
+      - name: Inspect actual public GitHub issues and four executed upstream source witnesses
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/phase5a-review"
+          PYTHONPATH=src python -m falsum.phase5a_executed_review_census \
+            --index evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json \
+            --source-lock data/phase4p-three-project-open-review-lock.json \
+            --out "$RUNNER_TEMP/phase5a-review/REAL-GITHUB-REVIEW-CLAIMS-NOT-EXPERT-GOLD.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = Path(os.environ["RUNNER_TEMP"])/"phase5a-review/REAL-GITHUB-REVIEW-CLAIMS-NOT-EXPERT-GOLD.json"
+          report=json.loads(p.read_text())
+          assert report["input_source"] == "PUBLIC_GITHUB_API"
+          assert report["source_executed_upstream_stages"] == 4
+          assert report["source_executed_distinct_projects"] == 3
+          assert report["format_valid_review_claims"] + report["format_rejected_review_claims"] == report["review_form_issues"]
+          assert report["verified_independent_human_expert_labels"] == 0
+          assert report["source_semantic_review_accuracy"] is None
+          assert report["new_blind_holdout_accuracy"] is None
+          assert report["training_eligible_rows"] == []
+          assert report["new_anjoman_evaluation_rows"] == 0
+          assert report["registered_evaluator"] is False
+          assert report["official_h2_submission_confirmed"] is False
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
+              f.write("## FALSUM Phase 5A — public issue-form review census\n\n")
+              f.write(f"Live issues examined: **{report['github_issues_examined']}**. "
+                      f"New executed-source structured reviews passing format checks: **{report['format_valid_review_claims']}**. "
+                      f"Format-rejected: **{report['format_rejected_review_claims']}**.\n\n")
+              f.write("**Independent human AppSec expert gold verified: 0.** "
+                      "GitHub account identity, permalinks and attestations only create unadjudicated claims. "
+                      "Model accuracy and blind-holdout accuracy remain **NOT MEASURED**.\n")
+          PY
+      - name: Preserve exact live reviewer-census receipt, not private text or training labels
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-PHASE5A-REAL-GITHUB-EXECUTED-REVIEW-CENSUS-NO-GOLD
+          path: ${{ runner.temp }}/phase5a-review/
+          retention-days: 90
+          if-no-files-found: error
