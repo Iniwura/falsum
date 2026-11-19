@@ -145,8 +145,8 @@ def verify_log_evidence(original: str, parent_reg: str, fixed_reg: str,
         if re.search(r"(?:keyerror|assertionerror)", line, re.IGNORECASE)
     ]
     vary_assertion = any(
-        re.search(r"\\b(?:keyerror|assertionerror)\\b", line, re.IGNORECASE)
-        and re.search(r"\\bvary\\b", line, re.IGNORECASE)
+        re.search(r"\b(?:keyerror|assertionerror)\b", line, re.IGNORECASE)
+        and re.search(r"\bvary\b", line, re.IGNORECASE)
         for line in assertion_lines
     )
     require("test_session_refresh_vary" in parent_reg and
