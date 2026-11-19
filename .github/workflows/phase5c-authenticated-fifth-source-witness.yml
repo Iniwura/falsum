@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'src/falsum/phase5c_fifth_source_witness.py'
+      - 'src/falsum/cli.py'
       - 'tests/test_phase5c_fifth_source_witness.py'
       - 'evidence/phase5c-original-phase4z-github-artifact.zip.b64'
       - 'docs/PHASE5C_AUTHENTIC_FLASK_FIFTH_WITNESS.md'
@@ -10,6 +11,7 @@ on:
   pull_request:
     paths:
       - 'src/falsum/phase5c_fifth_source_witness.py'
+      - 'src/falsum/cli.py'
       - 'tests/test_phase5c_fifth_source_witness.py'
       - 'evidence/phase5c-original-phase4z-github-artifact.zip.b64'
       - 'docs/PHASE5C_AUTHENTIC_FLASK_FIFTH_WITNESS.md'
@@ -43,6 +45,20 @@ jobs:
           python -m unittest discover -s tests -p 'test_phase5c_fifth_source_witness.py' -v
           python -m unittest discover -s tests -p 'test_source_review_witness_gate.py' -v
           python -m unittest discover -s tests -p 'test_phase4z_flask_upstream_runtime.py' -v
+      - name: Verify actual pip-installable falsum CLI has fifth witness option
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --no-deps -e .
+          env -u PYTHONPATH falsum verify-source-review             --index evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json             --source-lock data/phase4p-three-project-open-review-lock.json             --flask-lock data/phase4z-flask-new-source-lock.json             --flask-proof-b64 evidence/phase5c-original-phase4z-github-artifact.zip.b64             --out installed-cli-five-source-witness-results.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          doc=json.loads(Path('installed-cli-five-source-witness-results.json').read_text())
+          assert doc['source_case_count']==5
+          assert doc['internally_constructed_controls_matching']==40
+          assert doc['independent_human_expert_gold_labels']==0
+          PY
       - name: Execute exact original source evidence verifier with four plus Flask witness
         shell: bash
         env:
