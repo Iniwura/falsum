@@ -125,10 +125,9 @@ class OfficialSeason2ReleaseEvidenceGateTests(unittest.TestCase):
             ("**ZERO confirmed**", "**ONE verified**"),
             ("**UNKNOWN**", "**VERIFIED**"),
             ("**NO THREE VERIFIED PUBLIC URLs**", "**ALL POSTS VERIFIED**"),
-            ("**NOT FORMALLY CONFIRMED**", "**CONFIRMED**"),
+            ("**LIKELY, NOT FORMALLY CONFIRMED**", "**CONFIRMED**"),
         ):
-            if original not in self.text:
-                continue
+            self.assertIn(original,self.text)
             with self.subTest(original=original),self.assertRaises(ValueError):
                 inspect(self.text.replace(original,replacement),self.entry,self.readme)
 
