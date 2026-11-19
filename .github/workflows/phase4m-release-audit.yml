@@ -5,6 +5,8 @@ on:
       - 'src/falsum/phase4m_release_audit.py'
       - 'tests/test_phase4m_release_audit.py'
       - 'docs/H2_FINAL_ENTRY_DRAFT.md'
+      - 'docs/H2_NOV19_RULES_AND_SUBMISSION_GATE.md'
+      - 'tests/test_phase4w_official_h2_submission_gate.py'
       - 'docs/H2_EVALUATORS_JUDGE_PACK.md'
       - 'README.md'
       - '.github/workflows/phase4m-release-audit.yml'
@@ -13,6 +15,8 @@ on:
       - 'src/falsum/phase4m_release_audit.py'
       - 'tests/test_phase4m_release_audit.py'
       - 'docs/H2_FINAL_ENTRY_DRAFT.md'
+      - 'docs/H2_NOV19_RULES_AND_SUBMISSION_GATE.md'
+      - 'tests/test_phase4w_official_h2_submission_gate.py'
       - 'docs/H2_EVALUATORS_JUDGE_PACK.md'
       - 'README.md'
       - '.github/workflows/phase4m-release-audit.yml'
@@ -43,6 +47,7 @@ jobs:
         run: |
           set -euo pipefail
           python -m unittest discover -s tests -p 'test_phase4m_release_audit.py' -v
+          python -m unittest discover -s tests -p 'test_phase4w_official_h2_submission_gate.py' -v
       - name: Generate explicitly NOT READY evidence-aware release report
         shell: bash
         run: |
