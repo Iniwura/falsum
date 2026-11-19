@@ -1,5 +1,7 @@
 # Phase 4V — The real-source FALSUM review workbench
 
+**Current extension:** [Phase 5D adds a verified Flask fifth case to this same workbench](PHASE5D_FIVE_CASE_PREMIUM_JUDGE_WORKBENCH.md). The original historical Phase 4V analysis below describes the original four-case launch. The present public build generates **five cases and 80 constructed outcomes** once the updated deployment is live. The original four-case permanent index remains unchanged.
+
 **Telegraph Season II / Evaluators / `SECURITY_REVIEW_GENERAL`**  
 **Recorded upstream executions:** November 18, 2026. **Mode:** static offline verification, not live scoring.
 
