@@ -137,10 +137,21 @@ def verify_log_evidence(original: str, parent_reg: str, fixed_reg: str,
             "must observe original parent PASS, new regression parent FAIL, new regression fix PASS")
     require("test_session_vary_cookie" in original and "passed" in original.lower(),
             "original upstream session behavior test did not pass")
+    # The test name itself includes "vary": it MUST NOT satisfy the
+    # assertion evidence. Require the missing header in an actual failure
+    # diagnostic line instead of merely co-occurring in the pytest output.
+    assertion_lines = [
+        line.strip() for line in parent_reg.splitlines()
+        if re.search(r"(?:keyerror|assertionerror)", line, re.IGNORECASE)
+    ]
+    vary_assertion = any(
+        re.search(r"\\b(?:keyerror|assertionerror)\\b", line, re.IGNORECASE)
+        and re.search(r"\\bvary\\b", line, re.IGNORECASE)
+        for line in assertion_lines
+    )
     require("test_session_refresh_vary" in parent_reg and
             ("failed" in parent_reg.lower() or "failures" in parent_reg.lower())
-            and ("keyerror" in parent_reg.lower() or "assertionerror" in parent_reg.lower())
-            and "vary" in parent_reg.lower(),
+            and vary_assertion,
             "parent failed for a setup/import error rather than session Vary assertion")
     require("test_session_refresh_vary" in fixed_reg and
             re.search(r"\b1 passed\b", fixed_reg.lower()) is not None
