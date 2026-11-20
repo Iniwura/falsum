@@ -8,6 +8,12 @@ The exact [Phase 5D five-source implementation](https://github.com/Iniwura/falsu
 
 A verified attempt to deploy the fully tested current main SHA 061a6a7dd82618e344adb98dd128ef69ec7565a3 to the original linked project returned Vercel **402 api-deployments-free-per-day** after more than 100 free-plan deploy requests in 24 hours. The environment does not have a Vercel CLI fallback. No other project, billing upgrade, or unstated production promotion was used. [Tracked release blocker](https://github.com/Iniwura/falsum/issues/61).
 
+## November 20 verification update: latest production alias now assigned
+
+The authenticated Vercel API now reports deployment **dpl_6F56yGJhrpHa7Qbg5jGQUB2Cfm66** as READY and targeted to **production**, for the reviewed main commit **f0f3ffec3e957223a422c31d5983247397e5b7bf** (Phase 5F PR #63). Its alias list explicitly contains **falsum-evidence-lab.vercel.app**, so the earlier per-day deployment-quota blocker has been resolved at the hosting-platform level. The earlier stale-alias and HTTP 402 observations above are preserved as historical observations, not current status claims.
+
+**Live HTTPS byte-for-byte source content is not automatically proven by Vercel metadata.** Phase 5G closes this verification gap: after merging the workflow change to main, GitHub Actions will run the actual network-dependent Phase 5E proof (as well as its Python self-tests). This live job will remain excluded from pull-request checks and will refuse to produce a PASS if the public site is stale, protected, unreachable or not an exact five-source match.
+
 ## Independent live production freshness check
 
 [Verifier](../src/falsum/phase5e_production_freshness.py) generates an expected source report from the real five-stage evidence:
@@ -33,7 +39,7 @@ Run the strict actual public check from the exact reviewed main branch:
       --root . \
       --out phase5e-public-five-source-release-attestation.json
 
-Or dispatch [Phase 5E production release verification](../.github/workflows/phase5e-live-production-source-freshness.yml) manually. The workflow's three Python offline adversarial test jobs run in normal PR CI; the **actual production network check only runs on a manual dispatch**, so an already-known stale production alias does not make code PRs appear untested or pretend successful deployment.
+Or dispatch [Phase 5E production release verification](../.github/workflows/phase5e-live-production-source-freshness.yml) manually. As of Phase 5G, the workflow's three Python offline adversarial jobs still run in normal pull-request CI, but the **actual read-only public HTTPS byte-match also runs automatically for a reviewed push to main**. It never runs as a substitute for PR unit tests. On main release the live job retries a bounded six attempts, 15 seconds apart, to allow Vercel's alias mapping to settle. All failures remain failures; after the sixth unsuccessful live comparison no success artifact is produced. The manual dispatch remains available for an independent live rerun without changing source files.
 
 The live check must produce PHASE5E_LIVE_PRODUCTION_FIVE_SOURCE_WITNESS_EXACTLY_MATCHES_REPRODUCIBLE_BUILD with actual_production_content_verified=true, 5 original source stages, 4 repositories and 80 constructed source-bound outcomes. It must not claim trained-model generalization, qualified human expert gold, new Anjoman rows, a registered evaluator, production exploitability, or official H2 entry.
 
