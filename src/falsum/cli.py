@@ -62,8 +62,39 @@ def main(argv: list[str] | None = None) -> int:
                                 help="optional immutable Flask source/test selection for fifth historical witness")
     source_witness.add_argument("--flask-proof-b64", type=Path,
                                 help="optional original GitHub Actions Flask ZIP in pinned portable base64 form")
+    scorecard = commands.add_parser(
+        "score-source-predictions",
+        help="export or score open-book 80-item upstream security-review predictions, NOT expert gold",
+    )
+    scorecard.add_argument("mode", choices=("export", "score", "baseline"))
+    scorecard.add_argument("--challenge-out", type=Path)
+    scorecard.add_argument("--template-out", type=Path)
+    scorecard.add_argument("--predictions", type=Path)
+    scorecard.add_argument("--strategy",
+                           choices=("always-abstain", "always-supported", "always-contradicted"))
+    scorecard.add_argument("--out", type=Path)
     args = parser.parse_args(argv)
     try:
+        if args.command == "score-source-predictions":
+            from .phase5f_evaluator_scorecard import main as scorecard_main
+            if args.mode == "export":
+                if args.challenge_out is None or args.template_out is None:
+                    parser.error("export needs --challenge-out and --template-out")
+                return scorecard_main([
+                    "export", "--challenge-out", str(args.challenge_out),
+                    "--template-out", str(args.template_out),
+                ])
+            if args.mode == "score":
+                if args.predictions is None or args.out is None:
+                    parser.error("score needs --predictions and --out")
+                return scorecard_main([
+                    "score", "--predictions", str(args.predictions), "--out", str(args.out),
+                ])
+            if args.strategy is None or args.out is None:
+                parser.error("baseline needs --strategy and --out")
+            return scorecard_main([
+                "baseline", "--strategy", args.strategy, "--out", str(args.out),
+            ])
         if args.command == "verify-source-review":
             params=[
                 "--index",str(args.index),

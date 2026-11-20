@@ -54,6 +54,12 @@ Omit `--requests` and use a different output filename to run **32 automatically 
 
 **[Reproduce a fifth historical source witness, Flask](docs/PHASE5C_AUTHENTIC_FLASK_FIFTH_WITNESS.md).** The five-case offline checker preserves the original four immutable Koa/Hono/LangChain receipts and admits Flask's real upstream parent-fail/fix-pass session `Vary: Cookie` regression only from its **original, GitHub-SHA-256-pinned Actions ZIP artifact**. Its 40 constructed controls cover 10 supported, 10 contradicted and 20 abstained typed source claims across 4 distinct upstream repositories. These are **source-test consistency checks, not learned-model accuracy, independent expert labels or blind new-case generalization**. The existing four-witness command above remains unchanged.
 
+## Score an evaluator's own predictions (Phase 5F)
+
+**[Open-book source-review prediction scorecard](docs/PHASE5F_OPEN_EVALUATOR_SCORECARD.md).** FALSUM exports 80 no-answer historical source-test questions and an unfilled prediction template. A developer can submit their **own** SUPPORTED / CONTRADICTED / ABSTAIN judgments through the installed CLI, then inspect exact agreement, macro class recall, unsupported confident claims and correct vulnerable-parent-to-fixed reversals. No secrets, wallet or network access needed.
+
+The trivial always-ABSTAIN baseline gets **75% raw agreement** because 60 of 80 constructed conditions are evidence-limited, but only **33.3333% macro recall and 0/5 complete source reversals**. This illustrates why one raw percentage is insufficient. The public questions are deliberately source-derived and **not independent expert gold, a blind model holdout, actual trained-model performance or a registered Telegraph scoring adapter**. [Follow the independent developer tutorial](docs/PHASE5F_OPEN_EVALUATOR_SCORECARD.md#try-it-with-python-311).
+
 ## Four real upstream regression witnesses
 
 Each stage is a counterfactual using the third-party project's **own original regression test**:
