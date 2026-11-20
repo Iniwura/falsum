@@ -5,14 +5,12 @@ on:
       - 'data/phase5n-published-small-model-prediction-protocol.json'
       - 'src/falsum/phase5n_published_candidate_runner.py'
       - 'tests/test_phase5n_published_candidate_runner.py'
-      - 'docs/PHASE5N_ACTUAL_OPEN_WEIGHT_CANDIDATE_DIAGNOSTIC.md'
       - '.github/workflows/phase5n-published-model-real-predictions.yml'
   pull_request:
     paths:
       - 'data/phase5n-published-small-model-prediction-protocol.json'
       - 'src/falsum/phase5n_published_candidate_runner.py'
       - 'tests/test_phase5n_published_candidate_runner.py'
-      - 'docs/PHASE5N_ACTUAL_OPEN_WEIGHT_CANDIDATE_DIAGNOSTIC.md'
       - '.github/workflows/phase5n-published-model-real-predictions.yml'
   workflow_dispatch:
 permissions:
