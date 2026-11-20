@@ -4,7 +4,7 @@
 
 A reliable security review changes when the evidence changes. FALSUM tests that requirement against real vulnerable and fixed open-source code, distinguishes source-supported facts from unsupported security claims, and publishes failures as well as successful checks.
 
-**Public deployment status (Nov 19):** The merged source and CI now support five authenticated historical fixes, including Flask. The Vercel production alias still serves an older four-case commit because the account reached its free daily deployment cap. The [strict source-freshness release gate](docs/PHASE5E_PRODUCTION_FRESHNESS_GATE.md) and [tracked release blocker](https://github.com/Iniwura/falsum/issues/61) remain open. **Do not claim the fifth case is live until the actual alias passes that gate.**
+**Verified public deployment (November 20):** [The live five-case source workbench](https://falsum-evidence-lab.vercel.app/witness/) is now served from the user-owned Vercel production deployment `dpl_EHhg56Jjg8yWRpxLq7Ns87mgLD6A`, commit `02c975df2000ef7b2f95ebbee60eb1a548b260b1`. The [real public HTTPS attestation](https://github.com/Iniwura/falsum/actions/runs/44696464449) matched the entire served five-case JSON against a freshly reconstructed source-authenticated report (5 source fixes, 4 projects, **80 by-construction** outcomes) and verified its HTML; [release gate #61 is closed](https://github.com/Iniwura/falsum/issues/61). This is live source-content integrity, **not model accuracy, independent AppSec gold, a registered Telegraph scorer, or H2 submission**.
 
 [**Explore real code and tests**](https://falsum-evidence-lab.vercel.app/witness/) · [**Run locally**](#run-the-check) · [**See genuine model results**](https://falsum-evidence-lab.vercel.app/compare/) · [**Verify the four executions**](docs/PHASE4T_ONE_COMMAND_REAL_SOURCE_TEST_PROOF.md)
 
@@ -26,7 +26,7 @@ The current five-source workbench presents **80 exact outcomes precomputed by FA
 | **20 out of 20 Anjoman evaluation pairs marked Eligible** for the operator-shown Privy Wallet | [Read-only corrected-wallet verification](https://github.com/Iniwura/falsum/actions/runs/44311491808) · [GitHub bounty submission](https://github.com/telegraphprotocol/bounties/issues/96#issuecomment-6588168396) | Eligibility status is verified for the public address; **maintainer acceptance remains unresolved** |
 | **Authentic negative trained-model evaluation** on four earlier source-project cases | [Original Foundation score run](https://github.com/Iniwura/falsum/actions/runs/43530363990) · [Reproducible comparison](docs/PHASE4I_JUDGE_COMPARISON.md) | The unchanged LoRA matched 5/8 researcher source expectations and 1/4 complete reversals versus 4/8 for either constant-choice baseline. **No demonstrated trained-model improvement** |
 
-FALSUM targets the **Evaluators** track through **evaluation material and a source-bound evaluation process**, not a claimed registered scorer. The existing 20 Eligible submissions are separate from the four publicly executed upstream regression cases.
+FALSUM targets the **Evaluators** track through **evaluation material and a source-bound evaluation process**, not a claimed registered scorer. The existing 20 Eligible contribution rows are separate from the five historical upstream regression stages (four originally authenticated together plus Flask's separately authenticated source-test proof).
 
 ## Run the check
 
