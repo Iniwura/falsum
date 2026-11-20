@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5N_AUTHENTIC_GITHUB_HOSTED_RESEARCHER_OPERATED_QWEN_MODEL_NEGATIVE_SOURCE_SENSITIVITY_PROOF",
+  "verified_on": "2026-11-20",
+  "public_original_inference_run": "https://github.com/Iniwura/falsum/actions/runs/44739535866",
+  "inference_run_id": 44739535866,
+  "inference_run_head_sha": "5dac88c3a5cb0f49971466ca54b06c96e0c68376",
+  "actual_job_ended_successfully": true,
+  "actual_model_artifact_id": 14629742992,
+  "original_gitHub_actions_artifact_name": "PHASE5N-REAL-RESEARCHER-PUBLISHED-OPEN-WEIGHT-MODEL-NOT-INDEPENDENT-ADOPTION",
+  "original_gitHub_actions_archive_sha256": "fc3ba6c1a36fe2373d40637bb59ed3968b318ed2ca7035a5bbb45515168af1da",
+  "original_files_sha256": {
+    "PHASE5N-ACTUAL-PUBLISHED-MODEL-COMPLETIONS.json": "dd5a92853184ec08552539b0a4a39d15536c0cc73016fc4cbf6e237d5498ec75",
+    "PHASE5N-ORIGINAL-FROZEN-PROMPTS.json": "eeb9f8ec6a284c2674d730d9cc51637d120a06012e4567b51569364754c5a8ce",
+    "PHASE5N-ACTUAL-PUBLISHED-MODEL-THREE-SOURCE-DECISIONS.json": "b17a40c0aebf311b380c75048b0f9974a7eb835eaad805a8aa098662b64b2b31"
+  },
+  "pre_scoring_model_selection_commit": "aad0cac9e2bdb89ab395d2bb5d8398f62bc27016",
+  "pre_scoring_model_protocol_git_blob_sha1": "dddd564b4276c4f4ee7f60058594eda1d7cfbbae",
+  "prior_source_question_protocol_git_blob_sha1": "b50c6e1ad386f4bbf2faa7dd15ddba35b860f9b3",
+  "source_replay_original_gitHub_actions_run": 44716279199,
+  "model_provider_researcher_operated": "Qwen/Qwen2.5-0.5B-Instruct",
+  "model_immutable_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "actual_published_model_weights_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+  "actual_tokenizer_sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+  "actual_config_sha256": "18e18afcaccafade98daf13a54092927904649e1dd4eba8299ab717d5d94ff45",
+  "actual_token_sequence_lengths": [
+    242,
+    267,
+    255
+  ],
+  "raw_original_model_completed_responses": [
+    {
+      "id": "224c665c8ea24f2d2e6ba82cce18cf1e",
+      "output": "ABSTAIN",
+      "output_tokens": 4
+    },
+    {
+      "id": "28b97522f93491cb3d9c9cc375ae08be",
+      "output": "ABSTAIN",
+      "output_tokens": 4
+    },
+    {
+      "id": "7ab0c0f8f67d5d910560a8b91b5d30b2",
+      "output": "ABSTAIN",
+      "output_tokens": 4
+    }
+  ],
+  "structured_model_outputs_accepted": 3,
+  "reference_classes_in_original_source_derived_task": {
+    "A": 1,
+    "B": 1,
+    "ABSTAIN": 1
+  },
+  "source_guard_conditions": 2,
+  "source_guard_matched": 0,
+  "no_source_control_abstained": true,
+  "exact_public_reference_matches": 1,
+  "total_public_questions": 3,
+  "complete_code_revision_reversal": false,
+  "macro_class_recall": 0.333333,
+  "constant_A_matches": 1,
+  "constant_B_matches": 1,
+  "constant_ABSTAIN_matches": 1,
+  "model_does_not_beat_constant_ABSTAIN_on_this_task": true,
+  "open_book_public_researcher_constructed_reference": true,
+  "external_independent_model_adoption": false,
+  "independent_security_expert_gold_labels": 0,
+  "statistically_valid_general_accuracy": false,
+  "registered_telegraph_evaluator": false,
+  "original_quarantined_falsum_lora_recovered": false,
+  "new_anjoman_eligible_rows": 0,
+  "official_h2_entry_submitted": false,
+  "limitation": "Faithful permanent index of an authentic GitHub-hosted, researcher-operated published model (not independent developer adoption). Original evidence is the GitHub Actions artifact ZIP with its SHA256 and file digests. This three-question public source diagnostic with researcher-authored references cannot establish general security accuracy or network improvement; negative conclusions are retained.",
+  "later_canonical_corrected_model_provenance_run": "https://github.com/Iniwura/falsum/actions/runs/44740154995",
+  "later_canonical_corrected_model_provenance_sha": "6843765fc37c4bb9b585632ad94db1d1373c3c00",
+  "later_canonical_corrected_proof_artifact_id": 14629249541,
+  "later_canonical_corrected_artifact_zip_sha256": "9ffcc5ced3cadb87011953eeb07653f906758f4edbab80e491da931b0c422068",
+  "later_canonical_corrected_source_model_outputs_sha256": "7c559532e087133c8d8a7c27d6b2f083191ad81e553367b8b8feb71c064ae18d",
+  "later_canonical_corrected_source_model_report_sha256": "23b363d40da02fdff6888a27acd6ef309ce9c754f47ff49e59a5e73184ba22f9",
+  "later_canonical_corrected_prompt_sha256": "eeb9f8ec6a284c2674d730d9cc51637d120a06012e4567b51569364754c5a8ce",
+  "inferred_external_independent_adoption_in_first_nested_result_is_false": true,
+  "explanation_original_nested_scorer_provenance_corrected": "The first successful run's nested generic source scorer used EXTERNAL_UNVERIFIED_PREDICTIONS because it had no researcher-operated category; the later successful 44740154995 run labels the same unchanged 3 raw ABSTAIN completions RESEARCHER_OPERATED_PUBLISHED_OPEN_WEIGHT_MODEL. Neither run evidences an independent external user."
+}

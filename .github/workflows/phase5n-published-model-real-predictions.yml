@@ -1,0 +1,169 @@
+name: Phase 5N - real researcher-operated published open-weight model on frozen FALSUM source evidence
+on:
+  push:
+    paths:
+      - 'data/phase5n-published-small-model-prediction-protocol.json'
+      - 'src/falsum/phase5n_published_candidate_runner.py'
+      - 'tests/test_phase5n_published_candidate_runner.py'
+      - '.github/workflows/phase5n-published-model-real-predictions.yml'
+  pull_request:
+    paths:
+      - 'data/phase5n-published-small-model-prediction-protocol.json'
+      - 'src/falsum/phase5n_published_candidate_runner.py'
+      - 'tests/test_phase5n_published_candidate_runner.py'
+      - '.github/workflows/phase5n-published-model-real-predictions.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  precommitted-public-source-protocol:
+    name: Frozen public original source case + model choice audit / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Challenge integrity, fixed model choice and forged real-result rejection
+        shell: bash
+        env:
+          PYTHONPATH: src:tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5n_published_candidate_runner.py' -v
+          python -m unittest discover -s tests -p 'test_phase5m_source_context_candidate.py' -v
+          python -m unittest discover -s tests -p 'test_phase5m_real_source_sensitive_model.py' -v
+      - name: Generate exactly frozen public model prompts, no test label leakage
+        shell: bash
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          python -m falsum.phase5n_published_candidate_runner prepare \
+            --out PHASE5N-FROZEN-PUBLIC-SOURCE-MODEL-INPUTS.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('PHASE5N-FROZEN-PUBLIC-SOURCE-MODEL-INPUTS.json').read_text())
+          assert x['status']=='PHASE5N_PRE_SCORING_FROZEN_RESEARCHER_OPERATED_PUBLISHED_MODEL_PROMPTS'
+          assert x['model_repository']=='Qwen/Qwen2.5-0.5B-Instruct'
+          assert x['public_source_question_count']==3
+          assert x['model_inference_performed'] is False
+          assert x['candidate_external_adoption'] is False
+          assert x['independent_appsec_gold']==0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PHASE5N-PRECOMMITTED-RESEARCHER-MODEL-SOURCE-TASK-PY${{ matrix.python }}
+          path: PHASE5N-FROZEN-PUBLIC-SOURCE-MODEL-INPUTS.json
+          retention-days: 90
+          if-no-files-found: error
+  real-researcher-operated-open-weight-candidate:
+    name: Actual CPU inference on pretrained published checkpoint; no paid API or fake model
+    needs: precommitted-public-source-protocol
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_HUB_DISABLE_XET: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned inference dependencies, CPU only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'torch==2.6.0' \
+            --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check \
+            'transformers==4.46.3' \
+            'huggingface_hub==0.35.3' \
+            'safetensors==0.4.5' \
+            'tokenizers==0.20.3'
+      - name: Show frozen protocol fingerprint before any model fetch
+        shell: bash
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          mkdir -p real-open-weight-candidate
+          python -m falsum.phase5n_published_candidate_runner prepare \
+            --out real-open-weight-candidate/PHASE5N-ORIGINAL-FROZEN-PROMPTS.json
+          python - <<'PY'
+          from falsum.phase5n_published_candidate_runner import freeze,LOCK_SHA
+          x=freeze()
+          assert LOCK_SHA=='dddd564b4276c4f4ee7f60058594eda1d7cfbbae'
+          assert x['model_repository']=='Qwen/Qwen2.5-0.5B-Instruct'
+          assert x['total_public_source_questions']==3
+          assert x['external_independent_developer_adoption']==0
+          assert x['network_evaluator_registered'] is False
+          print('Frozen model choice and prompts verified BEFORE download/inference.')
+          PY
+      - name: Download publisher's immutable model revision and run all 3 original source/no-source model forward passes
+        shell: bash
+        env:
+          PYTHONPATH: src
+          HF_HUB_ETAG_TIMEOUT: '35'
+          HF_HUB_DOWNLOAD_TIMEOUT: '120'
+        run: |
+          set -euo pipefail
+          python -m falsum.phase5n_published_candidate_runner execute \
+            --inputs real-open-weight-candidate/PHASE5N-ORIGINAL-FROZEN-PROMPTS.json \
+            --out real-open-weight-candidate/PHASE5N-ACTUAL-PUBLISHED-MODEL-COMPLETIONS.json
+      - name: Audit real output, conservative INVALID accounting, frozen truth and three fixed controls
+        shell: bash
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          python -m falsum.phase5n_published_candidate_runner audit \
+            --inputs real-open-weight-candidate/PHASE5N-ORIGINAL-FROZEN-PROMPTS.json \
+            --actual real-open-weight-candidate/PHASE5N-ACTUAL-PUBLISHED-MODEL-COMPLETIONS.json \
+            --out real-open-weight-candidate/PHASE5N-ACTUAL-PUBLISHED-MODEL-THREE-SOURCE-DECISIONS.json
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=Path('real-open-weight-candidate')
+          x=json.loads((d/'PHASE5N-ACTUAL-PUBLISHED-MODEL-THREE-SOURCE-DECISIONS.json').read_text())
+          r=json.loads((d/'PHASE5N-ACTUAL-PUBLISHED-MODEL-COMPLETIONS.json').read_text())
+          assert x['model_run_real_not_simulated'] is True
+          assert x['real_independent_external_developer_adoption'] is False
+          assert x['independent_expert_gold']==0
+          assert x['statistically_valid_general_security_evaluator_accuracy'] is False
+          assert x['trained_model_improvement'] is False
+          assert x['eligible_anjoman_new_rows']==0
+          assert x['official_h2_entry_submitted'] is False
+          assert len(r['predictions'])==3
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              out.write('## Actual 3-question, researcher-operated open-weight small-model source diagnostic\n\n')
+              out.write('**Model:** Qwen/Qwen2.5-0.5B-Instruct. Resolved immutable Hugging Face model revision: '+x['model_revision']+'. Model/tokenizer/weight SHA-256 files are archived.\n\n')
+              out.write('**Exact public source-derived matches:** '+str(x['original_public_source_reference_matches'])+'/3; ')
+              out.write('structured replies: '+str(x['valid_structured_model_choices'])+'/3; ')
+              out.write('parent/fix correct reversal: '+str(x['correct_complete_source_revision_reversal'])+'; ')
+              out.write('no-source abstained: '+str(x['no_source_control_abstained'])+'.\n\n')
+              out.write('This is **NOT** an independently submitted model, external adoption, expert gold, registered Telegraph evaluator, trained improvement, hidden holdout or statistically valid security-review accuracy. One public source pair only. The historical FALSUM LoRA remains missing and unchanged.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: PHASE5N-REAL-RESEARCHER-PUBLISHED-OPEN-WEIGHT-MODEL-NOT-INDEPENDENT-ADOPTION
+          path: real-open-weight-candidate/
+          retention-days: 90
+          if-no-files-found: warn
