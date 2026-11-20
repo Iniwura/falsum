@@ -1,0 +1,101 @@
+name: Phase 5M - honest source-context external candidate evaluation interface, no fake model scores
+on:
+  push:
+    paths:
+      - 'data/phase5m-preinference-original-lora-pymdown-source-sensitivity.json'
+      - 'src/falsum/phase5m_source_context_candidate.py'
+      - 'src/falsum/phase5m_real_source_sensitive_model.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5m_source_context_candidate.py'
+      - 'docs/PHASE5M_REAL_ORIGINAL_MODEL_SOURCE_SENSITIVITY.md'
+      - '.github/workflows/phase5m-public-source-context-scorecard.yml'
+  pull_request:
+    paths:
+      - 'data/phase5m-preinference-original-lora-pymdown-source-sensitivity.json'
+      - 'src/falsum/phase5m_source_context_candidate.py'
+      - 'src/falsum/phase5m_real_source_sensitive_model.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5m_source_context_candidate.py'
+      - 'docs/PHASE5M_REAL_ORIGINAL_MODEL_SOURCE_SENSITIVITY.md'
+      - '.github/workflows/phase5m-public-source-context-scorecard.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-context-contract:
+    name: Three authentic source-derived source/no-source questions, CLI and adversarial tests / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Run source-context answer-isolation, dishonest claims and fail-closed candidate tests
+        shell: bash
+        env:
+          PYTHONPATH: src:tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5m_source_context_candidate.py' -v
+          python -m unittest discover -s tests -p 'test_phase5m_real_source_sensitive_model.py' -v
+          python -m unittest discover -s tests -p 'test_phase5l_pymdown_upstream_replay.py' -v
+      - name: Prove actual installed entrypoint produces blank external response file and fair constant baselines
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --no-deps -e .
+          falsum score-source-context export \
+            --questions-out phase5m-public-questions.json \
+            --template-out phase5m-blank-candidate-input.json
+          falsum score-source-context baseline \
+            --strategy always-A --out phase5m-baseline-constant-A.json
+          falsum score-source-context baseline \
+            --strategy always-B --out phase5m-baseline-constant-B.json
+          falsum score-source-context baseline \
+            --strategy always-ABSTAIN --out phase5m-baseline-constant-abstain.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          def load(f):return json.loads(Path(f).read_text())
+          challenge=load('phase5m-public-questions.json')
+          template=load('phase5m-blank-candidate-input.json')
+          assert challenge['public_questions']==3
+          assert challenge['source_revision_conditions']==2
+          assert challenge['source_omitted_controls']==1
+          assert challenge['answer_key_excluded'] is True
+          assert challenge['actual_model_scores_included'] is False
+          assert challenge['independent_appsec_expert_gold_labels']==0
+          assert all(q['choice'] is None for q in template['decisions'])
+          assert all('reference' not in q for q in challenge['questions'])
+          for f in ('phase5m-baseline-constant-A.json',
+                    'phase5m-baseline-constant-B.json',
+                    'phase5m-baseline-constant-abstain.json'):
+              x=load(f)
+              assert x['total_exact_source_derived_matches']==1
+              assert x['source_sensitive_complete_correct_reversal'] is False
+              assert x['model_inference_performed_by_this_scorer'] is False
+              assert x['independent_human_expert_gold_labels']==0
+              assert x['candidate_origin']=='SYNTHETIC_DISCLOSED_BASELINE'
+              assert x['statistically_valid_model_accuracy_estimate'] is False
+              assert x['registered_telegraph_evaluator'] is False
+          print('Three source-bound public questions, null template, and three explicit 1/3 synthetic controls verified.')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PHASE5M-PUBLIC-THREE-SOURCE-CONTEXT-QUESTIONS-AND-CONTROLS-PY${{ matrix.python }}
+          path: |
+            phase5m-public-questions.json
+            phase5m-blank-candidate-input.json
+            phase5m-baseline-constant-A.json
+            phase5m-baseline-constant-B.json
+            phase5m-baseline-constant-abstain.json
+          if-no-files-found: error
+          retention-days: 90
