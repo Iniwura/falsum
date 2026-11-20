@@ -1,0 +1,115 @@
+name: Phase 5K - falsify source-blind 80 score and check balanced public questions
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5k_source_blind_scorecard.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5k_source_blind_scorecard.py'
+      - 'docs/PHASE5K_SOURCE_BLIND_LEAK_AND_BALANCED_CHALLENGE.md'
+      - '.github/workflows/phase5k-source-shortcut-and-balanced-challenge.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5k_source_blind_scorecard.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5k_source_blind_scorecard.py'
+      - 'docs/PHASE5K_SOURCE_BLIND_LEAK_AND_BALANCED_CHALLENGE.md'
+      - '.github/workflows/phase5k-source-shortcut-and-balanced-challenge.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  falsify-legacy-score:
+    name: Real source-backed 80/80 metadata shortcut, balanced 30 questions, CLI (Python ${{ matrix.python }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Prove source-blind 80-of-80 leak and score limitations with adversarial tests
+        shell: bash
+        env:
+          PYTHONPATH: src:tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5k_source_blind_scorecard.py' -v
+          python -m unittest discover -s tests -p 'test_phase5f_evaluator_scorecard.py' -v
+          python -m unittest discover -s tests -p 'test_phase5c_fifth_source_witness.py' -v
+      - name: Run actual installed CLI, source-blind attack and balanced exports
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --no-deps -e .
+          env -u PYTHONPATH falsum score-source-balanced audit \
+            --out phase5k-proven-source-blind-leak.json
+          env -u PYTHONPATH falsum score-source-balanced export \
+            --questions-out phase5k-balanced-public-questions.json \
+            --template-out phase5k-blank-unverified-predictions.json
+          env -u PYTHONPATH falsum score-source-balanced baseline \
+            --strategy slot-a-is-parent \
+            --out phase5k-source-blind-slot-control.json
+          env -u PYTHONPATH falsum score-source-balanced baseline \
+            --strategy always-abstain \
+            --out phase5k-constant-abstain-control.json
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          def load(name): return json.loads(Path(name).read_text())
+          audit=load('phase5k-proven-source-blind-leak.json')
+          task=load('phase5k-balanced-public-questions.json')
+          blank=load('phase5k-blank-unverified-predictions.json')
+          slot=load('phase5k-source-blind-slot-control.json')
+          abstain=load('phase5k-constant-abstain-control.json')
+          assert audit['status']=='PHASE5K_SOURCE_BLIND_LEGACY_ANSWER_LEAK_CONFIRMED'
+          assert audit['legacy']['source_blind_predictions_matching']==80
+          assert audit['legacy']['source_code_or_regression_test_read'] is False
+          assert audit['legacy']['model_inference_used'] is False
+          assert audit['legacy']['independent_human_gold']==0
+          assert audit['legacy']['legacy_scorecard_as_model_accuracy']=='INVALID'
+          assert task['question_count']==30
+          assert task['answer_labels_exported'] is False
+          assert task['not_source_or_model_blind'] is True
+          assert len(task['questions'])==30
+          assert all('revision' not in q and 'receipt_integrity' not in q
+                     and 'answer' not in q for q in task['questions'])
+          assert len(blank['predictions'])==30
+          assert all(q['verdict'] is None for q in blank['predictions'])
+          assert slot['reference_class_distribution']=={
+              'SUPPORTED':10,'CONTRADICTED':10,'ABSTAIN':10
+          }
+          assert slot['exact_matches']==22
+          assert slot['macro_class_recall']==0.733333
+          assert slot['complete_source_sensitive_parent_fix_reversals']==3
+          assert abstain['exact_matches']==10
+          assert abstain['raw_match_ratio']==0.333333
+          assert abstain['complete_source_sensitive_parent_fix_reversals']==0
+          assert slot['actual_trained_model_comparison'] is False
+          assert slot['independent_human_gold_labels']==0
+          assert slot['official_H2_entry_submitted'] is False
+          path=os.environ.get('GITHUB_STEP_SUMMARY')
+          if path:
+              with open(path,'a') as f:
+                  f.write('## Phase 5K: FALSUM falsified its own original open-book scorecard\n\n')
+                  f.write('**Metadata-only source-blind attacker matches original source-derived references 80/80 = 100% without reading the source/test, or calling an LLM. The original benchmark must NOT be sold as semantic evaluator accuracy.**\n\n')
+                  f.write('New 30-question PUBLIC balanced challenge: 10 supported, 10 contradicted, 10 abstained; opaque IDs and neutral commit slots without explicit parent/fixed answer cue.\n\n')
+                  f.write('Trivial constant-ABSTAIN baseline: 10/30 = 33.33%; simplistic slot-is-parent attacker: 22/30 (73.33%), 3/5 correct complete reversals. This DOES NOT make v2 a sealed holdout or independent human AppSec gold.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5k-public-metadata-shortcut-falsification-and-balanced-questions-PY${{ matrix.python }}
+          path: |
+            phase5k-proven-source-blind-leak.json
+            phase5k-balanced-public-questions.json
+            phase5k-blank-unverified-predictions.json
+            phase5k-source-blind-slot-control.json
+            phase5k-constant-abstain-control.json
+          retention-days: 90
+          if-no-files-found: error
