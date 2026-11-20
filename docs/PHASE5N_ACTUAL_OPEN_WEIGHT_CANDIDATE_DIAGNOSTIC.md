@@ -10,6 +10,14 @@ The new experiment uses an independently published, open-weight **Qwen/Qwen2.5-0
 
 Source reference: [real pymdown-extensions historical upstream regression](https://github.com/Iniwura/falsum/actions/runs/44716279199). Six genuine upstream original Python regression processes and an aggregate source/test/commit-log check passed.
 
+## Actual verified result: the small model failed source-sensitive judgment
+
+[Successful original 20 November 2026 model execution](https://github.com/Iniwura/falsum/actions/runs/44739535866) loaded real published Qwen/Qwen2.5-0.5B-Instruct weights at immutable revision 7ae557604adf67be50417f59c2c2f167def9a775, with safetensors SHA-256 fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe. Raw outputs and actual source scoring are preserved in [original artifact 14629742992](https://github.com/Iniwura/falsum/actions/runs/44739535866/artifacts/14629742992), ZIP SHA-256 fc3ba6c1a36fe2373d40637bb59ed3968b318ed2ca7035a5bbb45515168af1da.
+
+The **actual answers were ABSTAIN, ABSTAIN, ABSTAIN**. The model gave three parseable choices, but achieved only **1/3 researcher-defined public source-reference matches**, **0/2 source-provided fact matches**, **0/1 correct parent/fixed source reversal** and correctly abstained on the one source-omitted condition. It therefore **did not beat the constant-ABSTAIN baseline (1/3)** on this particular public exercise. Negative results are reported without retuning the frozen prompt. This is real researcher-operated inference, not independently submitted third-party adoption, independent expert gold, or evidence of improvement.
+
+[Permanent evidence index](../evidence/phase5n-2026-11-20-real-open-weight-model-negative.json) records the original GitHub Actions provenance, ZIP/file digests, exact original model revision and all three raw answers. One publicly known repair and a constructed source-reference key do not establish general security model accuracy, whether positive or negative.
+
 ## Preregistered before inference
 
 [Original Phase 5M source-question protocol](../data/phase5m-preinference-original-lora-pymdown-source-sensitivity.json) Git blob SHA-1: b50c6e1ad386f4bbf2faa7dd15ddba35b860f9b3. No source question, historical revision, answer text or reference label was changed for the new model.
