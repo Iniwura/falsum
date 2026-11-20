@@ -40,8 +40,8 @@ jobs:
           python -m unittest discover -s tests -p 'test_phase5e_production_freshness.py' -v
           python -m unittest discover -s tests -p 'test_phase5c_fifth_source_witness.py' -v
   actual-public-alias-release-check:
-    name: Check public alias only on manual release verification (strict, may fail while stale)
-    if: github.event_name == 'workflow_dispatch'
+    name: Verify real public alias on main release or manual request (fail closed)
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     needs: release-gate-self-tests
     runs-on: ubuntu-24.04
     timeout-minutes: 8
@@ -59,9 +59,22 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/falsum-live-witness"
-          python -m falsum.phase5e_production_freshness \
-            --root . \
-            --out "$RUNNER_TEMP/falsum-live-witness/FIVE-SOURCE-PUBLIC-RELEASE-EXACT-MATCH.json"
+          # Allow the Vercel production alias to settle after a merged main push,
+          # but NEVER turn a stale or unreachable response into a successful artifact.
+          attempt=0
+          while :; do
+            attempt=$((attempt + 1))
+            if python -m falsum.phase5e_production_freshness \
+                --root . \
+                --out "$RUNNER_TEMP/falsum-live-witness/FIVE-SOURCE-PUBLIC-RELEASE-EXACT-MATCH.json"; then
+              break
+            fi
+            if [ "$attempt" -ge 6 ]; then
+              echo "Live production alias did not match the authenticated five-source evidence" >&2
+              exit 1
+            fi
+            sleep 15
+          done
           python - <<'PY'
           import os,json
           from pathlib import Path
