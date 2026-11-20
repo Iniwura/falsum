@@ -1,0 +1,137 @@
+name: Phase 5L - actual sixth upstream original security regression, not model gold
+on:
+  push:
+    paths:
+      - 'data/phase5l-pymdown-original-upstream-source-lock.json'
+      - 'src/falsum/phase5l_pymdown_upstream_replay.py'
+      - 'tests/test_phase5l_pymdown_upstream_replay.py'
+      - 'docs/PHASE5L_SIXTH_ACTUAL_UPSTREAM_SOURCE_CASE.md'
+      - '.github/workflows/phase5l-sixth-upstream-original-regression.yml'
+  pull_request:
+    paths:
+      - 'data/phase5l-pymdown-original-upstream-source-lock.json'
+      - 'src/falsum/phase5l_pymdown_upstream_replay.py'
+      - 'tests/test_phase5l_pymdown_upstream_replay.py'
+      - 'docs/PHASE5L_SIXTH_ACTUAL_UPSTREAM_SOURCE_CASE.md'
+      - '.github/workflows/phase5l-sixth-upstream-original-regression.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  actual-original-upstream-regression:
+    name: Original upstream Git regression ${{ matrix.stage }} / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.13']
+        stage: ['parent-original', 'parent-regression', 'fixed-regression']
+    steps:
+      - name: Checkout FALSUM's previously frozen public source selection
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout original upstream source (not a simulated package)
+        uses: actions/checkout@v4
+        with:
+          repository: facelessuser/pymdown-extensions
+          ref: 63b7835776d703d6c339cf2110d9888f676efc0c
+          path: upstream-pymdown
+          persist-credentials: false
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install pinned test-only dependencies (no private services)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check --quiet \
+            'Markdown==3.9' 'PyYAML==6.0.2' 'pytest==8.4.2' 'Pygments==2.19.2'
+      - name: Execute the actual maintainer's exact test on exact original Git source
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          stem="phase5l-${{ matrix.stage }}-PY${{ matrix.python }}"
+          mkdir -p "$RUNNER_TEMP/$stem"
+          PYTHONPATH="$GITHUB_WORKSPACE/src" python -m falsum.phase5l_pymdown_upstream_replay execute \
+            --worktree "$GITHUB_WORKSPACE/upstream-pymdown" \
+            --stage '${{ matrix.stage }}' \
+            --python '${{ matrix.python }}' \
+            --record-out "$RUNNER_TEMP/$stem/$stem.json" \
+            --log-out "$RUNNER_TEMP/$stem/$stem.log"
+          test -s "$RUNNER_TEMP/$stem/$stem.json"
+          test -s "$RUNNER_TEMP/$stem/$stem.log"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5l-${{ matrix.stage }}-PY${{ matrix.python }}
+          path: ${{ runner.temp }}/phase5l-${{ matrix.stage }}-PY${{ matrix.python }}/
+          retention-days: 90
+          if-no-files-found: error
+  aggregate-six-original-source-processes:
+    name: Verify all original Git/test/log records, publish one truthful source proof
+    needs: actual-original-upstream-regression
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: phase5l-*
+          path: original-upstream-process-records
+          merge-multiple: false
+      - name: Authenticate every original Git/source/test/revision and raw pytest log
+        shell: bash
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m falsum.phase5l_pymdown_upstream_replay aggregate \
+            --artifacts-dir original-upstream-process-records \
+            --out phase5l-sixth-original-source-process-proof.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('phase5l-sixth-original-source-process-proof.json').read_text())
+          assert x['status']=='PHASE5L_SIXTH_ORIGINAL_SOURCE_STAGE_PARENT_FAIL_FIXED_PASS_EVIDENCE'
+          assert x['actual_upstream_pytest_runs']==6
+          assert x['new_original_upstream_security_fix_stages']==1
+          assert x['original_source_fix_stages_including_this_separate_replay']==6
+          assert x['distinct_original_upstream_projects_including_this_case']==5
+          assert x['stage_exit_codes_by_python']=={
+              '3.11':{'parent-original':0,'parent-regression':1,'fixed-regression':0},
+              '3.13':{'parent-original':0,'parent-regression':1,'fixed-regression':0}
+          }
+          assert x['not_admitted_into_legacy_five_witness_checker'] is True
+          assert x['blind_new_case_holdout'] is False
+          assert x['new_semantic_model_evaluations']==0
+          assert x['independent_human_appsec_gold_labels']==0
+          assert x['trained_model_improvement_proven'] is False
+          assert x['new_anjoman_eligible_rows']==0
+          assert x['official_h2_entry_submitted'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PHASE5L-ORIGINAL-SIXTH-SOURCE-GIT-TEST-PROCESS-EVIDENCE-NOT-MODEL-SCORES
+          path: phase5l-sixth-original-source-process-proof.json
+          retention-days: 90
+          if-no-files-found: error
+      - name: Source evidence limits
+        shell: bash
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<'EOF'
+          ## Original upstream source regression on sixth security-fix stage
+
+          *Project:* facelessuser/pymdown-extensions. Original direct vulnerable parent 3d185501daaa1424c4a8d42124112c44ef6ab635; actual fixed commit 63b7835776d703d6c339cf2110d9888f676efc0c.
+          Six real pytest runs (Python 3.11 and 3.13): original vulnerable parent baseline PASS, unchanged original fixed upstream regression on vulnerable parent FAIL for the expected SnippetMissingError assertion, exact same regression on fixed source PASS. Exact source and test Git blob SHA identities and raw logs are preserved.
+          This **adds one genuine upstream-source security regression in a fifth distinct source project**, but was researcher-selected from a public advisory; it is NOT a blind generalization test, independent reviewer gold, scored learned model, registered Telegraph evaluator, new Eligible row, or hackathon submission.
+          EOF
