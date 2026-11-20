@@ -42,6 +42,14 @@
 - **Exact constructed verdict counts:** 10 SUPPORTED, 10 CONTRADICTED, 60 ABSTAIN. These are source-evidence agreement outcomes, not predictions from an improved learned evaluator.
 - **No new scoring model, no customer results, no independently accepted labels, and NOT registered as a Telegraph scorer or H2 final entry** by a public-site content check.
 
+## Phase 5K addendum: internally discovered 100% source-blind scorecard attack
+
+[Phase 5K exact adversarial reproduction](PHASE5K_SOURCE_BLIND_LEAK_AND_BALANCED_CHALLENGE.md) now shows the original Phase 5F 80-item challenge had a **fundamental benchmark-validity flaw**: using only the exposed revision name, claim type and receipt-integrity label, an attacker can reconstruct **all 80 of 80 constructed reference answers without reading source or calling a trained evaluator**. This makes any raw 80/80 score incapable of proving semantic source-review quality.
+
+A separately published, open-book **30-item class-balanced** source-role-neutral challenge (10 supported, 10 contradicted, 10 abstained) reduces the most obvious metadata leakage and trivial abstention reward. However, its public generator and historical source mappings still make it answerable by an informed shortcut. A disclosed source-blind A-is-parent baseline still scores **22/30** with **3/5** source reversals. Do **not** call this independent blind validation, new expert gold or measured LoRA improvement. The original real source-test execution provenance remains valid.
+
+**Impact on first-place assessment:** the earlier claim of a reusable predictor scorecard was too optimistic without this falsification. FALSUM is strongest as transparent, source-grounded **evaluation material and source provenance tooling**. It has yet to demonstrate semantic model improvement or real outside developer adoption. These limitations remain hard gates regardless of CI or production quality.
+
 ## Strict evaluator-track competitive assessment
 
 **Technical evidence: genuinely strong relative to a typical static hackathon pitch.** Original upstream security tests run on the old and fixed code, immutable source/test/CI pinning, calibrated abstention, dedicated browser CI, verified real production HTML and an installed no-credential developer scorecard are practical, reproducible materials.
