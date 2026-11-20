@@ -70,5 +70,14 @@
   "original_quarantined_falsum_lora_recovered": false,
   "new_anjoman_eligible_rows": 0,
   "official_h2_entry_submitted": false,
-  "limitation": "Faithful permanent index of an authentic GitHub-hosted, researcher-operated published model (not independent developer adoption). Original evidence is the GitHub Actions artifact ZIP with its SHA256 and file digests. This three-question public source diagnostic with researcher-authored references cannot establish general security accuracy or network improvement; negative conclusions are retained."
+  "limitation": "Faithful permanent index of an authentic GitHub-hosted, researcher-operated published model (not independent developer adoption). Original evidence is the GitHub Actions artifact ZIP with its SHA256 and file digests. This three-question public source diagnostic with researcher-authored references cannot establish general security accuracy or network improvement; negative conclusions are retained.",
+  "later_canonical_corrected_model_provenance_run": "https://github.com/Iniwura/falsum/actions/runs/44740154995",
+  "later_canonical_corrected_model_provenance_sha": "6843765fc37c4bb9b585632ad94db1d1373c3c00",
+  "later_canonical_corrected_proof_artifact_id": 14629249541,
+  "later_canonical_corrected_artifact_zip_sha256": "9ffcc5ced3cadb87011953eeb07653f906758f4edbab80e491da931b0c422068",
+  "later_canonical_corrected_source_model_outputs_sha256": "7c559532e087133c8d8a7c27d6b2f083191ad81e553367b8b8feb71c064ae18d",
+  "later_canonical_corrected_source_model_report_sha256": "23b363d40da02fdff6888a27acd6ef309ce9c754f47ff49e59a5e73184ba22f9",
+  "later_canonical_corrected_prompt_sha256": "eeb9f8ec6a284c2674d730d9cc51637d120a06012e4567b51569364754c5a8ce",
+  "inferred_external_independent_adoption_in_first_nested_result_is_false": true,
+  "explanation_original_nested_scorer_provenance_corrected": "The first successful run's nested generic source scorer used EXTERNAL_UNVERIFIED_PREDICTIONS because it had no researcher-operated category; the later successful 44740154995 run labels the same unchanged 3 raw ABSTAIN completions RESEARCHER_OPERATED_PUBLISHED_OPEN_WEIGHT_MODEL. Neither run evidences an independent external user."
 }
