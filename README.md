@@ -66,6 +66,12 @@ FALSUM now offers a separately scored **30-question public balanced alternative 
 
 The trivial always-ABSTAIN baseline gets **75% raw agreement** because 60 of 80 constructed conditions are evidence-limited, but only **33.3333% macro recall and 0/5 complete source reversals**. This illustrates why one raw percentage is insufficient. The public questions are deliberately source-derived and **not independent expert gold, a blind model holdout, actual trained-model performance or a registered Telegraph scoring adapter**. [Follow the independent developer tutorial](docs/PHASE5F_OPEN_EVALUATOR_SCORECARD.md#try-it-with-python-311).
 
+## Sixth original upstream source regression — separately verified
+
+**[Real pymdown-extensions source regression, with original upstream test and GitHub Actions logs](docs/PHASE5L_SIXTH_ACTUAL_UPSTREAM_SOURCE_CASE.md).** FALSUM now has an additional authenticated **original upstream-authored security regression** in a fifth distinct source project, separate from the existing five-case Koa/Hono/LangChain/Flask workbench. The original upstream parent control PASSED; the exact maintainer security test overlaid onto the vulnerable parent FAILED for the expected assertion; the same test on the fixed original Git source PASSED. This was genuinely executed on Python 3.11 and 3.13 in [seven passing GitHub Actions jobs](https://github.com/Iniwura/falsum/actions/runs/44711309872), with the Git source/test blobs and six raw process logs pinned.
+
+**Exact interpretation:** six original upstream security-fix stages across five projects, with this sixth stage maintained as an **independent evidence sidecar**, not yet an automatically recognized sixth case in the interactive five-source checker or its 80 constructed verdicts. The new public case was researcher-selected after reviewing an advisory, **not independently nominated or a blind model test**. It does not change the original failed LoRA score, human expert gold (still 0), Telegraph network integration, or H2 submission status.
+
 ## Four real upstream regression witnesses
 
 Each stage is a counterfactual using the third-party project's **own original regression test**:

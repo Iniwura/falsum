@@ -50,6 +50,12 @@ A separately published, open-book **30-item class-balanced** source-role-neutral
 
 **Impact on first-place assessment:** the earlier claim of a reusable predictor scorecard was too optimistic without this falsification. FALSUM is strongest as transparent, source-grounded **evaluation material and source provenance tooling**. It has yet to demonstrate semantic model improvement or real outside developer adoption. These limitations remain hard gates regardless of CI or production quality.
 
+## Phase 5L addendum: sixth actual original upstream regression, not a model evaluation
+
+[Phase 5L original pymdown-extensions upstream test proof](PHASE5L_SIXTH_ACTUAL_UPSTREAM_SOURCE_CASE.md) adds a **sixth genuine upstream-author-written security regression stage in a fifth distinct source project**. The [real GitHub-hosted run](https://github.com/Iniwura/falsum/actions/runs/44711309872) completed **six original upstream test processes and one aggregation job, all passing**, on Python 3.11 and 3.13. In each runtime the unchanged original vulnerable-parent control passed, the exact original fixed upstream regression test failed on the vulnerable direct parent for the expected missing exception, and the same test passed on the original fixed Git source. Original Git commit, source/test/fixture blobs and raw process-log digests were checked against a selection lock committed before the runner existed.
+
+**Method boundary:** the prior workbench is still the five-stage, four-project, 80-constructed-verdict UI; the extra project is a separate executed evidence sidecar, not yet a sixth typed checker source, new candidate scored prediction, independent adjudication, or improved model. This newly researched public advisory was selected by the FALSUM developer, *not* nominated independently or held out from any public corpus. Independent human AppSec expert gold remains zero.
+
 ## Strict evaluator-track competitive assessment
 
 **Technical evidence: genuinely strong relative to a typical static hackathon pitch.** Original upstream security tests run on the old and fixed code, immutable source/test/CI pinning, calibrated abstention, dedicated browser CI, verified real production HTML and an installed no-credential developer scorecard are practical, reproducible materials.
