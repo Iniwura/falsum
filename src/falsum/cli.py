@@ -73,8 +73,44 @@ def main(argv: list[str] | None = None) -> int:
     scorecard.add_argument("--strategy",
                            choices=("always-abstain", "always-supported", "always-contradicted"))
     scorecard.add_argument("--out", type=Path)
+    balanced = commands.add_parser(
+        "score-source-balanced",
+        help="audit the 80-item metadata leak, export or score 30 balanced source-role-neutral questions (NOT blind gold)",
+    )
+    balanced.add_argument("mode", choices=("audit", "export", "baseline", "score"))
+    balanced.add_argument("--out", type=Path)
+    balanced.add_argument("--questions-out", type=Path)
+    balanced.add_argument("--template-out", type=Path)
+    balanced.add_argument("--predictions", type=Path)
+    balanced.add_argument("--strategy",
+                          choices=("always-abstain", "always-supported",
+                                   "always-contradicted", "slot-a-is-parent"))
     args = parser.parse_args(argv)
     try:
+        if args.command == "score-source-balanced":
+            from .phase5k_source_blind_scorecard import main as balanced_main
+            if args.mode == "audit":
+                if args.out is None:
+                    parser.error("audit needs --out")
+                return balanced_main(["audit", "--out", str(args.out)])
+            if args.mode == "export":
+                if args.questions_out is None or args.template_out is None:
+                    parser.error("export needs --questions-out and --template-out")
+                return balanced_main([
+                    "export", "--questions-out", str(args.questions_out),
+                    "--template-out", str(args.template_out),
+                ])
+            if args.mode == "baseline":
+                if args.strategy is None or args.out is None:
+                    parser.error("baseline needs --strategy and --out")
+                return balanced_main([
+                    "baseline", "--strategy", args.strategy, "--out", str(args.out),
+                ])
+            if args.predictions is None or args.out is None:
+                parser.error("score needs --predictions and --out")
+            return balanced_main([
+                "score", "--predictions", str(args.predictions), "--out", str(args.out),
+            ])
         if args.command == "score-source-predictions":
             from .phase5f_evaluator_scorecard import main as scorecard_main
             if args.mode == "export":
