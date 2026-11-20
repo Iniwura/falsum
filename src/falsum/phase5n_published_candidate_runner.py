@@ -192,7 +192,7 @@ def audit(original:dict,prepared:dict,challenge:dict,refs:dict,conditions:dict)-
     # its structured protocol. An invalid reply is a logged failure, not abstain.
     if len(valid)==3:
         source=score(challenge,refs,conditions,valid,
-                     origin="EXTERNAL_UNVERIFIED_PREDICTIONS")
+                     origin="RESEARCHER_OPERATED_PUBLISHED_OPEN_WEIGHT_MODEL")
         require(source["questions_scored"]==3,"external-compatible scorer drift")
         full_reversal=source["source_sensitive_complete_correct_reversal"]
         abstained=source["no_source_control_abstained"]
