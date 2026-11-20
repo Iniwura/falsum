@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5M_PRE_INFERENCE_FROZEN_SOURCE_SENSITIVITY_PROTOCOL_RESEARCH_ONLY",
+  "created_date": "2026-11-20",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "intent_scoring_family": "SECURITY_REVIEW",
+  "purpose": "Run original unchanged quarantined Telegraph Foundation LoRA on a previously unscored, PUBLIC source-project-disjoint original upstream test repair; diagnose whether precise code evidence changes its answer compared with a source-omitted control.",
+  "source_project": "facelessuser/pymdown-extensions",
+  "source_fix_commit": "63b7835776d703d6c339cf2110d9888f676efc0c",
+  "source_parent_commit": "3d185501daaa1424c4a8d42124112c44ef6ab635",
+  "source_blob_parent": "305c7c0aae68516f4aad77c2430234762e981688",
+  "source_blob_fixed": "b808d7b929fec0962c4b41ca0a70ed4e696d0fc5",
+  "source_selection_lock_git_blob_sha1": "79e27d78376dde9cdd9d4e628a95cc3cc7ae63ee",
+  "verified_real_source_test_run": 44716279199,
+  "verified_source_test_six_process_index_artifact": 14619212930,
+  "original_model_sha256": "3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc",
+  "official_foundation_sha256": "0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6",
+  "official_tokenizer_sha256": "67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456",
+  "original_model_artifact_run": 41304788714,
+  "model_runtimes": 1,
+  "original_score_inputs": 6,
+  "real_inference_repeats_per_input": 2,
+  "source_sensitive_pair_count": 1,
+  "test_conditions": [
+    {
+      "id": "code-context-a",
+      "code_revision": "parent",
+      "expected_source_fact": "A",
+      "has_original_source_guard": true
+    },
+    {
+      "id": "code-context-b",
+      "code_revision": "fixed",
+      "expected_source_fact": "B",
+      "has_original_source_guard": true
+    },
+    {
+      "id": "source-omitted",
+      "code_revision": null,
+      "expected_source_fact": null,
+      "has_original_source_guard": false
+    }
+  ],
+  "original_source_guard_parent": "if not filename.startswith(base):\n    continue",
+  "original_source_guard_fixed": "if not filename.startswith(base + os.sep if not base.endswith(os.sep) else base):\n    continue",
+  "question_prefix": "A Python markdown snippets extension resolves a candidate path. Here `base = '/tmp/docs/nested'` and `filename = '/tmp/docs/nested_b.txt'`; the configured setting `restrict_base_path=True`. Focus only on whether the shown condition allows a sibling filename that shares the base path string prefix. Which statement matches the source?",
+  "context_template": "The full relevant guard is:\nif self.restrict_base_path:\n    filename = os.path.abspath(os.path.join(base, path))\n    {guard}",
+  "no_source_context": "The guard source is deliberately unavailable. No library behavior can be established from a commit name or a version label alone.",
+  "candidate_answers": [
+    {
+      "id": "A",
+      "text": "The filename can pass the directory restriction check because a raw string-prefix match accepts the sibling path, even though it lies outside the configured directory."
+    },
+    {
+      "id": "B",
+      "text": "The filename is rejected by this restriction check because it requires a directory-separator boundary and does not accept a sibling path that shares only the same text prefix."
+    }
+  ],
+  "declared_source_fact_reference_labels": {
+    "code-context-a": "A",
+    "code-context-b": "B",
+    "source-omitted": null
+  },
+  "fixed_model_before_selection": true,
+  "no_training_or_prompt_tuning_after_observing_scores": true,
+  "public_pretraining_disjoint": false,
+  "independent_human_expert_gold_labels": 0,
+  "new_anjoman_eligible_rows": 0,
+  "network_model_registered": false,
+  "official_H2_entry_submitted": false
+}
