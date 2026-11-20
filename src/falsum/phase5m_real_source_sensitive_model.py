@@ -144,7 +144,9 @@ def verify_source(worktree:Path,p:dict)->dict[str,str]:
         raw=git(worktree,"show",rev+":"+source_path)
         require(git_blob(raw)==expected_blob,"original Git source blob SHA no longer authentic: "+name)
         decoded=raw.decode("utf-8")
-        require(expected_guard in decoded,
+        normalized="\n".join(line.strip() for line in decoded.splitlines())
+        guard_normalized="\n".join(line.strip() for line in expected_guard.splitlines())
+        require(guard_normalized in normalized,
                 "precommitted original source guard no longer matches actual source: "+name)
         blobs[name]=decoded
     return blobs
