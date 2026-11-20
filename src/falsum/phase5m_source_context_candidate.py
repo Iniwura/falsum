@@ -137,7 +137,8 @@ def validate(challenge:dict,submitted:dict)->dict[str,str]:
 
 def score(challenge:dict,truth:dict[str,str],source_conditions:dict[str,str],
           choices:dict[str,str],*,origin:str)->dict:
-    require(origin in ("SYNTHETIC_DISCLOSED_BASELINE","EXTERNAL_UNVERIFIED_PREDICTIONS"),
+    require(origin in ("SYNTHETIC_DISCLOSED_BASELINE","EXTERNAL_UNVERIFIED_PREDICTIONS",
+                       "RESEARCHER_OPERATED_PUBLISHED_OPEN_WEIGHT_MODEL"),
             "unverified candidates cannot claim independent AppSec verification")
     require(len(truth)==len(source_conditions)==len(choices)==3
             and set(truth)==set(source_conditions)==set(choices)
