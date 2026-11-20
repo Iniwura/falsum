@@ -45,7 +45,7 @@ Real expected per-Python exit matrix:
 | New maintainer security test overlaid on vulnerable-parent code | Expected assertion FAIL (1) | Expected assertion FAIL (1) |
 | Exact same upstream test on fixed original source | PASS (0) | PASS (0) |
 
-**Status evidence:** do not cite this original execution as achieved until the linked GitHub Actions run succeeds with all six jobs and the aggregate artifact. The code and lock alone demonstrate a test design, not a completed replay.
+**Actual execution verified (20 November):** [Original successful upstream test run 44711309872](https://github.com/Iniwura/falsum/actions/runs/44711309872) completed with **all seven jobs SUCCESS**: six original upstream pytest processes and the aggregate verifier. The original combined proof is GitHub Actions artifact **14616838582**, named `PHASE5L-ORIGINAL-SIXTH-SOURCE-GIT-TEST-PROCESS-EVIDENCE-NOT-MODEL-SCORES`, with GitHub archive SHA-256 `51949d75e222482159f0752677655fdd88c1ef5da96287c6ad82735f1e42c9df`. A later source-doc update also produced [successful run 44711442176](https://github.com/Iniwura/falsum/actions/runs/44711442176), again all seven jobs green. These are **real GitHub-hosted source-test executions**, not the synthetic fixtures from the offline tests; the exact Git run URLs and immutable archived ZIP digests establish the original source evidence provenance.
 
 ## What becomes stronger, and what does not
 
