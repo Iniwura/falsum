@@ -108,6 +108,8 @@ class OpenWeightModelProtocolTests(unittest.TestCase):
         self.assertEqual(len(choices),3)
         test_raw=raw_envelope(self.prepared,choices)
         scored=p.audit(test_raw,self.prepared,self.challenge,self.refs,self.conditions)
+        self.assertEqual(scored["candidate_public_evaluator_score"]["candidate_origin"],
+                         "RESEARCHER_OPERATED_PUBLISHED_OPEN_WEIGHT_MODEL")
         self.assertEqual(scored["original_public_source_reference_matches"],3)
         self.assertEqual(scored["source_fact_matches_out_of_two"],2)
         self.assertTrue(scored["correct_complete_source_revision_reversal"])
