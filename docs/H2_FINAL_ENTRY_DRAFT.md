@@ -17,6 +17,8 @@
 
 The original trained Foundation LoRA still failed its narrower comparison; no registered improved scorer exists. Public Anjoman historical 20/20 address Eligible receipts and the main H2 submission are separate. Independent human gold, verified external adoption, final video/equivalent, required bounties star, account permissions and official final entry remain unresolved. **This document remains a draft; do not submit, publish a demo, or pretend owner-only consent has been granted.**
 
+**Further original-source evidence (20 November):** A [sixth real maintainer-authored regression on pymdown-extensions](PHASE5L_SIXTH_ACTUAL_UPSTREAM_SOURCE_CASE.md) was executed against its vulnerable direct parent and original fixed commit. [Seven actual GitHub Actions jobs passed](https://github.com/Iniwura/falsum/actions/runs/44711309872) across Python 3.11 and 3.13, including the expected parent-fail/fixed-pass security regression and source/test Git hashes. This extends original upstream regression coverage to six historical repair stages across five distinct projects. The extra stage is separate from the five-case public UI and its 80 constructed source verdicts, and is not an independently chosen blind case, new model evaluation, expert gold or registered Telegraph scorer. This final-entry text remains **DRAFT, NOT SUBMITTED**.
+
 ## Verified project links
 
 - **Real upstream security-review verifier (strongest current public technical result):** https://falsum-evidence-lab.vercel.app/witness/ (four actual source-fix stages across Koa, Hono and LangChain; 64 precomputed typed evidence checks, original upstream Git/test and CI receipts)
