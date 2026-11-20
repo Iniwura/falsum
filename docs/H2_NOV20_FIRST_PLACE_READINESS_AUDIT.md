@@ -37,7 +37,8 @@
 - **GitHub Actions artifact:** FALSUM-PHASE5E-PRODUCTION-FIVE-SOURCE-EXACT-MATCH, ID 14610009413, ZIP digest sha256:5005202d449e3acf84eeff305cd77dcac4801b27a1e3e281c5b87d6568ac69c6.
 - **Canonical expected AND served five-case source report SHA-256:** f77d00ffbe75d5d06cc233a56d066d74acf8a8c42ad2c0065ef1684157d82f6b.
 - **Verified live HTML SHA-256:** 40df4767844b3e11ee67bac19f1f45e17dc73876f5007f6d9bb74bf5a282ca9d.
-- **No new scoring model, customer results, independently accepted labels or H2 registration verified** by a public-site content check.
+- **Exact constructed verdict counts:** 10 SUPPORTED, 10 CONTRADICTED, 60 ABSTAIN. These are source-evidence agreement outcomes, not predictions from an improved learned evaluator.
+- **No new scoring model, no customer results, no independently accepted labels, and NOT registered as a Telegraph scorer or H2 final entry** by a public-site content check.
 
 ## Strict evaluator-track competitive assessment
 
