@@ -1,4 +1,4 @@
-name: Phase 5M - real unchanged official LoRA on sixth upstream source repair, not blind gold
+name: Phase 5M - frozen original model source sensitivity and explicit checkpoint availability gate
 on:
   push:
     paths:
@@ -68,9 +68,77 @@ jobs:
           assert 'if not filename.startswith(base + os.sep' in cases['fixed']
           print('The actual original parent/fix Git blobs are reverified; no inference or gold was invented.')
           PY
-  original-official-model-evidence:
-    name: Original unchanged Foundation ONNX/WASI real six-input source/no-source experiment
+  original-checkpoint-availability:
+    name: Fail-closed exact checkpoint retrieval gate, never fabricate original model scores
     needs: source-and-adversarial-inputs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      available: ${{ steps.inspect.outputs.available }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Inspect the exact original model artifact in the genuine historical GitHub Actions run
+        id: inspect
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          raw="$(curl --fail --silent --show-error --location \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/41304788714/artifacts?per_page=100")"
+          printf '%s' "$raw" > "$RUNNER_TEMP/phase5m-original-artifacts.json"
+          python - "$RUNNER_TEMP/phase5m-original-artifacts.json" <<'PY'
+          import json,os,sys
+          from pathlib import Path
+          response=json.loads(Path(sys.argv[1]).read_text())
+          assert isinstance(response,dict) and isinstance(response.get('artifacts'),list), (
+              'GitHub repository artifact listing unavailable; never convert an API failure to a scored model'
+          )
+          wanted='QUARANTINED-FALSUM-PHASE3B-RESEARCH-DELTA-NOT-NETWORK-REGISTERED'
+          candidates=[x for x in response['artifacts']
+                      if x.get('name')==wanted and x.get('expired') is False]
+          available=len(candidates)==1
+          with open(os.environ['GITHUB_OUTPUT'],'a') as stream:
+              stream.write('available='+str(available).lower()+'\n')
+          result={
+              'schema_version':1,
+              'status':('PHASE5M_EXACT_OLD_ORIGINAL_MODEL_AVAILABLE'
+                        if available else 'PHASE5M_EXACT_OLD_ORIGINAL_MODEL_ARTIFACT_UNAVAILABLE_NO_INFERENCE'),
+              'real_original_model_artifact_run':41304788714,
+              'required_original_model_sha256':
+                  '3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc',
+              'available_for_real_original_model_inference':available,
+              'candidate_artifact_count':len(candidates),
+              'no_checkpoint_fabricated':True,
+              'actual_model_inference_observed':False,
+              'source_evidence_and_public_candidate_harness_unaffected':True,
+              'independent_expert_gold':0,
+              'registered_evaluator':False,
+              'official_h2_entry_submitted':False,
+          }
+          Path('PHASE5M-HISTORICAL-MODEL-AVAILABILITY.json').write_text(
+              json.dumps(result,indent=2,sort_keys=True)+'\n')
+          if not available:
+              with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as stream:
+                  stream.write('### Model-side experiment blocked: original trained checkpoint artifact unavailable\n\n')
+                  stream.write('GitHub does not currently provide the exact historical model artifact from run 41304788714. **No original model inference ran. No score, replacement model or model improvement can be claimed.** The separately authenticated source-evidence and public candidate challenge remain usable.\n')
+          print(json.dumps(result,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PHASE5M-ACTUAL-ORIGINAL-MODEL-ARTIFACT-AVAILABILITY-NO-FALSE-SCORES
+          path: PHASE5M-HISTORICAL-MODEL-AVAILABILITY.json
+          retention-days: 90
+          if-no-files-found: error
+
+  original-official-model-evidence:
+    name: Real ORIGINAL Foundation LoRA scores (only when exact old checkpoint exists)
+    needs: [source-and-adversarial-inputs, original-checkpoint-availability]
+    if: needs.original-checkpoint-availability.outputs.available == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 75
     env:
