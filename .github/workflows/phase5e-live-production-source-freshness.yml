@@ -6,12 +6,11 @@ on:
       - 'tests/test_phase5e_production_freshness.py'
       - 'docs/PHASE5E_PRODUCTION_FRESHNESS_GATE.md'
       - '.github/workflows/phase5e-live-production-source-freshness.yml'
+  # The public alias changes on every main deployment, including docs-only
+  # commits. Never filter main pushes by file path: that skipped post-merge
+  # attestation on an actual Vercel production release.
   push:
-    paths:
-      - 'src/falsum/phase5e_production_freshness.py'
-      - 'tests/test_phase5e_production_freshness.py'
-      - 'docs/PHASE5E_PRODUCTION_FRESHNESS_GATE.md'
-      - '.github/workflows/phase5e-live-production-source-freshness.yml'
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
