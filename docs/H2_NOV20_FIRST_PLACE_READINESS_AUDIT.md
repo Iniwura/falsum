@@ -64,6 +64,10 @@ The original old LoRA's six-input source/no-source experiment was precommitted b
 
 **Competition risk unchanged:** the sample is one *public* upstream project, not an independently chosen blind set; verified outside candidate predictions, independent AppSec source adjudication, new registered scorer and mission-adoption evidence remain zero/unverified. Priority is evidence of a real independent candidate/reviewer or new authenticated model, not inflated counts.
 
+## Phase 5N: original real model prediction failure on source-sensitive case
+
+The [real Qwen2.5-0.5B-Instruct CPU model-run](https://github.com/Iniwura/falsum/actions/runs/44739535866) executed the previously frozen three public researcher-derived source-context conditions and archived original model SHA, outputs and [permanent negative evidence index](../evidence/phase5n-2026-11-20-real-open-weight-model-negative.json). Model chose **ABSTAIN / ABSTAIN / ABSTAIN**: **1/3** references, **0/2** source-present facts, **0/1** complete source-revision reversals; correctly abstained only when code was omitted. It is **no better than constant-ABSTAIN** on this tiny open-book challenge. The publisher is third party, but the run is researcher-operated, NOT independent adoption. There remains no statistical model improvement, human AppSec adjudication, hidden network score, or registered evaluator from Phase 5N.
+
 ## Strict evaluator-track competitive assessment
 
 **Technical evidence: genuinely strong relative to a typical static hackathon pitch.** Original upstream security tests run on the old and fixed code, immutable source/test/CI pinning, calibrated abstention, dedicated browser CI, verified real production HTML and an installed no-credential developer scorecard are practical, reproducible materials.
