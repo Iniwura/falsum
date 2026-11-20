@@ -90,6 +90,19 @@ class FiveSourcePublicReleaseFreshnessTests(unittest.TestCase):
         with self.assertRaisesRegex(p.FreshnessError,"local build"):
             p.compare(changed,json.dumps(changed).encode(),self.html,live=True)
 
+    def test_live_http_attestation_only_main_push_or_manual_and_bounded_retries(self):
+        workflow = (ROOT / ".github/workflows/phase5e-live-production-source-freshness.yml").read_text()
+        expected_gate = (
+            "if: github.event_name == 'workflow_dispatch' || "
+            "(github.event_name == 'push' && github.ref == 'refs/heads/main')"
+        )
+        self.assertIn(expected_gate, workflow)
+        self.assertIn("python -m falsum.phase5e_production_freshness", workflow)
+        self.assertIn("if [ \"$attempt\" -ge 6 ]; then", workflow)
+        self.assertIn("sleep 15", workflow)
+        self.assertIn("if: success()", workflow)
+        self.assertIn("FALSUM-PHASE5E-PRODUCTION-FIVE-SOURCE-EXACT-MATCH", workflow)
+
     def test_public_fetch_strictly_limits_endpoint_paths(self):
         with self.assertRaisesRegex(p.FreshnessError,"limited"):
             p._read_public("https://other.example.org/credential",1000)
