@@ -23,7 +23,7 @@ def example_inputs(p:dict)->dict:
     for index, ident in enumerate(probe.ALL_KEYS):
         cond,label=ident.split("--")
         rendered="### Task:\n"+conditions[cond]+"\n\n### Answer:\n"+answers[label]
-        fake=[50281,111,222,333,index,444,555,666,777,50282]
+        fake=[50281,111,222,333,index,444,555,666,777,888,999,50282]
         rows.append({
             "id":ident,"condition":cond,"answer_id":label,
             "question_sha256":probe.sha_text(conditions[cond]),
