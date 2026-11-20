@@ -14,6 +14,14 @@ The authenticated Vercel API now reports deployment **dpl_6F56yGJhrpHa7Qbg5jGQUB
 
 **Live HTTPS byte-for-byte source content is not automatically proven by Vercel metadata.** Phase 5G closes this verification gap: after merging the workflow change to main, GitHub Actions will run the actual network-dependent Phase 5E proof (as well as its Python self-tests). This live job will remain excluded from pull-request checks and will refuse to produce a PASS if the public site is stale, protected, unreachable or not an exact five-source match.
 
+## Phase 5I — every main production release is now checked (November 20)
+
+A separate post-merge review caught a real trigger bug: the Phase 5G live job itself permitted main pushes, but the workflow's **top-level push event still applied a file-path filter** limited to its own verifier and tests. Thus a main commit changing judge docs or other site-building content could deploy to production without starting a new live HTTPS attestation. This happened after the Phase 5H judge-doc correction; it did not invalidate the earlier successful main release proof, but it left that later deployment unaudited by this specific workflow.
+
+**Correction:** the workflow now uses an unfiltered `push` on branch `main` to check **every** new main commit, whatever file changed. PR runs remain path-filtered and offline-only. The actual public-HTTPS job is limited to main pushes or explicit manual dispatch, still requires the three offline source-integrity tests, and still fails closed with bounded retries. A new regression test checks the branch trigger and absence of a main-push path filter.
+
+The latest site content is not automatically proven by *changing* workflow YAML. Require a new successful Phase 5E main-push live Actions run and, for deployment-specific claims, authenticated Vercel production alias metadata. Do not pretend a previous commit's proof is current after a new deploy.
+
 ## Independent live production freshness check
 
 [Verifier](../src/falsum/phase5e_production_freshness.py) generates an expected source report from the real five-stage evidence:
