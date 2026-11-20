@@ -97,6 +97,12 @@ class FiveSourcePublicReleaseFreshnessTests(unittest.TestCase):
             "(github.event_name == 'push' && github.ref == 'refs/heads/main')"
         )
         self.assertIn(expected_gate, workflow)
+        # Main deploys happen even when only judge docs/README change.
+        # No path filter can silently skip a production content check.
+        main_trigger = workflow.split("  push:", 1)[1].split("  workflow_dispatch:", 1)[0]
+        self.assertIn("branches: [main]", main_trigger)
+        self.assertNotIn("paths:", main_trigger)
+
         self.assertIn("python -m falsum.phase5e_production_freshness", workflow)
         self.assertIn("if [ \"$attempt\" -ge 6 ]; then", workflow)
         self.assertIn("sleep 15", workflow)
