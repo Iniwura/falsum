@@ -2,6 +2,8 @@
 
 **Verified as of 20 November 2026. Internal build target: November 22. Official main entry deadline: December 1, 2026 at 23:59 UTC.**
 
+**Release verification is ongoing, not a frozen deployment SHA:** This dated audit records the authentic first successful main live attestation ([run 44696464449](https://github.com/Iniwura/falsum/actions/runs/44696464449)). [A later every-main-release HTTP attestation also passed](https://github.com/Iniwura/falsum/actions/runs/44697989518). Git deployments change SHAs on subsequent documentation and source merges: for the latest status, use the [main release-freshness Actions workflow](https://github.com/Iniwura/falsum/actions/workflows/phase5e-live-production-source-freshness.yml). Do not quote an earlier deployment ID as the permanent current Vercel target.
+
 **Verdict: technically substantial, with verified live release and genuine source-backed evaluation material; not yet a confirmed first-place or submission-ready entry.** The project does not have validated trained-model improvement, human AppSec adjudication, independent adoption, verified owner-only registration/star receipts, an authorized demo or a main-entry submission receipt. Technical quality, competition eligibility and winning are three different gates.
 
 ## Track and official requirements
@@ -32,7 +34,7 @@
 ### Authentic live release proof to cite precisely
 
 - **Actions:** https://github.com/Iniwura/falsum/actions/runs/44696464449 ; all 3 Python offline self-tests and a separate actual public HTTPS source checker succeeded.
-- **Exact current release SHA:** 02c975df2000ef7b2f95ebbee60eb1a548b260b1.
+- **Exact SHA for the original verified November 20 release:** 02c975df2000ef7b2f95ebbee60eb1a548b260b1. This is immutable *historical proof*, not a promise that future main deploys retain the same SHA.
 - **Vercel:** project prj_8yFMECbS8rbZocliI1yL9eBtYsv6; deployment dpl_EHhg56Jjg8yWRpxLq7Ns87mgLD6A; state READY, target production and public domain falsum-evidence-lab.vercel.app.
 - **GitHub Actions artifact:** FALSUM-PHASE5E-PRODUCTION-FIVE-SOURCE-EXACT-MATCH, ID 14610009413, ZIP digest sha256:5005202d449e3acf84eeff305cd77dcac4801b27a1e3e281c5b87d6568ac69c6.
 - **Canonical expected AND served five-case source report SHA-256:** f77d00ffbe75d5d06cc233a56d066d74acf8a8c42ad2c0065ef1684157d82f6b.

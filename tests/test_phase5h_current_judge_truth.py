@@ -38,11 +38,12 @@ class CurrentPublicJudgeEvidenceAuditTests(unittest.TestCase):
 
     def test_current_readme_cannot_revert_to_known_stale_quota_banner(self):
         top = self.readme.split("## Try the real upstream verification lab", 1)[0]
-        self.assertIn("Verified public deployment (November 20)", top)
-        self.assertIn(REAL_MAIN, top)
-        self.assertIn(REAL_DEPLOYMENT, top)
+        self.assertIn("Public release: verified five-source workbench", top)
+        self.assertIn("phase5e-live-production-source-freshness.yml", top)
         self.assertIn(REAL_LIVE_RUN, top)
-        self.assertIn("source-content integrity", top)
+        self.assertIn("https://github.com/Iniwura/falsum/actions/runs/44697989518", top)
+        self.assertNotIn("dpl_", top)
+        self.assertIn("Source content integrity", top)
         self.assertNotIn("still serves an older four-case commit", top)
         self.assertNotIn("remain open", top)
         self.assertNotIn("Do not claim the fifth case is live", top)
