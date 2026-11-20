@@ -44,7 +44,7 @@ class OpenBookSecurityReviewEvaluatorScorecardTests(unittest.TestCase):
         self.assertEqual(len(self.answers),80)
         self.assertEqual({v:list(self.answers.values()).count(v) for v in original.RESULTS},
                          {"SUPPORTED":10,"CONTRADICTED":10,"ABSTAIN":60})
-        self.assertEqual(len(set(self.answers)),3)
+        self.assertEqual(len(set(self.answers.values())),3)
 
     def test_always_abstain_looks_75_percent_accurate_but_macro_recall_is_one_third(self):
         preds=s.baseline_predictions(self.challenge,"always-abstain")
