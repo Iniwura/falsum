@@ -1,0 +1,100 @@
+name: Phase 5F - public source-test prediction scorecard, not independent gold
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5f_evaluator_scorecard.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5f_evaluator_scorecard.py'
+      - 'docs/PHASE5F_OPEN_EVALUATOR_SCORECARD.md'
+      - '.github/workflows/phase5f-open-source-evaluator-scorecard.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5f_evaluator_scorecard.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5f_evaluator_scorecard.py'
+      - 'docs/PHASE5F_OPEN_EVALUATOR_SCORECARD.md'
+      - '.github/workflows/phase5f-open-source-evaluator-scorecard.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check-open-scorecard:
+    name: Public source challenge, adversarial JSON, installed CLI (Python ${{ matrix.python }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Adversarial source-evidence, false confidence and challenge integrity tests
+        shell: bash
+        env:
+          PYTHONPATH: src:tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5f_evaluator_scorecard.py' -v
+          python -m unittest discover -s tests -p 'test_phase5c_fifth_source_witness.py' -v
+          python -m unittest discover -s tests -p 'test_source_review_witness_gate.py' -v
+      - name: Install actual developer CLI and export no-answer challenge
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --no-deps -e .
+          env -u PYTHONPATH falsum score-source-predictions export \
+            --challenge-out phase5f-open-book-no-answer-questions.json \
+            --template-out phase5f-empty-candidate-template.json
+          env -u PYTHONPATH falsum score-source-predictions baseline \
+            --strategy always-abstain --out phase5f-constant-abstain-baseline.json
+      - name: Assert actual 75 percent abstain-skew pitfall and 0 human gold
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          challenge=json.loads(Path('phase5f-open-book-no-answer-questions.json').read_text())
+          template=json.loads(Path('phase5f-empty-candidate-template.json').read_text())
+          baseline=json.loads(Path('phase5f-constant-abstain-baseline.json').read_text())
+          assert challenge['status']=='PHASE5F_PUBLIC_OPEN_BOOK_SOURCE_FACT_CHALLENGE_NO_LABELS'
+          assert len(challenge['questions'])==80
+          assert challenge['source_fix_stages']==5 and challenge['upstream_projects']==4
+          assert challenge['answer_labels_in_challenge'] is False
+          assert challenge['blind_holdout'] is False
+          assert challenge['independent_expert_gold_labels']==0
+          assert len(template['predictions'])==80
+          assert all(item['verdict'] is None for item in template['predictions'])
+          assert baseline['prediction_provenance']=='SYNTHETIC_CONSTANT_BASELINE'
+          assert baseline['exact_matches']==60
+          assert baseline['raw_exact_match_ratio']==0.75
+          assert baseline['macro_class_recall']==0.333333
+          assert baseline['fully_correct_parent_fix_reversals']==0
+          assert baseline['supported_or_contradicted_facts_abstained_on']==20
+          assert baseline['independently_certified_human_appsec_gold_labels']==0
+          assert baseline['trained_model_performance_improvement_claimed'] is False
+          assert baseline['network_evaluator_registered'] is False
+          assert baseline['official_h2_entry_submitted'] is False
+          path=os.environ.get('GITHUB_STEP_SUMMARY')
+          if path:
+              with open(path,'a') as f:
+                  f.write('## Public typed evaluator scorecard\n\n')
+                  f.write('Five genuine historical source-test witnesses, 80 open-book structured source claims. Normal CLI exports a no-answer challenge and an unfilled prediction template.\n\n')
+                  f.write('**Trivial always-ABSTAIN baseline:** 60/80 = 75% raw exact match but 33.3333% macro class recall, 0/5 complete source-sensitive reversals, and 20 factual claims missed.\n\n')
+                  f.write('**NOT a blind benchmark, independent human gold, qualified third-party evaluator, registered Telegraph scorer, or trained-model improvement.**\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5f-no-answer-source-challenge-and-trivial-abstain-control-PY${{ matrix.python }}
+          path: |
+            phase5f-open-book-no-answer-questions.json
+            phase5f-empty-candidate-template.json
+            phase5f-constant-abstain-baseline.json
+          retention-days: 90
+          if-no-files-found: error
