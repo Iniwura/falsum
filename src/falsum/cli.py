@@ -85,8 +85,40 @@ def main(argv: list[str] | None = None) -> int:
     balanced.add_argument("--strategy",
                           choices=("always-abstain", "always-supported",
                                    "always-contradicted", "slot-a-is-parent"))
+    source_pair = commands.add_parser(
+        "score-source-context",
+        help="export or score three public original upstream source-context predictions; no live model or expert gold",
+    )
+    source_pair.add_argument("mode", choices=("export", "score", "baseline"))
+    source_pair.add_argument("--questions-out", type=Path)
+    source_pair.add_argument("--template-out", type=Path)
+    source_pair.add_argument("--predictions", type=Path)
+    source_pair.add_argument("--strategy",
+                             choices=("always-A", "always-B", "always-ABSTAIN"))
+    source_pair.add_argument("--out", type=Path)
     args = parser.parse_args(argv)
     try:
+        if args.command == "score-source-context":
+            from .phase5m_source_context_candidate import main as source_pair_main
+            if args.mode == "export":
+                if args.questions_out is None or args.template_out is None:
+                    parser.error("export needs --questions-out and --template-out")
+                return source_pair_main([
+                    "export", "--questions-out", str(args.questions_out),
+                    "--template-out", str(args.template_out),
+                ])
+            if args.mode == "baseline":
+                if args.strategy is None or args.out is None:
+                    parser.error("baseline needs --strategy and --out")
+                return source_pair_main([
+                    "baseline", "--strategy", args.strategy, "--out", str(args.out),
+                ])
+            if args.predictions is None or args.out is None:
+                parser.error("score needs --predictions and --out")
+            return source_pair_main([
+                "score", "--predictions", str(args.predictions), "--out", str(args.out),
+            ])
+
         if args.command == "score-source-balanced":
             from .phase5k_source_blind_scorecard import main as balanced_main
             if args.mode == "audit":
