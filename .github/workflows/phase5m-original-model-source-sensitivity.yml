@@ -1,0 +1,231 @@
+name: Phase 5M - real unchanged official LoRA on sixth upstream source repair, not blind gold
+on:
+  push:
+    paths:
+      - 'data/phase5m-preinference-original-lora-pymdown-source-sensitivity.json'
+      - 'src/falsum/phase5m_real_source_sensitive_model.py'
+      - 'tests/test_phase5m_real_source_sensitive_model.py'
+      - 'docs/PHASE5M_REAL_ORIGINAL_MODEL_SOURCE_SENSITIVITY.md'
+      - '.github/workflows/phase5m-original-model-source-sensitivity.yml'
+  pull_request:
+    paths:
+      - 'data/phase5m-preinference-original-lora-pymdown-source-sensitivity.json'
+      - 'src/falsum/phase5m_real_source_sensitive_model.py'
+      - 'tests/test_phase5m_real_source_sensitive_model.py'
+      - 'docs/PHASE5M_REAL_ORIGINAL_MODEL_SOURCE_SENSITIVITY.md'
+      - '.github/workflows/phase5m-original-model-source-sensitivity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-and-adversarial-inputs:
+    name: Prior-frozen task + actual Git source, original tests and answerless control
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: facelessuser/pymdown-extensions
+          ref: 63b7835776d703d6c339cf2110d9888f676efc0c
+          path: pymdown-source
+          persist-credentials: false
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run adversarial provenance and synthetic-only score schema tests
+        shell: bash
+        env:
+          PYTHONPATH: src:tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5m_real_source_sensitive_model.py' -v
+          python -m unittest discover -s tests -p 'test_phase5l_pymdown_upstream_replay.py' -v
+      - name: Verify the prior-frozen original model protocol and both real original Git source guards
+        shell: bash
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from falsum.phase5m_real_source_sensitive_model import protocol,verify_source
+          from falsum.phase5l_pymdown_upstream_replay import load_lock
+          p=protocol()
+          lock=load_lock()
+          assert lock['original_fix_commit']==p['source_fix_commit']
+          assert lock['direct_vulnerable_parent']==p['source_parent_commit']
+          assert lock['original_fixed_source_blob_sha1']==p['source_blob_fixed']
+          assert lock['original_parent_source_blob_sha1']==p['source_blob_parent']
+          cases=verify_source(Path("pymdown-source"),p)
+          assert len(cases)==2
+          assert 'if not filename.startswith(base):' in cases['parent']
+          assert 'if not filename.startswith(base + os.sep' in cases['fixed']
+          print('The actual original parent/fix Git blobs are reverified; no inference or gold was invented.')
+          PY
+  original-official-model-evidence:
+    name: Original unchanged Foundation ONNX/WASI real six-input source/no-source experiment
+    needs: source-and-adversarial-inputs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: facelessuser/pymdown-extensions
+          ref: 63b7835776d703d6c339cf2110d9888f676efc0c
+          path: pymdown-source
+          persist-credentials: false
+          fetch-depth: 2
+      - uses: actions/checkout@v4
+        with:
+          repository: telegraphprotocol/telegraph-wasm-baseline
+          ref: 1ed063e2f0066cfaf0e124d66ec6a17b7a6121fd
+          path: telegraph-kit
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+      - name: Download the exact original quarantined LoRA model artifact, not a new model
+        uses: actions/download-artifact@v4
+        with:
+          name: QUARANTINED-FALSUM-PHASE3B-RESEARCH-DELTA-NOT-NETWORK-REGISTERED
+          run-id: 41304788714
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/phase5m/model
+      - name: Refuse any changed model bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          pkg="$(find "$RUNNER_TEMP/phase5m/model" -type f -name SECURITY_REVIEW.safetensors -print -quit)"
+          test -n "$pkg"
+          echo "3d269cc080538b6a13ae8e5fbb8526921ffe9689c1a6f62f9a6161a9d4680fbc  $pkg" | sha256sum -c -
+          echo "PHASE5M_ORIGINAL_MODEL=$pkg" >> "$GITHUB_ENV"
+      - name: Fetch and verify all official fixed Foundation code assets by SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          f="$RUNNER_TEMP/phase5m/foundation"
+          mkdir -p "$f"
+          base="https://github.com/telegraphprotocol/telegraph-foundation/releases/download/modernbert-base-lora16-v1"
+          for name in foundation.json foundation_engine.wasm foundation_lora_fp32.onnx tokenizer.json; do
+            curl --fail --location --silent --show-error --retry 3 "$base/$name" -o "$f/$name"
+          done
+          (
+            cd "$f"
+            printf '%s  %s\n' \
+              f7de64b999acd3f735118fbe5999abf251fdf188f9797e3a4e36c54ee9e4dbbe foundation.json \
+              77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de foundation_engine.wasm \
+              0a49b325304bb4cf292e683929689d0457966be264f60bfc94d0072b614bf8e6 foundation_lora_fp32.onnx \
+              67bc76f8b9386efba1a761c1c8e5ad439fd0eaf1c2826e9dd1a205c7af4dc456 tokenizer.json \
+              | sha256sum -c -
+          )
+      - name: Regenerate frozen genuine tokenizer inputs from original Git parent/fixed source bytes
+        shell: bash
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check --quiet 'tokenizers==0.22.2'
+          d="$RUNNER_TEMP/phase5m/results"
+          mkdir -p "$d"
+          python -m falsum.phase5m_real_source_sensitive_model prepare \
+            --upstream "$GITHUB_WORKSPACE/pymdown-source" \
+            --tokenizer "$RUNNER_TEMP/phase5m/foundation/tokenizer.json" \
+            --out "$d/FROZEN-SIX-REAL-SOURCE-SENSITIVITY-INPUTS.json"
+      - name: Build unchanged official Go/WASI model scorer
+        shell: bash
+        run: |
+          set -euo pipefail
+          (
+            cd telegraph-kit
+            go build -o "$RUNNER_TEMP/phase5m/adapterbuild" ./cmd/adapterbuild
+          )
+      - name: Run all six ORIGINAL, not retrained, official Foundation inferences
+        shell: bash
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/phase5m/results"
+          f="$RUNNER_TEMP/phase5m/foundation"
+          python - "$d/FROZEN-SIX-REAL-SOURCE-SENSITIVITY-INPUTS.json" <<'PY' > "$d/FROZEN-IDS.txt"
+          import json,re,sys
+          doc=json.load(open(sys.argv[1]))
+          assert doc['status']=='PHASE5M_REAL_MODEL_SIX_PRE_FROZEN_SOURCE_CONTEXT_INPUTS_NOT_GOLD'
+          assert len(doc['inputs'])==6
+          assert doc['model_training_or_registration'] is False
+          for row in doc['inputs']:
+              assert re.fullmatch(r'(code-context-[ab]|source-omitted)--[AB]',row['id'])
+              assert row['token_count'] <= 256
+              print(row['id'])
+          PY
+          while IFS= read -r ident; do
+            test -n "$ident"
+            mkdir -p "$d/$ident"
+            "$RUNNER_TEMP/phase5m/adapterbuild" lora \
+              --intent SECURITY_REVIEW \
+              --package "$PHASE5M_ORIGINAL_MODEL" \
+              --foundation "$f/foundation.json" \
+              --foundation-onnx "$f/foundation_lora_fp32.onnx" \
+              --engine "$f/foundation_engine.wasm" \
+              --engine-hash 77643d6e1176ab8744801cef93ccb844d0136ed32b8daa865d541f37d13292de \
+              --input "$d/SCORE-$ident.json" \
+              --out "$d/$ident" \
+              > "$d/$ident/OFFICIAL-SCORE.json" \
+              2> "$d/$ident/OFFICIAL-ENGINE-LOG.txt"
+          done < "$d/FROZEN-IDS.txt"
+      - name: Audit real original model float32 scores and truthful source-sensitive outcomes
+        shell: bash
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/phase5m/results"
+          python -m falsum.phase5m_real_source_sensitive_model audit \
+            --inputs "$d/FROZEN-SIX-REAL-SOURCE-SENSITIVITY-INPUTS.json" \
+            --scores-dir "$d" \
+            --out "$d/REAL-ORIGINAL-MODEL-SOURCE-CONTEXT-RESULTS.json"
+          python - "$d/REAL-ORIGINAL-MODEL-SOURCE-CONTEXT-RESULTS.json" <<'PY'
+          import json,os,sys
+          result=json.load(open(sys.argv[1]))
+          assert result['status']=='PHASE5M_REAL_UNCHANGED_ORIGINAL_LORA_PYMDOWN_SOURCE_SENSITIVITY_NOT_ACCURACY'
+          assert result['actual_official_model_inference_verified'] is True
+          assert result['actual_original_lora_model_score_inputs']==6
+          assert result['official_real_repeat_inference_calls']==12
+          assert result['source_context_revision_facts']==2
+          assert result['no_source_control_has_no_gold_verdict'] is True
+          assert result['actual_improvement_to_trained_model'] is False
+          assert result['independent_expert_gold_labels']==0
+          assert result['model_registered'] is False
+          assert result['official_H2_submission'] is False
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              out.write('### Original unchanged Foundation LoRA: real public source sensitivity test\n\n')
+              out.write('**Six actual official Foundation scorer inputs, 12 duplicate-verified real inference calls**. ')
+              out.write('Exact public historical pymdown-extensions source parent/fixed commits and test provenance frozen BEFORE scoring.\n\n')
+              out.write('Real source-fact matches: **'+str(result['original_model_fact_matches_out_of_two'])+'/2**; ')
+              out.write('correct paired reversal: **'+str(result['real_model_complete_correct_source_fact_reversal'])+'**; ')
+              out.write('model changed choice between source revisions: **'+str(result['real_model_changes_choice_with_source_revision'])+'**.\n')
+              out.write('No-source control preference: **'+str(result['no_source_control_preference'])+'**; no ground-truth label or accuracy applies to this control.\n\n')
+              out.write('This is not independent expert gold, a blinded new-project score, a retrained/improved model, a registered evaluator or an Anjoman Eligible contribution. No claims about external demand or H2 submission.\n')
+          PY
+      - name: Preserve actual original float32 bits, source-bound inputs, engine logs and auditable result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PHASE5M-REAL-ORIGINAL-LORA-PYMDOWN-SIX-SOURCE-SCORES-NOT-RELEASED
+          path: |
+            ${{ runner.temp }}/phase5m/results/**
+          retention-days: 90
+          if-no-files-found: warn
