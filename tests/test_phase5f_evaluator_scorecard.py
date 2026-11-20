@@ -184,6 +184,34 @@ class OpenBookSecurityReviewEvaluatorScorecardTests(unittest.TestCase):
                 s.main(["--root",str(ROOT),"score","--predictions",
                         str(inp),"--out",str(inp)])
 
+    def test_normal_installable_cli_supports_export_score_and_baseline(self):
+        from falsum.cli import main as public_cli
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            challenge=root/"challenge.json"
+            template=root/"template.json"
+            baseline=root/"baseline.json"
+            output=root/"scored.json"
+            self.assertEqual(public_cli([
+                "score-source-predictions","export",
+                "--challenge-out",str(challenge),"--template-out",str(template),
+            ]),0)
+            self.assertEqual(len(json.loads(challenge.read_text())["questions"]),80)
+            self.assertEqual(public_cli([
+                "score-source-predictions","baseline","--strategy","always-abstain",
+                "--out",str(baseline),
+            ]),0)
+            self.assertEqual(json.loads(baseline.read_text())["macro_class_recall"],0.333333)
+            request=json.loads(template.read_text())
+            for row in request["predictions"]:
+                row["verdict"]="ABSTAIN"
+            template.write_text(json.dumps(request))
+            self.assertEqual(public_cli([
+                "score-source-predictions","score","--predictions",str(template),
+                "--out",str(output),
+            ]),0)
+            self.assertEqual(json.loads(output.read_text())["exact_matches"],60)
+
     def test_modified_source_proof_and_missing_zip_cannot_construct_real_benchmark(self):
         from unittest.mock import patch
         with patch.object(s.source,"assemble",side_effect=ValueError("source digest tampered")):
