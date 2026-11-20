@@ -1,5 +1,7 @@
 # FALSUM — Season II submission evidence gate
 
+**Historical checkpoint (November 19).** This document preserves earlier submission-risk and unpublished-post drafts. The production site's old four-case deployment warning is superseded by the [November 20 live-release and competition readiness audit](H2_NOV20_FIRST_PLACE_READINESS_AUDIT.md), which cites an actual successful HTTPS attestation and the currently working five-case/80-choice site. Keep original owner-only eligibility and final-entry gates unresolved until authenticated; do not mistake old date-bound table rows for a current live failure.
+
 **Checked against the published Telegraph Season II rules on November 19, 2026.**  
 **Submission state: NOT SUBMITTED. No prize eligibility, award or maintainer acceptance is claimed.**
 

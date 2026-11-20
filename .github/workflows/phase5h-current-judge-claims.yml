@@ -1,0 +1,67 @@
+name: Phase 5H - real source-evidence judge claim and release truth
+on:
+  push:
+    paths:
+      - 'README.md'
+      - 'docs/H2_EVALUATORS_JUDGE_PACK.md'
+      - 'docs/H2_NOV19_RULES_AND_SUBMISSION_GATE.md'
+      - 'docs/H2_NOV20_FIRST_PLACE_READINESS_AUDIT.md'
+      - 'tests/test_phase5h_current_judge_truth.py'
+      - '.github/workflows/phase5h-current-judge-claims.yml'
+  pull_request:
+    paths:
+      - 'README.md'
+      - 'docs/H2_EVALUATORS_JUDGE_PACK.md'
+      - 'docs/H2_NOV19_RULES_AND_SUBMISSION_GATE.md'
+      - 'docs/H2_NOV20_FIRST_PLACE_READINESS_AUDIT.md'
+      - 'tests/test_phase5h_current_judge_truth.py'
+      - '.github/workflows/phase5h-current-judge-claims.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  judge-claim-falsification:
+    name: Verify pinned real five-source report and current judge claims (Python ${{ matrix.python }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify current README, judge guide and authentic five-source local SHA
+        shell: bash
+        env:
+          PYTHONPATH: src:tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5h_current_judge_truth.py' -v
+          python -m unittest discover -s tests -p 'test_phase5f_evaluator_scorecard.py' -v
+          python -m unittest discover -s tests -p 'test_phase5e_production_freshness.py' -v
+      - name: Preserve honest offline versus live release boundary
+        shell: bash
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from falsum.phase4v_real_source_witness_site import assemble
+          from falsum.phase5e_production_freshness import canonical,digest
+          expected=assemble(Path('.'))
+          assert digest(canonical(expected))=='f77d00ffbe75d5d06cc233a56d066d74acf8a8c42ad2c0065ef1684157d82f6b'
+          assert expected['precomputed_python_evaluations']==80
+          assert expected['by_construction_verdict_counts']=={'SUPPORTED':10,'CONTRADICTED':10,'ABSTAIN':60}
+          assert expected['independent_appsec_expert_gold_labels']==0
+          assert expected['trained_model_improvement_proven'] is False
+          assert expected['network_evaluator_registered'] is False
+          # This offline check does not prove the live alias now. It only
+          # binds docs to the independently successful Nov20 live Actions proof.
+          PY

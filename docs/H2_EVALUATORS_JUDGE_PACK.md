@@ -1,7 +1,20 @@
 # FALSUM — Judge guide
 
 **Telegraph Season II / Evaluators / SECURITY_REVIEW_GENERAL**  
-**Evidence reviewed through 19 November 2026. Final H2 submission: NOT YET FILED.**
+**Current judge-facing evidence verified through November 20, 2026. Official H2 entry: NOT SUBMITTED.**
+
+## Current evidence — use this first (November 20)
+
+The full guide below preserves earlier milestone studies, including the former four-stage/64-choice workbench. **Those historical four-case figures are not the present public release.** The [latest independent-minded evidence and eligibility audit](H2_NOV20_FIRST_PLACE_READINESS_AUDIT.md) separates current source-test proof, actual model scores, Anjoman contributions, and still-unverified H2 obligations.
+
+- **Verified live production:** [FALSUM five-source workbench](https://falsum-evidence-lab.vercel.app/witness/) is now served from the existing user-owned Vercel project, deployment `dpl_EHhg56Jjg8yWRpxLq7Ns87mgLD6A`, main SHA `02c975df2000ef7b2f95ebbee60eb1a548b260b1`. [Main-branch real HTTPS attestation](https://github.com/Iniwura/falsum/actions/runs/44696464449) independently fetched the real site and verified source JSON equals the regenerated evidence byte-for-byte. [Release issue #61](https://github.com/Iniwura/falsum/issues/61) was closed with the proof. No mock or preview was called production.
+- **What it actually checks:** five original historical upstream-authored parent/fix source-test stages in four projects (Koa, Hono, two LangChain fixes, Flask), with **80 deterministic constructed browser decisions: 10 SUPPORTED / 10 CONTRADICTED / 60 ABSTAIN**. The Flask GitHub Actions original test archive is separately SHA pinned. This source coverage is not trained-model accuracy or independent human AppSec gold.
+- **Useful evaluator-facing material:** [Phase 5F open-book scorecard](PHASE5F_OPEN_EVALUATOR_SCORECARD.md) accepts another candidate's own 80 source-test predictions and calculates macro class recall, confusion matrix, false confidence and correct before/after reversals. [PR #63](https://github.com/Iniwura/falsum/pull/63) passed **17/17 PR checks**. Always ABSTAIN reaches a misleading **75% raw agreement** but only **33.3333% macro recall and 0/5 full source reversals**. These are trivial constructed baselines, not new model-scoring observations or externally selected holdouts.
+- **Telegraph activity:** Nov 18 authenticated read-only Anjoman lookup confirmed **20/20 Eligible rows for the operator-reported Privy wallet**, while the prior bounty-comment address returned zero. This validates a public address's historical row status, not its cryptographic ownership, maintainer acceptance, external expert correctness or main hackathon submission.
+- **Original real model:** still **5/8 provisional source matches, 1/4 complete reversals** vs **4/8 constant-choice baselines**. The failed original LoRA is quarantined and not a registered scoring adapter.
+- **Pending:** independent expert gold **0 confirmed**; third-party mission consumption **not demonstrated**; three real public updates on separate dates **not verified**; registration/star/showcase permission **not authenticated**; 2–5 minute demo/accessibility equivalent **not authorized**; **final H2 entry NOT filed**.
+
+**Judge-safe summary:** a live independently reproducible **evaluation-material contribution**, not a newly improved or registered trained evaluator. Use the current [first-place readiness audit](H2_NOV20_FIRST_PLACE_READINESS_AUDIT.md) for remaining risks and owner gates; use older milestone paragraphs below to inspect the research chronology.
 
 ## What is FALSUM?
 
