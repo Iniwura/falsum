@@ -56,6 +56,14 @@ A separately published, open-book **30-item class-balanced** source-role-neutral
 
 **Method boundary:** the prior workbench is still the five-stage, four-project, 80-constructed-verdict UI; the extra project is a separate executed evidence sidecar, not yet a sixth typed checker source, new candidate scored prediction, independent adjudication, or improved model. This newly researched public advisory was selected by the FALSUM developer, *not* nominated independently or held out from any public corpus. Independent human AppSec expert gold remains zero.
 
+## Phase 5M addendum: working candidate-score interface, failed historical model availability
+
+[Phase 5M source-sensitive real-source challenge](PHASE5M_REAL_ORIGINAL_MODEL_SOURCE_SENSITIVITY.md) provides a usable installed evaluator-material workflow for a candidate's own public source-review predictions. It has **two real original upstream parent/fix source conditions and one no-source abstention control**, with question IDs and answerless export, strict input verification, source-sensitive reversal scoring and three explicit 1/3 synthetic constant baselines. This is genuine **evaluation-material usability**, not proof a trained model has improved or an outside expert has evaluated it.
+
+The original old LoRA's six-input source/no-source experiment was precommitted before scoring but **blocked by unavailable historical checkpoint artifacts**. No new official Foundation model inference took place; the checkpoint availability gate publishes an explicit machine-readable unavailable receipt and correctly skips the real model job. The original 5/8 source matches and 1/4 complete reversals remain the only observed original-model source comparison. Counting the new challenge's author reference as external gold or treating a green availability workflow as real model inference would be false.
+
+**Competition risk unchanged:** the sample is one *public* upstream project, not an independently chosen blind set; verified outside candidate predictions, independent AppSec source adjudication, new registered scorer and mission-adoption evidence remain zero/unverified. Priority is evidence of a real independent candidate/reviewer or new authenticated model, not inflated counts.
+
 ## Strict evaluator-track competitive assessment
 
 **Technical evidence: genuinely strong relative to a typical static hackathon pitch.** Original upstream security tests run on the old and fixed code, immutable source/test/CI pinning, calibrated abstention, dedicated browser CI, verified real production HTML and an installed no-credential developer scorecard are practical, reproducible materials.
