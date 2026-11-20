@@ -2,6 +2,10 @@
 
 **FALSUM · Telegraph Season II · Evaluators · SECURITY_REVIEW_GENERAL · 20 November 2026**
 
+**CRITICAL ADVERSARIAL CORRECTION (Phase 5K):** A source-blind rule using only the public question's `revision`, `claim_type` and `receipt_integrity` fields reproduces **all 80 source-derived labels without reading code or calling any model**. Therefore **even 80/80 is not evidence of evaluator correctness**. See the [reproducible falsification and balanced 30-question successor](PHASE5K_SOURCE_BLIND_LEAK_AND_BALANCED_CHALLENGE.md). The historical Phase 5F CLI and underlying original upstream source proof are preserved for reproducibility, but the original scores must not be advertised as learned-model accuracy, generalization or independent gold.
+
+
+
 FALSUM's five-source verifier already establishes whether narrow historical source-test claims are supported, contradicted or require abstention. Phase 5F adds a genuine developer-facing **candidate prediction format and repeatable scoring harness**. A developer can inspect questions, use their own evaluator to answer, and score those predictions against the original public upstream regression evidence. No wallet, paid inference, secrets, network account or private labels required.
 
 **The challenge is public, author-selected and open book.** It is not independent human AppSec gold, a sealed holdout, arbitrary natural-language review scoring, or a registered Telegraph adapter.

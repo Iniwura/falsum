@@ -54,6 +54,12 @@ Omit `--requests` and use a different output filename to run **32 automatically 
 
 **[Reproduce a fifth historical source witness, Flask](docs/PHASE5C_AUTHENTIC_FLASK_FIFTH_WITNESS.md).** The five-case offline checker preserves the original four immutable Koa/Hono/LangChain receipts and admits Flask's real upstream parent-fail/fix-pass session `Vary: Cookie` regression only from its **original, GitHub-SHA-256-pinned Actions ZIP artifact**. Its 40 constructed controls cover 10 supported, 10 contradicted and 20 abstained typed source claims across 4 distinct upstream repositories. These are **source-test consistency checks, not learned-model accuracy, independent expert labels or blind new-case generalization**. The existing four-witness command above remains unchanged.
 
+## Benchmark validity correction (Phase 5K)
+
+**[Adversarial test: the original 80-item score is completely exposed to a source-blind shortcut](docs/PHASE5K_SOURCE_BLIND_LEAK_AND_BALANCED_CHALLENGE.md).** A deterministic rule reading only the publicly exported revision, claim-type and receipt-integrity fields reproduces **80/80 source-derived verdicts (100%) without examining code or running a model**. Thus the Phase 5F scorecard remains useful for source-proof consistency, but **cannot measure semantic security-review ability or learned-model improvement**.
+
+FALSUM now offers a separately scored **30-question public balanced alternative (10 SUPPORTED, 10 CONTRADICTED, 10 ABSTAIN)** with opaque item IDs, neutral source commit slots and a lower-friction installed CLI command. The original always-ABSTAIN shortcut drops from 75% raw agreement to **33.33%**, while a disclosed slot-guessing source-blind rule still gets **22/30**, proving this is not a secret or fully shortcut-proof benchmark. Use [the adversarial methodology and reproduction](docs/PHASE5K_SOURCE_BLIND_LEAK_AND_BALANCED_CHALLENGE.md) rather than claiming a new independent model score. Actual third-party developer predictions and qualified AppSec gold remain unverified.
+
 ## Score an evaluator's own predictions (Phase 5F)
 
 **[Open-book source-review prediction scorecard](docs/PHASE5F_OPEN_EVALUATOR_SCORECARD.md).** FALSUM exports 80 no-answer historical source-test questions and an unfilled prediction template. A developer can submit their **own** SUPPORTED / CONTRADICTED / ABSTAIN judgments through the installed CLI, then inspect exact agreement, macro class recall, unsupported confident claims and correct vulnerable-parent-to-fixed reversals. No secrets, wallet or network access needed.
