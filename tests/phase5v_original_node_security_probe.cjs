@@ -60,6 +60,14 @@ async function cookieJar() {
   let polluted = false;
   let control = false;
   try {
+    // Check unrelated ordinary cookie-store behavior in a CLEAN isolated
+    // store before intentionally exercising the vulnerable __proto__ domain.
+    const safeJar = new CookieJar();
+    safeJar.setCookieSync("Healthy=ok; Domain=example.com; Path=/",
+                          "https://example.com/");
+    const safeCookies = safeJar.getCookiesSync("https://example.com/");
+    control = Array.isArray(safeCookies) &&
+              safeCookies.some(c => c.key==="Healthy" && c.value==="ok");
     const jar = new CookieJar(undefined, {rejectPublicSuffixes:false});
     jar.setCookieSync(
       "Slonser=polluted; Domain=__proto__; Path=/notauth",
@@ -68,8 +76,8 @@ async function cookieJar() {
       "Auth=Lol; Domain=google.com; Path=/notauth",
       "https://google.com/");
     polluted = Object.prototype.hasOwnProperty.call(Object.prototype, "/notauth");
-    const cookies = jar.getCookiesSync("https://google.com/notauth");
-    control = Array.isArray(cookies) && cookies.some(c => c.key === "Auth");
+    // Do not grade benign behavior through the intentionally polluted jar:
+    // that would conflate the negative source condition with the safe control.
   } finally {
     delete Object.prototype["/notauth"];
   }
