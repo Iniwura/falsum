@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5Q_FROZEN_CANONICAL_TELEGRAPH_RELEVANCE_AUDIT_BEFORE_IMPLEMENTATION",
+  "protocol_date_utc": "2026-11-21",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "family_display_name": "SECURITY_REVIEW",
+  "scope": "Public reproducible response-shape/task-relevance preflight for canonical SECURITY_REVIEW_GENERAL code-diff review, NOT evaluator adapter, semantic accuracy classifier, reranking or live routing improvement.",
+  "public_original_external_author": "anvithagowda098",
+  "source_repo": "anvithagowda098/pr-guard",
+  "source_commit": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+  "public_report": "https://github.com/telegraphprotocol/bounties/issues/187",
+  "original_external_capture_roles": {
+    "canonical_same_intent": {
+      "source_path": "test/fixtures/miner-responses/ROUTED/security-review-diff-77003-off-target.json",
+      "git_blob_sha1": "90088128cb12c4b55966e72165c6a8b311fdbfb2",
+      "requested_intent": "SECURITY_REVIEW_GENERAL",
+      "miner_id": "77003",
+      "request_field": "params.target",
+      "result_shape": "raw",
+      "observed": "100-entry unrelated general GitHub Security Advisories feed",
+      "protocol_prediction": "OFF_TARGET_ADVISORY_FEED"
+    },
+    "direct_different_envelope": {
+      "source_path": "test/fixtures/miner-responses/SECURITY_REVIEW_GENERAL/5530-review-sqli-eval-diff-200-paid.json",
+      "git_blob_sha1": "97931d0c376b8bc590f9dab73e5e2c2b29fcac94",
+      "requested_intent": "SECURITY_REVIEW",
+      "miner_id": "5530",
+      "request_field": "payload.input.code",
+      "result_shape": "raw",
+      "observed": "two source-related heuristic rule identifiers; not same canonical routed request envelope",
+      "protocol_prediction": "NOT_COMPARABLE_DIFFERENT_REQUEST"
+    },
+    "routed_other_intent": {
+      "source_path": "test/fixtures/miner-responses/ROUTED/code-review-sqli-eval-diff-302-intent.json",
+      "git_blob_sha1": "535166ec24b0d40d1ef5e72c2b080d929ac85262",
+      "requested_intent": "CODE_REVIEW_GENERAL",
+      "miner_id": "302",
+      "request_field": "params.code",
+      "result_shape": "intent",
+      "observed": "code-target-specific review but different evaluated Intent",
+      "protocol_prediction": "NOT_COMPARABLE_DIFFERENT_INTENT"
+    }
+  },
+  "excluded_miners": [
+    "731001"
+  ],
+  "comparison_policy": "Only same canonical SECURITY_REVIEW_GENERAL target, same exact request hash, same request schema and comparable output contract may be considered for relative miner-quality comparisons. Do not rank direct/different-Intent captures as equal candidates, even when diff hashes match.",
+  "normative_input_protocol": "A canonical SECURITY_REVIEW_GENERAL request must contain params.target with bounded Git unified diff. Treat other envelopes and Intents as noncomparable, not as comparable rank differences.",
+  "triage_outcomes": [
+    "OFF_TARGET_ADVISORY_FEED",
+    "REVIEW_STRUCTURE_PRESENT_NOT_SEMANTIC_GOLD",
+    "INSUFFICIENT_EVIDENCE",
+    "NOT_COMPARABLE_DIFFERENT_INTENT",
+    "NOT_COMPARABLE_DIFFERENT_REQUEST"
+  ],
+  "minimum_original_diagnostic": "The one original canonical same-Intent real paid response that is a 100-item broad GHSA listing, unrelated to the input diff, must fail task relevance even when paid:true and status 200.",
+  "adversarial_controls": [
+    "Reject source-blind HTTP200/paid flag as proxy for task relevance",
+    "Generic 100-GHSA feed must remain off-target if padded with fake target keywords",
+    "Wrong Intent must not become a same-Intent ranking comparison",
+    "Direct family envelope is not automatically canonical SECURITY_REVIEW_GENERAL",
+    "Echoing exact diff text without findings must not imply substantive review",
+    "Response that mentions actual source line is only structured candidate, not expert correctness",
+    "Attackers cannot inject arbitrary local files or shell through source path",
+    "Original source blob must be Git SHA1 verified before evidence is admitted",
+    "No raw third-party request or response body to be republished in evidence index",
+    "No accepted mineable scoring package or registered onchain evaluator claim"
+  ],
+  "baseline_stated": "HTTP 200 or payment.success:true is a false-positive task-completion baseline on original canonical PR Guard capture.",
+  "original_paid_flags_are_uncorroborated_receipt_metadata": true,
+  "original_attested_payment_cryptographically_verified": false,
+  "training_use_allowed": false,
+  "may_publish_aggregate_link_only": true,
+  "no_known_independent_expert_gold": true,
+  "excluded_same_owner_miner": true,
+  "no_new_same_intent_comparable_positive_miner": true,
+  "no_network_ranking_modification": true,
+  "no_external_adoption_claim": true,
+  "no_official_h2_submission": true,
+  "success_definition": "At least one authentic published paid canonical same-Intent off-target response rejected, non-comparable external responses excluded, adversarial mutation suite passes, and claims remain limited to structural relevance."
+}
