@@ -85,6 +85,13 @@ def main(argv: list[str] | None = None) -> int:
     balanced.add_argument("--strategy",
                           choices=("always-abstain", "always-supported",
                                    "always-contradicted", "slot-a-is-parent"))
+    telegraph = commands.add_parser(
+        "audit-telegraph-target",
+        help="source-pinned real paid SECURITY_REVIEW_GENERAL response relevance audit; not a registered scorer",
+    )
+    telegraph.add_argument("--out",type=Path,required=True)
+    telegraph.add_argument("--request-json",type=Path)
+    telegraph.add_argument("--response-json",type=Path)
     raw_code = commands.add_parser(
         "score-raw-code",
         help="authenticated real Git source excerpts, model inference or unverified developer score; not independent gold",
@@ -109,6 +116,14 @@ def main(argv: list[str] | None = None) -> int:
     source_pair.add_argument("--out", type=Path)
     args = parser.parse_args(argv)
     try:
+        if args.command == "audit-telegraph-target":
+            from .phase5q_telegraph_target_gate import main as telegraph_main
+            a=["--out",str(args.out)]
+            if args.request_json is not None:
+                a+=["--request-json",str(args.request_json)]
+            if args.response_json is not None:
+                a+=["--response-json",str(args.response_json)]
+            return telegraph_main(a)
         if args.command == "score-raw-code":
             from .phase5p_raw_code_evaluator import main as raw_code_main
             if args.mode == "export":
