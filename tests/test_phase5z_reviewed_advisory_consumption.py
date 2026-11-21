@@ -60,7 +60,7 @@ class SourceReviewedApplicationContract(unittest.TestCase):
         self.assertEqual(p["original_reviewed_advisory_records"],6)
         self.assertEqual(p["expected_total_display_only_reference_instances"],10)
         self.assertEqual(p["expected_distinct_version_inapplicable_ghsa"],[z.BAD_GHSA])
-        self.assertTrue(p["explicit_limits"]["no_automatic_security_approval"])
+        self.assertTrue(p["explicit_limits"]["not_automated_security_approval"])
         self.assertTrue(p["explicit_limits"]["not_same_canonical_intent_competition"])
 
     def test_six_author_constructed_reference_properties_are_internally_consistent(self):
