@@ -22,7 +22,7 @@ Original source-consumption protocol committed **before Phase 5T evaluator code 
 | True, correctly bound original regression result | 8 | Author-constructed from four genuinely executed upstream source-regression stages × pre/post fix | ALLOW |
 | False reversal of that same narrow source fact | 8 | Author-constructed counterfactuals against original execution | DENY |
 | Correct narrow fact, corrupted execution-receipt hash | 8 | Author-constructed tampered evidence | DENY |
-| Off-target paid-status original external Telecom reports | 2 | Actual immutable independently published PR Guard captures, same reported Miner | DENY |
+| Off-target paid-status original external Telegraph reports | 2 | Actual immutable independently published PR Guard captures, same reported Miner | DENY |
 | **Total** | **26** | **24 constructed and 2 real historical outputs** | **8 ALLOW, 18 DENY** |
 
 The gate can also assess local caller-supplied canonical-shaped requests and responses, without contacting the network. **Its positive output means narrowly verified regression truth, not vulnerability exploitability, production safety, semantic AppSec gold or general accuracy.**
@@ -85,3 +85,12 @@ The application consumes no private evaluation pool, hidden benchmark case, buye
 The official [Telegraph evaluation-material guide](https://docs.telegraphprotocol.com/docs/bounties/evaluation-material) recognizes reproducible measurement processes and working integrations as contributions, but public bounty proof **does not** mean canonical network evaluator status or award acceptance.
 
 This work does not generate the final demo or submit the H2 entry.
+
+## Actual original GitHub Actions evidence verified
+
+The [original successful Phase 5T CI run](https://github.com/Iniwura/falsum/actions/runs/44901279047) completed all **four jobs**: adversarial source-binding Python 3.11, 3.12, 3.13 and the actual online check fetching both original external paid-status Git blobs. The retained original artifact is GitHub ID **14706480193**.
+
+- Original downloadable aggregate-only ZIP SHA-256: `2e2ddb6a70a6b73762cc81b136d11f0bd89e15b72af6068472a8014bdf4c1cc4`.
+- Original contained aggregate JSON SHA-256: `4fa57b107f070b8c29abc2fe5e1fb9042c5281e19673659e6860a8c80b790296`.
+- Verified actions on the preregistered mixed **24 constructed + 2 real external** dataset: **26/26 matching designed/observed safe-action labels**. The three naive controls were **8/26**, **18/26** and **10/26**. Those are test contract rates, **not** independent model accuracy or real-network ranking uplift.
+- [Permanent artifact and provenance index](../evidence/phase5t-2026-11-21-actual-telegraph-app-consumption.json).
