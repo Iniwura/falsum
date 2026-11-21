@@ -1,0 +1,86 @@
+name: Phase 5AG - multi-ecosystem reviewed per-reference source contract
+on:
+  pull_request:
+    paths:
+      - 'data/phase5ag-multiecosystem-reviewed-source-preregistration.json'
+      - 'evidence/phase5ag-reviewed-advisories/**'
+      - 'src/falsum/phase5ag_reviewed_reference_evaluator.py'
+      - 'src/falsum/phase4l_external_receipt_evidence.py'
+      - 'src/falsum/phase5m_real_source_sensitive_model.py'
+      - 'tests/test_phase5ag_reviewed_reference_evaluator.py'
+      - 'docs/PHASE5AG_MULTIECOSYSTEM_REVIEWED_REFERENCE_EVALUATOR.md'
+      - '.github/workflows/phase5ag-reviewed-per-reference.yml'
+      - '.gitattributes'
+  push:
+    branches: [main]
+    paths:
+      - 'data/phase5ag-multiecosystem-reviewed-source-preregistration.json'
+      - 'evidence/phase5ag-reviewed-advisories/**'
+      - 'src/falsum/phase5ag_reviewed_reference_evaluator.py'
+      - 'src/falsum/phase4l_external_receipt_evidence.py'
+      - 'src/falsum/phase5m_real_source_sensitive_model.py'
+      - 'tests/test_phase5ag_reviewed_reference_evaluator.py'
+      - '.github/workflows/phase5ag-reviewed-per-reference.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verified-source-bounded-replay:
+    name: Bounded GHSA source replay / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Verify Git blob source identity, frozen labels and fail-closed tests
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5ag_reviewed_reference_evaluator.py' -v
+          python -m unittest discover -s tests -p 'test_phase5z_reviewed_advisory_consumption.py' -v
+      - name: Exercise create-only CLI on offline original published data
+        run: |
+          set -euo pipefail
+          python -m falsum.phase5ag_reviewed_reference_evaluator --ecosystem npm --package axios --version 1.5.0 --reference GHSA-wf5p-g6vw-rhxx --out /tmp/phase5ag-check.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("/tmp/phase5ag-check.json").read_text(encoding="utf-8"))
+          assert r["reference_decisions"][0]["decision"]=="VERIFIED_APPLICABLE"
+          assert r["original_git_reviewed_advisories_verified"]==3
+          assert r["coverage_is_complete"] is False
+          assert r["security_clearance_granted"] is False
+          print("PASS: authenticated multi-ecosystem bounded reference CLI")
+          PY
+  windows-bounded-source-replay:
+    name: Windows original byte replay with CRLF-prone checkout
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Reproduce normal Windows Git EOL config
+        shell: pwsh
+        run: git config --global core.autocrlf true
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12.10'
+      - name: Validate three pinned Git bytes and preregistered original labels
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5ag_reviewed_reference_evaluator.py' -v
