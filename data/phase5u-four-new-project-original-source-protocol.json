@@ -123,5 +123,13 @@
       "fixed_extra_anchor": "sensitiveHeaders.concat(options.sensitiveHeaders).map(escapeRegex).join(\"|\") +",
       "fixed_test_anchor": "Sensitive-A"
     }
-  ]
+  ],
+  "frozen_model_system": "You are reviewing a claim against the exact supplied original open-source code. Return A or B only when that code establishes one of the options. If source code is absent, answer ABSTAIN. Reply with exactly A, B, or ABSTAIN.",
+  "frozen_model_user_template": "Task: {question}\n\nOriginal source code excerpt:\n{code}\n\nA. {answer_a}\nB. {answer_b}\n\nAnswer with exactly A, B, or ABSTAIN.",
+  "max_model_input_tokens": 1024,
+  "max_generated_tokens": 12,
+  "greedy_no_few_shot": true,
+  "source_visible_only_prompt_threat_model": true,
+  "extractor_policy": "Find exact source anchor, select first occurrence if multiple equivalent setKey/this.idx assignments, include 8 code lines above and 12 below plus optional fixed extra helper at ±3 lines, fail closed on missing anchor. Source Git blob must be verified before excerpt.",
+  "actual_executed_source_behavior_not_claimed": true
 }
