@@ -8,7 +8,7 @@ on:
       - 'evidence/**'
       - 'src/falsum/**'
       - 'tests/**'
-      - 'docs/PHASE5AF_WINDOWS_EXTERNAL_REPRODUCIBILITY.md'
+      - 'docs/PHASE5AE_WINDOWS_EXTERNAL_REPRODUCIBILITY.md'
   push:
     branches:
       - main
@@ -19,7 +19,7 @@ on:
       - 'evidence/**'
       - 'src/falsum/**'
       - 'tests/**'
-      - 'docs/PHASE5AF_WINDOWS_EXTERNAL_REPRODUCIBILITY.md'
+      - 'docs/PHASE5AE_WINDOWS_EXTERNAL_REPRODUCIBILITY.md'
   workflow_dispatch:
 permissions:
   contents: read
