@@ -30,7 +30,7 @@ KIND_DIRECT = "DIRECT_PROVIDER_CANONICAL_RECEIPT_BUT_NO_CANONICAL_REQUEST"
 KIND_DIFFERENT = "SUCCESSFUL_RESPONSE_RECEIPT_IS_NOT_CANONICAL_INTENT"
 KIND_FAILED = "FAILED_NO_SUCCESSFUL_RECEIPT"
 ENGINE_ROUTED_URL = "https://devnode.telegraphprotocol.com/engine/v1/ask"
-ENGINE_DIRECT_RE = re.compile(r"^https://devnode\\.telegraphprotocol\\.com/engine/v1/ask/([1-9][0-9]*)$")
+ENGINE_DIRECT_RE = re.compile(r"^https://devnode\.telegraphprotocol\.com/engine/v1/ask/([1-9][0-9]*)$")
 LIMIT_FIELDS = (
     "folder_name_is_not_intent_proof",
     "reported_payment_not_chain_verified",
