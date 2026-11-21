@@ -8,9 +8,9 @@ Two independently recorded *reported* Miner IDs, **190048** and **77010**, retur
 
 The reviewed advisory gives the exact package `npm / lodash` this affected interval:
 
-<box>**Affected:** 4.17.23 (inclusive) through 4.18.1 (exclusive)
+**Affected:** 4.17.23 (inclusive) through 4.18.1 (exclusive).
 
-**Requested:** 4.17.15, which is earlier than the affected interval.</box>
+**Requested:** 4.17.15, which is earlier than the affected interval.
 
 The same advisory separately names packages such as `lodash.unset` and `lodash.omit`, with different version ranges. **These are different package names**. A version judge that merges their intervals into `lodash` gives a false positive. Phase 5Y explicitly selects **exactly** the matching `name=lodash`, `ecosystem=npm` entry before checking the numeric version boundary.
 
