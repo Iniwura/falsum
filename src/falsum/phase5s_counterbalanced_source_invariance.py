@@ -93,8 +93,10 @@ def prompt_parts(p:dict,question:str,code:str,a:str,b:str)->list[dict]:
             "source prompt cannot be truncated or malformed")
     user=(p["prompt_template"].replace("{question}",question)
           .replace("{code}",code).replace("{answer_a}",a).replace("{answer_b}",b))
-    require("{" not in user and len(user)<12500,
-            "placeholder injection or overly large prompt")
+    require(all(token not in user for token in (
+                "{question}","{code}","{answer_a}","{answer_b}"))
+            and len(user)<12500,
+            "placeholder substitution incomplete or overly large prompt")
     return [{"role":"system","content":p["frozen_prompt_system"]},
             {"role":"user","content":user}]
 
