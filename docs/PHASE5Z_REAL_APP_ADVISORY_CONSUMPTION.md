@@ -79,3 +79,23 @@ Record numerical outcomes and actual artifact hashes **only after** the online o
 - **No demo or official submission:** This is a technical release and independently reproducible source-backed reference implementation, not the final hackathon entry.
 
 The next evaluation improvement requires more genuinely comparable same-canonical-Intent Miner outputs, independent source adjudication, or an actual third-party integration. Additional author-built variations on the same three public examples cannot substitute for those.
+
+## Verified actual original source verification outcome
+
+The [original successful GitHub Actions run](https://github.com/Iniwura/falsum/actions/runs/44906868471) completed **4/4 jobs**: Python 3.11, 3.12 and 3.13 adversarial contracts plus a separate online source loader which actually retrieved **three original outside Miner Git blobs and six independently maintained reviewed advisory Git blobs**.
+
+Its original unmodified source-verified aggregate yielded:
+
+| Outside report | Original reference count | Sanitized display-only count | Suppressed | Security approval |
+| --- | ---: | ---: | ---: | --- |
+| Reported Miner 77003 routed | 100 unscoped | 0 | Entire feed denied | Never |
+| Reported Miner 190048 direct | 6 | 5 | 1 version-inapplicable GHSA | Never |
+| Reported Miner 77010 direct | 6 | 5 | 1 version-inapplicable CVE alias for the same GHSA | Never |
+
+All application decisions include direct primary reviewed-source URLs and immutable Git SHA-1 provenance. The original source verified report exposes **no complete outside Miner response body**, no paid-request secrets and no user input. Local caller-supplied data is always reported as unverified; it can never set the original-capture proof flag.
+
+**Original immutable evidence archive**: Actions artifact **14708530673**; original ZIP SHA-256 `bdc6dff92d144817f95349d8d08957bf6cc91f11ed1ece21c810ddb026191b6d`; contained safe aggregate JSON SHA-256 `68487eeb9c569257351f7be51d273d33fbab970fa1b63abb9001ddb0aa7f8165`.
+
+[Permanent measured evidence ledger](../evidence/phase5z-2026-11-21-genuine-miner-advisory-consumption-output.json).
+
+This original run measures **one applied version-inapplicability finding repeated by two different reported Miners**, not two distinct reviewed false-positive vulnerabilities. It also does not change Telegraph's live network rankings or establish any independent production integrator adoption.
