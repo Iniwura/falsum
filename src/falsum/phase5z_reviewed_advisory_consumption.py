@@ -113,17 +113,17 @@ def deny(role:str,reason:str,original:bool=False)->dict:
             "same_canonical_intent_network_ranking_proved":False}
 
 def consume(role:str,request:object,body:object,reviewed:list[dict],
-            *,original_external_verified:bool=False,root:Path=ROOT)->dict:
+            *,root:Path=ROOT)->dict:
     frozen(root)
     need(role in ROLES,"unsupported original provider family")
     ghsa,cves=reviewed_index(reviewed,root=root)
     result=relevance(role,request,body)
     if role=="canonical_routed_off_target":
         return deny(role,"UNSCOPED_100_ADVISORY_FEED_NOT_PACKAGE_BOUND",
-                    original_external_verified)
+                    False)
     if result["action"]!="DISPLAY_TARGET_BOUND_UNVERIFIED_ADVISORY_REFERENCES":
         return deny(role,"ORIGINAL_PACKAGE_TARGET_OR_PROVIDER_ID_NOT_BOUND",
-                    original_external_verified)
+                    False)
     raw=(body["result"]["advisoryKeys"] if role=="direct_deps_dev_ghsa"
          else body["result"]["version"]["advisories"])
     refs=ghsa if role=="direct_deps_dev_ghsa" else cves
@@ -131,22 +131,22 @@ def consume(role:str,request:object,body:object,reviewed:list[dict],
     for item in raw:
         if not isinstance(item,dict):
             return deny(role,"MALFORMED_OR_UNKNOWN_ADVISORY",
-                        original_external_verified)
+                        False)
         if role=="direct_deps_dev_ghsa":
             key=item.get("id")
         else:
             aliases=item.get("aliases")
             if not isinstance(aliases,list) or len(aliases)!=1:
                 return deny(role,"UNKNOWN_OR_AMBIGUOUS_CVE",
-                            original_external_verified)
+                            False)
             key=aliases[0]
         if not isinstance(key,str) or key not in refs:
             return deny(role,"NOT_IN_INDEPENDENT_REVIEWED_SOURCE_SET",
-                        original_external_verified)
+                        False)
         choices.append((key,refs[key]))
     if len(choices)!=6 or len({a for a,b in choices})!=6:
         return deny(role,"DUPLICATE_OR_INCOMPLETE_REFERENCE_SET",
-                    original_external_verified)
+                    False)
     visible=[]
     suppressed=[]
     for identifier,record in choices:
@@ -171,7 +171,7 @@ def consume(role:str,request:object,body:object,reviewed:list[dict],
        "reason":"INDEPENDENT_REVIEWED_EXACT_PACKAGE_VERSION_REFS_FOR_DISPLAY_ONLY",
        "display_references":visible,"suppressed_references":suppressed,
        "display_count":len(visible),"suppressed_count":len(suppressed),
-       "original_external_capture_git_verified":bool(original_external_verified),
+       "original_external_capture_git_verified":False,
        "independent_reviewed_git_source_required":True,
        "no_automatic_security_clearance":True,
        "same_canonical_intent_network_ranking_proved":False,
@@ -189,7 +189,10 @@ def study(*,root:Path=ROOT,fetch_original=fetch_bytes,
         role=src["spec"]["role"]
         original=src["document"]
         output=consume(role,original["request"],original["body"],sources,
-                       original_external_verified=True,root=root)
+                       root=root)
+        # Attach original provenance ONLY after the original external
+        # Git blob hash checker has independently validated this capture.
+        output["original_external_capture_git_verified"]=True
         expected=frozen(root)["expected_original_application_decisions"][role]
         need(output["action"]==(DENY if role==ROLES[0] else ALLOW)
              and output["display_count"]==expected["advisories_displayable"]
