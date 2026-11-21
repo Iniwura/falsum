@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5Y_INDEPENDENT_GITHUB_REVIEWED_ADVISORY_VERSION_APPLICABILITY_FROZEN_BEFORE_IMPLEMENTATION",
+  "frozen_date_utc": "2026-11-21",
+  "target": {
+    "ecosystem": "npm",
+    "package": "lodash",
+    "version": "4.17.15"
+  },
+  "primary_reference_source": "github/advisory-database",
+  "primary_reference_original_git_commit": "76955defc62d048f8f7cc68bc39a2f6dd1899ebe",
+  "source_material_category": "six separately maintained GitHub-reviewed advisory JSON records at one pinned original Git revision",
+  "original_external_provider_source": "anvithagowda098/pr-guard",
+  "original_provider_captures_git_commit": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+  "original_provider_captures": [
+    {
+      "role": "direct_deps_dev_ghsa",
+      "reported_miner_id": "190048",
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW_GENERAL/190048-npm-lodash-4.17.15-200-paid.json",
+      "original_git_blob_sha1": "658510885abb51d35f74357bf3ffc5a8c88e0374",
+      "intent_on_original_receipt": "SECURITY_REVIEW",
+      "direct_request_channel": "GET /query",
+      "identifier_field": "result.advisoryKeys[*].id"
+    },
+    {
+      "role": "direct_deps_dev_version",
+      "reported_miner_id": "77010",
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW_GENERAL/77010-npm-lodash-4.17.15-200-paid.json",
+      "original_git_blob_sha1": "c914607b580e99d2f269bc69a01d6104dc25191e",
+      "intent_on_original_receipt": "SECURITY_REVIEW",
+      "direct_request_channel": "GET /query",
+      "identifier_field": "result.version.advisories[*].aliases"
+    }
+  ],
+  "original_advisory_sources": [
+    {
+      "id": "GHSA-29mw-wpgm-hmr9",
+      "source_path": "advisories/github-reviewed/2022/01/GHSA-29mw-wpgm-hmr9/GHSA-29mw-wpgm-hmr9.json",
+      "original_git_blob_sha1": "ac3a6ecf8925bb88715d1bc8cf9cdfad8511db08",
+      "original_cve_alias": "CVE-2020-28500",
+      "expected_applicable_to_npm_lodash_4_17_15": true,
+      "original_lodash_range_introduced": "4.0.0",
+      "original_lodash_range_fixed_exclusive": "4.17.21"
+    },
+    {
+      "id": "GHSA-35jh-r3h4-6jhm",
+      "source_path": "advisories/github-reviewed/2021/05/GHSA-35jh-r3h4-6jhm/GHSA-35jh-r3h4-6jhm.json",
+      "original_git_blob_sha1": "762af2bfbd26d356e06974ad73c6b62c3905db6e",
+      "original_cve_alias": "CVE-2021-23337",
+      "expected_applicable_to_npm_lodash_4_17_15": true,
+      "original_lodash_range_introduced": "0",
+      "original_lodash_range_fixed_exclusive": "4.17.21"
+    },
+    {
+      "id": "GHSA-f23m-r3pf-42rh",
+      "source_path": "advisories/github-reviewed/2026/04/GHSA-f23m-r3pf-42rh/GHSA-f23m-r3pf-42rh.json",
+      "original_git_blob_sha1": "b177ca06d757445c58720176e1e46c18a9b6b4aa",
+      "original_cve_alias": "CVE-2026-2950",
+      "expected_applicable_to_npm_lodash_4_17_15": false,
+      "original_lodash_range_introduced": "4.17.23",
+      "original_lodash_range_fixed_exclusive": "4.18.1"
+    },
+    {
+      "id": "GHSA-p6mc-m468-83gw",
+      "source_path": "advisories/github-reviewed/2020/07/GHSA-p6mc-m468-83gw/GHSA-p6mc-m468-83gw.json",
+      "original_git_blob_sha1": "32f5f29f6aa18cb6522b94281862eb82e654877b",
+      "original_cve_alias": "CVE-2020-8203",
+      "expected_applicable_to_npm_lodash_4_17_15": true,
+      "original_lodash_range_introduced": "3.7.0",
+      "original_lodash_range_fixed_exclusive": "4.17.19"
+    },
+    {
+      "id": "GHSA-r5fr-rjxr-66jc",
+      "source_path": "advisories/github-reviewed/2026/04/GHSA-r5fr-rjxr-66jc/GHSA-r5fr-rjxr-66jc.json",
+      "original_git_blob_sha1": "e5336629943507815d967a47cd9e9fb515187850",
+      "original_cve_alias": "CVE-2026-4800",
+      "expected_applicable_to_npm_lodash_4_17_15": true,
+      "original_lodash_range_introduced": "4.0.0",
+      "original_lodash_range_fixed_exclusive": "4.18.0"
+    },
+    {
+      "id": "GHSA-xxjr-mmjv-4gpg",
+      "source_path": "advisories/github-reviewed/2026/01/GHSA-xxjr-mmjv-4gpg/GHSA-xxjr-mmjv-4gpg.json",
+      "original_git_blob_sha1": "45ee41307c6af4fcf89ea991afbb58e4f1593e0f",
+      "original_cve_alias": "CVE-2025-13465",
+      "expected_applicable_to_npm_lodash_4_17_15": true,
+      "original_lodash_range_introduced": "4.0.0",
+      "original_lodash_range_fixed_exclusive": "4.17.23"
+    }
+  ],
+  "original_advisory_id_count": 6,
+  "actual_distinct_recorded_miner_ids": 2,
+  "actual_raw_reported_advisory_references": 12,
+  "verified_distinct_applicable_advisories_count": 5,
+  "verified_distinct_inapplicable_advisories_count": 1,
+  "expected_12_original_provider_reference_matches": {
+    "applicable": 10,
+    "inapplicable": 2
+  },
+  "identified_version_inapplicable_advisory": "GHSA-f23m-r3pf-42rh",
+  "identified_version_inapplicable_cve": "CVE-2026-2950",
+  "identified_not_affected_reason": "GitHub-reviewed advisory specifies lodash npm package introduction at 4.17.23, so 4.17.15 is before the affected interval",
+  "primary_decision_rule": "For each reviewed advisory, select only affected entries with EXACT package.name=lodash and ecosystem=npm. Evaluate numeric 3-component package version against upstream introduced >= lower and exclusive fixed upper. Other lodash.* subpackages must not be conflated with lodash itself.",
+  "fixed_exclusive_semver_rule": true,
+  "last_affected_inclusive_semver_rule": true,
+  "original_provider_body_republish_forbidden": true,
+  "independent_source_maintainer_distinct_from_published_provider_app": true,
+  "qualified_human_appsec_gold_count": 0,
+  "does_not_establish_advisory_recall_or_completeness": true,
+  "recorded_provider_paid_status_not_independently_settled": true,
+  "original_200_paid_flag_both": true,
+  "both_direct_receipts_intent": "SECURITY_REVIEW",
+  "true_same_canonical_intent_comparison": false,
+  "independent_provider_ownership_verified": false,
+  "no_hidden_private_evaluation_source": true,
+  "no_registered_network_evaluator": true,
+  "no_actual_network_rank_change": true,
+  "no_new_paid_requests_by_falsum": true,
+  "no_external_falsum_adoption_claim": true,
+  "no_official_h2_submission": true,
+  "exact_historical_github_sources_required": true,
+  "original_raw_response_and_private_ledger_redaction_required": true,
+  "expected_result": "Two real third-party direct Miner responses each report the same 6 advisories for npm lodash 4.17.15; independent pinned reviewed advisory records identify 5 applicable and 1 introduced only in 4.17.23 (false positive) per Miner. This is narrow precision over reported references, NOT recall, qualified human gold, network rank uplift, or a fair same-canonical-Intent comparison."
+}

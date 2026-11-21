@@ -1,0 +1,119 @@
+name: Phase 5Y - independent original reviewed advisory version validity
+on:
+  push:
+    paths:
+      - data/phase5y-original-reviewed-lodash-six-advisory-protocol.json
+      - src/falsum/phase5y_original_reviewed_version_applicability.py
+      - src/falsum/cli.py
+      - tests/test_phase5y_original_reviewed_version_applicability.py
+      - .github/workflows/phase5y-real-reviewed-advisory-version-check.yml
+  pull_request:
+    paths:
+      - data/phase5y-original-reviewed-lodash-six-advisory-protocol.json
+      - src/falsum/phase5y_original_reviewed_version_applicability.py
+      - src/falsum/cli.py
+      - tests/test_phase5y_original_reviewed_version_applicability.py
+      - .github/workflows/phase5y-real-reviewed-advisory-version-check.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  anti-false-positive-policy:
+    name: Exact package/version and SHA tampering Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Frozen source provenance and advisory-version boundary adversarial tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5y_original_reviewed_version_applicability.py' -v
+          python -m unittest discover -s tests -p 'test_phase5x_three_real_miner_target_relevance.py' -v
+          python -m falsum.cli --help | grep -F audit-reviewed-advisory-version
+  genuine-independent-reviewed-github-sources:
+    name: Fetch 6 original GitHub-reviewed advisory blobs and 2 original paid Miner captures
+    needs: anti-false-positive-policy
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reproduce real provider 10 applicable and 2 version-inapplicable references
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p original-reviewed-evidence
+          python -m falsum.cli audit-reviewed-advisory-version \
+            --out original-reviewed-evidence/ORIGINAL-REVIEWED-ADVISORY-VERSION-REPORT.json
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads(Path('original-reviewed-evidence/ORIGINAL-REVIEWED-ADVISORY-VERSION-REPORT.json').read_text())
+          assert d['status']=='PHASE5Y_AUTHENTIC_REVIEWED_ADVISORY_VERSION_APPLICABILITY_ON_TWO_ORIGINAL_PAID_MINER_CAPTURES'
+          assert d['independent_reviewed_advisory_files_full_git_blob_verified']==6
+          assert d['original_paid_status_provider_capture_git_blobs_verified']==2
+          assert d['reported_distinct_miner_ids']==['190048','77010']
+          assert d['original_reported_advisory_references']==12
+          assert d['independent_reviewed_version_applicable_references']==10
+          assert d['independent_reviewed_version_inapplicable_references']==2
+          assert d['distinct_version_inapplicable_ghsa_ids']==['GHSA-f23m-r3pf-42rh']
+          assert d['distinct_version_inapplicable_cve_aliases']==['CVE-2026-2950']
+          assert d['distinct_independent_reviewed_advisories']==6
+          assert d['distinct_version_applicable_advisories']==5
+          assert d['distinct_version_inapplicable_advisories']==1
+          assert d['naive_http_200_paid_accepted_all_references']==12
+          assert d['evidence_bound_gate_allowed_reference_display_only']==10
+          assert d['evidence_bound_gate_denied_version_inapplicable_references']==2
+          assert d['same_canonical_intent_ranking_comparison'] is False
+          assert d['independent_human_appsec_gold']==0
+          assert d['advisory_recall_or_completeness_proven'] is False
+          assert d['registered_network_evaluator'] is False
+          assert d['telegraph_network_rank_improvement'] is False
+          assert d['new_paid_telegraph_requests']==0
+          assert d['falsum_adopted_by_third_party'] is False
+          assert d['original_full_external_response_bodies_republished'] is False
+          assert d['official_h2_entry_submitted'] is False
+          assert len(d['authenticated_independent_reviewed_advisory_sources'])==6
+          assert len(d['real_original_provider_rows'])==2
+          assert len(d['original_provider_reference_decisions'])==12
+          bad=[x for x in d['original_provider_reference_decisions']
+              if not x['reviewed_reference_package_version_applicable']]
+          assert len(bad)==2 and {x['original_reported_miner_id'] for x in bad}=={'190048','77010'}
+          assert all(x['independent_reviewed_ghsa_id']=='GHSA-f23m-r3pf-42rh' for x in bad)
+          assert all(x['reviewed_original_introduced']=='4.17.23' for x in bad)
+          assert all(x['target']=='npm:lodash@4.17.15' for x in bad)
+          assert all(x['application_gate_action']=='REJECT_VERSION_INAPPLICABLE_REFERENCE' for x in bad)
+          raw=Path('original-reviewed-evidence/ORIGINAL-REVIEWED-ADVISORY-VERSION-REPORT.json').read_text()
+          assert '"payment":' not in raw and '"receipt":' not in raw
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Genuine original version-aware advisory evaluation\n\n')
+              f.write('Six original GitHub-reviewed advisory Git blobs verified from immutable source, compared to 2 original public reported-paid direct Miner output captures about npm lodash 4.17.15.\n\n')
+              f.write('Miner 190048: five applicable, one inapplicable. Miner 77010: five applicable, one inapplicable. Both included GHSA-f23m-r3pf-42rh / CVE-2026-2950, which starts at 4.17.23 for the exact npm lodash package, outside target version 4.17.15. **Two observed false-positive references, one unique advisory.**\n\n')
+              f.write('Scope: not advisory recall, qualified human AppSec gold, payment settlement, independently owned Miners, fair same-canonical-Intent ranking, network gain, adoption or registered evaluator.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5y-original-six-reviewed-versus-two-paid-miner-versions
+          path: original-reviewed-evidence/
+          retention-days: 90
+          if-no-files-found: error
