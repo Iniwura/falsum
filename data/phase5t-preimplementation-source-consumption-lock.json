@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5T_SOURCE_BOUND_APPLICATION_CONSUMPTION_PROTOCOL_FROZEN_BEFORE_IMPLEMENTATION",
+  "date_utc": "2026-11-21",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "contribution_route": "evaluation material and reproducible application-consumption evaluation process, NOT registered network scorer",
+  "evidence_sources": [
+    "evidence/phase4u-2026-11-18-permanent-four-executed-source-witness-index.json",
+    "data/phase4p-three-project-open-review-lock.json",
+    "data/phase5r-observed-independent-two-task-contrast-lock.json"
+  ],
+  "source_cases": [
+    "koa-redirect",
+    "hono-csrf",
+    "langchain-path",
+    "langchain-symlink"
+  ],
+  "local_protocol": "A strict canonical-Intent-shaped offline application sample. For source reviews, params.target is exactly 'Review upstream security regression <case_id> at Git revision <40-lowercase-hex>.' Each accepted result must contain exactly one source-backed typed claim with all original source/test/receipt hashes. For the genuine external paid captures, params.target and original response shapes are used unchanged.",
+  "accepted_local_response_shape": "body.result.review_claim is exact approved source-review-witness claim; no freeform model scores",
+  "local_source_task_contract": "Only original GitHub Actions authenticated before/after source facts admitted; exact request case and revision bind to claim. A claimed PASS/FAIL that is contradicted by the authentic record must never authorize consumption.",
+  "decision_labels": [
+    "ACCEPT_SOURCE_WITNESSED_FACT",
+    "REJECT_CONTRADICTED_FACT",
+    "REJECT_UNVERIFIED_PROOF",
+    "REJECT_TASK_MISMATCH",
+    "REJECT_NONCOMPARABLE_REQUEST",
+    "REJECT_INVALID_INPUT"
+  ],
+  "judge_benchmark_groups": [
+    {
+      "kind": "verified-narrow-facts",
+      "count": 8,
+      "reference_decision": "ACCEPT_SOURCE_WITNESSED_FACT",
+      "origin": "RESEARCHER_CONSTRUCTED_FROM_AUTHENTICATED_EXECUTED_UPSTREAM_TESTS"
+    },
+    {
+      "kind": "source-contradicted-facts",
+      "count": 8,
+      "reference_decision": "REJECT_CONTRADICTED_FACT",
+      "origin": "RESEARCHER_CONSTRUCTED_FROM_AUTHENTICATED_EXECUTED_UPSTREAM_TESTS"
+    },
+    {
+      "kind": "source-proof-tampered-facts",
+      "count": 8,
+      "reference_decision": "REJECT_UNVERIFIED_PROOF",
+      "origin": "RESEARCHER_CONSTRUCTED_ADVERSARIAL_MUTATIONS"
+    },
+    {
+      "kind": "real-pr-guard-paid-off-target",
+      "count": 2,
+      "reference_decision": "REJECT_TASK_MISMATCH",
+      "origin": "AUTHENTICATED_ORIGINAL_THIRD_PARTY_PAID_FLAGGED_PUBLIC_CAPTURES"
+    }
+  ],
+  "total_conditions": 26,
+  "expected_actions": {
+    "ALLOW": 8,
+    "DENY": 18
+  },
+  "naive_http_success_baseline": "accept any local/real response with status=200 and paid=true, with synthetic paid flags for constructed local controls. The original real public third-party paid captures are reported flags only, NOT cryptographically verified.",
+  "reject_everything_baseline": "deny all 26; no utility for the eight authenticated narrow, source-supported claims",
+  "data_is_public_open_book": true,
+  "prior_cases_previously_studied": true,
+  "independently_validated_appsec_gold_count": 0,
+  "actual_telegraph_provider_improvement_proven": false,
+  "independent_adoption_of_falsum": false,
+  "network_evaluator_registered": false,
+  "no_new_paid_telegraph_request": true,
+  "no_third_party_full_response_bodies_published": true,
+  "private_hidden_eval_material_used": false,
+  "actual_external_request_count": 2,
+  "synthetic_benchmark_conditions": 24,
+  "verified_source_case_count": 4,
+  "new_project_disjoint_cases": 0,
+  "no_official_h2_submission": true,
+  "success_gate": "A single fail-closed, strictly parsed local application-consumption contract accepts eight valid source-bound facts, rejects eight contradictory facts and eight altered proofs and rejects the two authentic published off-target paid-flagged outputs; originals Git-verified, primary metric is application allow/deny, with three explicit baselines and no inflated model accuracy claims."
+}
