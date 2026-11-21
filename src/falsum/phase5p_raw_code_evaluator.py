@@ -131,6 +131,17 @@ def excerpt(text:str,anchor:str,window:list[int],*,
             extra_anchor:str|None=None,extra_window:list[int]|None=None)->str:
     lines=text.splitlines()
     hits=[i for i,line in enumerate(lines) if anchor in line]
+    if len(hits)==2 and anchor==(
+        "data_end = del_index = self.last_newline(data[data_start:]) + data_start"
+    ):
+        # Upstream Werkzeug has a second occurrence in its matched-boundary
+        # fallback. We only want the first, inside the no-boundary branch.
+        first_context="\n".join(lines[max(0,hits[0]-10):hits[0]])
+        second_context="\n".join(lines[max(0,hits[1]-6):hits[1]])
+        require(("if self.buffer.find(" in first_context)
+                and "if match is not None:" in second_context,
+                "Werkzeug no-boundary source context unexpectedly changed")
+        hits=hits[:1]
     require(len(hits)==1,"source excerpt anchor absent or ambiguous")
     def segment(position:int,span:list[int])->str:
         lo=max(0,position+span[0])
