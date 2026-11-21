@@ -2,9 +2,25 @@
 
 ## What FALSUM does, and does not yet do
 
-FALSUM publishes reproducible **security-review evaluation material**: immutable source/review evidence, benchmark cases and negative model results, plus a **bounded historical reference-filtering demonstration** for original published Telegraph security-review captures. The strict original lodash `4.17.15` six-advisory verifier is a forensic **fixed-snapshot contract**, **not** an arbitrary-package vulnerability scanner or production-ready universal network evaluator. Real improvements to unseen responses require independently source-backed tests and a separate generalized policy ([tracked openly](https://github.com/Iniwura/falsum/issues/89)).
+FALSUM publishes reproducible **security-review evaluation material**: immutable source/review evidence, benchmark cases, negative model results, and bounded advisory-reference checks. The original lodash `4.17.15` six-advisory verifier is a **fixed historical snapshot**. A newer, separate per-reference evaluator adds authenticated Axios/Rack evidence across npm and RubyGems. Neither is a comprehensive package scanner, a validated general-purpose security evaluator, or an approved network scoring service. Broader generalization and expert validation remain [tracked in Issue #89](https://github.com/Iniwura/falsum/issues/89).
 
 **Windows reviewer correction (Phase 5AE):** the repository enforces LF working-tree bytes via [`.gitattributes`](.gitattributes), because the pinned Git blob hashes must reproduce even with Git for Windows `core.autocrlf=true`. The [Windows Git checkout regression](.github/workflows/windows-lf-original-source-replay.yml) and [technical response](docs/PHASE5AE_WINDOWS_EXTERNAL_REPRODUCIBILITY.md) test the originally reported failure without weakening original byte-identity verification. Author-run CI is not an independent developer review.
+
+## Phase 5AG: reviewed per-reference decisions across two package ecosystems
+
+[Source-backed multi-ecosystem evaluator](docs/PHASE5AG_MULTIECOSYSTEM_REVIEWED_REFERENCE_EVALUATOR.md) adds a **separate**, offline classification mode for npm/axios and RubyGems/rack using **three complete GitHub-reviewed advisory blobs** authenticated against exact original Git identities. Its source roster and **13 constructed expected cases** were frozen before implementation. The new engine returns `VERIFIED_APPLICABLE`, `VERIFIED_INAPPLICABLE`, `UNKNOWN_SOURCE` or `INSUFFICIENT_EVIDENCE` per reference. It handles multiple numerical version intervals and CVE aliases, and fails closed on unsupported prerelease comparisons, tampering, ambiguous duplicates and missing evidence. Linux Python 3.11–3.13 and Windows reproducibility are CI-gated.
+
+Run from the repository root after setting `PYTHONPATH=src`:
+
+```bash
+python -m falsum.cli review-verified-references --ecosystem npm --package axios --version 1.5.0 --reference GHSA-wf5p-g6vw-rhxx --out my-reviewed-reference.json
+```
+
+**This expands authenticated source coverage, not independent accuracy or deployment claims.** The 13 labels are constructed, no new real Miner result was evaluated, the upstream snapshots are not a current complete advisory feed, and no security clearance, human AppSec gold, external adoption or improved Telegraph ranking is proved.
+
+## Phase 5AF: challenge the evidence rather than merely re-run it
+
+The [public reviewer guide](docs/INDEPENDENT_REVIEWER_START_HERE.md) now provides executable direct-vs-routed and single-byte source-tamper counterexamples. Critical reviewer CI actions are pinned to immutable SHAs; source dependency changes trigger the replay check. The Windows hash failure originally reported by an outside reviewer remains fixed.
 
 ## Phase 5AD: a developer challenged source routing — fix the real defect
 

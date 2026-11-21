@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5AG_REVIEWED_GHSA_MULTI_ECOSYSTEM_PROTOCOL_PREREGISTERED_BEFORE_EVALUATOR_IMPLEMENTATION",
+  "source_repository": "github/advisory-database",
+  "source_commit": "76955defc62d048f8f7cc68bc39a2f6dd1899ebe",
+  "frozen_on": "2026-11-21",
+  "source_count": 3,
+  "source_records": [
+    {
+      "id": "GHSA-wf5p-g6vw-rhxx",
+      "ecosystem": "npm",
+      "package": "axios",
+      "upstream_source_path": "advisories/github-reviewed/2023/11/GHSA-wf5p-g6vw-rhxx/GHSA-wf5p-g6vw-rhxx.json",
+      "original_upstream_git_blob_sha1": "ed4df0a27ba60625f1c70cc2baa6173516a16aa2",
+      "local_file": "evidence/phase5ag-reviewed-advisories/GHSA-wf5p-g6vw-rhxx.json",
+      "upstream_reviewed_at": "2023-11-10T00:35:37Z",
+      "original_modified_at": "2024-06-21T21:33:58Z"
+    },
+    {
+      "id": "GHSA-xj5v-6v4g-jfw6",
+      "ecosystem": "RubyGems",
+      "package": "rack",
+      "upstream_source_path": "advisories/github-reviewed/2024/02/GHSA-xj5v-6v4g-jfw6/GHSA-xj5v-6v4g-jfw6.json",
+      "original_upstream_git_blob_sha1": "dbc8a211717f5c99a5cb5f7793f8975710a0aa3a",
+      "local_file": "evidence/phase5ag-reviewed-advisories/GHSA-xj5v-6v4g-jfw6.json",
+      "upstream_reviewed_at": "2024-02-28T22:57:12Z",
+      "original_modified_at": "2024-02-29T02:30:42Z"
+    },
+    {
+      "id": "GHSA-7mqq-6cf9-v2qp",
+      "ecosystem": "RubyGems",
+      "package": "rack",
+      "upstream_source_path": "advisories/github-reviewed/2026/04/GHSA-7mqq-6cf9-v2qp/GHSA-7mqq-6cf9-v2qp.json",
+      "original_upstream_git_blob_sha1": "92126024d57ffd07b7469dad7f6e98a9a0078170",
+      "local_file": "evidence/phase5ag-reviewed-advisories/GHSA-7mqq-6cf9-v2qp.json",
+      "upstream_reviewed_at": "2026-04-02T20:32:42Z",
+      "original_modified_at": "2026-05-13T16:18:22Z"
+    }
+  ],
+  "constructed_cases": [
+    {
+      "name": "axios-1_5-multiple-interval",
+      "target": {
+        "ecosystem": "npm",
+        "package": "axios",
+        "version": "1.5.0"
+      },
+      "references": [
+        "GHSA-wf5p-g6vw-rhxx"
+      ],
+      "expected_statuses": [
+        "VERIFIED_APPLICABLE"
+      ]
+    },
+    {
+      "name": "axios-fixed-exclusive",
+      "target": {
+        "ecosystem": "npm",
+        "package": "axios",
+        "version": "1.6.0"
+      },
+      "references": [
+        "GHSA-wf5p-g6vw-rhxx"
+      ],
+      "expected_statuses": [
+        "VERIFIED_INAPPLICABLE"
+      ]
+    },
+    {
+      "name": "axios-old-range",
+      "target": {
+        "ecosystem": "npm",
+        "package": "axios",
+        "version": "0.27.9"
+      },
+      "references": [
+        "CVE-2023-45857"
+      ],
+      "expected_statuses": [
+        "VERIFIED_APPLICABLE"
+      ]
+    },
+    {
+      "name": "rack-multiple-independent",
+      "target": {
+        "ecosystem": "RubyGems",
+        "package": "rack",
+        "version": "2.2.8"
+      },
+      "references": [
+        "GHSA-xj5v-6v4g-jfw6",
+        "GHSA-7mqq-6cf9-v2qp"
+      ],
+      "expected_statuses": [
+        "VERIFIED_APPLICABLE",
+        "VERIFIED_APPLICABLE"
+      ]
+    },
+    {
+      "name": "rack-v3-fixed-exclusive",
+      "target": {
+        "ecosystem": "RubyGems",
+        "package": "rack",
+        "version": "3.0.9.1"
+      },
+      "references": [
+        "GHSA-xj5v-6v4g-jfw6"
+      ],
+      "expected_statuses": [
+        "VERIFIED_INAPPLICABLE"
+      ]
+    },
+    {
+      "name": "rack-v3-new-affected",
+      "target": {
+        "ecosystem": "RubyGems",
+        "package": "rack",
+        "version": "3.2.5"
+      },
+      "references": [
+        "GHSA-xj5v-6v4g-jfw6",
+        "GHSA-7mqq-6cf9-v2qp"
+      ],
+      "expected_statuses": [
+        "VERIFIED_INAPPLICABLE",
+        "VERIFIED_APPLICABLE"
+      ]
+    },
+    {
+      "name": "rack-prerelease-uncertain",
+      "target": {
+        "ecosystem": "RubyGems",
+        "package": "rack",
+        "version": "3.0.0.beta1"
+      },
+      "references": [
+        "GHSA-7mqq-6cf9-v2qp"
+      ],
+      "expected_statuses": [
+        "INSUFFICIENT_EVIDENCE"
+      ]
+    },
+    {
+      "name": "rack-prerelease-boundary-uncertain",
+      "target": {
+        "ecosystem": "RubyGems",
+        "package": "rack",
+        "version": "3.0.5"
+      },
+      "references": [
+        "GHSA-7mqq-6cf9-v2qp"
+      ],
+      "expected_statuses": [
+        "INSUFFICIENT_EVIDENCE"
+      ]
+    },
+    {
+      "name": "unknown-advisory",
+      "target": {
+        "ecosystem": "npm",
+        "package": "axios",
+        "version": "1.5.0"
+      },
+      "references": [
+        "GHSA-zzzz-zzzz-zzzz"
+      ],
+      "expected_statuses": [
+        "UNKNOWN_SOURCE"
+      ]
+    },
+    {
+      "name": "wrong-ecosystem",
+      "target": {
+        "ecosystem": "npm",
+        "package": "axios",
+        "version": "1.5.0"
+      },
+      "references": [
+        "GHSA-xj5v-6v4g-jfw6"
+      ],
+      "expected_statuses": [
+        "VERIFIED_INAPPLICABLE"
+      ]
+    },
+    {
+      "name": "mixed-duplicates-and-malformed",
+      "target": {
+        "ecosystem": "RubyGems",
+        "package": "rack",
+        "version": "3.2.5"
+      },
+      "references": [
+        "GHSA-7mqq-6cf9-v2qp",
+        "CVE-2026-34763",
+        "GHSA-zzzz-zzzz-zzzz",
+        null
+      ],
+      "expected_statuses": [
+        "VERIFIED_APPLICABLE",
+        "INSUFFICIENT_EVIDENCE",
+        "UNKNOWN_SOURCE",
+        "INSUFFICIENT_EVIDENCE"
+      ]
+    },
+    {
+      "name": "missing-target-version",
+      "target": {
+        "ecosystem": "npm",
+        "package": "axios",
+        "version": null
+      },
+      "references": [
+        "GHSA-wf5p-g6vw-rhxx"
+      ],
+      "expected_statuses": [
+        "INSUFFICIENT_EVIDENCE"
+      ]
+    },
+    {
+      "name": "empty-response-no-clearance",
+      "target": {
+        "ecosystem": "npm",
+        "package": "axios",
+        "version": "1.5.0"
+      },
+      "references": [],
+      "expected_statuses": []
+    }
+  ],
+  "explicit_limits": {
+    "no_new_miner_output_tested": true,
+    "no_independent_appsec_gold": true,
+    "no_current_ghsa_feed_completeness": true,
+    "no_falsum_independent_adoption_claim": true,
+    "no_telegraph_network_ranking_claim": true,
+    "no_auto_security_clearance": true,
+    "version_range_inference_must_fail_closed": true,
+    "source_attestation_never_from_untrusted_input_fields": true
+  }
+}
