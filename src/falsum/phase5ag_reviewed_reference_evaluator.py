@@ -29,7 +29,7 @@ INAPPLICABLE = "VERIFIED_INAPPLICABLE"
 UNKNOWN = "UNKNOWN_SOURCE"
 INSUFFICIENT = "INSUFFICIENT_EVIDENCE"
 STATUSES = frozenset((APPLICABLE, INAPPLICABLE, UNKNOWN, INSUFFICIENT))
-NUMERIC = re.compile(r"^(?:0|[0-9]+(?:\\.[0-9]+){2,3})$")
+NUMERIC = re.compile(r"^(?:0|[0-9]+(?:\.[0-9]+){2,3})$")
 ID = re.compile(r"^GHSA-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}$")
 
 
@@ -84,7 +84,7 @@ def frozen_protocol(root: Path = ROOT) -> dict:
 def checked_file(root: Path, relative: str, max_bytes: int = 100_000) -> bytes:
     ensure(isinstance(relative, str) and not relative.startswith("/")
            and ".." not in Path(relative).parts
-           and "\\\\" not in relative,
+           and "\\" not in relative,
            "invalid evidence path")
     path = root / relative
     ensure(path.is_file() and not path.is_symlink()
@@ -325,9 +325,9 @@ def main(argv: list[str] | None = None) -> int:
     ensure(args.out.parent.is_dir() and not args.out.is_symlink(),
            "output parent directory missing or output is symlink")
     # x mode never overwrites a previous reviewer result.
-    with args.out.open("x", encoding="utf-8", newline="\\n") as file:
+    with args.out.open("x", encoding="utf-8", newline="\n") as file:
         json.dump(result, file, indent=2, sort_keys=True)
-        file.write("\\n")
+        file.write("\n")
     print(json.dumps({"status": result["status"], "decision_counts": result["decision_counts"],
                       "original_verified_sources": result["original_git_reviewed_advisories_verified"]},
                      sort_keys=True))
