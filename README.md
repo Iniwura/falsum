@@ -4,6 +4,12 @@
 
 A reliable security review changes when the evidence changes. FALSUM tests that requirement against real vulnerable and fixed open-source code, distinguishes source-supported facts from unsupported security claims, and publishes failures as well as successful checks.
 
+## New: detect a real Telegraph paid response that missed the task
+
+**[Phase 5Q original canonical-Telegraph response relevance gate](docs/PHASE5Q_PUBLIC_TELEGRAPH_RESPONSE_CONTRACT.md).** An independent PR Guard builder captured a real paid HTTP 200 response for the `SECURITY_REVIEW_GENERAL` Intent: Miner 77003 returned a 100-item GitHub Security Advisory list instead of analysing the exact supplied source diff. FALSUM now **authenticates the three original external Git source files**, tests request-target relevance, and correctly rejects the one original canonical off-target response while refusing to rank two responses from other Intents/request channels as equivalent competitors. The behavior is reproducible with `falsum audit-telegraph-target --out task-relevance.json`. [Actual source-backed live proof](https://github.com/Iniwura/falsum/actions/runs/44856569057) · [original aggregate artifact fingerprints](evidence/phase5q-2026-11-21-canonical-paid-response-relevance.json).
+
+**Scope:** This verifies one original task-relevance failure and a useful fail-closed screening criterion, not semantic security correctness, multiple comparable model rankings, independent adoption, registered evaluator status or an actual network ranking change. The original payment flags are third-party captured, not independently settled-chain verified.
+
 ## New: authenticate original source code and score a candidate
 
 The [Phase 5P raw-code evaluator](docs/PHASE5P_AUTHENTICATED_RAW_CODE_EVALUATOR.md) upgrades the prior three- and twelve-question public source-*summary* diagnostics. It downloads original Git source at **eight pinned upstream file versions** from four previously researched projects, verifies each full Git blob SHA-1 against the frozen historical source selection, and constructs **12 balanced** parent/fixed/code-omitted tasks. The model is shown actual code excerpts, not FALSUM's research explanation of the answer. Public reference labels are **researcher-derived** and the cases were previously examined, so this is neither an independent blind holdout nor certified AppSec gold.
