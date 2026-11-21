@@ -1,5 +1,11 @@
 # FALSUM
 
+## Phase 5AA: offline evidence-bound security-reference integration
+
+FALSUM now supports **offline application filtering using the original six Git-blob-authenticated historical advisory source files**, without making a GitHub source request on every local decision. Run `falsum bundle-reviewed-advisories --out reviewed-sources.json` once to fetch and authenticate the exact pinned source bytes; then call `falsum filter-security-references --role direct_deps_dev_ghsa --request-json request.json --response-json response.json --reviewed-bundle reviewed-sources.json --out safe-display.json` with no network dependency for the review step. [Offline integration, trust contract and adversarial reproduction](docs/PHASE5AA_OFFLINE_REVIEWED_SOURCE_BUNDLE.md).
+
+The historical source bundle **does not include original external Miner responses**. Offline local inputs never inherit original-Miner provenance or a current-advisory-freshness claim. This is a developer integration improvement, **not new independent adoption, a broader arbitrary-package scanner, expert AppSec gold or a registered Telegraph evaluator**. Source-bundle replay is validated in the existing Phase 5Z CI workflow.
+
 ## Phase 5Z: actionable security-intelligence consumption gate
 
 An external application can now use FALSUM to **filter original public paid-status security Miner references before display** using independently GitHub-reviewed exact npm package/version ranges. The [actual original proof](docs/PHASE5Z_REAL_APP_ADVISORY_CONSUMPTION.md) checked **3 authenticated outside provider source captures and 6 separately maintained reviewed advisory Git files**: one generic 100-GHSA feed denied, two target-bound six-reference outputs sanitized to **five display-only references and one suppressed inapplicable reference each**. The two suppressed references point to the **same one unique GHSA**; no new security vulnerability is claimed.
