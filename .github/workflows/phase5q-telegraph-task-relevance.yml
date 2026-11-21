@@ -1,0 +1,118 @@
+name: Phase 5Q - authentic public Telegraph paid-response task-relevance failure proof
+on:
+  push:
+    paths:
+      - 'data/phase5q-preimplementation-telegraph-target-contract.json'
+      - 'src/falsum/phase5q_telegraph_target_gate.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5q_telegraph_target_gate.py'
+      - '.github/workflows/phase5q-telegraph-task-relevance.yml'
+  pull_request:
+    paths:
+      - 'data/phase5q-preimplementation-telegraph-target-contract.json'
+      - 'src/falsum/phase5q_telegraph_target_gate.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5q_telegraph_target_gate.py'
+      - '.github/workflows/phase5q-telegraph-task-relevance.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  adversarial-contract:
+    runs-on: ubuntu-24.04
+    name: Protocol freeze, no fake relevance and source-blind attacks (Python ${{ matrix.python }})
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Verify frozen original source policy and adversarial reject paths
+        shell: bash
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5q_telegraph_target_gate.py' -v
+          python -m unittest discover -s tests -p 'test_phase4l_external_receipt_evidence.py' -v
+          python -m falsum.cli --help | grep -F audit-telegraph-target
+  live-genuine-paid-external-network-capture:
+    name: Check all three authentic external paid source blobs, reject true off-target canonical response
+    needs: adversarial-contract
+    runs-on: ubuntu-24.04
+    timeout-minutes: 17
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run exact original PR Guard Git-source task-relevance preflight (no new paid request)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p actual-telegraph-response-audit
+          python -m falsum.cli audit-telegraph-target \
+            --out actual-telegraph-response-audit/ORIGINAL-GIT-AUTHENTICATED-TELEGRAPH-RELEVANCE.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          src=Path('actual-telegraph-response-audit/ORIGINAL-GIT-AUTHENTICATED-TELEGRAPH-RELEVANCE.json')
+          d=json.loads(src.read_text())
+          assert d["status"]=="PHASE5Q_ORIGINAL_PUBLIC_TELEGRAPH_ROUTE_RELEVANCE_DIAGNOSTIC"
+          assert d["original_capture_count"]==3
+          assert d["true_canonical_security_review_general_count"]==1
+          assert d["original_canonical_off_target_capture_rejected"] is True
+          assert d["naive_http200_would_accept_off_target_capture"] is True
+          assert d["noncomparable_different_intent_or_channel_count"]==2
+          assert d["original_owner_miner_731001_excluded"] is True
+          assert d["original_third_party_response_body_republished"] is False
+          assert d["same_intent_multi_miner_ranking_comparison_available"] is False
+          assert d["node_receipts_cryptographically_verified"] is False
+          assert d["candidate_evaluator_registered"] is False
+          assert d["real_telegraph_ranking_changed"] is False
+          assert d["official_h2_submitted"] is False
+          assert len({x["input_sha256"] for x in d["source_capture_diagnostics"].values()})==1
+          assert all(x["verified_original_source_bytes"] is True for x in d["source_capture_diagnostics"].values())
+          assert d["source_capture_diagnostics"]["canonical_same_intent"]["decision"]=="OFF_TARGET_ADVISORY_FEED"
+          assert all(x["decision"].startswith("NOT_COMPARABLE") for k,x in d["source_capture_diagnostics"].items() if k!="canonical_same_intent")
+          raw=src.read_text()
+          assert "req.query.id" not in raw and "eval(req.body" not in raw
+          assert "CVE-2026" not in raw and "ghsa_id" not in raw
+          print("Actual original same-Intent paid response fails target relevance, while mismatched request channels cannot be ranked together. Only source links + aggregate facts published.")
+          PY
+      - name: Public evaluator value vs trivial HTTP200 baseline, with no accuracy inflation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          x=json.loads(Path('actual-telegraph-response-audit/ORIGINAL-GIT-AUTHENTICATED-TELEGRAPH-RELEVANCE.json').read_text())
+          c=x['source_capture_diagnostics']['canonical_same_intent']
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## FALSUM Phase 5Q: authentic canonical Telegraph task mismatch\n\n')
+              f.write('Three **original public Git-blob-verified external paid response captures**, all with exact same 311-character input diff.\n\n')
+              f.write('**Comparable canonical SECURITY_REVIEW_GENERAL requests:** 1 (Miner 77003). It has HTTP 200/paid flags and returns a 100-GHSA general feed **instead of reviewing the target diff**. Target-relevance gate correctly rejects it as OFF_TARGET_ADVISORY_FEED.\n\n')
+              f.write('**Other source captures:** 2, but they use different request envelopes and/or Intents. They are **NOT ranked against 77003**.\n\n')
+              f.write('This demonstrates one original structural task-mismatch detection, not network ranking improvement, a validated security accuracy score, new paid FALSUM traffic, independent AppSec gold or external adoption.\n\n')
+              f.write('Original public source: '+x['public_issue']+'; original pinned repo '+x['source_repository']+'@'+x['source_revision']+'.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5q-real-original-third-party-paid-capture-aggregate-not-model-gold
+          path: actual-telegraph-response-audit/
+          retention-days: 90
+          if-no-files-found: error
