@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5P_AUTHENTICATED_REAL_UPSTREAM_CODE_MODEL_NEGATIVE_NOT_GOLD",
+  "date_utc": "2026-11-21",
+  "intended_intent": "SECURITY_REVIEW_GENERAL",
+  "precommitted_study_protocol_commit": "11e4711f7561f8fe967cbb37a4420a8041996d23",
+  "preregistered_protocol_git_blob_sha1": "a4eae5fd74be73e99f255d8f45da319c928aea48",
+  "original_source_selection_git_blob_sha1": "9fc67edec49c33d3efdb4a6128bd7c6c6b7766e2",
+  "original_verified_full_git_source_files": 8,
+  "original_source_project_count": 4,
+  "source_projects": [
+    "jpadilla/pyjwt",
+    "pallets/werkzeug",
+    "modelcontextprotocol/python-sdk",
+    "python-pillow/Pillow"
+  ],
+  "nature_of_source_material": "Real raw code excerpts taken from the exact publicly pinned original parent/fix files after checking full Git blob SHA1. Cases and researcher-designed expectations are public known historical source facts, not blind or independent human gold.",
+  "model_repository": "Qwen/Qwen2.5-0.5B-Instruct",
+  "actual_published_model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "original_model_safetensors_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+  "original_real_inference_github_run": "https://github.com/Iniwura/falsum/actions/runs/44852933182",
+  "original_real_inference_job_id": 136688393860,
+  "original_raw_artifact_id": 14686605906,
+  "original_raw_artifact_zip_sha256": "3936fcc530554cb04f54f93fd559d83905fb4dc6e6dd9cfb4505d1b07c767272",
+  "archive_files_sha256": {
+    "EMPTY-DEVELOPER-PREDICTION-TEMPLATE.json": "dfe4f4618a0c35bcef95d40b175d1bf1da8f94e7b1d06cf1c0b0dc401678e720",
+    "ORIGINAL-12-AUTHENTICATED-SOURCE-QUESTIONS.json": "57f1c7246e558ca7633409d9d1307ff54b73ebd3bdfc4e64314de951b4d1d0ff",
+    "REAL-QWEN-ORIGINAL-COMPLETIONS.json": "30c2512e6e68280f83be3f740954c828a1c28ba50386834b39f3089eb5051b83",
+    "VERIFIED-PUBLIC-RAW-CODE-DIAGNOSTIC.json": "676f581656c141da4349aab5275f1254de3c5d1dc73784bdf29fbfd5937a4cca"
+  },
+  "actual_model_prediction_sequence": [
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN"
+  ],
+  "measured": {
+    "real_forward_passes": 12,
+    "parseable_decisions": 12,
+    "exact_researcher_public_reference_matches": 4,
+    "complete_correct_parent_fix_reversals": 0,
+    "correctly_abstained_when_source_omitted": 4,
+    "unnecessary_abstentions_when_code_present": 8,
+    "unsupported_confident_no_source_guesses": 0,
+    "invalid_model_responses": 0,
+    "macro_class_recall": 0.333333,
+    "always_abstain_control_matches": 4,
+    "source_blind_constant_code_choice_plus_no_source_abstain_control_matches": 8
+  },
+  "scope_limits": {
+    "new_maintainer_disclosed_source_cases": false,
+    "source_never_seen_in_falsum_before": false,
+    "source_code_real_not_author_summary": true,
+    "human_appsec_independent_gold": 0,
+    "independent_outside_developer_usage_verified": false,
+    "pretrained_model_original_author_outside_falsum": true,
+    "model_inference_operated_by_falsum": true,
+    "experimental_new_trained_model_improvement_proven": false,
+    "external_hackathon_submitted": false,
+    "official_telegraph_evaluator_registered": false,
+    "eligible_anjoman_new_rows": 0,
+    "statistical_security_model_accuracy_claim": false
+  },
+  "conclusion": "Previously tested small published model again abstained on all three conditions for each of four original verified upstream source projects, even when the exact relevant code was supplied. Raw match 4/12 equals constant abstain and is below disclosed 8/12 source-blind shortcut. This is honest negative diagnostic evidence and useful reproducible evaluation material, not a new trained model or independent adoption."
+}

@@ -9,6 +9,12 @@
 **Internal completion target:** Sunday, November 22, 2026. This date does not authorize lowering technical standards.  
 **Actual official deadline:** December 1, 2026 at 23:59 UTC
 
+## Latest development sign-off evidence (21 November 2026)
+
+The [Phase 5P original authenticated-code evaluator](PHASE5P_AUTHENTICATED_RAW_CODE_EVALUATOR.md) implements a new working public CLI flow: full-source Git SHA integrity verification for eight pinned raw-code revisions across four previously investigated upstream projects, a class-balanced twelve-condition external model response protocol, strict failure handling, and a real published-model CPU measurement. The actual small published Qwen model **ABSTAINED on all twelve**, achieving **4/12** public research-reference matches, **0/4** complete code revisions, and **4/4** missing-code abstentions. It did not beat constant ABSTAIN or the disclosed 8/12 source-blind shortcut. Original [real Actions run 44852933182](https://github.com/Iniwura/falsum/actions/runs/44852933182) and [per-file original ZIP SHA256 index](../evidence/phase5p-2026-11-21-authenticated-raw-code-negative.json). These are real raw-code inputs, unlike Phase 5O's author-written summaries, but **still public known historical fixes and researcher-derived labels, not independent human gold**.
+
+For judging use the [five-minute reproduction guide](H2_FIVE_MINUTE_JUDGE_REPRODUCTION.md). The main official submission remains **NOT SUBMITTED**, and no organizer-accepted 2–5 minute video/equivalent, owner-required GitHub star evidence, official form receipt, showcase permission or independent developer use has been verified. Do not promote any of these to completed.
+
 ## Current entry-safe evidence, superseding older dated paragraphs (20 November 2026)
 
 **Use the current [judge guide](H2_EVALUATORS_JUDGE_PACK.md) and [strict readiness audit](H2_NOV20_FIRST_PLACE_READINESS_AUDIT.md), not the old Nov 18 source counts below, when preparing the eventual official entry.** The live source-review page has **5 real historical source-test repair stages in 4 public upstream projects**, with **80 constructed Python-source evidence verdicts** (10 supported / 10 contradicted / 60 abstained). [The latest automatic real production HTTPS check](https://github.com/Iniwura/falsum/actions/workflows/phase5e-live-production-source-freshness.yml) validates actual Vercel output after every main commit.

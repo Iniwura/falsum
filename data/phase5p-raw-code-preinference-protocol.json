@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5P_SOURCE_SELECTION_AND_EXACT_RAW_CODE_PROMPTS_FROZEN_BEFORE_ANY_MODEL_INFERENCE",
+  "protocol_date": "2026-11-21",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "aim": "Test whether a candidate can decide original source-behavior facts from authenticated raw upstream code excerpts, not researcher-written before/after summaries.",
+  "provenance": "Prior FALSUM Phase4H historical source selection: public maintainer-authored code/test commits previously examined by researchers. Not new unseen cases or independent AppSec gold.",
+  "source_lock_path": "data/phase4h-frozen-four-new-source-projects.json",
+  "source_lock_git_blob_sha1": "9fc67edec49c33d3efdb4a6128bd7c6c6b7766e2",
+  "exact_source_fetch_policy": "Only raw.githubusercontent.com using exact pinned source repo commit and file path; recompute complete original git blob SHA1 and compare to frozen original parent/fixed source blob before extracting code lines; no author-written code substituted.",
+  "programmatic_excerpts_instead_of_model_summaries": true,
+  "task_protocol": "For each of four project families, show same neutral question, same two candidate answers and source code excerpt at historical parent and fix, plus source-omitted negative control. Only code excerpt changes; answer position swaps for odd project indices. No parent/fixed/revision/label words shown inside model prompts. Model predictions are recorded raw with INVALID handling.",
+  "project_count": 4,
+  "conditions_per_project": [
+    "code-a",
+    "code-b",
+    "source-omitted"
+  ],
+  "total_tasks": 12,
+  "class_balance": {
+    "A": 4,
+    "B": 4,
+    "ABSTAIN": 4
+  },
+  "supported_label_set": [
+    "A",
+    "B",
+    "ABSTAIN"
+  ],
+  "original_model_baseline": "Qwen/Qwen2.5-0.5B-Instruct@7ae557604adf67be50417f59c2c2f167def9a775",
+  "candidate_model_policy": "Existing published Qwen model may be reused as weak negative baseline. Third parties supply actual predictions; scores are never represented as independent expert gold, hidden evaluation, or FALSUM model improvement.",
+  "project_specs": [
+    {
+      "key": "pyjwt",
+      "question": "Assume json.loads(decoded['payload']) raises RecursionError. In the source shown, which exception leaves the _decode_payload method?",
+      "parent_anchor": "except ValueError as e:",
+      "fixed_anchor": "except (ValueError, RecursionError) as e:",
+      "parent_window": [
+        -3,
+        5
+      ],
+      "fixed_window": [
+        -3,
+        5
+      ]
+    },
+    {
+      "key": "werkzeug",
+      "question": "Assume no complete boundary occurs and the trailing buffered span following the last newline is far longer than any partial boundary. What happens to that span in the no-boundary branch?",
+      "parent_anchor": "data_end = del_index = self.last_newline(data[data_start:]) + data_start",
+      "fixed_anchor": "data_end = del_index = self.last_newline(data[data_start:]) + data_start",
+      "parent_window": [
+        -6,
+        10
+      ],
+      "fixed_window": [
+        -6,
+        12
+      ]
+    },
+    {
+      "key": "mcp-python",
+      "question": "An HTTPS endpoint used by the shown transport sends a 307 redirect to a different host. What behavior does the shown code permit?",
+      "parent_anchor": "kwargs: dict[str, Any] = {\"follow_redirects\": True}",
+      "fixed_anchor": "next_request = next_request_within_origin(response)",
+      "parent_window": [
+        -3,
+        19
+      ],
+      "fixed_window": [
+        -8,
+        13
+      ],
+      "fixed_extra_anchor": "def next_request_within_origin(response: httpx2.Response)",
+      "fixed_extra_window": [
+        0,
+        23
+      ]
+    },
+    {
+      "key": "pillow",
+      "question": "The compressed FITS payload expands far beyond the declared image pixel byte count. What volume of decompressed bytes does the shown decoder request?",
+      "parent_anchor": "value = gzip.decompress(self.fd.read())",
+      "fixed_anchor": "with gzip.open(self.fd) as fp:",
+      "parent_window": [
+        -5,
+        9
+      ],
+      "fixed_window": [
+        -5,
+        10
+      ]
+    }
+  ],
+  "model_system_instruction": "Read only the supplied primary-source code excerpt and the question. Choose A or B when the excerpt directly establishes the answer. If the relevant source is missing or insufficient, choose ABSTAIN. Reply with exactly A, B, or ABSTAIN. No explanation.",
+  "model_user_template": "Task: {question}\\n\\nSource code:\\n{code}\\n\\nA. {answer_a}\\nB. {answer_b}\\n\\nReturn exactly A, B, or ABSTAIN.",
+  "generation_max_new_tokens": 12,
+  "max_input_tokens": 1024,
+  "greedy_decode_only": true,
+  "no_few_shot_examples": true,
+  "no_model_or_answer_key_in_public_export": true,
+  "source_omitted_control_is_intentionally_easy": true,
+  "no_independent_human_expert_gold": true,
+  "no_registered_telegraph_evaluator": true,
+  "no_anjoman_eligible_rows": true,
+  "no_external_developer_adoption": true,
+  "no_official_h2_entry_submitted": true
+}
