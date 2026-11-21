@@ -104,8 +104,13 @@ def main(argv: list[str] | None = None) -> int:
             raise CurriculumError("rendered training payload integrity mismatch")
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.manifest.parent.mkdir(parents=True, exist_ok=True)
-        args.out.write_text(payload, encoding="utf-8")
-        args.manifest.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        # Text-mode writes translate LF to CRLF on Windows, breaking the
+        # manifest's sha256 contract even when the source rows are identical.
+        # Hash and store the exact same UTF-8 bytes on every platform.
+        args.out.write_bytes(payload.encode("utf-8"))
+        args.manifest.write_bytes(
+            (json.dumps(report, indent=2, sort_keys=True) + "\n").encode("utf-8")
+        )
         print(json.dumps({k: report[k] for k in
                           ("curriculum", "base_train_pairs", "added_unreviewed_pr_train_pairs",
                            "withheld_pr_validation_cases", "withheld_pr_holdout_cases")},

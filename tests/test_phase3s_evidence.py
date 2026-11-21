@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class Phase3SLiveEditorialEvidence(unittest.TestCase):
     def setUp(self):
-        self.r=json.loads((ROOT/"evidence/phase3s-2026-11-03-live-editorial.json").read_text())
+        self.r=json.loads((ROOT/"evidence/phase3s-2026-11-03-live-editorial.json").read_text(encoding="utf-8"))
 
     def test_merged_reference_redesign_and_real_qa_checks(self):
         r=self.r
@@ -44,8 +44,8 @@ class Phase3SLiveEditorialEvidence(unittest.TestCase):
 
     def test_source_and_docs_exist(self):
         self.assertTrue((ROOT/"src/falsum/templates/firma_editorial_evidence_lab.html").is_file())
-        self.assertIn("Phase 3S",(ROOT/"docs/H2_EVALUATORS_JUDGE_PACK.md").read_text())
-        self.assertIn("Firma",(ROOT/"docs/PHASE3S.md").read_text())
+        self.assertIn("Phase 3S",(ROOT/"docs/H2_EVALUATORS_JUDGE_PACK.md").read_text(encoding="utf-8"))
+        self.assertIn("Firma",(ROOT/"docs/PHASE3S.md").read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

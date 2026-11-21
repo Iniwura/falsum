@@ -1,0 +1,22 @@
+# Immutable original Git blob and policy lock files must have the
+# same bytes in all working trees. Git for Windows otherwise transforms
+# LF to CRLF when core.autocrlf=true, invalidating raw-byte source locks.
+# Normalization is a checkout rule, not a waiver of Git blob validation.
+* text=auto eol=lf
+
+# Record the cross-platform provenance contract explicitly.
+*.json text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.sh text eol=lf
+*.ps1 text eol=lf
+*.svg text eol=lf
+.gitattributes text eol=lf

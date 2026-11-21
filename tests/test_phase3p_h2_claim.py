@@ -12,7 +12,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 class Phase3PPublicClaimAccuracy(unittest.TestCase):
     def setUp(self):
-        self.p=json.loads((ROOT/"evidence/phase3p-2026-11-02-bounty-claim.json").read_text())
+        self.p=json.loads((ROOT/"evidence/phase3p-2026-11-02-bounty-claim.json").read_text(encoding="utf-8"))
 
     def test_real_exact_public_bounty_receipt(self):
         r=self.p
@@ -45,8 +45,8 @@ class Phase3PPublicClaimAccuracy(unittest.TestCase):
         self.assertNotIn("0x9cBA6Cf",json.dumps(r))
 
     def test_h2_judge_instructions_and_script_exist(self):
-        instructions=(ROOT/"docs/H2_EVALUATORS_JUDGE_PACK.md").read_text()
-        shooting=(ROOT/"docs/H2_EVALUATORS_DEMO_STORYBOARD.md").read_text()
+        instructions=(ROOT/"docs/H2_EVALUATORS_JUDGE_PACK.md").read_text(encoding="utf-8")
+        shooting=(ROOT/"docs/H2_EVALUATORS_DEMO_STORYBOARD.md").read_text(encoding="utf-8")
         self.assertIn("December",instructions)
         self.assertIn("0/3",instructions)
         self.assertIn("real",shooting)

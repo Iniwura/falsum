@@ -126,7 +126,9 @@ class EvidenceGateTests(unittest.TestCase):
         src=self.root/m["evidence"][0]["path"]
         target=src.with_name("link.txt")
         target.symlink_to(src)
-        m["evidence"][0]["path"]=str(target.relative_to(self.root))
+        # Evidence manifests use '/' even when pathlib prints '\\' on Windows.
+        # Keep the real symlink probe instead of rejecting an invalid test path.
+        m["evidence"][0]["path"]=target.relative_to(self.root).as_posix()
         with self.assertRaisesRegex(ProofError,"symlink"):
             evaluate_case(self.rules[m["case_id"]],m,self.root)
 

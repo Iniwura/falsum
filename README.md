@@ -1,5 +1,11 @@
 # FALSUM
 
+## What FALSUM does, and does not yet do
+
+FALSUM publishes reproducible **security-review evaluation material**: immutable source/review evidence, benchmark cases and negative model results, plus a **bounded historical reference-filtering demonstration** for original published Telegraph security-review captures. The strict original lodash `4.17.15` six-advisory verifier is a forensic **fixed-snapshot contract**, **not** an arbitrary-package vulnerability scanner or production-ready universal network evaluator. Real improvements to unseen responses require independently source-backed tests and a separate generalized policy ([tracked openly](https://github.com/Iniwura/falsum/issues/89)).
+
+**Windows reviewer correction (Phase 5AE):** the repository enforces LF working-tree bytes via [`.gitattributes`](.gitattributes), because the pinned Git blob hashes must reproduce even with Git for Windows `core.autocrlf=true`. The [Windows Git checkout regression](.github/workflows/windows-lf-original-source-replay.yml) and [technical response](docs/PHASE5AE_WINDOWS_EXTERNAL_REPRODUCIBILITY.md) test the originally reported failure without weakening original byte-identity verification. Author-run CI is not an independent developer review.
+
 ## Phase 5AD: a developer challenged source routing — fix the real defect
 
 A technical review supplied by a developer outside FALSUM correctly identified an important **future-input** bug: a canonical request body plus matching receipt Intent can be sent via either Telegraph's network-routed `/engine/v1/ask` **or** direct `/engine/v1/ask/{minerId}` endpoint. The original Phase 5AB logic classified only by body+receipt. [Phase 5AD](docs/PHASE5AD_EXTERNAL_REVIEW_TRANSPORT_AND_IDENTITY.md) now validates the **exact Git-authenticated original capture's recorded URL** before allowing a routed label, and separately records receipt's onchain registration ID vs. the response's Miner ID without inventing an identity mapping.

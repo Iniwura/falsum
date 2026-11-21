@@ -9,7 +9,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 class Phase3QEvidence(unittest.TestCase):
     def setUp(self):
-        self.e=json.loads((ROOT/"evidence/phase3q-2026-11-03.json").read_text())
+        self.e=json.loads((ROOT/"evidence/phase3q-2026-11-03.json").read_text(encoding="utf-8"))
 
     def test_exact_real_ci_and_pr(self):
         e=self.e
@@ -41,9 +41,9 @@ class Phase3QEvidence(unittest.TestCase):
         self.assertTrue(x["previous_20_eligible_rows_unchanged"])
 
     def test_judge_docs_reproduce_working_lab(self):
-        lab=(ROOT/"docs/PHASE3Q.md").read_text()
-        judge=(ROOT/"docs/H2_EVALUATORS_JUDGE_PACK.md").read_text()
-        storyboard=(ROOT/"docs/H2_EVALUATORS_DEMO_STORYBOARD.md").read_text()
+        lab=(ROOT/"docs/PHASE3Q.md").read_text(encoding="utf-8")
+        judge=(ROOT/"docs/H2_EVALUATORS_JUDGE_PACK.md").read_text(encoding="utf-8")
+        storyboard=(ROOT/"docs/H2_EVALUATORS_DEMO_STORYBOARD.md").read_text(encoding="utf-8")
         target="python -m falsum.phase3q_mission_lab --out-dir"
         self.assertIn(target,lab)
         self.assertIn(target,judge)

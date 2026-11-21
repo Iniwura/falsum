@@ -1,0 +1,82 @@
+name: Windows LF original-source reproducibility (Git core.autocrlf=true)
+on:
+  pull_request:
+    paths:
+      - '.gitattributes'
+      - '.github/workflows/windows-lf-original-source-replay.yml'
+      - 'data/**'
+      - 'evidence/**'
+      - 'src/falsum/**'
+      - 'tests/**'
+      - 'docs/PHASE5AE_WINDOWS_EXTERNAL_REPRODUCIBILITY.md'
+  push:
+    branches:
+      - main
+    paths:
+      - '.gitattributes'
+      - '.github/workflows/windows-lf-original-source-replay.yml'
+      - 'data/**'
+      - 'evidence/**'
+      - 'src/falsum/**'
+      - 'tests/**'
+      - 'docs/PHASE5AE_WINDOWS_EXTERNAL_REPRODUCIBILITY.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows-git-autocrlf-original-byte-locks:
+    name: Windows 11 equivalent - CRLF-prone Git, actual pinned-byte tests
+    runs-on: windows-latest
+    timeout-minutes: 25
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Simulate common Windows Git default BEFORE checkout
+        shell: pwsh
+        run: |
+          git config --global core.autocrlf true
+          Write-Host "core.autocrlf=$(git config --global core.autocrlf)"
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Assert actual disk LF bytes and explicit checkout attributes
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in .gitattributes data/phase5ab-original-receipt-comparability-lock.json data/phase4p-three-project-open-review-lock.json src/falsum/phase5ab_original_receipt_comparability.py; do
+            test "$(git check-attr eol -- "$f")" = "$f: eol: lf"
+          done
+          python - <<'PY'
+          from pathlib import Path
+          from falsum.phase4l_external_receipt_evidence import git_blob_sha
+          from falsum.phase5ab_original_receipt_comparability import LOCK_BLOB,LOCK
+          files = [Path(LOCK), Path('data/phase4p-three-project-open-review-lock.json'),
+                   Path('src/falsum/phase5ab_original_receipt_comparability.py')]
+          for file in files:
+              raw = file.read_bytes()
+              assert b'\r\n' not in raw, f"Git checkout damaged LF byte provenance: {file}"
+          raw = Path(LOCK).read_bytes()
+          assert git_blob_sha(raw) == LOCK_BLOB, "pinned source-lock hash changed on Windows"
+          print("PASS: Windows Git checkout preserves LF raw bytes and pinned exact Git blob identity")
+          PY
+      - name: Run reviewer's original failing unit-test command exactly
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5ab_original_receipt_comparability.py' -v
+      - name: Run historical reviewed advisory and on-disk source regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5y_original_reviewed_version_applicability.py' -v
+          python -m unittest discover -s tests -p 'test_phase5z_reviewed_advisory_consumption.py' -v
+          python -m unittest discover -s tests -p 'test_phase5aa_offline_reviewed_bundle.py' -v
+      - name: Run full Python stdlib test suite with Windows EOL checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests
