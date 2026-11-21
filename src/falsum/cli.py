@@ -85,6 +85,13 @@ def main(argv: list[str] | None = None) -> int:
     balanced.add_argument("--strategy",
                           choices=("always-abstain", "always-supported",
                                    "always-contradicted", "slot-a-is-parent"))
+    consume = commands.add_parser(
+        "audit-telegraph-consumption",
+        help="strict original source-bound application allow/deny policy; two authentic real paid captures and 24 constructed tests, not network scoring",
+    )
+    consume.add_argument("--out",type=Path,required=True)
+    consume.add_argument("--request-json",type=Path)
+    consume.add_argument("--response-json",type=Path)
     paired = commands.add_parser(
         "audit-telegraph-consistency",
         help="source-pinned original two-task paid Telegraph response-identity contrast; not model quality gold",
@@ -133,6 +140,14 @@ def main(argv: list[str] | None = None) -> int:
     source_pair.add_argument("--out", type=Path)
     args = parser.parse_args(argv)
     try:
+        if args.command == "audit-telegraph-consumption":
+            from .phase5t_application_consumption import main as consume_main
+            cmd=["--out",str(args.out)]
+            if args.request_json is not None:
+                cmd+=["--request-json",str(args.request_json)]
+            if args.response_json is not None:
+                cmd+=["--response-json",str(args.response_json)]
+            return consume_main(cmd)
         if args.command == "audit-telegraph-consistency":
             from .phase5r_telegraph_two_task_consistency import main as paired_main
             return paired_main(["--out",str(args.out)])

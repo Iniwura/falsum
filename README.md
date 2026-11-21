@@ -1,5 +1,14 @@
 # FALSUM
 
+## Phase 5T: a verified source-backed application decision, not just a scorecard
+
+[**Run the original source-bound Telegraph application-consumption gate**](docs/PHASE5T_FAIL_CLOSED_SECURITY_REVIEW_CONSUMPTION.md). FALSUM now makes an explicit **ALLOW/DENY** decision for a security-review response. The only ALLOW outcomes require original authenticated Git source, upstream regression test, receipt hash, exact requested project and commit, and a narrowly truthful source claim. A polished but false assertion, altered receipt, unrelated paid response, wrong Intent or unsupported source **cannot authorize the application**.
+
+A [successful original four-job CI run](https://github.com/Iniwura/falsum/actions/runs/44901279047) verified **26/26 predefined application outcomes**: eight allowed locally constructed source-supported facts; 16 rejected constructed false/tampered claims; two actual original externally published paid-status Telegraph answers rejected as irrelevant. Naïve baselines matched 8/26 (trust HTTP success), 18/26 (reject everything), and 10/26 (trust any typed claim). [Permanent measured results and original GitHub artifact SHA fingerprints](evidence/phase5t-2026-11-21-actual-telegraph-app-consumption.json).
+
+**Scope is essential:** 24/26 conditions are *constructed from previously authenticated historical upstream source tests*, not independent expert-labelled model responses. Only 2/26 are original external paid-status captures, both from one reported miner. No registered Telegraph scoring adapter, independent source validation, broader model-ranking improvement or external FALSUM adoption is implied. Reproduce: `falsum audit-telegraph-consumption --out original-source-consumption.json`.
+
+
 **Evidence-grounded security-review evaluation for Telegraph's `SECURITY_REVIEW_GENERAL` Intent.**
 
 A reliable security review changes when the evidence changes. FALSUM tests that requirement against real vulnerable and fixed open-source code, distinguishes source-supported facts from unsupported security claims, and publishes failures as well as successful checks.

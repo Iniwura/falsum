@@ -1,0 +1,134 @@
+name: Phase 5T - real original Telegraph application consumption gate
+on:
+  push:
+    paths:
+      - data/phase5t-preimplementation-source-consumption-lock.json
+      - src/falsum/phase5t_application_consumption.py
+      - src/falsum/cli.py
+      - tests/test_phase5t_application_consumption.py
+      - .github/workflows/phase5t-original-telegraph-application-consumption.yml
+  pull_request:
+    paths:
+      - data/phase5t-preimplementation-source-consumption-lock.json
+      - src/falsum/phase5t_application_consumption.py
+      - src/falsum/cli.py
+      - tests/test_phase5t_application_consumption.py
+      - .github/workflows/phase5t-original-telegraph-application-consumption.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  adversarial-consumption-contract:
+    name: Source-witness, false-paid and borrowed-proof controls / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Check original executed-source claim binding and fail-closed adversaries
+        shell: bash
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5t_application_consumption.py' -v
+          python -m unittest discover -s tests -p 'test_phase5q_telegraph_target_gate.py' -v
+          python -m unittest discover -s tests -p 'test_phase5r_telegraph_two_task_consistency.py' -v
+          python -m falsum.cli --help | grep -F audit-telegraph-consumption
+  actual-original-telegraph-source-evidence:
+    name: Fetch 2 real original external paid outputs and verify 26 application decisions
+    needs: adversarial-consumption-contract
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify 2 original externally captured paid responses, original 4 executed source witnesses and 24 synthetic controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p verified-original-app-consumption
+          python -m falsum.cli audit-telegraph-consumption \
+            --out verified-original-app-consumption/PHASE5T-AUTHENTIC-AND-CONSTRUCTED-CONSUMPTION.json
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          file=Path('verified-original-app-consumption/PHASE5T-AUTHENTIC-AND-CONSTRUCTED-CONSUMPTION.json')
+          d=json.loads(file.read_text())
+          assert d['status']=='PHASE5T_AUTHENTIC_SOURCE_WITNESS_APP_CONSUMPTION_AND_PUBLIC_PAID_CAPTURE'
+          assert d['total_application_decisions']==26
+          assert d['constructed_from_original_source_witness_and_tamper_conditions']==24
+          assert d['original_external_git_authenticated_paid_responses']==2
+          assert d['decisions_matching_preconstructed_or_external_expectations']==26
+          assert d['app_authorized_exact_source_supported_narrow_facts']==8
+          assert d['app_denied_all_known_original_off_target_or_unsupported_claims']==18
+          assert d['original_paid_success_off_target_rejections']==2
+          assert d['certified_independent_gold_labels']==0
+          assert d['new_project_disjoint_security_cases']==0
+          assert d['security_expert_accuracy_metric'] is None
+          assert d['original_paid_receipt_crypto_authenticated'] is False
+          assert d['real_live_telegraph_scoring_improvement'] is False
+          assert d['real_provider_selection_or_network_ranking_change'] is False
+          assert d['registered_network_evaluator'] is False
+          assert d['actual_telegraph_paid_calls_by_falsum']==0
+          assert d['third_party_original_full_response_republished'] is False
+          assert d['outside_falsum_adoption'] is False
+          assert d['official_h2_entry_submitted'] is False
+          assert len(d['case_outcomes'])==26
+          assert sum(x['is_original_paid_capture'] for x in d['case_outcomes'])==2
+          assert all(x['application_action']=='DENY' for x in d['case_outcomes'] if x['is_original_paid_capture'])
+          b=d['baselines']
+          assert b['accept_all_successful_paid_status']['correct_to_constructed_or_original_target_expectations']==8
+          assert b['accept_all_successful_paid_status']['false_allow']==18
+          assert b['deny_everything']['correct_to_constructed_or_original_target_expectations']==18
+          assert b['deny_everything']['false_deny']==8
+          assert b['trust_any_typed_claim_without_verification']['correct_to_constructed_or_original_target_expectations']==10
+          assert b['trust_any_typed_claim_without_verification']['false_allow']==16
+          assert all(x['model_accuracy_claim'] is False for x in b.values())
+          txt=file.read_text()
+          assert 'req.query.id' not in txt and 'eval(req.body' not in txt
+          assert 'GHSA-v8qh' not in txt and 'review_claim' not in txt
+          print('Original paid response task mismatch correctly denied twice; 8 source supported local claims allowed; 16 altered or contradicted local claims denied.')
+          PY
+      - name: Publish factual real-vs-constructed and baseline limits
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          x=json.loads(Path('verified-original-app-consumption/PHASE5T-AUTHENTIC-AND-CONSTRUCTED-CONSUMPTION.json').read_text())
+          b=x['baselines']
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Original source-bound application gate\n\n')
+              f.write('Two original public Git-verified paid-status canonical Telegraph responses rejected as off-target; 24 constructed cases from 4 authenticated original upstream source-test witnesses: 8 narrow facts accepted and 16 contradicted/tampered proofs denied.\n\n')
+              f.write('| Decision policy | Matches of 26 *partly constructed* expected actions | False allow | False deny |\\n|---|---:|---:|---:|\\n')
+              f.write('| FALSUM strict source-bound gate | 26/26 | 0 | 0 |\\n')
+              for key,label in [('accept_all_successful_paid_status','Trust HTTP 200/paid'),('deny_everything','Deny everything'),('trust_any_typed_claim_without_verification','Trust structured claim only')]:
+                  row=b[key]
+                  f.write('| '+label+' | '+str(row['correct_to_constructed_or_original_target_expectations'])+'/26 | '+str(row['false_allow'])+' | '+str(row['false_deny'])+' |\\n')
+              f.write('\nNOT a real multi-miner same-task ranking result, independently validated AppSec gold, new paid requests, external adoption or registered network adapter.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5t-authentic-two-original-paid-and-24-constructed-application-decisions
+          path: verified-original-app-consumption/
+          retention-days: 90
+          if-no-files-found: error
