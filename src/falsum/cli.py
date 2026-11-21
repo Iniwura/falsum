@@ -85,6 +85,17 @@ def main(argv: list[str] | None = None) -> int:
     balanced.add_argument("--strategy",
                           choices=("always-abstain", "always-supported",
                                    "always-contradicted", "slot-a-is-parent"))
+    raw_code = commands.add_parser(
+        "score-raw-code",
+        help="authenticated real Git source excerpts, model inference or unverified developer score; not independent gold",
+    )
+    raw_code.add_argument("mode", choices=("export","score","infer","audit"))
+    raw_code.add_argument("--questions-out", type=Path)
+    raw_code.add_argument("--template-out", type=Path)
+    raw_code.add_argument("--questions", type=Path)
+    raw_code.add_argument("--predictions", type=Path)
+    raw_code.add_argument("--raw", type=Path)
+    raw_code.add_argument("--out", type=Path)
     source_pair = commands.add_parser(
         "score-source-context",
         help="export or score three public original upstream source-context predictions; no live model or expert gold",
@@ -98,6 +109,25 @@ def main(argv: list[str] | None = None) -> int:
     source_pair.add_argument("--out", type=Path)
     args = parser.parse_args(argv)
     try:
+        if args.command == "score-raw-code":
+            from .phase5p_raw_code_evaluator import main as raw_code_main
+            if args.mode == "export":
+                if args.questions_out is None or args.template_out is None:
+                    parser.error("export needs --questions-out and --template-out")
+                return raw_code_main(["export","--questions-out",str(args.questions_out),
+                                      "--template-out",str(args.template_out)])
+            if args.questions is None or args.out is None:
+                parser.error("score/infer/audit require --questions and --out")
+            cmd=[args.mode,"--questions",str(args.questions),"--out",str(args.out)]
+            if args.mode == "score":
+                if args.predictions is None:
+                    parser.error("score needs --predictions")
+                cmd.extend(("--predictions",str(args.predictions)))
+            if args.mode == "audit":
+                if args.raw is None:
+                    parser.error("audit needs --raw")
+                cmd.extend(("--raw",str(args.raw)))
+            return raw_code_main(cmd)
         if args.command == "score-source-context":
             from .phase5m_source_context_candidate import main as source_pair_main
             if args.mode == "export":
