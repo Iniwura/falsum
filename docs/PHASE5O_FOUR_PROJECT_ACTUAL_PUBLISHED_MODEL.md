@@ -42,3 +42,11 @@ Running the tests or the prepare command **never performs inference**. The Pytho
 No qualified independent AppSec gold, no third-party developer-adopted evaluator, no hidden model holdout or pretraining disjointness, no general security review accuracy, no trained model improvement, no new Anjoman Eligible scores, no Telegraph scorer registration and no H2 final submission. Preserve negative results. Do not change the frozen prompt to make the observed model look better.
 
 Next substantial gap: independently submitted developer predictions and source-first adjudication on genuinely fresh materials. The demo and official submission remain untouched by this Phase 5O change.
+
+## Original measured outcome (21 November 2026)
+
+The [original branch CI inference](https://github.com/Iniwura/falsum/actions/runs/44850246568) and [independent PR-triggered replay](https://github.com/Iniwura/falsum/actions/runs/44850284948) both completed successfully with the **same twelve raw model responses: ABSTAIN on all 12**. Original raw output ZIPs are stored on those runs (artifact IDs 14684558280 and 14684788789). The immutable model SHA and CPU execution were checked by each job; this did not involve a synthetic response generator.
+
+**Observed model:** 4/12 public author-reference matches, 0/4 correct source-revision reversals, 4/4 missing-source abstentions, and 8/8 unnecessary abstentions on code-present summaries. **Controls:** always-ABSTAIN 4/12, disclosed parent=A source-blind shortcut 8/12. The model **did not beat** the simplest constant-abstention baseline and is worse than the public role-based shortcut.
+
+[Permanent negative-result evidence and run IDs](../evidence/phase5o-2026-11-21-published-model-four-project-negative.json). Neither this failure nor any passing CI is evidence of a valid registered evaluator, statistical generalization, outside adoption or independent expert security review. This evaluation is finished; model weaknesses are not concealed or retuned after observing results.
