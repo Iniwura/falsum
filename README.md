@@ -1,5 +1,16 @@
 # FALSUM
 
+## Phase 5Y: independently reviewed version ranges expose an original paid Miner false positive
+
+[**Six immutable GitHub-reviewed security advisory records**](docs/PHASE5Y_INDEPENDENT_GHSA_VERSION_APPLICABILITY.md) were cross-checked against the **12 real advisory references** in two separately published reported-paid Miner outputs for **npm lodash 4.17.15**. Both reported Miner **190048** and Miner **77010** included **CVE-2026-2950 / GHSA-f23m-r3pf-42rh** despite the independently reviewed advisory affecting the exact **lodash** package only from **4.17.23**. Other separately named lodash subpackages have different ranges and must not contaminate the answer.
+
+**Observed version applicability: 5/6 per original Miner, 10/12 total; 1 unique version-inapplicable advisory repeated across both.** A basic paid-success policy would display all 12. FALSUM's verified source/version filter denies the two inapplicable references and allows displaying ten other original reported references as **unverified**, not approved security guarantees.
+
+[Original live 4/4 GitHub Actions evidence](https://github.com/Iniwura/falsum/actions/runs/44905080530) · [Six independent reviewed Git source proofs, original two outside Miner sources, and immutable artifact checksums](evidence/phase5y-2026-11-21-actual-reviewed-ghsa-version-inapplicable-miner-references.json).
+
+**Limits:** This is meaningful **external semantic reference validity**, not complete vulnerability recall, qualified expert gold, independently confirmed payment settlement, a fair same-canonical-Intent Miner ranking comparison, network leaderboard improvement, independent FALSUM adoption or a registered scoring adapter. Both original requests were direct SECURITY_REVIEW-family GETs with slightly different payloads. No new paid Telegraph requests, demo or official submission.
+
+
 ## Phase 5X: three real outside Miner responses, one package target, one rejected feed
 
 [**Three original third-party, paid-flagged public Telegraph capture records**](docs/PHASE5X_ORIGINAL_THREE_MINER_LODASH_TARGET_EVIDENCE.md) target **npm lodash 4.17.15**. FALSUM authenticated all three original public Git blobs and original receipt/signal structures. The real routed **Miner 77003** response comprised 100 unrelated GHSA records and was **rejected**; direct **Miners 190048 and 77010** returned six package/version-bound advisory references each, permitted for **unverified reference display only**. A naïve HTTP 200 / paid-status rule would accept all three. All 12 constructed identity/target tampering controls denied.
