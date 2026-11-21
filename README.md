@@ -1,5 +1,14 @@
 # FALSUM
 
+## Phase 5W: independently published model fails original source-reasoning test
+
+The [**real published Qwen2.5-0.5B evaluation on four new authenticated upstream security-fix projects**](docs/PHASE5W_REAL_PUBLISHED_MODEL_NEW_SECURITY_SOURCE.md) completed 24 original model forward passes on unchanged preregistered input, with the original publisher model SHA-256 verified. **The model answered ABSTAIN on all 24 prompts**: 8/24 matches to public researcher-derived references, **0/16** source-present questions correct, **0/4** complete source-and-position reversals. The disclosed synthetic source-blind baseline matched 16/24 but also 0/4 reversals.
+
+[Original successful inference run](https://github.com/Iniwura/falsum/actions/runs/44903712350) · [Permanent original raw output and diagnostic archive SHA digests](evidence/phase5w-2026-11-21-real-qwen-new-security-source-failure.json).
+
+These are genuine **negative model results**, not proof of improved model accuracy or Telegraph rankings. FALSUM detects the source-blind and over-abstention failure; it has not trained a superior model, gathered independent expert AppSec gold, or registered a network evaluator. The four original affected/fixed source vulnerabilities were separately reproduced under focused local historical Node execution in Phase 5V.
+
+
 ## Phase 5U: four new verified upstream security-fix projects
 
 FALSUM now has [**new, project-disjoint security-review evaluation material**](docs/PHASE5U_NEW_PROJECT_DISJOINT_SOURCE_COVERAGE.md) beyond its previous PyJWT/Werkzeug/MCP SDK/Pillow examples. The original affected and fixed source-code versions of **minimist, JSON5, tough-cookie and follow-redirects** and the corresponding original upstream test files were authenticated against **all 16 exact Git blob SHA-1 identities**. [Original successful four-job GitHub Actions proof](https://github.com/Iniwura/falsum/actions/runs/44901893174) · [immutable original ZIP, challenge and proof SHA-256 identities](evidence/phase5u-2026-11-21-original-four-project-security-fix-proof.json).
