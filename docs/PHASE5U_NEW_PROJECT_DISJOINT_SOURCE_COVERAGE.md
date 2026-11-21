@@ -76,3 +76,15 @@ The original CI [Phase 5U workflow](../.github/workflows/phase5u-disjoint-upstre
 Next meaningful proof: authentic execution of these exact upstream historical tests, and real independent model responses on these new prompts compared against baselines. The phase supplies the frozen source-and-test inputs required to do that honestly.
 
 [Phase 5T production app-consumption policy](PHASE5T_FAIL_CLOSED_SECURITY_REVIEW_CONSUMPTION.md) remains separate: it tests **real application allow/deny decisions** against two original paid captures and previously authenticated executed source facts. Phase 5U addresses the **unseen project-source coverage gap**.
+
+## Actual original source verification completed
+
+The [original live GitHub Actions execution](https://github.com/Iniwura/falsum/actions/runs/44901893174) completed **all four jobs**: Python 3.11, 3.12 and 3.13 adversarial source/score contract validation, plus a separate online verifier that fetched all **16 original Git file revisions** and checked every full Git SHA-1 against the frozen casebook.
+
+- Original GitHub Actions artifact ID **14705969779**; original ZIP SHA-256 **`32abf580d7586c0a1e672c6015c06fd962337379b6aaf24e6a3c01ddd3617f86`**.
+- Original aggregate source/test proof SHA-256 **`0e63a5c08af66e2c0b036a233474f0ca4dfb589724a7477f4190ec636d7eb431`**.
+- Original 24-condition public challenge SHA-256 **`574f6d3ee45b64be118cbf43fdae986f4275a559e3dafdf9c04c355a0753968e`**.
+- Original prompt-only source-blind baseline 16/24, 0/4 full reversals (SHA-256 **`d00e8086c107ca46437396792e37c185d1a83d9f5f5d702cbb916e6eddfc32b2`**).
+- [Permanent original evidence ledger](../evidence/phase5u-2026-11-21-original-four-project-security-fix-proof.json).
+
+**All sixteen original Git file identities verified.** This is genuine additional reference coverage. The original upstream test files were **not executed** as part of this release, and no independent outside model scoring, expert adjudication or network rank uplift has been shown.
