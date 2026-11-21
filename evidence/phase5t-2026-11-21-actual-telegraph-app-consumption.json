@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5T_ACTUAL_ORIGINAL_PAID_TELEGRAPH_APPLICATION_CONSUMPTION_EVIDENCE",
+  "original_execution_utc_date": "2026-11-21",
+  "frozen_protocol_git_commit": "566deb1de916bb1316469bf92eb78c4e57b0d867",
+  "frozen_protocol_git_blob_sha1": "8383f599f8abf60278008fbbf284081882daa62e",
+  "original_ci_run": "https://github.com/Iniwura/falsum/actions/runs/44901279047",
+  "original_artifact_id": 14706480193,
+  "original_artifact_zip_sha256": "2e2ddb6a70a6b73762cc81b136d11f0bd89e15b72af6068472a8014bdf4c1cc4",
+  "original_aggregate_json_sha256": "4fa57b107f070b8c29abc2fe5e1fb9042c5281e19673659e6860a8c80b790296",
+  "originals": {
+    "executed_historical_upstream_source_stages": 4,
+    "original_public_third_party_paid_flagged_responses": 2,
+    "exact_pr_guard_original_git_commit": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+    "source_bytes_git_verified": true,
+    "source_regression_index_validated_against_execution_receipts": true,
+    "third_party_payment_settlement_independently_verified": false,
+    "original_public_source_report": "https://github.com/telegraphprotocol/bounties/issues/187"
+  },
+  "evaluation": {
+    "original_external_observations": 2,
+    "locally_constructed_author_reference_conditions": 24,
+    "total_conditions": 26,
+    "narrow_source_supported_locally_allowed": 8,
+    "contradicted_source_claims_locally_denied": 8,
+    "altered_source_execution_receipts_locally_denied": 8,
+    "original_external_off_target_paid_status_responses_denied": 2,
+    "matches_to_constructed_or_observed_expected_actions": 26,
+    "baselines": {
+      "trust_http200_or_paid": {
+        "matches": 8,
+        "false_allow": 18,
+        "false_deny": 0
+      },
+      "deny_everything": {
+        "matches": 18,
+        "false_allow": 0,
+        "false_deny": 8
+      },
+      "trust_any_structured_claim": {
+        "matches": 10,
+        "false_allow": 16,
+        "false_deny": 0
+      }
+    },
+    "model_accuracy_demonstrated": false,
+    "independent_appsec_expert_gold": 0,
+    "project_disjoint_new_sources": 0,
+    "independent_miner_same_request_comparator_evaluated": false,
+    "independent_external_adoption": false,
+    "provider_ranking_improvement_evidenced": false,
+    "canonical_network_evaluator_registered": false,
+    "real_paid_requests_by_falsum": 0,
+    "official_h2_entry_submitted": false,
+    "no_original_third_party_raw_bodies_published": true
+  },
+  "interpretation": "This release demonstrates a reproducible fail-closed application contract: eight true narrow facts constructed from original authenticated upstream execution pass, sixteen contradicted or tampered local claims fail, and two original externally captured paid-status off-target Telegraph results fail. It does not establish independent evaluator semantic accuracy, a live network ranking improvement or a new project-disjoint holdout."
+}
