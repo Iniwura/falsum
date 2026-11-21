@@ -1,0 +1,152 @@
+name: Phase 5P - authenticated raw upstream code and genuine published model decisions
+on:
+  push:
+    paths:
+      - 'data/phase5p-raw-code-preinference-protocol.json'
+      - 'src/falsum/phase5p_raw_code_evaluator.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5p_raw_code_evaluator.py'
+      - '.github/workflows/phase5p-authenticated-raw-source-model.yml'
+  pull_request:
+    paths:
+      - 'data/phase5p-raw-code-preinference-protocol.json'
+      - 'src/falsum/phase5p_raw_code_evaluator.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5p_raw_code_evaluator.py'
+      - '.github/workflows/phase5p-authenticated-raw-source-model.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-and-anti-shortcut-contract:
+    name: Pinned Git source / output contract and no forged gold / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: No-network adversarial contract tests and zero-gold claims
+        shell: bash
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5p_raw_code_evaluator.py' -v
+          python -m unittest discover -s tests -p 'test_phase5o_four_project_published_model.py' -v
+          python -m unittest discover -s tests -p 'test_phase4h_frozen_sources_and_scoring.py' -v
+          python -m falsum.cli --help | grep 'score-raw-code'
+  real-original-git-source-and-model:
+    name: Actually fetch and SHA-verify eight upstream code files, then run pinned CPU Qwen
+    needs: source-and-anti-shortcut-contract
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_HUB_DISABLE_XET: '1'
+      HF_HUB_ETAG_TIMEOUT: '35'
+      HF_HUB_DOWNLOAD_TIMEOUT: '120'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Export authenticated real original source excerpts to original write-once archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p actual-raw-source-evaluator
+          python -m falsum.cli score-raw-code export \
+            --questions-out actual-raw-source-evaluator/ORIGINAL-12-AUTHENTICATED-SOURCE-QUESTIONS.json \
+            --template-out actual-raw-source-evaluator/EMPTY-DEVELOPER-PREDICTION-TEMPLATE.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('actual-raw-source-evaluator/ORIGINAL-12-AUTHENTICATED-SOURCE-QUESTIONS.json')
+          x=json.loads(p.read_text())
+          assert x['source_files_downloaded_git_blob_verified'] is True
+          assert x['actual_raw_code_not_researcher_summary'] is True
+          assert x['reference_is_public_researcher_derived'] is True
+          assert x['independent_appsec_gold']==0 and x['answer_key_included'] is False
+          assert len(x['questions'])==12
+          assert sum(q['source_code_url'] is not None for q in x['questions'])==8
+          assert all(q['source_excerpt_sha256'] for q in x['questions'])
+          assert len({q['id'] for q in x['questions']})==12
+          for q in x['questions']:
+              if q['source_code_url'] is not None:
+                  assert q['source_excerpt'] != '[SOURCE FILE OMITTED: no revision or implementation is provided]'
+                  assert len(q['source_git_commit'])==40
+          print('Eight real authentic raw Git source files validated; four deliberate no-source controls.')
+          PY
+      - name: Install actual previously verified published Qwen inference dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check 'transformers==4.46.3' 'huggingface_hub==0.35.3' 'safetensors==0.4.5' 'tokenizers==0.20.3'
+      - name: Actual CPU inference on frozen raw code excerpts, no fake model
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.cli score-raw-code infer \
+            --questions actual-raw-source-evaluator/ORIGINAL-12-AUTHENTICATED-SOURCE-QUESTIONS.json \
+            --out actual-raw-source-evaluator/REAL-QWEN-ORIGINAL-COMPLETIONS.json
+      - name: Exact original model replay audit and explicit source-blind controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.cli score-raw-code audit \
+            --questions actual-raw-source-evaluator/ORIGINAL-12-AUTHENTICATED-SOURCE-QUESTIONS.json \
+            --raw actual-raw-source-evaluator/REAL-QWEN-ORIGINAL-COMPLETIONS.json \
+            --out actual-raw-source-evaluator/VERIFIED-PUBLIC-RAW-CODE-DIAGNOSTIC.json
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          p=Path('actual-raw-source-evaluator')
+          doc=json.loads((p/'VERIFIED-PUBLIC-RAW-CODE-DIAGNOSTIC.json').read_text())
+          run=json.loads((p/'REAL-QWEN-ORIGINAL-COMPLETIONS.json').read_text())
+          score=doc['scored']
+          assert run['actual_cpu_forward_passes']==12
+          assert len(run['predictions'])==12
+          assert doc['model_weights_sha256']=='fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe'
+          assert score['source_blind_same_answer_for_all_code_and_abstain_no_source_baseline_matches']==8
+          assert score['always_abstain_baseline_matches']==4
+          assert score['real_independent_human_expert_gold']==0
+          assert score['statistical_model_accuracy_claim'] is False
+          assert doc['adopted_by_external_developer'] is False
+          assert doc['official_telegraph_evaluator_registered'] is False
+          assert doc['trained_falsum_model_improvement'] is False
+          assert doc['h2_entry_submitted'] is False
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Genuine original raw-code evaluator model diagnostic\n\n')
+              f.write('**Eight real original SHA1 authenticated Git source files**, four historical projects, twelve balanced source and no-source tasks. The code snippets are not researcher-written summaries.\n\n')
+              f.write('**Actual pinned Qwen code-source matches:** '+str(score['matches_to_public_researcher_references'])+'/12; ')
+              f.write('**Correct complete source reversals:** '+str(score['complete_correct_parent_fix_reversals'])+'/4; ')
+              f.write('**Missing-source abstentions:** '+str(score['correct_source_omitted_abstentions'])+'/4. ')
+              f.write('**Malformed outputs:** '+str(score['invalid_model_replies'])+'.\n\n')
+              f.write('Source-blind constant-code-choice + no-source-abstain control: **8/12**. Always ABSTAIN: **4/12**.\n\n')
+              f.write('Public known historical cases, not hidden holdout, human AppSec gold, external usage, trained improvement, registered evaluator or submitted hackathon entry.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase5p-original-authenticated-source-and-real-model-not-expert-gold
+          path: actual-raw-source-evaluator/
+          retention-days: 90
+          if-no-files-found: warn
