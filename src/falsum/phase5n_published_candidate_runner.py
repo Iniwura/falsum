@@ -122,7 +122,7 @@ def prepare(root:Path=ROOT)->dict:
 def parse_choice(raw:str)->str:
     require(isinstance(raw,str) and len(raw)<2000,"malformed raw model reply")
     normalized=raw.strip().upper()
-    normalized=normalized.strip(" .:*!'\`\"()")
+    normalized=normalized.strip(" .:*!'`\"()")
     if normalized in ALLOWED:
         return normalized
     # No heuristic extraction from explanations: failure to respect the forced
