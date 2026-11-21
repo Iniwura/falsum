@@ -1,0 +1,141 @@
+name: Phase 5W - real original Qwen on four new security source families
+on:
+  push:
+    paths:
+      - data/phase5w-preregistered-published-model-new-source.json
+      - src/falsum/phase5w_original_new_source_model.py
+      - tests/test_phase5w_original_new_source_model.py
+      - .github/workflows/phase5w-real-new-source-publisher-model.yml
+  pull_request:
+    paths:
+      - data/phase5w-preregistered-published-model-new-source.json
+      - src/falsum/phase5w_original_new_source_model.py
+      - tests/test_phase5w_original_new_source_model.py
+      - .github/workflows/phase5w-real-new-source-publisher-model.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  no-fabricated-evaluation-contract:
+    name: Immutable publisher source question, raw response, failure reporting / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Check frozen source publisher protocol and all model anti-forgery failure modes
+        shell: bash
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5w_original_new_source_model.py' -v
+          python -m unittest discover -s tests -p 'test_phase5u_project_disjoint_security.py' -v
+  genuine-published-model:
+    name: Original immutable Qwen2.5-0.5B weights / real 24 source-present, swapped, and omitted prompts
+    needs: no-fabricated-evaluation-contract
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_HUB_DISABLE_XET: '1'
+      HF_HUB_ETAG_TIMEOUT: '40'
+      HF_HUB_DOWNLOAD_TIMEOUT: '180'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original pinned CPU-only Qwen inference runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check 'transformers==4.46.3' 'huggingface_hub==0.35.3' 'safetensors==0.4.5' 'tokenizers==0.20.3'
+      - name: Download all 16 actual pinned Git source and test blobs and run 24 genuine immutable original publisher model forwards
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p original-phase5w-publisher-output
+          python -m falsum.phase5w_original_new_source_model infer \
+            --out original-phase5w-publisher-output/ORIGINAL-QWEN-0P5B-24-RAW-SOURCE-COMPLETIONS.json
+      - name: Revalidate authentic original source inputs and audit unmodified real model completions against researcher references
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase5w_original_new_source_model audit \
+            --raw original-phase5w-publisher-output/ORIGINAL-QWEN-0P5B-24-RAW-SOURCE-COMPLETIONS.json \
+            --out original-phase5w-publisher-output/ORIGINAL-QWEN-0P5B-24-AUTHENTIC-SOURCE-MODEL-DIAGNOSTIC.json
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('original-phase5w-publisher-output')
+          raw=json.loads((root/'ORIGINAL-QWEN-0P5B-24-RAW-SOURCE-COMPLETIONS.json').read_text())
+          study=json.loads((root/'ORIGINAL-QWEN-0P5B-24-AUTHENTIC-SOURCE-MODEL-DIAGNOSTIC.json').read_text())
+          model=study['measured_original_public_model']
+          baseline=study['prompt_only_source_blind_disclosed_synthetic']
+          abstain=study['always_abstain_disclosed_synthetic']
+          assert raw['actual_original_published_model_forward_passes']==24
+          assert len(raw['predictions'])==24
+          assert raw['original_model_safetensors_sha256']=='fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe'
+          assert study['actual_original_model_forward_passes']==24
+          assert study['actual_source_present_matches']==model['source_present_matches']
+          assert model['source_present_matches']+model['source_absent_correct_abstention']==model['matches_to_researcher_derived_public_references']
+          assert 0<=model['matches_to_researcher_derived_public_references']<=24
+          assert 0<=model['complete_correct_four_way_source_and_answer_reversals']<=4
+          assert baseline['matches_to_researcher_derived_public_references']==16
+          assert baseline['complete_correct_four_way_source_and_answer_reversals']==0
+          assert abstain['matches_to_researcher_derived_public_references']==8
+          assert abstain['complete_correct_four_way_source_and_answer_reversals']==0
+          assert study['published_model_vs_blind_reference_match_delta']==model['matches_to_researcher_derived_public_references']-16
+          assert study['independent_appsec_expert_gold']==0
+          assert study['real_telegraph_multi_miner_ranking_improved'] is False
+          assert study['registered_telegraph_evaluator'] is False
+          assert study['official_h2_entry_submitted'] is False
+          assert study['entire_original_upstream_suites_executed_for_this_model_study'] is False
+          print('Original publisher model ran 24 full authentic source prompts; negative model outcomes are preserved verbatim.')
+          PY
+      - name: Publish factual model results even when real model performance is poor
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          root=Path('original-phase5w-publisher-output')
+          study=json.loads((root/'ORIGINAL-QWEN-0P5B-24-AUTHENTIC-SOURCE-MODEL-DIAGNOSTIC.json').read_text())
+          metric=study['measured_original_public_model']
+          blind=study['prompt_only_source_blind_disclosed_synthetic']
+          abst=study['always_abstain_disclosed_synthetic']
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Genuine pinned 0.5B published model on four new authentic-source security fixes\n\n')
+              f.write('Publisher Qwen2.5-0.5B-Instruct revision '+study['original_immutable_publisher_revision']+' model.safetensors sha256 '+study['immutable_original_publisher_weights_sha256']+'. Exactly 24 actual CPU forwards, full raw completions archived.\n\n')
+              f.write('| Actual or explicitly synthetic method | Original public researcher references / 24 | Source-present /16 | Four-way source + option flips /4 |\\n|---|---:|---:|---:|\\n')
+              for label,row in [('Genuine original Qwen publisher',metric),('Source-masked prompt-only baseline (synthetic)',blind),('Always abstain (synthetic)',abst)]:
+                  f.write('| '+label+' | '+str(row['matches_to_researcher_derived_public_references'])+' | '+str(row['source_present_matches'])+' | '+str(row['complete_correct_four_way_source_and_answer_reversals'])+' |\\n')
+              f.write('\\nThese are FOUR known historical new upstream projects with original Git source/test blobs; NOT independently labelled AppSec gold, a model-training gain, a private holdout, an official on-network evaluator or live Telegraph ranking improvement. Original full upstream test suites were not executed by this model job. Negative model evidence is never rewritten as a success.\\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase5w-original-immutable-qwen-0p5b-four-new-project-24-source-prompts
+          path: original-phase5w-publisher-output/
+          retention-days: 90
+          if-no-files-found: warn
