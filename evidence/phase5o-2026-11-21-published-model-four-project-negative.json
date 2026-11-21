@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5O_AUTHENTIC_PUBLISHED_MODEL_FOUR_PROJECT_NEGATIVE_DIAGNOSTIC_NOT_GOLD",
+  "measured_at_utc_date": "2026-11-21",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "original_protocol_committed_before_runner": "415363fc2b016dcfe3753e8da776c1e54a7f5a85",
+  "model_repository": "Qwen/Qwen2.5-0.5B-Instruct",
+  "frozen_published_model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "model_safetensors_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+  "frozen_protocol_git_blob_sha1": "07d41d2f12c7b9ececac299c72785faae0ef85ea",
+  "source_selection_git_blob_sha1": "9fc67edec49c33d3efdb4a6128bd7c6c6b7766e2",
+  "source_projects": [
+    "pyjwt",
+    "werkzeug",
+    "mcp-python",
+    "pillow"
+  ],
+  "task_origin": "Public researcher-constructed previously known upstream source-behavior summaries, not raw code read by model or blind holdout",
+  "actual_run_evidence": [
+    {
+      "run_id": 44850246568,
+      "url": "https://github.com/Iniwura/falsum/actions/runs/44850246568",
+      "trigger": "push",
+      "code_commit": "c43b929459b905fa13e297d7558b915156417c81",
+      "cpu_inference_job_conclusion": "success",
+      "original_raw_outputs_artifact_id": 14684558280
+    },
+    {
+      "run_id": 44850284948,
+      "url": "https://github.com/Iniwura/falsum/actions/runs/44850284948",
+      "trigger": "pull_request",
+      "code_commit": "25784143df1d6e6224c88985674acb7e18f66b7e",
+      "cpu_inference_job_conclusion": "success",
+      "original_raw_outputs_artifact_id": 14684788789
+    }
+  ],
+  "returned_labels_in_original_order": [
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN",
+    "ABSTAIN"
+  ],
+  "observed_results": {
+    "actual_model_forward_passes": 12,
+    "parseable_replies": 12,
+    "original_public_source_reference_matches": 4,
+    "project_disjoint_within_experiment": 4,
+    "complete_correct_parent_fixed_reversals": 0,
+    "no_source_control_abstained": 4,
+    "code_present_tasks_with_unnecessary_abstention": 8,
+    "false_confident_answers_to_missing_source": 0,
+    "constant_abstain_baseline_matches": 4,
+    "source_blind_parent_is_A_with_no_source_abstention_baseline_matches": 8,
+    "true_general_model_accuracy_estimated": false
+  },
+  "truthful_interpretation": "Same published model now tested across four previously authenticated different historical project summaries. It abstained even when source behavior was described, failed all code-present tasks and beat no constant-abstention baseline. Results expose one model failure; they are not trained FALSUM-model performance, independent security labels, network usage or adoption.",
+  "limitations": {
+    "fresh_projects_to_candidate_relative_to_phase5n": true,
+    "newly_discovered_or_blind_cases": false,
+    "raw_source_code_loaded_by_model": false,
+    "answer_semantics_partially_leak_through_author_summaries": true,
+    "verified_independent_appsec_expert_gold_labels": 0,
+    "verified_developer_adoption": 0,
+    "telegraph_evaluator_registered": false,
+    "newly_eligible_anjoman_rows": 0,
+    "official_h2_entry_submitted": false,
+    "user_demo_started": false
+  }
+}
