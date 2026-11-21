@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5X_THREE_ORIGINAL_PUBLIC_PAID_FLAGGED_LODASH_PROVIDER_TARGET_RELEVANCE_PRECOMMITTED",
+  "frozen_date_utc": "2026-11-21",
+  "source_repository": "anvithagowda098/pr-guard",
+  "source_git_commit": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+  "public_only_no_private_traces": true,
+  "question_target": {
+    "ecosystem": "npm",
+    "package": "lodash",
+    "version": "4.17.15"
+  },
+  "original_immutable_third_party_fixtures": [
+    {
+      "role": "canonical_routed_off_target",
+      "path": "test/fixtures/miner-responses/ROUTED/security-review-lodash-77003-off-target.json",
+      "git_blob_sha1": "0b3268f57d3e21d906e51be9aebf754347e5787d",
+      "reported_miner_id": "77003",
+      "request_channel": "canonical_routed",
+      "reported_receipt_intent": "SECURITY_REVIEW_GENERAL",
+      "expected_result_shape": "raw",
+      "expected_advisory_count": 100,
+      "expected_display_action": "DENY_UNSCOPED_SECURITY_ADVICE",
+      "target_relevance_reference": "NO_LODASH_PACKAGE_IDENTIFIER_IN_100_GHSA_ADVISORY_FEED"
+    },
+    {
+      "role": "direct_deps_dev_ghsa",
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW_GENERAL/190048-npm-lodash-4.17.15-200-paid.json",
+      "git_blob_sha1": "658510885abb51d35f74357bf3ffc5a8c88e0374",
+      "reported_miner_id": "190048",
+      "request_channel": "direct_get_query",
+      "reported_receipt_intent": "SECURITY_REVIEW",
+      "expected_result_shape": "raw",
+      "expected_advisory_count": 6,
+      "expected_display_action": "DISPLAY_TARGET_BOUND_UNVERIFIED_ADVISORY_REFERENCES",
+      "target_relevance_reference": "EXACT_PACKAGE_NAME_VERSION_ECOSYSTEM_IN_ORIGINAL_RESULT"
+    },
+    {
+      "role": "direct_deps_dev_version",
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW_GENERAL/77010-npm-lodash-4.17.15-200-paid.json",
+      "git_blob_sha1": "c914607b580e99d2f269bc69a01d6104dc25191e",
+      "reported_miner_id": "77010",
+      "request_channel": "direct_get_query",
+      "reported_receipt_intent": "SECURITY_REVIEW",
+      "expected_result_shape": "raw",
+      "expected_advisory_count": 6,
+      "expected_display_action": "DISPLAY_TARGET_BOUND_UNVERIFIED_ADVISORY_REFERENCES",
+      "target_relevance_reference": "EXACT_PACKAGE_NAME_VERSION_ECOSYSTEM_IN_ORIGINAL_RESULT"
+    }
+  ],
+  "required_original_real_source_probes": 3,
+  "original_public_reported_paid_status": true,
+  "original_external_receipt_chain_settlement_independently_verified": false,
+  "response_label_semantics": "Only task relevance and package-bound advisory evidence for DISPLAY; not CVE correctness, severity, exploitability or automatic security signoff.",
+  "all_external_responses_same_target_semantics": true,
+  "all_external_responses_same_protocol_intent": false,
+  "all_external_requests_byte_identical": false,
+  "independent_miner_owners_verified": false,
+  "new_live_telegraph_traffic_generated": false,
+  "reference_observation_count": 3,
+  "local_synthetic_mutation_types": [
+    "change-request-package",
+    "change-request-version",
+    "remove-target-bound-identifier",
+    "swap-reported-miner-identity"
+  ],
+  "negative_mutations_per_original": 4,
+  "expected_constructed_adversarial_controls": 12,
+  "total_observations_and_constructed_conditions": 15,
+  "expected_original_display_allowed": 2,
+  "expected_original_off_target_rejected": 1,
+  "expected_constructed_mutations_denied": 12,
+  "trust_paid_status_baseline_original_allowed": 3,
+  "no_full_original_response_bodies_published": true,
+  "no_model_training_or_accuracy_claim": true,
+  "independent_appsec_gold_count": 0,
+  "registered_network_evaluator": false,
+  "real_telegraph_miner_ranking_changed": false,
+  "independent_falsum_adoption": false,
+  "official_h2_submission": false,
+  "no_fair_same_canonical_intent_comparison_claim": true,
+  "goal": "Demonstrate exact-original three-provider same-package semantic relevance with source-authenticated public paid-status captures. Verify source Git blob byte identity, request/receipt provenance, package/name/version/OSV evidence, reject original routed irrelevant 100-GHSA feed and adversarial altered inputs, compare naïve paid-success gate. No false network ranking claim."
+}
