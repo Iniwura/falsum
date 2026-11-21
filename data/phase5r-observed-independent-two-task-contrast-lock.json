@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5R_PREIMPLEMENTATION_PUBLIC_OBSERVED_EXTERNAL_TWO_TASK_CONTRAST",
+  "project": "FALSUM",
+  "date_utc": "2026-11-21",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "model": "canonical public source-only relevance triage, not network evaluator model",
+  "preobservation_disclosure": "The two original public response fixtures and their GHSA list similarity were manually inspected before this protocol was drafted; protocol is frozen BEFORE Phase5R automated implementation, not before original source discovery, and is NOT a blind holdout.",
+  "source_repo": "anvithagowda098/pr-guard",
+  "source_revision": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+  "original_fixtures": [
+    {
+      "key": "security-code-diff",
+      "path": "test/fixtures/miner-responses/ROUTED/security-review-diff-77003-off-target.json",
+      "blob_sha1": "90088128cb12c4b55966e72165c6a8b311fdbfb2",
+      "miner": "77003",
+      "intent": "SECURITY_REVIEW_GENERAL",
+      "target_kind": "unified-javascript-diff",
+      "expected": "OFF_TARGET_ADVISORY_FEED",
+      "task_category": "source-code-review"
+    },
+    {
+      "key": "security-npm-dependency",
+      "path": "test/fixtures/miner-responses/ROUTED/security-review-lodash-77003-off-target.json",
+      "blob_sha1": "0b3268f57d3e21d906e51be9aebf754347e5787d",
+      "miner": "77003",
+      "intent": "SECURITY_REVIEW_GENERAL",
+      "target_kind": "npm package lodash version 4.17.15",
+      "expected": "OFF_TARGET_ADVISORY_FEED",
+      "task_category": "package-security-review"
+    }
+  ],
+  "comparison_method": "Two externally captured paid tasks are different, but both requests use the exact same canonical SECURITY_REVIEW_GENERAL route envelope params.target and the same reported Miner 77003; compare answer-identity stability across tasks, NOT independent ranking quality.",
+  "target_match_requirements": "For package query, require package name and version from exact input; generic GHSA feed is off-target only when it contains no package-specific advisory metadata or textual package name and is a long broad catalogue.",
+  "original_capture_aggregate_expectations": {
+    "externally_captured_paid_responses": 2,
+    "HTTP200_responses": 2,
+    "advisory_ids_per_response": 100,
+    "common_advisory_ids": 100,
+    "exact_advisory_order_identical": true,
+    "original_package_name_mentions_in_100_entry_dependency_result": 0,
+    "expected_task_relevance_rejections": 2,
+    "model_rank_improvement_or_semantic_gold": 0
+  },
+  "synthetic_adversarial_matrix": [
+    "modified package versions or names must not be hardcoded to lodash",
+    "when source has no dependency context, generic advisory list cannot be treated as source diff review",
+    "keyword padding without package version/advisory support cannot produce correctness gold",
+    "an actually package-specific response is still structurally only, not a licensed accuracy label",
+    "HTTP 200 paid alone does not imply task compliance",
+    "intent spoofing or changed request envelope must fail",
+    "exact public source Git blobs must be checked before original summary",
+    "no third-party raw bodies republished"
+  ],
+  "restrictions": {
+    "not_new_blind_holdout": true,
+    "independent_expert_gold": 0,
+    "third_party_fixtures_licensing_for_training": false,
+    "no_evaluator_registered": true,
+    "no_live_rank_change": true,
+    "no_new_paid_requests": true,
+    "no_independent_falsum_adoption": true,
+    "only_historical_public_captures": true,
+    "not_multiple_independent_miners": true,
+    "not_scoring_security_correctness": true,
+    "do_not_republish_bodies": true
+  }
+}
