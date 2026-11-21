@@ -1,0 +1,153 @@
+name: Phase 5O - frozen four-project actual published model diagnostic
+on:
+  pull_request:
+    paths:
+      - 'data/phase5o-four-project-frozen-model-protocol.json'
+      - 'src/falsum/phase5o_four_project_published_model.py'
+      - 'tests/test_phase5o_four_project_published_model.py'
+      - '.github/workflows/phase5o-four-project-published-model.yml'
+  push:
+    paths:
+      - 'data/phase5o-four-project-frozen-model-protocol.json'
+      - 'src/falsum/phase5o_four_project_published_model.py'
+      - 'tests/test_phase5o_four_project_published_model.py'
+      - '.github/workflows/phase5o-four-project-published-model.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-protocol-and-adversarial-tests:
+    name: Public-source frozen protocol and anti-inflation tests / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Verify four authentic historical sources and all 12 prompts
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5o_four_project_published_model.py' -v
+          python -m unittest discover -s tests -p 'test_phase5n_published_candidate_runner.py' -v
+          python -m unittest discover -s tests -p 'test_phase4h_frozen_sources_and_scoring.py' -v
+      - name: Export write-once exact tasks and assert no real inference claimed
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          python -m falsum.phase5o_four_project_published_model prepare --out phase5o-frozen-public-questions.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('phase5o-frozen-public-questions.json').read_text())
+          assert len(d['questions'])==12 and d['distinct_upstream_projects']==4
+          assert d['real_model_inference_yet'] is False
+          assert d['reference_labels_included'] is False
+          assert d['independent_expert_gold']==0
+          assert d['external_developer_adoption'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5o-immutable-protocol-python-${{ matrix.python }}
+          path: phase5o-frozen-public-questions.json
+          retention-days: 60
+          if-no-files-found: error
+  actual-immutable-model-inference:
+    name: Real CPU 12-prompt published Qwen inference (no paid API)
+    runs-on: ubuntu-24.04
+    needs: frozen-protocol-and-adversarial-tests
+    timeout-minutes: 70
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_HUB_DISABLE_XET: '1'
+      HF_HUB_ETAG_TIMEOUT: '35'
+      HF_HUB_DOWNLOAD_TIMEOUT: '120'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned CPU-only inference libraries
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check 'transformers==4.46.3' 'huggingface_hub==0.35.3' 'safetensors==0.4.5' 'tokenizers==0.20.3'
+      - name: Prove precommitted source and exact previously used model revision before download
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p four-project-model-evidence
+          python -m falsum.phase5o_four_project_published_model prepare --out four-project-model-evidence/FROZEN-QUESTIONS.json
+          python - <<'PY'
+          from falsum.phase5o_four_project_published_model import freeze,MODEL_REVISION,MODEL_SAFETENSORS_SHA256,PROTOCOL_GIT_BLOB_SHA1
+          p,c=freeze()
+          assert MODEL_REVISION=='7ae557604adf67be50417f59c2c2f167def9a775'
+          assert MODEL_SAFETENSORS_SHA256=='fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe'
+          assert PROTOCOL_GIT_BLOB_SHA1=='07d41d2f12c7b9ececac299c72785faae0ef85ea'
+          assert p['independent_appsec_gold_labels']==0 and len(c['cases'])==4
+          print('Original 4-project selection and model choice are pre-inference frozen.')
+          PY
+      - name: Run original exact published model CPU forward pass on all 12 public prompts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase5o_four_project_published_model execute \
+            --inputs four-project-model-evidence/FROZEN-QUESTIONS.json \
+            --out four-project-model-evidence/ORIGINAL-RAW-MODEL-OUTPUTS.json
+      - name: Audit raw model outputs, source-revision reversals, controls and limitations
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase5o_four_project_published_model audit \
+            --inputs four-project-model-evidence/FROZEN-QUESTIONS.json \
+            --actual four-project-model-evidence/ORIGINAL-RAW-MODEL-OUTPUTS.json \
+            --out four-project-model-evidence/VERIFIED-RESEARCH-DIAGNOSTIC.json
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads(Path('four-project-model-evidence/VERIFIED-RESEARCH-DIAGNOSTIC.json').read_text())
+          s=d['score']
+          assert s['questions']==12 and s['source_projects']==4
+          assert s['synthetic_disclosed_no_model_baseline_matches']['always-ABSTAIN']==4
+          assert s['synthetic_disclosed_no_model_baseline_matches']['parent-is-A-and-omit-is-ABSTAIN']==8
+          assert d['independent_expert_gold_labels']==0
+          assert d['real_independent_external_developer_adoption'] is False
+          assert d['registered_telegraph_evaluator'] is False
+          assert d['trained_model_improvement_proven'] is False
+          assert d['official_h2_entry_submitted'] is False
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Phase 5O actual published model (public researcher-operated diagnostic)\n\n')
+              f.write('Pinned published model: Qwen2.5-0.5B-Instruct, 7ae557604adf67be50417f59c2c2f167def9a775.\n\n')
+              f.write('**Exact source-summary reference matches:** '+str(s['exact_source_summary_reference_matches'])+'/12. ')
+              f.write('**Complete parent/fix reversals:** '+str(s['correct_complete_parent_fixed_reversals'])+'/4. ')
+              f.write('**No-source abstentions:** '+str(s['source_omitted_abstentions'])+'/4. ')
+              f.write('**Invalid replies:** '+str(s['invalid_raw_responses'])+'.\n\n')
+              f.write('Disclosed source-blind parent=A shortcut: 8/12. Constant ABSTAIN: 4/12.\n\n')
+              f.write('**Not:** raw code-reading model, hidden holdout, expert gold, external developer adoption, model improvement, registered Telegraph evaluator or submitted H2 entry.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase5o-original-published-model-actual-inference-not-adoption
+          path: four-project-model-evidence/
+          if-no-files-found: warn
+          retention-days: 90
