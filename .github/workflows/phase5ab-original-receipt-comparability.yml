@@ -1,0 +1,124 @@
+name: Phase 5AB - authenticate original paid receipt Intent and fair-comparison eligibility
+on:
+  push:
+    paths:
+      - 'data/phase5ab-original-receipt-comparability-lock.json'
+      - 'src/falsum/phase5ab_original_receipt_comparability.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5ab_original_receipt_comparability.py'
+      - 'docs/PHASE5AB_EXTERNAL_RECEIPT_COMPARABILITY.md'
+      - '.github/workflows/phase5ab-original-receipt-comparability.yml'
+  pull_request:
+    paths:
+      - 'data/phase5ab-original-receipt-comparability-lock.json'
+      - 'src/falsum/phase5ab_original_receipt_comparability.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5ab_original_receipt_comparability.py'
+      - 'docs/PHASE5AB_EXTERNAL_RECEIPT_COMPARABILITY.md'
+      - '.github/workflows/phase5ab-original-receipt-comparability.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  adversarial-request-receipt-controls:
+    name: No false original paid provenance or canonical comparison / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Reject directory-only, direct receipt, wrong Intent, fake Miner and failed paid cases
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5ab_original_receipt_comparability.py' -v
+          python -m unittest discover -s tests -p 'test_phase5x_three_real_miner_target_relevance.py' -v
+          python -m unittest discover -s tests -p 'test_phase5z_reviewed_advisory_consumption.py' -v
+          python -m falsum.cli --help | grep -F audit-receipt-comparability
+  original-git-authenticated-receipt-census:
+    name: Authenticate original 12 public Git receipts, prove no fair same-request pairs
+    needs: adversarial-request-receipt-controls
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch and SHA1-authenticate all original twelve third-party paid-flagged source bytes
+        run: |
+          set -euo pipefail
+          mkdir -p original-receipt-source-census
+          python -m falsum.cli audit-receipt-comparability \
+            --out original-receipt-source-census/ORIGINAL-12-REAL-PUBLIC-RECEIPT-INTENT-AND-REQUEST-COMPARABILITY.json
+      - name: Reject overstated rankings, response bodies, new external observations or counterfeit gold
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('original-receipt-source-census/ORIGINAL-12-REAL-PUBLIC-RECEIPT-INTENT-AND-REQUEST-COMPARABILITY.json')
+          r=json.loads(p.read_text())
+          assert r['schema_version']==1
+          assert r['status']=='PHASE5AB_TWELVE_ORIGINAL_PUBLIC_CAPTURE_INTENT_AND_COMPARABILITY_CENSUS'
+          assert r['original_outside_git_authenticated_capture_count']==12
+          assert r['observed_reported_paid_http200_count']==10
+          assert r['original_receipts_reporting_canonical_intent_count']==4
+          assert r['original_explicit_canonical_routed_request_and_receipt_count']==2
+          assert r['original_direct_noncanonical_request_with_canonical_receipt_count']==2
+          assert r['original_paid_http200_with_noncanonical_receipt_count']==6
+          assert r['original_failed_requests_without_successful_receipts_count']==2
+          assert r['same_canonical_request_multi_miner_candidate_count']==0
+          assert r['same_canonical_request_multi_miner_candidates']==[]
+          assert r['original_full_third_party_response_body_republished'] is False
+          assert r['reported_payment_settlement_independently_verified'] is False
+          assert r['independent_miner_ownership_verified'] is False
+          assert r['semantic_security_accuracy_gold']==0
+          assert r['independent_developer_adoption_proved'] is False
+          assert r['registered_evaluator'] is False
+          assert r['ranking_change_proved'] is False
+          assert r['official_h2_submitted'] is False
+          observations=r['source_provenance_observations']
+          assert len(observations)==12
+          assert all(o['original_source_verified_by_git_blob'] is True for o in observations)
+          assert all(o['actual_paid_settlement_independently_verified'] is False for o in observations)
+          assert len({o['original_git_blob_sha1'] for o in observations})==12
+          assert sum(o['receipt_intent']=='SECURITY_REVIEW_GENERAL' for o in observations)==4
+          assert sum(o['request_has_canonical_routed_schema'] for o in observations)==2
+          assert 'bodyText' not in p.read_text()
+          assert 'advisoryKeys' not in p.read_text()
+          assert 'payer' not in p.read_text()
+          print('12 original third-party Git blobs checked; 2 exact canonical-routed, 2 direct-only receipt, 6 mismatched successful receipt, 2 failed; ZERO fair multi-Miner identical-request pairs.')
+          PY
+      - name: Describe the precise independent-source proof and important missing evidence
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              out.write('## Phase 5AB original public receipt Identity census\n\n')
+              out.write('Twelve original external reported-paid capture JSON Git blobs fetched and SHA1-authenticated from an immutable third-party commit. Of ten paid-flagged HTTP 200 responses: two explicit canonical routed request+receipt records, two direct provider responses with canonical reported receipt but not canonical request, and six successful records whose receipts were different Intents. Two original failed requests lacked a successful receipt. No two distinct reported Miners answered the same **identical explicit canonical routed request** in this frozen set.\n\n')
+              out.write('**NO fair canonical network ranking, expert AppSec gold, independently confirmed payment settlement, external FALSUM adoption or registered evaluator is claimed.** Folder names are never considered receipt authority.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5ab-original-public-twelve-receipt-comparability-provenance
+          path: original-receipt-source-census/
+          retention-days: 90
+          if-no-files-found: error

@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5AB_PREIMPLEMENTATION_PUBLIC_RECEIPT_INTENT_COMPARABILITY_AUDIT_FROZEN",
+  "date_utc": "2026-11-21",
+  "source_repo": "anvithagowda098/pr-guard",
+  "source_commit": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+  "source_prefix": "test/fixtures/miner-responses/",
+  "claimed_directory_intent": "SECURITY_REVIEW_GENERAL",
+  "capture_sources": [
+    {
+      "path": "SECURITY_REVIEW_GENERAL/190048-npm-lodash-4.17.15-200-paid.json",
+      "git_blob_sha1": "658510885abb51d35f74357bf3ffc5a8c88e0374"
+    },
+    {
+      "path": "SECURITY_REVIEW_GENERAL/5530-input-as-string-rejected-200-paid.json",
+      "git_blob_sha1": "283b8f359157d97b686bc06058c8534ca2b60cf7"
+    },
+    {
+      "path": "SECURITY_REVIEW_GENERAL/5530-new-intent-name-unsupported-500-paid.json",
+      "git_blob_sha1": "e817f89616915a26a2aa2e55c81ce80a5e9adeda"
+    },
+    {
+      "path": "SECURITY_REVIEW_GENERAL/5530-review-clean-diff-200-paid.json",
+      "git_blob_sha1": "64ad4608f10f0957ab3102e0ab2e6a597b00455d"
+    },
+    {
+      "path": "SECURITY_REVIEW_GENERAL/5530-review-sqli-eval-diff-200-paid.json",
+      "git_blob_sha1": "97931d0c376b8bc590f9dab73e5e2c2b29fcac94"
+    },
+    {
+      "path": "SECURITY_REVIEW_GENERAL/5530-review-two-file-diff-200-paid.json",
+      "git_blob_sha1": "57212bd3560c5e6a407924596a1ccfe27d6f40c7"
+    },
+    {
+      "path": "SECURITY_REVIEW_GENERAL/731001-package-pypi-django-3.2.0-200-paid.json",
+      "git_blob_sha1": "b032a357706c2e323c9a911e92cc6c5a48b4ebf4"
+    },
+    {
+      "path": "SECURITY_REVIEW_GENERAL/731001-review-two-file-diff-200-paid.json",
+      "git_blob_sha1": "944d8de0b184f9e6519e0eeda9831d03ab2c9fa8"
+    },
+    {
+      "path": "SECURITY_REVIEW_GENERAL/77010-npm-lodash-4.17.15-200-paid.json",
+      "git_blob_sha1": "c914607b580e99d2f269bc69a01d6104dc25191e"
+    },
+    {
+      "path": "SECURITY_REVIEW_GENERAL/9002-security-review-out-of-credit-500-paid.json",
+      "git_blob_sha1": "d29b350f3483ef82225d0d2a1d0298e0ec7edf11"
+    },
+    {
+      "path": "ROUTED/security-review-diff-77003-off-target.json",
+      "git_blob_sha1": "90088128cb12c4b55966e72165c6a8b311fdbfb2"
+    },
+    {
+      "path": "ROUTED/security-review-lodash-77003-off-target.json",
+      "git_blob_sha1": "0b3268f57d3e21d906e51be9aebf754347e5787d"
+    }
+  ],
+  "expected_original_observation_count": 12,
+  "expected_paid_http200_count": 10,
+  "expected_reported_canonical_receipts_count": 4,
+  "expected_explicit_routed_canonical_request_and_receipt_count": 2,
+  "expected_direct_canonical_receipt_with_untyped_direct_request_count": 2,
+  "expected_successful_noncanonical_receipt_count": 6,
+  "expected_failed_or_missing_receipt_count": 2,
+  "expected_genuine_byte_identical_same_canonical_request_multi_miner_pairs": 0,
+  "scope_limits": {
+    "folder_name_is_not_intent_proof": true,
+    "reported_payment_not_chain_verified": true,
+    "miner_ownership_not_verified": true,
+    "no_new_paid_calls": true,
+    "no_registered_evaluator": true,
+    "no_new_independent_adoption": true,
+    "no_expert_gold": true,
+    "request_receipt_context_distinct_from_provider_output_semantic_accuracy": true,
+    "no_fair_miner_ranking_without_same_canonical_request": true,
+    "contains_original_external_responses_only_in_memory": true,
+    "not_h2_submitted": true
+  },
+  "methods": "Fetch all original twelve complete immutable Git blob bytes, check original published GET/POST request, original receipt Intent and HTTP outcome separately, compute SHA256 of canonical request object only when explicit request.intent equals SECURITY_REVIEW_GENERAL and receipt.intent matches. Only group exact same request hash with distinct reported miner IDs, do not infer independence. Reject directory-only, direct-only, and wrong-Intent matches. Output safe aggregate fingerprints and classifications without original full response bodies."
+}
