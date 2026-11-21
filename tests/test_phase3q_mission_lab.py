@@ -155,8 +155,8 @@ class MeasuredEvidenceIntegrity(unittest.TestCase):
             out=Path(td)/"proof"
             report=capture()
             write_outputs(out,report)
-            self.assertEqual(json.loads((out/"ACTUAL-SYNTHETIC-RUNTIME-PROOF.json").read_text()),report)
-            markup=(out/"index.html").read_text()
+            self.assertEqual(json.loads((out/"ACTUAL-SYNTHETIC-RUNTIME-PROOF.json").read_text(encoding="utf-8")),report)
+            markup=(out/"index.html").read_text(encoding="utf-8")
             self.assertIn("FALSUM — Security review",markup)
             self.assertIn("PICK THE",markup)
             self.assertIn('aria-label="Choose the better review"',markup)
