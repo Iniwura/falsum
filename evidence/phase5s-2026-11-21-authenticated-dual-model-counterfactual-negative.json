@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5S_VERIFIED_PUBLISHED_TWO_MODEL_24_SOURCE_CONDITIONS_NEGATIVE",
+  "date_utc": "2026-11-21",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "freeze_commit": "87998536dde9021f418cbd6fcb80a66d37706599",
+  "freeze_protocol_git_blob_sha1": "5d7dff79205c24d465d71d45d4457b0ff992b67d",
+  "source_selection_original_git_blob_sha1": "9fc67edec49c33d3efdb4a6128bd7c6c6b7766e2",
+  "original_real_ci_run": "https://github.com/Iniwura/falsum/actions/runs/44857757905",
+  "number_of_genuine_original_source_projects": 4,
+  "original_upstream_files_authenticated_by_git_blob_sha1": 8,
+  "balanced_public_reference_distribution": {
+    "A": 8,
+    "B": 8,
+    "ABSTAIN": 8
+  },
+  "source_present_conditions": 16,
+  "source_omitted_conditions": 8,
+  "original_source_challenge_sha256": "987e5a6e3b58f828b72ce9d3633ebc9a1cad8eec2f650ae0745f3d87c590d486",
+  "prompt_only_source_blind_upper_bound": {
+    "maximum_total_reference_matches": 16,
+    "maximum_four_way_reversals": 0,
+    "threat_model": "Source code masked and no case identifier, source URL, Git hashes or external/public answer-key lookup. This proof does not defend against full public repository introspection, prior training exposure or external lookup."
+  },
+  "original_real_model_runs": [
+    {
+      "model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+      "published_model_safetensors_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+      "original_github_artifact_id": 14688352527,
+      "original_zip_sha256": "563e78c685bae0b113cb03818a9a7b9d30c5ed120187c483b61137c806956968",
+      "original_raw_completions_sha256": "4b7267036ebd71781931916bcc3db507313f30ffe354570286d4b9af60866c4c",
+      "original_audit_sha256": "447e47d7566143c1a811a4ca38b3c3765c7410b094e3cee88204fae865d8990e",
+      "cpu_forward_passes": 24,
+      "raw_prediction_distribution": {
+        "ABSTAIN": 24
+      },
+      "reference_matches": 8,
+      "source_present_matches": 0,
+      "no_source_abstentions": 8,
+      "complete_four_way_reversals": 0,
+      "invalid_outputs": 0
+    },
+    {
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "published_model_safetensors_sha256": "dd924a11b4c220f385b51ffa522daea7c9f3d850e31b162bb5661df483c6d3ee",
+      "original_github_artifact_id": 14688540681,
+      "original_zip_sha256": "ed1a9d369bf8ff859868d2867caa3654541687b30add502f3c8edeba7671c398",
+      "original_raw_completions_sha256": "0edc5f67c9e9b904597c215b4c9ef22776deb36b236eb649bfd60c1e7e6cf688",
+      "original_audit_sha256": "d6d70e5f80e8fe1b7e21c26a268cb904420eb92a1a41cffcdcd0a080c39294c3",
+      "cpu_forward_passes": 24,
+      "raw_prediction_distribution": {
+        "ABSTAIN": 24
+      },
+      "reference_matches": 8,
+      "source_present_matches": 0,
+      "no_source_abstentions": 8,
+      "complete_four_way_reversals": 0,
+      "invalid_outputs": 0
+    }
+  ],
+  "source_blind_disclosed_synthetic_baseline": {
+    "total_matches": 16,
+    "source_present_matches": 8,
+    "no_source_abstentions": 8,
+    "complete_four_way_reversals": 0,
+    "real_model_inference": false
+  },
+  "researcher_authored_public_reference_labels_not_independent_expert_gold": true,
+  "secret_pretraining_disjoint_holdout": false,
+  "trained_model_improvement_proven": false,
+  "external_developer_adoption_proven": false,
+  "live_telegraph_scoring_or_ranking_changed": false,
+  "registered_telegraph_evaluator": false,
+  "official_h2_submission_completed": false,
+  "conclusion": "Two genuine original independently published Qwen models, despite 3x size difference, abstained on all 24 authentic public source/option-swap tasks. Both match only eight missing-source controls; neither demonstrates source sensitivity. The primary benchmark distinguishes this from 16/24 source-blind guesser. This is defensible failure coverage, not a model-performance gain."
+}
