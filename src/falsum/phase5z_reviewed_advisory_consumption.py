@@ -258,6 +258,8 @@ def main(argv:list[str]|None=None)->int:
     p.add_argument("--role",choices=ROLES)
     p.add_argument("--request-json",type=Path)
     p.add_argument("--response-json",type=Path)
+    p.add_argument("--reviewed-bundle",type=Path,
+                   help="offline original six-Git-blob-verified advisory bundle")
     args=p.parse_args(argv)
     try:
         need(args.out.suffix==".json" and not args.out.exists() and
@@ -267,7 +269,11 @@ def main(argv:list[str]|None=None)->int:
         if local:
             need(args.role and args.request_json and args.response_json,
                  "local request requires role, request-json, response-json")
-            original_reviewed,_=load_reviewed()
+            if args.reviewed_bundle is None:
+                original_reviewed,_=load_reviewed()
+            else:
+                from .phase5aa_offline_reviewed_bundle import load_bundle
+                original_reviewed=load_bundle(args.reviewed_bundle)
             output=consume(args.role,_bounded(args.request_json),
                            _bounded(args.response_json),original_reviewed)
             result={
@@ -275,13 +281,19 @@ def main(argv:list[str]|None=None)->int:
                 "local_user_supplied_not_original_capture":True,
                 "original_external_capture_git_verified":False,
                 "reviewed_source_original_git_authentication":True,
+                "historical_reviewed_source_snapshot":True,
+                "reviewed_source_loaded_offline":args.reviewed_bundle is not None,
+                "current_advisory_freshness_verified":False,
                 "security_reference_consumption":output,
                 "does_not_echo_original_input":True,
                 "no_paid_requests":True,
                 "not_registered_network_evaluator":True,
                 "not_security_clearance":True,
             }
-        else:result=study()
+        else:
+            need(args.reviewed_bundle is None,
+                 "--reviewed-bundle requires all three local role/request/response fields")
+            result=study()
         args.out.parent.mkdir(parents=True,exist_ok=True)
         with args.out.open("x",encoding="utf-8") as f:
             json.dump(result,f,sort_keys=True,indent=2)
