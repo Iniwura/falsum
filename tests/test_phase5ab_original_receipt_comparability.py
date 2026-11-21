@@ -13,18 +13,20 @@ from falsum.phase5m_real_source_sensitive_model import ROOT
 
 
 def constructed(*, receipt="SECURITY_REVIEW_GENERAL", request=None,
-                miner="77003", status=200):
+                miner="77003", status=200, url=audit.ENGINE_ROUTED_URL,
+                registration_miner="3854"):
     if request is None:
         request = {"intent": "SECURITY_REVIEW_GENERAL",
                    "params": {"target": "example constructed security snippet"}}
     record = {
         "paid": True, "charged": True,
         "payment": {"success": True},
-        "status": status, "request": deepcopy(request),
+        "status": status, "request": deepcopy(request), "url": url,
     }
     if status == 200:
         record.update({
-            "receipt": {"intent": receipt, "receipt_hash": "0x" + "a" * 64},
+            "receipt": {"intent": receipt, "receipt_hash": "0x" + "a" * 64,
+                        "miner": registration_miner},
             "body": {"miner_id": miner, "signal_hash": "0x" + "b" * 64}
         })
     return record
@@ -49,11 +51,16 @@ class OriginalReceiptComparabilityTests(unittest.TestCase):
         self.assertIsNotNone(r["canonical_request_sha256"])
         self.assertFalse(r["original_source_verified_by_git_blob"])
         self.assertFalse(r["actual_paid_settlement_independently_verified"])
+        self.assertTrue(r["original_capture_url_records_general_route"])
+        self.assertTrue(r["canonical_schema_with_recorded_general_route"])
+        self.assertEqual(r["reported_receipt_miner_onchain_registration_id_not_body_miner_id"], "3854")
+        self.assertFalse(r["receipt_and_body_miner_id_namespace_mapping_independently_verified"])
 
     def test_directory_label_cannot_make_direct_provider_request_canonical(self):
         direct = {"method": "GET", "endpoint": "/query",
                   "payload": {"pkg": "lodash", "ver": "4.17.15"}}
-        r = audit.inspect(constructed(request=direct),
+        r = audit.inspect(constructed(request=direct,
+                          url=audit.ENGINE_ROUTED_URL + "/77003"),
                           path="SECURITY_REVIEW_GENERAL/constructed.json",
                           original_blob_sha1="c" * 40)
         self.assertEqual(r["capture_intent_provenance_class"], audit.KIND_DIRECT)
@@ -72,10 +79,65 @@ class OriginalReceiptComparabilityTests(unittest.TestCase):
         doc = constructed(receipt="FACT_CHECK", request={
             "method": "POST", "endpoint": "/v1/intent",
             "payload": {"intent": "SECURITY_REVIEW", "input": {"code": "x"}}
-        })
+        }, url=audit.ENGINE_ROUTED_URL + "/77003")
         r = row(doc)
         self.assertEqual(r["capture_intent_provenance_class"], audit.KIND_DIFFERENT)
         self.assertEqual(r["request_explicit_intent"], "SECURITY_REVIEW")
+
+    def test_outside_review_counterexample_direct_endpoint_with_canonical_body_and_receipt(self):
+        # This formerly passed as KIND_ROUTED because the old classifier ignored url.
+        direct = row(constructed(url=audit.ENGINE_ROUTED_URL + "/77003"))
+        assert direct["request_has_canonical_routed_schema"] is True
+        self.assertFalse(direct["original_capture_url_records_general_route"])
+        self.assertFalse(direct["canonical_schema_with_recorded_general_route"])
+        self.assertEqual(direct["original_recorded_route_class"], "DIRECT_MINER_ENDPOINT")
+        self.assertEqual(direct["original_direct_endpoint_miner_id"], "77003")
+        self.assertEqual(direct["capture_intent_provenance_class"], audit.KIND_DIRECT)
+        self.assertIsNone(direct["canonical_request_sha256"])
+        baseline = row(constructed())
+        self.assertNotEqual(baseline["capture_intent_provenance_class"],
+                            direct["capture_intent_provenance_class"])
+        self.assertEqual(audit.same_request_candidates([baseline,direct]), [])
+
+    def test_missing_forged_or_ambiguous_transport_never_counts_as_routing(self):
+        for url in (None, "", audit.ENGINE_ROUTED_URL + "/",
+                    audit.ENGINE_ROUTED_URL + "?miner=77003",
+                    audit.ENGINE_ROUTED_URL + "#fragment",
+                    "http://devnode.telegraphprotocol.com/engine/v1/ask",
+                    "https://some-other-host.example/engine/v1/ask",
+                    "https://devnode.telegraphprotocol.com.evil.example/engine/v1/ask",
+                    audit.ENGINE_ROUTED_URL + "/77003/",
+                    audit.ENGINE_ROUTED_URL + "/0",
+                    audit.ENGINE_ROUTED_URL + "/77003?x=1",
+                    audit.ENGINE_ROUTED_URL + "/not-a-miner"):
+            with self.subTest(url=url):
+                with self.assertRaises(audit.ComparabilityError):
+                    row(constructed(url=url))
+
+    def test_direct_endpoint_body_miner_swap_fails_closed(self):
+        valid = row(constructed(url=audit.ENGINE_ROUTED_URL + "/77003"))
+        self.assertEqual(valid["reported_miner_id_not_verified_owner"], "77003")
+        with self.assertRaisesRegex(audit.ComparabilityError, "disagrees"):
+            row(constructed(url=audit.ENGINE_ROUTED_URL + "/77003", miner="190048"))
+
+    def test_receipt_and_body_miner_are_distinct_documented_namespaces(self):
+        # Telegraph's receipt.miner is its onchain registration ID. It is NOT
+        # required to match the direct URL ID or response body's miner_id.
+        direct = row(constructed(url=audit.ENGINE_ROUTED_URL + "/77003",
+                                 miner="77003", registration_miner="3854"))
+        self.assertEqual(direct["reported_miner_id_not_verified_owner"], "77003")
+        self.assertEqual(direct["reported_receipt_miner_onchain_registration_id_not_body_miner_id"], "3854")
+        self.assertFalse(direct["receipt_and_body_miner_id_namespace_mapping_independently_verified"])
+        with self.assertRaisesRegex(audit.ComparabilityError, "registration"):
+            row(constructed(registration_miner=None))
+
+    def test_original_lock_preserves_two_true_general_routes_ten_direct_endpoints(self):
+        # The pinned original URL fields are downloaded and validated by the
+        # original-source job; regression assertions live in study().
+        self.assertEqual(audit.request_transport(audit.ENGINE_ROUTED_URL),
+                         ("GENERAL_NETWORK_ROUTE",None))
+        self.assertEqual(audit.request_transport(audit.ENGINE_ROUTED_URL + "/77003"),
+                         ("DIRECT_MINER_ENDPOINT","77003"))
 
     def test_improper_canonical_params_fail_exact_envelope(self):
         for obj in (

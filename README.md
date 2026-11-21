@@ -1,5 +1,11 @@
 # FALSUM
 
+## Phase 5AD: a developer challenged source routing — fix the real defect
+
+A technical review supplied by a developer outside FALSUM correctly identified an important **future-input** bug: a canonical request body plus matching receipt Intent can be sent via either Telegraph's network-routed `/engine/v1/ask` **or** direct `/engine/v1/ask/{minerId}` endpoint. The original Phase 5AB logic classified only by body+receipt. [Phase 5AD](docs/PHASE5AD_EXTERNAL_REVIEW_TRANSPORT_AND_IDENTITY.md) now validates the **exact Git-authenticated original capture's recorded URL** before allowing a routed label, and separately records receipt's onchain registration ID vs. the response's Miner ID without inventing an identity mapping.
+
+The original twelve upstream captures record **two general-route URLs and ten direct Miner URLs**. Their 2/2/6/2 request/receipt partition and zero comparable same-request multi-Miner pairs remain intact. The reviewer did not perform a public independent fork Actions run, so none is claimed. Historical data authenticity is not independent proof of actual HTTP transport, onchain settlement, expert security gold or a live network ranking. Arbitrary-package/advisory evaluation remains outside the fixed six-advisory historical filter.
+
 ## Independent developer reproduction (no keys or paid requests)
 
 The [independent reviewer start page](docs/INDEPENDENT_REVIEWER_START_HERE.md) includes a **fork-and-run public GitHub Action**, a local Python 3.11+ command sequence, expected original-source counts, a deliberately constructed application-filter example, and an [evidence-first issue form](https://github.com/Iniwura/falsum/issues/new?template=independent-public-reproduction.yml) for technical counterexamples, failures or genuine outside integration. The Action re-authenticates 12 original public receipt captures and six GitHub-reviewed GHSA sources. It uploads only public-safe summaries and verifies that the constructed local response **does not** inherit genuine outside Miner provenance.

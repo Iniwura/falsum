@@ -29,6 +29,8 @@ KIND_ROUTED = "CANONICAL_ROUTED_REQUEST_AND_RECEIPT"
 KIND_DIRECT = "DIRECT_PROVIDER_CANONICAL_RECEIPT_BUT_NO_CANONICAL_REQUEST"
 KIND_DIFFERENT = "SUCCESSFUL_RESPONSE_RECEIPT_IS_NOT_CANONICAL_INTENT"
 KIND_FAILED = "FAILED_NO_SUCCESSFUL_RECEIPT"
+ENGINE_ROUTED_URL = "https://devnode.telegraphprotocol.com/engine/v1/ask"
+ENGINE_DIRECT_RE = re.compile(r"^https://devnode\.telegraphprotocol\.com/engine/v1/ask/([1-9][0-9]*)$")
 LIMIT_FIELDS = (
     "folder_name_is_not_intent_proof",
     "reported_payment_not_chain_verified",
@@ -119,6 +121,22 @@ def request_identity(request: object) -> tuple[bool, str | None, str | None]:
     return False, explicit if type(explicit) is str else None, None
 
 
+def request_transport(url: object) -> tuple[str, str | None]:
+    """Prove which API endpoint the original capture records.
+
+    Telegraph accepts canonical intent+params on BOTH /ask and /ask/{minerId}.
+    Payload shape alone is therefore insufficient to assert network routing.
+    This Phase 5AB historical verifier recognizes ONLY the frozen capture
+    origin and exact engine paths; it is not a general network HTTP client.
+    """
+    need(type(url) is str, "original request transport URL absent")
+    if url == ENGINE_ROUTED_URL:
+        return "GENERAL_NETWORK_ROUTE", None
+    match = ENGINE_DIRECT_RE.fullmatch(url)
+    need(match is not None, "unrecognized request URL/host/route; cannot infer routing")
+    return "DIRECT_MINER_ENDPOINT", match.group(1)
+
+
 def inspect(document: object, *, path: str, original_blob_sha1: str) -> dict:
     """Classify a caller-supplied document. Only study() proves its Git origin."""
     need(type(document) is dict and type(path) is str and SHA1.fullmatch(original_blob_sha1),
@@ -126,6 +144,8 @@ def inspect(document: object, *, path: str, original_blob_sha1: str) -> dict:
     request = document.get("request")
     need(isinstance(request, dict), "missing original request object")
     req_canonical, request_intent, digest = request_identity(request)
+    transport, direct_endpoint_miner = request_transport(document.get("url"))
+    truly_routed = req_canonical and transport == "GENERAL_NETWORK_ROUTE"
     need(document.get("paid") is True and document.get("charged") is True
          and isinstance(document.get("payment"), dict)
          and document["payment"].get("success") is True,
@@ -138,6 +158,7 @@ def inspect(document: object, *, path: str, original_blob_sha1: str) -> dict:
     classified = KIND_FAILED
     recorded_intent = None
     reported_miner = None
+    receipt_registration_miner = None
     if status == 200:
         need(isinstance(receipt, dict) and isinstance(body, dict)
              and type(receipt.get("receipt_hash")) is str
@@ -149,10 +170,20 @@ def inspect(document: object, *, path: str, original_blob_sha1: str) -> dict:
              and str(body["miner_id"]).isdigit(),
              "missing reported original Miner identifier")
         reported_miner = str(body["miner_id"])
+        if direct_endpoint_miner is not None:
+            need(reported_miner == direct_endpoint_miner,
+                 "response-body miner ID disagrees with original direct request URL")
+        # The official Telegraph docs describe receipt.miner as the onchain
+        # registration ID, NOT response.body.miner_id / direct /ask/{id}.
+        # Never require their equality or invent a verified mapping.
+        registration = receipt.get("miner")
+        need(type(registration) in (int, str) and str(registration).isdigit(),
+             "missing reported onchain Miner registration identifier")
+        receipt_registration_miner = str(registration)
         recorded_intent = receipt.get("intent")
         need(type(recorded_intent) is str and len(recorded_intent) < 100,
              "no typed original receipt Intent")
-        if req_canonical and recorded_intent == CANONICAL:
+        if truly_routed and recorded_intent == CANONICAL:
             classified = KIND_ROUTED
         elif recorded_intent == CANONICAL:
             classified = KIND_DIRECT
@@ -169,9 +200,16 @@ def inspect(document: object, *, path: str, original_blob_sha1: str) -> dict:
         "reported_paid_flag": True,
         "reported_charge_flag": True,
         "receipt_intent": recorded_intent,
+        "original_recorded_route_class": transport,
+        "original_capture_url_records_general_route": transport == "GENERAL_NETWORK_ROUTE",
+        "original_direct_endpoint_miner_id": direct_endpoint_miner,
+        "reported_receipt_miner_onchain_registration_id_not_body_miner_id":
+            receipt_registration_miner,
+        "receipt_and_body_miner_id_namespace_mapping_independently_verified": False,
         "request_explicit_intent": request_intent,
         "reported_miner_id_not_verified_owner": reported_miner,
         "request_has_canonical_routed_schema": req_canonical,
+        "canonical_schema_with_recorded_general_route": truly_routed,
         "canonical_request_sha256": digest if classified == KIND_ROUTED else None,
         "capture_intent_provenance_class": classified,
         "request_and_receipt_not_proof_of_advisory_correctness": True,
@@ -228,8 +266,17 @@ def study(*, root: Path = ROOT, download=fetch_bytes) -> dict:
     need(sum(x["observed_http_status"] == 200 for x in original) == 10
          and sum(x["receipt_intent"] == CANONICAL for x in original) == 4,
          "original HTTP/receipt counts changed")
-    need(sum(x["request_has_canonical_routed_schema"] for x in original) == 2,
-         "canonical routed requests disagree with source observation")
+    need(sum(x["request_has_canonical_routed_schema"] for x in original) == 2
+         and sum(x["original_capture_url_records_general_route"] for x in original) == 2
+         and sum(x["canonical_schema_with_recorded_general_route"]
+                 for x in original) == 2,
+         "canonical request envelope and independently recorded transport disagree")
+    need(all(
+         (row["original_direct_endpoint_miner_id"] is not None)
+         == (row["original_recorded_route_class"] == "DIRECT_MINER_ENDPOINT")
+         and row["receipt_and_body_miner_id_namespace_mapping_independently_verified"] is False
+         for row in original),
+         "recorded direct URL or unsupported Miner identity mapping")
     candidates = same_request_candidates(original)
     need(len(candidates) == 0 and
          len({x["canonical_request_sha256"] for x in original
@@ -244,6 +291,9 @@ def study(*, root: Path = ROOT, download=fetch_bytes) -> dict:
         "original_outside_git_authenticated_capture_count": len(original),
         "observed_reported_paid_http200_count": 10,
         "original_receipts_reporting_canonical_intent_count": 4,
+        "original_captures_record_general_route_count": 2,
+        "original_captures_record_direct_endpoint_count": 10,
+        "receipt_miner_onchain_registration_id_to_body_miner_mapping_verified": False,
         "original_explicit_canonical_routed_request_and_receipt_count": counts[KIND_ROUTED],
         "original_direct_noncanonical_request_with_canonical_receipt_count": counts[KIND_DIRECT],
         "original_paid_http200_with_noncanonical_receipt_count": counts[KIND_DIFFERENT],
