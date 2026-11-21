@@ -117,6 +117,14 @@ def consume(role:str,request:object,body:object,reviewed:list[dict],
     frozen(root)
     need(role in ROLES,"unsupported original provider family")
     ghsa,cves=reviewed_index(reviewed,root=root)
+    # Caller-supplied provenance, overrides or extra request-envelope fields
+    # must not be interpreted as proof that a public Miner capture is original.
+    valid_keys=({"intent","params"} if role=="canonical_routed_off_target"
+                else {"method","endpoint","payload"})
+    if not isinstance(request,dict) or set(request)!=valid_keys:
+        return deny(role,"UNKNOWN_OR_FORGED_REQUEST_ENVELOPE_FIELDS",False)
+    if not isinstance(body,dict) or "original_external_capture_git_verified" in body:
+        return deny(role,"UNTRUSTED_OR_FORGED_RESPONSE_PROVENANCE",False)
     result=relevance(role,request,body)
     if role=="canonical_routed_off_target":
         return deny(role,"UNSCOPED_100_ADVISORY_FEED_NOT_PACKAGE_BOUND",
