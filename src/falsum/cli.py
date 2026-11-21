@@ -85,6 +85,17 @@ def main(argv: list[str] | None = None) -> int:
     balanced.add_argument("--strategy",
                           choices=("always-abstain", "always-supported",
                                    "always-contradicted", "slot-a-is-parent"))
+    disjoint = commands.add_parser(
+        "score-new-source-projects",
+        help="4 previously untested original public Git projects, 8 code revisions, 8 upstream test blobs, 24 counterbalanced tasks; no expert gold",
+    )
+    disjoint.add_argument("mode",choices=("export","score","baseline"))
+    disjoint.add_argument("--questions-out",type=Path)
+    disjoint.add_argument("--template-out",type=Path)
+    disjoint.add_argument("--source-proof-out",type=Path)
+    disjoint.add_argument("--questions",type=Path)
+    disjoint.add_argument("--predictions",type=Path)
+    disjoint.add_argument("--out",type=Path)
     consume = commands.add_parser(
         "audit-telegraph-consumption",
         help="strict original source-bound application allow/deny policy; two authentic real paid captures and 24 constructed tests, not network scoring",
@@ -140,6 +151,25 @@ def main(argv: list[str] | None = None) -> int:
     source_pair.add_argument("--out", type=Path)
     args = parser.parse_args(argv)
     try:
+        if args.command == "score-new-source-projects":
+            from .phase5u_project_disjoint_security import main as new_sources_main
+            if args.mode=="export":
+                if (args.questions_out is None or args.template_out is None
+                        or args.source_proof_out is None):
+                    parser.error("export requires --questions-out --template-out --source-proof-out")
+                return new_sources_main(["export",
+                    "--questions-out",str(args.questions_out),
+                    "--template-out",str(args.template_out),
+                    "--source-proof-out",str(args.source_proof_out)])
+            if args.out is None:
+                parser.error("score/baseline requires --out")
+            cmd=[args.mode,"--out",str(args.out)]
+            if args.mode=="score":
+                if args.questions is None or args.predictions is None:
+                    parser.error("score requires --questions --predictions")
+                cmd+=["--questions",str(args.questions),
+                      "--predictions",str(args.predictions)]
+            return new_sources_main(cmd)
         if args.command == "audit-telegraph-consumption":
             from .phase5t_application_consumption import main as consume_main
             cmd=["--out",str(args.out)]
