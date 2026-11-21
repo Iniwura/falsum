@@ -60,3 +60,25 @@ A report can only be created at a previously unused file path, without overwriti
 - Model failure is a meaningful negative diagnostic. Never claim a higher model score or FALSUM training improvement without independently supported evidence.
 
 **Phase 5W release gate:** only claim numerical genuine model results after all three offline-contract suites and the real publisher-inference job successfully complete. No official hackathon submission or demo is made by this phase.
+
+## Actual original model outcome verified
+
+[**The genuine original GitHub Actions inference run**](https://github.com/Iniwura/falsum/actions/runs/44903712350) completed successfully across **all four jobs** (Python 3.11, 3.12, 3.13 contract validation and the actual 24-pass immutable Qwen CPU runner).
+
+| Method | Matches to author-derived public reference /24 | Source-present /16 | No-source abstention /8 | Complete source + answer-position reversals /4 |
+| --- | ---: | ---: | ---: | ---: |
+| **Genuine original Qwen2.5-0.5B-Instruct** | **8** | **0** | **8** | **0** |
+| Disclosed synthetic prompt-only source-blind baseline | 16 | 8 | 8 | 0 |
+| Disclosed synthetic always-ABSTAIN baseline | 8 | 0 | 8 | 0 |
+
+**All 24 original model raw completions were exactly `ABSTAIN`.** That includes the 16 conditions where the actual original Git source was present. It is a **negative result** for model source reasoning, and **eight matches fewer than the disclosed 16/24 source-blind synthetic control**. It does not demonstrate model improvement. The primary complete four-way source/option reversal metric is 0/4 for every method.
+
+The result is reproducible with the original model publisher revision and the entire original raw completion artifact; no outputs were selectively discarded or reinterpreted as a positive.
+
+- Original Actions artifact ID: **14707515234**.
+- Original artifact ZIP SHA-256: `b073487d6b7990460f4795f80f427d5a31d9aad934456563f6ffda1c1d571673`.
+- Original 24 raw completions JSON SHA-256: `42c4ba407d34e40bc9f51d9916aac80ea3f38bd401726774950d7143dac293af`.
+- Original model diagnostic JSON SHA-256: `13ba0f26fee41519f5482a601ab47b9161494577b8b8ba3ce70f54ddc2f9cda2`.
+- [Permanent measured original evidence index](../evidence/phase5w-2026-11-21-real-qwen-new-security-source-failure.json).
+
+**Judge interpretation:** This source-sensitive evaluation material reveals that a genuine small published model can achieve credit for eight missing-source abstention conditions while learning nothing from the 16 source-provided revisions. The stronger claim is the reproducible detection of the limitation and a falsifiable four-way test, *not* superior model accuracy or live network ranking improvement. The original public source/expected answers remain author-selected, not independently certified AppSec gold.
