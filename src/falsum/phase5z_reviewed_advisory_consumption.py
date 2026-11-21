@@ -40,9 +40,7 @@ def frozen(root:Path=ROOT)->dict:
          "PHASE5Z_FROZEN_VERSION_REVIEWED_ADVISORY_REFERENCE_APP_CONSUMPTION_PROTOCOL_BEFORE_IMPLEMENTATION"
          and p.get("schema_version")==1
          and p.get("target")==TARGET and p.get("original_roles")==list(ROLES)
-         and p.get("original_provider_miner_ids")==["77003","190048","77010"]
-         and p.get("original_phase5x_git_blob")==source_frozen(root)["original_phase5x_git_blob"]
-             if False else True,
+         and p.get("original_provider_miner_ids")==["77003","190048","77010"],
          "frozen interface drift")
     need(p.get("original_phase5x_git_blob")=="227b91ab42688ac4a02a95633ba3556d3ff8b84f"
          and p.get("original_phase5y_git_blob")=="ed0e5c40d918dbc46e8a7e58eeb0a225cfaef237"
