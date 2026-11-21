@@ -42,3 +42,18 @@ The **actual original CI run and artifact hashes** must be documented here only 
 - No original third-party paid response body, private evaluation pool, live remote target, model training, independent adopter or registered Telegraph scoring adapter is used. No hackathon submission or demo is made.
 
 **Next critical milestone:** use these actually verified source behaviors as supporting reference evidence in a valid independent-model comparison, then obtain fair same-request multi-miner responses and expert adjudication if available. The source-runtime proof alone cannot justify a 90+ competitive judge score.
+
+## Verified original historical runtime execution
+
+All **12 actual GitHub Actions jobs** passed in [the authentic original execution run](https://github.com/Iniwura/falsum/actions/runs/44902503049): three Python 3.11–3.13 verifier suites, **eight actual separate original historical Git-source Node processes**, and the final source-reversal receipt aggregator.
+
+For each of minimist, JSON5, tough-cookie and follow-redirects, the affected historical source showed the exact expected unsafe behavior and the fixed original source did not. All **eight unrelated benign controls passed**. The exact source file and corresponding historical upstream test file SHA1 were revalidated at each checkout before execution.
+
+The first attempted run's tough-cookie benign control was invalidated by checking the same cookie jar *after* deliberately polluting it; the check was isolated in a separate clean jar before mutation without changing the preregistered affected/fixed security assertion. This correction is covered by [the successful subsequent full matrix](https://github.com/Iniwura/falsum/actions/runs/44902503049). No failed predecessor is counted as a successful original run.
+
+- Original GitHub Actions artifact ID **14706407714**.
+- Original aggregate ZIP SHA-256: `677ffdc66ac827a6f88eafca1e5ac88e7d88b6ba3760d41ee6b9d46ae396cff9`.
+- Embedded original eight-source-run aggregate JSON SHA-256: `dca4f43f8d22951111320eac59832b5511fac3f458fdee22659c040a990e03b1`.
+- [Original immutable runtime evidence digest index](../evidence/phase5v-2026-11-21-actual-four-original-js-security-fix-reversals.json).
+
+**Interpretation:** the additional source coverage now has **actual confirmed historical runtime source behavior** across all four newly selected original security fixes. These are **focused local reproduction probes**, not complete executions of every original upstream test. They are not independent expert gold or a model's source-reasoning accuracy.
