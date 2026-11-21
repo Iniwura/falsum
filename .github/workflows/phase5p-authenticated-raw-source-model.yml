@@ -94,6 +94,46 @@ jobs:
                   assert len(q['source_git_commit'])==40
           print('Eight real authentic raw Git source files validated; four deliberate no-source controls.')
           PY
+      - name: External developer CLI contract smoke, deliberate synthetic control only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/phase5p-developer-cli-check
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('actual-raw-source-evaluator/EMPTY-DEVELOPER-PREDICTION-TEMPLATE.json')
+          doc=json.loads(p.read_text())
+          assert all(x['choice'] is None for x in doc['decisions'])
+          for item in doc['decisions']:
+              item['choice']='ABSTAIN'
+          Path('/tmp/phase5p-developer-cli-check/disclosed-synthetic-abstain.json').write_text(json.dumps(doc))
+          corrupted=json.loads(json.dumps(doc))
+          corrupted['challenge_sha256']='0'*64
+          Path('/tmp/phase5p-developer-cli-check/tampered-candidate.json').write_text(json.dumps(corrupted))
+          PY
+          python -m falsum.cli score-raw-code score \
+            --questions actual-raw-source-evaluator/ORIGINAL-12-AUTHENTICATED-SOURCE-QUESTIONS.json \
+            --predictions /tmp/phase5p-developer-cli-check/disclosed-synthetic-abstain.json \
+            --out /tmp/phase5p-developer-cli-check/synthetic-score.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/phase5p-developer-cli-check/synthetic-score.json').read_text())
+          assert r['candidate_identity_independently_verified'] is False
+          assert r['independent_developer_adoption_not_established'] is True
+          assert r['results']['matches_to_public_researcher_references']==4
+          assert r['results']['complete_correct_parent_fix_reversals']==0
+          PY
+          if python -m falsum.cli score-raw-code score \
+            --questions actual-raw-source-evaluator/ORIGINAL-12-AUTHENTICATED-SOURCE-QUESTIONS.json \
+            --predictions /tmp/phase5p-developer-cli-check/tampered-candidate.json \
+            --out /tmp/phase5p-developer-cli-check/should-not-exist.json; then
+              echo "ERROR: altered developer challenge SHA should have been rejected" >&2
+              exit 1
+          fi
+          test ! -e /tmp/phase5p-developer-cli-check/should-not-exist.json
+          echo "Real external-compatible scoring command works, and forged challenge SHA fails closed."
       - name: Install actual previously verified published Qwen inference dependencies
         shell: bash
         run: |
