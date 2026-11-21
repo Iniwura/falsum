@@ -1,0 +1,166 @@
+name: Phase 5U - four new project-disjoint original upstream security-fix sources
+on:
+  push:
+    paths:
+      - 'data/phase5u-four-new-project-original-source-protocol.json'
+      - 'src/falsum/phase5u_project_disjoint_security.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5u_project_disjoint_security.py'
+      - '.github/workflows/phase5u-disjoint-upstream-source-test-provenance.yml'
+  pull_request:
+    paths:
+      - 'data/phase5u-four-new-project-original-source-protocol.json'
+      - 'src/falsum/phase5u_project_disjoint_security.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5u_project_disjoint_security.py'
+      - '.github/workflows/phase5u-disjoint-upstream-source-test-provenance.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-preinference-contract-and-no-shortcut:
+    name: Four disjoint new projects, frozen source/test Git tags, no forged gold / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Verify new project roster, original SHA source policy and counterbalanced score contract
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5u_project_disjoint_security.py' -v
+          python -m falsum.cli --help | grep -F score-new-source-projects
+  actual-original-git-code-and-upstream-test-verification:
+    name: Download and verify all 8 actual upstream source and 8 upstream test Git file revisions
+    needs: original-preinference-contract-and-no-shortcut
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch authenticated raw Git files and export complete 24 conditions
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p actual-four-new-original-source-projects
+          python -m falsum.cli score-new-source-projects export \
+            --questions-out actual-four-new-original-source-projects/ORIGINAL-24-NEW-PROJECT-SOURCE-CHALLENGE.json \
+            --template-out actual-four-new-original-source-projects/EMPTY-CANDIDATE-RESPONSES.json \
+            --source-proof-out actual-four-new-original-source-projects/EIGHT-SOURCE-EIGHT-UPSTREAM-TEST-GIT-PROOF.json
+          python -m falsum.cli score-new-source-projects baseline \
+            --out actual-four-new-original-source-projects/DISCLOSED-SOURCE-BLIND-SYNTHETIC-BASELINE.json
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('actual-four-new-original-source-projects')
+          doc=json.loads((root/'ORIGINAL-24-NEW-PROJECT-SOURCE-CHALLENGE.json').read_text())
+          proof=json.loads((root/'EIGHT-SOURCE-EIGHT-UPSTREAM-TEST-GIT-PROOF.json').read_text())
+          baseline=json.loads((root/'DISCLOSED-SOURCE-BLIND-SYNTHETIC-BASELINE.json').read_text())['score']
+          template=json.loads((root/'EMPTY-CANDIDATE-RESPONSES.json').read_text())
+          assert doc['status']=='PHASE5U_ORIGINAL_GIT_AUTHENTICATED_FOUR_NEW_PROJECTS_PUBLIC_24_SOURCE_CONDITIONS'
+          assert doc['new_distinct_public_project_count']==4
+          assert doc['new_historical_security_fix_families']==4
+          assert doc['original_code_git_blob_verified']==8
+          assert doc['original_upstream_test_git_blob_verified']==8
+          assert doc['actual_original_upstream_tests_executed'] is False
+          assert len(proof['original_immutable_project_git_files'])==8
+          assert len({row['repository'] for row in proof['original_immutable_project_git_files']})==4
+          assert all(x['original_upstream_source_full_blob_sha_verified'] is True and
+                     x['original_upstream_test_full_blob_sha_verified'] is True for x in proof['original_immutable_project_git_files'])
+          assert all(x['original_upstream_test_executed_by_phase5u'] is False for x in proof['original_immutable_project_git_files'])
+          assert doc['source_present_conditions']==16
+          assert doc['source_omitted_controls']==8
+          assert doc['question_count']==24
+          assert doc['response_classes_reference']=={'A':8,'B':8,'ABSTAIN':8}
+          assert all(set(x)=={'id','messages','prompt_sha256'} for x in doc['questions'])
+          assert len({x['id'] for x in doc['questions']})==24
+          assert all(x['choice'] is None for x in template['decisions'])
+          assert baseline['prompt_only_source_hidden_maximum_matches']==16
+          assert baseline['prompt_only_source_hidden_maximum_complete_four_way']==0
+          assert baseline['matches_to_researcher_derived_public_references']==16
+          assert baseline['complete_correct_four_way_source_and_answer_reversals']==0
+          assert doc['independent_appsec_expert_gold']==0
+          assert doc['network_evaluator_registered'] is False
+          assert proof['actual_model_inference'] is False
+          print('All 16 original upstream source/test Git blobs verified; new projects disjoint; four known historical security-fix families, 16 genuine code conditions and 8 no-code controls.')
+          PY
+      - name: Prove outside-model candidate placeholders cannot earn automatic scores
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/phase5u-candidate-controls
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          folder=Path('actual-four-new-original-source-projects')
+          template=json.loads((folder/'EMPTY-CANDIDATE-RESPONSES.json').read_text())
+          for decision in template['decisions']:
+              decision['choice']='ABSTAIN'
+          Path('/tmp/phase5u-candidate-controls/DECLARED-SYNTHETIC-ALWAYS-ABSTAIN.json').write_text(json.dumps(template))
+          wrong=json.loads(json.dumps(template))
+          wrong['challenge_sha256']='0'*64
+          Path('/tmp/phase5u-candidate-controls/FORGED-CHALLENGE.json').write_text(json.dumps(wrong))
+          PY
+          python -m falsum.cli score-new-source-projects score \
+            --questions actual-four-new-original-source-projects/ORIGINAL-24-NEW-PROJECT-SOURCE-CHALLENGE.json \
+            --predictions /tmp/phase5u-candidate-controls/DECLARED-SYNTHETIC-ALWAYS-ABSTAIN.json \
+            --out /tmp/phase5u-candidate-controls/ALWAYS-ABSTAIN-SYNTHETIC-SCORE.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('/tmp/phase5u-candidate-controls/ALWAYS-ABSTAIN-SYNTHETIC-SCORE.json').read_text())
+          assert d['score']['matches_to_researcher_derived_public_references']==8
+          assert d['score']['complete_correct_four_way_source_and_answer_reversals']==0
+          assert d['candidate_identity_or_independence_verified'] is False
+          assert d['score']['independent_appsec_gold']==0
+          PY
+          if python -m falsum.cli score-new-source-projects score \
+            --questions actual-four-new-original-source-projects/ORIGINAL-24-NEW-PROJECT-SOURCE-CHALLENGE.json \
+            --predictions /tmp/phase5u-candidate-controls/FORGED-CHALLENGE.json \
+            --out /tmp/phase5u-candidate-controls/SHOULD-NOT-EXIST.json; then
+              echo "ERROR: forged original challenge SHA should fail" >&2
+              exit 1
+          fi
+          test ! -e /tmp/phase5u-candidate-controls/SHOULD-NOT-EXIST.json
+      - name: Explicit original verification report, not unseen model accuracy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          p=Path('actual-four-new-original-source-projects')
+          d=json.loads((p/'EIGHT-SOURCE-EIGHT-UPSTREAM-TEST-GIT-PROOF.json').read_text())
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Phase 5U: genuine additional upstream security-fix source coverage\n\n')
+              f.write('Four new project-disjoint original upstream security fixes across minimist, JSON5, tough-cookie and follow-redirects. **Eight original code Git file blobs and eight original upstream test file blobs** were downloaded from exact immutable Git commits and authenticated byte-for-byte.\n\n')
+              f.write('New original code contexts: **16** source-present paired/option-swapped questions; **8** source-omission controls. Original test files were pinned but **their full test suites were not executed** by this source-authentication stage. This is new reference coverage, not a verified new trained model, sealed holdout, independent AppSec gold or improved Telegraph ranking.\n\n')
+              for record in d['original_immutable_project_git_files']:
+                  f.write('- '+record['repository']+' '+record['release']+': '+record['source_url']+'; test '+record['original_upstream_test_url']+'.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5u-original-four-new-public-upstream-source-and-regression-test-evidence
+          path: actual-four-new-original-source-projects/
+          retention-days: 90
+          if-no-files-found: error
