@@ -113,6 +113,11 @@ def main(argv: list[str] | None = None) -> int:
         help="fetch six SHA-authenticated historical GitHub-reviewed advisories into an offline source bundle; no Miner responses",
     )
     source_bundle.add_argument("--out",type=Path,required=True)
+    provenance = commands.add_parser(
+        "audit-receipt-comparability",
+        help="authenticate 12 public original security-response Git blobs and prevent false same-Intent rankings",
+    )
+    provenance.add_argument("--out",type=Path,required=True)
     version_quality = commands.add_parser(
         "audit-reviewed-advisory-version",
         help="six original Git-reviewed advisory source files vs two real published Miner outputs; exact target version only, NOT ranking",
@@ -192,6 +197,9 @@ def main(argv: list[str] | None = None) -> int:
                 cmd+=["--questions",str(args.questions),
                       "--predictions",str(args.predictions)]
             return new_sources_main(cmd)
+        if args.command == "audit-receipt-comparability":
+            from .phase5ab_original_receipt_comparability import main as provenance_main
+            return provenance_main(["--out",str(args.out)])
         if args.command == "bundle-reviewed-advisories":
             from .phase5aa_offline_reviewed_bundle import main as bundle_main
             return bundle_main(["--out",str(args.out)])
