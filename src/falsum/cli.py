@@ -85,6 +85,11 @@ def main(argv: list[str] | None = None) -> int:
     balanced.add_argument("--strategy",
                           choices=("always-abstain", "always-supported",
                                    "always-contradicted", "slot-a-is-parent"))
+    paired = commands.add_parser(
+        "audit-telegraph-consistency",
+        help="source-pinned original two-task paid Telegraph response-identity contrast; not model quality gold",
+    )
+    paired.add_argument("--out",type=Path,required=True)
     telegraph = commands.add_parser(
         "audit-telegraph-target",
         help="source-pinned real paid SECURITY_REVIEW_GENERAL response relevance audit; not a registered scorer",
@@ -116,6 +121,9 @@ def main(argv: list[str] | None = None) -> int:
     source_pair.add_argument("--out", type=Path)
     args = parser.parse_args(argv)
     try:
+        if args.command == "audit-telegraph-consistency":
+            from .phase5r_telegraph_two_task_consistency import main as paired_main
+            return paired_main(["--out",str(args.out)])
         if args.command == "audit-telegraph-target":
             from .phase5q_telegraph_target_gate import main as telegraph_main
             a=["--out",str(args.out)]

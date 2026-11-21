@@ -1,0 +1,119 @@
+name: Phase 5R - original public Telegraph two-task answer invariance
+on:
+  push:
+    paths:
+      - 'data/phase5r-observed-independent-two-task-contrast-lock.json'
+      - 'src/falsum/phase5r_telegraph_two_task_consistency.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5r_telegraph_two_task_consistency.py'
+      - '.github/workflows/phase5r-telegraph-public-two-task-consistency.yml'
+  pull_request:
+    paths:
+      - 'data/phase5r-observed-independent-two-task-contrast-lock.json'
+      - 'src/falsum/phase5r_telegraph_two_task_consistency.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5r_telegraph_two_task_consistency.py'
+      - '.github/workflows/phase5r-telegraph-public-two-task-consistency.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-blind-and-package-guards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    name: Frozen observational protocol + package-task isolation + no fake gold (Python PY)
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Run adversarial package-specific and cross-Intent tests
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5r_telegraph_two_task_consistency.py' -v
+          python -m unittest discover -s tests -p 'test_phase5q_telegraph_target_gate.py' -v
+          python -m falsum.cli --help | grep 'audit-telegraph-consistency'
+  original-external-actual-source-contrast:
+    needs: source-blind-and-package-guards
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    name: Verify two real original public Git blobs, same GHSA list under different canonical requests
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch two original reported-paid capture files without copying third-party bodies into artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p original-telegraph-canonical-task-consistency
+          python -m falsum.cli audit-telegraph-consistency \
+            --out original-telegraph-canonical-task-consistency/ORIGINAL-PUBLIC-TWO-TASK-CONSISTENCY.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('original-telegraph-canonical-task-consistency/ORIGINAL-PUBLIC-TWO-TASK-CONSISTENCY.json')
+          d=json.loads(p.read_text())
+          assert d['status']=='PHASE5R_TWO_INDEPENDENT_TASKS_SAME_EXTERNAL_MINER_IDENTICAL_IRRELEVANT_ADVISORIES'
+          assert d['original_external_canonical_paid_capture_count']==2
+          assert d['distinct_reporting_miners']==1
+          assert d['original_distinct_tasks']==2
+          assert d['distinct_canonical_security_review_intents']==1
+          assert d['naive_success_http200_would_pass_both'] is True
+          assert d['source_bound_target_relevance_rejected_both'] is True
+          assert d['task_insensitive_100_GHSA_id_list_exactly_equal_and_same_order'] is True
+          assert d['common_GHSA_ids_count']==100
+          assert len(d['original_aggregate_rows'])==2
+          assert all(x['source_git_blob_verified'] is True for x in d['original_aggregate_rows'])
+          assert len({x['task_sha256'] for x in d['original_aggregate_rows']})==2
+          assert len({x['GHSA_id_list_sha256'] for x in d['original_aggregate_rows']})==1
+          assert all(x['falsum_task_relevance_decision']=='OFF_TARGET_ADVISORY_FEED' for x in d['original_aggregate_rows'])
+          assert d['benchmark_model_accuracy_proven'] is False
+          assert d['valid_same_request_multi_miner_ranking_pair'] is False
+          assert d['new_ranked_network_quality_improvement'] is False
+          assert d['independent_expert_gold_count']==0
+          assert d['full_third_party_capture_republished'] is False
+          assert d['new_paid_network_requests_from_falsum'] is False
+          assert d['independent_adoption_of_falsum'] is False
+          assert d['official_h2_entry_submitted'] is False
+          output=p.read_text()
+          assert 'req.query.id' not in output and 'eval(req.body.expr)' not in output
+          assert 'GHSA-v8qh' not in output
+          print('Two distinct authentic original canonical task inputs received same irrelevant ordered 100 GHSA IDs from the same reported miner: task-relevance gate rejects both.')
+          PY
+      - name: Publish accurate summary with explicit small-sample, same-miner and no-adoption limits
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads(Path('original-telegraph-canonical-task-consistency/ORIGINAL-PUBLIC-TWO-TASK-CONSISTENCY.json').read_text())
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Real canonical Telegraph response invariance — two externally captured tasks\n\n')
+              f.write('A code-diff security request and an npm lodash dependency review task used the same canonical SECURITY_REVIEW_GENERAL request route and the same externally reported Miner 77003. Their original, Git-blob-authenticated paid captures returned the **identical 100 GHSA identifiers in identical order**, despite different target strings. Neither output was task-specific. FALSUM flags both as off-target.\n\n')
+              f.write('Two separate HTTP 200 and paid flags would pass a naïve success-health check. Task-relevance screening flags both. This is a **two-task observational failure example from a single reported Miner**, not a multi-miner leaderboard rank evaluation or generalization accuracy.\n\n')
+              f.write('Original external source: '+d['third_party_public_issue']+'. No direct new paid request, independent expert gold, private material, registered module, official evaluator improvement or external FALSUM adoption.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5r-original-public-same-intent-two-task-invariance-aggregate-only
+          path: original-telegraph-canonical-task-consistency/
+          retention-days: 90
+          if-no-files-found: error
