@@ -1,5 +1,14 @@
 # FALSUM
 
+## Phase 5X: three real outside Miner responses, one package target, one rejected feed
+
+[**Three original third-party, paid-flagged public Telegraph capture records**](docs/PHASE5X_ORIGINAL_THREE_MINER_LODASH_TARGET_EVIDENCE.md) target **npm lodash 4.17.15**. FALSUM authenticated all three original public Git blobs and original receipt/signal structures. The real routed **Miner 77003** response comprised 100 unrelated GHSA records and was **rejected**; direct **Miners 190048 and 77010** returned six package/version-bound advisory references each, permitted for **unverified reference display only**. A naïve HTTP 200 / paid-status rule would accept all three. All 12 constructed identity/target tampering controls denied.
+
+[Actual 4/4 successful original-source CI run](https://github.com/Iniwura/falsum/actions/runs/44904439815) · [Immutable original evidence artifact and Git SHA provenance](evidence/phase5x-2026-11-21-original-three-miner-target-relevance.json).
+
+**Important:** These were the **same semantic package/version but different transport Intents**: one routed `SECURITY_REVIEW_GENERAL` and two direct `SECURITY_REVIEW` requests. This is a genuine **application target-relevance** finding, not a fair same-Intent Miner leaderboard comparison, independent advisory gold, real network ranking improvement, confirmed crypto-settled payments or proof of external FALSUM adoption.
+
+
 ## Phase 5W: independently published model fails original source-reasoning test
 
 The [**real published Qwen2.5-0.5B evaluation on four new authenticated upstream security-fix projects**](docs/PHASE5W_REAL_PUBLISHED_MODEL_NEW_SECURITY_SOURCE.md) completed 24 original model forward passes on unchanged preregistered input, with the original publisher model SHA-256 verified. **The model answered ABSTAIN on all 24 prompts**: 8/24 matches to public researcher-derived references, **0/16** source-present questions correct, **0/4** complete source-and-position reversals. The disclosed synthetic source-blind baseline matched 16/24 but also 0/4 reversals.
