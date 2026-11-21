@@ -58,3 +58,27 @@ PYTHONPATH=src python -m unittest discover \
 This stage does **not** demonstrate a new model or training gain, independent AppSec judgement, original external payment *settlement* confirmation, comparable different Miners on the *same canonical Intent*, improved network leaderboard, FALSUM installed by PR Guard, a registered canonical evaluator, independently funded adoption or an official Season II submission.
 
 It demonstrates a verifiable external application-quality decision: **two original package-targeted outputs can be presented with a strong warning, while one original paid-status off-target output is denied.** That is a **task-relevance decision**, not a source-to-exploit semantic verdict.
+
+## Actually verified original public evidence
+
+The [original completed GitHub Actions execution](https://github.com/Iniwura/falsum/actions/runs/44904439815) finished **four of four** jobs: three Python 3.11–3.13 adversarial suites and the actual online original Git-source validation.
+
+The pinned original public Git blobs of all three captured responses were SHA-verified. The three recorded reported Miner IDs were distinct. All three recorded paid and HTTP success flags, receipt records and signal hash structures were present.
+
+**Results from the original public observations**, not synthetic replacements:
+
+- **77003:** canonical routed `SECURITY_REVIEW_GENERAL` returned **100 unscoped GHSA rows**; FALSUM **rejected** the feed for npm lodash 4.17.15.
+- **190048:** direct `GET /query`, recorded receipt Intent `SECURITY_REVIEW`, disclosed **6 package-bound GHSA references**; FALSUM allowed **display only**, without asserting security correctness.
+- **77010:** direct `GET /query`, recorded receipt Intent `SECURITY_REVIEW`, disclosed **6 package-bound OSV/CVE references**; FALSUM allowed **display only**, without asserting security correctness.
+- All **12 local author-constructed identity/package/version mutation cases denied**.
+
+The original raw third-party bodies have **not been republished** in the repository. The final report records original blob identities, original source links and bounded counts only.
+
+Original public source artifact and immutable digests:
+
+- GitHub Actions artifact ID **14707316390**.
+- Original ZIP SHA-256 `4b794f25ab1f773c038a09584837b99bab08c05e4087f9e2be60ac1bd30563a0`.
+- Original aggregate JSON SHA-256 `7c0dec6635ae5b6fa0ab20642404f5182b9dd919d26109467fb0b754f08f3c50`.
+- [Permanent source-evidence ledger](../evidence/phase5x-2026-11-21-original-three-miner-target-relevance.json).
+
+**Crucial judging boundary:** This is *observed target relevance across three different reported miners for an equivalent package request*. It is NOT real comparative ranking under the **same canonical Intent**: the two direct receipts explicitly report `SECURITY_REVIEW`, while the routed receipt reports `SECURITY_REVIEW_GENERAL`. Independent ownership and actual payment settlement remain unverified. Never silently convert this result into a network ranking claim.
