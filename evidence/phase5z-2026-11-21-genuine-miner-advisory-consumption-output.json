@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5Z_PROVEN_ORIGINAL_APPLICATION_CONSUMPTION_THREE_PUBLIC_PAID_MINER_CAPTURES",
+  "original_live_execution_date_utc": "2026-11-21",
+  "frozen_preimplementation_commit": "a2d521c7e77613dfe917300f4099dbb2264abdb4",
+  "frozen_application_protocol_git_blob_sha1": "46b42a68360e5f9011a2d60abd25db81176a4a73",
+  "original_github_actions_run": "https://github.com/Iniwura/falsum/actions/runs/44906868471",
+  "original_ci_jobs_passed": 4,
+  "original_github_actions_artifact_id": 14708530673,
+  "original_github_actions_archive_sha256": "bdc6dff92d144817f95349d8d08957bf6cc91f11ed1ece21c810ddb026191b6d",
+  "original_safe_aggregate_json_sha256": "68487eeb9c569257351f7be51d273d33fbab970fa1b63abb9001ddb0aa7f8165",
+  "original_external_report_source_repository": "anvithagowda098/pr-guard",
+  "original_external_report_source_git_commit": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+  "independent_reviewed_advisory_source_repository": "github/advisory-database",
+  "independent_reviewed_advisory_source_git_commit": "76955defc62d048f8f7cc68bc39a2f6dd1899ebe",
+  "full_original_external_git_blobs_verified": 3,
+  "full_original_reviewed_advisory_git_blobs_verified": 6,
+  "original_distinct_reported_miner_ids": [
+    "77003",
+    "190048",
+    "77010"
+  ],
+  "original_observations": [
+    {
+      "miner": "77003",
+      "original_channel": "routed_SECURITY_REVIEW_GENERAL",
+      "unscoped_ghsa_feed_items_denied": 100,
+      "application_action": "DENY_UNVERIFIED_OR_UNSCOPED_ADVICE"
+    },
+    {
+      "miner": "190048",
+      "original_channel": "direct_GET_query_receipt_SECURITY_REVIEW",
+      "reported_advisories": 6,
+      "display_only_exact_reviewed_version_applicable": 5,
+      "version_inapplicable_suppressed": 1
+    },
+    {
+      "miner": "77010",
+      "original_channel": "direct_GET_query_receipt_SECURITY_REVIEW",
+      "reported_advisories": 6,
+      "display_only_exact_reviewed_version_applicable": 5,
+      "version_inapplicable_suppressed": 1
+    }
+  ],
+  "original_reviewed_version_false_positive_ghsa": "GHSA-f23m-r3pf-42rh",
+  "original_reviewed_version_false_positive_cve": "CVE-2026-2950",
+  "original_false_positive_excluded_from_display_both_sources": true,
+  "original_data_not_self_generated_provider_responses": true,
+  "original_third_party_full_response_bodies_republished": false,
+  "independently_validated_exploitability": false,
+  "independent_appsec_human_gold_count": 0,
+  "full_advisory_recall_measured": false,
+  "true_canonical_same_intent_miner_ranking_comparison": false,
+  "request_payloads_byte_identical": false,
+  "independent_miner_ownership_verified": false,
+  "paid_transaction_settlement_independently_verified": false,
+  "new_network_paid_requests_by_falsum": 0,
+  "falsum_registered_evaluator": false,
+  "external_adoption_of_falsum": false,
+  "official_hackathon_entry_submitted": false,
+  "interpretation": "A strict reusable application filter constructed from two independently maintained original Git source families: original outside provider captures and independently reviewed package/version advisory records. It denies an original unscoped paid-flagged 100-GHSA feed, displays only ten version-applicable reference instances from two direct provider responses, and suppresses the same independently reviewed version-inapplicable advisory from each. This is not a head-to-head canonical Intent ranking, generalized package security accuracy, advisory completeness or third-party deployment."
+}

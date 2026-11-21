@@ -96,6 +96,16 @@ def main(argv: list[str] | None = None) -> int:
     disjoint.add_argument("--questions",type=Path)
     disjoint.add_argument("--predictions",type=Path)
     disjoint.add_argument("--out",type=Path)
+    safe_ref = commands.add_parser(
+        "filter-security-references",
+        help="use original independently reviewed GHSA version intervals to suppress inapplicable external references; display-only, not a registered scorer",
+    )
+    safe_ref.add_argument("--out",required=True,type=Path)
+    safe_ref.add_argument("--role",choices=(
+        "canonical_routed_off_target","direct_deps_dev_ghsa",
+        "direct_deps_dev_version"))
+    safe_ref.add_argument("--request-json",type=Path)
+    safe_ref.add_argument("--response-json",type=Path)
     version_quality = commands.add_parser(
         "audit-reviewed-advisory-version",
         help="six original Git-reviewed advisory source files vs two real published Miner outputs; exact target version only, NOT ranking",
@@ -175,6 +185,18 @@ def main(argv: list[str] | None = None) -> int:
                 cmd+=["--questions",str(args.questions),
                       "--predictions",str(args.predictions)]
             return new_sources_main(cmd)
+        if args.command == "filter-security-references":
+            from .phase5z_reviewed_advisory_consumption import main as safe_ref_main
+            cmd=["--out",str(args.out)]
+            for key,flag in (
+                ("role","--role"),
+                ("request_json","--request-json"),
+                ("response_json","--response-json")
+            ):
+                val=getattr(args,key)
+                if val is not None:
+                    cmd.extend((flag,str(val)))
+            return safe_ref_main(cmd)
         if args.command == "audit-reviewed-advisory-version":
             from .phase5y_original_reviewed_version_applicability import main as verified_version_main
             return verified_version_main(["--out",str(args.out)])

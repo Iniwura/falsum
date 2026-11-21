@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5Z_FROZEN_VERSION_REVIEWED_ADVISORY_REFERENCE_APP_CONSUMPTION_PROTOCOL_BEFORE_IMPLEMENTATION",
+  "date_utc": "2026-11-21",
+  "intent_scope": "SECURITY_REVIEW_GENERAL / direct SECURITY_REVIEW family distinguished",
+  "base_main_sha": "a0d05e36f8bc1ef142b9adbf30c375fb22c555b5",
+  "original_phase5x_git_blob": "227b91ab42688ac4a02a95633ba3556d3ff8b84f",
+  "original_phase5y_git_blob": "ed0e5c40d918dbc46e8a7e58eeb0a225cfaef237",
+  "target": {
+    "ecosystem": "npm",
+    "package": "lodash",
+    "version": "4.17.15"
+  },
+  "original_roles": [
+    "canonical_routed_off_target",
+    "direct_deps_dev_ghsa",
+    "direct_deps_dev_version"
+  ],
+  "original_provider_miner_ids": [
+    "77003",
+    "190048",
+    "77010"
+  ],
+  "original_external_git_repo": "anvithagowda098/pr-guard",
+  "original_external_git_commit": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+  "primary_reviewed_advisory_repo": "github/advisory-database",
+  "primary_reviewed_advisory_git_commit": "76955defc62d048f8f7cc68bc39a2f6dd1899ebe",
+  "original_external_published_records": 3,
+  "original_reviewed_advisory_records": 6,
+  "expected_original_application_decisions": {
+    "canonical_routed_off_target": {
+      "action": "DENY_UNSCOPED_ADVISORY_FEED",
+      "advisories_displayable": 0,
+      "advisories_rejected": 100
+    },
+    "direct_deps_dev_ghsa": {
+      "action": "DISPLAY_REVIEWED_VERSION_APPLICABLE_REFERENCES_ONLY",
+      "advisories_displayable": 5,
+      "advisories_rejected": 1
+    },
+    "direct_deps_dev_version": {
+      "action": "DISPLAY_REVIEWED_VERSION_APPLICABLE_REFERENCES_ONLY",
+      "advisories_displayable": 5,
+      "advisories_rejected": 1
+    }
+  },
+  "expected_total_display_only_reference_instances": 10,
+  "expected_total_version_inapplicable_reference_instances_rejected": 2,
+  "expected_distinct_version_inapplicable_ghsa": [
+    "GHSA-f23m-r3pf-42rh"
+  ],
+  "explicit_limits": {
+    "not_same_canonical_intent_competition": true,
+    "not_byte_identical_requests": true,
+    "not_independent_provider_ownership": true,
+    "payment_settlement_unverified": true,
+    "no_new_paid_calls": true,
+    "no_registered_telegraph_evaluator": true,
+    "not_general_package_range_verifier": true,
+    "no_full_advisory_recall": true,
+    "no_human_expert_gold": true,
+    "not_automated_security_approval": true,
+    "no_independent_adoption": true,
+    "no_official_h2_entry": true,
+    "previously_known_public_cases_not_hidden_holdout": true
+  },
+  "interface_contract": "sanitize_or_denial(role, request, response, independently reviewed source index) returns only bounded verified advisory display references with reviewed exact npm package semver intervals and original upstream URLs. Unknown or malformed data fail closed. User-submitted local responses must never be misrepresented as independently captured originals. No raw third-party response bodies are republished.",
+  "local_external_input_policy": "Caller-supplied source role limited to two direct modes or routed mode. Exact precommitted target + public version-review source; no dynamic advisory or package claims. Positive only DISPLAY_ONLY, not accept package as safe. Missing or unknown advisory reference DENY.",
+  "benchmark_policy": "3 genuine external original records, 12 synthetic tampering attempts; never call all 15 real external observations. A naive paid-status policy admits all three originals and all six/each direct advisory refs. A target-only policy admits two direct outputs including two independently version-inapplicable references; the combined gate admits two sanitized outputs with exactly five reviewed version-applicable references per output.",
+  "success_definition": "The actual original three Git blob verified captures + six Git blob reviewed advisory files show routed unscoped 100 row feed denied, 2 direct original provider responses allowed to display exactly 5 refs each, one proven inapplicable per direct source omitted and all injected/unverified records rejected; reusable user-provided local JSON contract exercised with no network or safety approval claims."
+}
