@@ -7,7 +7,15 @@
 
 A security response placed in a folder named `SECURITY_REVIEW_GENERAL`, or even an HTTP 200 response reporting payment success, is not proof that the original **receipt's Intent**, **request envelope**, **provider identity** and **review target** were comparable to another Miner response. A quality benchmark that compares unlike questions or Intent schemas would mislead developers and hackathon judges.
 
-FALSUM now tests the *underlying original captured request/receipt fields*, not the filename. Its relevant criterion for same-request **candidate** comparability is the same explicit routed `SECURITY_REVIEW_GENERAL` request object with identical canonical JSON SHA-256, successful recorded receipt with that exact Intent, and two different **reported** Miner IDs. This would still not verify independent ownership, payment settlement or accurate scores. The current frozen third-party set yields **zero** such candidates.
+FALSUM now tests the *underlying original captured request/receipt fields and exact recorded request URL*, not the filename. Its relevant criterion for same-request **candidate** comparability is a request whose **Git-source recorded URL equals the unqualified `https://devnode.telegraphprotocol.com/engine/v1/ask` general router**, the same explicit canonical `SECURITY_REVIEW_GENERAL` request object with identical canonical JSON SHA-256, a successful recorded receipt with that exact Intent, and two different **reported** Miner IDs. A canonical body sent to the direct `/ask/{minerId}` URL is **never network-routed**. This still would not verify independent ownership, actual HTTP transport, payment settlement, or accurate scores. The current frozen third-party set yields **zero** such candidates.
+
+## 21 November independent technical critique — Phase 5AD correction
+
+The submitted developer critique identified a valid future-capture routing counterexample: the earlier implementation recognized `intent + params` and receipt Intent, **but did not check the original capture's `url`**. Telegraph explicitly allows the same canonical request body through both the general and the direct Miner endpoints. Phase 5AD adds exact source-recorded URL discrimination and tests. The twelve historically pinned URLs comprise **two general and ten direct endpoints**; the existing 2/2/6/2 category counts are unchanged.
+
+The review also challenged `body.miner_id` versus `receipt.miner`. [Official Telegraph receipt docs](https://anjoman.ai/docs/using/x402-inference) state these are **different identifier namespaces** (direct API Miner ID vs. on-chain registration ID). Phase 5AD now exposes the two as **distinct reported, unverified values** and rejects direct endpoint/body-ID substitutions. No mapping or ownership independence is claimed. See [full analysis and tests](PHASE5AD_EXTERNAL_REVIEW_TRANSPORT_AND_IDENTITY.md).
+
+The feedback's provenance was privately supplied by the project owner; no independent public reviewer run or verified expert label has been provided. **Technical criticism and the project's own regression test are distinct from verified independent adoption.**
 
 ## Preimplementation original protocol
 
@@ -53,4 +61,4 @@ The [Phase 5AB Actions workflow](../.github/workflows/phase5ab-original-receipt-
 
 This is a **negative comparability finding**, not a claim that the reported Miners are fraudulent, that the external project's directory naming is malicious, or that the responses are semantically incorrect. A valid audit may conclude no comparison is currently defensible.
 
-**Original run link and artifact SHA:** provide only after the full original-source GitHub CI job actually succeeds.
+**Original verified 5AB source-run artifact:** [four-job successful original-source CI](https://github.com/Iniwura/falsum/actions/runs/44910699645), GitHub Actions artifact ID `14708674816`, archive digest `sha256:aff31da2fb700daaf64cb23a1de043c4a8d2e65880b32f81f1330fb019938949`. Phase 5AD must pass its **own** original-source regression before its transport correction is called verified.
