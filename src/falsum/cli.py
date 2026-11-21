@@ -96,6 +96,11 @@ def main(argv: list[str] | None = None) -> int:
     disjoint.add_argument("--questions",type=Path)
     disjoint.add_argument("--predictions",type=Path)
     disjoint.add_argument("--out",type=Path)
+    version_quality = commands.add_parser(
+        "audit-reviewed-advisory-version",
+        help="six original Git-reviewed advisory source files vs two real published Miner outputs; exact target version only, NOT ranking",
+    )
+    version_quality.add_argument("--out",type=Path,required=True)
     consume = commands.add_parser(
         "audit-telegraph-consumption",
         help="strict original source-bound application allow/deny policy; two authentic real paid captures and 24 constructed tests, not network scoring",
@@ -170,6 +175,9 @@ def main(argv: list[str] | None = None) -> int:
                 cmd+=["--questions",str(args.questions),
                       "--predictions",str(args.predictions)]
             return new_sources_main(cmd)
+        if args.command == "audit-reviewed-advisory-version":
+            from .phase5y_original_reviewed_version_applicability import main as verified_version_main
+            return verified_version_main(["--out",str(args.out)])
         if args.command == "audit-telegraph-consumption":
             from .phase5t_application_consumption import main as consume_main
             cmd=["--out",str(args.out)]
