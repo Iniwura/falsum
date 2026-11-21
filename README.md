@@ -1,5 +1,11 @@
 # FALSUM
 
+## Phase 5AB: do not rank incomparable original paid security responses
+
+A new [original Git-source-verified receipt comparability census](docs/PHASE5AB_EXTERNAL_RECEIPT_COMPARABILITY.md) checks **12 independently published third-party security-review captures**, not just their directory names or reported paid flags. Two are explicit `SECURITY_REVIEW_GENERAL` routed requests with matching receipts, two are direct provider requests with a canonical receipt, six HTTP 200 records have **different actual receipt Intents**, and two failed requests have no successful receipt. The original set contains **zero pairs** of distinct reported Miners responding to the same exact canonical routed request. We therefore do **not** publish a fabricated same-Intent leaderboard.
+
+Reproduce with `falsum audit-receipt-comparability --out original-receipts.json`. This audits original pinned Git bytes, not new paid requests. Receipt classifications are **not** expert security-accuracy labels, onchain settlement proof, registered network scoring, independent adoption or a fair Miner ranking.
+
 ## Phase 5AA: offline evidence-bound security-reference integration
 
 FALSUM now supports **offline application filtering using the original six Git-blob-authenticated historical advisory source files**, without making a GitHub source request on every local decision. Run `falsum bundle-reviewed-advisories --out reviewed-sources.json` once to fetch and authenticate the exact pinned source bytes; then call `falsum filter-security-references --role direct_deps_dev_ghsa --request-json request.json --response-json response.json --reviewed-bundle reviewed-sources.json --out safe-display.json` with no network dependency for the review step. [Offline integration, trust contract and adversarial reproduction](docs/PHASE5AA_OFFLINE_REVIEWED_SOURCE_BUNDLE.md).
