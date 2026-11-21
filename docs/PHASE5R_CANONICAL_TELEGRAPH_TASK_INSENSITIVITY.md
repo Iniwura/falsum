@@ -58,3 +58,15 @@ The reusable `classify_package()` method separates **structural relevance** from
 The official [Telegraph evaluation-material rules](https://docs.telegraphprotocol.com/docs/bounties/evaluation-material) value reproducible, grounded measurement **coverage**. A task-specific relevance gate backed by two actual original paid captures reveals a real failure mode in the evaluator supply loop. A future full scoring adapter would need task-specific semantic verification, representative same-Intent comparative outputs and independent gold labels before claiming leaderboard improvement.
 
 [Original external app builder's public report](https://github.com/telegraphprotocol/bounties/issues/187) · [Phase 5Q original one-task capture](PHASE5Q_PUBLIC_TELEGRAPH_RESPONSE_CONTRACT.md).
+
+## Verified actual GitHub execution and original retained evidence
+
+[**Original fully successful public CPU-independent upstream-source CI**](https://github.com/Iniwura/falsum/actions/runs/44857165885) completed on November 21, 2026 after a workflow shell delimiter was corrected (the prior attempt had source-classifier success but the job failed when running its Python post-check). All three Python 3.11–3.13 adversarial jobs and the genuine dual-source live check passed.
+
+- Original GitHub Actions evidence artifact ID: **14688277065**.
+- Original artifact ZIP SHA-256: **f6c94d0506e9b39822f6f60a66e3513265846d82d970b722c297e88fbf38dadc**.
+- Original aggregate-only JSON SHA-256: **a9c620276ef2404f0571b147ffeef0b1366572c72270976a24864089d84d9ca6**.
+- SHA-256 of the ordered 100 original GHSA IDs (same for both external captured responses): **551afad90c90bb2a3717569d33e8caa05c307f925d9f28a4a3039d53e590b2aa**.
+- [Permanent source-and-output digest index](../evidence/phase5r-2026-11-21-original-telegraph-two-task-invariance.json).
+
+The two source task SHA-256 digests differ while the ordered 100-GHSA digest is identical. This proves a narrow task-insensitivity observation; no probability, population accuracy or same-request rank increase is inferred.
