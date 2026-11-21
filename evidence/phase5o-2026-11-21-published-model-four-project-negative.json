@@ -23,7 +23,10 @@
       "trigger": "push",
       "code_commit": "c43b929459b905fa13e297d7558b915156417c81",
       "cpu_inference_job_conclusion": "success",
-      "original_raw_outputs_artifact_id": 14684558280
+      "original_raw_outputs_artifact_id": 14684558280,
+      "artifact_zip_sha256": "1d66af61d290a3f7a3e40e6ab7da13ecc93931279cfcde485ec6a50884f5e6a3",
+      "original_raw_model_outputs_json_sha256": "a70154a974234b36d368efb4d31181e582658ea56d664e5f438b656390a6a8fe",
+      "scored_report_json_sha256": "a401a85faf9bd721da158edccdf6d9948347de8ce807e54f1f9156924dd2043f"
     },
     {
       "run_id": 44850284948,
@@ -31,7 +34,10 @@
       "trigger": "pull_request",
       "code_commit": "25784143df1d6e6224c88985674acb7e18f66b7e",
       "cpu_inference_job_conclusion": "success",
-      "original_raw_outputs_artifact_id": 14684788789
+      "original_raw_outputs_artifact_id": 14684788789,
+      "artifact_zip_sha256": "56db155ea8c5221a5032768de28911a2bda4bdb8288152a9c40aa8eed3f575ce",
+      "original_raw_model_outputs_json_sha256": "3441ab107bd6c534e2e3071270ed47999b34c17f28b6906e7ed8fe172d94bf56",
+      "scored_report_json_sha256": "73cbb2a9a8c972a72e5f0e4f107ac2a825652f9bad07bf98ebd7e0dbd5043c87"
     }
   ],
   "returned_labels_in_original_order": [
@@ -73,5 +79,11 @@
     "newly_eligible_anjoman_rows": 0,
     "official_h2_entry_submitted": false,
     "user_demo_started": false
+  },
+  "cross_run_artifact_consistency": {
+    "frozen_questions_json_sha256_both_runs": "96652eb8e660d54f65ac459a1185d26f1454b772443b40ef924e5616fc001f1e",
+    "source_prompts_exact_byte_equal": true,
+    "raw_completion_choices_exactly_equal": true,
+    "raw_model_output_json_differs_due_to_run_metadata": true
   }
 }
