@@ -1,0 +1,127 @@
+name: Phase 5X - genuine three reported Miner paid-status package relevance
+on:
+  push:
+    paths:
+      - data/phase5x-frozen-original-three-provider-lodash-relevance.json
+      - src/falsum/phase5x_three_real_miner_target_relevance.py
+      - tests/test_phase5x_three_real_miner_target_relevance.py
+      - .github/workflows/phase5x-three-real-miner-package-relevance.yml
+  pull_request:
+    paths:
+      - data/phase5x-frozen-original-three-provider-lodash-relevance.json
+      - src/falsum/phase5x_three_real_miner_target_relevance.py
+      - tests/test_phase5x_three_real_miner_target_relevance.py
+      - .github/workflows/phase5x-three-real-miner-package-relevance.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-original-data-anti-forgery-contract:
+    name: No same-Intent ranking confusion; 12 mutation controls / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Frozen original SHA and three distinct actual transport role contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5x_three_real_miner_target_relevance.py' -v
+          python -m unittest discover -s tests -p 'test_phase5r_telegraph_two_task_consistency.py' -v
+  original-three-public-paid-flagged-captures:
+    name: Actually fetch 3 immutable external Git blobs and assert 2 target-bound vs 1 unrelated
+    needs: exact-original-data-anti-forgery-contract
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch exact original public reported-paid sources and check 3 immutable Git blob SHA1
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p original-public-provider-evidence
+          python -m falsum.phase5x_three_real_miner_target_relevance \
+            --out original-public-provider-evidence/PHASE5X-THREE-ORIGINAL-PROVIDER-TARGET-RELEVANCE.json
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          path=Path('original-public-provider-evidence/PHASE5X-THREE-ORIGINAL-PROVIDER-TARGET-RELEVANCE.json')
+          d=json.loads(path.read_text())
+          assert d['status']=='PHASE5X_ORIGINAL_THREE_DIFFERENT_MINER_PAID_FLAGGED_SAME_SEMANTIC_PACKAGE_TARGET'
+          assert d['original_genuine_paid_flagged_third_party_captures']==3
+          assert d['actual_reported_distinct_miner_ids']==3
+          assert d['all_three_semantic_target']=='npm:lodash@4.17.15'
+          assert d['original_canonical_routed_responses']==1
+          assert d['original_direct_get_query_responses']==2
+          assert d['same_protocol_intent_across_three'] is False
+          assert d['byte_identical_requests_across_three'] is False
+          assert d['independent_miner_ownership_verified'] is False
+          assert d['original_public_reported_paid_flags_not_chain_settlement_verified'] is True
+          assert d['actual_original_target_bound_package_references_displayable']==2
+          assert d['actual_original_unscoped_advisory_feed_denied']==1
+          assert d['original_unsafe_http_paid_accept_all_baseline_allowed']==3
+          assert d['local_synthetic_adversarial_controls']==12
+          assert d['local_synthetic_adversarial_controls_denied']==12
+          assert d['independent_appsec_accuracy_gold']==0
+          assert d['independent_reference_advisory_correctness_audited'] is False
+          assert d['global_telegraph_ranking_improved'] is False
+          assert d['fair_same_canonical_intent_miner_comparison'] is False
+          assert d['registered_evaluator'] is False
+          assert d['actual_paid_requests_by_falsum']==0
+          assert d['independent_adoption_of_falsum'] is False
+          assert d['official_h2_submitted'] is False
+          assert d['original_full_public_paid_response_bodies_republished'] is False
+          assert len(d['original_observational_results'])==3
+          assert len(d['constructed_anti_bypass_controls'])==12
+          assert all(x['source_git_blob_authenticated'] and x['reported_paid_and_http200'] for x in d['original_observational_results'])
+          assert len({x['original_reported_miner_id'] for x in d['original_observational_results']})==3
+          assert all(x['decision']=='DENY' for x in d['constructed_anti_bypass_controls'])
+          raw=path.read_text()
+          assert 'Memory overflow in SAML authentication' not in raw
+          assert 'Slonser=polluted' not in raw
+          assert 'review_claim' not in raw
+          print('Original three external paid-status reported sources Git-verified: two package/version-bound advisory references displayable, one 100-item unrelated routed feed denied; no same-Intent ranking claim.')
+          PY
+      - name: Summarize actual original evidence with strict transport and accuracy caveat
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import os,json
+          d=json.loads(Path('original-public-provider-evidence/PHASE5X-THREE-ORIGINAL-PROVIDER-TARGET-RELEVANCE.json').read_text())
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Three original third-party reported paid Miner outputs for npm lodash 4.17.15\n\n')
+              f.write('Original 3 pinned Git blobs verified at external PR Guard historical commit. Distinct reported miners **77003, 190048 and 77010**; 1 canonical routed SECURITY_REVIEW_GENERAL vs **2 direct GET /query on SECURITY_REVIEW family**. Same semantic package/version, NOT comparable canonical Intent requests, independent provider owners unverified.\n\n')
+              f.write('| Original reported output | App may display unverified advisory references | Action |\\n|---|---:|---|\\n')
+              for row in d['original_observational_results']:
+                  f.write('| reported Miner '+row['original_reported_miner_id']+' ('+row['request_channel']+') | '+str(row['source_bound_unverified_advisory_reference_count'])+' | '+row['action']+' |\\n')
+              f.write('\nSimple HTTP 200/paid success rule would accept all **3**, including the unrelated original 100-advisory list. The bounded package relevance gate permits displaying two package/version-bound advisory references and denies the unrelated feed; 12 author-constructed altered-envelope/source controls deny. **No independent advisory accuracy gold, confirmed chain settlement, same-canonical-Intent fair ranking, network ranking uplift or registered evaluator.**\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5x-original-three-public-paid-miner-package-relevance
+          path: original-public-provider-evidence/
+          retention-days: 90
+          if-no-files-found: error
