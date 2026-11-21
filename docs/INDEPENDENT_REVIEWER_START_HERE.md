@@ -72,6 +72,26 @@ If the captured original request and receipt differ, **do not** interpret that a
 
 Failures: a network/TLS error during original public fetch is **not a source-validity failure**; distinguish transport failures from hash mismatches. GHSA coverage is pinned to six original historical files, not an exhaustive current vulnerability feed. No onchain settlement is independently verified. The first-party CI proves the implementation runs; it cannot replace external reviewer expertise.
 
+## Two copy-paste falsification recipes (Phase 5AF)
+
+These **constructed local challenges** are safe and require no account, payment, network request or file edits. They run against the actual classifier and byte-lock verifier, and intentionally do **not** count as genuine external Miner outcomes or independent reviewer adoption.
+
+From the repository root, after setting Python's module path as in Option B, run each recipe:
+
+```bash
+python examples/reviewer_challenges.py --challenge direct-vs-routed
+python examples/reviewer_challenges.py --challenge tampered-lock
+```
+
+Expected assertions:
+
+1. `direct-vs-routed` changes **only** the constructed capture URL from `/engine/v1/ask` to `/engine/v1/ask/77003`. Even though the request body and receipt still say `SECURITY_REVIEW_GENERAL`, classification must switch from canonical routed to **direct**. Both constructed observations must keep `original_source_verified_by_git_blob=false`.
+2. `tampered-lock` copies the **real locally pinned lock** into a disposable temporary directory, appends one byte to the copy and requires the frozen verification to raise `ComparabilityError`. The tracked original remains untouched.
+
+Both commands must exit `0` and print `PASS` lines. Exit `1` or a traceback is a challenge failure worth reporting. On PowerShell, first set `$env:PYTHONPATH = 'src'` and run the same two `python` commands. These recipes are also executed on the public reviewer GitHub Action and tested automatically on the Windows CI path.
+
+Reviewer CI now pins the exact `actions/checkout`, `actions/setup-python` and `actions/upload-artifact` commits and a specific Python patch version; its pull-request trigger covers `src/falsum/**`, all `data/**`, `examples/**`, and `tests/**`. The standalone Windows workflow separately verifies common `core.autocrlf=true` behavior. Other research workflows are not covered by this limited action-pin audit.
+
 ## How to report an independent result
 
 Use [Independent public reproduction / challenge](https://github.com/Iniwura/falsum/issues/new?template=independent-public-reproduction.yml). Attach a **real workflow run link** or exact commands, environment and exit status; the specific source URL/lines or output field; whether the reported counts matched; any discrepancy and its practical effect. All opinions and negative outcomes are welcome. Do not publish secrets or hidden evaluation prompts. Public feedback may be reviewed and incorporated but is **never automatically promoted to independent expert gold**.
