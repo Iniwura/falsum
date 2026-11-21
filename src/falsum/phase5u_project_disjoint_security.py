@@ -137,8 +137,8 @@ def _excerpt(source:str,anchor:str,extra:str|None=None)->str:
     if extra:
         extra_hits=[i for i,s in enumerate(lines) if extra in s]
         require(len(extra_hits)==1,"original additional helper not unambiguous")
-        body=body+"\n\n// Separate verified excerpt from same original upstream file:\n"+
-             segment(extra_hits[0],-4,8)
+        body=(body+"\n\n// Separate verified excerpt from same original upstream file:\n"+
+              segment(extra_hits[0],-4,8))
     require(45<len(body)<8000 and anchor in body and
             (not extra or extra in body),
             "original Git-verified source excerpt incomplete")
