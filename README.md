@@ -1,5 +1,11 @@
 # FALSUM
 
+## Independent developer reproduction (no keys or paid requests)
+
+The [independent reviewer start page](docs/INDEPENDENT_REVIEWER_START_HERE.md) includes a **fork-and-run public GitHub Action**, a local Python 3.11+ command sequence, expected original-source counts, a deliberately constructed application-filter example, and an [evidence-first issue form](https://github.com/Iniwura/falsum/issues/new?template=independent-public-reproduction.yml) for technical counterexamples, failures or genuine outside integration. The Action re-authenticates 12 original public receipt captures and six GitHub-reviewed GHSA sources. It uploads only public-safe summaries and verifies that the constructed local response **does not** inherit genuine outside Miner provenance.
+
+**Independent use is not yet verified.** Running this first-party CI or posting the issue form does not establish independent reviewer adoption, AppSec gold, a new Telegraph network evaluator, a fair Miner ranking or current advisory completeness. The project is a Telegraph Season II prize entry and encourages uncompensated, critical reproduction.
+
 ## Phase 5AB: do not rank incomparable original paid security responses
 
 A new [original Git-source-verified receipt comparability census](docs/PHASE5AB_EXTERNAL_RECEIPT_COMPARABILITY.md) checks **12 independently published third-party security-review captures**, not just their directory names or reported paid flags. Two are explicit `SECURITY_REVIEW_GENERAL` routed requests with matching receipts, two are direct provider requests with a canonical receipt, six HTTP 200 records have **different actual receipt Intents**, and two failed requests have no successful receipt. The original set contains **zero pairs** of distinct reported Miners responding to the same exact canonical routed request. The audit therefore publishes **no same-Intent Miner leaderboard**.
