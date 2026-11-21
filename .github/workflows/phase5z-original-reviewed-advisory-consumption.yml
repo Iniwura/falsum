@@ -4,15 +4,19 @@ on:
     paths:
       - 'data/phase5z-frozen-app-consumption-protocol.json'
       - 'src/falsum/phase5z_reviewed_advisory_consumption.py'
+      - 'src/falsum/phase5aa_offline_reviewed_bundle.py'
       - 'src/falsum/cli.py'
       - 'tests/test_phase5z_reviewed_advisory_consumption.py'
+      - 'tests/test_phase5aa_offline_reviewed_bundle.py'
       - '.github/workflows/phase5z-original-reviewed-advisory-consumption.yml'
   pull_request:
     paths:
       - 'data/phase5z-frozen-app-consumption-protocol.json'
       - 'src/falsum/phase5z_reviewed_advisory_consumption.py'
+      - 'src/falsum/phase5aa_offline_reviewed_bundle.py'
       - 'src/falsum/cli.py'
       - 'tests/test_phase5z_reviewed_advisory_consumption.py'
+      - 'tests/test_phase5aa_offline_reviewed_bundle.py'
       - '.github/workflows/phase5z-original-reviewed-advisory-consumption.yml'
   workflow_dispatch:
 permissions:
@@ -41,9 +45,11 @@ jobs:
         run: |
           set -euo pipefail
           python -m unittest discover -s tests -p 'test_phase5z_reviewed_advisory_consumption.py' -v
+          python -m unittest discover -s tests -p 'test_phase5aa_offline_reviewed_bundle.py' -v
           python -m unittest discover -s tests -p 'test_phase5x_three_real_miner_target_relevance.py' -v
           python -m unittest discover -s tests -p 'test_phase5y_original_reviewed_version_applicability.py' -v
           python -m falsum.cli --help | grep -F filter-security-references
+          python -m falsum.cli --help | grep -F bundle-reviewed-advisories
   actual-original-public-provider-and-independent-git-review:
     name: Recheck all 3 original external Miner Git captures and 6 independently reviewed advisory files
     needs: local-adversarial-and-schema-controls
@@ -113,6 +119,81 @@ jobs:
           assert '"result":' not in f.read_text()
           assert '"advisoryKeys":' not in f.read_text()
           print('Three original outside source responses cross-reviewed against six authentic advisories; 100 off-target advisory rows refused; ten version-applicable original reference instances display-only; two inapplicable filtered.')
+          PY
+      - name: Export the six actually authenticated reviewed source files into a portable bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.cli bundle-reviewed-advisories \
+            --out original-source-bound-app-reference-gate/ORIGINAL-SIX-GIT-REVIEWED-ADVISORY-OFFLINE-BUNDLE.json
+      - name: Compare genuine original Miner decisions with fully offline advisory loading and reject source-byte mutation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from copy import deepcopy
+          from tempfile import TemporaryDirectory
+          from unittest.mock import patch
+          import json
+          from falsum.phase5aa_offline_reviewed_bundle import load_bundle
+          from falsum.phase5x_three_real_miner_target_relevance import _original_docs
+          from falsum.phase5z_reviewed_advisory_consumption import consume, main, ALLOW, DENY
+
+          bundle=Path('original-source-bound-app-reference-gate/ORIGINAL-SIX-GIT-REVIEWED-ADVISORY-OFFLINE-BUNDLE.json')
+          online=json.loads(Path('original-source-bound-app-reference-gate/ORIGINAL-THREE-REAL-PROVIDER-GIT-REVIEWED-DISPLAY-DECISIONS.json').read_text())
+          originals=_original_docs()  # independently reverify 3 real external pinned Git blobs
+          assert len(originals)==3
+          # From here: no online fetch can occur during application consumption.
+          with patch('falsum.phase5y_original_reviewed_version_applicability.urlopen',
+                     side_effect=AssertionError('unexpected network fetch')), \
+               patch('falsum.phase4l_external_receipt_evidence.urlopen',
+                     side_effect=AssertionError('unexpected network fetch')):
+              rows=load_bundle(bundle)
+              assert len(rows)==6
+              with TemporaryDirectory() as directory:
+                  folder=Path(directory)
+                  for position,entry in enumerate(originals):
+                      role=entry['spec']['role']
+                      req=entry['document']['request']
+                      body=entry['document']['body']
+                      observed=consume(role,req,body,rows)
+                      expected=online['public_original_source_decisions'][position]['display_only_security_reference_decision']
+                      assert observed['action']==expected['action']
+                      assert observed['display_references']==expected['display_references']
+                      assert observed['suppressed_references']==expected['suppressed_references']
+                      if position==0:
+                          assert observed['action']==DENY
+                          continue
+                      request_path=folder/f'request-{position}.json'
+                      body_path=folder/f'body-{position}.json'
+                      output=folder/f'decision-{position}.json'
+                      request_path.write_text(json.dumps(req))
+                      body_path.write_text(json.dumps(body))
+                      assert main(['--role',role,'--request-json',str(request_path),
+                                   '--response-json',str(body_path),
+                                   '--reviewed-bundle',str(bundle),'--out',str(output)])==0
+                      report=json.loads(output.read_text())
+                      safe=report['security_reference_consumption']
+                      assert safe['action']==ALLOW and safe['display_count']==5 and safe['suppressed_count']==1
+                      assert report['reviewed_source_loaded_offline'] is True
+                      assert report['original_external_capture_git_verified'] is False
+                      assert report['current_advisory_freshness_verified'] is False
+                      assert 'advisoryKeys' not in output.read_text()
+          # Constructed adversarial mutation, NOT a new original observation.
+          forged=deepcopy(json.loads(bundle.read_text()))
+          ident=next(iter(forged['original_reviewed_source_bytes_base64']))
+          forged['original_reviewed_source_bytes_base64'][ident]='e30='
+          with TemporaryDirectory() as directory:
+              bad=Path(directory)/'tampered.json'
+              bad.write_text(json.dumps(forged))
+              try:
+                  load_bundle(bad)
+              except ValueError:
+                  pass
+              else:
+                  raise AssertionError('tampered original Git blob improperly accepted')
+          print('Online original 3-capture results EXACTLY match offline six-source consumption; 2 local CLI calls accepted, no outside provenance promoted, mutated cached Git bytes refused.')
           PY
       - name: Publish bounded real original decision impact and scope
         shell: bash
