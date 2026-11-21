@@ -65,7 +65,7 @@ jobs:
           mkdir -p original-telegraph-canonical-task-consistency
           python -m falsum.cli audit-telegraph-consistency \
             --out original-telegraph-canonical-task-consistency/ORIGINAL-PUBLIC-TWO-TASK-CONSISTENCY.json
-          python - <<'${{ matrix.python }}'
+          python - <<'PY'
           import json
           from pathlib import Path
           p=Path('original-telegraph-canonical-task-consistency/ORIGINAL-PUBLIC-TWO-TASK-CONSISTENCY.json')
@@ -101,7 +101,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'${{ matrix.python }}'
+          python - <<'PY'
           import json,os
           from pathlib import Path
           d=json.loads(Path('original-telegraph-canonical-task-consistency/ORIGINAL-PUBLIC-TWO-TASK-CONSISTENCY.json').read_text())
