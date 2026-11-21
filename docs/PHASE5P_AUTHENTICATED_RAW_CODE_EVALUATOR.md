@@ -53,3 +53,12 @@ Do not claim this source excerpt workflow re-executes upstream regression tests.
 ## Next release gate
 
 After authentic source-and-model CI, obtain genuine outside reproduction and independently scrutinize the evaluator claim. Improve the judge's one-command path, external developer onboarding and submission evidence. Do not count any self-run model or owner-written review request as an outside developer.
+
+## Actual measured outcome: 21 November 2026
+
+[**Successful original live upstream-source and model CI**](https://github.com/Iniwura/falsum/actions/runs/44852933182) verified eight full pinned original upstream Git source blobs, then performed 12 genuine CPU model forward passes using the original immutable published Qwen model. The original ZIP artifact is **14686605906**, SHA-256 **3936fcc530554cb04f54f93fd559d83905fb4dc6e6dd9cfb4505d1b07c767272**. Original raw completions SHA-256: **30c2512e6e68280f83be3f740954c828a1c28ba50386834b39f3089eb5051b83**. Source question archive SHA-256: **57f1c7246e558ca7633409d9d1307ff54b73ebd3bdfc4e64314de951b4d1d0ff**.
+
+All 12 genuine model responses were **ABSTAIN**. This produced **4/12** exact matches, **0/4** complete parent/fix reversals, **4/4** no-source abstentions, **8/8** unnecessary code-present abstentions, and **0 invalid** replies. Three constant baselines score 4/12, and the disclosed same-code-answer/no-code-abstain shortcut scores **8/12**. No model improvement was demonstrated.
+
+[Permanent original evidence index](../evidence/phase5p-2026-11-21-authenticated-raw-code-negative.json). The historical upstream evidence and original output are real and repeatable, but **not new blind cases, qualified independent AppSec gold, external developer adoption, a registered Telegraph evaluator or a hackathon submission**.
+
