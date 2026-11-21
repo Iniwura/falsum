@@ -51,8 +51,8 @@ class OriginalReceiptComparabilityTests(unittest.TestCase):
         self.assertIsNotNone(r["canonical_request_sha256"])
         self.assertFalse(r["original_source_verified_by_git_blob"])
         self.assertFalse(r["actual_paid_settlement_independently_verified"])
-        self.assertTrue(r["original_request_url_general_route_verified"])
-        self.assertTrue(r["request_has_both_canonical_schema_and_general_network_route"])
+        self.assertTrue(r["original_capture_url_records_general_route"])
+        self.assertTrue(r["canonical_schema_with_recorded_general_route"])
         self.assertEqual(r["reported_receipt_miner_onchain_registration_id_not_body_miner_id"], "3854")
         self.assertFalse(r["receipt_and_body_miner_id_namespace_mapping_independently_verified"])
 
@@ -88,8 +88,8 @@ class OriginalReceiptComparabilityTests(unittest.TestCase):
         # This formerly passed as KIND_ROUTED because the old classifier ignored url.
         direct = row(constructed(url=audit.ENGINE_ROUTED_URL + "/77003"))
         assert direct["request_has_canonical_routed_schema"] is True
-        self.assertFalse(direct["original_request_url_general_route_verified"])
-        self.assertFalse(direct["request_has_both_canonical_schema_and_general_network_route"])
+        self.assertFalse(direct["original_capture_url_records_general_route"])
+        self.assertFalse(direct["canonical_schema_with_recorded_general_route"])
         self.assertEqual(direct["original_recorded_route_class"], "DIRECT_MINER_ENDPOINT")
         self.assertEqual(direct["original_direct_endpoint_miner_id"], "77003")
         self.assertEqual(direct["capture_intent_provenance_class"], audit.KIND_DIRECT)
