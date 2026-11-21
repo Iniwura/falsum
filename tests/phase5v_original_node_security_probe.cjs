@@ -15,9 +15,10 @@ const PROJECTS = new Set([
   "follow-redirects-custom-headers",
 ]);
 const STATES = new Set(["affected", "fixed"]);
-const [project, state, packageRoot, outputPath] = process.argv.slice(2);
+const [project, state, packageRoot, outputPath, commit, sourceBlob, testBlob] = process.argv.slice(2);
 if (!PROJECTS.has(project) || !STATES.has(state) ||
-    !packageRoot || !outputPath || fs.existsSync(outputPath)) {
+    !packageRoot || !outputPath || fs.existsSync(outputPath) ||
+    ![commit, sourceBlob, testBlob].every(x=>typeof x==="string" && /^[a-f0-9]{40}$/.test(x))) {
   throw new Error("exact project, source revision, checkout and fresh output required");
 }
 const pkg = path.resolve(packageRoot);
@@ -149,6 +150,9 @@ async function main() {
     schema_version:1,
     status:"PHASE5V_ACTUAL_ORIGINAL_HISTORICAL_SOURCE_RUNTIME_PROBE",
     project,original_source_revision_role:state,
+    original_git_commit:commit,
+    original_source_git_blob_sha1:sourceBlob,
+    original_upstream_test_git_blob_sha1:testBlob,
     historical_original_source_executed_in_node:true,
     historical_upstream_test_file_authenticated_elsewhere:true,
     full_original_upstream_suite_executed:false,
