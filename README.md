@@ -1,5 +1,16 @@
 # FALSUM
 
+## Phase 5Z: actionable security-intelligence consumption gate
+
+An external application can now use FALSUM to **filter original public paid-status security Miner references before display** using independently GitHub-reviewed exact npm package/version ranges. The [actual original proof](docs/PHASE5Z_REAL_APP_ADVISORY_CONSUMPTION.md) checked **3 authenticated outside provider source captures and 6 separately maintained reviewed advisory Git files**: one generic 100-GHSA feed denied, two target-bound six-reference outputs sanitized to **five display-only references and one suppressed inapplicable reference each**. The two suppressed references point to the **same one unique GHSA**; no new security vulnerability is claimed.
+
+[Original four-job CI verification](https://github.com/Iniwura/falsum/actions/runs/44906868471) · [Immutable original output digest and provenance](evidence/phase5z-2026-11-21-genuine-miner-advisory-consumption-output.json).
+
+Reproduce with `falsum filter-security-references --out reviewed-advisory-display.json`. Developers can also supply local `--role`, `--request-json`, and `--response-json`, but such inputs are explicitly **not** reported as authenticated original external Miner captures.
+
+**Scope:** This is a reusable **display-only** reference implementation with a fixed known public target. It does not approve package security, prove independent expert judgement, give a fair same-Intent Miner leaderboard, register a network evaluator, demonstrate outside adoption, or submit the hackathon entry.
+
+
 ## Phase 5Y: independently reviewed version ranges expose an original paid Miner false positive
 
 [**Six immutable GitHub-reviewed security advisory records**](docs/PHASE5Y_INDEPENDENT_GHSA_VERSION_APPLICABILITY.md) were cross-checked against the **12 real advisory references** in two separately published reported-paid Miner outputs for **npm lodash 4.17.15**. Both reported Miner **190048** and Miner **77010** included **CVE-2026-2950 / GHSA-f23m-r3pf-42rh** despite the independently reviewed advisory affecting the exact **lodash** package only from **4.17.23**. Other separately named lodash subpackages have different ranges and must not contaminate the answer.
