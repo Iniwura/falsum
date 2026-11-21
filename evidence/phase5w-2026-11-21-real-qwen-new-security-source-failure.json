@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5W_ORIGINAL_PUBLISHED_QWEN0P5B_MEASURED_NEW_FOUR_UPSTREAM_SECURITY_SOURCE_FAILURE",
+  "verified_date_utc": "2026-11-21",
+  "original_preregistered_model_study_git_blob_sha1": "c8ce938f914ec8c1c481ff193d6c3db98aa86ed0",
+  "original_authentic_publisher_run": "https://github.com/Iniwura/falsum/actions/runs/44903712350",
+  "actual_github_actions_jobs_passed": 4,
+  "actual_model_forward_passes": 24,
+  "source_project_count": 4,
+  "new_original_source_present_conditions": 16,
+  "new_source_absent_controls": 8,
+  "published_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "published_model_original_git_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "original_publisher_model_safetensors_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+  "original_github_actions_artifact_id": 14707515234,
+  "original_artifact_zip_sha256": "b073487d6b7990460f4795f80f427d5a31d9aad934456563f6ffda1c1d571673",
+  "original_raw_24_completion_json_sha256": "42c4ba407d34e40bc9f51d9916aac80ea3f38bd401726774950d7143dac293af",
+  "original_source_model_audit_json_sha256": "13ba0f26fee41519f5482a601ab47b9161494577b8b8ba3ce70f54ddc2f9cda2",
+  "original_full_published_model_completion_distribution": {
+    "ABSTAIN": 24
+  },
+  "genuine_publisher_model": {
+    "matches_to_public_researcher_source_references": 8,
+    "source_present_correct": 0,
+    "missing_source_correct_abstentions": 8,
+    "complete_correct_source_and_answer_order_fourway_reversals": 0
+  },
+  "synthetic_disclosed_controls": {
+    "prompt_only_source_blind": {
+      "matches_to_researcher_references": 16,
+      "source_present_correct": 8,
+      "missing_source_abstentions": 8,
+      "complete_fourway_reversals": 0
+    },
+    "always_abstain": {
+      "matches_to_researcher_references": 8,
+      "source_present_correct": 0,
+      "missing_source_abstentions": 8,
+      "complete_fourway_reversals": 0
+    }
+  },
+  "model_minus_prompt_only_source_blind_total_reference_matches": -8,
+  "original_upstream_full_test_suites_executed_by_phase5w": false,
+  "four_new_source_fix_families_previously_executed_by_phase5v": true,
+  "independent_appsec_expert_gold_count": 0,
+  "model_training_performed": false,
+  "secret_holdout_evaluation": false,
+  "real_multi_miner_same_request_ranking_improvement": false,
+  "registered_telegraph_evaluator": false,
+  "real_paid_requests_by_phase5w": 0,
+  "independent_adoption": false,
+  "official_h2_submitted": false,
+  "interpretation": "The actual pinned original published Qwen 0.5B returned ABSTAIN on every one of the 24 authenticated raw source prompts, including all 16 source-provided examples from four previously unexamined public projects, so no full source/position reversal succeeded. The prompt-only synthetic source-blind comparator matched 16/24 researcher-derived public labels but never completed a four-way reversal. This is reproducible negative model evidence and does not demonstrate successful FALSUM model training, general model accuracy, independent expert validation, registered network evaluator or Telegraph ranking uplift."
+}
