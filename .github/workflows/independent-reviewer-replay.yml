@@ -1,0 +1,127 @@
+name: Independent Reviewer Replay - public evidence only
+# On a fork, enable GitHub Actions and use "Run workflow" from its Actions tab.
+# Running this in the author's repository is NOT independent developer adoption.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/independent-reviewer-replay.yml'
+      - 'docs/INDEPENDENT_REVIEWER_START_HERE.md'
+      - 'examples/phase5aa-constructed-request.json'
+      - 'examples/phase5aa-constructed-response.json'
+      - 'src/falsum/phase5ab_original_receipt_comparability.py'
+      - 'src/falsum/phase5aa_offline_reviewed_bundle.py'
+      - 'src/falsum/phase5z_reviewed_advisory_consumption.py'
+      - 'tests/test_phase5ab_original_receipt_comparability.py'
+      - 'data/phase5ab-original-receipt-comparability-lock.json'
+permissions:
+  contents: read
+jobs:
+  reproduce-two-original-evidence-gates:
+    name: Public original-source replay - no secrets, wallet, payment or provider account
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reject constructed evidence substitution and wrong canonical request
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5ab_original_receipt_comparability.py' -v
+          python -m unittest discover -s tests -p 'test_phase5aa_offline_reviewed_bundle.py' -v
+      - name: Retrieve and verify 12 authentic third-party Git source blobs
+        run: |
+          set -euo pipefail
+          mkdir -p reviewer-results
+          python -m falsum.cli audit-receipt-comparability \
+            --out reviewer-results/original-12-receipt-comparability.json
+      - name: Authenticate six original GitHub-reviewed advisory source files
+        run: |
+          set -euo pipefail
+          python -m falsum.cli bundle-reviewed-advisories \
+            --out /tmp/falsum-reviewed-historical-sources.json
+      - name: Reproduce a local display-only filtering decision (CONSTRUCTED input)
+        run: |
+          set -euo pipefail
+          python -m falsum.cli filter-security-references \
+            --role direct_deps_dev_ghsa \
+            --request-json examples/phase5aa-constructed-request.json \
+            --response-json examples/phase5aa-constructed-response.json \
+            --reviewed-bundle /tmp/falsum-reviewed-historical-sources.json \
+            --out reviewer-results/constructed-local-display-decision.json
+      - name: Assert original external count, sanitized output and no false independence claim
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,os
+          folder=Path('reviewer-results')
+          original=folder/'original-12-receipt-comparability.json'
+          example=folder/'constructed-local-display-decision.json'
+          o=json.loads(original.read_text())
+          e=json.loads(example.read_text())
+          assert o['original_outside_git_authenticated_capture_count']==12
+          assert o['original_explicit_canonical_routed_request_and_receipt_count']==2
+          assert o['original_direct_noncanonical_request_with_canonical_receipt_count']==2
+          assert o['original_paid_http200_with_noncanonical_receipt_count']==6
+          assert o['original_failed_requests_without_successful_receipts_count']==2
+          assert o['same_canonical_request_multi_miner_candidate_count']==0
+          assert o['semantic_security_accuracy_gold']==0
+          assert o['independent_developer_adoption_proved'] is False
+          assert o['original_full_third_party_response_body_republished'] is False
+          assert len(o['source_provenance_observations'])==12
+          assert all(x['original_source_verified_by_git_blob'] is True for x in o['source_provenance_observations'])
+          d=e['security_reference_consumption']
+          assert d['display_count']==5 and d['suppressed_count']==1
+          assert d['suppressed_references'][0]['verified_ghsa_id']=='GHSA-f23m-r3pf-42rh'
+          assert e['reviewed_source_loaded_offline'] is True
+          assert e['original_external_capture_git_verified'] is False
+          assert e['current_advisory_freshness_verified'] is False
+          assert d['original_external_capture_git_verified'] is False
+          for p in (original,example):
+              content=p.read_text()
+              assert '"bodyText"' not in content
+              assert '"payer"' not in content
+              assert '"advisoryKeys"' not in content
+          result={
+            'schema_version':1,
+            'status':'FALSUM_PUBLIC_REVIEWER_REPLAY_COMPLETED_NO_INDEPENDENT_ACCEPTANCE',
+            'source_replay_original_verified_git_blobs':12,
+            'source_replay_ghsa_git_blobs_verified':6,
+            'same_exact_canonical_multi_miner_pairs':0,
+            'constructed_local_display_count':5,
+            'constructed_local_suppressed_count':1,
+            'original_external_paid_settlement_verified':False,
+            'new_independent_appsec_gold':0,
+            'registered_telegraph_network_evaluator':False,
+            'claim_of_external_developer_adoption':False,
+            'reviewer_attestation_or_identity_verified':False,
+            'github_workflow_repository':os.environ.get('GITHUB_REPOSITORY',''),
+            'github_workflow_commit':os.environ.get('GITHUB_SHA',''),
+            'sha256_original_receipt_report':hashlib.sha256(original.read_bytes()).hexdigest(),
+            'sha256_constructed_filter_report':hashlib.sha256(example.read_bytes()).hexdigest(),
+          }
+          (folder/'reproduction-manifest.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(result,sort_keys=True))
+          PY
+      - name: Upload only public-safe outputs (not source bundles, Miner bodies or user data)
+        uses: actions/upload-artifact@v4
+        with:
+          name: falsum-public-reviewer-replay
+          path: reviewer-results/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Provide review instructions
+        shell: bash
+        run: |
+          echo '## Public reviewer replay' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The original sources were authenticated against their immutable Git blob identities. The constructed filtering sample is NOT an independent Miner result.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The public-safe artifact includes the reproduction manifest, 12-capture receipt census and one clearly constructed local filter decision.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'A forked workflow alone does not prove independent authorship, accuracy of source labels, confirmed payment or adoption. To challenge or contribute, use the independent reviewer guide and issue form.' >> "$GITHUB_STEP_SUMMARY"

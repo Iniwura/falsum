@@ -1,0 +1,83 @@
+name: Independent public reproduction or counterexample
+description: Report your own FALSUM public-source replay, failure, source disagreement, or integration test; negative findings welcome
+title: "[Independent replay] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is an external evidence request for FALSUM (Telegraph Season II Evaluators prize entry). Please read the [short independent reviewer guide](https://github.com/Iniwura/falsum/blob/main/docs/INDEPENDENT_REVIEWER_START_HERE.md).
+
+        No wallet, payment, API key or hidden evaluation prompt is required. A green workflow or this issue alone does NOT prove expert AppSec correctness, independent provider identity, model quality or genuine app adoption.
+
+        Only report work that you actually performed. Criticism, an unexpected failure and ABSTAIN are welcome. Please do not include passwords, customer data, third-party unpublished findings, full private request bodies or unpublished qualification data.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What did you actually do?
+      options:
+        - Ran the public GitHub Actions replay in my own fork
+        - Reproduced the public evidence CLI locally
+        - Independently inspected an original source and found a possible error
+        - Tried an integration with my own code
+        - Found a reproducibility failure
+        - Other technical critique
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Exact reproducibility evidence
+      description: Link your own public GitHub Actions run or give the commands, Python version, commit and exit status. If you only reviewed a source, link its pinned file and line numbers.
+      placeholder: |
+        Fork: https://github.com/<your-account>/falsum
+        GitHub Actions run: https://github.com/<your-account>/falsum/actions/runs/<actual-run-id>
+        Commit: <actual-sha>
+        OR: Python 3.12 on Windows/Linux/macOS; command; exit status...
+    validations:
+      required: true
+  - type: dropdown
+    id: assessment
+    attributes:
+      label: Observed result
+      options:
+        - Both source checks matched documented results
+        - Receipt/Intent comparability disagrees with the original source
+        - Reviewed GHSA package-version filtering disagrees with source
+        - Transport or environment error prevented execution
+        - Integration found a correctness or usability problem
+        - I inspected but cannot confirm correctness
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Evidence-grounded technical finding, discrepancy, or criticism
+      description: Cite exact original source or sanitized output fields. A brief but critical contradiction is as useful as a confirmation.
+      placeholder: |
+        Expected:
+        Observed:
+        Reproduction:
+        Original public pinned source/line:
+        Why this changes a real downstream decision:
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and limitations you actually checked
+      description: State whether you checked real raw third-party files, a constructed sample, settlement, current advisory completeness, or only a code path.
+      placeholder: I checked the historical public original source and did not verify independent Miner ownership or paid onchain settlement...
+    validations:
+      required: true
+  - type: checkboxes
+    id: attest
+    attributes:
+      label: Review integrity
+      options:
+        - label: This describes actions and observations I actually performed; I am not claiming a self-authored or generated acceptance as independent reviewer evidence.
+          required: true
+        - label: I understand that submitting this report does not automatically make it expert gold, independently confirmed adoption, or a registered Telegraph evaluator.
+          required: true
+        - label: The report does not contain secrets, nonpublic security findings or confidential evaluation material.
+          required: true
