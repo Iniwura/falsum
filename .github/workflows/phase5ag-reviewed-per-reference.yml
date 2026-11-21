@@ -2,25 +2,27 @@ name: Phase 5AG - multi-ecosystem reviewed per-reference source contract
 on:
   pull_request:
     paths:
-      - 'data/phase5ag-multiecosystem-reviewed-source-preregistration.json'
-      - 'evidence/phase5ag-reviewed-advisories/**'
-      - 'src/falsum/phase5ag_reviewed_reference_evaluator.py'
-      - 'src/falsum/phase4l_external_receipt_evidence.py'
-      - 'src/falsum/phase5m_real_source_sensitive_model.py'
-      - 'tests/test_phase5ag_reviewed_reference_evaluator.py'
-      - 'docs/PHASE5AG_MULTIECOSYSTEM_REVIEWED_REFERENCE_EVALUATOR.md'
-      - '.github/workflows/phase5ag-reviewed-per-reference.yml'
+      - 'README.md'
       - '.gitattributes'
+      - '.github/workflows/phase5ag-reviewed-per-reference.yml'
+      - 'data/**'
+      - 'evidence/phase5ag-reviewed-advisories/**'
+      - 'src/falsum/**'
+      - 'tests/**'
+      - 'pyproject.toml'
+      - 'docs/PHASE5AG_MULTIECOSYSTEM_REVIEWED_REFERENCE_EVALUATOR.md'
   push:
     branches: [main]
     paths:
-      - 'data/phase5ag-multiecosystem-reviewed-source-preregistration.json'
-      - 'evidence/phase5ag-reviewed-advisories/**'
-      - 'src/falsum/phase5ag_reviewed_reference_evaluator.py'
-      - 'src/falsum/phase4l_external_receipt_evidence.py'
-      - 'src/falsum/phase5m_real_source_sensitive_model.py'
-      - 'tests/test_phase5ag_reviewed_reference_evaluator.py'
+      - 'README.md'
+      - '.gitattributes'
       - '.github/workflows/phase5ag-reviewed-per-reference.yml'
+      - 'data/**'
+      - 'evidence/phase5ag-reviewed-advisories/**'
+      - 'src/falsum/**'
+      - 'tests/**'
+      - 'pyproject.toml'
+      - 'docs/PHASE5AG_MULTIECOSYSTEM_REVIEWED_REFERENCE_EVALUATOR.md'
   workflow_dispatch:
 permissions:
   contents: read
