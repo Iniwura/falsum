@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5W_FROZEN_ORIGINAL_NEW_PROJECT_PUBLIC_MODEL_INFERENCE_BEFORE_ANY_FORWARD_PASSES",
+  "frozen_date_utc": "2026-11-21",
+  "source_project_lock_file": "data/phase5u-four-new-project-original-source-protocol.json",
+  "source_project_lock_git_blob_sha1": "ff1e9063f0f37e0a9265db25d6f767bb56db73e8",
+  "source_projects": [
+    "minimist-constructor",
+    "json5-proto-data",
+    "tough-cookie-null-maps",
+    "follow-redirects-custom-headers"
+  ],
+  "actual_source_original_git_files": 8,
+  "actual_test_original_git_files": 8,
+  "source_present_tasks": 16,
+  "source_absent_tasks": 8,
+  "all_tasks": 24,
+  "selected_published_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "pinned_original_publisher_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "pinned_original_safetensors_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+  "inference_runtime": "torch==2.6.0 CPU; transformers==4.46.3; huggingface_hub==0.35.3; safetensors==0.4.5; tokenizers==0.20.3",
+  "generation_max_new_tokens": 12,
+  "greedy_decode_only": true,
+  "no_few_shot_examples": true,
+  "input_tokens_limit": 1024,
+  "input_messages_original_unmodified": true,
+  "output_whitelist": [
+    "A",
+    "B",
+    "ABSTAIN",
+    "INVALID"
+  ],
+  "model_forward_passes_required": 24,
+  "raw_outputs_must_be_preserved": true,
+  "preselected_metric": "Complete correct four-way source and answer-position reversals across 4 previously unseen project families; report total source present correctness separately from no-source abstentions.",
+  "controls": [
+    "prompt-only source-blind always pick A on source and ABSTAIN on absent (known synthetic baseline)",
+    "always abstain synthetic baseline"
+  ],
+  "threat_model": "Prompt-only no code source, cannot distinguish parent/fix under swapped answers; public source lookup still possible. Researcher selected public cases are not independent expert gold.",
+  "reference_provenance": "Phase5U exact original Git code references, supported by Phase5V executed independent Git checkout focused original behavior probes; Phase5V is NOT an independent expert.",
+  "original_upstream_full_test_suites_executed_in_this_study": false,
+  "independent_appsec_expert_gold_count": 0,
+  "model_training_performed": false,
+  "registered_network_evaluator": false,
+  "paid_network_requests": 0,
+  "independent_external_developer_adoption": false,
+  "official_h2_submitted": false,
+  "no_model_score_or_positive_result_asserted_before_actual_inference": true
+}
