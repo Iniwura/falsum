@@ -8,6 +8,8 @@ on:
       - 'src/falsum/cli.py'
       - 'tests/test_phase5z_reviewed_advisory_consumption.py'
       - 'tests/test_phase5aa_offline_reviewed_bundle.py'
+      - 'examples/phase5aa-constructed-request.json'
+      - 'examples/phase5aa-constructed-response.json'
       - '.github/workflows/phase5z-original-reviewed-advisory-consumption.yml'
   pull_request:
     paths:
@@ -17,6 +19,8 @@ on:
       - 'src/falsum/cli.py'
       - 'tests/test_phase5z_reviewed_advisory_consumption.py'
       - 'tests/test_phase5aa_offline_reviewed_bundle.py'
+      - 'examples/phase5aa-constructed-request.json'
+      - 'examples/phase5aa-constructed-response.json'
       - '.github/workflows/phase5z-original-reviewed-advisory-consumption.yml'
   workflow_dispatch:
 permissions:
@@ -126,6 +130,29 @@ jobs:
           set -euo pipefail
           python -m falsum.cli bundle-reviewed-advisories \
             --out original-source-bound-app-reference-gate/ORIGINAL-SIX-GIT-REVIEWED-ADVISORY-OFFLINE-BUNDLE.json
+      - name: Plug and play example uses constructed input and cannot acquire original-capture provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.cli filter-security-references \
+            --role direct_deps_dev_ghsa \
+            --request-json examples/phase5aa-constructed-request.json \
+            --response-json examples/phase5aa-constructed-response.json \
+            --reviewed-bundle original-source-bound-app-reference-gate/ORIGINAL-SIX-GIT-REVIEWED-ADVISORY-OFFLINE-BUNDLE.json \
+            --out /tmp/phase5aa-constructed-output.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('/tmp/phase5aa-constructed-output.json').read_text())
+          d=v['security_reference_consumption']
+          assert v['reviewed_source_loaded_offline'] is True
+          assert v['original_external_capture_git_verified'] is False
+          assert v['current_advisory_freshness_verified'] is False
+          assert d['display_count']==5 and d['suppressed_count']==1
+          assert d['original_external_capture_git_verified'] is False
+          assert d['suppressed_references'][0]['verified_ghsa_id']=='GHSA-f23m-r3pf-42rh'
+          print('Constructed demonstration input exercised offline original-source gate. This is NOT a newly captured outside response.')
+          PY
       - name: Compare genuine original Miner decisions with fully offline advisory loading and reject source-byte mutation
         shell: bash
         run: |
