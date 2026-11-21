@@ -36,6 +36,20 @@ body:
         OR: Python 3.12 on Windows/Linux/macOS; command; exit status...
     validations:
       required: true
+  - type: textarea
+    id: source_and_fork_integrity
+    attributes:
+      label: Original upstream SHA, fork modifications and report hashes
+      description: For forked runs provide the exact public upstream 40-character commit, your fork's checked-out commit, any source modifications, workflow run URL, and SHA-256 output hashes. If you only did a manual code review, say "no fork run" and link the exact source lines instead.
+      placeholder: |
+        Original upstream FALSUM Git SHA:
+        My fork / checked-out Git SHA:
+        Changes or diff URL (or explicitly none):
+        Public workflow run URL:
+        SHA-256 of original receipt summary and constructed filter report:
+        I did not run Actions, but read these original files/lines:
+    validations:
+      required: false
   - type: dropdown
     id: assessment
     attributes:
