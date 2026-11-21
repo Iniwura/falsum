@@ -1,0 +1,135 @@
+name: Phase 5Z - application actually filters original Miner security advisory references
+on:
+  push:
+    paths:
+      - 'data/phase5z-frozen-app-consumption-protocol.json'
+      - 'src/falsum/phase5z_reviewed_advisory_consumption.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5z_reviewed_advisory_consumption.py'
+      - '.github/workflows/phase5z-original-reviewed-advisory-consumption.yml'
+  pull_request:
+    paths:
+      - 'data/phase5z-frozen-app-consumption-protocol.json'
+      - 'src/falsum/phase5z_reviewed_advisory_consumption.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5z_reviewed_advisory_consumption.py'
+      - '.github/workflows/phase5z-original-reviewed-advisory-consumption.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  local-adversarial-and-schema-controls:
+    name: Safe app consumption, wrong package/version, no forged original proofs / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Validate freeze, local DTO input and original source defense-in-depth
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5z_reviewed_advisory_consumption.py' -v
+          python -m unittest discover -s tests -p 'test_phase5x_three_real_miner_target_relevance.py' -v
+          python -m unittest discover -s tests -p 'test_phase5y_original_reviewed_version_applicability.py' -v
+          python -m falsum.cli --help | grep -F filter-security-references
+  actual-original-public-provider-and-independent-git-review:
+    name: Recheck all 3 original external Miner Git captures and 6 independently reviewed advisory files
+    needs: local-adversarial-and-schema-controls
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Actually fetch nine original Git SHA1-verified public sources and issue sanitized application decisions
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p original-source-bound-app-reference-gate
+          python -m falsum.cli filter-security-references \
+            --out original-source-bound-app-reference-gate/ORIGINAL-THREE-REAL-PROVIDER-GIT-REVIEWED-DISPLAY-DECISIONS.json
+      - name: Fail closed on any original-reference inapplicable version being displayed or original source identity drift
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          f=Path('original-source-bound-app-reference-gate/ORIGINAL-THREE-REAL-PROVIDER-GIT-REVIEWED-DISPLAY-DECISIONS.json')
+          v=json.loads(f.read_text())
+          assert v['schema_version']==1
+          assert v['status']=='PHASE5Z_ORIGINAL_THREE_MINER_SAFE_REFERENCE_CONSUMPTION'
+          assert v['original_external_git_authenticated_miner_captures']==3
+          assert v['original_reviewed_advisory_git_verified_sources']==6
+          assert v['original_real_unscoped_advisory_feed_denied']==1
+          assert v['original_direct_provider_outputs_reference_filtered']==2
+          assert v['original_direct_provider_references']==12
+          assert v['original_reviewed_version_applicable_display_only_references']==10
+          assert v['original_version_inapplicable_suppressed_references']==2
+          assert v['original_distinct_advisories_with_version_false_positive']==1
+          assert v['all_requests_same_canonical_intent'] is False
+          assert v['independent_paid_settlement_verified'] is False
+          assert v['independent_appsec_gold']==0
+          assert v['external_adoption_proven'] is False
+          assert v['network_evaluator_registered'] is False
+          assert v['network_ranking_improvement_proven'] is False
+          assert v['official_hackathon_submission'] is False
+          assert v['entire_original_third_party_body_republished'] is False
+          cases=v['public_original_source_decisions']
+          assert len(cases)==3
+          assert [x['reported_original_miner_id'] for x in cases]==['77003','190048','77010']
+          assert cases[0]['display_only_security_reference_decision']['display_count']==0
+          assert cases[0]['display_only_security_reference_decision']['action']=='DENY_UNVERIFIED_OR_UNSCOPED_ADVICE'
+          for case in cases[1:]:
+            out=case['display_only_security_reference_decision']
+            assert out['action']=='DISPLAY_REVIEWED_VERSION_APPLICABLE_REFERENCES_ONLY'
+            assert out['original_external_capture_git_verified'] is True
+            assert out['display_count']==5
+            assert out['suppressed_count']==1
+            assert len(out['display_references'])==5
+            assert len(out['suppressed_references'])==1
+            assert all(x['verified_ghsa_id']!='GHSA-f23m-r3pf-42rh' for x in out['display_references'])
+            assert out['suppressed_references'][0]['verified_ghsa_id']=='GHSA-f23m-r3pf-42rh'
+            assert all(x['reference_meaning']=='MATCHES_REVIEWED_PACKAGE_VERSION_RANGE_NOT_SECURITY_CLEARANCE' for x in out['display_references'])
+          assert '"result":' not in f.read_text()
+          assert '"advisoryKeys":' not in f.read_text()
+          print('Three original outside source responses cross-reviewed against six authentic advisories; 100 off-target advisory rows refused; ten version-applicable original reference instances display-only; two inapplicable filtered.')
+          PY
+      - name: Publish bounded real original decision impact and scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads(Path('original-source-bound-app-reference-gate/ORIGINAL-THREE-REAL-PROVIDER-GIT-REVIEWED-DISPLAY-DECISIONS.json').read_text())
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+            f.write('## Actual original outside security output application consumption\n\n')
+            f.write('Three original Git-SHA1 authenticated external reported-paid Miner captures and six Git-SHA1 authenticated reviewed GHSA records. One routed 100-unscoped-feed rejected; two direct outputs sanitized to **5 displayed review references and one independently version-inapplicable suppressed reference each** (10 displayed / 2 suppressed, one distinct inapplicable advisory).\n\n')
+            f.write('**Not a same-Intent leaderboard:** original routed intent SECURITY_REVIEW_GENERAL, direct recorded receipts SECURITY_REVIEW. Not independently verified miner ownership, paid settlement, expert gold, advisory completeness, external adoption or registered evaluator. The result permits DISPLAY only, never security clearance.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5z-real-three-external-miner-six-independent-reviewed-app-reference-decisions
+          path: original-source-bound-app-reference-gate/
+          retention-days: 90
+          if-no-files-found: error
