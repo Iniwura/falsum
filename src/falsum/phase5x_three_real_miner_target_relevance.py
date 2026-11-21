@@ -22,7 +22,7 @@ from pathlib import Path
 import re
 
 from .phase4l_external_receipt_evidence import (
-    ROOT as SOURCE_ROOT, SOURCE_BASE,VIEW_BASE,fetch_bytes,git_blob_sha,
+    SOURCE_BASE,VIEW_BASE,fetch_bytes,git_blob_sha,
 )
 from .phase5m_real_source_sensitive_model import ROOT,sha
 from .phase5q_telegraph_target_gate import TargetRelevanceError
