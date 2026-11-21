@@ -106,6 +106,13 @@ def main(argv: list[str] | None = None) -> int:
         "direct_deps_dev_version"))
     safe_ref.add_argument("--request-json",type=Path)
     safe_ref.add_argument("--response-json",type=Path)
+    safe_ref.add_argument("--reviewed-bundle",type=Path,
+                          help="local Git-blob-verified offline advisory source bundle")
+    source_bundle = commands.add_parser(
+        "bundle-reviewed-advisories",
+        help="fetch six SHA-authenticated historical GitHub-reviewed advisories into an offline source bundle; no Miner responses",
+    )
+    source_bundle.add_argument("--out",type=Path,required=True)
     version_quality = commands.add_parser(
         "audit-reviewed-advisory-version",
         help="six original Git-reviewed advisory source files vs two real published Miner outputs; exact target version only, NOT ranking",
@@ -185,13 +192,17 @@ def main(argv: list[str] | None = None) -> int:
                 cmd+=["--questions",str(args.questions),
                       "--predictions",str(args.predictions)]
             return new_sources_main(cmd)
+        if args.command == "bundle-reviewed-advisories":
+            from .phase5aa_offline_reviewed_bundle import main as bundle_main
+            return bundle_main(["--out",str(args.out)])
         if args.command == "filter-security-references":
             from .phase5z_reviewed_advisory_consumption import main as safe_ref_main
             cmd=["--out",str(args.out)]
             for key,flag in (
                 ("role","--role"),
                 ("request_json","--request-json"),
-                ("response_json","--response-json")
+                ("response_json","--response-json"),
+                ("reviewed_bundle","--reviewed-bundle")
             ):
                 val=getattr(args,key)
                 if val is not None:

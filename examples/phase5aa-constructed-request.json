@@ -1,0 +1,9 @@
+{
+  "method": "GET",
+  "endpoint": "/query",
+  "payload": {
+    "system": "npm",
+    "pkg": "lodash",
+    "ver": "4.17.15"
+  }
+}
