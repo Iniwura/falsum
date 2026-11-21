@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5U_AUTHENTIC_ORIGINAL_FOUR_DISJOINT_PUBLIC_SECURITY_FIX_SOURCES_AND_TESTS",
+  "date_utc": "2026-11-21",
+  "premodel_original_selection_commit": "1e6b3a212659739365731e3e8d452ecd96c90ffa",
+  "premodel_original_selection_git_blob_sha1": "ff1e9063f0f37e0a9265db25d6f767bb56db73e8",
+  "original_successful_actions_run": "https://github.com/Iniwura/falsum/actions/runs/44901893174",
+  "original_actions_artifact_id": 14705969779,
+  "original_zip_sha256": "32abf580d7586c0a1e672c6015c06fd962337379b6aaf24e6a3c01ddd3617f86",
+  "original_artifact_files_sha256": {
+    "DISCLOSED-SOURCE-BLIND-SYNTHETIC-BASELINE.json": "d00e8086c107ca46437396792e37c185d1a83d9f5f5d702cbb916e6eddfc32b2",
+    "EMPTY-CANDIDATE-RESPONSES.json": "5752b8b43c0755eba5cc3d4f1425b9b695b326a15a3e7555f0c7f8de8c57c6db",
+    "EIGHT-SOURCE-EIGHT-UPSTREAM-TEST-GIT-PROOF.json": "0e63a5c08af66e2c0b036a233474f0ca4dfb589724a7477f4190ec636d7eb431",
+    "ORIGINAL-24-NEW-PROJECT-SOURCE-CHALLENGE.json": "574f6d3ee45b64be118cbf43fdae986f4275a559e3dafdf9c04c355a0753968e"
+  },
+  "authentic_original_source_project_repositories": [
+    "minimistjs/minimist",
+    "json5/json5",
+    "salesforce/tough-cookie",
+    "follow-redirects/follow-redirects"
+  ],
+  "original_github_commits_and_source_git_blobs_verified": 8,
+  "original_upstream_regression_test_git_blobs_verified": 8,
+  "complete_original_test_suites_executed_by_phase5u": false,
+  "new_distinct_security_fix_families": 4,
+  "actual_new_project_distinct_source_present_conditions": 16,
+  "source_missing_controls": 8,
+  "total_questions": 24,
+  "source_blind_prompt_only_baseline_matches": 16,
+  "source_blind_complete_four_way_reversals": 0,
+  "actual_candidate_model_inference_executed": false,
+  "pretraining_blindness_proven": false,
+  "independent_appsec_expert_gold_count": 0,
+  "new_evaluator_registered": false,
+  "same_intent_miner_ranking_improvement_proven": false,
+  "independent_developer_adoption": false,
+  "official_h2_entry_submitted": false,
+  "interpretation": "All eight original historical source Git blobs and eight upstream test Git blobs were verified from four new public code repositories, then rendered as 24 balanced original raw-source questions. No full upstream test execution or real candidate model inference was performed by this phase. This is authentic additional source coverage, not model accuracy or expert gold."
+}

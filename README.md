@@ -1,5 +1,14 @@
 # FALSUM
 
+## Phase 5U: four new verified upstream security-fix projects
+
+FALSUM now has [**new, project-disjoint security-review evaluation material**](docs/PHASE5U_NEW_PROJECT_DISJOINT_SOURCE_COVERAGE.md) beyond its previous PyJWT/Werkzeug/MCP SDK/Pillow examples. The original affected and fixed source-code versions of **minimist, JSON5, tough-cookie and follow-redirects** and the corresponding original upstream test files were authenticated against **all 16 exact Git blob SHA-1 identities**. [Original successful four-job GitHub Actions proof](https://github.com/Iniwura/falsum/actions/runs/44901893174) · [immutable original ZIP, challenge and proof SHA-256 identities](evidence/phase5u-2026-11-21-original-four-project-security-fix-proof.json).
+
+Four genuinely new historical security-fix families yield **16 actual Git-source-present counterbalanced questions and 8 no-source controls**. A prompt-only source-masked shortcut cannot complete any **four-way source-and-option reversal** and at best matches 16/24 public references. Reproduce with `falsum score-new-source-projects export --questions-out new-source-24.json --template-out predictions.json --source-proof-out upstream-code-and-tests.json`.
+
+**Limits:** Original upstream test *files* are authenticated, but their full original suites have **not** been executed by this phase. This is public researcher-selected coverage, not 16 distinct vulnerabilities, independent expert gold, an actual new model's accuracy, a registered Telegraph evaluator, fair same-request network Miner rankings or new independent adoption.
+
+
 ## Phase 5T: a verified source-backed application decision, not just a scorecard
 
 [**Run the original source-bound Telegraph application-consumption gate**](docs/PHASE5T_FAIL_CLOSED_SECURITY_REVIEW_CONSUMPTION.md). FALSUM now makes an explicit **ALLOW/DENY** decision for a security-review response. The only ALLOW outcomes require original authenticated Git source, upstream regression test, receipt hash, exact requested project and commit, and a narrowly truthful source claim. A polished but false assertion, altered receipt, unrelated paid response, wrong Intent or unsupported source **cannot authorize the application**.
