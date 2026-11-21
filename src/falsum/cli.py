@@ -97,6 +97,18 @@ def main(argv: list[str] | None = None) -> int:
     telegraph.add_argument("--out",type=Path,required=True)
     telegraph.add_argument("--request-json",type=Path)
     telegraph.add_argument("--response-json",type=Path)
+    counterbalanced = commands.add_parser(
+        "score-counterbalanced-source",
+        help="24 authenticated raw-source / swapped-option tasks, four-way reversal scoring and actual model inference; NOT blind gold",
+    )
+    counterbalanced.add_argument("mode",choices=("export","score","baseline","infer","audit"))
+    counterbalanced.add_argument("--questions-out",type=Path)
+    counterbalanced.add_argument("--template-out",type=Path)
+    counterbalanced.add_argument("--questions",type=Path)
+    counterbalanced.add_argument("--predictions",type=Path)
+    counterbalanced.add_argument("--raw",type=Path)
+    counterbalanced.add_argument("--model",choices=("small","larger"))
+    counterbalanced.add_argument("--out",type=Path)
     raw_code = commands.add_parser(
         "score-raw-code",
         help="authenticated real Git source excerpts, model inference or unverified developer score; not independent gold",
@@ -132,6 +144,35 @@ def main(argv: list[str] | None = None) -> int:
             if args.response_json is not None:
                 a+=["--response-json",str(args.response_json)]
             return telegraph_main(a)
+        if args.command == "score-counterbalanced-source":
+            from .phase5s_counterbalanced_source_invariance import main as counterbalanced_main
+            if args.mode=="export":
+                if args.questions_out is None or args.template_out is None:
+                    parser.error("export requires --questions-out and --template-out")
+                return counterbalanced_main([
+                    "export","--questions-out",str(args.questions_out),
+                    "--template-out",str(args.template_out),
+                ])
+            if args.out is None:
+                parser.error("all scoring/inference modes require --out")
+            if args.mode=="baseline":
+                return counterbalanced_main(["baseline","--out",str(args.out)])
+            if args.questions is None:
+                parser.error("score/infer/audit need --questions")
+            argv=[args.mode,"--questions",str(args.questions),"--out",str(args.out)]
+            if args.mode=="score":
+                if args.predictions is None:
+                    parser.error("score needs --predictions")
+                argv+=["--predictions",str(args.predictions)]
+            else:
+                if args.model is None:
+                    parser.error("infer/audit need --model small or larger")
+                argv+=["--model",args.model]
+                if args.mode=="audit":
+                    if args.raw is None:
+                        parser.error("audit needs --raw")
+                    argv+=["--raw",str(args.raw)]
+            return counterbalanced_main(argv)
         if args.command == "score-raw-code":
             from .phase5p_raw_code_evaluator import main as raw_code_main
             if args.mode == "export":

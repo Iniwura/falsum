@@ -1,0 +1,152 @@
+name: Phase 5S - genuine two-size published model counterbalanced source test
+on:
+  push:
+    paths:
+      - 'data/phase5s-preinference-four-way-source-reversal.json'
+      - 'src/falsum/phase5s_counterbalanced_source_invariance.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5s_counterbalanced_source_invariance.py'
+      - '.github/workflows/phase5s-four-way-counterbalanced-model.yml'
+  pull_request:
+    paths:
+      - 'data/phase5s-preinference-four-way-source-reversal.json'
+      - 'src/falsum/phase5s_counterbalanced_source_invariance.py'
+      - 'src/falsum/cli.py'
+      - 'tests/test_phase5s_counterbalanced_source_invariance.py'
+      - '.github/workflows/phase5s-four-way-counterbalanced-model.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preinference-contract:
+    name: Source-blind upper bound and counterfactual assertions / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Offline frozen protocol and strict 4-way source reversal correctness
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5s_counterbalanced_source_invariance.py' -v
+          python -m unittest discover -s tests -p 'test_phase5p_raw_code_evaluator.py' -v
+          python -m falsum.cli --help | grep -F score-counterbalanced-source
+  actual-published-model:
+    name: Genuine Qwen ${{ matrix.model }} 24 authenticated source prompts / CPU
+    needs: preinference-contract
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        model: ['small','larger']
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_HUB_DISABLE_XET: '1'
+      HF_HUB_ETAG_TIMEOUT: '40'
+      HF_HUB_DOWNLOAD_TIMEOUT: '180'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Export exact frozen upstream original code and source-blind control
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p source-counterfactual-${{ matrix.model }}
+          python -m falsum.cli score-counterbalanced-source export \
+            --questions-out source-counterfactual-${{ matrix.model }}/ORIGINAL-24-AUTHENTICATED-QUESTIONS.json \
+            --template-out source-counterfactual-${{ matrix.model }}/EMPTY-INDEPENDENT-CANDIDATE-TEMPLATE.json
+          python -m falsum.cli score-counterbalanced-source baseline \
+            --out source-counterfactual-${{ matrix.model }}/DISCLOSED-SYNTHETIC-SOURCE-BLIND-BASELINE.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('source-counterfactual-${{ matrix.model }}')
+          q=json.loads((p/'ORIGINAL-24-AUTHENTICATED-QUESTIONS.json').read_text())
+          s=json.loads((p/'DISCLOSED-SYNTHETIC-SOURCE-BLIND-BASELINE.json').read_text())['score']
+          assert q['source_code_files_full_git_blob_verified']==8
+          assert len(q['questions'])==24
+          assert q['source_code_present_count']==16 and q['source_omitted_controls']==8
+          assert q['independent_security_expert_gold']==0 and q['secret_private_holdout'] is False
+          assert all(set(x)=={'id','messages','prompt_sha256'} for x in q['questions'])
+          assert s['source_blind_prompt_only_upper_bound_four_way_reversals']==0
+          assert s['source_blind_constant_code_choice_plus_no_source_abstain_matches']==16
+          assert s['matches_to_public_researcher_references']==16
+          assert s['complete_correct_four_way_source_and_position_reversals']==0
+          print('Verified original Git files, public 24 source conditions and disclosed source-blind upper bound.')
+          PY
+      - name: Install original pinned CPU model-inference runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check 'transformers==4.46.3' 'huggingface_hub==0.35.3' 'safetensors==0.4.5' 'tokenizers==0.20.3'
+      - name: Load real original immutable Qwen weights and perform 24 greedy CPU passes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.cli score-counterbalanced-source infer \
+            --questions source-counterfactual-${{ matrix.model }}/ORIGINAL-24-AUTHENTICATED-QUESTIONS.json \
+            --model ${{ matrix.model }} \
+            --out source-counterfactual-${{ matrix.model }}/REAL-PUBLISHED-MODEL-COMPLETIONS.json
+      - name: Score authentic raw completions and preserve negative outcome
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.cli score-counterbalanced-source audit \
+            --questions source-counterfactual-${{ matrix.model }}/ORIGINAL-24-AUTHENTICATED-QUESTIONS.json \
+            --raw source-counterfactual-${{ matrix.model }}/REAL-PUBLISHED-MODEL-COMPLETIONS.json \
+            --model ${{ matrix.model }} \
+            --out source-counterfactual-${{ matrix.model }}/ORIGINAL-FOUR-WAY-REAL-MODEL-DIAGNOSTIC.json
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path('source-counterfactual-${{ matrix.model }}')
+          audit=json.loads((p/'ORIGINAL-FOUR-WAY-REAL-MODEL-DIAGNOSTIC.json').read_text())
+          original=json.loads((p/'REAL-PUBLISHED-MODEL-COMPLETIONS.json').read_text())
+          s=audit['score']
+          assert original['actual_model_forward_passes']==24
+          assert len(original['predictions'])==24
+          assert audit['model_weight_sha256']==original['publisher_model_file_sha256']['model.safetensors']
+          assert s['source_blind_prompt_only_upper_bound_four_way_reversals']==0
+          assert s['source_blind_prompt_only_upper_bound_total_matches']==16
+          assert s['independent_appsec_gold']==0
+          assert audit['no_model_training_or_evaluator_registration'] is True
+          assert audit['no_external_human_gold_or_developer_adoption'] is True
+          assert s['registered_network_evaluator'] is False and s['network_ranking_improved'] is False
+          assert audit['no_h2_entry_submitted'] is True
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Measured publisher '+audit['model_repository']+' source sensitivity\n\n')
+              f.write('Publisher revision '+audit['model_revision']+', weight SHA256 '+audit['model_weight_sha256']+'. Actual CPU passes 24.\n\n')
+              f.write('Matches '+str(s['matches_to_public_researcher_references'])+'/24. Four-way reversals '+str(s['complete_correct_four_way_source_and_position_reversals'])+'/4. Source-present '+str(s['source_present_matches'])+'/16. No-source abstentions '+str(s['correct_no_source_abstentions'])+'/8. Invalid '+str(s['invalid_outputs'])+'.\n\n')
+              f.write('Source-blind prompt-only upper bound 16/24 and 0/4 full reversals; public known source is not hidden holdout or independent expert gold. No training, adoption or network rank claims.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase5s-real-publisher-${{ matrix.model }}-24-source-reversal-evidence
+          path: source-counterfactual-${{ matrix.model }}/
+          retention-days: 90
+          if-no-files-found: warn
