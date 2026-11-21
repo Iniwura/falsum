@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5O_PREINFERENCE_FROZEN_FOUR_PROJECT_OPEN_SOURCE_DIAGNOSTIC_NOT_BLIND_GOLD",
+  "freeze_date": "2026-11-21",
+  "intended_intent": "SECURITY_REVIEW_GENERAL",
+  "provenance": "Four previously source-verified Phase4H upstream projects: PyJWT, Werkzeug, MCP Python SDK and Pillow. Public historical source summaries authored by FALSUM, NOT new independent gold, blind unseen model data or model reading raw code.",
+  "upstream_source_selection_file": "data/phase4h-frozen-four-new-source-projects.json",
+  "upstream_source_selection_git_blob_sha1": "9fc67edec49c33d3efdb4a6128bd7c6c6b7766e2",
+  "previous_published_model_run": "https://github.com/Iniwura/falsum/actions/runs/44739535866",
+  "model_repository": "Qwen/Qwen2.5-0.5B-Instruct",
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "no_new_model_selection_or_prompt_tuning": true,
+  "prompt_policy": "Per project use original Phase4H before/after source summaries, replace standalone parent/fixed words with selected, and preserve exact historical case meaning. Add third intentionally source-omitted control using neither version-specific details nor original answer.",
+  "answer_policy": "Use Phase4H original A/B answer texts; swap displayed positions for odd project indices, preserving original substantive answer. All 12 tasks generated before real inference; no answer key in prompts.",
+  "no_source_policy": "No code or test excerpt and no specific revision for calibration, expected ABSTAIN. This task intentionally signals missing evidence; it is not a difficult hidden control.",
+  "cases": 4,
+  "conditions_per_case": [
+    "parent-summary",
+    "fixed-summary",
+    "source-omitted"
+  ],
+  "total_questions": 12,
+  "truth_distribution": {
+    "A": 4,
+    "B": 4,
+    "ABSTAIN": 4
+  },
+  "model_system_instruction": "Assess the supplied security-source evidence. Pick A, B or ABSTAIN. If the selected historical revision is unspecified or no source facts support a choice, choose ABSTAIN. Reply with only one label. No explanation.",
+  "generation_max_new_tokens": 12,
+  "max_input_tokens": 1024,
+  "generate_do_sample": false,
+  "model_weights_cpu_only": true,
+  "model_file_sha256_required": true,
+  "answer_parsing_policy": "Only exact A, B or ABSTAIN after trimming punctuation; all other outputs INVALID and counted wrong.",
+  "baselines": [
+    "always-A",
+    "always-B",
+    "always-ABSTAIN",
+    "parent-is-A-and-omit-is-ABSTAIN"
+  ],
+  "true_security_exploit_or_production_safety_claims": false,
+  "independent_appsec_gold_labels": 0,
+  "external_developer_adoption": 0,
+  "network_registered_evaluator": false,
+  "trained_model_improvement": false,
+  "original_telegraph_lora_available": false,
+  "official_h2_submitted": false,
+  "eligible_anjoman_new_rows": 0
+}
