@@ -108,6 +108,15 @@ def main(argv: list[str] | None = None) -> int:
     safe_ref.add_argument("--response-json",type=Path)
     safe_ref.add_argument("--reviewed-bundle",type=Path,
                           help="local Git-blob-verified offline advisory source bundle")
+    bounded_review = commands.add_parser(
+        "review-verified-references",
+        help="individually evaluate npm/RubyGems advisory IDs against independently pinned GHSA source bytes; no security clearance",
+    )
+    bounded_review.add_argument("--ecosystem", required=True)
+    bounded_review.add_argument("--package", required=True)
+    bounded_review.add_argument("--version", required=True)
+    bounded_review.add_argument("--reference", action="append", required=True)
+    bounded_review.add_argument("--out", type=Path, required=True)
     source_bundle = commands.add_parser(
         "bundle-reviewed-advisories",
         help="fetch six SHA-authenticated historical GitHub-reviewed advisories into an offline source bundle; no Miner responses",
@@ -203,6 +212,13 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "bundle-reviewed-advisories":
             from .phase5aa_offline_reviewed_bundle import main as bundle_main
             return bundle_main(["--out",str(args.out)])
+        if args.command == "review-verified-references":
+            from .phase5ag_reviewed_reference_evaluator import main as reviewer_main
+            params = ["--ecosystem", args.ecosystem, "--package", args.package,
+                      "--version", args.version, "--out", str(args.out)]
+            for reference in args.reference:
+                params.extend(("--reference", reference))
+            return reviewer_main(params)
         if args.command == "filter-security-references":
             from .phase5z_reviewed_advisory_consumption import main as safe_ref_main
             cmd=["--out",str(args.out)]

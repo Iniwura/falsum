@@ -10,6 +10,9 @@ from pathlib import Path
 import shutil
 import tempfile
 import unittest
+import json
+import io
+from contextlib import redirect_stdout
 
 from falsum import phase5ag_reviewed_reference_evaluator as e
 from falsum.phase4l_external_receipt_evidence import git_blob_sha
@@ -104,6 +107,29 @@ class MultiEcosystemReviewedSourceContract(unittest.TestCase):
                                          {"introduced": "3.0.0"},
                                          {"fixed": "4.0.0"}],
                                         e.numbers("1.5.0")), e.APPLICABLE)
+
+    def test_public_cli_subcommand_matches_standalone_review(self):
+        from falsum.cli import main as falsum_main
+        with tempfile.TemporaryDirectory() as folder:
+            out = Path(folder) / "references.json"
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = falsum_main([
+                    "review-verified-references", "--ecosystem", "npm",
+                    "--package", "axios", "--version", "1.5.0",
+                    "--reference", e.EXPECTED_IDS[0], "--out", str(out),
+                ])
+            self.assertEqual(code, 0, buffer.getvalue())
+            result = json.loads(out.read_text(encoding="utf-8"))
+            self.assertEqual(result["reference_decisions"][0]["decision"], e.APPLICABLE)
+            self.assertFalse(result["security_clearance_granted"])
+            # Create-only outputs must never silently overwrite prior evidence.
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(falsum_main([
+                    "review-verified-references", "--ecosystem", "npm",
+                    "--package", "axios", "--version", "1.5.0",
+                    "--reference", e.EXPECTED_IDS[0], "--out", str(out),
+                ]), 1)
 
     def test_tamper_original_byte_or_preregistration_rejected(self):
         with tempfile.TemporaryDirectory() as folder:

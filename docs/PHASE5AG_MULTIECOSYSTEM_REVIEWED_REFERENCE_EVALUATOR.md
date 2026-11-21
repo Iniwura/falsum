@@ -14,12 +14,12 @@ The added independent *source records* cover npm/axios and RubyGems/rack, includ
 | `GHSA-xj5v-6v4g-jfw6` | RubyGems / rack | `dbc8a211717f5c99a5cb5f7793f8975710a0aa3a` |
 | `GHSA-7mqq-6cf9-v2qp` | RubyGems / rack | `92126024d57ffd07b7469dad7f6e98a9a0078170` |
 
-## Run a standalone offline evaluation
+## Run an offline per-reference evaluation
 
 From repository root, on Bash:
 
 ```bash
-PYTHONPATH=src python -m falsum.phase5ag_reviewed_reference_evaluator \
+PYTHONPATH=src python -m falsum.cli review-verified-references \
   --ecosystem npm --package axios --version 1.5.0 \
   --reference GHSA-wf5p-g6vw-rhxx \
   --out /tmp/phase5ag-axios-applicable.json
@@ -31,7 +31,7 @@ More challenges:
 
 ```bash
 PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase5ag_reviewed_reference_evaluator.py' -v
-PYTHONPATH=src python -m falsum.phase5ag_reviewed_reference_evaluator \
+PYTHONPATH=src python -m falsum.cli review-verified-references \
   --ecosystem RubyGems --package rack --version 3.2.5 \
   --reference GHSA-xj5v-6v4g-jfw6 \
   --reference GHSA-7mqq-6cf9-v2qp \

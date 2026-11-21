@@ -13,7 +13,7 @@ FALSUM publishes reproducible **security-review evaluation material**: immutable
 Run from the repository root after setting `PYTHONPATH=src`:
 
 ```bash
-python -m falsum.phase5ag_reviewed_reference_evaluator --ecosystem npm --package axios --version 1.5.0 --reference GHSA-wf5p-g6vw-rhxx --out my-reviewed-reference.json
+python -m falsum.cli review-verified-references --ecosystem npm --package axios --version 1.5.0 --reference GHSA-wf5p-g6vw-rhxx --out my-reviewed-reference.json
 ```
 
 **This expands authenticated source coverage, not independent accuracy or deployment claims.** The 13 labels are constructed, no new real Miner result was evaluated, the upstream snapshots are not a current complete advisory feed, and no security clearance, human AppSec gold, external adoption or improved Telegraph ranking is proved.
