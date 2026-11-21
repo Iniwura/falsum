@@ -1,0 +1,181 @@
+name: Phase 5V - actual historical affected-to-fixed source runtime proof
+on:
+  push:
+    paths:
+      - data/phase5v-preexecution-four-new-original-regression-probe.json
+      - src/falsum/phase5v_historical_runtime_verifier.py
+      - tests/test_phase5v_historical_runtime_verifier.py
+      - tests/phase5v_original_node_security_probe.cjs
+      - .github/workflows/phase5v-original-historical-security-fix-execution.yml
+  pull_request:
+    paths:
+      - data/phase5v-preexecution-four-new-original-regression-probe.json
+      - src/falsum/phase5v_historical_runtime_verifier.py
+      - tests/test_phase5v_historical_runtime_verifier.py
+      - tests/phase5v_original_node_security_probe.cjs
+      - .github/workflows/phase5v-original-historical-security-fix-execution.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  adversarial-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Check source SHA freezes and reject forged / incomplete execution receipts
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5v_historical_runtime_verifier.py' -v
+  original-source-process:
+    name: Original ${{ matrix.project }} / ${{ matrix.role }} security behavior
+    needs: adversarial-contract
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ['minimist-constructor','json5-proto-data','tough-cookie-null-maps','follow-redirects-custom-headers']
+        role: ['affected','fixed']
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PROJECT: ${{ matrix.project }}
+      ROLE: ${{ matrix.role }}
+      npm_config_audit: 'false'
+      npm_config_fund: 'false'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Load exact immutable Git revision and source/test Git blob SHA1 pins
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os
+          from falsum.phase5v_historical_runtime_verifier import frozen
+          doc=frozen()
+          candidates=[x for x in doc['projects'] if x['key']==os.environ['PROJECT']]
+          assert len(candidates)==1 and os.environ['ROLE'] in ('affected','fixed')
+          x=candidates[0];role=os.environ['ROLE']
+          data={
+            'SOURCE_REPO':x['repo'],
+            'ORIGINAL_COMMIT':x[role+'_commit'],
+            'SOURCE_PATH':x['source'],
+            'TEST_PATH':x['test_path'],
+            'SOURCE_BLOB':x[role+'_blob'],
+            'TEST_BLOB':x[role+'_test_blob']
+          }
+          with open(os.environ['GITHUB_ENV'],'a') as f:
+            for k,v in data.items():
+              assert '\n' not in v and '\r' not in v
+              f.write(k+'='+v+'\n')
+          PY
+      - name: Git checkout genuine historical original affected/fixed project and prove full source/test SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init --quiet upstream
+          git -C upstream remote add origin "https://github.com/$SOURCE_REPO.git"
+          git -C upstream -c protocol.version=2 fetch --depth=1 --no-tags origin "$ORIGINAL_COMMIT"
+          git -C upstream checkout --quiet --detach FETCH_HEAD
+          test "$(git -C upstream rev-parse HEAD)" = "$ORIGINAL_COMMIT"
+          test "$(git -C upstream hash-object "$SOURCE_PATH")" = "$SOURCE_BLOB"
+          test "$(git -C upstream hash-object "$TEST_PATH")" = "$TEST_BLOB"
+          echo 'Exact original source and upstream test file blob hashes verified'
+      - name: Install production-only deps for original tough-cookie runtime
+        if: matrix.project == 'tough-cookie-null-maps'
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm --prefix upstream install --omit=dev --ignore-scripts --no-audit --no-fund --package-lock=false
+      - name: Execute original Node source and require vulnerable-to-patched behavior
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p original-reports
+          node tests/phase5v_original_node_security_probe.cjs \
+            "$PROJECT" "$ROLE" "$GITHUB_WORKSPACE/upstream" \
+            "original-reports/$PROJECT-$ROLE.json" \
+            "$ORIGINAL_COMMIT" "$SOURCE_BLOB" "$TEST_BLOB"
+          test -s "original-reports/$PROJECT-$ROLE.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5v-runtime-${{ matrix.project }}-${{ matrix.role }}
+          path: original-reports/
+          retention-days: 90
+          if-no-files-found: error
+  evidence-aggregate:
+    needs: original-source-process
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: phase5v-runtime-*
+          path: original-reports/
+          merge-multiple: true
+      - name: Require eight real original source runs and four affected-to-fixed reversals
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p original-historical-source-proof
+          python -m falsum.phase5v_historical_runtime_verifier \
+            --input-dir original-reports/ \
+            --out original-historical-source-proof/ORIGINAL-EIGHT-PINNED-SOURCE-RUNS.json
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          p=Path('original-historical-source-proof/ORIGINAL-EIGHT-PINNED-SOURCE-RUNS.json')
+          r=json.loads(p.read_text())
+          assert r['original_git_commits_executed_in_isolated_node']==8
+          assert r['original_source_file_git_blobs_verified_before_run']==8
+          assert r['original_upstream_test_file_git_blobs_verified_before_run']==8
+          assert r['focused_original_historical_source_behavior_reversals']==4
+          assert r['unrelated_safe_control_successes']==8
+          assert r['original_upstream_full_test_suites_executed'] is False
+          assert r['independent_expert_gold_count']==0
+          assert r['registered_network_evaluator'] is False
+          assert r['same_request_real_miner_ranking_improved'] is False
+          assert r['new_paid_telegraph_requests']==0
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+            f.write('## Real original security-code execution: four fixes\n\n')
+            f.write('8 genuine affected/fixed Git source commits loaded under Node 22, with exact source AND original test-file SHA verified before the runtime. All four original historical unsafe-behavior cases observed on affected code and absent after fix; eight benign controls passed.\n\n')
+            f.write('Focused new runtime probes adapted from original upstream test cases, **not full original upstream test suites**. Not independent expert gold, model improvement or network evaluator registration.\n')
+          print('Four actual original source reversals verified from eight distinct pinned Git checkouts')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5v-four-executed-original-source-reversal-aggregate
+          path: original-historical-source-proof/
+          retention-days: 90
+          if-no-files-found: error
