@@ -72,3 +72,24 @@ Export requires public access to original immutable upstream Git code files, whi
 A model exceeding the source-blind upper bound or completing correct source/option counterfactuals would demonstrate greater sensitivity to source context on these four **known historical public cases**. It would *not* prove a new trained evaluator, generalizable AppSec expertise, leaderboard-rank improvement, independent human gold, network registration or outside adoption. The four-project sample is too small for broad accuracy claims.
 
 **The practical contribution is the falsifiable benchmark and provenance discipline, not a promised high model score.** Cross-check the separate [real canonical external Telegraph task-insensitivity failure](PHASE5R_CANONICAL_TELEGRAPH_TASK_INSENSITIVITY.md), which shows why output relevance matters beyond code-history puzzles.
+
+## Genuine verified original inference results (21 November 2026)
+
+The [original successful GitHub Actions run](https://github.com/Iniwura/falsum/actions/runs/44857757905) loaded **both original immutable independently published Qwen checkpoints** and completed exactly **24 actual CPU model predictions per model** against the same original, Git-verified four-project sources and swapped-answer prompts.
+
+| Actual original checkpoint | Reference matches | Source-present correct | Correct no-source abstentions | Four-way source+position reversals | Original raw outputs |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Qwen2.5-0.5B-Instruct | **8/24** | **0/16** | 8/8 | **0/4** | 24 ABSTAIN |
+| Qwen2.5-1.5B-Instruct | **8/24** | **0/16** | 8/8 | **0/4** | 24 ABSTAIN |
+| Disclosed synthetic source-blind constant-code-answer | **16/24** | 8/16 | 8/8 | **0/4** | No inference |
+
+Both actual published models failed to produce *any* answer on the sixteen authentic code-present conditions and correctly abstained only when the source was omitted. Their performance is **below the deliberately weak source-blind score**. Increasing these two published model sizes from 0.5B to 1.5B did **not** improve this measured test. This does not imply that larger models in general cannot perform the task; neither model belongs to nor was trained by FALSUM.
+
+Original immutable checkpoints:
+- 0.5B revision `7ae557604adf67be50417f59c2c2f167def9a775`, safetensors SHA-256 `fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe`. Original Actions ZIP artifact ID `14688352527`, ZIP SHA-256 `563e78c685bae0b113cb03818a9a7b9d30c5ed120187c483b61137c806956968`.
+- 1.5B revision `989aa7980e4cf806f80c7fef2b1adb7bc71aa306`, safetensors SHA-256 `dd924a11b4c220f385b51ffa522daea7c9f3d850e31b162bb5661df483c6d3ee`. Original Actions ZIP artifact ID `14688540681`, ZIP SHA-256 `ed1a9d369bf8ff859868d2867caa3654541687b30add502f3c8edeba7671c398`.
+- The **same original public challenge JSON** SHA-256 `987e5a6e3b58f828b72ce9d3633ebc9a1cad8eec2f650ae0745f3d87c590d486` is present in both original ZIPs, demonstrating a byte-identical test.
+
+[Permanent signed-off evidence index](../evidence/phase5s-2026-11-21-authenticated-dual-model-counterfactual-negative.json). Original raw completions and complete matrices remain archived in the corresponding public GitHub Actions artifacts.
+
+**Interpretation:** we have demonstrated a reproducible *failure* of two real published candidate models to use authenticated source code in this small public test. This is relevant evaluator coverage, but **not** a new trained FALSUM scorer, statistical accuracy gain, certified security gold, independent adoption or improved Telegram/Telegraph network rankings. Future models require frozen additional test cases to avoid tuning the benchmark to these observed failures.
