@@ -180,6 +180,7 @@ def range_status(events: object, version: tuple[int, ...]) -> str:
         return INSUFFICIENT
     opened: tuple[int, ...] | None = None
     seen = False
+    matched = False
     for event in events:
         if not isinstance(event, dict) or len(event) != 1:
             return INSUFFICIENT
@@ -197,14 +198,13 @@ def range_status(events: object, version: tuple[int, ...]) -> str:
                 return INSUFFICIENT
             left = compare(version, opened) >= 0
             right = compare(version, parsed) < 0 if key == "fixed" else compare(version, parsed) <= 0
-            if left and right:
-                return APPLICABLE
+            matched = matched or (left and right)
             opened = None
         else:
             return INSUFFICIENT
     if opened is not None and compare(version, opened) >= 0:
-        return APPLICABLE
-    return INAPPLICABLE if seen else INSUFFICIENT
+        matched = True
+    return APPLICABLE if matched else INAPPLICABLE if seen else INSUFFICIENT
 
 
 def package_status(source: dict, target: Mapping[str, object]) -> tuple[str, str]:

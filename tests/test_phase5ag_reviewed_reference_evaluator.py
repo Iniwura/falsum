@@ -93,6 +93,17 @@ class MultiEcosystemReviewedSourceContract(unittest.TestCase):
         self.assertEqual(e.range_status([{"introduced": "3.2.0"},
                                          {"limit": "3.3.0"}],
                                         e.numbers("3.2.1")), e.INSUFFICIENT)
+        # An early matching interval cannot hide a subsequent unparseable event.
+        self.assertEqual(e.range_status([{"introduced": "1.0.0"},
+                                         {"fixed": "2.0.0"},
+                                         {"introduced": "2.0.0.beta1"}],
+                                        e.numbers("1.5.0")), e.INSUFFICIENT)
+        # Two valid disjoint intervals remain a supported source representation.
+        self.assertEqual(e.range_status([{"introduced": "1.0.0"},
+                                         {"fixed": "2.0.0"},
+                                         {"introduced": "3.0.0"},
+                                         {"fixed": "4.0.0"}],
+                                        e.numbers("1.5.0")), e.APPLICABLE)
 
     def test_tamper_original_byte_or_preregistration_rejected(self):
         with tempfile.TemporaryDirectory() as folder:
