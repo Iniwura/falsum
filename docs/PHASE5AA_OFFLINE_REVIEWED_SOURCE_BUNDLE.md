@@ -28,6 +28,21 @@ falsum filter-security-references \
   --out my-display-only-references.json
 ```
 
+### Copyable end-to-end demonstration (constructed response, NOT a Miner capture)
+
+The repository includes a pair of **clearly constructed** minimal local inputs, not copied third-party paid responses. After exporting the verified six-source bundle:
+
+```bash
+falsum filter-security-references \
+  --role direct_deps_dev_ghsa \
+  --request-json examples/phase5aa-constructed-request.json \
+  --response-json examples/phase5aa-constructed-response.json \
+  --reviewed-bundle reviewed-lodash-2026.json \
+  --out example-display-decision.json
+```
+
+Expected: `display_count=5`, `suppressed_count=1`, `original_external_capture_git_verified=false`, `reviewed_source_loaded_offline=true`. This illustrates the parser's local integration, **not a new original outside response**, verified paid transaction, independent adoption or expert review.
+
 The local request and response must match Phase 5Z's exact provider shape and target. An example request for the `direct_deps_dev_ghsa` role:
 
 ```json
