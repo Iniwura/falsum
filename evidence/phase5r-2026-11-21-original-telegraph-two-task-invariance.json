@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5R_VERIFIED_ORIGINAL_EXTERNAL_PAID_CANONICAL_TWOTASK_INVARIANCE",
+  "date_utc": "2026-11-21",
+  "original_experiment_protocol_commit": "10bafd6b9076e1b109bf6d580cefb44b3ead02cc",
+  "frozen_git_blob_sha1": "94b90f7276b001e1660eb53497a20611f3a6973a",
+  "source_repo": "anvithagowda098/pr-guard",
+  "source_commit": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+  "source_external_issue": "https://github.com/telegraphprotocol/bounties/issues/187",
+  "original_source_git_blobs": [
+    "90088128cb12c4b55966e72165c6a8b311fdbfb2",
+    "0b3268f57d3e21d906e51be9aebf754347e5787d"
+  ],
+  "original_actual_ci_run": "https://github.com/Iniwura/falsum/actions/runs/44857165885",
+  "original_actions_artifact_id": 14688277065,
+  "original_actions_zip_sha256": "f6c94d0506e9b39822f6f60a66e3513265846d82d970b722c297e88fbf38dadc",
+  "original_aggregate_json_sha256": "a9c620276ef2404f0571b147ffeef0b1366572c72270976a24864089d84d9ca6",
+  "ordered_100_ghsa_id_sequence_sha256": "551afad90c90bb2a3717569d33e8caa05c307f925d9f28a4a3039d53e590b2aa",
+  "original_paid_canonical_security_review_general_responses": 2,
+  "original_tasks_distinct": 2,
+  "original_reported_miner": "77003",
+  "original_http_statuses": [
+    200,
+    200
+  ],
+  "original_reports_paid": [
+    true,
+    true
+  ],
+  "original_source_verified_distinct_target_types": [
+    "JavaScript source code diff",
+    "npm lodash 4.17.15 dependency"
+  ],
+  "same_100_advisory_ids_in_same_order": true,
+  "lodash_specific_evidence_count_in_dependency_response": 0,
+  "fail_closed_target_relevance_flagged_both": true,
+  "http_200_only_baseline_mislabels_both_as_success": true,
+  "semantic_appsec_gold": 0,
+  "new_same_request_two_miner_ranking_improvement_proven": false,
+  "candidate_adapter_registered": false,
+  "new_paid_request_executed_by_falsum": false,
+  "independent_customer_or_developer_adoption_of_falsum": false,
+  "user_submitted_h2_entry": false,
+  "source_captures_available_publicly_but_raw_third_party_bodies_not_republished": true,
+  "original_pair_known_before_frozen_automated_study": true,
+  "interpretation": "Two original paid-status successful canonical requests on distinct input target categories produced the same 100 irrelevant GHSA IDs from one reported Miner. This provides reproducible real task-sensitivity coverage, not independent gold or an improved live Telegraph ranking."
+}
