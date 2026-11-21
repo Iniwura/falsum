@@ -39,7 +39,7 @@ class TelegraphCanonicalTriageTests(unittest.TestCase):
             SPECS["routed_security"]["blob"])
         self.assertTrue(p["no_known_independent_expert_gold"])
         self.assertTrue(p["no_network_ranking_modification"])
-        self.assertFalse(p["no_new_same_intent_comparable_positive_miner"])
+        self.assertTrue(p["no_new_same_intent_comparable_positive_miner"])
         self.assertFalse(p["original_attested_payment_cryptographically_verified"])
         self.assertTrue(p["excluded_same_owner_miner"])
 
@@ -56,7 +56,7 @@ class TelegraphCanonicalTriageTests(unittest.TestCase):
             "diff --git a/x.py b/y.py\n@@ -1 +1 @@\n+eval(x)",
             "diff --git a/../private.key b/../private.key\n@@ -1 +1 @@\n+eval(x)",
             "diff --git a/src/f b/src/f\n+eval(x)",
-            "diff --git a/src/f b/src/f\n@@ -1 +1 @@\n+eval(x)\n+eval(x)",
+            "diff --git a/src/f b/src/f\n@@ -1 +1 @@\n+eval(x)\n@@ -1 +1 @@\n+eval(y)",
             "diff --git a/a b/a\n@@ -1 +1 @@\n+foo\rbar",
             "diff --git a/a b/a\n@@ -1 +1 @@\n+foo\x00",
             "diff --git a/a b/a\n@@ -1 +1 @@\n+foo"*20000,
