@@ -201,7 +201,7 @@ def inspect(document: object, *, path: str, original_blob_sha1: str) -> dict:
         "reported_charge_flag": True,
         "receipt_intent": recorded_intent,
         "original_recorded_route_class": transport,
-        "original_request_url_general_route_verified": transport == "GENERAL_NETWORK_ROUTE",
+        "original_capture_url_records_general_route": transport == "GENERAL_NETWORK_ROUTE",
         "original_direct_endpoint_miner_id": direct_endpoint_miner,
         "reported_receipt_miner_onchain_registration_id_not_body_miner_id":
             receipt_registration_miner,
@@ -209,7 +209,7 @@ def inspect(document: object, *, path: str, original_blob_sha1: str) -> dict:
         "request_explicit_intent": request_intent,
         "reported_miner_id_not_verified_owner": reported_miner,
         "request_has_canonical_routed_schema": req_canonical,
-        "request_has_both_canonical_schema_and_general_network_route": truly_routed,
+        "canonical_schema_with_recorded_general_route": truly_routed,
         "canonical_request_sha256": digest if classified == KIND_ROUTED else None,
         "capture_intent_provenance_class": classified,
         "request_and_receipt_not_proof_of_advisory_correctness": True,
@@ -267,8 +267,8 @@ def study(*, root: Path = ROOT, download=fetch_bytes) -> dict:
          and sum(x["receipt_intent"] == CANONICAL for x in original) == 4,
          "original HTTP/receipt counts changed")
     need(sum(x["request_has_canonical_routed_schema"] for x in original) == 2
-         and sum(x["original_request_url_general_route_verified"] for x in original) == 2
-         and sum(x["request_has_both_canonical_schema_and_general_network_route"]
+         and sum(x["original_capture_url_records_general_route"] for x in original) == 2
+         and sum(x["canonical_schema_with_recorded_general_route"]
                  for x in original) == 2,
          "canonical request envelope and independently recorded transport disagree")
     need(all(
@@ -291,8 +291,8 @@ def study(*, root: Path = ROOT, download=fetch_bytes) -> dict:
         "original_outside_git_authenticated_capture_count": len(original),
         "observed_reported_paid_http200_count": 10,
         "original_receipts_reporting_canonical_intent_count": 4,
-        "source_urls_prove_general_network_route_count": 2,
-        "source_urls_prove_direct_miner_endpoint_count": 10,
+        "original_captures_record_general_route_count": 2,
+        "original_captures_record_direct_endpoint_count": 10,
         "receipt_miner_onchain_registration_id_to_body_miner_mapping_verified": False,
         "original_explicit_canonical_routed_request_and_receipt_count": counts[KIND_ROUTED],
         "original_direct_noncanonical_request_with_canonical_receipt_count": counts[KIND_DIRECT],
