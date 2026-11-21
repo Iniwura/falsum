@@ -75,7 +75,7 @@ Reproduce without an API key, wallet, paid Telegraph request or third-party priv
 git clone https://github.com/Iniwura/falsum.git
 cd falsum
 python -m pip install --no-deps -e .
-PYTHONPATH=src python -m falsum.phase5y_original_reviewed_version_applicability \
+PYTHONPATH=src python -m falsum.cli audit-reviewed-advisory-version \
   --out original-reviewed-version-evidence.json
 PYTHONPATH=src python -m unittest discover \
   -s tests -p 'test_phase5y_original_reviewed_version_applicability.py' -v
