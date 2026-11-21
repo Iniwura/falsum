@@ -123,7 +123,8 @@ def _decision(label:str,*,kind:str,request:object,validated:bool=False,
     target=(request.get("params",{}).get("target","")
             if isinstance(request,dict) and
             isinstance(request.get("params"),dict) else "")
-    require(type(target) is str,"invalid original request source identity")
+    if not isinstance(target,str):
+        target=""
     return {
         "decision":label,"action":action,"input_class":kind,
         "request_target_sha256":sha(target.encode("utf-8")),
