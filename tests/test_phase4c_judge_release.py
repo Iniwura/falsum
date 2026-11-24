@@ -11,6 +11,7 @@ from falsum.phase4c_judge_proof import (
     read_validated, render, write, JudgeProofError, STATUS, ROOT, TEMPLATE,
 )
 from falsum.phase4c_release import build
+from falsum.phase5am_application_evidence_site import read_validated as read_application, RECORD as APPLICATION_RECORD
 
 
 class Phase4CJudgeReleaseTests(unittest.TestCase):
@@ -99,11 +100,26 @@ class Phase4CJudgeReleaseTests(unittest.TestCase):
             with self.assertRaises(JudgeProofError):
                 read_validated(fake)
 
+    def test_application_record_tampering_fails_closed(self):
+        from falsum.phase5aj_cross_app_evidence import AuditError
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td)
+            target=root/APPLICATION_RECORD
+            target.parent.mkdir(parents=True)
+            target.write_bytes((ROOT/APPLICATION_RECORD).read_bytes()+b" ")
+            with self.assertRaisesRegex(AuditError, "aggregate changed"):
+                read_application(root)
+
     def test_full_deployment_build_preserves_both_real_and_synthetic_truths(self):
         with tempfile.TemporaryDirectory() as td:
             target=Path(td)/"public"
             with patch.object(socket.socket,"connect",side_effect=AssertionError("network used in local static build")):
                 output=build(target)
+            self.assertEqual(output["recorded_application_latest_cases"],129)
+            self.assertTrue((target/"applications/index.html").is_file())
+            application=json.loads((target/"applications/RECORDED-APPLICATION-AGGREGATES.json").read_text())
+            self.assertEqual(application,read_application())
+            self.assertFalse(application['limits']['better_than_verdict_baseline'])
             self.assertEqual(output["root_synthetic_cases"],3)
             self.assertEqual(output["root_real_python_fixture_pairs"],6)
             self.assertEqual(output["real_model_fact_matches"],3)

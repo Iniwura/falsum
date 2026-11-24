@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "status": "RECORDED_CI_AGGREGATE_NOT_LIVE_EVALUATION",
+  "date": "2026-11-24",
+  "record_type": "Exact aggregate JSON from successful historical author-run workflow logs; full original artifacts linked separately. Not an original artifact ZIP copy.",
+  "cross_app": {
+    "timestamp": "2026-11-24T08:26:31.6916016Z",
+    "aggregate": {
+      "gig_audited": {
+        "all_errors": 0,
+        "all_purchases": 30,
+        "decisions": 22,
+        "fix": 5,
+        "hold": 7,
+        "security_absent_without_explicit_failure": 7,
+        "security_answers": 15,
+        "security_explicit_failures": 0,
+        "ship": 10,
+        "ship_without_security_answer": 0
+      },
+      "gig_planted": {
+        "all_errors": 13,
+        "all_purchases": 11,
+        "decisions": 12,
+        "fix": 7,
+        "hold": 3,
+        "security_absent_without_explicit_failure": 0,
+        "security_answers": 2,
+        "security_explicit_failures": 10,
+        "ship": 2,
+        "ship_with_known_planted_bug": 1,
+        "ship_without_security_answer": 1
+      },
+      "original_git_sources_authenticated": 7,
+      "status": "PHASE5AJ_ORIGINAL_CROSS_APP_EVIDENCE_AVAILABILITY_AUDIT",
+      "truvian_contradictions": 2
+    },
+    "run_id": 45356083445,
+    "job_id": 138314253994,
+    "artifact_id": 14902790850,
+    "artifact_sha256": "sha256:45f3df543b674e1ec9f811bdec8f31c22697d7887d06cee32c13b05908b3427b"
+  },
+  "scale": {
+    "timestamp": "2026-11-24T08:31:33.3099342Z",
+    "aggregate": {
+      "all_decisions": 158,
+      "archived_not_found": 1,
+      "archived_settled": 201,
+      "errors": 70,
+      "latest_availability": {
+        "audited:NO_ANSWER_RECORD": 7,
+        "audited:RECORDED_ANSWER": 14,
+        "audited:RECORDED_FAILURE": 1,
+        "vulnerable:NO_ANSWER_RECORD": 15,
+        "vulnerable:RECORDED_ANSWER": 89,
+        "vulnerable:RECORDED_FAILURE": 3
+      },
+      "latest_metrics": {
+        "count_only": {
+          "audited:FLAG": 1,
+          "audited:PASS": 13,
+          "audited:UNKNOWN": 8,
+          "vulnerable:FLAG": 80,
+          "vulnerable:PASS": 8,
+          "vulnerable:UNKNOWN": 19
+        },
+        "falsum_consumer": {
+          "audited:FLAG": 5,
+          "audited:PASS": 9,
+          "audited:UNKNOWN": 8,
+          "vulnerable:FLAG": 89,
+          "vulnerable:UNKNOWN": 18
+        },
+        "strict_agreement": {
+          "audited:FLAG": 1,
+          "audited:PASS": 9,
+          "audited:UNKNOWN": 12,
+          "vulnerable:FLAG": 80,
+          "vulnerable:UNKNOWN": 27
+        },
+        "verdict_only": {
+          "audited:FLAG": 5,
+          "audited:PASS": 9,
+          "audited:UNKNOWN": 8,
+          "vulnerable:FLAG": 89,
+          "vulnerable:UNKNOWN": 18
+        }
+      },
+      "no_hint_cases": 98,
+      "no_hint_count_only": {
+        "audited:FLAG": 1,
+        "audited:PASS": 13,
+        "audited:UNKNOWN": 8,
+        "vulnerable:FLAG": 52,
+        "vulnerable:PASS": 7,
+        "vulnerable:UNKNOWN": 17
+      },
+      "no_hint_falsum_consumer": {
+        "audited:FLAG": 5,
+        "audited:PASS": 9,
+        "audited:UNKNOWN": 8,
+        "vulnerable:FLAG": 59,
+        "vulnerable:UNKNOWN": 17
+      },
+      "purchases": 202,
+      "reruns": 29,
+      "unique_cases": 129
+    },
+    "run_id": 45356819921,
+    "job_id": 138316636056,
+    "artifact_id": 14901884473,
+    "artifact_sha256": "sha256:61be36e839f1a80d2196d59cd6b2b1cf956a7c9c599957f9f08427e00a5982de"
+  },
+  "limits": {
+    "security_clearance_granted": false,
+    "independent_adoption_proved": false,
+    "independent_expert_gold_proved": false,
+    "registered_network_evaluator": false,
+    "network_ranking_improvement_proved": false,
+    "live_settlement_verified": false,
+    "live_inference": false,
+    "better_than_verdict_baseline": false,
+    "blind_holdout": false
+  },
+  "source_url": "https://github.com/swiftbotlabs/gig-guard/blob/aa495fe5cd713c41e89698dc20463c5d6dade8fd/eval/scale/RESULTS.md",
+  "collaboration_url": "https://github.com/Iniwura/falsum/issues/97"
+}
