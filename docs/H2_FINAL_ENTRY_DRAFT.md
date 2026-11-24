@@ -6,7 +6,8 @@
 **Track:** Evaluators  
 **Intent:** SECURITY_REVIEW_GENERAL (shared scoring family SECURITY_REVIEW)  
 **Project:** FALSUM  
-**Current release checkpoint:** November 24, 2026; [5-minute evidence-first judge start](H2_NOV24_JUDGE_START.md).  
+**Current release checkpoint:** November 24, 2026; [5-minute evidence-first judge start](H2_NOV24_JUDGE_START.md).
+**Internal completion target:** Sunday, November 22, 2026. Historical build target, now elapsed; this is not the official deadline, authorization to submit, or evidence of readiness.  
 **Actual official deadline:** December 1, 2026 at 23:59 UTC
 
 ## Current judge and production checkpoint — 24 November 2026
