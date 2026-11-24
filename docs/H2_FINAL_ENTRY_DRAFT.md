@@ -1,5 +1,51 @@
 # FALSUM — Telegraph Season II final entry (form-ready draft)
 
+**STATUS: NOT SUBMITTED.** Current concise form answers are below; the older dated evidence is preserved further down for provenance only.
+
+## Current form answers — verified November 24, 2026
+
+**Project:** FALSUM  
+**Track:** Evaluators  
+**Intent:** SECURITY_REVIEW_GENERAL  
+**Deadline:** December 1, 2026, 23:59 UTC  
+**Repository:** https://github.com/Iniwura/falsum  
+**Live application evidence:** https://falsum-evidence-lab.vercel.app/applications/  
+**Judge guide:** https://github.com/Iniwura/falsum/blob/main/docs/H2_NOV24_JUDGE_START.md
+
+### Short project description
+
+FALSUM builds reproducible evaluation material for AI security-review intelligence. It checks whether security conclusions follow authenticated source evidence, exact dependency versions and recorded request/receipt context. It includes historical application replays, original upstream security regression execution, explicit uncertainty controls and portable integrity checks for applications consuming Telegraph responses.
+
+### What was built and measured
+
+- **Real Telegraph contribution:** 20/20 material rows are Eligible for the entrant-reported Privy address in the [November 24 live read-only recheck](https://github.com/Iniwura/falsum/actions/runs/45490538616). This is material status, not organizer acceptance, cryptographic account ownership or an approved scoring adapter.
+- **Application failure coverage:** [129 historical contract cases](https://github.com/Iniwura/falsum/actions/runs/45356819921), 158 recorded decision events and 202 purchase records. Eight count-only vulnerable-label PASS predictions are avoided by FALSUM, which ties verdict-only on this population. Labels are externally published, not independently adjudicated expert gold.
+- **Developer-confirmed response integrity:** [Original nine-fixture replay](https://github.com/Iniwura/falsum/actions/runs/45476259143) finds three documented missing-code cases: verdict-only admits 3/3 unsupported clean candidates, Secure plus zero count admits 2/3, FALSUM admits 0/3. Two fixtures were confirmed by the original maintainer. These are bounded retrospective outcomes, not nine unique paid requests.
+- **Solana / Anchor coverage:** [Source-verified advisory replay](https://github.com/Iniwura/falsum/actions/runs/45489641572) matches 12/12 constructed dependency queries versus 3/12 for citation-only. A correct range-aware baseline is equivalent. [Actual original Rust regression](https://github.com/Iniwura/falsum/actions/runs/45490186795): affected revision 3/4 tests passed with the expected security assertion failure; fixed revision 4/4 passed. No live Solana deployment or provider-ranking improvement is claimed.
+- **Caller context:** [17/17 constructed controls](https://github.com/Iniwura/falsum/actions/runs/45477939270) matched the precommitted policy expectations, with 9/9 to 0/9 unsupported clean candidates and 4/4 clean controls preserved. The new gate uses extra caller information, so this is coverage, not a learned accuracy gain.
+
+### Reproduction and developer evidence
+
+The [five-minute judge route](H2_NOV24_JUDGE_START.md) links live evidence, the no-key reviewer workflow and original test results. [Public maintainer feedback and four dated progress-update days](H2_VERIFIED_GROWTH_EVIDENCE.md) document real Gig Guard and Truvian Shield feedback. [Solana reproduction invitation](https://github.com/Iniwura/falsum/issues/113) is open; no response or independent integration confirmed.
+
+### Current verified production release
+
+[PR #112](https://github.com/Iniwura/falsum/pull/112) passed 16 PR workflows and Vercel preview. Production deployment [dpl_DCUspCvDULXLiJXeb3kEZm8cGBbW](https://vercel.com/iniwura-akurus-projects/falsum-evidence-lab/DCUspCvDULXLiJXeb3kEZm8cGBbW) was READY on exact main commit `dd89602940cd2a900af33c85edd19e549999feda`. [Chromium verification](https://github.com/Iniwura/falsum/actions/runs/45490538700) passed 1440/768/390/320px with no page errors. This is a dated release checkpoint, not a permanent current SHA or an independent live HTTP attestation.
+
+### Remaining form fields and permissions (do not invent)
+
+- Entrant contact and account details: complete through signed-in official portal.
+- Required bounties repository star: previously entrant-reported, not authenticated in this audit.
+- Demo link or approved accessible equivalent: not supplied or published.
+- Showcase permissions: entrant must decide.
+- Official submission receipt: absent. Do not mark submitted until actual portal confirmation.
+
+**Limitations:** No independently verified generalization, qualified expert gold, accepted outside integration, registered improved model, or paid customer adoption. Negative model findings are retained; no claim of a 90+ organizer score.
+
+---
+
+## Historical supporting draft (not current form answers)
+
 **STATUS: NOT SUBMITTED.** This document is public-safe text, not an H2 confirmation receipt, network adapter registration, bounty acceptance or proof that a 2–5 minute video exists. Only fill the remaining fields with genuine evidence.
 
 **Official competition:** [Telegraph Season II](https://hackathon.telegraphprotocol.com/)  
