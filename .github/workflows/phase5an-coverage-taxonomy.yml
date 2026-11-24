@@ -1,0 +1,43 @@
+name: Phase 5AN - source maintainer coverage clarification
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/falsum/phase5an_coverage_taxonomy.py'
+      - 'tests/test_phase5an_coverage_taxonomy.py'
+      - 'data/phase5aj-cross-app-evidence-protocol.json'
+      - 'data/phase5ak-external-label-baseline-protocol.json'
+      - '.github/workflows/phase5an-coverage-taxonomy.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/falsum/phase5an_coverage_taxonomy.py'
+      - 'tests/test_phase5an_coverage_taxonomy.py'
+      - 'data/phase5aj-cross-app-evidence-protocol.json'
+      - 'data/phase5ak-external-label-baseline-protocol.json'
+      - '.github/workflows/phase5an-coverage-taxonomy.yml'
+permissions:
+  contents: read
+jobs:
+  coverage:
+    name: Original application coverage taxonomy / Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: ${{ matrix.python }}
+      - run: PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase5an_coverage_taxonomy.py' -v
+      - run: PYTHONPATH=src python -m falsum.phase5an_coverage_taxonomy --out phase5an-report.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: phase5an-coverage-taxonomy-${{ matrix.python }}
+          path: phase5an-report.json
+          if-no-files-found: error
