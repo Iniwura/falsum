@@ -19,6 +19,8 @@ The proposed consumer policy is expected to prevent eight count-only false passe
 
 The full ledger retains earlier attempts but the latest-by-case comparison uses each case once. Abbreviated addresses are matched only by a collision-rejecting transformation against the authenticated manifest. Explicit failure differs from no recorded answer. The archived check lists 201 settled and one NOT_FOUND, not 202 independently verified live settlements. We compare archived status metadata, not current payment proof.
 
+The first original-source run rejected the missing `hint` field in the audited controls. All 22 audited rows omit it; the source publisher's [scorer](https://github.com/swiftbotlabs/gig-guard/blob/aa495fe5cd713c41e89698dc20463c5d6dade8fd/eval/scale/score.mjs) uses `!it.hint`. The parser now reproduces that documented convention only for audited rows and rejects missing or malformed vulnerable-row hints. The frozen protocol, source identities, population and expected metrics are unchanged. [First fail-closed run](https://github.com/Iniwura/falsum/actions/runs/45356686227/job/138316220251).
+
 ## Reproduce
 
 Python 3.11+, network access to pinned GitHub raw files. No wallet, key or new purchases.

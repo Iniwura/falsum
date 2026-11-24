@@ -32,6 +32,14 @@ class PolicyTests(unittest.TestCase):
     def test_bounded_positive(self):
         self.assertEqual(p.predictions({"verdict": "Secure", "vulnerability_count": 0})["falsum_consumer"], "PASS")
 
+    def test_source_hint_convention(self):
+        out = p.label_index({"items": [{"name": "control.sol", "label": "audited"}]})
+        self.assertIs(out["control.sol"]["hint"], False)
+        with self.assertRaises(p.AuditError):
+            p.label_index({"items": [{"name": "vulnerable.sol", "label": "vulnerable"}]})
+        with self.assertRaises(p.AuditError):
+            p.label_index({"items": [{"name": "control.sol", "label": "audited", "hint": None}]})
+
     def test_abbreviation_collision(self):
         a = "x_0x1234" + "a"*32 + "5678.sol"
         b = "x_0x1234" + "b"*32 + "5678.sol"

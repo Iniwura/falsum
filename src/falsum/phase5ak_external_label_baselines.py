@@ -32,8 +32,13 @@ def label_index(manifest):
         name = display_name(item["name"])
         require(name not in out, "ambiguous abbreviated case name")
         require(item["label"] in {"audited", "vulnerable"}
-                and type(item["hint"]) is bool, "invalid case label or hint")
-        out[name] = item
+                and (type(item.get("hint")) is bool or
+                     ("hint" not in item and item["label"] == "audited")),
+                "invalid case label or hint")
+        # Original scale/score.mjs uses !it.hint. Its 22 audited controls
+        # omit the field entirely; reproduce that convention without guessing
+        # missing hint values for vulnerable cases.
+        out[name] = dict(item, hint=item.get("hint", False))
     return out
 
 
