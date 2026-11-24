@@ -5,6 +5,10 @@
 
 [Final readiness checkpoint](H2_FINAL_READINESS_CHECKPOINT.md) — evidence and remaining eligibility gates. [Phase 5AT caller-context extension](PHASE5AT_CALLER_CONTEXT_INTEGRITY.md) adds a separate optional fail-closed interface: 17/17 constructed outcomes matched, with 9/9 to 0/9 unsupported clean candidates and 4/4 clean controls preserved in the [successful foundation workflow](https://github.com/Iniwura/falsum/actions/runs/45477939270). This is additional caller-informed policy coverage, not a historical or learned-model accuracy improvement.
 
+## Solana application security coverage
+
+[Phase 5AU: Anchor / Rust advisory evaluation](PHASE5AU_SOLANA_ANCHOR_EVIDENCE.md) is merged and verified by [original-source CI](https://github.com/Iniwura/falsum/actions/runs/45489641572). A reviewed Anchor advisory and pinned affected/fixed source authenticate the evidence for 12 constructed dependency queries. A citation-only baseline matches 3/12 expected policy outcomes; the range-aware evaluator matches 12/12, with unsupported applicability decisions reduced from nine to zero. An ordinary correct range-aware baseline would be equivalent. This is new Solana-oriented evaluation material, not live network inference or adoption. [Separate original upstream Rust runtime replay](https://github.com/Iniwura/falsum/pull/111) remains pending verification.
+
 ## The problem
 
 A security-review response can be fluent, paid-flagged and still fail its actual task: it may return unrelated advisories, use the wrong Intent or claim that a vulnerability is fixed without authentic source evidence. In the [independently published PR Guard report](https://github.com/telegraphprotocol/bounties/issues/187), a canonical security-review request about lodash returned an unrelated bulk advisory feed. This is a documented integration failure candidate, **not** proof of faulty onchain settlement, a published benchmark ranking or security exploitation.
