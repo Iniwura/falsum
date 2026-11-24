@@ -79,6 +79,13 @@ jobs:
             --ecosystem RubyGems --package rack --version 3.0.5 \
             --reference GHSA-7mqq-6cf9-v2qp \
             --out reviewer-results/constructed-rack-prerelease-uncertainty.json
+      - name: Reproduce original cross-app availability and complete external-label policy comparison
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5aj_cross_app_evidence.py' -v
+          python -m unittest discover -s tests -p 'test_phase5ak_external_label_baselines.py' -v
+          python -m falsum.phase5aj_cross_app_evidence --out reviewer-results/original-cross-app-availability.json
+          python -m falsum.phase5ak_external_label_baselines --out reviewer-results/original-external-label-policy-comparison.json
       - name: Assert original external count, sanitized output and no false independence claim
         run: |
           set -euo pipefail
@@ -135,12 +142,58 @@ jobs:
               assert '"bodyText"' not in content
               assert '"payer"' not in content
               assert '"advisoryKeys"' not in content
+          cross=json.loads((folder/'original-cross-app-availability.json').read_text())
+          scale=json.loads((folder/'original-external-label-policy-comparison.json').read_text())
+          assert cross['original_git_sources_authenticated']==7
+          assert len(cross['truvian'])==2
+          assert all(x['diagnostic']=='EXPLICIT_NO_EVIDENCE_CONTRADICTION' and x['security_clearance_granted'] is False for x in cross['truvian'])
+          assert cross['gig_planted']['counts']['security_explicit_failures']==10
+          assert cross['gig_planted']['counts']['ship_with_known_planted_bug']==1
+          assert cross['gig_audited']['counts']['security_absent_without_explicit_failure']==7
+          assert cross['gig_planted']['archived_receipts_matched']+cross['gig_audited']['archived_receipts_matched']==41
+          assert cross['security_clearance_granted'] is False
+          assert cross['new_network_ranking_proved'] is False
+          assert cross['gig_planted']['live_settlement_verified'] is False
+          assert cross['gig_audited']['live_settlement_verified'] is False
+          assert scale['source_git_objects_authenticated']==3
+          assert scale['summary']['unique_cases']==129 and scale['summary']['all_decisions']==158
+          assert scale['summary']['purchases']==202 and scale['summary']['errors']==70
+          assert scale['summary']['archived_settled']==201 and scale['summary']['archived_not_found']==1
+          metrics=scale['summary']['latest_metrics']
+          assert metrics['count_only']['vulnerable:PASS']==8
+          assert metrics['falsum_consumer']==metrics['verdict_only']
+          assert metrics['falsum_consumer'].get('vulnerable:PASS',0)==0
+          assert metrics['falsum_consumer']['audited:FLAG']==5
+          assert metrics['count_only']['audited:FLAG']==1
+          assert scale['better_than_verdict_baseline'] is False
+          assert scale['security_clearance_granted'] is False
+          assert scale['live_settlement_verified'] is False
+          assert all(v is True for v in scale['limits'].values())
+          assert all(v is False for v in cross['limits'].values())
+          for report in (cross, scale):
+              for forbidden in ('payer','summary','result','receipt_hash','bodyText'):
+                  # The top-level scale aggregate is explicitly named summary;
+                  # no raw response fields or payer metadata are published.
+                  if forbidden!='summary':
+                      assert '"'+forbidden+'":' not in json.dumps(report)
           result={
             'schema_version':1,
             'status':'FALSUM_PUBLIC_REVIEWER_REPLAY_COMPLETED_NO_INDEPENDENT_ACCEPTANCE',
             'source_replay_original_verified_git_blobs':12,
             'source_replay_ghsa_git_blobs_verified':6,
             'separate_multiecosystem_reviewed_ghsa_git_blobs_verified':3,
+            'cross_app_original_git_objects_verified':7,
+            'scale_original_git_objects_verified':3,
+            'scale_latest_cases':129,
+            'scale_historical_receipt_statuses':{'SETTLED':201,'NOT_FOUND':1},
+            'scale_count_only_vulnerable_pass_predictions':8,
+            'scale_falsum_vulnerable_pass_predictions':0,
+            'scale_falsum_equals_verdict_only':True,
+            'scale_live_settlement_verified':False,
+            'sha256_cross_app_report':hashlib.sha256(
+              (folder/'original-cross-app-availability.json').read_bytes()).hexdigest(),
+            'sha256_external_label_policy_report':hashlib.sha256(
+              (folder/'original-external-label-policy-comparison.json').read_bytes()).hexdigest(),
             'new_package_inputs_are_constructed':True,
             'new_reviewed_reference_expected_statuses':{
               'npm_axios_1_5_0':['VERIFIED_APPLICABLE'],
@@ -181,6 +234,6 @@ jobs:
         run: |
           echo '## Public reviewer replay' >> "$GITHUB_STEP_SUMMARY"
           echo 'The original sources were authenticated against their immutable Git blob identities. The constructed filtering sample is NOT an independent Miner result.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'The public-safe artifact includes the reproduction manifest, 12-capture receipt census, one constructed lodash filter decision and three constructed Axios/Rack reference reports.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The public-safe artifact includes the receipt census, constructed package exercises, original cross-app availability audit and original 129-case policy comparison, with each report fingerprinted in the manifest.' >> "$GITHUB_STEP_SUMMARY"
           echo 'The multi-ecosystem results authenticate three separate pinned GitHub-reviewed source blobs. They are not independent expert security labels or a current complete advisory feed.' >> "$GITHUB_STEP_SUMMARY"
           echo 'A forked workflow alone does not prove independent authorship, accuracy of source labels, confirmed payment or adoption. To challenge or contribute, use the independent reviewer guide and issue form.' >> "$GITHUB_STEP_SUMMARY"

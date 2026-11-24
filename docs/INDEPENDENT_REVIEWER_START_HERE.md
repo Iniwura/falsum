@@ -4,12 +4,15 @@
 
 This is a public, reproducible developer review task for [FALSUM](https://github.com/Iniwura/falsum), a **Telegraph Season II Evaluators hackathon entry** focused on source-grounded security-review evidence. It is not a promise of a payment, reward, credential, approved network evaluator or validated scoring improvement.
 
-## What to test (three public-source exercises with distinct provenance)
+## What to test (five public-source exercises with distinct provenance)
 
 1. **Receipt/Intent comparability.** FALSUM re-fetches 12 historical captures independently published in PR Guard's public GitHub repository, checks each complete original Git blob SHA-1, and compares the **actual request envelope** with the **reported receipt Intent**. The expected observed partition is **2** explicit canonical requests with matching receipts, **2** direct requests with canonical-reported receipts, **6** HTTP 200 captures with different reported receipt Intents, and **2** unsuccessful records lacking a successful receipt. The exact canonical request of neither routed capture was answered by a different reported Miner in this frozen sample. This is not a fair Miner leaderboard.
 2. **Package/version reference filtering.** FALSUM independently authenticates six complete GitHub-reviewed GHSA source records and rechecks a **constructed local** lodash 4.17.15 response. It should display **5** version-applicable advisory references and suppress **1** version-inapplicable reference (GHSA-f23m-r3pf-42rh). The local response is deliberately constructed and **is not an independent outside Miner response**.
 
 3. **New npm/RubyGems advisory source cases.** The one-click replay separately authenticates three complete GitHub-reviewed advisory blobs covering npm/axios and RubyGems/rack. Three **constructed** reviewer targets check an Axios version-applicable reference, an old-vs-new Rack version distinction and conservative abstention on an unsupported prerelease interval. The source corpus and original 13 precommitted assertions remain unchanged. This is not a general current vulnerability scanner or independent expert-labelled benchmark.
+
+4. **Cross-app availability.** Reproduce the [Truvian and Gig Guard audit](PHASE5AJ_CROSS_APP_EVIDENCE_AVAILABILITY.md) from seven original Git objects: two explicit missing-input contradictions, 34 recorded decisions, 41 archived purchase joins. Distinguish the ten explicit failures in the planted run from the seven missing records in audited-v7.
+5. **Complete historical external-label comparison.** Reproduce the [129-case comparison](PHASE5AK_EXTERNAL_LABEL_BASELINES.md) from three original Git objects. All 158 decision events and 202 purchases are reconciled (201 archived SETTLED, one NOT_FOUND). FALSUM avoids eight count-only vulnerable-label PASS predictions, ties verdict-only, and flags four additional audited controls versus count-only. These are retrospective policy predictions, not learned model or ranking improvement.
 
 The distinction between original outside captures, reviewed GitHub advisory sources and constructed demonstration inputs is material. Original source records are not independent expert security gold, proof of paid onchain settlement, proof of external adoption or a registered network evaluator.
 
@@ -17,7 +20,7 @@ The distinction between original outside captures, reviewed GitHub advisory sour
 
 1. Fork [Iniwura/falsum](https://github.com/Iniwura/falsum).
 2. In **your fork**, enable GitHub Actions if GitHub prompts you. Open **Actions → Independent Reviewer Replay - public evidence only → Run workflow** on your fork's default branch. GitHub may require the workflow file to be on the fork's default branch before manual dispatch is available.
-3. Inspect the actual job's green/red steps, not merely a screenshot. Download its **falsum-public-reviewer-replay** Actions artifact. It contains `reproduction-manifest.json`, `original-12-receipt-comparability.json`, `constructed-local-display-decision.json`, `constructed-axios-source-decision.json`, `constructed-rack-source-decisions.json`, and `constructed-rack-prerelease-uncertainty.json`. Check the source count, provenance classes, distinct reported-Miner comparison count and the filtered GHSA.
+3. Inspect the actual job's green/red steps, not merely a screenshot. Download its **falsum-public-reviewer-replay** Actions artifact. It contains `reproduction-manifest.json`, `original-12-receipt-comparability.json`, `constructed-local-display-decision.json`, `constructed-axios-source-decision.json`, `constructed-rack-source-decisions.json`,  `constructed-rack-prerelease-uncertainty.json`, `original-cross-app-availability.json`, and `original-external-label-policy-comparison.json`. Check the source count, provenance classes, distinct reported-Miner comparison count and the filtered GHSA.
 4. Try to **falsify** an assumption: inspect any original pinned source link in the report and decide whether the request/receipt classification matches the published input. A failed run, a contrary finding or an unclear item is more valuable than a rubber stamp.
 5. If willing, report the **actual public workflow run URL** and your specific findings in [the external reproduction issue form](https://github.com/Iniwura/falsum/issues/new?template=independent-public-reproduction.yml). Use your own GitHub account. No submission of keys, paid receipt secrets, wallets or nonpublic cases is requested.
 
@@ -54,6 +57,13 @@ On Windows PowerShell, use `$env:PYTHONPATH = 'src'` in that terminal session, t
 
 Each CLI writes a **new file only** and deliberately refuses to overwrite an existing output. Change the filename or delete the old local output before repeating. This avoids silent mutation of a reviewer result.
 
+To reproduce the two application audits separately, with the same module path:
+
+```bash
+python -m falsum.phase5aj_cross_app_evidence --out original-cross-app-availability.json
+python -m falsum.phase5ak_external_label_baselines --out original-external-label-policy-comparison.json
+```
+
 ### Expected outcomes
 
 | Check | Expected |
@@ -71,6 +81,11 @@ Each CLI writes a **new file only** and deliberately refuses to overwrite an exi
 | Constructed npm Axios 1.5.0 reference | VERIFIED_APPLICABLE |
 | Constructed RubyGems Rack 3.2.5 older/newer references | VERIFIED_INAPPLICABLE / VERIFIED_APPLICABLE |
 | Constructed RubyGems Rack 3.0.5 prerelease range | INSUFFICIENT_EVIDENCE |
+| Original cross-app files / decision records / archived purchase joins | 7 / 34 / 41 |
+| Full scale ledger decision events / latest cases / recorded purchases | 158 / 129 / 202 |
+| Scale receipt archive SETTLED / NOT_FOUND | 201 / 1 |
+| Vulnerable-label PASS predictions, count only / FALSUM | 8 / 0 |
+| FALSUM beats verdict-only on scale data | No — exact tie |
 | New qualified independent source labels from these examples | 0 |
 | Historical snapshot counts as current advisory completeness | No |
 | Original external Miner provenance of constructed local response | No |

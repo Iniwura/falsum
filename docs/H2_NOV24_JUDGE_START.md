@@ -9,6 +9,19 @@ A security-review response can be fluent, paid-flagged and still fail its actual
 
 **FALSUM's contribution:** reproducible *evaluation material* that tests whether claims follow immutable original source and version evidence, exposes unsupported conclusions, and keeps unlike request/receipt types out of unfair comparisons. This is a source-grounded evaluation testbed, not an improved registered neural evaluator or comprehensive vulnerability scanner.
 
+## The latest measured application result
+
+Two Mission 14 applications, Truvian Shield and Gig Guard, independently published the underlying security-intelligence failure records. FALSUM's [cross-app audit](PHASE5AJ_CROSS_APP_EVIDENCE_AVAILABILITY.md) authenticated seven original Git files and checked 34 decision records and 41 archived receipt joins. The [complete historical scale comparison](PHASE5AK_EXTERNAL_LABEL_BASELINES.md) separately replays 158 decision events, 129 latest labeled contracts and 202 purchases (201 archived SETTLED, one NOT_FOUND). These populations are **not necessarily disjoint**; do not add them to claim a larger unique-case dataset.
+
+| Policy | Vulnerable flagged / 107 | Vulnerable PASS | Vulnerable unknown | Audited controls flagged / 22 |
+| --- | ---: | ---: | ---: | ---: |
+| Count only | 80 | 8 | 19 | 1 |
+| Verdict only | 89 | 0 | 18 | 5 |
+| Strict field agreement | 80 | 0 | 27 | 1 |
+| FALSUM consumer | 89 | 0 | 18 | 5 |
+
+The bounded policy avoids eight count-only unsafe pass predictions, **ties verdict-only** and increases flags on audited controls. Audited contracts are not certified bug-free; those flags are not verified false positives. PASS is a policy prediction, never security clearance. [Actual successful scale replay](https://github.com/Iniwura/falsum/actions/runs/45356819921). [Cross-app replay](https://github.com/Iniwura/falsum/actions/runs/45356083445). [Open collaboration request](https://github.com/Iniwura/falsum/issues/97) — no outside response or adoption confirmed.
+
 ## Try it in five minutes
 
 ### 1. Witness a real historical source regression (60–90 seconds)
@@ -21,7 +34,7 @@ The workbench's **80 typed outcomes** are deliberately *constructed controls*: 1
 
 [Fork the public repository](https://github.com/Iniwura/falsum) → Actions → **Independent Reviewer Replay - public evidence only** → Run workflow. The Action needs no wallet, secret, paid request or model download. Inspect its public-safe artifact `falsum-public-reviewer-replay` and report exact contradictions using the [independent reproduction form](https://github.com/Iniwura/falsum/issues/new?template=independent-public-reproduction.yml).
 
-It authenticates **12 independently published receipt captures**, **6 historical reviewed GHSA files**, and **3 separate Axios/Rack reviewed GHSA files**. Its constructed tests show an applicable Axios advisory, opposing Rack version outcomes, and an `INSUFFICIENT_EVIDENCE` result where prerelease semantics are not supported. It also runs routing and tampered-lock counterexamples.
+It authenticates **12 independently published receipt captures**, **6 historical reviewed GHSA files**, **3 separate Axios/Rack reviewed GHSA files**, and the pinned original cross-app and scale records. The two application reports retain separate provenance and historical receipt status boundaries. Its constructed tests show an applicable Axios advisory, opposing Rack version outcomes, and an `INSUFFICIENT_EVIDENCE` result where prerelease semantics are not supported. It also runs routing and tampered-lock counterexamples.
 
 [Original author-run PR #94 replay (successful)](https://github.com/Iniwura/falsum/actions/runs/45319267361) produced public-safe artifact ID `14885889459`. **An owner-run workflow is not independent adoption.** An outside developer's actual fork run and critique are still awaited.
 
@@ -53,7 +66,7 @@ Try changing the target version to `1.6.0` with a new output filename. Expect `V
 | Six historical and three new upstream GitHub-reviewed advisory blobs; bounded per-reference decisions | Complete or fresh advisory feed, arbitrary-package support, or package security clearance |
 | 13 source-backed, preregistered **constructed** Axios/Rack cases, plus new adversarial parser checks | New blind holdout, outside model evaluation, or general model recall |
 | One-click public fork workflow and author-controlled real CI artifact | A verified outside fork replay, integration, retention or independent reviewer |
-| Production Vercel deployment on exact merged SHA `4ef69c601cc3bd65c171fa329208b102e6ac0182`, READY; **8/8** successful post-merge workflows as checked November 24 | Browser-time arbitrary model scoring endpoint or official Telegraph network registration |
+| Production Vercel deployment verified at the Phase 5AK checkpoint `8df1942791dc2fcd1b9de4ae5bdf46624839d62a`, READY; **6/6** successful post-merge workflows as checked November 24; see [latest freshness workflow](https://github.com/Iniwura/falsum/actions/workflows/phase5e-live-production-source-freshness.yml) | Browser-time arbitrary model scoring endpoint or official Telegraph network registration |
 
 The historic 12-response audit observed **2** canonical routed requests with matching reported receipt Intents, **2** direct requests with canonical-reported receipts, **6** successful outputs with noncanonical receipt Intents, and **2** failed captures without successful receipts. There are **zero** pairs proving different miners answered the *same exact* canonical request. Do not turn these into a fair ranking. Source Git authenticity does not independently authenticate payment.
 
