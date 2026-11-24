@@ -1,6 +1,6 @@
 # Phase 5AJ — cross-application security evidence availability
 
-**In progress: author CI must authenticate and replay the frozen originals before any new measured outcome is claimed.** This is an Evaluators contribution for `SECURITY_REVIEW_GENERAL`; not a new Apps & Agents entry.
+**Verified November 24, 2026:** [actual original-source run](https://github.com/Iniwura/falsum/actions/runs/45356083445) succeeded, artifact 14902790850, SHA-256 `45f3df543b674e1ec9f811bdec8f31c22697d7887d06cee32c13b05908b3427b`. PR #96 passed 22/22 checks and merged; all 8 post-merge workflows passed. This is an Evaluators contribution for `SECURITY_REVIEW_GENERAL`; not a new Apps & Agents entry.
 
 ## Real downstream failure and contribution
 
@@ -23,7 +23,7 @@ PYTHONPATH=src python -m falsum.phase5aj_cross_app_evidence --out phase5aj-origi
 
 On PowerShell set `$env:PYTHONPATH = 'src'` once, then run the commands without the leading environment assignment. The report is create-only. [Fork and manually run the dedicated GitHub Actions workflow](../.github/workflows/phase5aj-cross-app-evidence.yml) for a public-safe result artifact. No external source code is executed. The source bytes must match each original Git object before parsing.
 
-## What the frozen protocol is designed to test
+## Verified original-source results
 
 | Source population | Expected answer availability | Distinction |
 | --- | --- | --- |
@@ -31,7 +31,7 @@ On PowerShell set `$env:PYTHONPATH = 'src'` once, then run the commands without 
 | Gig Guard original planted decision set (12 cases) | 2 security answers, 10 explicit failures | Includes one recorded SHIP with a known planted bug and no security answer; missing review is not evidence of safety |
 | Gig Guard audited-v7 recorded decision set (22 cases) | 15 security answers, 7 no answer records | Missing record is **not** a reported provider failure; audited controls are not independently proven bug-free |
 
-The counts above are preregistered expected results from the independent developers' published records, not yet a new FALSUM CI outcome. The report keeps request/settlement Miner namespaces distinct, checks archived receipt hashes, amount, Intent and epoch, and verifies that every labelled decision and purchase is accounted for. It does not fetch the live receipt node or make a new request. An archived receipt-status check is not fresh settlement proof.
+The actual original-source CI output matches the preregistered historical counts. These are FALSUM retrospective measurements of the independent developers' published records, not new inference or developer adoption. The report keeps request/settlement Miner namespaces distinct, checks archived receipt hashes, amount, Intent and epoch, and verifies that every labelled decision and purchase is accounted for. It does not fetch the live receipt node or make a new request. An archived receipt-status check is not fresh settlement proof.
 
 ## Reviewer next step
 

@@ -10,7 +10,11 @@
 **Internal completion target:** Sunday, November 22, 2026. Historical build target, now elapsed; this is not the official deadline, authorization to submit, or evidence of readiness.  
 **Actual official deadline:** December 1, 2026 at 23:59 UTC
 
-## Current judge and production checkpoint — 24 November 2026
+## Latest measured application evidence — 24 November 2026
+
+[Phase 5AJ](PHASE5AJ_CROSS_APP_EVIDENCE_AVAILABILITY.md) and [Phase 5AK](PHASE5AK_EXTERNAL_LABEL_BASELINES.md) are merged and verified. Two separately authored Mission 14 apps supply original published source records. The full scale comparison includes 129 latest contract labels, 158 decision events, 202 purchases and 70 errors. The original archive reports 201 SETTLED and one NOT_FOUND. The FALSUM consumer policy flags 89/107 vulnerable-labeled cases and gives zero vulnerable-label PASS predictions versus eight count-only; it ties verdict-only and flags five rather than one audited controls. This is retrospective evaluation material, not security clearance, independent expert gold, paid inference by FALSUM, outside adoption, or network ranking improvement. The two original reports and all limitations are linked from the [judge guide](H2_NOV24_JUDGE_START.md). The release checkpoint `8df1942791dc2fcd1b9de4ae5bdf46624839d62a` matched Vercel READY and six successful post-merge workflows. [Reviewer request #97](https://github.com/Iniwura/falsum/issues/97) is open, without a verified outside response at this checkpoint.
+
+## Earlier judge and production checkpoint — 24 November 2026
 
 - **Verified production:** Vercel reports existing owned project `falsum-evidence-lab` READY on deployment `dpl_DN4yMnNdqqi8un4fdB3heAtuqEVg`, Git commit `4ef69c601cc3bd65c171fa329208b102e6ac0182` (Phase 5AI), matching `main` at this checkpoint.
 - **Merged engineering:** [Phase 5AH #93](https://github.com/Iniwura/falsum/pull/93) passed 35/35 PR checks, [Phase 5AI #94](https://github.com/Iniwura/falsum/pull/94) passed 50/50 PR checks. Latest `main` post-merge runs succeeded **8/8**, including production witness HTTPS check.

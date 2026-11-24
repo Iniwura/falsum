@@ -2,7 +2,7 @@
 
 ## Start here: a five-minute reproducible judge route
 
-**[Open the FALSUM judge guide](docs/H2_NOV24_JUDGE_START.md)** to see the live original-source witness, reproduce the no-key independent reviewer workflow, test an authenticated Axios/Rack advisory decision, and inspect the actual failed-model baseline. The guide separates verified evidence from constructed test inputs and lists the remaining Season II submission obligations. Production currently serves `4ef69c60`; the official entry is **not submitted**.
+**[Open the FALSUM judge guide](docs/H2_NOV24_JUDGE_START.md)** to see the live original-source witness, reproduce the no-key independent reviewer workflow, test an authenticated Axios/Rack advisory decision, and inspect the actual failed-model baseline. The guide separates verified evidence from constructed test inputs and lists the remaining Season II submission obligations. The [latest measured application comparison](docs/PHASE5AK_EXTERNAL_LABEL_BASELINES.md) covers 129 externally labeled contracts and 202 historical purchase records. FALSUM avoids eight count-only vulnerable-label PASS predictions but ties verdict-only. The public release was verified on `8df19427` (Phase 5AK); the official entry is **not submitted**.
 
 ## What FALSUM does, and does not yet do
 
