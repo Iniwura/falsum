@@ -1,0 +1,45 @@
+name: Phase 5AP - original SmartBugs annotation and selection audit
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/falsum/phase5ap_upstream_selection.py'
+      - 'tests/test_phase5ap_upstream_selection.py'
+      - 'src/falsum/phase5ak_external_label_baselines.py'
+      - 'src/falsum/phase5an_coverage_taxonomy.py'
+      - 'data/phase5ak-external-label-baseline-protocol.json'
+      - '.github/workflows/phase5ap-upstream-selection.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/falsum/phase5ap_upstream_selection.py'
+      - 'tests/test_phase5ap_upstream_selection.py'
+      - 'src/falsum/phase5ak_external_label_baselines.py'
+      - 'src/falsum/phase5an_coverage_taxonomy.py'
+      - 'data/phase5ak-external-label-baseline-protocol.json'
+      - '.github/workflows/phase5ap-upstream-selection.yml'
+permissions:
+  contents: read
+jobs:
+  selection:
+    name: Original annotation selection replay / Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: ${{ matrix.python }}
+      - run: PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase5ap_upstream_selection.py' -v
+      - run: PYTHONPATH=src python -m falsum.phase5ap_upstream_selection --out phase5ap-report.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: phase5ap-original-label-selection-${{ matrix.python }}
+          path: phase5ap-report.json
+          if-no-files-found: error
