@@ -6,8 +6,17 @@
 **Track:** Evaluators  
 **Intent:** SECURITY_REVIEW_GENERAL (shared scoring family SECURITY_REVIEW)  
 **Project:** FALSUM  
-**Internal completion target:** Sunday, November 22, 2026. This date does not authorize lowering technical standards.  
+**Current release checkpoint:** November 24, 2026; [5-minute evidence-first judge start](H2_NOV24_JUDGE_START.md).
+**Internal completion target:** Sunday, November 22, 2026. Historical build target, now elapsed; this is not the official deadline, authorization to submit, or evidence of readiness.  
 **Actual official deadline:** December 1, 2026 at 23:59 UTC
+
+## Current judge and production checkpoint — 24 November 2026
+
+- **Verified production:** Vercel reports existing owned project `falsum-evidence-lab` READY on deployment `dpl_DN4yMnNdqqi8un4fdB3heAtuqEVg`, Git commit `4ef69c601cc3bd65c171fa329208b102e6ac0182` (Phase 5AI), matching `main` at this checkpoint.
+- **Merged engineering:** [Phase 5AH #93](https://github.com/Iniwura/falsum/pull/93) passed 35/35 PR checks, [Phase 5AI #94](https://github.com/Iniwura/falsum/pull/94) passed 50/50 PR checks. Latest `main` post-merge runs succeeded **8/8**, including production witness HTTPS check.
+- **New reviewer path:** the [judge-start page](H2_NOV24_JUDGE_START.md) links the live witness, one-click independent fork workflow, pinned advisory source decision CLI and real negative model results.
+- **Remaining hard gates:** external reviewer action, qualified expert labels, required entrant GitHub bounties star, separate-date public updates, final 2–5 minute demo/equivalent, owner-controlled permissions and official entry. They are **not** implied by PR checks or deployment status.
+- **Do not infer:** a browser-based general CVE scorer, new qualified model accuracy, an accepted Telegraph ranking, or a registered scoring adapter from Phase 5AG/5AH/5AI source-only code.
 
 ## Production verified after the November 22 release
 
