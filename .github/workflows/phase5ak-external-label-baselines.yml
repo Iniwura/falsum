@@ -1,0 +1,48 @@
+name: Phase 5AK - original external-label policy baseline comparison
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/falsum/phase5ak_external_label_baselines.py'
+      - 'tests/test_phase5ak_external_label_baselines.py'
+      - 'data/phase5ak-external-label-baseline-protocol.json'
+      - '.github/workflows/phase5ak-external-label-baselines.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/falsum/phase5ak_external_label_baselines.py'
+      - 'tests/test_phase5ak_external_label_baselines.py'
+      - 'data/phase5ak-external-label-baseline-protocol.json'
+      - '.github/workflows/phase5ak-external-label-baselines.yml'
+permissions:
+  contents: read
+jobs:
+  offline:
+    name: Policy controls / Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase5ak_external_label_baselines.py' -v
+  original:
+    name: Replay complete original outside scale records
+    needs: offline
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: PYTHONPATH=src python -m falsum.phase5ak_external_label_baselines --out phase5ak-report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5ak-original-external-label-baselines
+          path: phase5ak-report.json
+          if-no-files-found: error
