@@ -1,0 +1,42 @@
+name: Phase 5AU - authenticated Solana Anchor advisory coverage
+on:
+  pull_request:
+    paths:
+      - 'data/phase5au-solana-anchor-protocol.json'
+      - 'src/falsum/phase5au_solana_anchor_evidence.py'
+      - 'src/falsum/phase5aj_cross_app_evidence.py'
+      - 'tests/test_phase5au_solana_anchor_evidence.py'
+      - '.github/workflows/phase5au-solana-anchor.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.14'
+      - name: Test offline negative and version controls
+        run: python -m unittest discover -s tests -p 'test_phase5au_solana_anchor_evidence.py' -v
+      - name: Authenticate original reviewed advisory and affected/fixed source bytes
+        run: |
+          python -m falsum.phase5au_solana_anchor_evidence --out solana-anchor-report.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("solana-anchor-report.json").read_text())
+          assert r["original_git_sources_verified"] == 3
+          assert r["original_test_definitions_verified"] == 4
+          assert r["source_bound_matches"] == r["cases"] == 12
+          assert r["reference_only_matches"] == 3
+          assert r["reference_only_false_applicable"] == 9
+          assert r["source_bound_false_applicable"] == 0
+          assert all(r[k] is False for k in ("upstream_tests_executed","security_clearance","live_solana_integration","independent_adoption","model_accuracy_improvement"))
+          PY

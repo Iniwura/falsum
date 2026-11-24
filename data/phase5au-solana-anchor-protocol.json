@@ -1,0 +1,125 @@
+{
+  "scope": "One independently published historical advisory, pinned affected/fixed original source; constructed version queries, not actual provider responses or live Solana deployment.",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "sources": [
+    {
+      "key": "reviewed_advisory",
+      "repo": "github/advisory-database",
+      "commit": "620ebeed9f80c494459e0d84d9a1d5bbd25c9796",
+      "path": "advisories/github-reviewed/2026/05/GHSA-c6rc-8jpp-2fgc/GHSA-c6rc-8jpp-2fgc.json",
+      "blob": "6330f908c7aedcfb1fb335aee605939e843cebc6"
+    },
+    {
+      "key": "advisory_cited_affected_source",
+      "repo": "otter-sec/anchor",
+      "commit": "5ff3f96eeda91cc54b7fa525631eb8c1394fda04",
+      "path": "lang/src/accounts/program.rs",
+      "blob": "1d5bb9b9fddd5c83a77a1c573d611a339fe14f9a"
+    },
+    {
+      "key": "fixed_source_and_original_unit_tests",
+      "repo": "otter-sec/anchor",
+      "commit": "3eb1fb0427d4fed0e944b627aef76db651a93aab",
+      "path": "lang/src/accounts/program.rs",
+      "blob": "4ff621a31a94356e28fad1d1e4df51c0ea2ed06b"
+    }
+  ],
+  "cases": [
+    {
+      "id": "affected-100",
+      "ecosystem": "crates.io",
+      "package": "anchor-lang",
+      "version": "1.0.0",
+      "reference": "GHSA-c6rc-8jpp-2fgc",
+      "expected": "APPLICABLE"
+    },
+    {
+      "id": "affected-101",
+      "ecosystem": "crates.io",
+      "package": "anchor-lang",
+      "version": "1.0.1",
+      "reference": "CVE-2026-45137",
+      "expected": "APPLICABLE"
+    },
+    {
+      "id": "fixed-102",
+      "ecosystem": "crates.io",
+      "package": "anchor-lang",
+      "version": "1.0.2",
+      "reference": "GHSA-c6rc-8jpp-2fgc",
+      "expected": "INAPPLICABLE"
+    },
+    {
+      "id": "fixed-later",
+      "ecosystem": "crates.io",
+      "package": "anchor-lang",
+      "version": "1.0.3",
+      "reference": "CVE-2026-45137",
+      "expected": "INAPPLICABLE"
+    },
+    {
+      "id": "before-introduction",
+      "ecosystem": "crates.io",
+      "package": "anchor-lang",
+      "version": "0.32.1",
+      "reference": "GHSA-c6rc-8jpp-2fgc",
+      "expected": "INAPPLICABLE"
+    },
+    {
+      "id": "later-major",
+      "ecosystem": "crates.io",
+      "package": "anchor-lang",
+      "version": "2.0.0",
+      "reference": "GHSA-c6rc-8jpp-2fgc",
+      "expected": "INAPPLICABLE"
+    },
+    {
+      "id": "wrong-package",
+      "ecosystem": "crates.io",
+      "package": "anchor-spl",
+      "version": "1.0.1",
+      "reference": "GHSA-c6rc-8jpp-2fgc",
+      "expected": "UNKNOWN_TARGET"
+    },
+    {
+      "id": "wrong-ecosystem",
+      "ecosystem": "npm",
+      "package": "anchor-lang",
+      "version": "1.0.1",
+      "reference": "GHSA-c6rc-8jpp-2fgc",
+      "expected": "UNKNOWN_TARGET"
+    },
+    {
+      "id": "unknown-reference",
+      "ecosystem": "crates.io",
+      "package": "anchor-lang",
+      "version": "1.0.1",
+      "reference": "GHSA-xxxx-yyyy-zzzz",
+      "expected": "UNKNOWN_REFERENCE"
+    },
+    {
+      "id": "prerelease",
+      "ecosystem": "crates.io",
+      "package": "anchor-lang",
+      "version": "1.0.2-rc.1",
+      "reference": "GHSA-c6rc-8jpp-2fgc",
+      "expected": "INSUFFICIENT_EVIDENCE"
+    },
+    {
+      "id": "range-not-exact",
+      "ecosystem": "crates.io",
+      "package": "anchor-lang",
+      "version": "^1.0.0",
+      "reference": "GHSA-c6rc-8jpp-2fgc",
+      "expected": "INSUFFICIENT_EVIDENCE"
+    },
+    {
+      "id": "missing-version",
+      "ecosystem": "crates.io",
+      "package": "anchor-lang",
+      "version": null,
+      "reference": "GHSA-c6rc-8jpp-2fgc",
+      "expected": "INSUFFICIENT_EVIDENCE"
+    }
+  ]
+}
