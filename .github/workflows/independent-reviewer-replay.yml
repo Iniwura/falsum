@@ -88,6 +88,8 @@ jobs:
           python -m falsum.phase5ak_external_label_baselines --out reviewer-results/original-external-label-policy-comparison.json
           python -m unittest discover -s tests -p 'test_phase5an_coverage_taxonomy.py' -v
           python -m falsum.phase5an_coverage_taxonomy --out reviewer-results/original-maintainer-coverage-taxonomy.json
+          python -m unittest discover -s tests -p 'test_phase5ar_response_integrity.py' -v
+          python -m falsum.phase5ar_response_integrity --out reviewer-results/original-app-response-integrity.json
       - name: Assert original external count, sanitized output and no false independence claim
         run: |
           set -euo pipefail
@@ -179,7 +181,16 @@ jobs:
           assert coverage['planted_recorded_error_kinds']=={'HTTP_500_CONTEXT_DEADLINE':9,'FETCH_FAILED':1}
           for key in ('security_clearance_granted','network_ranking_improvement_proved','independent_fork_execution_proved','external_integration_proved','live_transport_verified'):
               assert coverage[key] is False
-          for report in (cross, scale, coverage):
+          integrity=json.loads((folder/'original-app-response-integrity.json').read_text())
+          si=integrity['summary']
+          assert si['original_direct_fixtures']==9 and si['maintainer_confirmed']==2
+          assert si['explicit_no_code_fixtures']==3
+          assert si['explicit_no_code_verdict_only_clean']==3
+          assert si['explicit_no_code_count_verdict_clean']==2
+          assert si['explicit_no_code_gate_clean']==0
+          assert all(v is False for v in integrity['limits'].values())
+          assert all(r['gate']['security_clearance'] is False for r in integrity['fixtures'])
+          for report in (cross, scale, coverage, integrity):
               for forbidden in ('payer','summary','result','receipt_hash','bodyText'):
                   # The top-level scale aggregate is explicitly named summary;
                   # no raw response fields or payer metadata are published.
@@ -209,6 +220,12 @@ jobs:
             'coverage_preflight_cases_with_earlier_failure':22,
             'sha256_maintainer_coverage_report':hashlib.sha256(
               (folder/'original-maintainer-coverage-taxonomy.json').read_bytes()).hexdigest(),
+            'response_integrity_explicit_no_code_fixtures':3,
+            'response_integrity_verdict_only_clean_candidates':3,
+            'response_integrity_count_verdict_clean_candidates':2,
+            'response_integrity_gate_clean_candidates':0,
+            'sha256_app_response_integrity_report':hashlib.sha256(
+              (folder/'original-app-response-integrity.json').read_bytes()).hexdigest(),
             'new_package_inputs_are_constructed':True,
             'new_reviewed_reference_expected_statuses':{
               'npm_axios_1_5_0':['VERIFIED_APPLICABLE'],
