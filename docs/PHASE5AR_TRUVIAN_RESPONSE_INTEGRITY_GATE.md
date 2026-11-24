@@ -6,7 +6,7 @@
 
 Re-fetch the already pinned original Truvian test file. Parse **all nine direct security fixture declarations** with a restricted literal grammar; one original spread is explicitly resolved. The set includes the two maintainer-confirmed answers, a third reported live response with node-shaped fields, other scan/review fixtures, a derived generic regression and a constructed honeypot regression. Nine declarations do not mean nine distinct live requests. The source was inspected before implementation.
 
-The original inspected third missing-source record is `securityWethTxLensLive`: Secure/count three, with the published fixture explicitly noting node shaping. On the three explicitly missing-code cases, the expected retrospective comparison (fresh CI required):
+The original inspected third missing-source record is `securityWethTxLensLive`: Secure/count three, with the published fixture explicitly noting node shaping. On the three explicitly missing-code cases, the verified retrospective comparison ([successful original-source CI replay](https://github.com/Iniwura/falsum/actions/runs/45476259143); PR #106 passed 21/21 checks and merged):
 
 | Consumer policy | Clean candidates on missing-code cases |
 | --- | ---: |

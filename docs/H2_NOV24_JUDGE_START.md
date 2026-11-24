@@ -24,6 +24,14 @@ Two Mission 14 applications, Truvian Shield and Gig Guard, independently publish
 
 The bounded policy avoids eight count-only unsafe pass predictions, **ties verdict-only** and increases flags on audited controls. Audited contracts are not certified bug-free; those flags are not verified false positives. PASS is a policy prediction, never security clearance. [Actual successful scale replay](https://github.com/Iniwura/falsum/actions/runs/45356819921). [Cross-app replay](https://github.com/Iniwura/falsum/actions/runs/45356083445). [Public Gig Guard source-maintainer review](https://github.com/Iniwura/falsum/issues/97#issuecomment-7126424685) confirms the 12 planted / 22 audited-v7 decisions and 41 archived receipt joins, and clarifies the seven zero-cost input-limit holds. FALSUM's [Phase 5AN follow-up](PHASE5AN_MAINTAINER_COVERAGE_TAXONOMY.md) corroborates this across the original records: 103 recorded answers, four recorded failures, and 22 explicitly documented pre-request holds among 129 latest cases. All 22 retain earlier recorded failures. [Successful Phase 5AN post-merge replay](https://github.com/Iniwura/falsum/actions/runs/45369264734). This is substantive external source-maintainer feedback, not adoption, a fork execution or expert gold.
 
+### Response integrity: a narrower measured improvement
+
+[Truvian Shield maintainer's public memo verification](https://github.com/Iniwura/falsum/issues/97#issuecomment-7132041935) confirms the two parsed live-answer fixtures. [Phase 5AR](PHASE5AR_TRUVIAN_RESPONSE_INTEGRITY_GATE.md) adds a portable response-integrity gate and [successful original-source CI replay](https://github.com/Iniwura/falsum/actions/runs/45476259143) across all nine direct fixture declarations. Three explicitly missing-code cases: verdict-only admits 3/3 clean candidates, Secure + zero count admits 2/3, and FALSUM admits 0/3. Two are maintainer-confirmed; the third is a developer-reported node-shaped fixture. This is a bounded retrospective comparison, not a semantic model-accuracy, network-ranking, or accepted-integration result.
+
+The [SmartBugs selection audit](PHASE5AP_UPSTREAM_LABEL_SELECTION_AUDIT.md) authenticates all 107 selected annotation records against the original 143-contract dataset; 36 are omitted, 32 from unchecked-low-level-calls. The [historical SWC citation audit](PHASE5AQ_ORIGINAL_REGISTRY_CITATION_COVERAGE.md) covers 11 direct registry-linked cases, 10 recorded negative verdicts and zero exact registry-linked CWE citations. Citation absence is not proof of incorrect semantic review. Both original-source replays passed three Python versions.
+
+[Public growth evidence](H2_VERIFIED_GROWTH_EVIDENCE.md) links four actual dated progress updates, both external maintainers' responses and our technical follow-up. Organizer scoring and any external integration remain unconfirmed.
+
 ## Try it in five minutes
 
 ### 1. Witness a real historical source regression (60–90 seconds)
@@ -38,7 +46,7 @@ The workbench's **80 typed outcomes** are deliberately *constructed controls*: 1
 
 It authenticates **12 independently published receipt captures**, **6 historical reviewed GHSA files**, **3 separate Axios/Rack reviewed GHSA files**, and the pinned original cross-app and scale records. The two application reports retain separate provenance and historical receipt status boundaries. Its constructed tests show an applicable Axios advisory, opposing Rack version outcomes, and an `INSUFFICIENT_EVIDENCE` result where prerelease semantics are not supported. It also runs routing and tampered-lock counterexamples.
 
-[Original author-run PR #94 replay (successful)](https://github.com/Iniwura/falsum/actions/runs/45319267361) produced public-safe artifact ID `14885889459`. **An owner-run workflow is not independent adoption.** The Gig Guard maintainer has supplied substantive public source-record verification and a clarification; a verified outside fork execution is still awaited.
+[Original author-run PR #94 replay (successful)](https://github.com/Iniwura/falsum/actions/runs/45319267361) produced public-safe artifact ID `14885889459`. **An owner-run workflow is not independent adoption.** Both the Gig Guard and Truvian Shield maintainers supplied substantive public source-record verification. A verified outside fork execution is still awaited.
 
 ### 3. Make your own bounded package decision (60 seconds)
 
@@ -88,8 +96,8 @@ FALSUM's value is to make unsupported security judgments visible and reproducibl
 | Required star of `telegraphprotocol/bounties` from entrant's GitHub account | **Unverified** |
 | Final Season II entry and track/mission form receipt | **Not submitted** |
 | Required 2–5 minute video or organizer-accepted accessible equivalent | **Not verified** |
-| Public updates on three separate dates and public distribution evidence | **Not verified** |
-| External source-maintainer feedback | **Verified public source-record review** (Issue #97) |
+| Public updates on three separate dates and public distribution evidence | **Dated links collected** ([growth evidence](H2_VERIFIED_GROWTH_EVIDENCE.md)); organizer scoring unconfirmed |
+| External source-maintainer feedback | **Two verified public source-record reviews** (Issue #97) |
 | Verified outside adoption, independent fork use, qualified AppSec gold | **None verified** |
 | User-selected showcase permissions and buyer-introduction consent | **Not confirmed** |
 

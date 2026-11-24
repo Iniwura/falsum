@@ -4,7 +4,7 @@
 
 This is a public, reproducible developer review task for [FALSUM](https://github.com/Iniwura/falsum), a **Telegraph Season II Evaluators hackathon entry** focused on source-grounded security-review evidence. It is not a promise of a payment, reward, credential, approved network evaluator or validated scoring improvement.
 
-## What to test (six public-source exercises with distinct provenance)
+## What to test (seven public-source exercises with distinct provenance)
 
 1. **Receipt/Intent comparability.** FALSUM re-fetches 12 historical captures independently published in PR Guard's public GitHub repository, checks each complete original Git blob SHA-1, and compares the **actual request envelope** with the **reported receipt Intent**. The expected observed partition is **2** explicit canonical requests with matching receipts, **2** direct requests with canonical-reported receipts, **6** HTTP 200 captures with different reported receipt Intents, and **2** unsuccessful records lacking a successful receipt. The exact canonical request of neither routed capture was answered by a different reported Miner in this frozen sample. This is not a fair Miner leaderboard.
 2. **Package/version reference filtering.** FALSUM independently authenticates six complete GitHub-reviewed GHSA source records and rechecks a **constructed local** lodash 4.17.15 response. It should display **5** version-applicable advisory references and suppress **1** version-inapplicable reference (GHSA-f23m-r3pf-42rh). The local response is deliberately constructed and **is not an independent outside Miner response**.
@@ -16,13 +16,15 @@ This is a public, reproducible developer review task for [FALSUM](https://github
 
 6. **Source-maintainer coverage clarification.** [Public Gig Guard source-maintainer review](https://github.com/Iniwura/falsum/issues/97#issuecomment-7126424685) prompted the [Phase 5AN taxonomy](PHASE5AN_MAINTAINER_COVERAGE_TAXONOMY.md): all 22 latest missing-answer records in the scale population are explicit input-limit holds, and all have an earlier recorded security failure. The new report keeps those two observations separate.
 
+7. **Response integrity.** [Truvian Shield maintainer's public memo verification](https://github.com/Iniwura/falsum/issues/97#issuecomment-7132041935) confirms the two parsed live-answer fixtures. [Phase 5AR](PHASE5AR_TRUVIAN_RESPONSE_INTEGRITY_GATE.md) adds a portable response-integrity gate and [successful original-source CI replay](https://github.com/Iniwura/falsum/actions/runs/45476259143) across all nine direct fixture declarations. Three explicitly missing-code cases: verdict-only admits 3/3 clean candidates, Secure + zero count admits 2/3, and FALSUM admits 0/3. Two are maintainer-confirmed; the third is a developer-reported node-shaped fixture. This is a bounded retrospective comparison, not a semantic model-accuracy, network-ranking, or accepted-integration result. Test the JSON stdin interface with a legitimate scan or an explicit missing-code answer. A REVIEW decision must not be mistaken for a vulnerability verdict; a CLEAN_CANDIDATE must never release a transaction.
+
 The distinction between original outside captures, reviewed GitHub advisory sources and constructed demonstration inputs is material. Original source records are not independent expert security gold, proof of paid onchain settlement, proof of external adoption or a registered network evaluator.
 
 ## Option A: run the public GitHub Action on your own fork
 
 1. Fork [Iniwura/falsum](https://github.com/Iniwura/falsum).
 2. In **your fork**, enable GitHub Actions if GitHub prompts you. Open **Actions → Independent Reviewer Replay - public evidence only → Run workflow** on your fork's default branch. GitHub may require the workflow file to be on the fork's default branch before manual dispatch is available.
-3. Inspect the actual job's green/red steps, not merely a screenshot. Download its **falsum-public-reviewer-replay** Actions artifact. It contains `reproduction-manifest.json`, `original-12-receipt-comparability.json`, `constructed-local-display-decision.json`, `constructed-axios-source-decision.json`, `constructed-rack-source-decisions.json`,  `constructed-rack-prerelease-uncertainty.json`, `original-cross-app-availability.json`,  `original-external-label-policy-comparison.json`, and `original-maintainer-coverage-taxonomy.json`. Check the source count, provenance classes, distinct reported-Miner comparison count and the filtered GHSA.
+3. Inspect the actual job's green/red steps, not merely a screenshot. Download its **falsum-public-reviewer-replay** Actions artifact. It contains `reproduction-manifest.json`, `original-12-receipt-comparability.json`, `constructed-local-display-decision.json`, `constructed-axios-source-decision.json`, `constructed-rack-source-decisions.json`,  `constructed-rack-prerelease-uncertainty.json`, `original-cross-app-availability.json`,  `original-external-label-policy-comparison.json`,  `original-maintainer-coverage-taxonomy.json`, and `original-app-response-integrity.json`. Check the source count, provenance classes, distinct reported-Miner comparison count and the filtered GHSA.
 4. Try to **falsify** an assumption: inspect any original pinned source link in the report and decide whether the request/receipt classification matches the published input. A failed run, a contrary finding or an unclear item is more valuable than a rubber stamp.
 5. If willing, report the **actual public workflow run URL** and your specific findings in [the external reproduction issue form](https://github.com/Iniwura/falsum/issues/new?template=independent-public-reproduction.yml). Use your own GitHub account. No submission of keys, paid receipt secrets, wallets or nonpublic cases is requested.
 
@@ -65,6 +67,7 @@ To reproduce the three application audits separately, with the same module path:
 python -m falsum.phase5aj_cross_app_evidence --out original-cross-app-availability.json
 python -m falsum.phase5ak_external_label_baselines --out original-external-label-policy-comparison.json
 python -m falsum.phase5an_coverage_taxonomy --out original-maintainer-coverage-taxonomy.json
+python -m falsum.phase5ar_response_integrity --out original-app-response-integrity.json
 ```
 
 ### Expected outcomes
