@@ -62,6 +62,23 @@ jobs:
             --response-json examples/phase5aa-constructed-response.json \
             --reviewed-bundle /tmp/falsum-reviewed-historical-sources.json \
             --out reviewer-results/constructed-local-display-decision.json
+      - name: Reproduce new-package source-backed decisions and uncertainty (CONSTRUCTED targets)
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5ag_reviewed_reference_evaluator.py' -v
+          python -m falsum.cli review-verified-references \
+            --ecosystem npm --package axios --version 1.5.0 \
+            --reference GHSA-wf5p-g6vw-rhxx \
+            --out reviewer-results/constructed-axios-source-decision.json
+          python -m falsum.cli review-verified-references \
+            --ecosystem RubyGems --package rack --version 3.2.5 \
+            --reference GHSA-xj5v-6v4g-jfw6 \
+            --reference GHSA-7mqq-6cf9-v2qp \
+            --out reviewer-results/constructed-rack-source-decisions.json
+          python -m falsum.cli review-verified-references \
+            --ecosystem RubyGems --package rack --version 3.0.5 \
+            --reference GHSA-7mqq-6cf9-v2qp \
+            --out reviewer-results/constructed-rack-prerelease-uncertainty.json
       - name: Assert original external count, sanitized output and no false independence claim
         run: |
           set -euo pipefail
@@ -84,6 +101,28 @@ jobs:
           assert o['original_full_third_party_response_body_republished'] is False
           assert len(o['source_provenance_observations'])==12
           assert all(x['original_source_verified_by_git_blob'] is True for x in o['source_provenance_observations'])
+          # Three new reviewed source blobs are separately authenticated by
+          # the standalone evaluator; these inputs are CONSTRUCTED locally.
+          axios=json.loads((folder/'constructed-axios-source-decision.json').read_text())
+          rack=json.loads((folder/'constructed-rack-source-decisions.json').read_text())
+          uncertain=json.loads((folder/'constructed-rack-prerelease-uncertainty.json').read_text())
+          assert [x['decision'] for x in axios['reference_decisions']]==['VERIFIED_APPLICABLE']
+          assert [x['decision'] for x in rack['reference_decisions']]==[
+              'VERIFIED_INAPPLICABLE','VERIFIED_APPLICABLE']
+          assert [x['decision'] for x in uncertain['reference_decisions']]==[
+              'INSUFFICIENT_EVIDENCE']
+          for review in (axios,rack,uncertain):
+              assert review['original_git_reviewed_advisories_verified']==3
+              assert review['source_roster_git_blob_sha1']=='c396cede959429ff32eff499156961e17546b3e3'
+              assert review['coverage_is_complete'] is False
+              assert review['security_clearance_granted'] is False
+              assert review['independent_expert_appsec_gold']==0
+              assert review['new_actual_miner_result_evaluated'] is False
+              assert review['new_independent_developer_adoption_proved'] is False
+              assert review['registered_telegraph_network_evaluator'] is False
+              assert review['current_advisory_freshness_verified'] is False
+              assert all(row['source_is_current_feed'] is False
+                         for row in review['reference_decisions'])
           d=e['security_reference_consumption']
           assert d['display_count']==5 and d['suppressed_count']==1
           assert d['suppressed_references'][0]['verified_ghsa_id']=='GHSA-f23m-r3pf-42rh'
@@ -101,6 +140,13 @@ jobs:
             'status':'FALSUM_PUBLIC_REVIEWER_REPLAY_COMPLETED_NO_INDEPENDENT_ACCEPTANCE',
             'source_replay_original_verified_git_blobs':12,
             'source_replay_ghsa_git_blobs_verified':6,
+            'separate_multiecosystem_reviewed_ghsa_git_blobs_verified':3,
+            'new_package_inputs_are_constructed':True,
+            'new_reviewed_reference_expected_statuses':{
+              'npm_axios_1_5_0':['VERIFIED_APPLICABLE'],
+              'rubygems_rack_3_2_5':['VERIFIED_INAPPLICABLE','VERIFIED_APPLICABLE'],
+              'rubygems_rack_3_0_5':['INSUFFICIENT_EVIDENCE'],
+            },
             'same_exact_canonical_multi_miner_pairs':0,
             'constructed_local_display_count':5,
             'constructed_local_suppressed_count':1,
@@ -113,6 +159,12 @@ jobs:
             'github_workflow_commit':os.environ.get('GITHUB_SHA',''),
             'sha256_original_receipt_report':hashlib.sha256(original.read_bytes()).hexdigest(),
             'sha256_constructed_filter_report':hashlib.sha256(example.read_bytes()).hexdigest(),
+            'sha256_constructed_axios_report':hashlib.sha256(
+              (folder/'constructed-axios-source-decision.json').read_bytes()).hexdigest(),
+            'sha256_constructed_rack_report':hashlib.sha256(
+              (folder/'constructed-rack-source-decisions.json').read_bytes()).hexdigest(),
+            'sha256_constructed_prerelease_report':hashlib.sha256(
+              (folder/'constructed-rack-prerelease-uncertainty.json').read_bytes()).hexdigest(),
           }
           (folder/'reproduction-manifest.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
           print(json.dumps(result,sort_keys=True))
@@ -129,5 +181,6 @@ jobs:
         run: |
           echo '## Public reviewer replay' >> "$GITHUB_STEP_SUMMARY"
           echo 'The original sources were authenticated against their immutable Git blob identities. The constructed filtering sample is NOT an independent Miner result.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'The public-safe artifact includes the reproduction manifest, 12-capture receipt census and one clearly constructed local filter decision.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The public-safe artifact includes the reproduction manifest, 12-capture receipt census, one constructed lodash filter decision and three constructed Axios/Rack reference reports.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The multi-ecosystem results authenticate three separate pinned GitHub-reviewed source blobs. They are not independent expert security labels or a current complete advisory feed.' >> "$GITHUB_STEP_SUMMARY"
           echo 'A forked workflow alone does not prove independent authorship, accuracy of source labels, confirmed payment or adoption. To challenge or contribute, use the independent reviewer guide and issue form.' >> "$GITHUB_STEP_SUMMARY"
