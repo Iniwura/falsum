@@ -179,6 +179,11 @@ def range_status(events: object, version: tuple[int, ...]) -> str:
     if not isinstance(events, list) or not events:
         return INSUFFICIENT
     opened: tuple[int, ...] | None = None
+    # Reject an apparently valid interval followed by overlapping, descending,
+    # or boundary-conflicting events. OSV ranges encode ordered transitions;
+    # an ambiguous stream must never produce a verified status.
+    prior_end: tuple[int, ...] | None = None
+    prior_end_inclusive = False
     seen = False
     matched = False
     for event in events:
@@ -191,6 +196,10 @@ def range_status(events: object, version: tuple[int, ...]) -> str:
         if key == "introduced":
             if opened is not None:
                 return INSUFFICIENT
+            if prior_end is not None:
+                order = compare(parsed, prior_end)
+                if order < 0 or (order == 0 and prior_end_inclusive):
+                    return INSUFFICIENT
             opened = parsed
             seen = True
         elif key in ("fixed", "last_affected"):
@@ -199,6 +208,8 @@ def range_status(events: object, version: tuple[int, ...]) -> str:
             left = compare(version, opened) >= 0
             right = compare(version, parsed) < 0 if key == "fixed" else compare(version, parsed) <= 0
             matched = matched or (left and right)
+            prior_end = parsed
+            prior_end_inclusive = key == "last_affected"
             opened = None
         else:
             return INSUFFICIENT

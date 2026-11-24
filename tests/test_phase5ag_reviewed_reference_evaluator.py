@@ -108,6 +108,40 @@ class MultiEcosystemReviewedSourceContract(unittest.TestCase):
                                          {"fixed": "4.0.0"}],
                                         e.numbers("1.5.0")), e.APPLICABLE)
 
+    def test_rejects_out_of_order_overlapping_and_inclusive_interval_reentry(self):
+        # New adversarial parser tests, NOT replacements for the 13 frozen
+        # preregistration cases or independent AppSec reference labels.
+        malformed = [
+            # Descending intervals: a later interval starts before an earlier one.
+            ([{"introduced": "2.0.0"}, {"fixed": "3.0.0"},
+              {"introduced": "1.0.0"}, {"fixed": "1.5.0"}], "2.5.0"),
+            # Overlapping intervals cannot become verified merely because
+            # the first interval already matched the queried version.
+            ([{"introduced": "1.0.0"}, {"fixed": "2.0.0"},
+              {"introduced": "1.9.0"}, {"fixed": "3.0.0"}], "1.5.0"),
+            # last_affected is inclusive, so reopening on the same release
+            # double-counts a boundary in a contradictory event stream.
+            ([{"introduced": "1.0.0"}, {"last_affected": "2.0.0"},
+              {"introduced": "2.0.0"}, {"fixed": "3.0.0"}], "2.0.0"),
+            # Range ordering cannot be repaired by a subsequent good interval.
+            ([{"introduced": "1.0.0"}, {"fixed": "2.0.0"},
+              {"introduced": "1.0.0"}, {"last_affected": "4.0.0"}], "3.0.0"),
+        ]
+        for events, target in malformed:
+            with self.subTest(events=events, target=target):
+                self.assertEqual(e.range_status(events, e.numbers(target)),
+                                 e.INSUFFICIENT)
+        # Reopening at an exclusive fixed boundary is a legal adjacent range.
+        adjacent = [{"introduced": "1.0.0"}, {"fixed": "2.0.0"},
+                    {"introduced": "2.0.0"}, {"fixed": "3.0.0"}]
+        for version, expected in (("1.5.0", e.APPLICABLE),
+                                  ("2.0.0", e.APPLICABLE),
+                                  ("2.5.0", e.APPLICABLE),
+                                  ("3.0.0", e.INAPPLICABLE)):
+            with self.subTest(adjacent=version):
+                self.assertEqual(e.range_status(adjacent, e.numbers(version)),
+                                 expected)
+
     def test_public_cli_subcommand_matches_standalone_review(self):
         from falsum.cli import main as falsum_main
         with tempfile.TemporaryDirectory() as folder:
