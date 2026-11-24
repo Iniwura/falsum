@@ -3,6 +3,8 @@
 **Telegraph Season II · Evaluators · SECURITY_REVIEW_GENERAL**  
 **Evidence checkpoint: November 24, 2026. Submission status: NOT SUBMITTED.**
 
+[Final readiness checkpoint](H2_FINAL_READINESS_CHECKPOINT.md) — evidence and remaining eligibility gates. [Phase 5AT caller-context extension](PHASE5AT_CALLER_CONTEXT_INTEGRITY.md) adds a separate optional fail-closed interface: 17/17 constructed outcomes matched, with 9/9 to 0/9 unsupported clean candidates and 4/4 clean controls preserved in the [successful foundation workflow](https://github.com/Iniwura/falsum/actions/runs/45477939270). This is additional caller-informed policy coverage, not a historical or learned-model accuracy improvement.
+
 ## The problem
 
 A security-review response can be fluent, paid-flagged and still fail its actual task: it may return unrelated advisories, use the wrong Intent or claim that a vulnerability is fixed without authentic source evidence. In the [independently published PR Guard report](https://github.com/telegraphprotocol/bounties/issues/187), a canonical security-review request about lodash returned an unrelated bulk advisory feed. This is a documented integration failure candidate, **not** proof of faulty onchain settlement, a published benchmark ranking or security exploitation.

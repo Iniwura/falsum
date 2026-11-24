@@ -14,7 +14,7 @@ PYTHONPATH=src python -m falsum.phase5at_request_context_integrity --out constru
 printf '%s' '{"verdict":"Secure","vulnerability_count":0,"issues":[],"summary":"No vulnerabilities were identified."}' | PYTHONPATH=src python -m falsum.phase5at_request_context_integrity --stdin --evidence-state UNAVAILABLE
 ```
 
-The fixture [was frozen before implementation](https://github.com/Iniwura/falsum/commit/5094212554b52d7b601a1a72e3431c52119cfe5b). It contains 17 author-constructed controls: three identical-response pairs, five additional missing-evidence wording variations, and six other controls. The expected counts are nine unsupported clean candidates for the old gate versus zero for the context gate, with all four clean-candidate controls retained. These are expected policy outcomes until the actual test run succeeds. No historical benchmark or original provider record was changed.
+The fixture [was frozen before implementation](https://github.com/Iniwura/falsum/commit/5094212554b52d7b601a1a72e3431c52119cfe5b). It contains 17 author-constructed controls: three identical-response pairs, five additional missing-evidence wording variations, and six other controls. The expected counts are nine unsupported clean candidates for the old gate versus zero for the context gate, with all four clean-candidate controls retained. These policy outcomes were verified in the [successful foundation matrix](https://github.com/Iniwura/falsum/actions/runs/45477939270). [PR #108](https://github.com/Iniwura/falsum/pull/108) passed all six reported workflows and Vercel preview before merge. No historical benchmark or original provider record was changed.
 
 ## Integration boundary
 
