@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5AJ_CROSS_APP_FAILURE_PROTOCOL_FROZEN_BEFORE_IMPLEMENTATION",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "mission": "Web3 Native & DeFi (Mission 14)",
+  "sources": [
+    {
+      "key": "truvian_tests",
+      "repo": "mrnetwork0001/Truvian",
+      "commit": "1d7b9248d853eb1ca1f1fdc3270c60d3502f4e60",
+      "path": "src/scripts/test-preflight.ts",
+      "blob": "98563828f58cd58a589cfc6ccc28685d0761c494"
+    },
+    {
+      "key": "gig_planted_ledger",
+      "repo": "swiftbotlabs/gig-guard",
+      "commit": "aa495fe5cd713c41e89698dc20463c5d6dade8fd",
+      "path": "eval/ledger.public.jsonl",
+      "blob": "84c332f100e286143f5dd354adb6aa0b5fe183e8"
+    },
+    {
+      "key": "gig_planted_truth",
+      "repo": "swiftbotlabs/gig-guard",
+      "commit": "aa495fe5cd713c41e89698dc20463c5d6dade8fd",
+      "path": "eval/truth.json",
+      "blob": "d912c4342a72dd19c784b3e4726479b9803ec546"
+    },
+    {
+      "key": "gig_planted_receipts",
+      "repo": "swiftbotlabs/gig-guard",
+      "commit": "aa495fe5cd713c41e89698dc20463c5d6dade8fd",
+      "path": "eval/receipts-verify.json",
+      "blob": "cbf4b83adb35fada0a4d4f6afc0bf44a27ad6ce9"
+    },
+    {
+      "key": "gig_audited_ledger",
+      "repo": "swiftbotlabs/gig-guard",
+      "commit": "aa495fe5cd713c41e89698dc20463c5d6dade8fd",
+      "path": "eval/scale/ledger.audited-v7.public.jsonl",
+      "blob": "96219d10f0d1a4bd84c0af6195a2e8e3a75628b4"
+    },
+    {
+      "key": "gig_audited_manifest",
+      "repo": "swiftbotlabs/gig-guard",
+      "commit": "aa495fe5cd713c41e89698dc20463c5d6dade8fd",
+      "path": "eval/scale/manifest.json",
+      "blob": "58057554084d89a2fb87cac99d558258e7e3dadc"
+    },
+    {
+      "key": "gig_audited_receipts",
+      "repo": "swiftbotlabs/gig-guard",
+      "commit": "aa495fe5cd713c41e89698dc20463c5d6dade8fd",
+      "path": "eval/scale/receipts-verify-audited-v7.json",
+      "blob": "6065856fdaf16653a7b5a4aac39f40b238e12dc8"
+    }
+  ],
+  "truvian": {
+    "selected_original_response_variables": [
+      "secureUnseen",
+      "secureQueryOnly"
+    ],
+    "source_lines": [
+      [
+        209,
+        214
+      ],
+      [
+        255,
+        260
+      ]
+    ],
+    "expected_field_only_clear_count": 2,
+    "expected_explicit_no_evidence_contradiction_count": 2,
+    "source_class": "developer-published regression fixture of reported live answer, not raw original network capture",
+    "reported_same_miner_id": "9002"
+  },
+  "gig": {
+    "planted": {
+      "decisions": 12,
+      "security_answers": 2,
+      "security_explicit_failures": 10,
+      "security_absent_without_explicit_failure": 0,
+      "all_purchases": 11,
+      "all_errors": 13,
+      "ship_without_security_answer": 1,
+      "ship_with_known_planted_bug": 1,
+      "fix": 7,
+      "hold": 3,
+      "ship": 2
+    },
+    "audited": {
+      "decisions": 22,
+      "security_answers": 15,
+      "security_explicit_failures": 0,
+      "security_absent_without_explicit_failure": 7,
+      "all_purchases": 30,
+      "all_errors": 0,
+      "ship_without_security_answer": 0,
+      "fix": 5,
+      "hold": 7,
+      "ship": 10
+    }
+  },
+  "measurement_contract": [
+    "Hash the complete original upstream Git bytes before parsing. Reject drift, duplicate keys and missing files; never execute external TypeScript or Solidity.",
+    "For each published Gig Guard decision, require exactly one uniquely identified case, disjoint receipt IDs, exact purchase-to-archived receipt status and amount/Intent/epoch/settlement-miner match, and agreement of successful security evidence with recorded security purchase. Registration IDs and settlement miner IDs are different namespaces.",
+    "Separate recorded failures from no recorded answer; do not classify missing audited attempts as provider outages. Report answer availability per all recorded decision cases, not quality among successful answers only.",
+    "Never treat SHIP or a structured Secure/zero count as security clearance. Use a source-verified explicit self-reported missing-evidence contradiction diagnostic for the two Truvian regression fixtures. Report original app behavior separately; no claim FALSUM authored the app's existing guard.",
+    "The 12 planted labels were authored by a separate app team, not independent qualified AppSec gold. The 22 audited controls are not proven vulnerability-free. No cross-provider ranking, new paid inference, live settlement verification, external adoption or mission completion is implied."
+  ],
+  "source_selection": "Two independently authored Season II mission 14 apps; all 12 original planted decisions and all 22 archived audited-v7 decisions; two Truvian explicitly documented missing-input regression examples selected after reading public records. Not a blind test or holdout.",
+  "explicit_limits": {
+    "new_paid_requests": false,
+    "verified_new_external_adoption": false,
+    "qualified_expert_gold": false,
+    "live_settlement_verified": false,
+    "registered_network_evaluator": false,
+    "mission_completion_proved": false
+  },
+  "provenance_correction": {
+    "reason": "One-character transcription error in original freeze; first genuine online replay rejected the mismatched bytes. Corrected to existing upstream Git object identity, without any source selection, case, expected measurement, or interpretation changes.",
+    "original_protocol_commit": "7e126cdf7740c726d59993d85501492f3a87f9ee",
+    "original_protocol_git_blob_sha1": "e7d746f957b139993681fbc7167f640d118ea8f0",
+    "original_mistyped_ledger_blob": "96219d10f0d1a4bd84c0af6192a2e8e3a75628b4",
+    "corrected_upstream_blob": "96219d10f0d1a4bd84c0af6195a2e8e3a75628b4",
+    "failed_online_run": "https://github.com/Iniwura/falsum/actions/runs/45355934479/job/138313766119"
+  }
+}

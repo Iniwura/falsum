@@ -1,0 +1,50 @@
+name: Phase 5AJ - cross-app original security evidence availability
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/falsum/phase5aj_cross_app_evidence.py'
+      - 'tests/test_phase5aj_cross_app_evidence.py'
+      - 'data/phase5aj-cross-app-evidence-protocol.json'
+      - '.github/workflows/phase5aj-cross-app-evidence.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/falsum/phase5aj_cross_app_evidence.py'
+      - 'tests/test_phase5aj_cross_app_evidence.py'
+      - 'data/phase5aj-cross-app-evidence-protocol.json'
+      - '.github/workflows/phase5aj-cross-app-evidence.yml'
+permissions:
+  contents: read
+jobs:
+  offline:
+    name: Constructed adversarial contracts / Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Run narrow offline tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase5aj_cross_app_evidence.py' -v
+  original:
+    name: Authenticate original outside application records
+    needs: offline
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download and verify seven exact public upstream Git files
+        run: PYTHONPATH=src python -m falsum.phase5aj_cross_app_evidence --out phase5aj-original-report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5aj-original-cross-app-evidence
+          path: phase5aj-original-report.json
+          if-no-files-found: error
