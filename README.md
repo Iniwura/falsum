@@ -6,7 +6,7 @@
 
 ## Solana / Anchor evaluation coverage
 
-[Verified Solana Anchor advisory material](docs/PHASE5AU_SOLANA_ANCHOR_EVIDENCE.md) authenticates three original Git sources and matches all 12 constructed target/version queries versus three for a citation-only baseline. [Original-source CI](https://github.com/Iniwura/falsum/actions/runs/45489641572) passed. A correct range-aware baseline would be equivalent. No model accuracy or Solana deployment claim. [Original upstream Rust runtime replay](https://github.com/Iniwura/falsum/pull/111) is separate and pending.
+[Verified Solana Anchor advisory material](docs/PHASE5AU_SOLANA_ANCHOR_EVIDENCE.md) authenticates three original Git sources and matches all 12 constructed target/version queries versus three for a citation-only baseline. [Original-source CI](https://github.com/Iniwura/falsum/actions/runs/45489641572) passed. A correct range-aware baseline would be equivalent. No model accuracy or Solana deployment claim. [Original upstream Rust runtime replay](https://github.com/Iniwura/falsum/actions/runs/45490186795) separately confirmed four fixed-revision passes and exactly one expected affected-revision assertion failure, with the three remaining controls passing. [Reproduce](docs/PHASE5AV_SOLANA_ANCHOR_RUNTIME.md).
 
 ## What FALSUM does, and does not yet do
 
