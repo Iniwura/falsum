@@ -1,5 +1,9 @@
 # FALSUM
 
+## Start here: a five-minute reproducible judge route
+
+**[Open the FALSUM judge guide](docs/H2_NOV24_JUDGE_START.md)** to see the live original-source witness, reproduce the no-key independent reviewer workflow, test an authenticated Axios/Rack advisory decision, and inspect the actual failed-model baseline. The guide separates verified evidence from constructed test inputs and lists the remaining Season II submission obligations. Production currently serves `4ef69c60`; the official entry is **not submitted**.
+
 ## What FALSUM does, and does not yet do
 
 FALSUM publishes reproducible **security-review evaluation material**: immutable source/review evidence, benchmark cases, negative model results, and bounded advisory-reference checks. The original lodash `4.17.15` six-advisory verifier is a **fixed historical snapshot**. A newer, separate per-reference evaluator adds authenticated Axios/Rack evidence across npm and RubyGems. Neither is a comprehensive package scanner, a validated general-purpose security evaluator, or an approved network scoring service. Broader generalization and expert validation remain [tracked in Issue #89](https://github.com/Iniwura/falsum/issues/89).
