@@ -11,7 +11,7 @@ A security-review response can be fluent, paid-flagged and still fail its actual
 
 ## The latest measured application result
 
-[Inspect the recorded application comparison in the browser](https://falsum-evidence-lab.vercel.app/applications/) after the Phase 5AM production release. The page is an offline display of the successful CI log aggregates, not a browser-time inference endpoint.
+[Inspect the recorded application comparison in the browser](https://falsum-evidence-lab.vercel.app/applications/) now live after the verified Phase 5AM production release. The page is an offline display of the successful CI log aggregates, not a browser-time inference endpoint.
 
 Two Mission 14 applications, Truvian Shield and Gig Guard, independently published the underlying security-intelligence failure records. FALSUM's [cross-app audit](PHASE5AJ_CROSS_APP_EVIDENCE_AVAILABILITY.md) authenticated seven original Git files and checked 34 decision records and 41 archived receipt joins. The [complete historical scale comparison](PHASE5AK_EXTERNAL_LABEL_BASELINES.md) separately replays 158 decision events, 129 latest labeled contracts and 202 purchases (201 archived SETTLED, one NOT_FOUND). These populations are **not necessarily disjoint**; do not add them to claim a larger unique-case dataset.
 
@@ -22,7 +22,7 @@ Two Mission 14 applications, Truvian Shield and Gig Guard, independently publish
 | Strict field agreement | 80 | 0 | 27 | 1 |
 | FALSUM consumer | 89 | 0 | 18 | 5 |
 
-The bounded policy avoids eight count-only unsafe pass predictions, **ties verdict-only** and increases flags on audited controls. Audited contracts are not certified bug-free; those flags are not verified false positives. PASS is a policy prediction, never security clearance. [Actual successful scale replay](https://github.com/Iniwura/falsum/actions/runs/45356819921). [Cross-app replay](https://github.com/Iniwura/falsum/actions/runs/45356083445). [Open collaboration request](https://github.com/Iniwura/falsum/issues/97) — no outside response or adoption confirmed.
+The bounded policy avoids eight count-only unsafe pass predictions, **ties verdict-only** and increases flags on audited controls. Audited contracts are not certified bug-free; those flags are not verified false positives. PASS is a policy prediction, never security clearance. [Actual successful scale replay](https://github.com/Iniwura/falsum/actions/runs/45356819921). [Cross-app replay](https://github.com/Iniwura/falsum/actions/runs/45356083445). [Public Gig Guard source-maintainer review](https://github.com/Iniwura/falsum/issues/97#issuecomment-7126424685) confirms the 12 planted / 22 audited-v7 decisions and 41 archived receipt joins, and clarifies the seven zero-cost input-limit holds. FALSUM's [Phase 5AN follow-up](PHASE5AN_MAINTAINER_COVERAGE_TAXONOMY.md) corroborates this across the original records: 103 recorded answers, four recorded failures, and 22 explicitly documented pre-request holds among 129 latest cases. All 22 retain earlier recorded failures. [Successful Phase 5AN post-merge replay](https://github.com/Iniwura/falsum/actions/runs/45369264734). This is substantive external source-maintainer feedback, not adoption, a fork execution or expert gold.
 
 ## Try it in five minutes
 
@@ -38,7 +38,7 @@ The workbench's **80 typed outcomes** are deliberately *constructed controls*: 1
 
 It authenticates **12 independently published receipt captures**, **6 historical reviewed GHSA files**, **3 separate Axios/Rack reviewed GHSA files**, and the pinned original cross-app and scale records. The two application reports retain separate provenance and historical receipt status boundaries. Its constructed tests show an applicable Axios advisory, opposing Rack version outcomes, and an `INSUFFICIENT_EVIDENCE` result where prerelease semantics are not supported. It also runs routing and tampered-lock counterexamples.
 
-[Original author-run PR #94 replay (successful)](https://github.com/Iniwura/falsum/actions/runs/45319267361) produced public-safe artifact ID `14885889459`. **An owner-run workflow is not independent adoption.** An outside developer's actual fork run and critique are still awaited.
+[Original author-run PR #94 replay (successful)](https://github.com/Iniwura/falsum/actions/runs/45319267361) produced public-safe artifact ID `14885889459`. **An owner-run workflow is not independent adoption.** The Gig Guard maintainer has supplied substantive public source-record verification and a clarification; a verified outside fork execution is still awaited.
 
 ### 3. Make your own bounded package decision (60 seconds)
 
@@ -67,8 +67,8 @@ Try changing the target version to `1.6.0` with a new output filename. Expect `V
 | Twelve public third-party response captures authenticated by original Git blob identities | Verified paid settlement, equal-request multi-Miner ranking, or real provider accuracy |
 | Six historical and three new upstream GitHub-reviewed advisory blobs; bounded per-reference decisions | Complete or fresh advisory feed, arbitrary-package support, or package security clearance |
 | 13 source-backed, preregistered **constructed** Axios/Rack cases, plus new adversarial parser checks | New blind holdout, outside model evaluation, or general model recall |
-| One-click public fork workflow and author-controlled real CI artifact | A verified outside fork replay, integration, retention or independent reviewer |
-| Production Vercel deployment verified at the Phase 5AK checkpoint `8df1942791dc2fcd1b9de4ae5bdf46624839d62a`, READY; **6/6** successful post-merge workflows as checked November 24; see [latest freshness workflow](https://github.com/Iniwura/falsum/actions/workflows/phase5e-live-production-source-freshness.yml) | Browser-time arbitrary model scoring endpoint or official Telegraph network registration |
+| One-click public fork workflow and author-controlled real CI artifact | A verified outside fork replay, integration or retention |
+| Production Vercel deployment verified at the Phase 5AN checkpoint `b120bfbacf4f88bc2b9570b2afb43762c4406d95`, READY; **6/6** successful post-merge workflows as checked November 24; see [latest freshness workflow](https://github.com/Iniwura/falsum/actions/workflows/phase5e-live-production-source-freshness.yml) | Browser-time arbitrary model scoring endpoint or official Telegraph network registration |
 
 The historic 12-response audit observed **2** canonical routed requests with matching reported receipt Intents, **2** direct requests with canonical-reported receipts, **6** successful outputs with noncanonical receipt Intents, and **2** failed captures without successful receipts. There are **zero** pairs proving different miners answered the *same exact* canonical request. Do not turn these into a fair ranking. Source Git authenticity does not independently authenticate payment.
 
@@ -89,6 +89,7 @@ FALSUM's value is to make unsupported security judgments visible and reproducibl
 | Final Season II entry and track/mission form receipt | **Not submitted** |
 | Required 2–5 minute video or organizer-accepted accessible equivalent | **Not verified** |
 | Public updates on three separate dates and public distribution evidence | **Not verified** |
+| External source-maintainer feedback | **Verified public source-record review** (Issue #97) |
 | Verified outside adoption, independent fork use, qualified AppSec gold | **None verified** |
 | User-selected showcase permissions and buyer-introduction consent | **Not confirmed** |
 

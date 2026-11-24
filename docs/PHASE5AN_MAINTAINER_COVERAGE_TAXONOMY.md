@@ -6,7 +6,9 @@ On November 24, the Gig Guard account [swiftbotlabs publicly reviewed the origin
 
 The additive Phase 5AN taxonomy verifies the existing original Git identities and recognizes an input-limit preflight hold only when the exact recorded reason, length above 2,000, HOLD verdict, empty evidence, zero cost, zero receipts, and empty event batch all agree. Ambiguous missing records stay unexplained. It preserves earlier failures even when latest-case coverage uses a later preflight hold. Existing Phase 5AJ/5AK protocols and original measured counts are unchanged.
 
-## Reproduction target (source inspected; fresh CI required)
+## Verified original-source reproduction
+
+[Successful Phase 5AN post-merge replay](https://github.com/Iniwura/falsum/actions/runs/45369264734) passed, including Python 3.11, 3.12 and 3.13; [PR #102](https://github.com/Iniwura/falsum/pull/102) merged after 21/21 checks. All six post-merge main workflows passed on `b120bfba`.
 
 | Original population | Recorded answer | Explicit recorded failure | Input-limit preflight hold |
 | --- | ---: | ---: | ---: |
