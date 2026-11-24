@@ -1,0 +1,45 @@
+name: Phase 5AR - original application response integrity and portable gate
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/falsum/phase5ar_response_integrity.py'
+      - 'tests/test_phase5ar_response_integrity.py'
+      - '.github/workflows/phase5ar-response-integrity.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/falsum/phase5ar_response_integrity.py'
+      - 'tests/test_phase5ar_response_integrity.py'
+      - '.github/workflows/phase5ar-response-integrity.yml'
+permissions:
+  contents: read
+jobs:
+  replay:
+    name: Original app response integrity / Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: ${{ matrix.python }}
+      - run: PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase5ar_response_integrity.py' -v
+      - run: PYTHONPATH=src python -m falsum.phase5ar_response_integrity --out phase5ar-report.json
+      - name: Exercise actual integration CLI without credentials
+        run: |
+          printf '%s' '{"verdict":"Secure","vulnerability_count":0,"issues":["Reported issue"],"summary":"The supplied source was reviewed."}' | PYTHONPATH=src python -m falsum.phase5ar_response_integrity --stdin > integration.json
+          python -c 'import json; r=json.load(open("integration.json")); assert r["decision"]=="REVIEW" and r["security_clearance"] is False'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: phase5ar-response-integrity-${{ matrix.python }}
+          path: |
+            phase5ar-report.json
+            integration.json
+          if-no-files-found: error
