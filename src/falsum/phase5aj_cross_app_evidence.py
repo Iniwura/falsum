@@ -15,7 +15,7 @@ from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[2]
 PROTOCOL = "data/phase5aj-cross-app-evidence-protocol.json"
-PROTOCOL_BLOB = "e7d746f957b139993681fbc7167f640d118ea8f0"
+PROTOCOL_BLOB = "b7048df17553268f9b8737af536f89eae8b73712"
 INTENT = "SECURITY_REVIEW_GENERAL"
 MAX_BYTES = 200_000
 VERDICTS = {"SHIP", "FIX", "HOLD"}
@@ -69,7 +69,7 @@ def source_bytes(spec):
     with urlopen(url, timeout=30) as response:
         raw = response.read(MAX_BYTES + 1)
     require(len(raw) <= MAX_BYTES, "oversized upstream source")
-    require(git_blob(raw) == spec["blob"], "upstream Git byte identity mismatch")
+    require(git_blob(raw) == spec["blob"], "upstream Git byte identity mismatch: " + spec["key"])
     return raw
 
 

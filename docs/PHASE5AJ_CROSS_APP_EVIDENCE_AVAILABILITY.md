@@ -10,6 +10,8 @@ FALSUM adds a separate reproducible evaluation-material audit: measure **availab
 
 The [preimplementation protocol](../data/phase5aj-cross-app-evidence-protocol.json) fixes seven complete original upstream Git identities, both Truvian reported-live fixture variable names and all 12 planted + all 22 audited-v7 recorded Gig Guard decisions. Protocol commit `7e126cdf7740c726d59993d85501492f3a87f9ee`, Git blob `e7d746f957b139993681fbc7167f640d118ea8f0`. The public records were already read; this is a frozen historical retrospective replay, not blinded model validation.
 
+**Transparent source-identity correction.** The first online run failed closed on a single-character transcription error in the audited-v7 ledger SHA. The original upstream object is `96219d10f0d1a4bd84c0af6195a2e8e3a75628b4`, not `96219d10f0d1a4bd84c0af6192a2e8e3a75628b4`. The original preimplementation commit and lock remain historical evidence; the corrected lock blob is `b7048df17553268f9b8737af536f89eae8b73712`. [Original failed online replay](https://github.com/Iniwura/falsum/actions/runs/45355934479/job/138313766119). No source selection, test case, expected count, or measurement rule changed.
+
 ## Reproduce
 
 Python 3.11+, internet access to raw.githubusercontent.com, no API token, no wallet or payment.

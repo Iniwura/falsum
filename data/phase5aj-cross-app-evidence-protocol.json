@@ -37,7 +37,7 @@
       "repo": "swiftbotlabs/gig-guard",
       "commit": "aa495fe5cd713c41e89698dc20463c5d6dade8fd",
       "path": "eval/scale/ledger.audited-v7.public.jsonl",
-      "blob": "96219d10f0d1a4bd84c0af6192a2e8e3a75628b4"
+      "blob": "96219d10f0d1a4bd84c0af6195a2e8e3a75628b4"
     },
     {
       "key": "gig_audited_manifest",
@@ -116,5 +116,13 @@
     "live_settlement_verified": false,
     "registered_network_evaluator": false,
     "mission_completion_proved": false
+  },
+  "provenance_correction": {
+    "reason": "One-character transcription error in original freeze; first genuine online replay rejected the mismatched bytes. Corrected to existing upstream Git object identity, without any source selection, case, expected measurement, or interpretation changes.",
+    "original_protocol_commit": "7e126cdf7740c726d59993d85501492f3a87f9ee",
+    "original_protocol_git_blob_sha1": "e7d746f957b139993681fbc7167f640d118ea8f0",
+    "original_mistyped_ledger_blob": "96219d10f0d1a4bd84c0af6192a2e8e3a75628b4",
+    "corrected_upstream_blob": "96219d10f0d1a4bd84c0af6195a2e8e3a75628b4",
+    "failed_online_run": "https://github.com/Iniwura/falsum/actions/runs/45355934479/job/138313766119"
   }
 }
