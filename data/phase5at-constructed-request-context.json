@@ -1,0 +1,215 @@
+{
+  "scope": "Constructed author-designed request-context controls, not independent gold or live inference. AVAILABLE is trusted caller-reported availability of reviewable evidence, not proof it was reviewed. No semantic accuracy claim.",
+  "rows": [
+    {
+      "id": "P1-available",
+      "pair": "P1",
+      "context": "AVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "No vulnerabilities were identified."
+      },
+      "expected": "CLEAN_CANDIDATE",
+      "note": "Constructed evidence-available clean-candidate control."
+    },
+    {
+      "id": "P1-missing",
+      "pair": "P1",
+      "context": "UNAVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "No vulnerabilities were identified."
+      },
+      "expected": "REVIEW",
+      "note": "Constructed no-evidence control."
+    },
+    {
+      "id": "P2-available",
+      "pair": "P2",
+      "context": "AVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "The review returned zero findings."
+      },
+      "expected": "CLEAN_CANDIDATE",
+      "note": "Constructed evidence-available clean-candidate control."
+    },
+    {
+      "id": "P2-missing",
+      "pair": "P2",
+      "context": "UNAVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "The review returned zero findings."
+      },
+      "expected": "REVIEW",
+      "note": "Constructed no-evidence control."
+    },
+    {
+      "id": "P3-available",
+      "pair": "P3",
+      "context": "AVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "The supplied material appears secure."
+      },
+      "expected": "CLEAN_CANDIDATE",
+      "note": "Constructed evidence-available clean-candidate control."
+    },
+    {
+      "id": "P3-missing",
+      "pair": "P3",
+      "context": "UNAVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "The supplied material appears secure."
+      },
+      "expected": "REVIEW",
+      "note": "Constructed no-evidence control."
+    },
+    {
+      "id": "W1",
+      "context": "UNAVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "Unable to retrieve the implementation; no findings reported."
+      },
+      "expected": "REVIEW",
+      "note": "Constructed unavailable-evidence wording variation."
+    },
+    {
+      "id": "W2",
+      "context": "UNAVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "The implementation was not included in the request."
+      },
+      "expected": "REVIEW",
+      "note": "Constructed unavailable-evidence wording variation."
+    },
+    {
+      "id": "W3",
+      "context": "UNAVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "Only an address was available for inspection."
+      },
+      "expected": "REVIEW",
+      "note": "Constructed unavailable-evidence wording variation."
+    },
+    {
+      "id": "W4",
+      "context": "UNAVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "The source could not be obtained."
+      },
+      "expected": "REVIEW",
+      "note": "Constructed unavailable-evidence wording variation."
+    },
+    {
+      "id": "W5",
+      "context": "UNAVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "The review was limited to the information supplied."
+      },
+      "expected": "REVIEW",
+      "note": "Constructed unavailable-evidence wording variation."
+    },
+    {
+      "id": "C1",
+      "context": "AVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "The code checks the caller before transfer."
+      },
+      "expected": "CLEAN_CANDIDATE"
+    },
+    {
+      "id": "C2",
+      "context": "AVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [
+          "An issue is reported."
+        ],
+        "summary": "Review completed."
+      },
+      "expected": "REVIEW"
+    },
+    {
+      "id": "C3",
+      "context": "AVAILABLE",
+      "response": {
+        "verdict": "Insecure",
+        "vulnerability_count": 1,
+        "issues": [
+          "An issue is reported."
+        ],
+        "summary": "Review completed."
+      },
+      "expected": "FLAG"
+    },
+    {
+      "id": "C4",
+      "context": "UNKNOWN",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "Review completed."
+      },
+      "expected": "REVIEW"
+    },
+    {
+      "id": "C5",
+      "context": "AVAILABLE",
+      "response": {
+        "verdict": "Secure",
+        "vulnerability_count": 0,
+        "issues": [],
+        "summary": "No executable code, configuration files, or system descriptions were supplied for review."
+      },
+      "expected": "REVIEW"
+    },
+    {
+      "id": "C6",
+      "context": "UNAVAILABLE",
+      "response": {
+        "verdict": "Insecure",
+        "vulnerability_count": 1,
+        "issues": [
+          "Reported concern."
+        ],
+        "summary": "Review incomplete."
+      },
+      "expected": "FLAG"
+    }
+  ]
+}
