@@ -1,0 +1,36 @@
+{
+  "scope": "Original upstream Anchor Rust regression execution on the advisory-cited affected revision and upstream fix. Test module is appended unmodified to the affected file only; not a direct-parent claim, no deployed program or real transactions.",
+  "repo": "otter-sec/anchor",
+  "rust": "1.94.1",
+  "source": "lang/src/accounts/program.rs",
+  "revisions": {
+    "affected": {
+      "commit": "5ff3f96eeda91cc54b7fa525631eb8c1394fda04",
+      "source_blob": "1d5bb9b9fddd5c83a77a1c573d611a339fe14f9a",
+      "workspace_blob": "ca9b3cbd838c99694a02f02e67653d6987e17b4e",
+      "lang_manifest_blob": "48e86d2b98e705713a26dbad7eee6e3775a1a158",
+      "cargo_lock_blob": "771ed022536d1a7e1b4efcea93cd28fff296da4a"
+    },
+    "fixed": {
+      "commit": "3eb1fb0427d4fed0e944b627aef76db651a93aab",
+      "source_blob": "4ff621a31a94356e28fad1d1e4df51c0ea2ed06b",
+      "workspace_blob": "4547ad21c45f4280857ac2743b3373231bfecdc2",
+      "lang_manifest_blob": "48e86d2b98e705713a26dbad7eee6e3775a1a158",
+      "cargo_lock_blob": "c1a5f3ffab32200f4f3d3690e436f37fc88945d1"
+    }
+  },
+  "expected": {
+    "affected": {
+      "program_system_rejects_non_system_account": "FAILED",
+      "program_system_accepts_system_account": "ok",
+      "program_system_rejects_non_executable_system_account": "ok",
+      "program_unit_accepts_arbitrary_executable": "ok"
+    },
+    "fixed": {
+      "program_system_rejects_non_system_account": "ok",
+      "program_system_accepts_system_account": "ok",
+      "program_system_rejects_non_executable_system_account": "ok",
+      "program_unit_accepts_arbitrary_executable": "ok"
+    }
+  }
+}

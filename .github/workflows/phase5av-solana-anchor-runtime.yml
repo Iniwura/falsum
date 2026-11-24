@@ -1,0 +1,46 @@
+name: Phase 5AV - original Anchor Rust runtime regression
+on:
+  pull_request:
+    paths:
+      - 'data/phase5av-solana-anchor-runtime-lock.json'
+      - 'src/falsum/phase5av_solana_anchor_runtime.py'
+      - '.github/workflows/phase5av-solana-anchor-runtime.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-upstream:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Check out original affected Anchor revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: otter-sec/anchor
+          ref: 5ff3f96eeda91cc54b7fa525631eb8c1394fda04
+          path: upstream-affected
+          persist-credentials: false
+      - name: Check out original fixed Anchor revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: otter-sec/anchor
+          ref: 3eb1fb0427d4fed0e944b627aef76db651a93aab
+          path: upstream-fixed
+          persist-credentials: false
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.94.1 --profile minimal
+      - name: Execute original upstream regression and verify exact outcomes
+        run: python3 src/falsum/phase5av_solana_anchor_runtime.py upstream-affected upstream-fixed runtime-evidence
+      - name: Preserve public test logs and outcome receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: falsum-anchor-original-runtime-evidence
+          path: |
+            runtime-evidence/report.json
+            runtime-evidence/affected.log
+            runtime-evidence/fixed.log
+          if-no-files-found: warn
