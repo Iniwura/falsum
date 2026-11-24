@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5AK_FROZEN_RETROSPECTIVE_EXTERNAL_LABEL_BASELINES",
+  "selection": "Complete published Gig Guard scale ledger, including all 158 original decision records, all 202 purchases and 70 errors, latest-by-case 129 labels; not a blind test. Compared count-only, verdict-only, strict agreement, and conservative FALSUM consumer policy after inspecting original source. No trained-model claim.",
+  "sources": [
+    {
+      "key": "ledger",
+      "repo": "swiftbotlabs/gig-guard",
+      "commit": "aa495fe5cd713c41e89698dc20463c5d6dade8fd",
+      "path": "eval/scale/ledger.public.jsonl",
+      "blob": "c11e4987db0311a7be1e77434829e908002937be"
+    },
+    {
+      "key": "manifest",
+      "repo": "swiftbotlabs/gig-guard",
+      "commit": "aa495fe5cd713c41e89698dc20463c5d6dade8fd",
+      "path": "eval/scale/manifest.json",
+      "blob": "58057554084d89a2fb87cac99d558258e7e3dadc"
+    },
+    {
+      "key": "receipt_archive",
+      "repo": "swiftbotlabs/gig-guard",
+      "commit": "aa495fe5cd713c41e89698dc20463c5d6dade8fd",
+      "path": "eval/scale/receipts-verify.json",
+      "blob": "5f301278b5fd675a3243721d604ee85ec49d3e39"
+    }
+  ],
+  "expected": {
+    "all_decisions": 158,
+    "unique_cases": 129,
+    "reruns": 29,
+    "purchases": 202,
+    "errors": 70,
+    "archived_settled": 201,
+    "archived_not_found": 1,
+    "latest_availability": {
+      "vulnerable:RECORDED_ANSWER": 89,
+      "vulnerable:NO_ANSWER_RECORD": 15,
+      "vulnerable:RECORDED_FAILURE": 3,
+      "audited:RECORDED_ANSWER": 14,
+      "audited:NO_ANSWER_RECORD": 7,
+      "audited:RECORDED_FAILURE": 1
+    },
+    "latest_metrics": {
+      "count_only": {
+        "vulnerable:FLAG": 80,
+        "vulnerable:UNKNOWN": 19,
+        "vulnerable:PASS": 8,
+        "audited:PASS": 13,
+        "audited:UNKNOWN": 8,
+        "audited:FLAG": 1
+      },
+      "verdict_only": {
+        "vulnerable:FLAG": 89,
+        "vulnerable:UNKNOWN": 18,
+        "audited:FLAG": 5,
+        "audited:UNKNOWN": 8,
+        "audited:PASS": 9
+      },
+      "strict_agreement": {
+        "vulnerable:FLAG": 80,
+        "vulnerable:UNKNOWN": 27,
+        "audited:UNKNOWN": 12,
+        "audited:PASS": 9,
+        "audited:FLAG": 1
+      },
+      "falsum_consumer": {
+        "vulnerable:FLAG": 89,
+        "vulnerable:UNKNOWN": 18,
+        "audited:FLAG": 5,
+        "audited:UNKNOWN": 8,
+        "audited:PASS": 9
+      }
+    },
+    "no_hint_cases": 98,
+    "no_hint_count_only": {
+      "vulnerable:FLAG": 52,
+      "vulnerable:UNKNOWN": 17,
+      "vulnerable:PASS": 7,
+      "audited:PASS": 13,
+      "audited:UNKNOWN": 8,
+      "audited:FLAG": 1
+    },
+    "no_hint_falsum_consumer": {
+      "vulnerable:FLAG": 59,
+      "vulnerable:UNKNOWN": 17,
+      "audited:FLAG": 5,
+      "audited:UNKNOWN": 8,
+      "audited:PASS": 9
+    }
+  },
+  "limits": {
+    "source_labels_independent_of_falsum": true,
+    "controls_not_proven_clean": true,
+    "case_names_not_hidden_from_original_miners": true,
+    "not_new_inference": true,
+    "not_live_settlement": true,
+    "not_independent_expert_gold": true,
+    "not_network_ranking_improvement": true,
+    "not_outside_adoption": true,
+    "pass_is_not_security_clearance": true,
+    "expected_falsum_equals_verdict_baseline": true
+  }
+}
