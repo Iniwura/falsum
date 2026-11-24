@@ -4,6 +4,10 @@ on:
     paths:
       - 'src/falsum/phase4c_judge_proof.py'
       - 'src/falsum/phase4c_release.py'
+      - 'src/falsum/phase5am_application_evidence_site.py'
+      - 'src/falsum/templates/phase5am_application_evidence.html'
+      - 'evidence/phase5am-2026-11-24-recorded-application-aggregates.json'
+      - 'tests/browser/phase5am_application_evidence.cjs'
       - 'src/falsum/phase4v_real_source_witness_site.py'
       - 'src/falsum/phase5c_fifth_source_witness.py'
       - 'data/phase4z-flask-new-source-lock.json'
@@ -25,6 +29,10 @@ on:
     paths:
       - 'src/falsum/phase4c_judge_proof.py'
       - 'src/falsum/phase4c_release.py'
+      - 'src/falsum/phase5am_application_evidence_site.py'
+      - 'src/falsum/templates/phase5am_application_evidence.html'
+      - 'evidence/phase5am-2026-11-24-recorded-application-aggregates.json'
+      - 'tests/browser/phase5am_application_evidence.cjs'
       - 'src/falsum/phase4v_real_source_witness_site.py'
       - 'src/falsum/phase5c_fifth_source_witness.py'
       - 'data/phase4z-flask-new-source-lock.json'
@@ -124,6 +132,7 @@ jobs:
           node --check tests/browser/phase4c_judge_proof.cjs
           node --check tests/browser/phase4v_real_source_witness.cjs
           node --check tests/browser/phase3t_judge_flow.cjs
+          node --check tests/browser/phase5am_application_evidence.cjs
       - name: Test unchanged three-case challenge and new recorded-model proof
         env:
           TEST_SITE_DIR: ${{ github.workspace }}/public
@@ -132,6 +141,7 @@ jobs:
           node tests/browser/phase3t_judge_flow.cjs
           node tests/browser/phase4c_judge_proof.cjs
           node tests/browser/phase4v_real_source_witness.cjs
+          node tests/browser/phase5am_application_evidence.cjs
       - name: Archive real evidence displays and 1440/390/320 screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -148,5 +158,8 @@ jobs:
             public/witness/phase4v-*.png
             public/witness/phase5d-*.png
             public/phase3t-*.png
+            public/applications/index.html
+            public/applications/RECORDED-APPLICATION-AGGREGATES.json
+            public/applications/phase5am-*.png
           if-no-files-found: warn
           retention-days: 90

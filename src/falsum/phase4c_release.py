@@ -12,6 +12,7 @@ from .phase3q_mission_lab import capture, write_outputs
 from .phase4c_judge_proof import write as write_real_proof, STATUS
 from .phase4i_evidence_comparison import write as write_model_comparison, STATUS as COMPARISON_STATUS
 from .phase4v_real_source_witness_site import write as write_real_witness, STATUS as WITNESS_STATUS
+from .phase5am_application_evidence_site import write as write_application_evidence
 
 
 def build(out_dir: Path) -> dict:
@@ -51,7 +52,12 @@ def build(out_dir: Path) -> dict:
             or witness["trained_model_improvement_proven"] is not False
             or witness["network_evaluator_registered"] is not False):
         raise ValueError("real upstream source witness proof failed or incorrectly promoted")
+    application = write_application_evidence(out_dir / "applications")
+    if application["limits"]["live_inference"] is not False:
+        raise ValueError("application record cannot become live inference")
     return {
+        "recorded_application_evidence": str(out_dir / "applications/index.html"),
+        "recorded_application_latest_cases": application["scale"]["aggregate"]["unique_cases"],
         "real_upstream_witness_experience": str(out_dir / "witness/index.html"),
         "real_upstream_source_stages": 5,
         "precomputed_source_witness_verdicts": 80,

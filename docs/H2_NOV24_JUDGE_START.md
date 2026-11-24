@@ -11,6 +11,8 @@ A security-review response can be fluent, paid-flagged and still fail its actual
 
 ## The latest measured application result
 
+[Inspect the recorded application comparison in the browser](https://falsum-evidence-lab.vercel.app/applications/) after the Phase 5AM production release. The page is an offline display of the successful CI log aggregates, not a browser-time inference endpoint.
+
 Two Mission 14 applications, Truvian Shield and Gig Guard, independently published the underlying security-intelligence failure records. FALSUM's [cross-app audit](PHASE5AJ_CROSS_APP_EVIDENCE_AVAILABILITY.md) authenticated seven original Git files and checked 34 decision records and 41 archived receipt joins. The [complete historical scale comparison](PHASE5AK_EXTERNAL_LABEL_BASELINES.md) separately replays 158 decision events, 129 latest labeled contracts and 202 purchases (201 archived SETTLED, one NOT_FOUND). These populations are **not necessarily disjoint**; do not add them to claim a larger unique-case dataset.
 
 | Policy | Vulnerable flagged / 107 | Vulnerable PASS | Vulnerable unknown | Audited controls flagged / 22 |
