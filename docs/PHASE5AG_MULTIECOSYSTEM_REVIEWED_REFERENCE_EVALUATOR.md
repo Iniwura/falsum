@@ -40,6 +40,12 @@ PYTHONPATH=src python -m falsum.cli review-verified-references \
 
 The Rack 3.2.5 case must classify the first historical GHSA as `VERIFIED_INAPPLICABLE` and the second as `VERIFIED_APPLICABLE`. The prerelease-linked range at Rack 3.0.5 must return `INSUFFICIENT_EVIDENCE` rather than an unsupported claim about version ordering.
 
+## Phase 5AH — adversarial interval-order hardening (24 November 2026)
+
+The parser now rejects overlapping, descending and inclusive-endpoint-reentered event intervals as `INSUFFICIENT_EVIDENCE`, even when an earlier interval already matched the target release. Legitimate disjoint and adjacent (exclusive `fixed` boundary) intervals remain supported. Dedicated tests demonstrate those cases. This is a **constructed adversarial correctness regression**, not a newly adjudicated source, expert gold label or extra holdout dataset.
+
+The three original upstream Git blobs, frozen protocol SHA and 13 preregistered expected cases are **unchanged**. Phase 5AH does not change the historical lodash gates, source provenance, advisory freshness claims or real network outcomes.
+
 ## Contract and limitations
 
 - Every result is one of `VERIFIED_APPLICABLE`, `VERIFIED_INAPPLICABLE`, `UNKNOWN_SOURCE`, `INSUFFICIENT_EVIDENCE`; each decision carries an explanatory reason code, authoritative frozen source URL, blob identity and timestamp when one exists.
