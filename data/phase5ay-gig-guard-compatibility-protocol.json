@@ -1,0 +1,24 @@
+{
+  "scope": "Retrospective compatibility test of recorded Gig Guard SHIP/FIX/HOLD decisions, not a new blind benchmark or live integration.",
+  "original_protocol_blob": "fcab9afdbdf9722e39750d887b23fe5d09121238",
+  "source_interface": {
+    "repo": "swiftbotlabs/gig-guard",
+    "commit": "aa495fe5cd713c41e89698dc20463c5d6dade8fd",
+    "path": "src/guards.mjs",
+    "blob": "b4a41a8cbf4f8d8697454ce21ee4e09c76cba13a"
+  },
+  "comparison": [
+    "original recorded decision",
+    "original decision with both exact Intent reviews successfully recorded as a prerequisite to SHIP",
+    "same two-review prerequisite plus existing FALSUM response integrity gate"
+  ],
+  "rules": [
+    "Never change FIX or HOLD to SHIP or change FIX to HOLD.",
+    "Use only exact security and code review Intent records; missing, duplicate, non-object, failed or empty result cannot satisfy dual availability.",
+    "On an original SHIP with both reviews, retain only if existing FALSUM assess yields CLEAN_CANDIDATE; FLAG and REVIEW become HOLD, not automatic FIX.",
+    "No case names, labels, receipt amounts or historical outcomes supplied to policy.",
+    "Evaluate all 129 latest cases with original external labels; report transitions, coverage, vulnerable-label SHIP and audited-label SHIP separately, no claim audited=clean.",
+    "No security clearance or actual adoption; original SHIP is a recorded policy disposition."
+  ],
+  "baseline": "Dual successful nonempty review requirement; not the only possible context-aware baseline."
+}
