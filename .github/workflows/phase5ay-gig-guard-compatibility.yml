@@ -1,0 +1,33 @@
+name: Phase 5AY - actual Gig Guard decision compatibility
+on:
+  pull_request:
+    paths:
+      - 'src/falsum/phase5ay_gig_guard_compatibility.py'
+      - 'tests/test_phase5ay_gig_guard_compatibility.py'
+      - 'data/phase5ay-gig-guard-compatibility-protocol.json'
+      - '.github/workflows/phase5ay-gig-guard-compatibility.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.14'
+      - name: Verify non-promoting postcondition
+        run: python -m unittest discover -s tests -p 'test_phase5ay_gig_guard_compatibility.py' -v
+      - name: Replay all 129 original latest decisions and source interface
+        run: python -m falsum.phase5ay_gig_guard_compatibility --out phase5ay-report.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: phase5ay-gig-guard-compatibility
+          path: phase5ay-report.json
+          if-no-files-found: error
