@@ -1,0 +1,36 @@
+{
+  "source": "kolega-ai/Real-Vuln-Benchmark",
+  "commit": "408906248023dca88e4519aa17b6cc286adec9c1",
+  "manifest_blob": "74b6fc43db463ea9f511b5903b7cce5faf9c618b",
+  "previous_protocol_blob": "4c433b63641a16cd77d6f5f5514683f0caa19fea",
+  "selection": "All remaining 21 human-authored Python targets in pinned manifest, excluding the five pilot targets. All Semgrep and Snyk published result files. Missing paths explicitly reported, no missing-as-empty inference. Benchmark labels independently authored; not blind or independently adjudicated by FALSUM.",
+  "scanners": [
+    "semgrep",
+    "snyk"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "comparison": "Unchanged Phase 5AZ candidate and original/sorted-greedy controls. Compare actual paired report confusion matrices and F3 variation. No tuning after observing these 21 targets. Pin whole upstream Git commit; derive exact file identities from its tree, with only previously audited three Python modules executed. No scanner rerun, network ranking, or adoption claim.",
+  "expected_targets": 21,
+  "expected_slots": 42
+}
