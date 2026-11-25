@@ -1,0 +1,22 @@
+{
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "scope": "Retrospective full 129-case original published corpus, all 103 recorded latest answers. New explicit CWE title-identity diagnostic, not blinded semantic accuracy or vulnerability localization. No labels or case names used in policy.",
+  "ledger_protocol": "data/phase5ak-external-label-baseline-protocol.json",
+  "ledger_protocol_git_blob": "fcab9afdbdf9722e39750d887b23fe5d09121238",
+  "registry": {
+    "version": "4.19.1",
+    "url": "https://cwe.mitre.org/data/xml/cwec_v4.19.1.xml.zip",
+    "source": "https://cwe.mitre.org/data/archive.html",
+    "known_names": {
+      "252": "Unchecked Return Value",
+      "829": "Inclusion of Functionality from Untrusted Control Sphere",
+      "1104": "Use of Unmaintained Third Party Components"
+    }
+  },
+  "comparison": {
+    "baseline": "Registry ID exists (checks exact ID, not wording).",
+    "candidate": "Same input and registry, detect only explicit code/title pairs where title exactly normalizes to another unique registry weakness name and differs from claimed ID. Otherwise abstain when title cannot be mapped; no security claim.",
+    "denominator": "Report all 129 latest cases and all 103 answers; per explicit name pair count matches/conflicts/unresolved; report missing answers separately.",
+    "selection": "Existing original records inspected before this protocol; no holdout claim. Freeze parser and complete census; no hand-picking mismatches."
+  }
+}
