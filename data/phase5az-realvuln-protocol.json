@@ -1,0 +1,63 @@
+{
+  "source": "kolega-ai/Real-Vuln-Benchmark",
+  "commit": "408906248023dca88e4519aa17b6cc286adec9c1",
+  "license": "Apache-2.0; original scanner and dataset authors retain attribution",
+  "selection": "Five convenience-selected public Python targets with both published Semgrep and Snyk files accessible. Not a random sample or blinded holdout. Include all ten files, including empty scanner output. No selection by measured outcome.",
+  "targets": [
+    "realvuln-dsvpwa",
+    "realvuln-dsvw",
+    "realvuln-dvblab",
+    "realvuln-djangoat",
+    "realvuln-damn-vulnerable-graphql-application"
+  ],
+  "scanners": [
+    "semgrep",
+    "snyk"
+  ],
+  "files": {
+    "scorer/matcher.py": "ac93005f68f04098f69a1d3275f1d775a5966491",
+    "parsers/base.py": "c58a7d194dd6c09c0ea20cb985831cba115913c0",
+    "parsers/semgrep.py": "41959365cb2f99462e7275e81b6823e89950c30c",
+    "LICENSE": "d7f139fa36e6d5c321a7d5b19271e4ca124fdb88",
+    "benchmark-manifest.json": "74b6fc43db463ea9f511b5903b7cce5faf9c618b",
+    "ground-truth/realvuln-dsvpwa/ground-truth.json": "f586ac2a3a33e6c99a7923b9ee5ad49080c4b2fb",
+    "scan-results/realvuln-dsvpwa/semgrep/results.json": "63d9e8d501629b6c614c992c701478d1d8d845de",
+    "scan-results/realvuln-dsvpwa/snyk/results.json": "21441be7028eabb5345f65e4a82ced86ab3ffac9",
+    "ground-truth/realvuln-dsvw/ground-truth.json": "bb467651ce21cf6c1b3176c90492e5b1b0af24c0",
+    "scan-results/realvuln-dsvw/semgrep/results.json": "430113c708752af6818f23c78791f2861457f480",
+    "scan-results/realvuln-dsvw/snyk/results.json": "6cc255cb23d6b7555483b0e3e4eb953fcef38159",
+    "ground-truth/realvuln-dvblab/ground-truth.json": "0197050525b139df6ddfebed3e4b6854887b5c84",
+    "scan-results/realvuln-dvblab/semgrep/results.json": "55765f75434371240153cf35e7909efa2a11c881",
+    "scan-results/realvuln-dvblab/snyk/results.json": "be4828d5596b7a4969cda93e79a2355657ebd9af",
+    "ground-truth/realvuln-djangoat/ground-truth.json": "0ee8ae16a815ed7324a561f32641aa1ee315a789",
+    "scan-results/realvuln-djangoat/semgrep/results.json": "fdd4a401e510d8142970c7dd8fe89dd2822abe86",
+    "scan-results/realvuln-djangoat/snyk/results.json": "ba66550fd14431e7c1d7e76f70db858cd1223f61",
+    "ground-truth/realvuln-damn-vulnerable-graphql-application/ground-truth.json": "d63268cf4527bffc3c22b26e2e6b993b9348f5a8",
+    "scan-results/realvuln-damn-vulnerable-graphql-application/semgrep/results.json": "a31286bc7375ccfe9c2fdb46894cacb2f653152b",
+    "scan-results/realvuln-damn-vulnerable-graphql-application/snyk/results.json": "d7a3d8dab987a3e6e4d7e64031b8c1e9e3e4bd3e"
+  },
+  "comparison": "Use identical official parser, matching predicate, non-scoring and ground-truth semantics. Compare original greedy matcher, deterministic sorted greedy, and deterministic maximum-cardinality positive matching followed by trap matching and non-scoring classification. Twenty seeded input-order perturbations of findings AND labels, plus original order. Report TP, FP, FN, TN, NS and F3, variation and max-TP gaps. Candidate maximizes positive credit, then trap assignment on remaining findings; not a global F3 optimizer or proof of semantic correctness. No new scanner or model output.",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "success": "Report actual instability or TP gaps if present; no gain asserted from constructed cases or empty output. No network ranking or adoption claim."
+}
