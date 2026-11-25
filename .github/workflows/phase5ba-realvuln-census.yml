@@ -1,0 +1,34 @@
+name: Phase 5BA - disjoint RealVuln Python census
+on:
+  pull_request:
+    paths:
+      - 'src/falsum/phase5ba_realvuln_census.py'
+      - 'tests/test_phase5ba_realvuln_census.py'
+      - 'data/phase5ba-realvuln-census-protocol.json'
+      - '.github/workflows/phase5ba-realvuln-census.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: src
+      GIT_TERMINAL_PROMPT: '0'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.14'
+      - name: Verify complete disjoint selection
+        run: python -m unittest discover -s tests -p 'test_phase5ba_realvuln_census.py' -v
+      - name: Replay full pinned remaining Python census
+        run: python -m falsum.phase5ba_realvuln_census --out phase5ba-report.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: phase5ba-realvuln-census
+          path: phase5ba-report.json
+          if-no-files-found: error
