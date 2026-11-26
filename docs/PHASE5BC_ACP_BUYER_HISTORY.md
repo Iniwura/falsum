@@ -4,7 +4,7 @@
 
 We are pursuing use case #08 without requiring another contestant's integration.
 Register the buyer and seller through the official Virtuals ACP sandbox registration
-at https://app.virtuals.io/acp/join. Organizer guidance distinguishes the sandbox
+at https://app.virtuals.io/acp/new (the old /acp/join route returned 404 in the entrant's browser). Organizer guidance distinguishes the sandbox
 from the dev/testnet CLI auth environment, which may require separate access.
 Do not assume Base Sepolia is the correct sandbox chain: obtain the actual chain
 and job ID from the registered platform. Do not fund, add signers, authorize
