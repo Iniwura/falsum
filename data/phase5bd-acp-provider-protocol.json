@@ -1,0 +1,28 @@
+{
+  "offering": "verifySecurityReport",
+  "schema": "falsum.acp.verify.request.v1",
+  "result_schema": "falsum.acp.verify.result.v1",
+  "scope": "Provider-side preparation of inline verification deliverable for one funded ACP v2 verification job. Original report job and outer verification job are distinct. Never submit, sign, fund, accept or reject ACP transactions.",
+  "upstream": {
+    "repo": "Virtual-Protocol/acp-cli",
+    "commit": "9d2be827cc19e4ea2cecfff3896398607537ea3e",
+    "key": "provider",
+    "path": "src/commands/provider.ts",
+    "blob": "5ee246f5b64c693b7d9213467ec828f24002a1ff"
+  },
+  "controls": [
+    "valid-supported",
+    "valid-contradicted",
+    "missing-custody",
+    "receipt-tamper",
+    "outer-job-mismatch",
+    "buyer-mismatch",
+    "duplicate-requirement",
+    "unfunded",
+    "already-submitted",
+    "seller-custody-injection",
+    "wrong-offering",
+    "changed-request"
+  ],
+  "limits": "Constructed wrappers with pinned real advisory. Local custody is caller-supplied, not cryptographically verified by FALSUM. No live job or automated provider runtime."
+}
