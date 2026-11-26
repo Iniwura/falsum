@@ -26,7 +26,17 @@
     "acp_mainnet_contract": "0x238E541BfefD82238730D00a2208E5497F1832E0",
     "acp_mainnet_usdc": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
     "telegraph_base_sepolia_asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
-    "telegraph_pay_to": "0xC0A3FB6dF3F1f4B54617d29ffbdA4663Af5F96e2e"
+    "telegraph_pay_to": "0xC0A3FB6dF3F1f4B54617d29ffbdA4663Af5F96e2e",
+    "binding_verifier": {
+      "module": "src/falsum/phase5bg_telegraph_acp_binding.py",
+      "test_suite": "tests/test_phase5bg_telegraph_acp_binding.py",
+      "constructed_tests": 7,
+      "constructed_tests_passed": true,
+      "live_binding_verified": false,
+      "no_original_report_job_id_generated": true,
+      "v1_request_schema_can_carry_binding": false,
+      "strict_live_path": "requires explicit v2 telegraph_binding extension"
+    }
   },
   "conclusions": {
     "empty_registry_chains_is_absolute_receive_blocker": false,
@@ -36,6 +46,8 @@
     "gas_sponsorship": "official sandbox guidance says no gas/ETH is required; current session lacks account-level live sponsor confirmation",
     "telegraph_historical_receipts_reusable_for_anchor_accept": false,
     "fresh_telegraph_to_acp_binding_verified": false,
+    "telegraph_receipt_request_response_job_binding": "not available in observed receipt fields; strict verifier returns HOLD",
+    "report_job_schema_limitation": "Phase 5BD v1 exact four-field request cannot carry the required binding reference",
     "independent_customer_adoption": false
   },
   "cost": {

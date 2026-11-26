@@ -187,10 +187,28 @@ or an ACP job.
 
 The current FALSUM acceptance gate also intentionally accepts a caller-supplied
 five-field custody wrapper and documents that it does not authenticate settlement.
-The x402 receipt itself contains intent, amount, chain, payer/miner, receipt hash
-and transaction hash; it does not carry the exact Anchor request digest, response
-digest or ACP job ID. Consequently **the binding is not independently verified
-yet**.
+The x402 receipt observed in the read-only quote/history work contains intent,
+amount, chain, payer/miner, receipt hash and transaction hash; it does not carry
+the exact Anchor request digest, response digest or an original report job ID.
+Consequently **the live binding is not independently verified**.
+
+Phase 5BG now includes a strict offline verifier in
+`src/falsum/phase5bg_telegraph_acp_binding.py` with seven constructed tests.
+It requires raw request/response bytes, a receipt carrying all three digest/job
+links, an independently matching token-transfer receipt, exact ACP v2
+requirement/history bytes, and the exact FALSUM deliverable. It never generates
+an original job ID and never authorizes purchase or settlement. The tests prove
+that a fully linked constructed bundle can be recognized and that request
+tampering, transfer mismatch, missing original job ID, current v1 schema, and
+ACP history/deliverable mismatch all return `HOLD`. This is implementation and
+constructed test evidence only; it is not a live Telegraph receipt.
+
+The current Phase 5BD v1 request is an exact four-field object and therefore
+cannot carry the required binding reference. The verifier accepts only an
+explicit v2 extension for a future live run. Until Telegraph exposes a genuine
+original report job ID plus receipt-level request/response links, or the
+operator supplies those links from an independently authenticated protocol
+record, the proposed `$0.02` route remains blocked.
 
 The fresh run may claim binding only if an independent evidence bundle recomputes
 all of these links:
