@@ -1,0 +1,58 @@
+{
+  "version": "falsum.acp.security.v1",
+  "scope": "Single pinned Anchor advisory applicability job, not whole-contract security audit. Caller-sourced ACP job identity and purchased-response custody required; local fixtures do not prove live ACP or receipt settlement.",
+  "source": "data/phase5au-solana-anchor-protocol.json",
+  "source_lock": "e90406c9d7b6a6e4ba79e4c77392f8669681f710",
+  "cases": [
+    {
+      "id": "affected-correct",
+      "version": "1.0.1",
+      "claim": "APPLICABLE",
+      "expected": "ACCEPT"
+    },
+    {
+      "id": "fixed-correct",
+      "version": "1.0.2",
+      "claim": "INAPPLICABLE",
+      "expected": "ACCEPT"
+    },
+    {
+      "id": "affected-false-safe",
+      "version": "1.0.1",
+      "claim": "INAPPLICABLE",
+      "expected": "REJECT"
+    },
+    {
+      "id": "fixed-false-positive",
+      "version": "1.0.2",
+      "claim": "APPLICABLE",
+      "expected": "REJECT"
+    },
+    {
+      "id": "missing-claim",
+      "version": "1.0.1",
+      "claim": null,
+      "expected": "HOLD"
+    },
+    {
+      "id": "unsupported-version",
+      "version": "1.0.2-rc.1",
+      "claim": "INAPPLICABLE",
+      "expected": "HOLD"
+    }
+  ],
+  "controls": [
+    "wrong-job",
+    "wrong-chain",
+    "wrong-target",
+    "wrong-reference",
+    "wrong-intent",
+    "unverified-receipt",
+    "response-digest-mismatch",
+    "request-digest-mismatch",
+    "extra-claim",
+    "missing-issues",
+    "source-tamper"
+  ],
+  "limits": "Constructed job wrappers; authenticated advisory bytes only. No paid call, ACP SDK execution, external adoption, or onchain receipt verification."
+}
