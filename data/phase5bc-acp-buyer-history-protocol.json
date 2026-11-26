@@ -1,0 +1,35 @@
+{
+  "upstream": {
+    "repo": "Virtual-Protocol/acp-cli",
+    "commit": "9d2be827cc19e4ea2cecfff3896398607537ea3e",
+    "sources": [
+      {
+        "key": "history",
+        "path": "src/commands/job.ts",
+        "blob": "0d24bbe7ffa27f6ba7852ad207fb487efd337a69"
+      },
+      {
+        "key": "skill",
+        "path": "SKILL.md",
+        "blob": "51727498d45a0d945bd39bbece3043cc48567e04"
+      }
+    ]
+  },
+  "scope": "Read-only v2 ACP job history normalization, exact expected buyer/chain/job/requirement, submitted lifecycle, independently supplied purchase custody. Constructed history fixtures only; no live ACP or onchain verification.",
+  "controls": [
+    "valid",
+    "wrong-buyer",
+    "wrong-job",
+    "wrong-chain",
+    "wrong-requirement",
+    "duplicate-requirement",
+    "duplicate-submission",
+    "pre-funding-submission",
+    "completed",
+    "non-v2",
+    "missing-custody",
+    "missing-deliverable",
+    "out-of-scope",
+    "contradicted-claim"
+  ]
+}
