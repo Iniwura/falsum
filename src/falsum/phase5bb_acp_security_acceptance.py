@@ -13,7 +13,7 @@ import sys
 
 from .phase5aj_cross_app_evidence import git_blob, parse, require, source_bytes
 from . import phase5au_solana_anchor_evidence as anchor
-from .phase5ar_response_integrity import assess as integrity
+from .phase5ar_response_integrity import NO_CODE, MISSING_CODE
 
 CONTRACT = Path(__file__).resolve().parents[2] / "data/phase5bb-acp-security-contract.json"
 LOCK = "a7d3f9620d3fba991f41cc4399ff4aaf8152afc3"
@@ -98,14 +98,19 @@ def evaluate(job, delivery, custody, advisory_bytes):
             type(response["summary"]) is not str or not response["summary"].strip() or
             len(response["summary"]) > 12000):
         return hold("INVALID_RESPONSE_FIELDS", **flags)
-    checks = integrity({k: v for k, v in response.items() if k != "claim"})
-    if "EXPLICIT_NO_CODE_EVIDENCE" in checks["reasons"]:
+    if MISSING_CODE.search(response["summary"]) or NO_CODE.search(response["summary"]):
         return hold("RESPONSE_EXPLICITLY_LACKS_REVIEW_EVIDENCE", **flags)
     # A rejection means the narrowly requested applicability claim is wrong.
     # Negative security verdicts are not themselves rejected: a valid report
     # can identify an affected dependency.
     if delivery["claim"] != expected:
         return result("REJECT", ["PINNED_ADVISORY_CONTRADICTS_CLAIM"], job, delivery, **flags)
+    if response["verdict"] not in ("Secure", "Insecure", "Needs changes"):
+        return hold("UNKNOWN_SECURITY_VERDICT", **flags)
+    if (expected == "APPLICABLE" and (response["verdict"] == "Secure" or response["vulnerability_count"] == 0 or not response["issues"])):
+        return hold("CONTRADICTORY_AFFECTED_REPORT", **flags)
+    if (expected == "INAPPLICABLE" and (response["verdict"] != "Secure" or response["vulnerability_count"] != 0 or response["issues"])):
+        return hold("ADDITIONAL_FINDINGS_OUTSIDE_JOB_SCOPE", **flags)
     # Do not accept broader security assertions under an advisory-only contract.
     # The summary/issue contents are unverified narrative, not approved findings.
     return result("ACCEPT", ["SCOPED_APPLICABILITY_CLAIM_CORROBORATED"], job, delivery, **flags)
