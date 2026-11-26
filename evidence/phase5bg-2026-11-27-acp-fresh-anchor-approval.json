@@ -12,7 +12,7 @@
     "manual_wallet_approvals": 0
   },
   "confirmed": {
-    "repository_head": "7076dff0a297122f983379b6f20e3ba969ffaf16",
+    "repository_head": "22a9800ed7bd7dfc585e0712042c41d8de9f59e4",
     "repository_origin_main_synced": true,
     "acp_cli": "1.0.40",
     "acp_node_sdk": "@virtuals-protocol/acp-node-v2@0.1.15",
