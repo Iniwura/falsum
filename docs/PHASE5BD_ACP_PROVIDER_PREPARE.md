@@ -20,6 +20,16 @@ Do not include trusted_custody in the request. It is a separate trusted local fi
 never derived from a buyer/seller assertion or a receipt-shaped string. Without
 independently verified purchase evidence, the report evaluation is HOLD.
 
+The live-bound path is an explicit `falsum.acp.verify.request.v2` extension. It
+adds `telegraph_binding` and changes the report schema to
+`falsum.acp.verify.report.v2`, whose `source_response_sha256` must equal the
+actual purchased Telegraph response digest. The provider accepts v2 only when
+the event handler has first verified the raw Telegraph/transfer/ACP evidence
+with `phase5bg_telegraph_acp_binding`; a missing or mismatched verified binding
+returns HOLD and cannot reach `READY_TO_SUBMIT`. The v1 path remains available
+for the earlier constructed acceptance tests and never claims live Telegraph
+custody.
+
 The local operator context is chain_id, decimal-string job_id, buyer (actual EVM
 address), offering, and requirement_digest (SHA256 of the exact independently
 retained request, sorted compact ASCII JSON; see Phase 5BB digest). The caller must
@@ -33,6 +43,10 @@ sandbox history differs, stop and inspect rather than inventing a compatible eve
 acp job history --job-id ACTUAL_JOB_ID --chain-id ACTUAL_CHAIN_ID --json > history.json
 PYTHONPATH=src python -m falsum.phase5bd_acp_provider_prepare --context context.json --history history.json --trusted-custody custody.json
 ```
+
+The event planner accepts a verified v2 manifest with `--telegraph-binding`.
+It does not execute a mutation; it only emits a `READY_TO_SUBMIT` plan after
+the exact funded lifecycle and the strict binding verifier both pass.
 
 The command emits prepared=true with a structured deliverable only when the outer
 job contract checks pass. It does not submit or sign anything. The report decision

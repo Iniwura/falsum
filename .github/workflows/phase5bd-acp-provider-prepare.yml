@@ -3,9 +3,11 @@ on:
   pull_request:
     paths:
       - 'src/falsum/phase5bd_acp_provider_prepare.py'
+      - 'src/falsum/phase5bg_telegraph_acp_binding.py'
       - 'src/falsum/phase5bb_acp_security_acceptance.py'
       - 'data/phase5bd-acp-provider-protocol.json'
       - 'tests/test_phase5bd_acp_provider_prepare.py'
+      - 'tests/test_phase5bg_telegraph_acp_binding.py'
       - '.github/workflows/phase5bd-acp-provider-prepare.yml'
   workflow_dispatch:
 permissions:
@@ -25,3 +27,5 @@ jobs:
           python-version: '3.11.14'
       - name: Verify official submit contract and funded-job preparation controls
         run: python -m unittest discover -s tests -p 'test_phase5bd_acp_provider_prepare.py' -v
+      - name: Verify v2 binding handoff controls
+        run: python -m unittest discover -s tests -p 'test_phase5bg_telegraph_acp_binding.py' -v

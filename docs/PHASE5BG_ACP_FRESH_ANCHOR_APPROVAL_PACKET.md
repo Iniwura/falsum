@@ -193,7 +193,8 @@ the exact Anchor request digest, response digest or an original report job ID.
 Consequently **the live binding is not independently verified**.
 
 Phase 5BG now includes a strict offline verifier in
-`src/falsum/phase5bg_telegraph_acp_binding.py` with seven constructed tests.
+`src/falsum/phase5bg_telegraph_acp_binding.py` with thirteen constructed and
+adversarial integration tests.
 It requires raw request/response bytes, a receipt carrying all three digest/job
 links, an independently matching token-transfer receipt, exact ACP v2
 requirement/history bytes, and the exact FALSUM deliverable. It never generates
@@ -223,7 +224,7 @@ ACP requirement bytes
 ACP authenticated job history
   -> outer chain_id/job_id + requirement_sha256
 FALSUM response
-  -> response_sha256 and the same receipt_hash
+  -> source_response_sha256 + evaluated_report_digest + the same receipt_hash
 ```
 
 If any link is absent, seller-supplied, or only asserted by a receipt-shaped

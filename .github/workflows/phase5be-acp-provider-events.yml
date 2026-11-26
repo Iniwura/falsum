@@ -4,9 +4,11 @@ on:
     paths:
       - 'src/falsum/phase5be_acp_provider_events.py'
       - 'src/falsum/phase5bd_acp_provider_prepare.py'
+      - 'src/falsum/phase5bg_telegraph_acp_binding.py'
       - 'src/falsum/phase5bb_acp_security_acceptance.py'
       - 'data/phase5be-acp-provider-events-protocol.json'
       - 'tests/test_phase5be_acp_provider_events.py'
+      - 'tests/test_phase5bg_telegraph_acp_binding.py'
       - '.github/workflows/phase5be-acp-provider-events.yml'
   workflow_dispatch:
 permissions:
@@ -26,3 +28,5 @@ jobs:
           python-version: '3.11.14'
       - name: Verify ACP event handling and prepare-only safety boundary
         run: python -m unittest discover -s tests -p 'test_phase5be_acp_provider_events.py' -v
+      - name: Verify strict Telegraph binding and v2 integration
+        run: python -m unittest discover -s tests -p 'test_phase5bg_telegraph_acp_binding.py' -v

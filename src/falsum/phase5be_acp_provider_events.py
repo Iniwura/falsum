@@ -21,6 +21,7 @@ from typing import Any
 from . import phase5au_solana_anchor_evidence as anchor
 from . import phase5bd_acp_provider_prepare as provider
 from . import phase5bb_acp_security_acceptance as gate
+from . import phase5bg_telegraph_acp_binding as binding
 from .phase5aj_cross_app_evidence import git_blob, parse, require, source_bytes
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -127,6 +128,7 @@ def plan_events(
     provider_wallet: str,
     histories: dict[tuple[int, str], dict[str, Any]] | None = None,
     custodies: dict[tuple[int, str], dict[str, Any] | None] | None = None,
+    bindings: dict[tuple[int, str], dict[str, Any]] | None = None,
     advisory_bytes: bytes | None = None,
 ) -> list[dict[str, Any]]:
     """Return safe action plans for an ordered event batch.
@@ -139,6 +141,7 @@ def plan_events(
     provider_wallet = _identity(provider_wallet, "provider_wallet")
     histories = histories or {}
     custodies = custodies or {}
+    bindings = bindings or {}
     raw = _as_events(raw_events)
     states: dict[tuple[int, str], dict[str, Any]] = {}
     plans: list[dict[str, Any]] = []
@@ -178,9 +181,15 @@ def plan_events(
             if state["requirement"] is not None:
                 plans.append(_refuse(base, "DUPLICATE_REQUIREMENT"))
                 continue
-            if (not gate.exact_fields(requirement, {"schema", "offering", "report_job", "report"})
-                    or requirement.get("schema") != provider.REQUEST_SCHEMA):
+            supported_v1 = (gate.exact_fields(requirement, {"schema", "offering", "report_job", "report"})
+                            and requirement.get("schema") == provider.REQUEST_SCHEMA)
+            supported_v2 = (gate.exact_fields(requirement, provider.V2_REQUEST_FIELDS)
+                            and requirement.get("schema") == provider.REQUEST_SCHEMA_V2)
+            if not (supported_v1 or supported_v2):
                 plans.append(_refuse(base, "UNSUPPORTED_VERIFICATION_REQUEST"))
+                continue
+            if supported_v2 and key not in bindings:
+                plans.append(_refuse(base, "TELEGRAPH_BINDING_MANIFEST_REQUIRED"))
                 continue
             state["requirement"] = requirement
             state["buyer"] = sender
@@ -243,13 +252,31 @@ def plan_events(
                 "offering": provider.OFFERING,
                 "requirement_digest": gate.digest(state["requirement"]),
             }
+            binding_ref = None
             custody = custodies.get(key)
+            if state["requirement"].get("schema") == provider.REQUEST_SCHEMA_V2:
+                manifest = bindings.get(key)
+                if manifest is None:
+                    plans.append(_refuse(base, "TELEGRAPH_BINDING_MANIFEST_REQUIRED"))
+                    continue
+                verified = binding.verify(manifest)
+                if verified.get("decision") != "BOUND":
+                    plans.append(_refuse(
+                        base,
+                        "TELEGRAPH_BINDING_HOLD:" + ":".join(verified.get("reasons", ["UNVERIFIED"])),
+                    ))
+                    continue
+                if verified.get("acp_job") != {"chain_id": event["chain_id"], "job_id": event["job_id"]}:
+                    plans.append(_refuse(base, "TELEGRAPH_BINDING_ACP_JOB_MISMATCH"))
+                    continue
+                binding_ref = verified["telegraph_binding"]
+                custody = verified["trusted_custody"]
             raw_advisory = advisory_bytes
             if raw_advisory is None:
                 source = next(s for s in anchor.protocol()["sources"] if s["key"] == "reviewed_advisory")
                 raw_advisory = source_bytes(source)
             try:
-                prepared = provider.prepare(context, history, custody, raw_advisory)
+                prepared = provider.prepare(context, history, custody, raw_advisory, binding_ref=binding_ref)
             except (TypeError, ValueError, KeyError, UnicodeError, RecursionError) as exc:
                 plans.append(_refuse(base, f"PREPARATION_ERROR:{exc}"))
                 continue
@@ -286,12 +313,15 @@ def main() -> None:
                    help="optional funded history JSON for the single job in the event batch")
     p.add_argument("--trusted-custody", type=Path,
                    help="optional caller-verified Telegraph custody JSON")
+    p.add_argument("--telegraph-binding", type=Path,
+                   help="optional strict v2 Telegraph↔ACP binding manifest")
     p.add_argument("--advisory", type=Path)
     args = p.parse_args()
     protocol()
     events = _load_json(args.events)
     histories: dict[tuple[int, str], dict[str, Any]] = {}
     custodies: dict[tuple[int, str], dict[str, Any] | None] = {}
+    bindings: dict[tuple[int, str], dict[str, Any]] = {}
     if args.history:
         history = _load_json(args.history)
         histories[(history["chainId"], history["jobId"])] = history
@@ -299,9 +329,15 @@ def main() -> None:
         custody = _load_json(args.trusted_custody)
         if args.history:
             custodies[(history["chainId"], history["jobId"])] = custody
+    if args.telegraph_binding:
+        manifest = _load_json(args.telegraph_binding)
+        acp = manifest.get("acp", {})
+        if isinstance(acp, dict):
+            bindings[(acp.get("chain_id"), acp.get("job_id"))] = manifest
     advisory = args.advisory.read_bytes() if args.advisory else None
     print(json.dumps(plan_events(events, provider_wallet=args.provider_wallet,
                                  histories=histories, custodies=custodies,
+                                 bindings=bindings,
                                  advisory_bytes=advisory), sort_keys=True,
                      allow_nan=False))
 

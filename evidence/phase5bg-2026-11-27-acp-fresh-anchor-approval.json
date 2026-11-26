@@ -30,12 +30,17 @@
     "binding_verifier": {
       "module": "src/falsum/phase5bg_telegraph_acp_binding.py",
       "test_suite": "tests/test_phase5bg_telegraph_acp_binding.py",
-      "constructed_tests": 7,
+      "constructed_tests": 13,
       "constructed_tests_passed": true,
       "live_binding_verified": false,
       "no_original_report_job_id_generated": true,
       "v1_request_schema_can_carry_binding": false,
-      "strict_live_path": "requires explicit v2 telegraph_binding extension"
+      "strict_live_path": "requires explicit v2 telegraph_binding extension",
+      "provider_v2_integration": true,
+      "event_handler_v2_integration": true,
+      "response_content_digest_bound_to_report": true,
+      "quote_validator_invoked": true,
+      "independent_adoption_derived_from_classification": false
     }
   },
   "conclusions": {

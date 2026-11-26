@@ -6,6 +6,7 @@ import unittest
 from falsum import phase5au_solana_anchor_evidence as anchor
 from falsum import phase5bb_acp_security_acceptance as gate
 from falsum import phase5bd_acp_provider_prepare as provider
+from falsum import phase5be_acp_provider_events as events
 from falsum import phase5bg_telegraph_acp_binding as binding
 from falsum.phase5aj_cross_app_evidence import source_bytes
 
@@ -73,13 +74,14 @@ class TelegraphAcpBindingTests(unittest.TestCase):
             "summary": "Constructed scoped applicability claim.",
         }
         report = {
-            "schema": gate.SCHEMA,
+            "schema": provider.REPORT_SCHEMA_V2,
             "chain_id": original["chain_id"],
             "job_id": original["job_id"],
             "target": copy.deepcopy(original["target"]),
             "claim": "APPLICABLE",
             "response": report_response,
             "receipt_hash": receipt_hash,
+            "source_response_sha256": binding.bytes_digest(response_raw),
         }
         outer_job_id = "77"
         requirement_binding = {
@@ -89,6 +91,7 @@ class TelegraphAcpBindingTests(unittest.TestCase):
             "receipt_hash": receipt_hash,
             "tx_hash": tx_hash,
             "report_job_digest": binding.digest(original),
+            "report_digest": binding.digest(report),
         }
         requirement = {
             "schema": binding.REQUEST_SCHEMA_V2,
@@ -109,24 +112,30 @@ class TelegraphAcpBindingTests(unittest.TestCase):
             "protocol": "v2", "status": "funded", "chainId": binding.ACP_CHAIN_ID,
             "jobId": outer_job_id, "entryCount": len(entries), "entries": entries,
         }
+        gate_report = copy.deepcopy(report)
+        gate_report["schema"] = gate.SCHEMA
+        del gate_report["source_response_sha256"]
+        evaluation = gate.evaluate(
+            original,
+            gate_report,
+            {
+                "status": "CALLER_VERIFIED",
+                "job_digest": binding.digest(original),
+                "response_digest": binding.digest(report["response"]),
+                "receipt_hash": receipt_hash,
+                "intent": binding.TELEGRAPH_INTENT,
+            },
+            self.advisory,
+        )
+        evaluation["source_response_sha256"] = binding.bytes_digest(response_raw)
+        evaluation["evaluated_report_digest"] = binding.digest(report)
         delivery = {
             "schema": provider.RESULT_SCHEMA,
             "offering": provider.OFFERING,
             "verification_job": {"chain_id": binding.ACP_CHAIN_ID, "job_id": outer_job_id},
             "requirement_digest": binding.digest(requirement),
             "history_digest": binding.digest(history),
-            "report_evaluation": gate.evaluate(
-                original,
-                report,
-                {
-                    "status": "CALLER_VERIFIED",
-                    "job_digest": binding.digest(original),
-                    "response_digest": binding.digest(report["response"]),
-                    "receipt_hash": receipt_hash,
-                    "intent": binding.TELEGRAPH_INTENT,
-                },
-                self.advisory,
-            ),
+            "report_evaluation": evaluation,
             "telegraph_binding": requirement_binding,
         }
         return {
@@ -198,12 +207,109 @@ class TelegraphAcpBindingTests(unittest.TestCase):
         acp["history_body_b64"] = b64(history_raw)
         acp["history_sha256"] = binding.bytes_digest(history_raw)
 
+    def v2_provider_bundle(self):
+        manifest = self.manifest()
+        verified = binding.verify(manifest)
+        requirement = json.loads(base64.b64decode(manifest["acp"]["requirement_body_b64"]).decode("utf-8"))
+        history = json.loads(base64.b64decode(manifest["acp"]["history_body_b64"]).decode("utf-8"))
+        acp = manifest["acp"]
+        context = {
+            "chain_id": acp["chain_id"],
+            "job_id": acp["job_id"],
+            "buyer": acp["buyer"],
+            "offering": provider.OFFERING,
+            "requirement_digest": gate.digest(requirement),
+        }
+        raw_events = []
+        for entry in history["entries"]:
+            if entry["kind"] == "message":
+                event_entry = dict(entry)
+                tools = ["setBudget"]
+            else:
+                event_entry = {"kind": "system", "event": dict(entry["event"])}
+                event_type = event_entry["event"]["type"]
+                if event_type == "job.created":
+                    event_entry["event"].update({"jobId": acp["job_id"], "client": acp["buyer"],
+                                                 "provider": acp["provider"]})
+                if event_type == "job.funded":
+                    event_entry["event"].update({"jobId": acp["job_id"], "client": acp["buyer"]})
+                tools = ["submit"] if event_type == "job.funded" else []
+            raw_events.append({
+                "jobId": acp["job_id"], "chainId": acp["chain_id"],
+                "status": "funded" if entry["kind"] == "system" and entry["event"]["type"] == "job.funded" else "open",
+                "roles": ["provider"], "availableTools": tools, "entry": event_entry,
+            })
+        return manifest, verified, context, history, raw_events
+
     def test_constructed_exact_binding(self):
         out = binding.verify(self.manifest())
         self.assertEqual(out["decision"], "BOUND")
         self.assertTrue(out["binding_verified"])
         self.assertFalse(out["independent_customer_adoption"])
         self.assertFalse(out["purchase_authorized"])
+
+    def test_report_records_actual_response_content_digest(self):
+        manifest = self.manifest()
+        requirement = json.loads(base64.b64decode(manifest["acp"]["requirement_body_b64"]).decode("utf-8"))
+        requirement["report"]["source_response_sha256"] = "0" * 64
+        self.reencode_requirement(manifest, requirement)
+        self.assertEqual(binding.verify(manifest)["reasons"], ["EVALUATED_REPORT_SOURCE_RESPONSE_MISMATCH"])
+
+    def test_quote_validator_is_not_dead_code(self):
+        manifest = self.manifest()
+        manifest["telegraph"]["quote"]["amount"] = "1"
+        self.assertEqual(binding.verify(manifest)["reasons"], ["UNSUPPORTED_TELEGRAPH_PAYMENT_QUOTE"])
+
+    def test_external_customer_classification_never_proves_adoption(self):
+        manifest = self.manifest()
+        manifest["classification"] = "LIVE_EXTERNAL_CUSTOMER"
+        out = binding.verify(manifest)
+        self.assertEqual(out["decision"], "BOUND")
+        self.assertFalse(out["independent_customer_adoption"])
+        self.assertEqual(out["adoption_status"], "NOT_ESTABLISHED_BY_THIS_VERIFIER")
+
+    def test_v2_provider_requires_verified_binding_and_emits_binding(self):
+        manifest, verified, context, history, _ = self.v2_provider_bundle()
+        unverified = provider.prepare(context, history, verified["trusted_custody"], self.advisory)
+        self.assertFalse(unverified["prepared"])
+        self.assertEqual(unverified["reason"], "TELEGRAPH_BINDING_NOT_VERIFIED")
+        prepared = provider.prepare(
+            context, history, verified["trusted_custody"], self.advisory,
+            binding_ref=verified["telegraph_binding"],
+        )
+        self.assertTrue(prepared["prepared"])
+        self.assertEqual(prepared["deliverable"]["telegraph_binding"], verified["telegraph_binding"])
+        self.assertEqual(
+            prepared["deliverable"]["report_evaluation"]["source_response_sha256"],
+            verified["telegraph_binding"]["response_sha256"],
+        )
+
+    def test_event_handler_requires_and_consumes_v2_binding(self):
+        manifest, _, _, history, raw_events = self.v2_provider_bundle()
+        key = (binding.ACP_CHAIN_ID, "77")
+        no_manifest = events.plan_events(
+            raw_events, provider_wallet=binding.FALSUM_PROVIDER_WALLET,
+            histories={key: history}, advisory_bytes=self.advisory,
+        )
+        self.assertEqual(no_manifest[1]["reason"], "TELEGRAPH_BINDING_MANIFEST_REQUIRED")
+        plans = events.plan_events(
+            raw_events, provider_wallet=binding.FALSUM_PROVIDER_WALLET,
+            histories={key: history}, bindings={key: manifest}, advisory_bytes=self.advisory,
+        )
+        self.assertEqual(plans[1]["action"], "READY_FOR_BUDGET")
+        self.assertEqual(plans[3]["action"], "READY_TO_SUBMIT")
+        self.assertEqual(plans[3]["deliverable"]["telegraph_binding"]["schema"], binding.BINDING_REF_SCHEMA)
+
+    def test_event_handler_holds_tampered_v2_binding(self):
+        manifest, _, _, history, raw_events = self.v2_provider_bundle()
+        manifest["telegraph"]["quote"]["amount"] = "1"
+        key = (binding.ACP_CHAIN_ID, "77")
+        plans = events.plan_events(
+            raw_events, provider_wallet=binding.FALSUM_PROVIDER_WALLET,
+            histories={key: history}, bindings={key: manifest}, advisory_bytes=self.advisory,
+        )
+        self.assertEqual(plans[3]["action"], "HOLD")
+        self.assertEqual(plans[3]["reason"], "TELEGRAPH_BINDING_HOLD:UNSUPPORTED_TELEGRAPH_PAYMENT_QUOTE")
 
     def test_missing_original_job_id_is_hold(self):
         manifest = self.manifest()

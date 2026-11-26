@@ -27,8 +27,9 @@ from . import phase5bd_acp_provider_prepare as provider
 
 
 SCHEMA = "falsum.telegraph.acp.binding.v1"
-REQUEST_SCHEMA_V2 = "falsum.acp.verify.request.v2"
-BINDING_REF_SCHEMA = "falsum.telegraph.acp.binding-ref.v1"
+REQUEST_SCHEMA_V2 = provider.REQUEST_SCHEMA_V2
+BINDING_REF_SCHEMA = provider.BINDING_REF_SCHEMA
+REPORT_SCHEMA_V2 = provider.REPORT_SCHEMA_V2
 RESULT_SCHEMA = provider.RESULT_SCHEMA
 OFFERING = provider.OFFERING
 TELEGRAPH_URL = "https://devnode.telegraphprotocol.com/engine/v1/ask"
@@ -56,6 +57,7 @@ TX_HASH = re.compile(r"0x[0-9a-fA-F]{64}\Z")
 ADDRESS = re.compile(r"0x[0-9a-fA-F]{40}\Z")
 JOB_ID = re.compile(r"[1-9][0-9]{0,77}\Z")
 CLASSIFICATIONS = {"CONSTRUCTED_TEST", "LIVE_SELF_CONTROLLED", "LIVE_EXTERNAL_CUSTOMER"}
+BINDING_REF_FIELDS = provider.BINDING_REF_FIELDS
 
 
 class BindingError(ValueError):
@@ -293,6 +295,7 @@ def _verify(manifest: dict[str, Any]) -> dict[str, Any]:
     )
     if telegraph["request_url"] != TELEGRAPH_URL:
         raise BindingError("TELEGRAPH_REQUEST_URL_MISMATCH")
+    _quote(telegraph["quote"])
     if not isinstance(telegraph["payment_response_header"], str) or not telegraph["payment_response_header"].strip():
         raise BindingError("MISSING_PAYMENT_RESPONSE_HEADER")
     request_raw, request = _json_bytes(telegraph["request_body_b64"], "telegraph_request")
@@ -338,15 +341,17 @@ def _verify(manifest: dict[str, Any]) -> dict[str, Any]:
         raise BindingError("REPORT_JOB_SCHEMA_LIMITATION")
     if digest(requirement["report_job"]) != digest(report_job):
         raise BindingError("ACP_ORIGINAL_REPORT_JOB_MISMATCH")
-    report = _exact_fields(requirement["report"], gate.DELIVERY_FIELDS, "INVALID_ACP_REPORT")
-    if (report["schema"] != gate.SCHEMA or report["chain_id"] != report_job["chain_id"]
+    report = _exact_fields(requirement["report"], provider.V2_REPORT_FIELDS, "INVALID_ACP_REPORT")
+    if (report["schema"] != REPORT_SCHEMA_V2 or report["chain_id"] != report_job["chain_id"]
             or report["job_id"] != report_job["job_id"] or report["target"] != report_job["target"]):
         raise BindingError("ACP_REPORT_ORIGINAL_JOB_MISMATCH")
+    _hash_field(report, "source_response_sha256", telegraph["response_sha256"],
+                "EVALUATED_REPORT_SOURCE_RESPONSE_MISMATCH")
     if report["receipt_hash"] != receipt["receipt_hash"]:
         raise BindingError("ACP_REPORT_RECEIPT_MISMATCH")
     binding_ref = _exact_fields(
         requirement["telegraph_binding"],
-        {"schema", "request_sha256", "response_sha256", "receipt_hash", "tx_hash", "report_job_digest"},
+        BINDING_REF_FIELDS,
         "REPORT_JOB_SCHEMA_LIMITATION",
     )
     if binding_ref["schema"] != BINDING_REF_SCHEMA:
@@ -358,6 +363,7 @@ def _verify(manifest: dict[str, Any]) -> dict[str, Any]:
         "receipt_hash": receipt["receipt_hash"],
         "tx_hash": receipt["tx_hash"],
         "report_job_digest": digest(report_job),
+        "report_digest": digest(report),
     }
     if binding_ref != expected_ref:
         raise BindingError("TELEGRAPH_ACP_BINDING_REFERENCE_MISMATCH")
@@ -377,9 +383,14 @@ def _verify(manifest: dict[str, Any]) -> dict[str, Any]:
     if delivery.get("telegraph_binding") != expected_ref:
         raise BindingError("FALSUM_DELIVERY_BINDING_MISMATCH")
     evaluation = delivery.get("report_evaluation")
+    gate_report = dict(report)
+    del gate_report["source_response_sha256"]
+    gate_report["schema"] = gate.SCHEMA
     if (not isinstance(evaluation, dict)
             or evaluation.get("job_digest") != digest(report_job)
-            or evaluation.get("deliverable_digest") != digest(report)):
+            or evaluation.get("deliverable_digest") != digest(gate_report)
+            or evaluation.get("source_response_sha256") != telegraph["response_sha256"]
+            or evaluation.get("evaluated_report_digest") != digest(report)):
         raise BindingError("FALSUM_EVALUATION_BINDING_MISMATCH")
     return {
         "schema": SCHEMA,
@@ -397,7 +408,16 @@ def _verify(manifest: dict[str, Any]) -> dict[str, Any]:
         },
         "acp_job": {"chain_id": acp["chain_id"], "job_id": acp["job_id"]},
         "binding_verified": True,
-        "independent_customer_adoption": manifest["classification"] == "LIVE_EXTERNAL_CUSTOMER",
+        "independent_customer_adoption": False,
+        "adoption_status": "NOT_ESTABLISHED_BY_THIS_VERIFIER",
+        "telegraph_binding": expected_ref,
+        "trusted_custody": {
+            "status": "CALLER_VERIFIED",
+            "job_digest": digest(report_job),
+            "response_digest": digest({k: v for k, v in report["response"].items()}),
+            "receipt_hash": receipt["receipt_hash"],
+            "intent": TELEGRAPH_INTENT,
+        },
         "purchase_authorized": False,
         "automatic_settlement_authorized": False,
     }
@@ -419,6 +439,7 @@ def verify(manifest: Any) -> dict[str, Any]:
             "evidence_classification": classification,
             "binding_verified": False,
             "independent_customer_adoption": False,
+            "adoption_status": "NOT_ESTABLISHED_BY_THIS_VERIFIER",
             "purchase_authorized": False,
             "automatic_settlement_authorized": False,
         }

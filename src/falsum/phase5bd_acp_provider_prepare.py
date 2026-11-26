@@ -19,12 +19,21 @@ LOCK_PATH = ROOT / "data/phase5bd-acp-provider-protocol.json"
 LOCK = "2142c8458e714e1d1e9fa4593aaacd94a662f9d3"
 OFFERING = "verifySecurityReport"
 REQUEST_SCHEMA = "falsum.acp.verify.request.v1"
+REQUEST_SCHEMA_V2 = "falsum.acp.verify.request.v2"
+REPORT_SCHEMA_V2 = "falsum.acp.verify.report.v2"
+BINDING_REF_SCHEMA = "falsum.telegraph.acp.binding-ref.v1"
 RESULT_SCHEMA = "falsum.acp.verify.result.v1"
 ADDRESS = re.compile(r"0x[0-9a-fA-F]{40}")
 ID = re.compile(r"[1-9][0-9]{0,77}")
 DIGEST = re.compile(r"[0-9a-f]{64}")
 LIFECYCLE = ["job.created", "budget.set", "job.funded"]
 TERMINAL = {"job.submitted", "job.completed", "job.rejected", "job.expired"}
+V2_REQUEST_FIELDS = {"schema", "offering", "report_job", "report", "telegraph_binding"}
+V2_REPORT_FIELDS = gate.DELIVERY_FIELDS | {"source_response_sha256"}
+BINDING_REF_FIELDS = {
+    "schema", "request_sha256", "response_sha256", "receipt_hash", "tx_hash",
+    "report_job_digest", "report_digest",
+}
 
 
 def protocol():
@@ -53,7 +62,31 @@ def valid_context(context):
             and DIGEST.fullmatch(context["requirement_digest"]))
 
 
-def prepare(context, history, trusted_custody, advisory_bytes):
+def _v2_request_parts(request, binding_ref):
+    """Validate the app-level v2 extension and return its gate-compatible report."""
+    if not gate.exact_fields(request, V2_REQUEST_FIELDS) or request.get("schema") != REQUEST_SCHEMA_V2:
+        return None
+    if not gate.exact_fields(request.get("telegraph_binding"), BINDING_REF_FIELDS):
+        return "TELEGRAPH_BINDING_REQUIRED"
+    ref = request["telegraph_binding"]
+    if ref.get("schema") != BINDING_REF_SCHEMA:
+        return "TELEGRAPH_BINDING_REQUIRED"
+    if binding_ref is None or binding_ref != ref:
+        return "TELEGRAPH_BINDING_NOT_VERIFIED"
+    report = request.get("report")
+    if not gate.exact_fields(report, V2_REPORT_FIELDS) or report.get("schema") != REPORT_SCHEMA_V2:
+        return "TELEGRAPH_REPORT_SCHEMA_UNSUPPORTED"
+    if (not isinstance(report.get("source_response_sha256"), str)
+            or not DIGEST.fullmatch(report["source_response_sha256"])
+            or report["source_response_sha256"] != ref["response_sha256"]):
+        return "EVALUATED_REPORT_SOURCE_RESPONSE_MISMATCH"
+    base_report = dict(report)
+    del base_report["source_response_sha256"]
+    base_report["schema"] = gate.SCHEMA
+    return base_report, ref, report
+
+
+def prepare(context, history, trusted_custody, advisory_bytes, binding_ref=None):
     """Return an inline deliverable candidate, or refuse to prepare a job."""
     def stop(reason):
         return {"prepared": False, "reason": reason, "deliverable": None,
@@ -101,19 +134,34 @@ def prepare(context, history, trusted_custody, advisory_bytes):
         return stop("MALFORMED_REQUIREMENT")
     if gate.digest(request) != context["requirement_digest"]:
         return stop("REQUIREMENT_DIGEST_MISMATCH")
-    if (not gate.exact_fields(request, {"schema", "offering", "report_job", "report"})
-            or request["schema"] != REQUEST_SCHEMA or request["offering"] != OFFERING):
+    if request.get("offering") != OFFERING:
         return stop("UNSUPPORTED_VERIFICATION_REQUEST")
-    report_job, report = request["report_job"], request["report"]
+    v2_parts = _v2_request_parts(request, binding_ref)
+    if v2_parts is not None:
+        if isinstance(v2_parts, str):
+            return stop(v2_parts)
+        report, verified_binding_ref, full_report = v2_parts
+        request_version = 2
+    elif gate.exact_fields(request, {"schema", "offering", "report_job", "report"}) and request["schema"] == REQUEST_SCHEMA:
+        report, verified_binding_ref, full_report = request["report"], None, request["report"]
+        request_version = 1
+    else:
+        return stop("UNSUPPORTED_VERIFICATION_REQUEST")
+    report_job = request["report_job"]
     if (type(report_job) is dict and gate.same(report_job.get("chain_id"), context["chain_id"])
             and gate.same(report_job.get("job_id"), context["job_id"])):
         return stop("ORIGINAL_REPORT_AND_VERIFICATION_JOB_MUST_BE_DISTINCT")
     verdict = gate.evaluate(report_job, report, trusted_custody, advisory_bytes)
+    if request_version == 2:
+        verdict["source_response_sha256"] = full_report["source_response_sha256"]
+        verdict["evaluated_report_digest"] = gate.digest(full_report)
     delivery = {"schema": RESULT_SCHEMA, "offering": OFFERING,
                 "verification_job": {"chain_id": context["chain_id"], "job_id": context["job_id"]},
                 "requirement_digest": gate.digest(request), "history_digest": gate.digest(history),
                 "report_evaluation": verdict, "history_authenticated_by_falsum": False,
                 "automatic_settlement_authorized": False, "live_acp_job_verified": False}
+    if request_version == 2:
+        delivery["telegraph_binding"] = verified_binding_ref
     return {"prepared": True, "reason": "REVIEWABLE_DELIVERABLE_ONLY", "deliverable": delivery,
             "automatic_settlement_authorized": False, "live_acp_job_verified": False}
 
