@@ -2,7 +2,7 @@
 
 **STATUS: NOT SUBMITTED.** Current concise form answers are below; the older dated evidence is preserved further down for provenance only.
 
-## Current form answers — verified November 24, 2026
+## Current form answers — verified November 26, 2026
 
 **Project:** FALSUM  
 **Track:** Evaluators  
@@ -18,6 +18,7 @@ FALSUM builds reproducible evaluation material for AI security-review intelligen
 
 ### What was built and measured
 
+- **ACP provider integration (read-only verified on 26 November):** the installed official ACP CLI `1.0.40` and Node SDK `0.1.15` authenticated a direct `GET /agents/wallet/{walletAddress}` lookup for FALSUM and returned the live `verifySecurityReport` offering at `$0.01` with a 30-minute SLA. A prepare-only event handler now binds ordered ACP `job.created → requirement → budget.set → job.funded` evidence to the existing source-bound engine and reproducibly emits `ACCEPT`, `REJECT` or `HOLD`; it executes no budget, submit, settlement or purchase mutation. The ACP dashboard sandbox remains unverified and is not conflated with the CLI's separate testnet environment. [Read-only probe evidence](../evidence/phase5be-2026-11-26-acp-readonly-probe.json) · [Provider event contract](PHASE5BE_ACP_PROVIDER_EVENTS.md). **This is not a live ACP job, completed commercial execution or independent adoption.**
 - **Real Telegraph contribution:** 20/20 material rows are Eligible for the entrant-reported Privy address in the [November 24 live read-only recheck](https://github.com/Iniwura/falsum/actions/runs/45490538616). This is material status, not organizer acceptance, cryptographic account ownership or an approved scoring adapter.
 - **Application failure coverage:** [129 historical contract cases](https://github.com/Iniwura/falsum/actions/runs/45356819921), 158 recorded decision events and 202 purchase records. Eight count-only vulnerable-label PASS predictions are avoided by FALSUM, which ties verdict-only on this population. Labels are externally published, not independently adjudicated expert gold.
 - **Developer-confirmed response integrity:** [Original nine-fixture replay](https://github.com/Iniwura/falsum/actions/runs/45476259143) finds three documented missing-code cases: verdict-only admits 3/3 unsupported clean candidates, Secure plus zero count admits 2/3, FALSUM admits 0/3. Two fixtures were confirmed by the original maintainer. These are bounded retrospective outcomes, not nine unique paid requests.

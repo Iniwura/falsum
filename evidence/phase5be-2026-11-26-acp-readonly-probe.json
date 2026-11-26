@@ -1,0 +1,42 @@
+{
+  "status": "VERIFIED_AUTHENTICATED_READ_ONLY_PROVIDER_LOOKUP",
+  "observed_date": "2026-11-26",
+  "environment": "mainnet",
+  "cli_version": "1.0.40",
+  "sdk": {
+    "package": "@virtuals-protocol/acp-node-v2",
+    "version": "0.1.15",
+    "method": "AcpApiClient.getAgentByWalletAddress",
+    "http_method": "GET",
+    "path": "/agents/wallet/{walletAddress}"
+  },
+  "agent": {
+    "id": "01a21868-850b-7c91-80de-65e2add32087",
+    "name": "FALSUM",
+    "role": "HYBRID",
+    "wallet_address": "0x012501f623e8a45c0de5716d1228d2b61f1b3a0c",
+    "chains": []
+  },
+  "offering": {
+    "name": "verifySecurityReport",
+    "price_type": "fixed",
+    "price_value_usd": 0.01,
+    "sla_minutes": 30,
+    "is_hidden": false,
+    "required_funds": false
+  },
+  "signer_policy_observation": "ACP_ONLY",
+  "side_effects": {
+    "job_created": false,
+    "job_funded": false,
+    "deliverable_submitted": false,
+    "settlement_executed": false,
+    "telegraph_purchase": false,
+    "onchain_transaction": false
+  },
+  "limitations": [
+    "This is provider registry lookup, not proof of a live ACP job.",
+    "An empty chains array is recorded exactly and is not promoted to network eligibility.",
+    "No sandbox identity was inferred from the mainnet CLI session or from the separate testnet configuration."
+  ]
+}

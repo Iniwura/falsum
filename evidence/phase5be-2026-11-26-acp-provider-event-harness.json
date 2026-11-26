@@ -1,0 +1,40 @@
+{
+  "status": "CONSTRUCTED_PREPARE_ONLY_EVENT_HARNESS",
+  "observed_date": "2026-11-26",
+  "implementation": "src/falsum/phase5be_acp_provider_events.py",
+  "test": "tests/test_phase5be_acp_provider_events.py",
+  "command": "PYTHONPATH=src python -m unittest discover -s tests -p test_phase5be_acp_provider_events.py -v",
+  "cases": [
+    {
+      "id": "correct-claim-with-caller-verified-custody",
+      "recommendation": "ACCEPT",
+      "live": false
+    },
+    {
+      "id": "contradicted-claim-with-caller-verified-custody",
+      "recommendation": "REJECT",
+      "live": false
+    },
+    {
+      "id": "correct-claim-without-custody",
+      "recommendation": "HOLD",
+      "live": false
+    }
+  ],
+  "safety": {
+    "mutation_executed": false,
+    "job_created": false,
+    "job_funded": false,
+    "deliverable_submitted": false,
+    "settlement_executed": false,
+    "telegraph_paid_purchase": false,
+    "signer_policy": "ACP_ONLY"
+  },
+  "limitations": [
+    "Constructed ACP event/history wrappers",
+    "Authentic pinned advisory bytes only",
+    "Caller custody is an input contract, not cryptographic custody verification",
+    "No sandbox eligibility or live ACP job has been established",
+    "No independent adoption or official Evaluator score is claimed"
+  ]
+}

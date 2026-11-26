@@ -1,0 +1,22 @@
+{
+  "schema": "falsum.acp.provider.events.v1",
+  "offering": "verifySecurityReport",
+  "mode": "prepare-only",
+  "event_types": [
+    "job.created",
+    "budget.set",
+    "job.funded",
+    "job.submitted",
+    "job.completed",
+    "job.rejected",
+    "job.expired"
+  ],
+  "invariants": [
+    "Provider waits for the requirement message after job.created",
+    "The requirement must be bound to one buyer and the verifySecurityReport offering",
+    "The funded event must authorize submit before preparation is attempted",
+    "Authenticated ACP history and caller-verified Telegraph custody remain separate inputs",
+    "The handler never executes set-budget, submit, complete, reject or fund"
+  ],
+  "limits": "Event envelopes are supplied by an authenticated caller but are not authenticated by FALSUM; no live job, payment, settlement, Telegraph purchase, sandbox eligibility or independent adoption is claimed."
+}

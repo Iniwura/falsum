@@ -8,6 +8,10 @@
 
 [Verified Solana Anchor advisory material](docs/PHASE5AU_SOLANA_ANCHOR_EVIDENCE.md) authenticates three original Git sources and matches all 12 constructed target/version queries versus three for a citation-only baseline. [Original-source CI](https://github.com/Iniwura/falsum/actions/runs/45489641572) passed. A correct range-aware baseline would be equivalent. No model accuracy or Solana deployment claim. [Original upstream Rust runtime replay](https://github.com/Iniwura/falsum/actions/runs/45490186795) separately confirmed four fixed-revision passes and exactly one expected affected-revision assertion failure, with the three remaining controls passing. [Reproduce](docs/PHASE5AV_SOLANA_ANCHOR_RUNTIME.md).
 
+## ACP provider integration — read-only verified, prepare-only runtime
+
+[Phase 5BE](docs/PHASE5BE_ACP_PROVIDER_EVENTS.md) verifies the authenticated direct provider lookup through the installed official ACP Node SDK, records FALSUM's live offering metadata, and connects the existing bounded acceptance engine to ordered ACP event envelopes. The event handler plans `READY_FOR_BUDGET` and `READY_TO_SUBMIT` actions but executes no ACP mutation. Constructed event evidence demonstrates `ACCEPT`, `REJECT` and `HOLD` while keeping Telegraph purchase custody separate. The ACP dashboard sandbox and the CLI's `IS_TESTNET=true` environment are intentionally not conflated; no live ACP job, purchase, settlement or independent adoption is claimed.
+
 ## What FALSUM does, and does not yet do
 
 FALSUM publishes reproducible **security-review evaluation material**: immutable source/review evidence, benchmark cases, negative model results, and bounded advisory-reference checks. The original lodash `4.17.15` six-advisory verifier is a **fixed historical snapshot**. A newer, separate per-reference evaluator adds authenticated Axios/Rack evidence across npm and RubyGems. Neither is a comprehensive package scanner, a validated general-purpose security evaluator, or an approved network scoring service. Broader generalization and expert validation remain [tracked in Issue #89](https://github.com/Iniwura/falsum/issues/89).

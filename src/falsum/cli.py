@@ -151,6 +151,15 @@ def main(argv: list[str] | None = None) -> int:
     telegraph.add_argument("--out",type=Path,required=True)
     telegraph.add_argument("--request-json",type=Path)
     telegraph.add_argument("--response-json",type=Path)
+    provider_events = commands.add_parser(
+        "acp-provider-plan",
+        help="plan a prepare-only FALSUM provider response from ACP event envelopes; never mutates ACP",
+    )
+    provider_events.add_argument("--events", type=Path, required=True)
+    provider_events.add_argument("--provider-wallet", required=True)
+    provider_events.add_argument("--history", type=Path)
+    provider_events.add_argument("--trusted-custody", type=Path)
+    provider_events.add_argument("--advisory", type=Path)
     counterbalanced = commands.add_parser(
         "score-counterbalanced-source",
         help="24 authenticated raw-source / swapped-option tasks, four-way reversal scoring and actual model inference; NOT blind gold",
@@ -254,6 +263,16 @@ def main(argv: list[str] | None = None) -> int:
             if args.response_json is not None:
                 a+=["--response-json",str(args.response_json)]
             return telegraph_main(a)
+        if args.command == "acp-provider-plan":
+            from .phase5be_acp_provider_events import main as provider_events_main
+            argv = ["--events", str(args.events), "--provider-wallet", args.provider_wallet]
+            for name, flag in (("history", "--history"),
+                               ("trusted_custody", "--trusted-custody"),
+                               ("advisory", "--advisory")):
+                value = getattr(args, name)
+                if value is not None:
+                    argv.extend((flag, str(value)))
+            return provider_events_main(argv)
         if args.command == "score-counterbalanced-source":
             from .phase5s_counterbalanced_source_invariance import main as counterbalanced_main
             if args.mode=="export":
