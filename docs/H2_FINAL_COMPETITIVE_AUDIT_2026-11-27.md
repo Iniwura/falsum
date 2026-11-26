@@ -67,12 +67,17 @@ presented as external demand.
 
 ## ACP branch status
 
-Commit `656427a` now integrates the strict v2 Telegraph binding into the
+Commit `22a9800` integrates the strict v2 Telegraph binding into the
 provider and event planner. The v2 path binds the actual response-content
 digest into the evaluated report, invokes the payment-quote validator, never
 derives adoption from a caller label, and holds without a verified manifest.
 All current tests are constructed; no buyer, signer, payment, transaction, or
 independent customer adoption is claimed.
+
+The pushed evidence-head correction is `22a2951`; hosted GitHub Foundation
+tests and the official data gate passed for that head. The local Windows full
+suite remains subject to the repository's pre-existing symlink-privilege
+limitation; Ubuntu hosted CI is the authoritative cross-platform result.
 
 The optional branch remains blocked on Virtuals Sandbox browser access, buyer
 identity approval, account-level sponsorship confirmation, x402 wallet
