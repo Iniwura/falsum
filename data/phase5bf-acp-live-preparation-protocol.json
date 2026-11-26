@@ -1,0 +1,147 @@
+{
+  "schema": "falsum.acp.live-preparation.v1",
+  "status": "PREPARED_PENDING_OPERATOR_APPROVAL",
+  "verified_at_utc": "2026-11-26T22:47:45.5504345Z",
+  "scope": "Read-only preparation for one ACP v2 verification job. No ACP mutation, Telegraph purchase, token transfer, signer change, or manual wallet approval was executed.",
+  "acp": {
+    "cli_version": "1.0.40",
+    "sdk_package": "@virtuals-protocol/acp-node-v2",
+    "sdk_version": "0.1.15",
+    "environment": "mainnet",
+    "api_base": "https://api.acp.virtuals.io",
+    "direct_lookup": {
+      "method": "GET",
+      "path": "/agents/wallet/{walletAddress}",
+      "marketplace_search_required": false,
+      "result": "FALSUM returned with active EVM chains"
+    },
+    "provider": {
+      "name": "FALSUM",
+      "agent_id": "01a21868-850b-7c91-80de-65e2add32087",
+      "wallet_address": "0x012501f623e8a45c0de5716d1228d2b61f1b3a0c",
+      "role": "HYBRID",
+      "active_chains": [4663, 5042, 8453],
+      "signer_policy": "ACP_ONLY",
+      "offering": {
+        "name": "verifySecurityReport",
+        "price_usdc": "0.01",
+        "sla_minutes": 30,
+        "required_funds": false,
+        "hidden": false
+      }
+    },
+    "provider_receive_readiness": {
+      "sse_listener_authenticated_and_connected": true,
+      "job_received": false,
+      "active_jobs_via_safe_direct_api": 0,
+      "interpretation": "FALSUM is registry-visible and event-listener capable; no live job has yet been received."
+    },
+    "wallet_observation": {
+      "base_native_balance_observed": "0x0",
+      "base_usdc_balance": "null_registry_only",
+      "interpretation": "No provider funding is assumed. A null registry-only token balance is not treated as a proven zero."
+    }
+  },
+  "sandbox": {
+    "supported_route": "Virtuals platform non-public sandbox/self-evaluation flow",
+    "required_shape": [
+      "register distinct buyer and seller agents with the Service Registry",
+      "use FALSUM as the seller and a different buyer wallet",
+      "create the required smart wallet and whitelist the developer wallet where the platform requires it",
+      "buyer initiates at least one job against the seller",
+      "top up the test buyer with USDC",
+      "run the event-driven budget, funding, submission and evaluation lifecycle"
+    ],
+    "testnet_is_not_assumed_to_be_sandbox": true,
+    "testnet_probe": {
+      "env": "IS_TESTNET=true",
+      "chains": [84532, 97, 46630, 5042002, 500],
+      "authenticated_session_available": false
+    },
+    "blocker": "No organizer/platform sandbox designation or authenticated ACP test-buyer session is available on this PC. Do not substitute the unauthenticated developer testnet for the official sandbox."
+  },
+  "telegraph": {
+    "intent": "SECURITY_REVIEW_GENERAL",
+    "current_read_only_quote": {
+      "endpoint": "POST https://devnode.telegraphprotocol.com/engine/v1/ask",
+      "request_result": "402 Payment Required",
+      "payment_method": "x402 exact",
+      "amount_uusdc": "10000",
+      "amount_usdc": "0.01",
+      "network": "eip155:84532",
+      "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      "pay_to": "0xC0A3FB6dF3F1f4B54617d29ffbdA4663Af5F96e2e",
+      "max_timeout_seconds": 60,
+      "new_payment_executed": false
+    },
+    "historical_receipt_reuse": {
+      "onchain_receipts_rechecked_read_only": true,
+      "reusable_for_current_anchor_acceptance": false,
+      "reason": "The two historical SECURITY_REVIEW_GENERAL captures are paid and successful on Sepolia, but their targets are an off-target JavaScript diff and npm lodash 4.17.15, not crates.io anchor-lang 1.0.1 / GHSA-c6rc-8jpp-2fgc.",
+      "receipts": [
+        {
+          "source": "https://github.com/anvithagowda098/pr-guard/blob/99d2e3c93890a8fc083947bde4f21217516b7a5f/test/fixtures/miner-responses/ROUTED/security-review-diff-77003-off-target.json",
+          "receipt_hash": "0x661378d59ac7aaadcbd67482cf24e6105b9c619bbd45a71dd5eba39492b3fc75",
+          "tx_hash": "0x0c6b9b4a5e8d21ef0ce9b9e6240e46f403683255b76976c2d39103d7f202cd85",
+          "chain": "eip155:11155111",
+          "amount_uusdc": "10000",
+          "rpc_status": "0x1",
+          "transfer_event_verified": true,
+          "transfer_token": "0xcc194e1a843b658526d0d5c431f670028582ae17",
+          "transfer_amount_uusdc": "10000"
+        },
+        {
+          "source": "https://github.com/anvithagowda098/pr-guard/blob/99d2e3c93890a8fc083947bde4f21217516b7a5f/test/fixtures/miner-responses/ROUTED/security-review-lodash-77003-off-target.json",
+          "receipt_hash": "0xbabe4600a1f3df4802043a29561b2ec70e17d67635e48ea6742d0bfb1ebb01ab",
+          "tx_hash": "0x20cb57e275497db1a896955b8bbe9fea9a603fe042be4389328e7eaf15b843b0",
+          "chain": "eip155:11155111",
+          "amount_uusdc": "10000",
+          "rpc_status": "0x1",
+          "transfer_event_verified": true,
+          "transfer_token": "0xcc194e1a843b658526d0d5c431f670028582ae17",
+          "transfer_amount_uusdc": "10000"
+        }
+      ]
+    }
+  },
+  "cost_models": {
+    "minimum_complete_lifecycle_reusing_historical_intelligence": {
+      "acp_network": "Base mainnet (8453)",
+      "acp_escrow_usdc": "0.01",
+      "new_telegraph_purchase_usdc": "0.00",
+      "expected_provider_result": "HOLD",
+      "reason": "Historical purchase custody is genuine, but not target-compatible with the supported Anchor advisory; FALSUM must not convert it into an ACCEPT.",
+      "user_gas": "0 only when the official sandbox/ACP sponsor covers the ACP actions; otherwise dynamic and must be checked from receipts before proceeding",
+      "minimum_known_user_spend_usdc": "0.01"
+    },
+    "minimum_current_anchor_compatible_intelligence": {
+      "acp_escrow_usdc": "0.01",
+      "telegraph_quote_usdc": "0.01",
+      "combined_usdc_before_gas": "0.02",
+      "telegraph_network": "Base Sepolia (84532)",
+      "gas": "not determinable read-only; do not execute unless the selected sandbox confirms sponsorship or an approved testnet gas source",
+      "status": "blocked_until_platform_sandbox_or_authenticated_testnet_buyer_exists"
+    }
+  },
+  "supported_anchor_target": {
+    "ecosystem": "crates.io",
+    "package": "anchor-lang",
+    "version": "1.0.1",
+    "reference": "GHSA-c6rc-8jpp-2fgc",
+    "range": ">=1.0.0 and <1.0.2",
+    "source_evidence": "data/phase5au-solana-anchor-protocol.json and data/phase5av-solana-anchor-runtime-lock.json"
+  },
+  "required_approval": {
+    "create_distinct_buyer_agent": true,
+    "add_or_enable_buyer_signer": true,
+    "maximum_acp_escrow_usdc_for_first_job": "0.01",
+    "maximum_new_telegraph_spend_usdc": "0.00 for the reuse/HOLD run; 0.01 only for a fresh compatible intelligence run",
+    "allow_mainnet_or_testnet": "operator must select the platform-designated route; no transaction is authorized by this record",
+    "abort_if": [
+      "ACP testnet is unauthenticated and no official sandbox endpoint is supplied",
+      "the ACP send is not sponsored and requires unapproved native gas",
+      "the Telegraph receipt cannot be bound to the exact Anchor target",
+      "the CLI asks for manual wallet approval outside the approved ACP action"
+    ]
+  }
+}

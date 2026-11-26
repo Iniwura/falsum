@@ -2,6 +2,12 @@
 
 **Status: implementation verified on 26 November 2026; live job and settlement not verified.**
 
+The initial direct-lookup observation recorded below showed an empty registry
+`chains` array. That observation is historical and was superseded by the
+current authenticated server state verified in [Phase 5BF](PHASE5BF_ACP_LIVE_EXECUTION_PREP.md),
+which returns active EVM chains `4663`, `5042` and `8453`. The original probe
+record remains unchanged for provenance.
+
 ## What is verified
 
 The local checkout is synchronized with `origin/main` at `d62c862`, which

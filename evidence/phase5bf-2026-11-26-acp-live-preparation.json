@@ -1,0 +1,82 @@
+{
+  "schema": "falsum.acp.live-preparation.evidence.v1",
+  "status": "PREPARED_NOT_EXECUTED",
+  "date_utc": "2026-11-26",
+  "acp": {
+    "cli": "1.0.40",
+    "sdk": "@virtuals-protocol/acp-node-v2@0.1.15",
+    "environment": "mainnet",
+    "direct_provider_lookup": "GET /agents/wallet/{walletAddress}",
+    "provider_agent_id": "01a21868-850b-7c91-80de-65e2add32087",
+    "provider_wallet": "0x012501f623e8a45c0de5716d1228d2b61f1b3a0c",
+    "active_chain_ids": [4663, 5042, 8453],
+    "offering": "verifySecurityReport",
+    "price_usdc": "0.01",
+    "sla_minutes": 30,
+    "required_funds": false,
+    "signer_policy": "ACP_ONLY",
+    "safe_active_job_count": 0,
+    "event_listener_connection": "authenticated SSE connected; no job event observed",
+    "can_receive_jobs": true,
+    "live_job_verified": false
+  },
+  "sandbox": {
+    "official_route": "Virtuals non-public platform sandbox with distinct buyer and seller agents",
+    "is_testnet_equivalent": false,
+    "testnet_environment_authenticated": false,
+    "external_blocker": "The official platform sandbox identity/access and a separate authenticated test buyer are not available."
+  },
+  "telegraph": {
+    "current_quote": {
+      "endpoint": "https://devnode.telegraphprotocol.com/engine/v1/ask",
+      "result": "402 Payment Required; no payment header was redeemed",
+      "intent": "SECURITY_REVIEW_GENERAL",
+      "amount_uusdc": "10000",
+      "network": "eip155:84532",
+      "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      "payment_method": "x402 exact"
+    },
+    "historical_receipt_checks": [
+      {
+        "tx_hash": "0x0c6b9b4a5e8d21ef0ce9b9e6240e46f403683255b76976c2d39103d7f202cd85",
+        "receipt_hash": "0x661378d59ac7aaadcbd67482cf24e6105b9c619bbd45a71dd5eba39492b3fc75",
+        "network": "eip155:11155111",
+        "rpc_status": "0x1",
+        "transfer_amount_uusdc": "10000",
+        "target_compatibility": "off-target JavaScript diff"
+      },
+      {
+        "tx_hash": "0x20cb57e275497db1a896955b8bbe9fea9a603fe042be4389328e7eaf15b843b0",
+        "receipt_hash": "0xbabe4600a1f3df4802043a29561b2ec70e17d67635e48ea6742d0bfb1ebb01ab",
+        "network": "eip155:11155111",
+        "rpc_status": "0x1",
+        "transfer_amount_uusdc": "10000",
+        "target_compatibility": "off-target npm lodash 4.17.15"
+      }
+    ],
+    "compatible_anchor_purchase_available": false,
+    "interpretation": "Existing paid Telegraph receipts are now chain-confirmed as historical Sepolia transfers, but neither is compatible evidence for the supported Anchor target. Reusing one can support a fail-closed HOLD demonstration, not ACCEPT."
+  },
+  "cost": {
+    "reuse_historical_hold_run_usdc": "0.01 ACP escrow + 0.00 new Telegraph",
+    "fresh_current_anchor_run_usdc_before_gas": "0.01 ACP escrow + 0.01 Telegraph quote = 0.02",
+    "sponsored_sandbox_gas": "expected 0 wallet gas under the official sandbox guidance; not independently verified for this FALSUM mainnet session",
+    "mainnet_exact_gas": "unknown until a sponsored transaction receipt exists"
+  },
+  "financial_activity": {
+    "acp_transactions_executed": 0,
+    "telegraph_payments_executed": 0,
+    "token_transfers_executed": 0,
+    "manual_wallet_approvals": 0,
+    "new_signers_created": 0
+  },
+  "evidence_references": {
+    "provider_protocol": "data/phase5be-acp-provider-events-protocol.json",
+    "provider_implementation": "src/falsum/phase5be_acp_provider_events.py",
+    "anchor_protocol": "data/phase5au-solana-anchor-protocol.json",
+    "historical_telegraph_evidence": "evidence/phase5t-2026-11-21-actual-telegraph-app-consumption.json",
+    "official_acp_examples": "https://github.com/Virtual-Protocol/acp-node-v2/blob/main/src/examples/README.md",
+    "official_sandbox_guidance": "https://github.com/Virtual-Protocol/acp-python",
+    "official_agreement": "https://app.virtuals.io/acp_developer_agreement.pdf"
+  }
+}
