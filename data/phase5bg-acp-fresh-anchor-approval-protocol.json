@@ -1,0 +1,143 @@
+{
+  "schema": "falsum.acp.fresh-anchor-approval.v1",
+  "status": "BLOCKED_PENDING_EXPLICIT_APPROVAL_AND_PLATFORM_SANDBOX_CONFIRMATION",
+  "verified_at_utc": "2026-11-26T23:09:25.7726193Z",
+  "scope": "Read-only preparation for one outer FALSUM ACP verification job using one fresh Telegraph SECURITY_REVIEW_GENERAL call. No buyer, signer, job, deposit, payment, transfer or approval was executed.",
+  "approval_not_granted": true,
+  "sandbox": {
+    "authorized_route": "Virtuals ACP platform non-public developer Sandbox / Sandbox Butler mode",
+    "entrypoint": "https://app.virtuals.io/acp",
+    "self_evaluation_shape": [
+      "distinct buyer/requestor agent",
+      "FALSUM seller/provider agent",
+      "both registered with the Service Registry",
+      "platform smart wallet and developer-wallet whitelist where required",
+      "buyer-initiated job",
+      "full budget/fund/submit/evaluate lifecycle"
+    ],
+    "cli_testnet_is_sandbox": false,
+    "cli_testnet_chains_observed": [84532, 97, 46630, 5042002, 500],
+    "expected_acp_network": {
+      "name": "Base",
+      "chain_id": 8453,
+      "basis": "Official Butler guide accepts USDC on Base mainnet only; official legacy self-evaluation example uses BASE_MAINNET_ACP_X402_CONFIG_V2.",
+      "must_confirm_in_live_sandbox": true
+    },
+    "access_available": false,
+    "blocker": "No platform-designated Sandbox identity/access or separate authenticated buyer session is available locally."
+  },
+  "provider": {
+    "name": "FALSUM",
+    "agent_id": "01a21868-850b-7c91-80de-65e2add32087",
+    "wallet_address": "0x012501f623e8a45c0de5716d1228d2b61f1b3a0c",
+    "historical_registry_chains": [],
+    "current_active_chains": [4663, 5042, 8453],
+    "offering": {
+      "name": "verifySecurityReport",
+      "price_usdc": "0.01",
+      "sla_minutes": 30,
+      "required_funds": false,
+      "visible": true
+    },
+    "signer_policy": "ACP_ONLY",
+    "sse_authenticated": true,
+    "live_job_received": false,
+    "receive_conclusion": "Historical empty registry metadata alone does not block the SDK receive path; current mainnet provider support includes 8453. This is readiness evidence, not a live-job claim."
+  },
+  "anchor_target": {
+    "ecosystem": "crates.io",
+    "package": "anchor-lang",
+    "version": "1.0.1",
+    "reference": "GHSA-c6rc-8jpp-2fgc",
+    "expected_applicability": "APPLICABLE",
+    "request_body": {
+      "intent": "SECURITY_REVIEW_GENERAL",
+      "params": {
+        "target": "Review anchor-lang 1.0.1 for GHSA-c6rc-8jpp-2fgc applicability"
+      }
+    },
+    "request_body_sha256": "27fec1e82b8a4aab3a930a0092f33f9e63d07e604474fe4526408ec57d750386"
+  },
+  "telegraph": {
+    "endpoint": "https://devnode.telegraphprotocol.com/engine/v1/ask",
+    "intent": "SECURITY_REVIEW_GENERAL",
+    "scheme": "exact",
+    "network": "eip155:84532",
+    "chain_id": 84532,
+    "amount_uusdc": "10000",
+    "amount_usdc": "0.01",
+    "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+    "pay_to": "0xC0A3FB6dF3F1f4B54617d29ffbdA4663Af5F96e2e",
+    "max_timeout_seconds": 60,
+    "quote_status": "read-only 402 observed; no payment header redeemed",
+    "payment_receipt_status": "not yet available",
+    "x402_gas_condition": "Use EIP-3009 exact authorization/facilitator settlement; abort if the buyer is asked for native gas or an on-chain approval."
+  },
+  "acp": {
+    "network": "Base mainnet",
+    "chain_id": 8453,
+    "usdc": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+    "usdc_decimals": 6,
+    "contract": "0x238E541BfefD82238730D00a2208E5497F1832E0",
+    "escrow_uusdc": "10000",
+    "escrow_usdc": "0.01",
+    "lifecycle": ["job.created", "budget.set", "job.funded", "job.submitted", "job.completed"],
+    "expected_actions": [
+      "buyer createJobByOfferingName",
+      "provider setBudget",
+      "buyer fund (allowance plus fund may be batched)",
+      "provider submit",
+      "buyer evaluator complete"
+    ],
+    "native_gas": "must be zero/sponsored; no native-gas funding is approved"
+  },
+  "binding": {
+    "independently_verified_now": false,
+    "reason": "Historical Telegraph receipts do not contain the exact Anchor request digest, response digest or ACP job ID. Existing FALSUM custody is caller-supplied and explicitly does not authenticate settlement.",
+    "required_cross_binding": [
+      "exact Telegraph request bytes to request_sha256",
+      "exact Telegraph response bytes to response_sha256",
+      "x-telegraph-receipt fields to verified Base Sepolia token receipt",
+      "exact ACP requirement bytes to requirement_sha256",
+      "authenticated ACP chain_id/job_id to requirement_sha256",
+      "FALSUM response digest and receipt_hash to the same custody manifest"
+    ],
+    "failure_result": "HOLD",
+    "seller_custody_injection_allowed": false
+  },
+  "cost": {
+    "telegraph_usdc": "0.01",
+    "outer_acp_usdc": "0.01",
+    "minimum_known_principal_usdc": "0.02",
+    "native_gas_cap": "0",
+    "maximum_total_cost_usdc": "0.02",
+    "conditional_second_acp_report_job": {
+      "required_if": "Virtuals/FALSUM requires report_job to be a separate paid ACP job",
+      "minimum_total_usdc_before_gas": "0.03",
+      "action": "abort; no approval under the proposed 0.02 USDC cap"
+    }
+  },
+  "financial_activity": {
+    "buyer_created": false,
+    "signer_created": false,
+    "acp_jobs_created": 0,
+    "acp_transactions": 0,
+    "telegraph_payments": 0,
+    "token_transfers": 0,
+    "manual_wallet_approvals": 0
+  },
+  "independent_adoption": {
+    "claimed": false,
+    "classification": "self-controlled buyer/provider self-evaluation if executed",
+    "independent_customer_count": 0
+  },
+  "sources": [
+    "https://whitepaper.virtuals.io/builders-hub/acp-tech-playbook.md",
+    "https://whitepaper.virtuals.io/acp/acp-dev-onboarding-guide/customize-agent/simulate-agent-with-sandbox-butler",
+    "https://whitepaper.virtuals.io/info-hub/user-hub/butler-quick-start-guide.md",
+    "https://github.com/Virtual-Protocol/acp-node-v2/blob/main/src/examples/README.md",
+    "https://github.com/Virtual-Protocol/acp-python",
+    "https://github.com/Virtual-Protocol/acp-cli",
+    "https://devnode.telegraphprotocol.com/engine/v1/ask"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schema": "falsum.acp.fresh-anchor-approval.evidence.v1",
+  "status": "BLOCKED_PENDING_EXPLICIT_APPROVAL_AND_PLATFORM_SANDBOX_CONFIRMATION",
+  "date_utc": "2026-11-27",
+  "read_only_only": true,
+  "financial_activity": {
+    "buyer_created": false,
+    "signer_created": false,
+    "jobs_created": 0,
+    "telegraph_payments": 0,
+    "token_transfers": 0,
+    "manual_wallet_approvals": 0
+  },
+  "confirmed": {
+    "repository_head": "7076dff0a297122f983379b6f20e3ba969ffaf16",
+    "repository_origin_main_synced": true,
+    "acp_cli": "1.0.40",
+    "acp_node_sdk": "@virtuals-protocol/acp-node-v2@0.1.15",
+    "provider_direct_lookup": "GET /agents/wallet/{walletAddress}",
+    "provider_current_active_chains": [4663, 5042, 8453],
+    "provider_offering": "verifySecurityReport at 0.01 USDC with 30-minute SLA",
+    "provider_sse_authenticated": true,
+    "provider_live_job_received": false,
+    "telegraph_quote": "402 Payment Required for 10000 uUSDC exact on Base Sepolia; no payment redeemed",
+    "telegraph_request_sha256": "27fec1e82b8a4aab3a930a0092f33f9e63d07e604474fe4526408ec57d750386",
+    "acp_mainnet_contract": "0x238E541BfefD82238730D00a2208E5497F1832E0",
+    "acp_mainnet_usdc": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+    "telegraph_base_sepolia_asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+    "telegraph_pay_to": "0xC0A3FB6dF3F1f4B54617d29ffbdA4663Af5F96e2e"
+  },
+  "conclusions": {
+    "empty_registry_chains_is_absolute_receive_blocker": false,
+    "falsum_can_receive_on_current_mainnet_provider_path": "yes as SDK/listener capability; not live-job proof",
+    "cli_testnet_is_official_virtuals_sandbox": false,
+    "sandbox_route": "Virtuals platform Sandbox/Sandbox Butler or documented two-agent self-evaluation flow",
+    "gas_sponsorship": "official sandbox guidance says no gas/ETH is required; current session lacks account-level live sponsor confirmation",
+    "telegraph_historical_receipts_reusable_for_anchor_accept": false,
+    "fresh_telegraph_to_acp_binding_verified": false,
+    "independent_customer_adoption": false
+  },
+  "cost": {
+    "fresh_route_floor_usdc": "0.02 before gas: 0.01 Telegraph + 0.01 outer ACP escrow",
+    "approved_native_gas": "0",
+    "maximum_total_usdc": "0.02",
+    "second_paid_acp_report_job_if_required": "0.03 before gas; exceeds cap and must abort"
+  },
+  "required_before_execution": [
+    "explicit operator approval",
+    "platform-designated Sandbox access and authenticated separate buyer",
+    "Base mainnet 8453 job/network confirmation",
+    "read-only account-level sponsorship/no-native-gas confirmation",
+    "buyer wallet x402 EIP-3009 compatibility confirmation",
+    "confirmation that Telegraph report descriptor satisfies the existing distinct report_job contract",
+    "independent digest/receipt/ACP history binding bundle"
+  ],
+  "source_links": {
+    "official_acp_playbook": "https://whitepaper.virtuals.io/builders-hub/acp-tech-playbook.md",
+    "sandbox_butler": "https://whitepaper.virtuals.io/acp/acp-dev-onboarding-guide/customize-agent/simulate-agent-with-sandbox-butler",
+    "butler_base_network": "https://whitepaper.virtuals.io/info-hub/user-hub/butler-quick-start-guide.md",
+    "official_acp_v2_examples": "https://github.com/Virtual-Protocol/acp-node-v2/blob/main/src/examples/README.md",
+    "official_acp_python": "https://github.com/Virtual-Protocol/acp-python",
+    "official_acp_cli": "https://github.com/Virtual-Protocol/acp-cli",
+    "telegraph_quote_endpoint": "https://devnode.telegraphprotocol.com/engine/v1/ask"
+  }
+}
