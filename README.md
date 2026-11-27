@@ -30,7 +30,9 @@ ecosystem-native PEP 440 and SemVer rules, exercises disjoint and unsupported
 ranges, retains immutable PyPI/npm registry snapshots, and evaluates complete
 answer claims/actions. It covers 14 cases (12 additional unseen) with 14/14
 candidate decisions and 14/14 claim/actions. These regression results do not
-automatically add score points or establish external validation. The public
+automatically add score points or establish external validation. Its hosted
+[three-version replay](https://github.com/Iniwura/falsum/actions/runs/45972932870)
+passed. The public
 [production experience check](evidence/phase5bo-production-experience-check-2026-11-27.json)
 read-only verified the witness and applications routes at HTTP 200; Phase5BO is
 not claimed as deployed there.

@@ -124,9 +124,10 @@ six committed PyPI/npm registry snapshots without live registry reads. It
 adds 12 additional unseen cases to the two regressions and evaluates complete
 claim/action answers: 14/14 candidate decisions and 14/14 claims.
 
-The current internal score remains **96/100**. No points are added merely for
-passing this regression gate; external validation, human adjudication and the
-two withheld growth points remain separate.
+The [three-version hosted replay](https://github.com/Iniwura/falsum/actions/runs/45972932870)
+passed. The current internal score remains **96/100**. No points are added
+merely for passing this regression gate; external validation, human
+adjudication and the two withheld growth points remain separate.
 
 ### Current Anjoman status
 
