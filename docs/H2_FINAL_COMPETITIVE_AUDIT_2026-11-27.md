@@ -24,6 +24,26 @@ prefer proven measurement improvement or valuable new coverage, followed by
 validity. FALSUM should therefore lead with reproducible new coverage and
 measurement safeguards, not with an unverified ACP transaction.
 
+## Competitive reference: official Season I Evaluators winners
+
+The official [Season I winners](https://hackathon.telegraphprotocol.com/winners)
+list `@zkasuran` first, `@hyadav42774` second, and `@BangDropID` third for
+Evaluation WASMs. The public winners page does not expose a comparable numeric
+score breakdown, so this audit does not invent one. The defensible lesson is
+that the winning Evaluators entries are named and ranked as completed
+evaluation contributions, while the strongest Season I application winners
+also show a compact end-to-end user outcome rather than a repository-only
+research narrative.
+
+FALSUM's defensible differentiation is narrower: source-identity and
+version-boundary integrity, explicit fail-closed unknowns, balanced
+applicability discrimination, and two mission-specific supporting workflows.
+The judge should prefer this over a polished but unsupported accuracy claim;
+the competitive liability is that FALSUM still lacks independent human gold,
+an externally consumed integration, a registered adapter, and a submitted
+entry. Those are recorded as gaps, not silently converted into technical
+points.
+
 ## Evidence position
 
 | Area | Verified strength | Competitive liability | Submission treatment |
