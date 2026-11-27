@@ -1,0 +1,9 @@
+{
+  "byte_size": 2680,
+  "canonical_id": "GHSA-q2x7-8rv6-6q7h",
+  "captured_utc": "2026-11-27T09:13:56.332016+00:00",
+  "kind": "advisories",
+  "schema_version": 1,
+  "sha256": "53289d88385a37dbbc878e46d5fd3ea5749e82b9f5581da5f69b0019c0361807",
+  "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2024/12/GHSA-q2x7-8rv6-6q7h/GHSA-q2x7-8rv6-6q7h.json"
+}

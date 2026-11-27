@@ -24,6 +24,17 @@ freezes 24 registry-backed cases and labels from `packaging==26.4` and
 external resolver, with 48 meaningful competing answers and computed
 index/position/token leakage checks. No paid transaction is required.
 
+The [Phase5BO semantic audit](docs/PHASE5BO_ECOSYSTEM_SEMANTICS.md) is a
+separate improvement: it resolves the legacy/prerelease abstentions with
+ecosystem-native PEP 440 and SemVer rules, exercises disjoint and unsupported
+ranges, retains immutable PyPI/npm registry snapshots, and evaluates complete
+answer claims/actions. It covers 14 cases (12 additional unseen) with 14/14
+candidate decisions and 14/14 claim/actions. These regression results do not
+automatically add score points or establish external validation. The public
+[production experience check](evidence/phase5bo-production-experience-check-2026-11-27.json)
+read-only verified the witness and applications routes at HTTP 200; Phase5BO is
+not claimed as deployed there.
+
 ## Start here: a five-minute reproducible judge route
 
 **[Open the FALSUM judge guide](docs/H2_NOV24_JUDGE_START.md)** to see the live original-source witness, reproduce the no-key independent reviewer workflow, test an authenticated Axios/Rack advisory decision, and inspect the actual failed-model baseline. The guide separates verified evidence from constructed test inputs and lists the remaining Season II submission obligations. The [latest measured application comparison](docs/PHASE5AK_EXTERNAL_LABEL_BASELINES.md) covers 129 externally labeled contracts and 202 historical purchase records. FALSUM avoids eight count-only vulnerable-label PASS predictions but ties verdict-only. Explore the [live application evidence](https://falsum-evidence-lab.vercel.app/applications/). [Public Gig Guard source-maintainer review](https://github.com/Iniwura/falsum/issues/97#issuecomment-7126424685) confirmed the historical counts and clarified the pre-request input-limit holds; the [implemented coverage taxonomy](docs/PHASE5AN_MAINTAINER_COVERAGE_TAXONOMY.md) passed all three Python versions. [Truvian Shield maintainer's public memo verification](https://github.com/Iniwura/falsum/issues/97#issuecomment-7132041935) confirmed two parsed responses; the [portable response-integrity gate](docs/PHASE5AR_TRUVIAN_RESPONSE_INTEGRITY_GATE.md) reduced unsupported clean candidates from 3/3 (verdict-only) to 0/3 on the three documented missing-code fixtures. The full 129-case comparison still ties verdict-only. [Public growth evidence and dated updates](docs/H2_VERIFIED_GROWTH_EVIDENCE.md). Production checkpoint `52fc6557` READY; official entry **not submitted**.

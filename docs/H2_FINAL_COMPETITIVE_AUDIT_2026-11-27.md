@@ -148,6 +148,24 @@ permutation threshold while adversarial index/token mutations are detected.
 This is stronger validity evidence but not human AppSec gold or a FALSUM win
 over the competent version resolver.
 
+## Phase5BO semantic improvement and production check
+
+The [Phase5BO protocol](../data/phase5bo-ecosystem-semantics-protocol.json)
+keeps six raw registry responses and their SHA-256 sidecars in the repository,
+so replay does not depend on a live PyPI/npm response remaining unchanged. The
+candidate uses ecosystem-native PEP 440 and strict SemVer semantics, supports
+disjoint intervals, and abstains on unsupported ranges. It resolves the two
+Phase5BN regressions and adds 12 unseen cases, including four prereleases.
+Complete claims/actions are selected from candidate output and then scored;
+reference labels never choose the answer token. The bounded result is 14/14
+candidate decisions and 14/14 complete claims/actions. No points are added
+automatically, and this does not establish external validation.
+
+The dated [production experience check](../evidence/phase5bo-production-experience-check-2026-11-27.json)
+read-only verified the public witness and applications routes at HTTP 200 with
+public-safe response checks. It does not claim that Phase5BO is deployed or
+that the site proves adoption.
+
 The [current Anjoman read-only record](../evidence/phase5bk-2026-11-27-anjoman-status.json)
 shows 20 total / 20 Eligible rows for the operator-reported Privy address and
 0/0 for the distinct historical bounty address. Ownership, maintainer

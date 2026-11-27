@@ -1,0 +1,9 @@
+{
+  "byte_size": 1902,
+  "canonical_id": "GHSA-x7hr-w5r2-h6wg",
+  "captured_utc": "2026-11-27T09:14:00.082184+00:00",
+  "kind": "advisories",
+  "schema_version": 1,
+  "sha256": "699d9185c35e4e3d12de840336564e08e10f38838d245509e7c7472c3c62d779",
+  "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-x7hr-w5r2-h6wg/GHSA-x7hr-w5r2-h6wg.json"
+}

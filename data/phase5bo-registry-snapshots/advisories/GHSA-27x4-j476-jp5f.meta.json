@@ -1,0 +1,9 @@
+{
+  "byte_size": 1823,
+  "canonical_id": "GHSA-27x4-j476-jp5f",
+  "captured_utc": "2026-11-27T09:13:51.889863+00:00",
+  "kind": "advisories",
+  "schema_version": 1,
+  "sha256": "751cba3a453eb1f60729a51d7ba0d8aaa27c09195c3994f81185763d4e2f0632",
+  "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2022/05/GHSA-27x4-j476-jp5f/GHSA-27x4-j476-jp5f.json"
+}

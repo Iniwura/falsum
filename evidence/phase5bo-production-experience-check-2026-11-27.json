@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "verified_utc": "2026-11-27T09:17:12.5564863Z",
+  "method": "read-only HTTPS GET with redirect cap 3; response body hashed after retrieval",
+  "routes": [
+    {
+      "url": "https://falsum-evidence-lab.vercel.app/witness/",
+      "status": 200,
+      "content_length": 56350,
+      "sha256": "40df4767844b3e11ee67bac19f1f45e17dc73876f5007f6d9bb74bf5a282ca9d",
+      "title": "FALSUM — Real source evidence",
+      "public_safe": true,
+      "checks": ["source-evidence text present", "ABSTAIN text present", "navigation markup present"]
+    },
+    {
+      "url": "https://falsum-evidence-lab.vercel.app/applications/",
+      "status": 200,
+      "content_length": 13473,
+      "sha256": "51347bed5ccd1230db219401ed68d99e3cca8464a255040cfe1f3dd551e70a04",
+      "title": "Application evidence — FALSUM",
+      "public_safe": true,
+      "checks": ["application evidence text present", "no private key/token/secret text detected"]
+    }
+  ],
+  "limits": [
+    "This is a dated public-route freshness check, not a permanent deployment identity or independent adoption proof.",
+    "Phase5BO is reproduced locally and in CI; it is not claimed to be deployed by these routes."
+  ]
+}

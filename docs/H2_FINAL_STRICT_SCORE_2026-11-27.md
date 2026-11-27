@@ -114,6 +114,20 @@ detected signal at the predeclared alpha. This is version-applicability evidence
 not human security adjudication. Hosted CI passed the Python 3.11, 3.12 and
 3.13 matrix in [run 45949446218](https://github.com/Iniwura/falsum/actions/runs/45949446218).
 
+### Phase5BO semantic improvement gate
+
+The [Phase5BO audit](PHASE5BO_ECOSYSTEM_SEMANTICS.md) is a separate
+implementation and does not alter Phase5BN. It resolves both observed legacy
+version abstentions, tests PEP 440 and strict SemVer prereleases, exercises
+Axios's disjoint intervals and unsupported-range abstention, and replays from
+six committed PyPI/npm registry snapshots without live registry reads. It
+adds 12 additional unseen cases to the two regressions and evaluates complete
+claim/action answers: 14/14 candidate decisions and 14/14 claims.
+
+The current internal score remains **96/100**. No points are added merely for
+passing this regression gate; external validation, human adjudication and the
+two withheld growth points remain separate.
+
 ### Current Anjoman status
 
 The fresh [read-only status evidence](../evidence/phase5bk-2026-11-27-anjoman-status.json)

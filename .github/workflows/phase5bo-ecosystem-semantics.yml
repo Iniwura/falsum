@@ -1,0 +1,60 @@
+name: Phase 5BO ecosystem-native semantics
+
+on:
+  push:
+    paths:
+      - "src/falsum/phase5bo_ecosystem_semantics.py"
+      - "src/falsum/cli.py"
+      - "data/phase5bo-ecosystem-semantics-*.json"
+      - "data/phase5bo-registry-snapshots/**"
+      - "tests/test_phase5bo_ecosystem_semantics.py"
+      - ".github/workflows/phase5bo-ecosystem-semantics.yml"
+  pull_request:
+    paths:
+      - "src/falsum/phase5bo_ecosystem_semantics.py"
+      - "src/falsum/cli.py"
+      - "data/phase5bo-ecosystem-semantics-*.json"
+      - "data/phase5bo-registry-snapshots/**"
+      - "tests/test_phase5bo_ecosystem_semantics.py"
+      - ".github/workflows/phase5bo-ecosystem-semantics.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  ecosystem-semantics:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install exact semantic libraries
+        run: python -m pip install --disable-pip-version-check --no-deps packaging==26.4
+      - name: Install exact npm resolver
+        run: npm install --prefix .phase5bo-node --ignore-scripts --no-audit --no-fund semver@7.8.6
+      - name: Run semantic and snapshot regression tests
+        env:
+          PYTHONPATH: src
+          FALSUM_PHASE5BO_NODE_PATH: ${{ github.workspace }}/.phase5bo-node/node_modules
+        run: python -m unittest discover -s tests -p 'test_phase5bo_ecosystem_semantics.py' -v
+      - name: Replay the audit from committed snapshots only
+        env:
+          PYTHONPATH: src
+          FALSUM_PHASE5BO_NODE_PATH: ${{ github.workspace }}/.phase5bo-node/node_modules
+        run: python -m falsum.cli audit-ecosystem-semantics --out .phase5bo-ci-result.json
+      - name: Assert the bounded result without awarding points
+        run: >-
+          python -c "import json; expected=json.load(open('data/phase5bo-ecosystem-semantics-result.json',encoding='utf-8')); actual=json.load(open('.phase5bo-ci-result.json',encoding='utf-8')); assert actual==expected; assert actual['offline_snapshot_only'] is True; assert actual['registry_snapshot_verification']['live_registry_reads']==0; assert actual['policies']['improved_candidate']=={'correct':14,'incorrect':0,'denominator':14}; assert actual['policies']['answer_claim_action_selection']=={'correct':14,'incorrect':0,'denominator':14}; assert actual['answer_surface_audit']['reference_label_to_token_mapping_used'] is False"
+      - name: Upload offline semantic evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase5bo-ecosystem-semantics-${{ matrix.python-version }}
+          path: |
+            data/phase5bo-ecosystem-semantics-protocol.json
+            data/phase5bo-ecosystem-semantics-result.json
+            data/phase5bo-registry-snapshots
+            .phase5bo-ci-result.json

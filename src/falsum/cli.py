@@ -163,6 +163,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     corrected_holdout.add_argument("--out", type=Path, required=True)
     corrected_holdout.add_argument("--freeze", action="store_true")
+    ecosystem_semantics = commands.add_parser(
+        "audit-ecosystem-semantics",
+        help="run the offline Phase 5BO PEP 440 and SemVer snapshot-backed audit",
+    )
+    ecosystem_semantics.add_argument("--out", type=Path, required=True)
+    ecosystem_semantics.add_argument("--freeze", action="store_true")
     consume = commands.add_parser(
         "audit-telegraph-consumption",
         help="strict original source-bound application allow/deny policy; two authentic real paid captures and 24 constructed tests, not network scoring",
@@ -294,6 +300,10 @@ def main(argv: list[str] | None = None) -> int:
             from .phase5bn_corrected_independent_holdout import main as corrected_holdout_main
             command = (["--freeze"] if args.freeze else []) + ["--out", str(args.out)]
             return corrected_holdout_main(command)
+        if args.command == "audit-ecosystem-semantics":
+            from .phase5bo_ecosystem_semantics import main as ecosystem_semantics_main
+            command = (["--freeze"] if args.freeze else []) + ["--out", str(args.out)]
+            return ecosystem_semantics_main(command)
         if args.command == "audit-telegraph-consumption":
             from .phase5t_application_consumption import main as consume_main
             cmd=["--out",str(args.out)]

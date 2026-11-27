@@ -43,6 +43,12 @@ token leakage checks. These results are reproducible evaluation
 material—not security clearance, human AppSec gold, recall, customer adoption,
 ranking uplift, or a new paid Telegraph transaction.
 
+Phase5BO is a separate semantic regression improvement: it resolves both
+legacy-version abstentions, adds 12 unseen snapshot-backed cases, covers
+disjoint intervals and unsupported ranges, and evaluates complete claim/action
+answers. It records 14/14 candidate decisions and 14/14 answer claims. This is
+not automatic score credit or external validation.
+
 ## Reviewer run path
 
 Prerequisite: Python 3.11–3.13 and public internet access for immutable
@@ -65,6 +71,9 @@ npm install --prefix .phase5bn-node --ignore-scripts --no-audit --no-fund semver
 PYTHONPATH=src FALSUM_PHASE5BN_NODE_PATH=.phase5bn-node/node_modules \
   python -m falsum.cli audit-corrected-independent-holdout \
   --out corrected-independent-holdout.json
+PYTHONPATH=src FALSUM_PHASE5BO_NODE_PATH=.phase5bo-node/node_modules \
+  python -m falsum.cli audit-ecosystem-semantics \
+  --out ecosystem-semantics.json
 ```
 
 Expected fresh result: 66 reported references, 38 canonical source records,
@@ -76,6 +85,8 @@ historical evidence. Expected corrected Phase5BN result: 24 cases, 22/24
 FALSUM, 24/24 external resolver, 48 distinct target-specific answers,
 computed leakage checks with no detected signal, and verified package versions
 from pinned live registry metadata.
+Expected Phase5BO result: 14/14 from committed registry snapshots with zero
+live registry reads during audit.
 
 The network used by the fresh replay is public GitHub source retrieval pinned
 to immutable commits. The replay costs **$0** and performs **no Telegraph
@@ -94,6 +105,7 @@ does not become current production usage.
 | Cross-source discriminative measurement | [Phase 5BL report](../data/phase5bl-cross-source-measurement-discrimination.json) and [contracts](../tests/test_phase5bl_measurement_discrimination.py) | Two weaker-policy contrasts, competent-baseline tie, verdict-only tie preserved |
 | New independent balanced holdout | [Phase 5BM protocol](../data/phase5bm-independent-balanced-holdout-protocol.json), [implementation](../src/falsum/phase5bm_independent_balanced_holdout.py), [result](../data/phase5bm-independent-balanced-holdout-result.json), and [contracts](../tests/test_phase5bm_independent_balanced_holdout.py) | 24 paired cases; FALSUM and competent baseline 24/24; citation-only 12/24; balanced/no leakage |
 | Corrected independent holdout | [Phase 5BN protocol](../data/phase5bn-corrected-independent-holdout-protocol.json), [implementation](../src/falsum/phase5bn_corrected_independent_holdout.py), [result](../data/phase5bn-corrected-independent-holdout-result.json), [contracts](../tests/test_phase5bn_corrected_independent_holdout.py), [hosted workflow](../.github/workflows/phase5bn-corrected-independent-holdout.yml) and [passed run](https://github.com/Iniwura/falsum/actions/runs/45949446218) | 22/24 FALSUM vs 24/24 external resolver; real registry versions; meaningful answers; computed leakage audit |
+| Ecosystem-native semantic improvement | [Phase 5BO protocol](../data/phase5bo-ecosystem-semantics-protocol.json), [implementation](../src/falsum/phase5bo_ecosystem_semantics.py), [snapshots](../data/phase5bo-registry-snapshots/), [result](../data/phase5bo-ecosystem-semantics-result.json), and [contracts](../tests/test_phase5bo_ecosystem_semantics.py) | PEP 440/SemVer, 12 additional unseen cases, disjoint/unsupported ranges, snapshot-only replay, and complete claim/action evaluation; no automatic score credit |
 | Official Intent mapping | [Bounty #96](https://github.com/telegraphprotocol/bounties/issues/96) and [INTENTS.md](https://github.com/telegraphprotocol/bounties/blob/main/docs/INTENTS.md) | Child Intent maps to `SECURITY_REVIEW` family; no acceptance or adapter registration claim |
 | Safety and provenance | [Phase 5B/5BG tests](../tests/) and current GitHub Actions workflows | Fail-closed evidence handling; no security clearance |
 | Telegraph relevance | [final competitive audit](H2_FINAL_COMPETITIVE_AUDIT_2026-11-27.md) | Historical/public evidence only; ACP suspended |

@@ -1,0 +1,9 @@
+{
+  "byte_size": 3014,
+  "canonical_id": "GHSA-98qm-wvgf-w4cf",
+  "captured_utc": "2026-11-27T09:13:47.500476+00:00",
+  "kind": "advisories",
+  "schema_version": 1,
+  "sha256": "dd5b7faa0344602f119a22536f7a2c31cd2da4b998529e4ea550cc868d60fa17",
+  "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2026/10/GHSA-98qm-wvgf-w4cf/GHSA-98qm-wvgf-w4cf.json"
+}

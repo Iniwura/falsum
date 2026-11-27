@@ -1,0 +1,8 @@
+{
+  "byte_size": 6028429,
+  "captured_utc": "2026-11-27T09:13:51.070858+00:00",
+  "kind": "registry",
+  "schema_version": 1,
+  "sha256": "ab55e013cdd091ea190ceae52458eebc2109488545a57155fd333a58d6c568c9",
+  "source_url": "https://pypi.org/pypi/pymongo/json"
+}

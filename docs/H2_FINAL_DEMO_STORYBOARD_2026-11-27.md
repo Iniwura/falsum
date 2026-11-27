@@ -1,4 +1,4 @@
-# FALSUM - final judge storyboard (3:30)
+# FALSUM - final judge storyboard (4:00)
 
 **Prepared, not recorded or submitted.** The walkthrough is public-safe: it
 uses pinned source metadata and generated summaries, never raw provider
@@ -67,14 +67,28 @@ then open the computed case-index, answer-position and answer-token leakage
 metrics. State that this corrected result supersedes the historical Phase5BM
 perfect result for current certification.
 
-## 2:35-3:05 - demonstrate safety and failure handling
+## 2:35-3:10 - run the ecosystem-native offline audit
+
+```bash
+PYTHONPATH=src FALSUM_PHASE5BO_NODE_PATH=.phase5bo-node/node_modules \
+  python -m falsum.cli audit-ecosystem-semantics \
+  --out /tmp/falsum-phase5bo.json
+```
+
+Show the committed registry snapshot manifest and SHA-256 sidecars, then show
+14/14 candidate decisions and 14/14 complete answer claims/actions. Highlight
+`pymongo@0.1pre`, `setuptools@0.6c11`, Axios's two disjoint intervals and the
+four prerelease cases. State that the audit performs zero live registry reads;
+the snapshot is evidence of captured package existence, not freshness.
+
+## 3:10-3:35 - demonstrate safety and failure handling
 
 Run the focused adversarial tests. Show that wrong target identity, changed
 source bytes, unsupported intervals, duplicate references, caller-supplied
 adoption labels and sensitive response fields fail closed. Mention that ACP is
 suspended; no buyer, signer, payment, deposit or transaction is used.
 
-## 3:05-3:30 - close with the judge checklist
+## 3:35-4:00 - close with the judge checklist
 
 Show the final score page and say:
 
@@ -94,6 +108,7 @@ Show the final score page and say:
 - Keep holdout counts and caveats on screen long enough to read.
 - Show the official rules link and repository commit, not a private dashboard.
 - State the replay network and cost truth: public GitHub/PyPI/npm retrieval,
-  $0, no Telegraph transaction.
+  $0, no Telegraph transaction. The current public witness and applications
+  routes were read-only checked at HTTP 200; Phase5BO is not claimed as deployed.
 - If no recording is made, submit this document as an accessible equivalent
   only after owner approval; do not claim a video exists.
