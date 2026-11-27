@@ -26,7 +26,16 @@ class AnjomanPairPreparationTests(unittest.TestCase):
         self.assertEqual(report["upload_schema"]["label_kind"], "preference_pair")
         self.assertEqual(len(report["upload_rows"]), 14)
         self.assertTrue(report["quality_audit"]["max_pairwise_prompt_similarity"] < 0.85)
-        self.assertLessEqual(report["quality_audit"]["length_only_best_threshold_accuracy"], 0.75)
+        self.assertLessEqual(report["quality_audit"]["length_only_best_threshold_accuracy"], 0.60)
+        self.assertLessEqual(report["quality_audit"]["maximum_simple_shortcut_accuracy"], 0.60)
+        self.assertEqual(report["quality_audit"]["rejected_error_indicating_keyword_hits"], [])
+        self.assertLessEqual(report["quality_audit"]["shortcut_baselines"]["prompt_answer_lexical_overlap"], 0.60)
+        self.assertLessEqual(report["quality_audit"]["shortcut_baselines"]["recurring_template"], 0.60)
+        self.assertLessEqual(report["quality_audit"]["shortcut_baselines"]["stylistic_punctuation"], 0.60)
+        self.assertTrue(report["quality_audit"]["error_indicating_keyword_check_passed"])
+        self.assertTrue(report["quality_audit"]["lexical_overlap_shortcut_check_passed"])
+        self.assertTrue(report["quality_audit"]["recurring_template_shortcut_check_passed"])
+        self.assertTrue(report["quality_audit"]["stylistic_shortcut_check_passed"])
         self.assertTrue(report["quality_audit"]["answer_template_diversity_check_passed"])
         self.assertEqual(report["submission_state"], "OWNER_REVIEW_REQUIRED_NOT_SUBMITTED")
         self.assertFalse(report["human_adjudication"])
@@ -37,6 +46,7 @@ class AnjomanPairPreparationTests(unittest.TestCase):
             self.assertEqual(row["label_kind"], "preference_pair")
             self.assertEqual(row["intent_id"], "SECURITY_REVIEW_GENERAL")
             self.assertEqual(row["provenance"]["source_kind"], "generated")
+            self.assertFalse(any(marker in row["rejected"].casefold() for marker in m.ERROR_INDICATING_MARKERS))
 
     def test_each_pair_has_immutable_provenance_and_real_competing_claims(self):
         with patch.dict("os.environ", {"FALSUM_PHASE5BO_NODE_PATH": self.node_path}):
@@ -80,6 +90,12 @@ class AnjomanPairPreparationTests(unittest.TestCase):
         repeated = forged["upload_rows"][0]["chosen"]
         for row in forged["upload_rows"]:
             row["chosen"] = repeated
+        with self.assertRaises(m.PairPreparationError):
+            m.validate(forged)
+
+        with patch.dict("os.environ", {"FALSUM_PHASE5BO_NODE_PATH": self.node_path}):
+            forged = m.prepare()
+        forged["upload_rows"][0]["rejected"] += " The incorrect answer is easy to identify."
         with self.assertRaises(m.PairPreparationError):
             m.validate(forged)
 

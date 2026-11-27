@@ -2,9 +2,10 @@
 
 This is an owner-gated procedure for the V2 candidate packet. It is not an
 upload authorization. The packet is generated material with public source URLs
-and `source_kind: generated`; it is unverified provenance until Anjoman's
-actual row state says otherwise. Never describe these rows as human-adjudicated,
-eligible or maintainer-accepted before the network confirms those facts.
+and `source_kind: generated`. Under the current Anjoman rules, `generated` is
+always classified as unverified even when `source_url` is public. Never
+describe these rows as human-adjudicated, attested, eligible or
+maintainer-accepted before the network confirms those facts.
 
 ## Official contract
 
@@ -22,14 +23,22 @@ specifies one JSON object per JSONL line:
 be nonempty and different. `label_kind` is `preference_pair`; when present,
 `intent_id` must equal the upload Intent. The V2 packet uses public advisory
 URLs as provenance but deliberately keeps `source_kind` as `generated`, which
-the official documentation treats as unverified. It does not claim that a URL
-turns generated material into human evidence.
+the official documentation treats as unverified regardless of the URL. The
+current documentation defines `eligible` as a network/freeze state and does
+not state that every unverified row is automatically ineligible. Therefore the
+only defensible procedure is to send the true generated provenance, never
+relabel it as `attested`, and report the actual returned `provenance_class`,
+`status` and `reason_code`. This packet has not been uploaded, so it has no
+network eligibility result.
 
 The V2 quality gate also records the official prompt and answer length bounds,
 Unicode-NFC/casefold/whitespace normalization, the 85% near-duplicate prompt
-threshold, paired-length comparability, an answer-length-only classifier
-check, and exact answer-template diversity. It keeps the original V1 packet
-unchanged as historical material.
+threshold, paired-length comparability, exact answer-template diversity and
+four shortcut audits. The balanced packet has no rejected-answer
+error-indicating markers; length, prompt-answer lexical-overlap, recurring
+template and punctuation baselines all remain at or below 60% (the observed
+maximum is recorded in the packet). It keeps the original V1 packet unchanged
+as historical material.
 
 ## Reproduce and inspect locally
 
@@ -59,7 +68,9 @@ GET https://devnode.telegraphprotocol.com/api/evalpool/submissions/mine?submitte
 Do not expose the owner address in public reports unless the owner approves it.
 `admitted` or an HTTP success is not `eligible`; each row must be checked after
 the network's quarantine/freeze process. The pool-wide five-contributor rule
-is separate and must be read from the current status response.
+is separate and must be read from the current status response. A successful
+POST would not change the packet's generated provenance class or establish
+human adjudication.
 
 ## Owner-only signing and upload sequence
 
@@ -117,7 +128,7 @@ These are drafts for owner review, not posted claims.
 For [Model Economy #198](https://github.com/telegraphprotocol/bounties/issues/198):
 
 ```text
-/progress FALSUM prepared a corrected, unsigned SECURITY_REVIEW_GENERAL JSONL candidate packet from immutable public advisory and registry snapshots. It contains 14 source-backed dependency-security preference pairs with exact package/version/advisory evidence, ecosystem-native PEP 440 or strict npm SemVer semantics, remediation actions, and explicit no-exploitability scope limits. Reproducible checks cover source hashes, exact registry existence, normalized-prompt deduplication, near-duplicate prompts, answer-template repetition, answer-length comparability, and length-only shortcut accuracy. This is generated/unverified material, not human adjudication, not eligible until Anjoman accepts it, and not a live mission-delivery, adoption or payment claim. The next owner-gated step is review and, if approved, upload to SECURITY_REVIEW_GENERAL; row eligibility will be reported only from the official status endpoint.
+/progress FALSUM prepared a corrected, unsigned SECURITY_REVIEW_GENERAL JSONL candidate packet from immutable public advisory and registry snapshots. It contains 14 source-backed dependency-security preference pairs with exact package/version/advisory evidence, ecosystem-native PEP 440 or strict npm SemVer semantics, remediation actions, and explicit no-exploitability scope limits. Reproducible checks cover source hashes, exact registry existence, normalized-prompt deduplication, near-duplicate prompts, answer-template repetition, comparable answer lengths, and four shortcut baselines at or below 60%: length, error-indicating keywords, prompt-answer lexical overlap, recurring templates and punctuation style. This is generated/unverified material, not human adjudication, and not a live mission-delivery, adoption or payment claim. Its network eligibility is unknown because it has not been uploaded; the current rules require reporting the actual returned status and provenance class without relabeling. The next owner-gated step is review and, if approved, upload to SECURITY_REVIEW_GENERAL.
 ```
 
 For [Web3 Native & DeFi #202](https://github.com/telegraphprotocol/bounties/issues/202):

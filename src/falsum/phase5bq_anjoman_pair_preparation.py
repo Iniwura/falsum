@@ -13,6 +13,7 @@ from difflib import SequenceMatcher
 import hashlib
 import json
 from pathlib import Path
+import re
 from typing import Any
 import unicodedata
 
@@ -41,7 +42,24 @@ MIN_ANSWER_LENGTH = 8
 MAX_ANSWER_LENGTH = 32_000
 MAX_PROMPT_SIMILARITY = 0.85
 MIN_PAIRED_LENGTH_RATIO = 0.65
-MAX_LENGTH_SHORTCUT_ACCURACY = 0.75
+MAX_LENGTH_SHORTCUT_ACCURACY = 0.60
+
+# A rejected answer must stand on its own as a plausible security review.  A
+# marker that tells a learner which side is defective is a label leak even when
+# the underlying technical claim is otherwise useful.
+ERROR_INDICATING_MARKERS = (
+    "incorrect",
+    "wrong",
+    "misorder",
+    "opposing",
+    "alternate",
+    "does not establish",
+    "not evidence",
+    "counterfactual",
+    "mistake",
+    "error",
+    "failure",
+)
 
 
 class PairPreparationError(ValueError):
@@ -93,19 +111,24 @@ def _scenario(ecosystem: str, version: str, ranges: list[str]) -> str:
     return "Respect the published fixed boundary and the exact package identity."
 
 
-def _wrong_reason(reference: str, version: str, ranges: list[str]) -> str:
-    if reference == APPLICABLE:
+def _wrong_reason(decision: str, version: str, ranges: list[str]) -> str:
+    """Return a confident but technically subtle rationale for the wrong side.
+
+    This intentionally does not identify the answer as defective.  The pair's
+    frozen reference and the evaluator's comparison establish which side is
+    preferred; the text itself must remain a realistic competing review.
+    """
+    if decision == APPLICABLE:
         if "-" in version or version.casefold().endswith("pre"):
-            return "It misorders the prerelease against the stable boundary and therefore misses the affected interval."
-        return "It applies the fixed boundary on the wrong side and treats an affected release as already remediated."
-    fixed = {item.split(",<", 1)[1] for item in ranges if ",<" in item}
-    if version in fixed:
-        return "It incorrectly includes the fixed-exclusive boundary release in the affected set."
-    if ranges and version.startswith("0") and all(item.split(">=", 1)[1].startswith("0") for item in ranges):
-        return "It incorrectly treats a pre-introduction or legacy release as covered by the advisory."
+            return "Package metadata places this release in the affected stable line."
+        if len(ranges) > 1:
+            return "Package metadata places this release in the affected branch."
+        return "Package metadata places this release in the affected set."
+    if "-" in version or version.casefold().endswith("pre"):
+        return "Package metadata places this release beyond the repaired stable line."
     if len(ranges) > 1:
-        return "It incorrectly carries one affected branch across a gap into a separate fixed branch."
-    return "It incorrectly carries the affected interval past its published fixed release."
+        return "Package metadata places this release in the published gap."
+    return "Package metadata places this release beyond the repaired branch."
 
 
 def _answer(
@@ -140,59 +163,59 @@ def _answer(
             f"{heading} {'affected' if decision == APPLICABLE else 'not affected'}. The "
             f"{ecosystem} package entry for {package}@{version} is resolved against {advisory_id} "
             f"({summary}; severity {severity}) under {semantics}. Published intervals: {range_text}. "
-            f"{scenario}"
+            f"{scenario} Evidence context: the published interval text, package metadata and "
+            f"{semantics} comparator are the basis for this bounded version review."
         )
         recommendation = (
-            "Action: block this dependency or upgrade it beyond the published affected interval; "
-            "do not claim exploitability from version applicability alone. Scope: this is a version-applicability finding."
+            "Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the "
+            "published affected interval; do not infer runtime exploitability. Scope: package-version applicability."
             if decision == APPLICABLE else
-            "Action: do not block for this advisory alone; continue checking other advisories, "
-            "the dependency manifest and application-specific evidence; do not infer exploitability from this version fact. "
-            "Scope: this is a version-applicability finding."
+            "Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped "
+            "to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability."
         )
     else:
-        wrong_reference = APPLICABLE if decision == INAPPLICABLE else INAPPLICABLE
         assessment = (
             f"{heading} {'affected' if decision == APPLICABLE else 'not affected'}. The "
-            f"{ecosystem} package entry for {package}@{version} is compared with {advisory_id} "
+            f"{ecosystem} package entry for {package}@{version} is resolved against {advisory_id} "
             f"({summary}; severity {severity}) under {semantics}. Published intervals: {range_text}. "
-            f"{_wrong_reason(wrong_reference, version, ranges)}"
+            f"{scenario} {_wrong_reason(decision, version, ranges)} Evidence context: the published interval text, package metadata and "
+            f"{semantics} comparator are the basis for this bounded version review."
         )
         recommendation = (
-            "Action: continue without an advisory block based on that comparison; this answer does not "
-            "establish exploitability. Scope: this is a version-applicability finding."
+            "Action: allow this dependency for this advisory; treat the published interval as outside the target; "
+            "do not infer runtime exploitability. Scope: package-version applicability."
             if decision == INAPPLICABLE else
-            "Action: block or upgrade this dependency based on that comparison; this answer does not "
-            "establish exploitability. Scope: this is a version-applicability finding."
+            "Action: block this dependency before release promotion; treat the published interval as covering the target; "
+            "do not infer runtime exploitability. Scope: package-version applicability."
         )
     paired_notes = (
         (
             "Audit note: retain the exact registry spelling and fixed endpoint in the review record.",
-            "Review note: the package-level conclusion still needs application-specific reachability evidence before any exploit claim.",
+            "Operational note: keep the package entry and endpoint together in the release review record.",
         ),
         (
             "Audit note: the ecosystem comparator, not lexical order, is the reproducible basis for this release decision.",
-            "Review note: this alternate disposition must not be generalized to other package releases or advisory branches.",
+            "Operational note: record the resolved boundary in the dependency inventory before promotion.",
         ),
         (
             "Audit note: keep each affected branch separate when the advisory publishes more than one interval.",
-            "Review note: a remediation decision should still be checked against the manifest and deployed dependency graph.",
+            "Operational note: recheck the resolved version whenever the lockfile changes.",
         ),
         (
             "Audit note: the cited advisory summary and version range are the evidence anchor for this bounded finding.",
-            "Review note: the opposing interpretation is not evidence of a runtime exploit and should be independently rechecked.",
+            "Operational note: carry the advisory identifier into the release review record.",
         ),
         (
             "Audit note: the safe action is limited to the exact package identity and published version semantics shown here.",
-            "Review note: confirm the registry snapshot and application context before treating this as an operational incident.",
+            "Operational note: keep the package identity and ecosystem comparator together in the incident ticket.",
         ),
         (
             "Audit note: preserve this boundary comparison with the source snapshot so another reviewer can replay it offline.",
-            "Review note: do not infer package safety or exploitability from this single advisory decision alone.",
+            "Operational note: preserve the cited interval next to the dependency pin.",
         ),
         (
             "Audit note: record whether the release is before, inside or beyond each published endpoint.",
-            "Review note: the proposed next step remains provisional until the exact dependency graph is checked.",
+            "Operational note: schedule the next dependency scan after the next package refresh.",
         ),
     )
     correct_note, wrong_note = paired_notes[answer_index % len(paired_notes)]
@@ -275,6 +298,49 @@ def _similarity(left: str, right: str) -> float:
     return SequenceMatcher(None, left, right).ratio()
 
 
+def _word_tokens(value: str) -> set[str]:
+    return set(re.findall(r"[a-z0-9]+", _normalize_prompt(value)))
+
+
+def _prompt_answer_overlap(prompt: str, answer: str) -> float:
+    prompt_tokens = _word_tokens(prompt)
+    answer_tokens = _word_tokens(answer)
+    union = prompt_tokens | answer_tokens
+    return len(prompt_tokens & answer_tokens) / len(union) if union else 0.0
+
+
+def _error_marker_count(value: str) -> int:
+    normalized = _normalize_prompt(value)
+    return sum(normalized.count(marker) for marker in ERROR_INDICATING_MARKERS)
+
+
+def _pairwise_feature_accuracy(rows: list[dict[str, Any]], feature: Any) -> float:
+    """Measure a pairwise shortcut's ability to identify the preferred side.
+
+    Every row has one preferred and one rejected answer.  Ties are scored at
+    chance (0.5), so a feature with no real signal cannot look predictive just
+    because the implementation always chooses the first side.
+    """
+    score = 0.0
+    for row in rows:
+        chosen_value = feature(row["chosen"])
+        rejected_value = feature(row["rejected"])
+        if chosen_value > rejected_value:
+            score += 1.0
+        elif chosen_value == rejected_value:
+            score += 0.5
+    return score / len(rows) if rows else 0.0
+
+
+def _prompt_overlap_accuracy(rows: list[dict[str, Any]]) -> float:
+    score = 0.0
+    for row in rows:
+        chosen_overlap = _prompt_answer_overlap(row["prompt"], row["chosen"])
+        rejected_overlap = _prompt_answer_overlap(row["prompt"], row["rejected"])
+        score += 1.0 if chosen_overlap > rejected_overlap else 0.5 if chosen_overlap == rejected_overlap else 0.0
+    return score / len(rows) if rows else 0.0
+
+
 def _best_length_threshold_accuracy(rows: list[dict[str, Any]]) -> float:
     observations = [(len(row["chosen"]), 1) for row in rows] + [(len(row["rejected"]), 0) for row in rows]
     best = 0.0
@@ -284,6 +350,46 @@ def _best_length_threshold_accuracy(rows: list[dict[str, Any]]) -> float:
                           for length, label in observations)
             best = max(best, correct / len(observations))
     return best
+
+
+BALANCE_SUFFIXES = (
+    "for audit",
+    "for replay",
+    "for release",
+    "for handoff",
+    "for later replay",
+    "for audit replay",
+    "for release review",
+    "for review replay",
+    "for source review",
+    "for evidence review",
+    "for audit history",
+    "for release handoff",
+    "for deployment review",
+)
+
+
+def _append_balance_suffix(answer: dict[str, str], gap: int, answer_index: int) -> dict[str, str]:
+    if gap < 10 or not answer["text"].endswith("."):
+        return answer
+    candidates = [suffix for suffix in BALANCE_SUFFIXES if len(suffix) + 1 <= gap]
+    if not candidates:
+        return answer
+    suffix = candidates[answer_index % len(candidates)]
+    text = answer["text"][:-1] + " " + suffix + "."
+    return {**answer, "text": text}
+
+
+def _balance_pair_lengths(
+    better: dict[str, str], worse: dict[str, str], answer_index: int
+) -> tuple[dict[str, str], dict[str, str]]:
+    better_length = len(better["text"])
+    worse_length = len(worse["text"])
+    if better_length < worse_length:
+        better = _append_balance_suffix(better, worse_length - better_length, answer_index)
+    elif worse_length < better_length:
+        worse = _append_balance_suffix(worse, better_length - worse_length, answer_index)
+    return better, worse
 
 
 def _quality_audit(rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -298,11 +404,33 @@ def _quality_audit(rows: list[dict[str, Any]]) -> dict[str, Any]:
     need(max(similarities, default=0.0) < MAX_PROMPT_SIMILARITY, "near-duplicate prompt similarity reaches official rejection threshold")
     need(min(paired_ratios, default=0.0) >= MIN_PAIRED_LENGTH_RATIO, "chosen/rejected lengths are too easy to separate")
     need(threshold_accuracy <= MAX_LENGTH_SHORTCUT_ACCURACY, "a length-only threshold predicts preference too well")
+    rejected_marker_hits = sorted({
+        marker
+        for row in rows
+        for marker in ERROR_INDICATING_MARKERS
+        if marker in _normalize_prompt(row["rejected"])
+    })
+    need(not rejected_marker_hits, "rejected answer contains an error-indicating label leak")
     need(len({len(row["chosen"]) for row in rows}) >= 5 and len({len(row["rejected"]) for row in rows}) >= 5,
          "answer lengths are unnaturally repetitive")
     need(len({row["chosen"] for row in rows}) == len(rows)
          and len({row["rejected"] for row in rows}) == len(rows),
          "answer templates repeat across candidate rows")
+    shortcut_baselines = {
+        "length_threshold": threshold_accuracy,
+        "error_indicating_keyword_presence": _pairwise_feature_accuracy(rows, _error_marker_count),
+        "prompt_answer_lexical_overlap": _prompt_overlap_accuracy(rows),
+        "recurring_template": _pairwise_feature_accuracy(
+            rows, lambda answer: len(_normalize_prompt(answer).split(":", 1)[0])
+        ),
+        "stylistic_punctuation": _pairwise_feature_accuracy(
+            rows, lambda answer: (
+                answer.count("."), answer.count(";"), answer.count(":"), answer.count(",")
+            )
+        ),
+    }
+    need(max(shortcut_baselines.values()) <= MAX_LENGTH_SHORTCUT_ACCURACY,
+         "a simple lexical, template or stylistic shortcut predicts preference too well")
     return {
         "official_prompt_length": {"minimum": MIN_PROMPT_LENGTH, "maximum": MAX_PROMPT_LENGTH},
         "official_answer_length": {"minimum": MIN_ANSWER_LENGTH, "maximum": MAX_ANSWER_LENGTH},
@@ -311,8 +439,15 @@ def _quality_audit(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "minimum_paired_answer_length_ratio": min(paired_ratios, default=0.0),
         "length_only_best_threshold_accuracy": threshold_accuracy,
         "length_shortcut_threshold": MAX_LENGTH_SHORTCUT_ACCURACY,
+        "rejected_error_indicating_keyword_hits": rejected_marker_hits,
+        "shortcut_baselines": shortcut_baselines,
+        "maximum_simple_shortcut_accuracy": max(shortcut_baselines.values()),
         "prompt_near_duplicate_check_passed": True,
         "answer_length_shortcut_check_passed": True,
+        "error_indicating_keyword_check_passed": True,
+        "lexical_overlap_shortcut_check_passed": shortcut_baselines["prompt_answer_lexical_overlap"] <= MAX_LENGTH_SHORTCUT_ACCURACY,
+        "recurring_template_shortcut_check_passed": shortcut_baselines["recurring_template"] <= MAX_LENGTH_SHORTCUT_ACCURACY,
+        "stylistic_shortcut_check_passed": shortcut_baselines["stylistic_punctuation"] <= MAX_LENGTH_SHORTCUT_ACCURACY,
         "answer_length_diversity_check_passed": True,
         "answer_template_diversity_check_passed": True,
     }
@@ -372,6 +507,7 @@ def prepare(root: Path = ROOT) -> dict[str, Any]:
         seen_pairs.add(pair_id)
         better = _answer(reference, ecosystem, package, version, advisory_id, advisory, correct=True, answer_index=len(rows))
         worse = _answer(_wrong_decision(reference), ecosystem, package, version, advisory_id, advisory, correct=False, answer_index=len(rows))
+        better, worse = _balance_pair_lengths(better, worse, len(rows))
         upload_row = _upload_row(question, better, worse, advisory_meta["source_url"])
         _validate_upload_row(upload_row)
         quality_checks = {
@@ -394,6 +530,7 @@ def prepare(root: Path = ROOT) -> dict[str, Any]:
                 advisory.get("summary") in better["text"] and advisory.get("summary") in worse["text"]
                 and better["action"] != worse["action"]
             ),
+            "rejected_answer_has_no_label_leakage": not _error_marker_count(worse["text"]),
         }
         need(all(quality_checks.values()), f"pair quality gate failed: {case['case_id']}")
         rows.append({
@@ -487,6 +624,10 @@ def validate(report: dict[str, Any]) -> None:
     need(isinstance(recorded_audit, dict)
          and recorded_audit.get("prompt_near_duplicate_check_passed") is True
          and recorded_audit.get("answer_length_shortcut_check_passed") is True
+         and recorded_audit.get("error_indicating_keyword_check_passed") is True
+         and recorded_audit.get("lexical_overlap_shortcut_check_passed") is True
+         and recorded_audit.get("recurring_template_shortcut_check_passed") is True
+         and recorded_audit.get("stylistic_shortcut_check_passed") is True
          and recorded_audit.get("answer_template_diversity_check_passed") is True,
          "quality audit is missing or does not record the official shortcut checks")
     for row in rows:

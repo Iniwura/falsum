@@ -29,10 +29,13 @@ The reference labels are independently re-resolved from the pinned snapshots
 and must match the frozen Phase5BO labels. Duplicate normalized questions,
 duplicate pair fingerprints, missing registry versions, missing provenance or
 opaque answer-token selection fail closed. V2 additionally audits the official
-prompt near-duplicate threshold, paired answer lengths, length-only preference
-prediction and exact answer-template repetition. The packet does not upload
-rows, claim Anjoman eligibility, prove human AppSec gold or establish a ranked
-Telegraph evaluator.
+prompt near-duplicate threshold, paired answer lengths, exact answer-template
+repetition, rejection-label leakage and four simple shortcut baselines. The
+corrected packet contains plausible competing reviews without self-described
+error markers; length, error-keyword, prompt-answer lexical-overlap,
+recurring-template and punctuation baselines are each at or below 60%. The
+packet does not upload rows, claim Anjoman eligibility, prove human AppSec gold
+or establish a ranked Telegraph evaluator.
 
 The historical material Intent is `SECURITY_REVIEW_GENERAL`; the authoritative
 family mapping to `SECURITY_REVIEW` is recorded in [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96)
