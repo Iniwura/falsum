@@ -83,7 +83,7 @@ reproduced by both Phase 5Y and Phase 5Z. It is evaluation material and
 valuable version-aware coverage, not general security accuracy, recall, expert
 gold, network ranking uplift or independent adoption.
 
-Commit `3e1529b` is hosted-verified by the [Phase 5BI scorecard workflow](https://github.com/Iniwura/falsum/actions/runs/45915924410), with all three contract-test Python versions and the live authenticated public-source replay green. The same head passed the [Foundation suite](https://github.com/Iniwura/falsum/actions/runs/45915924271) and [official data gate](https://github.com/Iniwura/falsum/actions/runs/45915924459).
+The current head `050f59b` is hosted-verified by the [Phase 5BJ fresh-provider workflow](https://github.com/Iniwura/falsum/actions/runs/45918441740), with all three contract-test Python versions and the live authenticated public-source replay green. The same head also passed the [Phase 5BI scorecard workflow](https://github.com/Iniwura/falsum/actions/runs/45918441661), [Foundation suite](https://github.com/Iniwura/falsum/actions/runs/45918441798), and the relevant prior official data gates. The Phase 5BJ run carries a non-blocking GitHub Actions Node.js 20 deprecation annotation from the hosted action wrappers; all jobs completed successfully.
 
 It does not currently have evidence for a 90+/100 outcome. The largest score
 and excellence-award risks are independent reproducibility, proven measurement

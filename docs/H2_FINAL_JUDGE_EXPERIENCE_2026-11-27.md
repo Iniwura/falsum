@@ -29,7 +29,7 @@ run the two zero-credential commands in the [submission package](H2_FINAL_SUBMIS
 | 2 | [Fresh holdout protocol](../data/phase5bj-fresh-provider-holdout-protocol.json) | Proves selection was frozen before observation |
 | 3 | [Fresh holdout implementation](../src/falsum/phase5bj_fresh_provider_holdout.py) | Shows binding, interval policy and independent baseline |
 | 4 | [Fresh holdout tests](../tests/test_phase5bj_fresh_provider_holdout.py) | Adversarial boundary, target and leakage checks |
-| 5 | [Hosted Phase 5BI CI](https://github.com/Iniwura/falsum/actions/runs/45915924410) | Prior bounded measurement replay |
+| 5 | [Hosted Phase 5BI CI](https://github.com/Iniwura/falsum/actions/runs/45918441661) | Prior bounded measurement replay |
 | 6 | [Final storyboard](H2_FINAL_DEMO_STORYBOARD_2026-11-27.md) | Safe presentation sequence |
 | 7 | [Official rules](https://hackathon.telegraphprotocol.com/rules) | Eligibility and submission bar |
 

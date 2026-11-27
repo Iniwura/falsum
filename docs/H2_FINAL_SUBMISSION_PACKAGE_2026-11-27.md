@@ -62,7 +62,7 @@ does not become current production usage.
 | --- | --- | --- |
 | Frozen fresh public-provider holdout | [Phase 5BJ protocol](../data/phase5bj-fresh-provider-holdout-protocol.json) and [implementation](../src/falsum/phase5bj_fresh_provider_holdout.py) | New public coverage; not blind gold or recall |
 | Fresh outcome | `data/phase5bj-fresh-provider-holdout-result.json` when the owner elects to retain the replay artifact | 66 references, 38 resolved, 27 applicable, 39 abstentions/unknowns |
-| Prior bounded measurement | [Phase 5BI scorecard](../src/falsum/phase5bi_measurement_scorecard.py) and [hosted CI](https://github.com/Iniwura/falsum/actions/runs/45915924410) | 2/12 known false-positive reduction; narrow reviewed roster |
+| Prior bounded measurement | [Phase 5BI scorecard](../src/falsum/phase5bi_measurement_scorecard.py) and [hosted CI](https://github.com/Iniwura/falsum/actions/runs/45918441661) | 2/12 known false-positive reduction; narrow reviewed roster |
 | Safety and provenance | [Phase 5B/5BG tests](../tests/) and current GitHub Actions workflows | Fail-closed evidence handling; no security clearance |
 | Telegraph relevance | [final competitive audit](H2_FINAL_COMPETITIVE_AUDIT_2026-11-27.md) | Historical/public evidence only; ACP suspended |
 | Demo/equivalent | [final storyboard](H2_FINAL_DEMO_STORYBOARD_2026-11-27.md) | Prepared, not recorded or submitted |
