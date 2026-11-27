@@ -157,6 +157,12 @@ def main(argv: list[str] | None = None) -> int:
         help="run the new balanced OSV/GitHub-reviewed holdout with independent baselines and shortcut audits",
     )
     balanced_holdout.add_argument("--out", type=Path, required=True)
+    corrected_holdout = commands.add_parser(
+        "audit-corrected-independent-holdout",
+        help="run the Phase 5BN corrected independent-label holdout with external version resolvers",
+    )
+    corrected_holdout.add_argument("--out", type=Path, required=True)
+    corrected_holdout.add_argument("--freeze", action="store_true")
     consume = commands.add_parser(
         "audit-telegraph-consumption",
         help="strict original source-bound application allow/deny policy; two authentic real paid captures and 24 constructed tests, not network scoring",
@@ -284,6 +290,10 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "audit-independent-balanced-holdout":
             from .phase5bm_independent_balanced_holdout import main as balanced_holdout_main
             return balanced_holdout_main(["--out", str(args.out)])
+        if args.command == "audit-corrected-independent-holdout":
+            from .phase5bn_corrected_independent_holdout import main as corrected_holdout_main
+            command = (["--freeze"] if args.freeze else []) + ["--out", str(args.out)]
+            return corrected_holdout_main(command)
         if args.command == "audit-telegraph-consumption":
             from .phase5t_application_consumption import main as consume_main
             cmd=["--out",str(args.out)]

@@ -115,7 +115,8 @@ Evaluators rubric is recorded in the [rubric evidence note](H2_EVALUATORS_RUBRIC
 measurement validity/baseline 40 (minimum 28), integrity 15,
 reproducibility/protocol compatibility 10, useful coverage/improvement 10,
 documentation/integration 5, and growth 20. The corrected strict assessment is
-[98/100](H2_FINAL_STRICT_SCORE_2026-11-27.md), with 40/40 measurement validity
+[96/100](H2_FINAL_STRICT_SCORE_2026-11-27.md), with 38/40 corrected
+measurement validity
 and the 28/40 technical minimum passed.
 
 The [Phase 5BK matrix](../data/phase5bk-evaluator-mission-workflow-matrix.json)
@@ -129,6 +130,23 @@ and [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96) map
 historical FALSUM material's `SECURITY_REVIEW_GENERAL` child Intent to the
 `SECURITY_REVIEW` family. Maintainer acceptance and live adapter registration
 remain separate and unverified.
+
+## Phase 5BN correction
+
+The historical Phase 5BM result is preserved but no longer treated as the
+current perfect measurement. Phase 5BN removes the former FALSUM-dependent
+boundary/layout risk: it freezes actual PyPI/npm registry versions, derives
+reference labels with `packaging==26.4` and `semver@7.8.6` before the candidate,
+uses a fixed label-blind seed, and verifies all claimed versions still exist.
+It evaluates 48 target-specific competing answers and computes leakage tests for
+case index, answer position and answer token.
+
+The corrected result is 22/24 FALSUM versus 24/24 for the external resolver.
+The two unknown disagreements are published. The answer surfaces are
+meaningful, and the clean protocol shows no leakage signal at the predeclared
+permutation threshold while adversarial index/token mutations are detected.
+This is stronger validity evidence but not human AppSec gold or a FALSUM win
+over the competent version resolver.
 
 The [current Anjoman read-only record](../evidence/phase5bk-2026-11-27-anjoman-status.json)
 shows 20 total / 20 Eligible rows for the operator-reported Privy address and
@@ -158,10 +176,10 @@ adds a new fair comparison surface across the original Truvian fixtures, the
 complete 129-case Gig Guard ledger, the Phase 5BI roster and the fresh Phase
 5BJ holdout. It records two source-bound contrasts against weaker policies,
 ties the competent baseline 66/66, and preserves the negative verdict-only
-tie. Phase 5BM adds a new balanced 24-case contrast while preserving the
-competent-baseline tie. Together these support the 40/40 internal measurement
-allocation; they are not human gold or
-a ranking-improvement claim.
+tie. Phase 5BM remains a historical balanced contrast. The corrected Phase
+5BN result is 22/24 against a 24/24 external resolver, so the current internal
+measurement allocation is 38/40 rather than a perfect score. These results are
+not human gold or a ranking-improvement claim.
 
 The prior Phase 5BJ, Phase 5BI and Foundation evidence remains green in its
 [fresh-provider](https://github.com/Iniwura/falsum/actions/runs/45919862041),
@@ -173,7 +191,7 @@ and [Phase 5BK mapping workflow](https://github.com/Iniwura/falsum/actions/runs/
 Hosted action Node.js deprecation annotations are non-blocking; successful
 conclusions are the authoritative results.
 
-The 98/100 result is an internal, evidence-mapped readiness assessment, not an
+The 96/100 corrected result is an internal, evidence-mapped readiness assessment, not an
 organizer score. The largest remaining excellence-award risks are independent
 repeat integration or contribution beyond the existing reviews, a
 registered/usable evaluator contribution, and external

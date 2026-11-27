@@ -3,6 +3,18 @@
 Start here: [final storyboard](H2_FINAL_DEMO_STORYBOARD_2026-11-27.md), then
 run the two zero-credential commands in the [submission package](H2_FINAL_SUBMISSION_PACKAGE_2026-11-27.md).
 
+## Phase 5BN correction — current measurement result
+
+The earlier Phase 5BM result remains preserved as historical evidence, but it
+is not the current certification basis. The corrected [Phase 5BN independent
+holdout](PHASE5BN_CORRECTED_INDEPENDENT_HOLDOUT.md) removes FALSUM-dependent
+layout selection, freezes labels from `packaging==26.4` and `semver@7.8.6`
+before candidate execution, checks actual registry version existence, tests
+index/position/token leakage with computed permutation tests, and evaluates
+target-specific competing security answers. It records 22/24 FALSUM decisions
+against 24/24 for the external version-resolution reference. The two FALSUM
+unknowns are preserved; this is not human AppSec gold or a perfect-score claim.
+
 ## What the judge should learn in three minutes
 
 1. FALSUM is **Evaluator material** for `SECURITY_REVIEW_GENERAL`, which
@@ -24,10 +36,11 @@ run the two zero-credential commands in the [submission package](H2_FINAL_SUBMIS
    references suppressed, 8 count-only vulnerable-label PASS outcomes removed,
    and 66/66 agreement with the competent baseline; it preserves the tie with
    verdict-only.
-6. The new balanced holdout covers six previously unused package families and
-   24 paired boundary cases: FALSUM and the separately implemented competent
-   interval baseline are 24/24, while citation-only is 12/24. Answer order is
-   balanced 12/12, surfaces are equal-length, and shortcut/leakage checks pass.
+6. The historical Phase 5BM balanced holdout remains available for audit, but
+   the corrected Phase 5BN holdout is the current result: 24 registry-backed
+   cases, 22/24 FALSUM, 24/24 external resolver, 48 distinct target-specific
+   answers, and computed index/position/token leakage checks with no detected
+   signal at the predeclared threshold.
 7. Two distinct official mission workflows have repeatable supporting tests:
    Model Economy supply-chain verification and Web3 Native and DeFi
    security/bug-bounty proof. They are not claimed as completed missions or
@@ -55,6 +68,7 @@ minimum](H2_EVALUATORS_RUBRIC_2026-11-27.md), not the Apps & Agents-shaped
 | 9 | [Current Anjoman status](../evidence/phase5bk-2026-11-27-anjoman-status.json) | 20/20 current Eligible rows for the operator-reported Privy address |
 | 10 | [Cross-source measurement audit](../data/phase5bl-cross-source-measurement-discrimination.json) | Fair contrasts, baseline tie, and preserved negative findings |
 | 11 | [Independent balanced holdout](../data/phase5bm-independent-balanced-holdout-result.json) | 24 paired cases, balanced order, shortcut audit, and citation-only contrast |
+| 12 | [Corrected independent holdout](PHASE5BN_CORRECTED_INDEPENDENT_HOLDOUT.md) | Independent labels, external resolver, version existence, meaningful answers, and computed leakage audit |
 
 ## Claims a judge can safely repeat
 
@@ -62,6 +76,7 @@ minimum](H2_EVALUATORS_RUBRIC_2026-11-27.md), not the Apps & Agents-shaped
 - “The fresh public holdout was selected before response inspection and was
   replayed against an independent version-aware baseline.”
 - “FALSUM and the baseline agreed; unknown cases were not forced positive.”
+- “The corrected 24-case study records 22/24 FALSUM versus 24/24 for an external version-resolution reference, with two explicit unknown disagreements.”
 - “The prior measured effect is bounded to a frozen reviewed-reference roster.”
 - “The cross-source audit shows two safety-relevant contrasts against weaker
   policies, ties a competent baseline, and preserves the verdict-only tie.”
@@ -75,6 +90,7 @@ minimum](H2_EVALUATORS_RUBRIC_2026-11-27.md), not the Apps & Agents-shaped
 
 - “FALSUM is an official registered evaluator.”
 - “The fresh holdout proves security accuracy, recall, or production safety.”
+- “The historical Phase5BM 24/24 result is the current corrected score.”
 - “Paid/charged fields prove settlement or independent customer demand.”
 - “The old model experiment proves FALSUM improved ranking.”
 - “The ACP Sandbox route is complete.”

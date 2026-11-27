@@ -1,0 +1,781 @@
+{
+  "answer_surface_audit": {
+    "distinct_option_texts": 48,
+    "meaningful_competing_answers": true,
+    "minimum_option_text_length": 241,
+    "placeholder_a_or_b_only": false
+  },
+  "balance": {
+    "applicable": 12,
+    "ecosystems": {
+      "PyPI": 12,
+      "npm": 12
+    },
+    "inapplicable": 12,
+    "package_families": 6,
+    "total": 24
+  },
+  "cases": [
+    {
+      "case_id": "3aa38f340ff2de1a",
+      "case_index": 0,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "APPLICABLE",
+      "falsum_selected_answer_token": "ref-sable",
+      "options": [
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For npm:tough-cookie@2.2.2, advisory GHSA-qhv9-728r-6jqg is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For npm:tough-cookie@2.2.2, advisory GHSA-qhv9-728r-6jqg is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "APPLICABLE",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tough-cookie",
+        "version": "2.2.2"
+      }
+    },
+    {
+      "case_id": "031bace70bff19ca",
+      "case_index": 1,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "APPLICABLE",
+      "falsum_selected_answer_token": "ref-rhea",
+      "options": [
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For npm:tar@7.5.18, advisory GHSA-23hp-3jrh-7fpw is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For npm:tar@7.5.18, advisory GHSA-23hp-3jrh-7fpw is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "APPLICABLE",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tar",
+        "version": "7.5.18"
+      }
+    },
+    {
+      "case_id": "2c32de7d35ede29a",
+      "case_index": 2,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "INAPPLICABLE",
+      "falsum_selected_answer_token": "ref-rhea",
+      "options": [
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For npm:tar@0.0.1, advisory GHSA-29xp-372q-xqph is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For npm:tar@0.0.1, advisory GHSA-29xp-372q-xqph is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "INAPPLICABLE",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tar",
+        "version": "0.0.1"
+      }
+    },
+    {
+      "case_id": "dde13b57d6502181",
+      "case_index": 3,
+      "falsum_answer_correct": false,
+      "falsum_correct": false,
+      "falsum_decision": "UNKNOWN_OR_INSUFFICIENT",
+      "falsum_selected_answer_token": null,
+      "options": [
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:setuptools@0.6c11, advisory GHSA-27x4-j476-jp5f is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:setuptools@0.6c11, advisory GHSA-27x4-j476-jp5f is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "APPLICABLE",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "setuptools",
+        "version": "0.6c11"
+      }
+    },
+    {
+      "case_id": "5b428c10cdfc8a31",
+      "case_index": 4,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "INAPPLICABLE",
+      "falsum_selected_answer_token": "ref-sable",
+      "options": [
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For npm:node-fetch@2.6.7, advisory GHSA-r683-j2x4-v87g is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For npm:node-fetch@2.6.7, advisory GHSA-r683-j2x4-v87g is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "INAPPLICABLE",
+      "target": {
+        "ecosystem": "npm",
+        "package": "node-fetch",
+        "version": "2.6.7"
+      }
+    },
+    {
+      "case_id": "f2969f9933f28ad0",
+      "case_index": 5,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "APPLICABLE",
+      "falsum_selected_answer_token": "ref-sable",
+      "options": [
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:pymongo@4.18.0, advisory GHSA-8fvv-fgr5-f8ch is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:pymongo@4.18.0, advisory GHSA-8fvv-fgr5-f8ch is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "APPLICABLE",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "pymongo",
+        "version": "4.18.0"
+      }
+    },
+    {
+      "case_id": "7999d9cafce7d9bf",
+      "case_index": 6,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "INAPPLICABLE",
+      "falsum_selected_answer_token": "ref-sable",
+      "options": [
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:pymongo@4.18.1, advisory GHSA-8fvv-fgr5-f8ch is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:pymongo@4.18.1, advisory GHSA-8fvv-fgr5-f8ch is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "INAPPLICABLE",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "pymongo",
+        "version": "4.18.1"
+      }
+    },
+    {
+      "case_id": "104f1880e76b7966",
+      "case_index": 7,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "APPLICABLE",
+      "falsum_selected_answer_token": "ref-rhea",
+      "options": [
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For npm:tough-cookie@2.3.2, advisory GHSA-g7q5-pjjr-gqvp is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For npm:tough-cookie@2.3.2, advisory GHSA-g7q5-pjjr-gqvp is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "APPLICABLE",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tough-cookie",
+        "version": "2.3.2"
+      }
+    },
+    {
+      "case_id": "e3546f3a39a253a1",
+      "case_index": 8,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "INAPPLICABLE",
+      "falsum_selected_answer_token": "ref-sable",
+      "options": [
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For npm:tough-cookie@2.3.3, advisory GHSA-g7q5-pjjr-gqvp is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For npm:tough-cookie@2.3.3, advisory GHSA-g7q5-pjjr-gqvp is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "INAPPLICABLE",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tough-cookie",
+        "version": "2.3.3"
+      }
+    },
+    {
+      "case_id": "0b6aac20f1626830",
+      "case_index": 9,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "APPLICABLE",
+      "falsum_selected_answer_token": "ref-rhea",
+      "options": [
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:cryptography@41.0.7, advisory GHSA-3ww4-gg4f-jr7f is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:cryptography@41.0.7, advisory GHSA-3ww4-gg4f-jr7f is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "APPLICABLE",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "cryptography",
+        "version": "41.0.7"
+      }
+    },
+    {
+      "case_id": "012c1d64d22945c6",
+      "case_index": 10,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "INAPPLICABLE",
+      "falsum_selected_answer_token": "ref-sable",
+      "options": [
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:setuptools@0.7.2, advisory GHSA-27x4-j476-jp5f is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:setuptools@0.7.2, advisory GHSA-27x4-j476-jp5f is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "INAPPLICABLE",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "setuptools",
+        "version": "0.7.2"
+      }
+    },
+    {
+      "case_id": "48f2d38baa3204eb",
+      "case_index": 11,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "APPLICABLE",
+      "falsum_selected_answer_token": "ref-rhea",
+      "options": [
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For npm:tar@7.5.1, advisory GHSA-29xp-372q-xqph is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For npm:tar@7.5.1, advisory GHSA-29xp-372q-xqph is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "APPLICABLE",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tar",
+        "version": "7.5.1"
+      }
+    },
+    {
+      "case_id": "4b4fee0eb0f09d42",
+      "case_index": 12,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "INAPPLICABLE",
+      "falsum_selected_answer_token": "ref-sable",
+      "options": [
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For npm:node-fetch@0.1.0, advisory GHSA-vp56-6g26-6827 is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For npm:node-fetch@0.1.0, advisory GHSA-vp56-6g26-6827 is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "INAPPLICABLE",
+      "target": {
+        "ecosystem": "npm",
+        "package": "node-fetch",
+        "version": "0.1.0"
+      }
+    },
+    {
+      "case_id": "a207bf2807a25750",
+      "case_index": 13,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "APPLICABLE",
+      "falsum_selected_answer_token": "ref-sable",
+      "options": [
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:cryptography@38.0.2, advisory GHSA-39hc-v87j-747x is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:cryptography@38.0.2, advisory GHSA-39hc-v87j-747x is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "APPLICABLE",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "cryptography",
+        "version": "38.0.2"
+      }
+    },
+    {
+      "case_id": "b8cfbb8df540aa98",
+      "case_index": 14,
+      "falsum_answer_correct": false,
+      "falsum_correct": false,
+      "falsum_decision": "UNKNOWN_OR_INSUFFICIENT",
+      "falsum_selected_answer_token": null,
+      "options": [
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:pymongo@0.1pre, advisory GHSA-98qm-wvgf-w4cf is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:pymongo@0.1pre, advisory GHSA-98qm-wvgf-w4cf is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "INAPPLICABLE",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "pymongo",
+        "version": "0.1pre"
+      }
+    },
+    {
+      "case_id": "230f2a210b9a2921",
+      "case_index": 15,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "INAPPLICABLE",
+      "falsum_selected_answer_token": "ref-rhea",
+      "options": [
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:cryptography@0.1, advisory GHSA-39hc-v87j-747x is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:cryptography@0.1, advisory GHSA-39hc-v87j-747x is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "INAPPLICABLE",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "cryptography",
+        "version": "0.1"
+      }
+    },
+    {
+      "case_id": "b9a09f7cd9c24834",
+      "case_index": 16,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "APPLICABLE",
+      "falsum_selected_answer_token": "ref-rhea",
+      "options": [
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:setuptools@78.1.0, advisory GHSA-5rjg-fvgr-3xxf is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:setuptools@78.1.0, advisory GHSA-5rjg-fvgr-3xxf is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "APPLICABLE",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "setuptools",
+        "version": "78.1.0"
+      }
+    },
+    {
+      "case_id": "5d9c8cafa36c21d9",
+      "case_index": 17,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "APPLICABLE",
+      "falsum_selected_answer_token": "ref-rhea",
+      "options": [
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:pymongo@4.18.2, advisory GHSA-98qm-wvgf-w4cf is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:pymongo@4.18.2, advisory GHSA-98qm-wvgf-w4cf is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "APPLICABLE",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "pymongo",
+        "version": "4.18.2"
+      }
+    },
+    {
+      "case_id": "bf354b87ffce4cdb",
+      "case_index": 18,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "INAPPLICABLE",
+      "falsum_selected_answer_token": "ref-rhea",
+      "options": [
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:setuptools@78.1.1, advisory GHSA-5rjg-fvgr-3xxf is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:setuptools@78.1.1, advisory GHSA-5rjg-fvgr-3xxf is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "INAPPLICABLE",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "setuptools",
+        "version": "78.1.1"
+      }
+    },
+    {
+      "case_id": "1d341883222bfd24",
+      "case_index": 19,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "INAPPLICABLE",
+      "falsum_selected_answer_token": "ref-rhea",
+      "options": [
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For npm:tough-cookie@2.3.0, advisory GHSA-qhv9-728r-6jqg is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For npm:tough-cookie@2.3.0, advisory GHSA-qhv9-728r-6jqg is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "INAPPLICABLE",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tough-cookie",
+        "version": "2.3.0"
+      }
+    },
+    {
+      "case_id": "676c16a7a8c9fcd2",
+      "case_index": 20,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "APPLICABLE",
+      "falsum_selected_answer_token": "ref-sable",
+      "options": [
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For npm:node-fetch@3.1.0, advisory GHSA-r683-j2x4-v87g is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For npm:node-fetch@3.1.0, advisory GHSA-r683-j2x4-v87g is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "APPLICABLE",
+      "target": {
+        "ecosystem": "npm",
+        "package": "node-fetch",
+        "version": "3.1.0"
+      }
+    },
+    {
+      "case_id": "dad2394cd2707520",
+      "case_index": 21,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "INAPPLICABLE",
+      "falsum_selected_answer_token": "ref-rhea",
+      "options": [
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:cryptography@42.0.0, advisory GHSA-3ww4-gg4f-jr7f is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For PyPI:cryptography@42.0.0, advisory GHSA-3ww4-gg4f-jr7f is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "INAPPLICABLE",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "cryptography",
+        "version": "42.0.0"
+      }
+    },
+    {
+      "case_id": "f3ae170ddb53ab42",
+      "case_index": 22,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "APPLICABLE",
+      "falsum_selected_answer_token": "ref-rhea",
+      "options": [
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For npm:node-fetch@3.2.9, advisory GHSA-vp56-6g26-6827 is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For npm:node-fetch@3.2.9, advisory GHSA-vp56-6g26-6827 is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "APPLICABLE",
+      "target": {
+        "ecosystem": "npm",
+        "package": "node-fetch",
+        "version": "3.2.9"
+      }
+    },
+    {
+      "case_id": "11be490213f89213",
+      "case_index": 23,
+      "falsum_answer_correct": true,
+      "falsum_correct": true,
+      "falsum_decision": "INAPPLICABLE",
+      "falsum_selected_answer_token": "ref-rhea",
+      "options": [
+        {
+          "action": "block_or_upgrade",
+          "answer_token": "ref-sable",
+          "scope": "version_applicability_only",
+          "text": "For npm:tar@7.5.19, advisory GHSA-23hp-3jrh-7fpw is inside the published affected range. Treat this dependency as affected for this review, block the release or upgrade before relying on it. This is version applicability only, not exploitability."
+        },
+        {
+          "action": "no_action_for_this_record",
+          "answer_token": "ref-rhea",
+          "scope": "version_applicability_only",
+          "text": "For npm:tar@7.5.19, advisory GHSA-23hp-3jrh-7fpw is outside the published affected range. Do not attribute this advisory to the dependency, and do not require an upgrade for this record. This is version applicability only, not exploitability."
+        }
+      ],
+      "reference_label": "INAPPLICABLE",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tar",
+        "version": "7.5.19"
+      }
+    }
+  ],
+  "interpretation": {
+    "falsum_beats_external_resolver": false,
+    "independent_human_appsec_gold": false,
+    "meaningful_quality_discrimination": true,
+    "new_paid_telegraph_execution": false,
+    "ranking_improvement": false,
+    "security_clearance": false,
+    "summary": "The corrected holdout freezes independently resolved registry versions and labels before FALSUM execution, tests index/token leakage, and evaluates target-specific competing security answers. It is version-applicability evidence, not human AppSec gold."
+  },
+  "leakage_audit": {
+    "label_leakage_detected": false,
+    "metrics": {
+      "answer_position": {
+        "baseline_accuracy": 0.5,
+        "bucket_majority": {
+          "0": "INAPPLICABLE",
+          "1": "APPLICABLE"
+        },
+        "correct": 13,
+        "denominator": 24,
+        "excess_over_baseline": 0.04166666666666663,
+        "observed_accuracy": 0.5416666666666666,
+        "permutation_p_value": 1.0
+      },
+      "answer_token": {
+        "baseline_accuracy": 0.5,
+        "bucket_majority": {
+          "ref-rhea": "APPLICABLE",
+          "ref-sable": "INAPPLICABLE"
+        },
+        "correct": 13,
+        "denominator": 24,
+        "excess_over_baseline": 0.04166666666666663,
+        "observed_accuracy": 0.5416666666666666,
+        "permutation_p_value": 1.0
+      },
+      "case_index_mod_3": {
+        "baseline_accuracy": 0.5,
+        "bucket_majority": {
+          "0": "INAPPLICABLE",
+          "1": "APPLICABLE",
+          "2": "APPLICABLE"
+        },
+        "correct": 14,
+        "denominator": 24,
+        "excess_over_baseline": 0.08333333333333337,
+        "observed_accuracy": 0.5833333333333334,
+        "permutation_p_value": 0.872656367181641
+      },
+      "case_index_parity": {
+        "baseline_accuracy": 0.5,
+        "bucket_majority": {
+          "0": "INAPPLICABLE",
+          "1": "APPLICABLE"
+        },
+        "correct": 16,
+        "denominator": 24,
+        "excess_over_baseline": 0.16666666666666663,
+        "observed_accuracy": 0.6666666666666666,
+        "permutation_p_value": 0.22213889305534723
+      }
+    }
+  },
+  "limits": [
+    "External resolver agreement is a competent version-resolution baseline, not human semantic AppSec adjudication.",
+    "The answer surfaces are meaningful source-bound triage alternatives, but the experiment does not establish exploitability or customer adoption."
+  ],
+  "package_versions_verified_from_pinned_registry_metadata": true,
+  "policies": {
+    "external_resolver_reference": {
+      "correct": 24,
+      "denominator": 24,
+      "incorrect": 0
+    },
+    "falsum": {
+      "correct": 22,
+      "denominator": 24,
+      "incorrect": 2
+    },
+    "falsum_answer_selection": {
+      "correct": 22,
+      "denominator": 24,
+      "incorrect": 2
+    }
+  },
+  "protocol": "data/phase5bn-corrected-independent-holdout-protocol.json",
+  "reference_stage_completed_before_candidate": true,
+  "schema_version": 1,
+  "status": "PHASE5BN_CORRECTED_INDEPENDENT_LABEL_HOLDOUT_AUDIT"
+}

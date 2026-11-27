@@ -5,6 +5,13 @@ This assessment uses the current Evaluators-specific rubric, not the Apps &
 Agents rubric. The official source and extracted criteria are recorded in
 [H2_EVALUATORS_RUBRIC_2026-11-27.md](H2_EVALUATORS_RUBRIC_2026-11-27.md).
 
+The earlier Phase 5BM 24/24 result is preserved as historical evidence only.
+Phase 5BN is the corrected certification basis: labels are independently
+resolved and frozen before FALSUM execution, the layout seed is not selected
+against labels, package versions are checked against live registry metadata,
+meaningful competing answers are evaluated, and index/position/token leakage
+is measured with a permutation test.
+
 ## Correct rubric
 
 | Evaluators criterion | Points | Technical minimum |
@@ -17,21 +24,22 @@ Agents rubric. The official source and extracted criteria are recorded in
 | Organic growth, education, and developer activation | 20 | — |
 | **Total** | **100** | **70/100 overall published threshold** |
 
-## Strict result: **98 / 100**
+## Corrected strict result: **96 / 100**
 
-The 40/40 measurement result clears the 28/40 technical minimum. That is a readiness
-assessment, not evidence that the entry is first. Every awarded point below is
-tied to a verified artifact or public record; no future action is counted.
+The corrected 38/40 measurement result clears the 28/40 technical minimum. This
+is a readiness assessment, not evidence that the entry is first. Every awarded
+point below is tied to a verified artifact or public record; no future action is
+counted.
 
 | Criterion | Awarded | Evidence-backed point allocation | Withheld |
 | --- | ---: | --- | ---: |
-| Measurement validity, quality discrimination, and baseline evidence | **40/40** | 10: exact target binding, immutable source identity, interval semantics and fail-closed decisions; 8: prior bounded accept-all comparison removed 2 known inapplicable displays from 12; 6: separately implemented version-aware baseline agreed on all 66 fresh rows; 4: fresh public holdout supplied 38 canonical source records and appropriate unknown/insufficient outcomes; 3: Phase 5BL cross-source audit demonstrates 3/3 missing-evidence rejection against verdict-only and 0/2 version-inapplicable display against accept-all; 3: fair 129-case external policy comparison removes 8 count-only vulnerable-label PASS outcomes while preserving the verdict-only tie and audited-control trade-off; 2: new immutable GitHub-reviewed advisory reference set; 2: genuinely unseen 24-case balanced protocol across six new package families with fixed boundary pairs; 1: 12/24 citation-only false positives removed by FALSUM; 1: balanced answer order, equal-length surfaces, identifier/package baselines and selection-leakage audit all pass. | 0: independent human AppSec gold, full recall/completeness, advantage over verdict-only, and ranking change remain explicitly unclaimed. |
+| Measurement validity, quality discrimination, and baseline evidence | **38/40** | 10: exact target binding, immutable source identity, interval semantics and fail-closed decisions; 8: prior bounded accept-all comparison removed 2 known inapplicable displays from 12; 6: separately implemented version-aware baseline agreed on all 66 fresh rows; 4: fresh public holdout supplied 38 canonical source records and appropriate unknown/insufficient outcomes; 3: Phase 5BL cross-source audit demonstrates 3/3 missing-evidence rejection against verdict-only and 0/2 version-inapplicable display against accept-all; 3: fair 129-case external policy comparison removes 8 count-only vulnerable-label PASS outcomes while preserving the verdict-only tie and audited-control trade-off; 2: new immutable GitHub-reviewed advisory reference set; 1: corrected 24-case protocol uses live registry versions and independently frozen labels before candidate execution; 1: 48 meaningful competing answers plus computed index/position/token leakage tests pass. | **2**: FALSUM is 22/24 against the external resolver's 24/24, with two explicit unknown disagreements; independent human AppSec gold, full recall/completeness, advantage over verdict-only, and ranking change remain unclaimed. |
 | Integrity and robustness | **15/15** | 6: response-content/provenance binding and wrong-target rejection; 5: adversarial regression coverage for tampering, unsupported intervals, duplicates and caller-supplied adoption; 3: safe signer/credential/receipt boundaries and accurate non-clearance claims; 1: authoritative `SECURITY_REVIEW_GENERAL` → `SECURITY_REVIEW` family mapping is source-pinned without conflating acceptance or registration. | 0 |
 | Reproducibility and protocol compatibility | **10/10** | 4: public CLI, frozen protocols and write-once evidence; 3: hosted Python 3.11–3.13 contracts plus live public replay; 2: public-safe artifacts and exact run instructions with network/cost/limit disclosure; 1: official bounty and `INTENTS.md` mapping confirms the child Intent, response schema and family-level adapter route. | 0; a live registered adapter is not required for this evaluation-material contribution and is not claimed. |
 | Useful evaluation coverage and demonstrated improvement | **10/10** | 4: multi-ecosystem reference gating, Anchor/Rust source/runtime coverage, and fresh Django coverage; 2: bounded 2/12 known false-positive reduction; 2: Model Economy now has a new 24-case balanced workflow with 12 citation-only false positives removed and a competent-baseline tie; 2: Web3 Native and DeFi has the repeatable Anchor/Rust boundary and regression workflow. The [Phase 5BK matrix](../data/phase5bk-evaluator-mission-workflow-matrix.json) keeps both as supporting tests, not completed apps. | 0: independent application consumption and finalized network ranking remain separate claims and are not required to assert the measured coverage improvement. |
 | Documentation and integration clarity | **5/5** | 2: clear judge route and storyboard; 2: beginner commands, evidence links, network/cost/limits and troubleshooting; 1: explicit separation of evaluation material, historical Telegraph evidence, test/internal activity and adoption. | 0 |
 | Organic growth, education, and developer activation | **18/20** | 5: public explanation, technical walkthroughs and honest limitations; 5: reproducible no-key route with examples and next steps; 5: four separate competition-period update dates plus public technical sharing and follow-up; 3: a concrete no-key invitation and two genuine external maintainer reviews/actions. | 2: no independently verified repeat integration/contribution beyond those two maintainer reviews. |
-| **Total** | **98/100** | 40/40 measurement, 10/10 useful coverage, and 28/40 technical minimum passed; total exceeds the published 70 threshold, subject to entry eligibility and official review. | **2** |
+| **Total** | **96/100** | 38/40 corrected measurement, 10/10 useful coverage, and 28/40 technical minimum passed; total exceeds the published 70 threshold, subject to entry eligibility and official review. | **4** |
 
 ## Current evidence facts
 
@@ -85,6 +93,26 @@ immutable GitHub Advisory Database commit. This is new discrimination and
 reproducibility evidence, not human gold, full recall, or superiority over the
 competent baseline.
 
+### Corrected Phase 5BN independent-label holdout
+
+The [corrected protocol](../data/phase5bn-corrected-independent-holdout-protocol.json)
+is separate from Phase 5BM and is the current measurement basis. It derives
+labels with the established external `packaging==26.4` and `semver@7.8.6`
+implementations, verifies the selected versions against pinned live PyPI or npm
+metadata, and completes that reference stage before any FALSUM call. The case
+order and answer-token assignment use one fixed label-blind seed; no seed search
+is performed against labels or candidate output.
+
+The [result](../data/phase5bn-corrected-independent-holdout-result.json) records
+24/24 external-resolver reference decisions and 22/24 FALSUM decisions. The
+two preserved disagreements are `setuptools@0.6c11` (external applicable,
+FALSUM unknown) and `pymongo@0.1pre` (external inapplicable, FALSUM unknown).
+All 48 answer surfaces are target-specific and action-bearing. The adversarial
+suite mutates labels to correlate with case index and answer token and requires
+the computed permutation audit to detect both; the clean protocol reports no
+detected signal at the predeclared alpha. This is version-applicability evidence,
+not human security adjudication.
+
 ### Current Anjoman status
 
 The fresh [read-only status evidence](../evidence/phase5bk-2026-11-27-anjoman-status.json)
@@ -109,16 +137,17 @@ followers, self-controlled status, or unverified adoption.
 
 ### Evaluators excellence award
 
-FALSUM is now a credible 98-point internal contender if the entry passes the
+FALSUM is now a credible 96-point internal contender if the entry passes the
 common eligibility bar. Its strongest excellence differentiators are
-source-integrity discipline, balanced new holdout discrimination, two
+source-integrity discipline, corrected independent-label holdout discrimination, two
 source-bound safety contrasts, a fresh public holdout, explicit abstention, and
 valuable multi-ecosystem coverage. It is not
 guaranteed first place: the competent baseline ties, verdict-only remains a
-tie, independent AppSec gold and finalized ranking change are absent, and no
-registered adapter is claimed. Two points remain withheld for independently
-verified repeat integration or contribution beyond the existing external
-reviews.
+tie, the external resolver currently exceeds FALSUM 24/24 to 22/24 on the
+corrected study, independent AppSec gold and finalized ranking change are
+absent, and no registered adapter is claimed. Four points remain withheld for
+the two corrected disagreements and independently verified repeat integration
+or contribution beyond the existing external reviews.
 
 ### Evaluators verified delivery award
 

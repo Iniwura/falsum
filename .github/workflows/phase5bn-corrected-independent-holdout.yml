@@ -1,0 +1,57 @@
+name: Phase 5BN corrected independent holdout
+
+on:
+  push:
+    paths:
+      - "src/falsum/phase5bn_corrected_independent_holdout.py"
+      - "src/falsum/cli.py"
+      - "data/phase5bn-corrected-independent-holdout-*.json"
+      - "tests/test_phase5bn_corrected_independent_holdout.py"
+      - ".github/workflows/phase5bn-corrected-independent-holdout.yml"
+  pull_request:
+    paths:
+      - "src/falsum/phase5bn_corrected_independent_holdout.py"
+      - "src/falsum/cli.py"
+      - "data/phase5bn-corrected-independent-holdout-*.json"
+      - "tests/test_phase5bn_corrected_independent_holdout.py"
+      - ".github/workflows/phase5bn-corrected-independent-holdout.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  corrected-holdout:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install pinned external resolvers
+        run: python -m pip install --disable-pip-version-check --no-deps packaging==26.4
+      - name: Install pinned npm resolver
+        run: npm install --prefix .phase5bn-node --ignore-scripts --no-audit --no-fund semver@7.8.6
+      - name: Run adversarial corrected-holdout tests
+        env:
+          PYTHONPATH: src
+          FALSUM_PHASE5BN_NODE_PATH: ${{ github.workspace }}/.phase5bn-node/node_modules
+        run: python -m unittest discover -s tests -p 'test_phase5bn_corrected_independent_holdout.py' -v
+      - name: Re-run corrected audit against live registry metadata
+        env:
+          PYTHONPATH: src
+          FALSUM_PHASE5BN_NODE_PATH: ${{ github.workspace }}/.phase5bn-node/node_modules
+        run: python -m falsum.cli audit-corrected-independent-holdout --out .phase5bn-ci-result.json
+      - name: Assert committed result and negative findings
+        run: >-
+          python -c "import json; expected=json.load(open('data/phase5bn-corrected-independent-holdout-result.json',encoding='utf-8')); actual=json.load(open('.phase5bn-ci-result.json',encoding='utf-8')); assert actual==expected; assert actual['policies']['external_resolver_reference']=={'correct':24,'incorrect':0,'denominator':24}; assert actual['policies']['falsum']['correct']==22; assert actual['leakage_audit']['label_leakage_detected'] is False; assert actual['answer_surface_audit']['placeholder_a_or_b_only'] is False; assert actual['package_versions_verified_from_pinned_registry_metadata'] is True"
+      - name: Upload corrected evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase5bn-corrected-independent-holdout-${{ matrix.python-version }}
+          path: |
+            data/phase5bn-corrected-independent-holdout-protocol.json
+            data/phase5bn-corrected-independent-holdout-result.json
+            .phase5bn-ci-result.json
