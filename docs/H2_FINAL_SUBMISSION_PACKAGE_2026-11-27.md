@@ -114,6 +114,7 @@ does not become current production usage.
 | Telegraph relevance | [final competitive audit](H2_FINAL_COMPETITIVE_AUDIT_2026-11-27.md) | Historical/public evidence only; ACP suspended |
 | Demo/equivalent | [final storyboard](H2_FINAL_DEMO_STORYBOARD_2026-11-27.md) | Prepared, not recorded or submitted |
 | Internal release gate | [release-gate evidence](../evidence/final-release-gate-check-2026-11-27.json) | Read-only command, public-route, accessibility and owner-blocker verification |
+| Hosted production inspection | [Playwright + axe run](https://github.com/Iniwura/falsum/actions/runs/45978583401) and [release-gate evidence](../evidence/final-release-gate-check-2026-11-27.json) | Four desktop/mobile screenshots, zero automated axe violations; no human screen-reader claim |
 
 ## Official submission checklist
 

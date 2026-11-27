@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "verified_utc": "2026-11-27T09:45:28.3001587Z",
+  "verified_utc": "2026-11-27T10:04:33.6859094Z",
   "status": "INTERNAL_RELEASE_GATE_VERIFIED",
   "scope": "read-only release verification; no publication, submission, payment or ACP activity",
   "hosted_ci_run": "https://github.com/Iniwura/falsum/actions/runs/45976774179",
@@ -49,10 +49,23 @@
     ],
     "local_evidence_links_resolved": true,
     "rendered_browser_visual_check": {
-      "performed": false,
-      "blocked": true,
-      "reason": "The local visual computer-use runtime timed out during initialization and the authorized browser surface returned an OS path error.",
-      "scope_preserved": "HTTP/HTML structural checks are verified; no visual or assistive-technology result is claimed."
+      "performed": true,
+      "hosted_run": "https://github.com/Iniwura/falsum/actions/runs/45978583401",
+      "artifact": "FALSUM-FINAL-PUBLIC-PLAYWRIGHT-EVIDENCE",
+      "route_viewports": 4,
+      "axe_violations": 0,
+      "screenshots": [
+        "witness-desktop.png",
+        "witness-mobile.png",
+        "applications-desktop.png",
+        "applications-mobile.png"
+      ],
+      "inspection_observations": [
+        "desktop and mobile pages render without observed clipping or overlap",
+        "mobile tables wrap within the viewport",
+        "witness controls and evidence links remain readable at mobile width"
+      ],
+      "assistive_technology_limit": "axe automated checks passed; this is not a substitute for a human screen-reader review"
     }
   },
   "preserved_boundaries": {

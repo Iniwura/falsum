@@ -37,7 +37,9 @@ automatically add score points or establish external validation. Its hosted
 passed. The public
 [production experience check](evidence/phase5bo-production-experience-check-2026-11-27.json)
 read-only verified the witness and applications routes at HTTP 200; Phase5BO is
-not claimed as deployed there.
+not claimed as deployed there. The final [hosted Playwright + axe inspection](https://github.com/Iniwura/falsum/actions/runs/45978583401)
+captured desktop/mobile screenshots for both public routes with zero automated
+axe violations.
 
 ## Start here: a five-minute reproducible judge route
 

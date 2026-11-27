@@ -88,6 +88,7 @@ minimum](H2_EVALUATORS_RUBRIC_2026-11-27.md), not the Apps & Agents-shaped
 | 12 | [Corrected independent holdout](PHASE5BN_CORRECTED_INDEPENDENT_HOLDOUT.md) | Independent labels, external resolver, version existence, meaningful answers, and computed leakage audit |
 | 13 | [Ecosystem-native semantic audit](PHASE5BO_ECOSYSTEM_SEMANTICS.md) | PEP 440/SemVer semantics, offline registry snapshots, disjoint/unsupported ranges, and structured claim/action selection |
 | 14 | [Final release-gate record](../evidence/final-release-gate-check-2026-11-27.json) | Reviewer command smoke checks, public-route accessibility checks, resolved local links, and owner-controlled blockers |
+| 15 | [Hosted Playwright and axe inspection](https://github.com/Iniwura/falsum/actions/runs/45978583401) | Four desktop/mobile screenshots, zero automated WCAG axe violations, and public-route structural checks |
 
 ## Claims a judge can safely repeat
 
