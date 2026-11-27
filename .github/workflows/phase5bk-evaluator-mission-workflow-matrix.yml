@@ -1,0 +1,60 @@
+name: Phase 5BK - Evaluator mission workflow evidence matrix
+
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5bk_evaluator_mission_workflow_matrix.py'
+      - 'tests/test_phase5bk_evaluator_mission_workflow_matrix.py'
+      - 'data/phase5bk-evaluator-mission-workflow-matrix.json'
+      - '.github/workflows/phase5bk-evaluator-mission-workflow-matrix.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5bk_evaluator_mission_workflow_matrix.py'
+      - 'tests/test_phase5bk_evaluator_mission_workflow_matrix.py'
+      - 'data/phase5bk-evaluator-mission-workflow-matrix.json'
+      - '.github/workflows/phase5bk-evaluator-mission-workflow-matrix.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  matrix-contract:
+    name: Verify Evaluator mission/workflow matrix / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Run matrix contracts and CLI
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5bk_evaluator_mission_workflow_matrix.py' -v
+          mkdir -p phase5bk-evidence
+          python -m falsum.phase5bk_evaluator_mission_workflow_matrix \
+            --out phase5bk-evidence/MISSION-WORKFLOW-MATRIX.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          expected=json.loads(Path('data/phase5bk-evaluator-mission-workflow-matrix.json').read_text())
+          actual=json.loads(Path('phase5bk-evidence/MISSION-WORKFLOW-MATRIX.json').read_text())
+          assert actual == expected
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5bk-evaluator-mission-workflow-matrix-${{ matrix.python }}
+          path: phase5bk-evidence/
+          retention-days: 90
+          if-no-files-found: error

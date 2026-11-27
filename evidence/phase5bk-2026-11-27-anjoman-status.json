@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5BK_CURRENT_ANJOMAN_READ_ONLY_STATUS",
+  "observed_utc": "2026-11-27T00:49:01.720624+00:00",
+  "intent_id": "SECURITY_REVIEW_GENERAL",
+  "source_method": "Existing Phase 4N read-only checker against the documented public /api/evalpool/submissions/mine endpoint; aggregate counts only.",
+  "accounts": {
+    "operator_shown_privy_wallet": {
+      "readback_completed": true,
+      "current_total_rows": 20,
+      "current_eligible_rows": 20
+    },
+    "historical_bounty_comment_wallet": {
+      "readback_completed": true,
+      "current_total_rows": 0,
+      "current_eligible_rows": 0
+    }
+  },
+  "accepted_bounty_verified": false,
+  "registered_evaluator_verified": false,
+  "cryptographic_wallet_ownership_verified": false,
+  "independent_appsec_gold_labels_verified": 0,
+  "private_rows_persisted_or_logged": false,
+  "interpretation": "The public node currently reports 20 Eligible rows for the operator-reported Privy address. This does not authenticate account ownership, label quality, maintainer acceptance, evaluator registration, or an H2 award.",
+  "limits": [
+    "No wallet address, row identifier, prompt, answer, signature, or raw response is stored.",
+    "The historical bounty address is a distinct public address and is not evidence that the Privy rows disappeared.",
+    "Current row eligibility is Anjoman pool status, not independent human AppSec adjudication."
+  ]
+}

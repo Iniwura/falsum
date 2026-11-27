@@ -1,7 +1,32 @@
 # FALSUM — Judge guide
 
-**Telegraph Season II / Evaluators / SECURITY_REVIEW_GENERAL**  
-**Current judge-facing evidence verified through November 20, 2026. Official H2 entry: NOT SUBMITTED.**
+**Telegraph Season II / Evaluators / current catalogue Intent: `SECURITY_REVIEW`**
+**Corrected judge-facing assessment verified November 27, 2026. Official H2 entry: NOT SUBMITTED.**
+
+## Current Evaluators correction
+
+The applicable track is Evaluators, not Apps & Agents. The current official
+rubric is **40 measurement validity and baseline evidence (technical minimum
+28/40), 15 integrity, 10 reproducibility/protocol compatibility, 10 useful
+coverage and demonstrated improvement, 5 documentation/integration, and 20
+organic growth**. The evidence-backed strict assessment is **82/100**, with the
+28/40 technical minimum met exactly; this is a readiness assessment, not an
+organizer score. See the [pinned rubric note](H2_EVALUATORS_RUBRIC_2026-11-27.md)
+and [strict score](H2_FINAL_STRICT_SCORE_2026-11-27.md).
+
+The [mission/workflow matrix](../data/phase5bk-evaluator-mission-workflow-matrix.json)
+maps FALSUM's proven material to two official H2 workflows: Model Economy
+supply-chain verification priced per commit, and Web3 Native and DeFi
+machine-proved security/bug-bounty review. Both have repeatable supporting
+tests; neither is claimed as completed independent delivery, ranking change,
+or customer adoption. The [current read-only Anjoman status](../evidence/phase5bk-2026-11-27-anjoman-status.json)
+records 20/20 eligible rows for the operator-reported current Privy address
+and 0/0 for the distinct historical bounty address, while acceptance,
+registration, and cryptographic ownership remain unverified.
+
+The historical material below uses `SECURITY_REVIEW_GENERAL`. The current
+official catalogue uses `SECURITY_REVIEW`; FALSUM does not silently claim that
+the two names are interchangeable without an independent compatibility check.
 
 ## Current evidence — use this first (November 20)
 

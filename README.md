@@ -3,12 +3,12 @@
 ## Final Evaluators route — 27 November 2026
 
 Use the [final judge experience](docs/H2_FINAL_JUDGE_EXPERIENCE_2026-11-27.md),
-then the [strict score and gap audit](docs/H2_FINAL_STRICT_SCORE_2026-11-27.md)
+then the [correct Evaluators rubric and strict assessment](docs/H2_FINAL_STRICT_SCORE_2026-11-27.md)
 and [submission package](docs/H2_FINAL_SUBMISSION_PACKAGE_2026-11-27.md).
 The fresh public-provider holdout is reproducible with no wallet, token or
 payment: it authenticates a frozen Django 3.2.0 capture and a zero-reference
 lodash 4.18.1 capture selected before response inspection. The current strict
-internal score is **56/100**, not an organizer score; independent adoption,
+Evaluators assessment is **82/100**, not an organizer score; independent adoption,
 expert AppSec gold, current paid execution and final owner-controlled form
 actions remain unverified.
 

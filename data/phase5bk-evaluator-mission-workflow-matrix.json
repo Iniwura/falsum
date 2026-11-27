@@ -1,0 +1,64 @@
+{
+  "aggregate": {
+    "distinct_missions_completed": 0,
+    "distinct_official_missions_with_repeatable_supporting_tests": 2,
+    "independent_application_consumption_verified": false,
+    "independent_customer_adoption_claimed": false,
+    "ranking_change_claimed": false
+  },
+  "current_official_intent": "SECURITY_REVIEW",
+  "historical_material_intent": "SECURITY_REVIEW_GENERAL",
+  "intent_alias_or_protocol_compatibility_verified": false,
+  "limits": [
+    "The test workflows are evaluator-material support, not autonomous Apps & Agents purchases.",
+    "Fictional mission-lab scenarios are not used as external customer evidence.",
+    "Official SECURITY_REVIEW and historical SECURITY_REVIEW_GENERAL compatibility remains an external confirmation gap."
+  ],
+  "mission_rows": [
+    {
+      "official_example_intents": ["SECURITY_REVIEW", "VULNERABILITY_TRIAGE", "CODE_REVIEW", "SOCIAL_BOT_DETECTION"],
+      "official_mission": "Model Economy",
+      "official_workflow": "GitHub supply-chain verification priced per commit",
+      "falsum_capability": "Exact package/version advisory-reference gating and response-integrity checks for a PR/dependency security result.",
+      "independent_application_consumption_verified": false,
+      "mission_completed": false,
+      "repeatable_supporting_tests": [
+        {
+          "command": "PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase5z_reviewed_advisory_consumption.py' -v",
+          "evidence": "Phase 5Z source-authenticated application consumption tests",
+          "result": "Original direct captures reduce to target-bound display-only references and suppress known version-inapplicable references."
+        },
+        {
+          "command": "PYTHONPATH=src python -m falsum.cli audit-fresh-provider-holdout --out fresh-holdout.json",
+          "evidence": "Phase 5BJ hosted replay",
+          "result": "Fresh public provider evidence: 66 reported references, 38 canonical sources, 27 applicable, 39 fail-closed unknown/insufficient."
+        }
+      ],
+      "workflow_status": "REPEATABLE_SUPPORTING_TEST"
+    },
+    {
+      "official_example_intents": ["SMART_CONTRACT_AUDIT", "VULNERABILITY_TRIAGE", "SECURITY_REVIEW", "CODE_PATCH_VERIFY"],
+      "official_mission": "Web3 Native and DeFi",
+      "official_workflow": "Machine-proved bug-bounty or smart-contract/dependency security review before capital or payout decisions",
+      "falsum_capability": "Anchor/Rust advisory version boundaries plus original upstream regression execution, with fail-closed unsupported evidence.",
+      "independent_application_consumption_verified": false,
+      "mission_completed": false,
+      "repeatable_supporting_tests": [
+        {
+          "command": "PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase5au_solana_anchor_evidence.py' -v",
+          "evidence": "Phase 5AU authenticated Anchor advisory material",
+          "result": "Twelve exact target/version cases are checked against pinned advisory/source facts; unsupported cases abstain."
+        },
+        {
+          "command": "PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase5av_solana_anchor_runtime.py' -v",
+          "evidence": "Phase 5AV original Anchor runtime replay",
+          "result": "The pinned fixed revision passes its original tests and the affected revision produces the exact expected security-regression failure with controls preserved."
+        }
+      ],
+      "workflow_status": "REPEATABLE_SUPPORTING_TEST"
+    }
+  ],
+  "schema_version": 1,
+  "status": "PHASE5BK_EVALUATOR_MISSION_WORKFLOW_EVIDENCE_MATRIX",
+  "delivery_interpretation": "The matrix supplies repeatable mission-specific supporting tests and valuable coverage. It does not claim completed missions, independent app consumption, a finalized ranking, or customer adoption."
+}

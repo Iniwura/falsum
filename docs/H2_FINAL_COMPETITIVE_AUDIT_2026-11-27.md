@@ -10,13 +10,12 @@ The current [Season II rules](https://hackathon.telegraphprotocol.com/rules)
 define Evaluators as an evaluation adapter, evaluation material, or both, for a
 Telegraph Intent. Every entry must be real and independently testable, show a
 real Telegraph integration, repeatable results, safe handling, accurate claims,
-and the required bounties-repository star. The common displayed rubric is 35
-technical quality/mainnet readiness, 25 commercial viability, 10 genuine
-independent adoption and retention, 5 Telegraph integration and usage quality,
-5 reproducibility/demo/proof, and 20 organic growth/education/developer
-activation; the published threshold is 70/100 with a 24/35 technical minimum.
-The official page currently renders its Apps & Agents selector in this
-read-only fetch, so no Evaluators-specific slider value is assigned here.
+and the required bounties-repository star. The current client-rendered
+Evaluators rubric is **40 measurement validity/baseline (minimum 28), 15
+integrity, 10 reproducibility/protocol compatibility, 10 useful coverage and
+demonstrated improvement, 5 documentation/integration, and 20 organic growth**;
+the published overall threshold is 70/100. The exact extraction is pinned in
+[the Evaluators rubric note](H2_EVALUATORS_RUBRIC_2026-11-27.md).
 
 For Evaluators delivery awards, the rules prioritize distinct commercial
 missions, distinct H2 workflows, independently verified missing mission-critical
@@ -64,6 +63,31 @@ The [final judge experience](H2_FINAL_JUDGE_EXPERIENCE_2026-11-27.md) puts this
 fresh coverage beside the prior Phase 5BI bounded 2/12 measurement, with the
 [strict score](H2_FINAL_STRICT_SCORE_2026-11-27.md) and [submission packet](H2_FINAL_SUBMISSION_PACKAGE_2026-11-27.md)
 keeping all owner and external-verification gaps explicit.
+
+## Correct Evaluators rubric and delivery mapping
+
+The previous audit's 56-point table used the common Apps & Agents-shaped
+categories. That was incorrect for this entry. The official client-rendered
+Evaluators rubric is recorded in the [rubric evidence note](H2_EVALUATORS_RUBRIC_2026-11-27.md):
+measurement validity/baseline 40 (minimum 28), integrity 15,
+reproducibility/protocol compatibility 10, useful coverage/improvement 10,
+documentation/integration 5, and growth 20. The corrected strict assessment is
+[82/100](H2_FINAL_STRICT_SCORE_2026-11-27.md), with 28/40 measurement validity
+met exactly.
+
+The [Phase 5BK matrix](../data/phase5bk-evaluator-mission-workflow-matrix.json)
+maps proven material to two official H2 workflows that explicitly name
+`SECURITY_REVIEW`: Model Economy supply-chain verification priced per commit,
+and Web3 Native and DeFi machine-proved security/bug-bounty review. Each has
+repeatable tests and public evidence. Neither is claimed as a completed mission,
+independent app consumption, ranking change, or customer adoption. The current
+official catalogue uses `SECURITY_REVIEW`; historical FALSUM material uses
+`SECURITY_REVIEW_GENERAL`, so compatibility remains an explicit external gap.
+
+The [current Anjoman read-only record](../evidence/phase5bk-2026-11-27-anjoman-status.json)
+shows 20 total / 20 Eligible rows for the operator-reported Privy address and
+0/0 for the distinct historical bounty address. Ownership, maintainer
+acceptance, and registration remain unverified.
 
 ## Competitive conclusion
 

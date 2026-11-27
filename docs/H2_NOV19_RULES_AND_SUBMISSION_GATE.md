@@ -10,6 +10,17 @@
 
 Official sources: [Season II rules](https://hackathon.telegraphprotocol.com/rules) · [Evaluators track](https://hackathon.telegraphprotocol.com/tracks) · [Intent catalogue](https://hackathon.telegraphprotocol.com/intents) · [Model Economy mission](https://hackathon.telegraphprotocol.com/missions/model-economy).
 
+**Current correction (November 27, 2026):** the earlier checkpoint's
+track-threshold wording is superseded by the [verified Evaluators rubric
+note](H2_EVALUATORS_RUBRIC_2026-11-27.md). The current client-rendered rubric
+is 40 measurement validity/baseline (minimum 28/40), 15 integrity, 10
+reproducibility/protocol compatibility, 10 useful coverage/improvement, 5
+documentation/integration, and 20 growth. The current catalogue names the
+Intent `SECURITY_REVIEW`; compatibility with this entry's historical
+`SECURITY_REVIEW_GENERAL` material remains explicitly unverified. The latest
+[growth evidence](H2_VERIFIED_GROWTH_EVIDENCE.md) now records four separate
+update dates and two genuine external maintainer reviews.
+
 ## What is actually verified
 
 | Evidence | Status | How to verify |
@@ -27,7 +38,7 @@ Official sources: [Season II rules](https://hackathon.telegraphprotocol.com/rule
 
 Season II allows an Evaluators entrant to supply **evaluation material, a scorer adapter, or both**. FALSUM is explicitly the first route. The official rules require a *real working contribution*, genuine Telegraph integration evidence, reproducibility on new inputs and failure cases, safe handling of private material, accurate claims, and **a star on `telegraphprotocol/bounties`**. The four source tests and the source-claim evaluator support reproducibility; the network readback supports public eligibility **for an address**. They do not prove organizer acceptance, independent gold accuracy, or an H2 entry receipt.
 
-The H2 main competition has **$7,000** allocated, with Evaluators awarded **$2,000**: four delivery awards at $300 and excellence awards of $500 (1st) and $300 (2nd), as published in the rules. **No prize is guaranteed by registration, a green workflow, or network Eligible status.** For Evaluators, tie-breaks favor proven measurement improvement or valuable new coverage, then validity. The judges may require additional independent review. This audit **does not borrow Apps & Agents' 24/35 technical minimum or mandatory Telegraph purchase** as if it applied to Evaluators; the track-specific threshold must be confirmed in the live selected Evaluators rules.
+The H2 main competition has **$7,000** allocated, with Evaluators awarded **$2,000**: four delivery awards at $300 and excellence awards of $500 (1st) and $300 (2nd), as published in the rules. **No prize is guaranteed by registration, a green workflow, or network Eligible status.** For Evaluators, tie-breaks favor proven measurement improvement or valuable new coverage, then validity. The judges may require additional independent review. This audit **does not apply Apps & Agents' 24/35 technical minimum or mandatory Telegraph purchase** to Evaluators; the current Evaluators-specific minimum is the verified 28/40 measurement gate documented above.
 
 ## Owner-only submission requirements — intentionally unverified
 

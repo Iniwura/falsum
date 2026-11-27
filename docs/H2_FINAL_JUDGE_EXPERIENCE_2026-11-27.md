@@ -17,9 +17,17 @@ run the two zero-credential commands in the [submission package](H2_FINAL_SUBMIS
 4. The earlier frozen roster has a bounded, repeatable measurement: an
    accept-all policy displayed 12 references including 2 known inapplicable
    instances; the reviewed gate displayed 10 and suppressed both.
-5. The project is honest about what remains: no independent customer adoption,
+5. Two distinct official mission workflows have repeatable supporting tests:
+   Model Economy supply-chain verification and Web3 Native and DeFi
+   security/bug-bounty proof. They are not claimed as completed missions or
+   independent app consumption.
+6. The project is honest about what remains: no independent customer adoption,
    no human AppSec gold, no current paid transaction in this sprint, no
    ranking uplift, and no submitted entry.
+
+The correct Evaluators rubric is [40/15/10/10/5/20 with a 28/40 measurement
+minimum](H2_EVALUATORS_RUBRIC_2026-11-27.md), not the Apps & Agents-shaped
+35/25/10/5/5/20 table.
 
 ## Evidence order
 
@@ -32,6 +40,8 @@ run the two zero-credential commands in the [submission package](H2_FINAL_SUBMIS
 | 5 | [Hosted Phase 5BI CI](https://github.com/Iniwura/falsum/actions/runs/45918441661) | Prior bounded measurement replay |
 | 6 | [Final storyboard](H2_FINAL_DEMO_STORYBOARD_2026-11-27.md) | Safe presentation sequence |
 | 7 | [Official rules](https://hackathon.telegraphprotocol.com/rules) | Eligibility and submission bar |
+| 8 | [Mission/workflow matrix](../data/phase5bk-evaluator-mission-workflow-matrix.json) | Two repeatable supporting workflows, no inflated delivery claim |
+| 9 | [Current Anjoman status](../evidence/phase5bk-2026-11-27-anjoman-status.json) | 20/20 current Eligible rows for the operator-reported Privy address |
 
 ## Claims a judge can safely repeat
 
@@ -40,6 +50,9 @@ run the two zero-credential commands in the [submission package](H2_FINAL_SUBMIS
   replayed against an independent version-aware baseline.”
 - “FALSUM and the baseline agreed; unknown cases were not forced positive.”
 - “The prior measured effect is bounded to a frozen reviewed-reference roster.”
+- “FALSUM supplies repeatable supporting tests for two official mission
+  workflows; it does not claim completed mission delivery or independent app
+  consumption.”
 - “No customer adoption, expert gold, current paid Telegraph execution, or
   security clearance is claimed.”
 
@@ -50,3 +63,5 @@ run the two zero-credential commands in the [submission package](H2_FINAL_SUBMIS
 - “Paid/charged fields prove settlement or independent customer demand.”
 - “The old model experiment proves FALSUM improved ranking.”
 - “The ACP Sandbox route is complete.”
+- “`SECURITY_REVIEW_GENERAL` is officially interchangeable with the current
+  `SECURITY_REVIEW` Intent.”

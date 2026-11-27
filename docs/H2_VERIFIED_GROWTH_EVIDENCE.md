@@ -25,4 +25,15 @@ Only count updates within the competition period. The October 30 progress post p
 
 [Live evidence](https://falsum-evidence-lab.vercel.app/applications/) · [One-click reviewer workflow](INDEPENDENT_REVIEWER_START_HERE.md) · [Response-integrity JSON interface](PHASE5AR_TRUVIAN_RESPONSE_INTEGRITY_GATE.md). No wallet, paid call, model download or secret required. Independent testing is invited without compensation or endorsement.
 
-The current [Season II rules](https://anjoman.ai/dashboard/hackathon/season-2/rules) describe the common 20-point education, ease-of-adoption, organic distribution and community activation rubric. These links are the evidence to present, not a guarantee of organizer scoring. The required bounties star and registration were previously reported by the entrant; authenticated star verification was unavailable to this audit. Do not claim a verified star, final submission or independent integration until supported.
+The current [Season II rules](https://hackathon.telegraphprotocol.com/rules) describe the 20-point education, ease-of-adoption, organic distribution and community activation rubric. The current Evaluators-specific criteria are recorded in [the rubric note](H2_EVALUATORS_RUBRIC_2026-11-27.md). These links are the evidence to present, not a guarantee of organizer scoring.
+
+**27 November current Anjoman read-only check:** the existing Phase 4N checker
+queried the documented public endpoint and observed **20 total / 20 Eligible**
+rows for the operator-reported Privy address, and **0 total / 0 Eligible** for
+the distinct historical bounty-comment address. The privacy-safe aggregate is
+recorded in [Phase 5BK status evidence](../evidence/phase5bk-2026-11-27-anjoman-status.json).
+This confirms current row status for the supplied public address only; it does
+not prove wallet ownership, semantic correctness, maintainer acceptance,
+registration or independent adoption. The required bounties star, registration,
+showcase permissions and final submission remain owner-controlled and
+unverified.

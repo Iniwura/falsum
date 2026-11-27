@@ -142,6 +142,11 @@ def main(argv: list[str] | None = None) -> int:
         help="run the frozen public-provider holdout against FALSUM and an independent version-aware baseline",
     )
     fresh_holdout.add_argument("--out", type=Path, required=True)
+    mission_matrix = commands.add_parser(
+        "audit-evaluator-mission-matrix",
+        help="validate official Evaluators mission/workflow evidence without claiming mission delivery or adoption",
+    )
+    mission_matrix.add_argument("--out", type=Path, required=True)
     consume = commands.add_parser(
         "audit-telegraph-consumption",
         help="strict original source-bound application allow/deny policy; two authentic real paid captures and 24 constructed tests, not network scoring",
@@ -260,6 +265,9 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "audit-fresh-provider-holdout":
             from .phase5bj_fresh_provider_holdout import main as fresh_holdout_main
             return fresh_holdout_main(["--out", str(args.out)])
+        if args.command == "audit-evaluator-mission-matrix":
+            from .phase5bk_evaluator_mission_workflow_matrix import main as mission_matrix_main
+            return mission_matrix_main(["--out", str(args.out)])
         if args.command == "audit-telegraph-consumption":
             from .phase5t_application_consumption import main as consume_main
             cmd=["--out",str(args.out)]

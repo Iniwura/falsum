@@ -1,93 +1,113 @@
-# FALSUM — strict final Evaluators score (27 November 2026)
+# FALSUM — strict Evaluators assessment (27 November 2026)
 
 **Status: internal, conservative, not an organizer score and not submitted.**
-This score awards only evidence that is already public, reproducible, and
-within the official Season II scope. It does not treat a self-authored label,
-an owner-controlled action, a constructed fixture, a paid flag, or a planned
-demo as independent adoption or expert validation.
+This assessment uses the current Evaluators-specific rubric, not the Apps &
+Agents rubric. The official source and extracted criteria are recorded in
+[H2_EVALUATORS_RUBRIC_2026-11-27.md](H2_EVALUATORS_RUBRIC_2026-11-27.md).
 
-Official reference: [Season II rules](https://hackathon.telegraphprotocol.com/rules),
-especially the Evaluators definition, Section 5 entry bar, Section 6 rubric,
-Section 7 delivery priorities, and Section 8 submission requirements.
+## Correct rubric
 
-## Score: **56 / 100**
+| Evaluators criterion | Points | Technical minimum |
+| --- | ---: | ---: |
+| Measurement validity, quality discrimination, and baseline evidence | 40 | **28/40** |
+| Integrity and robustness | 15 | — |
+| Reproducibility and protocol compatibility | 10 | — |
+| Useful evaluation coverage and demonstrated improvement | 10 | — |
+| Documentation and integration clarity | 5 | — |
+| Organic growth, education, and developer activation | 20 | — |
+| **Total** | **100** | **70/100 overall published threshold** |
 
-| Rubric area | Awarded | Evidence that earns the points | Points withheld |
-| --- | ---: | --- | --- |
-| Technical quality and mainnet readiness | **30/35** | 8: authenticated public Git source/provider identities and response-integrity gates; 8: fail-closed handling, signer restrictions, and adversarial Phase 5B/5BG contracts; 6: repeatable CLI plus hosted multi-version CI; 5: valuable version-aware coverage across original upstream security regressions and the fresh Phase 5BJ holdout; 3: safe Telegraph-related material and explicit network/cost boundaries. Current proof includes [Phase 5BI hosted CI](https://github.com/Iniwura/falsum/actions/runs/45918441661), the [fresh holdout implementation](../src/falsum/phase5bj_fresh_provider_holdout.py), and the [Phase 5BJ protocol](../data/phase5bj-fresh-provider-holdout-protocol.json). | 5: no currently registered/independently operated network evaluator and no current production purchase in this sprint. |
-| Commercial viability | **12/25** | 4: clear security-review buyer problem—avoid displaying version-inapplicable advisory evidence; 3: measured bounded result (prior 2/12 known false-positive reduction) plus fresh 27 applicable references; 3: sensible zero-cost reproduction path and explicit spending/safety limits; 2: usable public CLI/judge route for a future integration. | 13: no independently funded customer, retained usage, production SLA, or verified mission workflow. |
-| Genuine independent adoption and retention | **0/10** | No point claimed. | No independent customer, external integration, repeat user, or funded demand is verified. |
-| Telegraph integration and usage quality | **2/5** | 2: real Telegraph-related evaluation material, historical public contribution evidence, and explicit separation of production, test, internal, and unsupported claims in the [audit](H2_FINAL_COMPETITIVE_AUDIT_2026-11-27.md). | 3: no fresh paid Telegraph execution or current independently verified ranking/accounting result is being claimed; ACP is suspended. |
-| Reproducibility, demo/tutorial, and verifiable proof | **4/5** | 2: public repository, deterministic commands, frozen protocols and adversarial tests; 1: hosted CI artifacts; 1: this judge route and [final storyboard](H2_FINAL_DEMO_STORYBOARD_2026-11-27.md). | 1: a final owner-approved 2–5 minute recording or equivalent reviewer-accessible presentation is not yet verified. |
-| Organic growth, education, and developer activation | **8/20** | 3: public technical explanations and honest limitations; 3: beginner-run instructions, zero-credential source replay, costs and troubleshooting; 2: useful public technical milestones and review material. | 12: the required three dated external updates, external developer action, community activation, and attributable repeat contribution are not all independently verified. |
-| **Total** | **56/100** | Every awarded point maps to the evidence above; no score is reserved for future work. | **44** |
+## Strict result: **82 / 100**
 
-## New holdout result
+The 28/40 measurement minimum is met exactly. That is a qualification
+threshold, not evidence that the entry is first. Every awarded point below is
+tied to a verified artifact or public record; no future action is counted.
 
-The Phase 5BJ protocol was frozen at Git blob
-`0b51a6b645f38aaeb31ace53e6bbde146a2d3bf6` before either selected response
-body was inspected. The selected public provider commit is
-`99d2e3c93890a8fc083947bde4f21217516b7a5f`.
+| Criterion | Awarded | Evidence-backed point allocation | Withheld |
+| --- | ---: | --- | ---: |
+| Measurement validity, quality discrimination, and baseline evidence | **28/40** | 10: exact target binding, immutable source identity, interval semantics and fail-closed decisions; 8: prior bounded accept-all comparison removed 2 known inapplicable displays from 12; 6: separately implemented version-aware baseline agreed on all 66 fresh rows; 4: fresh public holdout supplied 38 canonical source records and appropriate unknown/insufficient outcomes. | 12: no independent AppSec gold, no blind model benchmark, no full recall/completeness, and no demonstrated ranking change. |
+| Integrity and robustness | **14/15** | 6: response-content/provenance binding and wrong-target rejection; 5: adversarial regression coverage for tampering, unsupported intervals, duplicates and caller-supplied adoption; 3: safe signer/credential/receipt boundaries and accurate non-clearance claims. | 1: current official Intent/pipeline compatibility is not yet externally confirmed. |
+| Reproducibility and protocol compatibility | **9/10** | 4: public CLI, frozen protocols and write-once evidence; 3: hosted Python 3.11–3.13 contracts plus live public replay; 2: public-safe artifacts and exact run instructions with network/cost/limit disclosure. | 1: no registered/current evaluator adapter or independently confirmed `SECURITY_REVIEW_GENERAL` → `SECURITY_REVIEW` compatibility. |
+| Useful evaluation coverage and demonstrated improvement | **8/10** | 4: multi-ecosystem reference gating, Anchor/Rust source/runtime coverage, and fresh Django coverage; 2: bounded 2/12 known false-positive reduction; 2: two official mission workflows now have repeatable supporting tests in the [Phase 5BK matrix](../data/phase5bk-evaluator-mission-workflow-matrix.json). | 2: no finalized ranking change or independent application consumption. |
+| Documentation and integration clarity | **5/5** | 2: clear judge route and storyboard; 2: beginner commands, evidence links, network/cost/limits and troubleshooting; 1: explicit separation of evaluation material, historical Telegraph evidence, test/internal activity and adoption. | 0 |
+| Organic growth, education, and developer activation | **18/20** | 5: public explanation, technical walkthroughs and honest limitations; 5: reproducible no-key route with examples and next steps; 5: four separate competition-period update dates plus public technical sharing and follow-up; 3: a concrete no-key invitation and two genuine external maintainer reviews/actions. | 2: no independently verified repeat integration/contribution beyond those two maintainer reviews. |
+| **Total** | **82/100** | 28/40 measurement minimum passed; total exceeds the published 70 threshold, subject to entry eligibility and official review. | **18** |
 
-| Capture | Reported refs | Canonical source records | FALSUM applicable | Fail-closed unknown/insufficient | Baseline disagreement |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| PyPI Django 3.2.0 | 66 | 38 | 27 | 39 | 0 |
-| npm lodash 4.18.1 | 0 | 0 | 0 | 0 | 0 |
-| **Total** | **66** | **38** | **27** | **39** | **0** |
+## Current evidence facts
 
-The separate baseline uses exact target binding, numeric version comparison,
-exclusive `fixed`, inclusive `last_affected`, and explicit abstention on
-unsupported intervals. It agrees with FALSUM on all 66 rows. That is a
-reproducibility and new-coverage result, not a new superiority claim. The
-clean lodash response is a valid zero-reference observation, not proof of
-security. The raw response, payment object, receipt, and token are excluded
-from the evidence artifact.
+### Fresh unseen-provider holdout
 
-## Official eligibility and material disposition
+The [Phase 5BJ protocol](../data/phase5bj-fresh-provider-holdout-protocol.json)
+was frozen before response inspection. Hosted replay [45918441740](https://github.com/Iniwura/falsum/actions/runs/45918441740)
+verified:
 
-The rules allow an Evaluator entry to be an **evaluation adapter, evaluation
-material, or both**. FALSUM should enter as evaluation material for
-`SECURITY_REVIEW_GENERAL`, with the source-authenticated reference gate,
-version-boundary checks, response-integrity controls, fresh holdout, and
-reproducible tests as the contribution. It should not present the quarantined
-model experiments as a released superior evaluator.
+- Django 3.2.0: 66 reported references, 38 canonical advisory records, 27
+  applicable, 39 unknown/insufficient and fail-closed.
+- lodash 4.18.1: zero reported advisories.
+- FALSUM and the independent version-aware baseline: 66/66 agreement.
 
-Eligible/public-safe material:
+This is new coverage and validity evidence, not a superiority, recall,
+security-clearance, or customer-adoption claim.
 
-- Phase 5BI bounded measurement artifact and hosted CI.
-- Phase 5BJ frozen fresh-provider holdout, source hashes, fail-closed decisions,
-  and separate competent baseline.
-- Original upstream source/test witnesses and public-safe Telegraph evidence.
-- Adversarial tests for forged provenance, wrong target, unsupported interval,
-  sensitive-field leakage, and boundary handling.
-- The judge guide, final storyboard, and beginner run instructions.
+### Current Anjoman status
 
-Do not count as independent adoption or expert gold:
+The fresh [read-only status evidence](../evidence/phase5bk-2026-11-27-anjoman-status.json)
+records 20 total / 20 Eligible rows for the operator-reported Privy address
+and 0/0 for the distinct historical bounty-comment address. It does not prove
+cryptographic wallet ownership, maintainer acceptance, evaluator registration,
+or independent label quality. The 20 rows remain eligible material evidence,
+not an award or adapter registration.
 
-- constructed fixtures, self-authored classifications, or caller-supplied
-  adoption labels;
-- historical paid/HTTP-200 flags as settlement proof;
-- the old model's negative results as a trained evaluator improvement;
-- the historical Anjoman eligibility readback as maintainer acceptance;
-- ACP preparation, Sandbox access, or a self-controlled buyer test.
+### Growth reassessment
 
-## Gaps not realistically solvable internally
+[H2_VERIFIED_GROWTH_EVIDENCE.md](H2_VERIFIED_GROWTH_EVIDENCE.md) records six
+public evidence links across four separate update dates (Nov 2, Nov 17, Nov
+21, Nov 24) and two genuine external maintainer reviews. The assessment counts
+those facts under the official four growth criteria and does not count likes,
+followers, self-controlled status, or unverified adoption.
 
-1. An independent developer or customer must perform a real reproduction,
-   integration, or repeat use. The repository cannot create genuine external
-   adoption without becoming self-dealing.
-2. An independent AppSec adjudication set or accepted evaluator registration
-   requires an external reviewer/platform decision; more self-authored cases
-   would not cure that gap.
-3. The required bounties-repository star, H2 registration, showcase permission,
-   contact identity, and final form receipt are owner-controlled actions.
-4. A current paid Telegraph purchase/ranking/accounting result requires the
-   operator's explicit financial and platform authorization. ACP remains
-   intentionally suspended and is not a submission dependency.
-5. A final screen recording or accessible equivalent needs owner approval of
-   the final public-facing presentation and cannot be honestly claimed before
-   it exists.
+## Award outlook
 
-The strict score is therefore below the 90+/100 internal target. The strongest
-remaining improvement is external verification, not another internal metric
-or another preparation document.
+### Evaluators excellence award
+
+FALSUM is a legitimate contender if the entry passes the common eligibility
+bar and the historical/current Intent mapping is accepted. Its strongest
+excellence differentiators are source-integrity discipline, a fresh public
+holdout, explicit abstention, and valuable multi-ecosystem coverage. It is not
+currently favored for first place because measurement validity only clears the
+minimum, the baseline agrees rather than being beaten, no independent AppSec
+gold or finalized ranking change exists, and no registered adapter is shown.
+
+### Evaluators verified delivery award
+
+The delivery case is stronger than the previous audit suggested: FALSUM now
+documents two distinct official mission workflows with repeatable supporting
+tests—Model Economy supply-chain verification and Web3 Native and DeFi
+security/bug-bounty proof. The [matrix](../src/falsum/phase5bk_evaluator_mission_workflow_matrix.py)
+is explicit that these are supporting tests, not completed missions or
+independent app consumption. Delivery remains plausible but not secure: the
+rules prioritize distinct mission/workflow impact and independent verification,
+and FALSUM still lacks an external application rerun or accepted integration
+test.
+
+## Highest-value remaining technical gaps
+
+1. **Resolve Intent compatibility.** Obtain authoritative confirmation that
+   the historical `SECURITY_REVIEW_GENERAL` material is valid for the current
+   official `SECURITY_REVIEW` Intent and document the exact adapter/material
+   schema expected by the H2 pipeline. This is the highest internal technical
+   risk.
+2. **Raise measurement validity above the minimum.** Add independently
+   adjudicated reference answers or an accepted external review set, then run
+   a sealed Provider-discrimination comparison under the same Intent. More
+   self-authored fixtures would not solve this gap.
+3. **Prove one real workflow impact.** An independent reviewer or app should
+   rerun the Model Economy or Web3 workflow and inspect the evaluation result
+   and Telegraph evidence. This cannot honestly be simulated as customer use.
+4. **Keep the material version operationally consumable.** Preserve the
+   versioned source manifest, input/output schema, deterministic commands and
+   CI artifact as the reviewer-accessible replacement if a network adapter is
+   not registered.
+
+Items 1–3 require an external platform decision or independent action; ACP is
+intentionally suspended and is not a dependency for this Evaluators entry.
