@@ -132,6 +132,11 @@ def main(argv: list[str] | None = None) -> int:
         help="six original Git-reviewed advisory source files vs two real published Miner outputs; exact target version only, NOT ranking",
     )
     version_quality.add_argument("--out",type=Path,required=True)
+    measurement = commands.add_parser(
+        "audit-evaluator-measurement",
+        help="run the source-authenticated Phase 5Y/5Z bounded measurement scorecard; not model accuracy or network ranking",
+    )
+    measurement.add_argument("--out", type=Path, required=True)
     consume = commands.add_parser(
         "audit-telegraph-consumption",
         help="strict original source-bound application allow/deny policy; two authentic real paid captures and 24 constructed tests, not network scoring",
@@ -244,6 +249,9 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "audit-reviewed-advisory-version":
             from .phase5y_original_reviewed_version_applicability import main as verified_version_main
             return verified_version_main(["--out",str(args.out)])
+        if args.command == "audit-evaluator-measurement":
+            from .phase5bi_measurement_scorecard import main as measurement_main
+            return measurement_main(["--out", str(args.out)])
         if args.command == "audit-telegraph-consumption":
             from .phase5t_application_consumption import main as consume_main
             cmd=["--out",str(args.out)]

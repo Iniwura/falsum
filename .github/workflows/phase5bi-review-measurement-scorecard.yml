@@ -1,0 +1,123 @@
+name: Phase 5BI - bounded reviewed-reference measurement scorecard
+
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5bi_measurement_scorecard.py'
+      - 'src/falsum/phase5y_original_reviewed_version_applicability.py'
+      - 'src/falsum/phase5z_reviewed_advisory_consumption.py'
+      - 'src/falsum/phase5x_three_real_miner_target_relevance.py'
+      - 'src/falsum/phase4l_external_receipt_evidence.py'
+      - 'src/falsum/cli.py'
+      - 'data/phase5y-original-reviewed-lodash-six-advisory-protocol.json'
+      - 'data/phase5z-frozen-app-consumption-protocol.json'
+      - 'tests/test_phase5bi_measurement_scorecard.py'
+      - 'tests/test_phase5y_original_reviewed_version_applicability.py'
+      - 'tests/test_phase5z_reviewed_advisory_consumption.py'
+      - '.github/workflows/phase5bi-review-measurement-scorecard.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5bi_measurement_scorecard.py'
+      - 'src/falsum/phase5y_original_reviewed_version_applicability.py'
+      - 'src/falsum/phase5z_reviewed_advisory_consumption.py'
+      - 'src/falsum/phase5x_three_real_miner_target_relevance.py'
+      - 'src/falsum/phase4l_external_receipt_evidence.py'
+      - 'src/falsum/cli.py'
+      - 'data/phase5y-original-reviewed-lodash-six-advisory-protocol.json'
+      - 'data/phase5z-frozen-app-consumption-protocol.json'
+      - 'tests/test_phase5bi_measurement_scorecard.py'
+      - 'tests/test_phase5y_original_reviewed_version_applicability.py'
+      - 'tests/test_phase5z_reviewed_advisory_consumption.py'
+      - '.github/workflows/phase5bi-review-measurement-scorecard.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  adversarial-contracts:
+    name: Scorecard and source-gate contracts / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Run measurement, source-gate and CLI contract tests
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5bi_measurement_scorecard.py' -v
+          python -m unittest discover -s tests -p 'test_phase5y_original_reviewed_version_applicability.py' -v
+          python -m unittest discover -s tests -p 'test_phase5z_reviewed_advisory_consumption.py' -v
+          python -m falsum.cli --help | grep -F audit-evaluator-measurement
+
+  live-authenticated-scorecard:
+    name: Reproduce the bounded 10/12 measurement effect from public Git sources
+    needs: adversarial-contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run source-authenticated Phase 5BI scorecard
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p phase5bi-evidence
+          python -m falsum.cli audit-evaluator-measurement \
+            --out phase5bi-evidence/REVIEWED-REFERENCE-MEASUREMENT-SCORECARD.json
+      - name: Assert measured effect and explicit limits
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('phase5bi-evidence/REVIEWED-REFERENCE-MEASUREMENT-SCORECARD.json')
+          report=json.loads(path.read_text())
+          assert report['status']=='PHASE5BI_REVIEWED_REFERENCE_FALSE_POSITIVE_MEASUREMENT_SCORECARD'
+          assert report['measurement_scope']['frozen_reported_reference_instances']==12
+          assert report['baseline']['known_false_positive_rate']=='2/12'
+          assert report['falsum_gate']['known_false_positive_rate']=='0/10'
+          assert report['falsum_gate']['reviewed_reference_precision_within_frozen_roster']=='10/10'
+          assert report['observed_improvement']['known_false_positives_removed']==2
+          assert report['observed_improvement']['relative_known_false_positive_reduction_percent']==100
+          assert report['observed_improvement']['same_result_reproduced_by_phase5y_and_phase5z'] is True
+          assert report['evaluator_contribution']['official_track_shape_claimed']=='evaluation material'
+          assert report['evaluator_contribution']['registered_network_evaluator'] is False
+          assert report['evaluator_contribution']['independent_customer_adoption'] is False
+          assert report['evaluator_contribution']['qualified_human_appsec_gold']==0
+          assert report['evaluator_contribution']['full_advisory_recall'] is False
+          assert report['evaluator_contribution']['model_accuracy_or_training_improvement'] is False
+          raw=path.read_text()
+          assert '"result":' not in raw and '"body":' not in raw and '"payment":' not in raw
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'],'a') as summary:
+              summary.write('## Phase 5BI bounded measurement scorecard\n\n')
+              summary.write('Authenticated public source replay: accept-all baseline displays 12 reported references, including 2 known inapplicable instances; exact package/version reviewed gate displays 10 and suppresses both. Narrow reviewed-reference precision is 10/10, not general security accuracy or recall.\n\n')
+              summary.write('No network evaluator registration, independent customer adoption, human AppSec gold or new paid Telegraph request is claimed.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5bi-bounded-reviewed-reference-measurement
+          path: phase5bi-evidence/
+          retention-days: 90
+          if-no-files-found: error

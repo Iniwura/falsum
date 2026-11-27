@@ -44,6 +44,16 @@ boundaries, response content, and payment/job context, while refusing to turn
 constructed or seller-supplied evidence into clearance. That is a strong
 technical narrative and useful coverage.
 
+The new Phase 5BI source-authenticated scorecard turns one of those safeguards
+into a directly judgeable measurement result: on the frozen two-provider,
+12-reference roster, the recorded paid/HTTP-200 accept-all baseline admits 2
+known version-inapplicable references, while the exact package/version gate
+displays 10 and admits 0. The measured effect is therefore a bounded 2/12
+false-positive reduction (10/10 reviewed-reference precision after the gate),
+reproduced by both Phase 5Y and Phase 5Z. It is evaluation material and
+valuable version-aware coverage, not general security accuracy, recall, expert
+gold, network ranking uplift or independent adoption.
+
 It does not currently have evidence for a 90+/100 outcome. The largest score
 and excellence-award risks are independent reproducibility, proven measurement
 improvement, a registered/usable evaluator contribution, and external adoption.
@@ -66,6 +76,13 @@ presented as external demand.
    the explicit identity, signer, zero-native-gas, and `$0.02` limits.
 
 ## ACP branch status
+
+Live ACP execution is suspended by operator instruction. The verified provider,
+event and strict Telegraph/ACP binding implementation is preserved for a future
+authorized run, but no browser retry, buyer creation, signer change, job,
+payment or transaction will be attempted. The external browser-permission
+blocker and the unverified original Telegraph report-job/receipt remain
+documented below; this optional branch does not block the Evaluators entry.
 
 Commit `22a9800` integrates the strict v2 Telegraph binding into the
 provider and event planner. The v2 path binds the actual response-content

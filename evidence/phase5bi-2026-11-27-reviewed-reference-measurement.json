@@ -1,0 +1,58 @@
+{
+  "baseline": {
+    "known_false_positive_rate": "2/12",
+    "known_inapplicable_instances_displayed": 2,
+    "policy": "accept_every_reported_reference_after_recorded_paid_http200",
+    "reference_instances_displayed": 12
+  },
+  "evaluator_contribution": {
+    "full_advisory_recall": false,
+    "improvement_kind": "proven bounded measurement improvement and valuable version-aware coverage",
+    "independent_customer_adoption": false,
+    "model_accuracy_or_training_improvement": false,
+    "official_track_shape_claimed": "evaluation material",
+    "qualified_human_appsec_gold": 0,
+    "registered_network_evaluator": false,
+    "same_canonical_intent_ranking": false
+  },
+  "falsum_gate": {
+    "known_false_positive_rate": "0/10",
+    "known_inapplicable_instances_displayed": 0,
+    "policy": "display_only_exact-package-version-reviewed-references",
+    "reference_instances_displayed": 10,
+    "reviewed_reference_precision_within_frozen_roster": "10/10"
+  },
+  "limitations": [
+    "The 12 reference instances come from two historical public provider captures and are not 12 independent cases.",
+    "The reviewed advisory files are source-grounded reference facts, not qualified human AppSec gold.",
+    "The result measures only exact package/version applicability among reported references; it does not measure recall, completeness, severity, exploitability or general security accuracy.",
+    "Recorded paid flags are not independent settlement proof and this run creates no new paid Telegraph request.",
+    "This artifact does not claim independent developer adoption, network registration, ranking uplift or official submission."
+  ],
+  "measurement_scope": {
+    "frozen_independently_reviewed_applicable_instances": 10,
+    "frozen_independently_reviewed_inapplicable_instances": 2,
+    "frozen_reported_reference_instances": 12,
+    "meaning": "narrow reviewed-reference applicability measurement, not general security accuracy",
+    "provider_reference_decision_rows": 12,
+    "source_families": 2,
+    "target": "npm:lodash@4.17.15"
+  },
+  "observed_improvement": {
+    "absolute_false_positive_rate_reduction": "2/12",
+    "displayed_reference_instances_change": "-2/12",
+    "known_false_positives_removed": 2,
+    "relative_known_false_positive_reduction_percent": 100,
+    "same_result_reproduced_by_phase5y_and_phase5z": true
+  },
+  "schema_version": 1,
+  "source_provenance": {
+    "inapplicable_advisory": "GHSA-f23m-r3pf-42rh",
+    "provider_git_revision": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+    "provider_repository": "anvithagowda098/pr-guard",
+    "receipt_settlement_independently_verified": false,
+    "reviewed_git_revision": "76955defc62d048f8f7cc68bc39a2f6dd1899ebe",
+    "reviewed_repository": "github/advisory-database"
+  },
+  "status": "PHASE5BI_REVIEWED_REFERENCE_FALSE_POSITIVE_MEASUREMENT_SCORECARD"
+}

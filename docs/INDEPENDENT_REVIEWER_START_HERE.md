@@ -18,6 +18,8 @@ This is a public, reproducible developer review task for [FALSUM](https://github
 
 7. **Response integrity.** [Truvian Shield maintainer's public memo verification](https://github.com/Iniwura/falsum/issues/97#issuecomment-7132041935) confirms the two parsed live-answer fixtures. [Phase 5AR](PHASE5AR_TRUVIAN_RESPONSE_INTEGRITY_GATE.md) adds a portable response-integrity gate and [successful original-source CI replay](https://github.com/Iniwura/falsum/actions/runs/45476259143) across all nine direct fixture declarations. Three explicitly missing-code cases: verdict-only admits 3/3 clean candidates, Secure + zero count admits 2/3, and FALSUM admits 0/3. Two are maintainer-confirmed; the third is a developer-reported node-shaped fixture. This is a bounded retrospective comparison, not a semantic model-accuracy, network-ranking, or accepted-integration result. Test the JSON stdin interface with a legitimate scan or an explicit missing-code answer. A REVIEW decision must not be mistaken for a vulnerability verdict; a CLEAN_CANDIDATE must never release a transaction.
 
+8. **Bounded measurement improvement.** [Phase 5BI](../src/falsum/phase5bi_measurement_scorecard.py) runs the actual Phase 5Y and 5Z source-verifying studies and emits one judge-ready scorecard. On the frozen public roster it compares the recorded paid/HTTP-200 accept-all baseline (12 reported references, 2 known inapplicable) with FALSUM's exact package/version display gate (10 displayed, 0 known inapplicable). The result is a narrow **2/12 false-positive reduction and 10/10 reviewed-reference precision within this roster**, not recall, general security accuracy, expert gold, network ranking or adoption. Reproduce it with `PYTHONPATH=src python -m falsum.cli audit-evaluator-measurement --out measurement-scorecard.json`; it performs public read-only source fetches and no payment, wallet or model call.
+
 The distinction between original outside captures, reviewed GitHub advisory sources and constructed demonstration inputs is material. Original source records are not independent expert security gold, proof of paid onchain settlement, proof of external adoption or a registered network evaluator.
 
 ## Option A: run the public GitHub Action on your own fork
@@ -49,6 +51,10 @@ PYTHONPATH=src python -m falsum.cli filter-security-references \
   --response-json examples/phase5aa-constructed-response.json \
   --reviewed-bundle historical-six-reviewed-sources.json \
   --out constructed-local-display-decision.json
+
+# Source-authenticated bounded measurement effect; no payment or wallet:
+PYTHONPATH=src python -m falsum.cli audit-evaluator-measurement \
+  --out reviewed-reference-measurement-scorecard.json
 
 # New reviewed Axios/Rack original-source and constructed-input exercises:
 PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase5ag_reviewed_reference_evaluator.py' -v
@@ -95,6 +101,7 @@ python -m falsum.phase5ar_response_integrity --out original-app-response-integri
 | New qualified independent source labels from these examples | 0 |
 | Historical snapshot counts as current advisory completeness | No |
 | Original external Miner provenance of constructed local response | No |
+| Phase 5BI accept-all baseline / exact-version gate | 12 references / 2 known inapplicable → 10 display-only / 0 known inapplicable; 100% reduction of the two observed false positives | Frozen historical reference roster only; not recall or general security accuracy |
 
 These are expected **historical original source/reproduction values**. They are **not** a generalization to all of Telegraph, all Miners, all dependency advisories, or arbitrary unseen responses.
 
