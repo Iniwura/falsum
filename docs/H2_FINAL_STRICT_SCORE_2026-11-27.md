@@ -52,7 +52,9 @@ security-clearance, or customer-adoption claim.
 ### Cross-source discriminative measurement
 
 The new [Phase 5BL audit](../data/phase5bl-cross-source-measurement-discrimination.json)
-is a repeatable cross-source analysis with its own adversarial contract tests.
+is a repeatable cross-source analysis with its own adversarial contract tests;
+the [hosted Python 3.11–3.13 replay](https://github.com/Iniwura/falsum/actions/runs/45942955107)
+passed on measurement commit `b8db95d`.
 It does not relabel the underlying studies. It records:
 
 - 3/3 explicit missing-evidence clean candidates rejected by FALSUM versus
