@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5BJ_FRESH_PUBLIC_PROVIDER_HOLDOUT_FROZEN_BEFORE_OBSERVATION",
+  "frozen_date_utc": "2026-11-27",
+  "provider_source_repository": "anvithagowda098/pr-guard",
+  "provider_source_git_commit": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+  "selection_method": "Exact public Git tree paths selected from path metadata before fetching or inspecting either response body. No content-based reselection, deletion, or outcome-based exclusion is permitted.",
+  "selected_fresh_capture_paths": [
+    {
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW/190048-pypi-django-3.2.0-200-paid.json",
+      "provider_role": "direct_versioned_security_review",
+      "selection_reason": "A versioned PyPI target in a public provider fixture, absent from all existing FALSUM frozen source rosters."
+    },
+    {
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW/77010-npm-lodash-4.18.1-200-paid.json",
+      "provider_role": "direct_versioned_security_review",
+      "selection_reason": "A versioned npm target and version distinct from FALSUM's frozen lodash 4.17.15 captures, absent from all existing FALSUM frozen source rosters."
+    }
+  ],
+  "prior_roster_exclusion_rule": "Reject any selected path present in data/phase5ab-original-receipt-comparability-lock.json, data/phase5x-frozen-original-three-provider-lodash-relevance.json, data/phase5y-original-reviewed-lodash-six-advisory-protocol.json, data/phase5z-frozen-app-consumption-protocol.json, or the Phase 5AG reviewed-source roster.",
+  "independent_reference_source": {
+    "repository": "github/advisory-database",
+    "git_commit": "76955defc62d048f8f7cc68bc39a2f6dd1899ebe",
+    "source_selection": "For each identifier actually emitted by a selected response, resolve only its canonical GHSA record or declared CVE alias at this frozen commit. Missing, ambiguous, withdrawn, malformed, or unsupported source data is INSUFFICIENT/UNKNOWN; it cannot be converted into a positive label."
+  },
+  "evaluation_contract": {
+    "target_binding": "Use only the exact ecosystem, package and version in each selected request envelope. Do not infer target identity from path names or caller classifications.",
+    "falsum_policy": "Authenticated source identity, exact package match, and a fail-closed introduced/fixed/last_affected interval evaluator. Display-only applicability; never security clearance.",
+    "competent_baseline": "An independently implemented version-aware interval baseline using the same authenticated source records, exact package/ecosystem binding, numeric version comparison, exclusive fixed and inclusive last_affected boundaries, and explicit abstention on unsupported ranges. It is not accept-all and is not FALSUM code reuse.",
+    "comparison_unit": "One response-reference assertion, plus per-capture aggregate counts. Duplicate identifiers are counted once per capture and separately reported as malformed/repeated input.",
+    "primary_metrics": [
+      "source_resolved_reference_count",
+      "source_applicable_reference_count",
+      "source_inapplicable_reference_count",
+      "source_uncertain_or_unknown_count",
+      "falsum_baseline_disagreement_count",
+      "falsum_fail_closed_count",
+      "baseline_fail_closed_count"
+    ],
+    "success_or_failure_rule": "Report exact agreement, disagreement and abstention. Do not treat agreement with the competent baseline as a new improvement; a meaningful delta must be independently explained and source-bound."
+  },
+  "explicit_limits": {
+    "not_a_private_or_blind_model_holdout": true,
+    "not_human_appsec_gold": true,
+    "not_advisory_recall_or_current_feed_completeness": true,
+    "not_same_intent_provider_ranking": true,
+    "not_independent_customer_adoption": true,
+    "not_new_paid_telegraph_execution": true,
+    "not_security_clearance": true,
+    "provider_paid_flags_not_independent_settlement": true,
+    "raw_provider_response_bodies_not_republished": true,
+    "no_outcome_based_path_reselection": true
+  }
+}
