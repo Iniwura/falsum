@@ -5,8 +5,10 @@ run the two zero-credential commands in the [submission package](H2_FINAL_SUBMIS
 
 ## What the judge should learn in three minutes
 
-1. FALSUM is **Evaluator material** for `SECURITY_REVIEW_GENERAL`, not a
-   claimed registered scoring adapter or security-clearance service.
+1. FALSUM is **Evaluator material** for `SECURITY_REVIEW_GENERAL`, which
+   official bounty #96 and `INTENTS.md` map to the `SECURITY_REVIEW` judgment
+   family; it is not a claimed registered scoring adapter or security-clearance
+   service.
 2. A genuinely fresh public provider capture is bound to its exact target and
    immutable advisory-source bytes. Unsupported identity or version evidence
    becomes an explicit abstention.
@@ -17,11 +19,16 @@ run the two zero-credential commands in the [submission package](H2_FINAL_SUBMIS
 4. The earlier frozen roster has a bounded, repeatable measurement: an
    accept-all policy displayed 12 references including 2 known inapplicable
    instances; the reviewed gate displayed 10 and suppressed both.
-5. Two distinct official mission workflows have repeatable supporting tests:
+5. The cross-source audit adds fair discriminative comparisons: 3/3 explicit
+   missing-evidence clean candidates rejected, 2/2 version-inapplicable
+   references suppressed, 8 count-only vulnerable-label PASS outcomes removed,
+   and 66/66 agreement with the competent baseline; it preserves the tie with
+   verdict-only.
+6. Two distinct official mission workflows have repeatable supporting tests:
    Model Economy supply-chain verification and Web3 Native and DeFi
    security/bug-bounty proof. They are not claimed as completed missions or
    independent app consumption.
-6. The project is honest about what remains: no independent customer adoption,
+7. The project is honest about what remains: no independent customer adoption,
    no human AppSec gold, no current paid transaction in this sprint, no
    ranking uplift, and no submitted entry.
 
@@ -42,6 +49,7 @@ minimum](H2_EVALUATORS_RUBRIC_2026-11-27.md), not the Apps & Agents-shaped
 | 7 | [Official rules](https://hackathon.telegraphprotocol.com/rules) | Eligibility and submission bar |
 | 8 | [Mission/workflow matrix](../data/phase5bk-evaluator-mission-workflow-matrix.json) | Two repeatable supporting workflows, no inflated delivery claim |
 | 9 | [Current Anjoman status](../evidence/phase5bk-2026-11-27-anjoman-status.json) | 20/20 current Eligible rows for the operator-reported Privy address |
+| 10 | [Cross-source measurement audit](../data/phase5bl-cross-source-measurement-discrimination.json) | Fair contrasts, baseline tie, and preserved negative findings |
 
 ## Claims a judge can safely repeat
 
@@ -50,6 +58,8 @@ minimum](H2_EVALUATORS_RUBRIC_2026-11-27.md), not the Apps & Agents-shaped
   replayed against an independent version-aware baseline.”
 - “FALSUM and the baseline agreed; unknown cases were not forced positive.”
 - “The prior measured effect is bounded to a frozen reviewed-reference roster.”
+- “The cross-source audit shows two safety-relevant contrasts against weaker
+  policies, ties a competent baseline, and preserves the verdict-only tie.”
 - “FALSUM supplies repeatable supporting tests for two official mission
   workflows; it does not claim completed mission delivery or independent app
   consumption.”
@@ -63,5 +73,4 @@ minimum](H2_EVALUATORS_RUBRIC_2026-11-27.md), not the Apps & Agents-shaped
 - “Paid/charged fields prove settlement or independent customer demand.”
 - “The old model experiment proves FALSUM improved ranking.”
 - “The ACP Sandbox route is complete.”
-- “`SECURITY_REVIEW_GENERAL` is officially interchangeable with the current
-  `SECURITY_REVIEW` Intent.”
+- “The family mapping proves maintainer acceptance or live adapter registration.”

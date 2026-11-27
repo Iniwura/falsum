@@ -147,6 +147,11 @@ def main(argv: list[str] | None = None) -> int:
         help="validate official Evaluators mission/workflow evidence without claiming mission delivery or adoption",
     )
     mission_matrix.add_argument("--out", type=Path, required=True)
+    discrimination = commands.add_parser(
+        "audit-measurement-discrimination",
+        help="cross-check source-bound policy contrasts and fair baselines; not human gold or ranking",
+    )
+    discrimination.add_argument("--out", type=Path, required=True)
     consume = commands.add_parser(
         "audit-telegraph-consumption",
         help="strict original source-bound application allow/deny policy; two authentic real paid captures and 24 constructed tests, not network scoring",
@@ -268,6 +273,9 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "audit-evaluator-mission-matrix":
             from .phase5bk_evaluator_mission_workflow_matrix import main as mission_matrix_main
             return mission_matrix_main(["--out", str(args.out)])
+        if args.command == "audit-measurement-discrimination":
+            from .phase5bl_measurement_discrimination import main as discrimination_main
+            return discrimination_main(["--out", str(args.out)])
         if args.command == "audit-telegraph-consumption":
             from .phase5t_application_consumption import main as consume_main
             cmd=["--out",str(args.out)]

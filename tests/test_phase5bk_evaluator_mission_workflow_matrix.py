@@ -19,15 +19,22 @@ class EvaluatorMissionMatrixContract(unittest.TestCase):
             self.assertGreaterEqual(len(row["repeatable_supporting_tests"]), 2)
             self.assertEqual(row["workflow_status"], "REPEATABLE_SUPPORTING_TEST")
 
-    def test_current_intent_alias_is_not_fabricated(self):
+    def test_authoritative_family_mapping_is_separate_from_acceptance(self):
         report = m.matrix()
         self.assertEqual(report["current_official_intent"], "SECURITY_REVIEW")
         self.assertEqual(report["historical_material_intent"], "SECURITY_REVIEW_GENERAL")
-        self.assertFalse(report["intent_alias_or_protocol_compatibility_verified"])
+        self.assertTrue(report["intent_alias_or_protocol_compatibility_verified"])
+        self.assertFalse(report["maintainer_acceptance_verified"])
+        self.assertFalse(report["registered_evaluator_adapter_verified"])
 
     def test_supporting_tests_cannot_be_promoted_to_delivery_or_adoption(self):
         forged = deepcopy(m.matrix())
         forged["mission_rows"][0]["mission_completed"] = True
+        with self.assertRaises(m.MatrixError):
+            m.validate(forged)
+
+        forged = deepcopy(m.matrix())
+        forged["maintainer_acceptance_verified"] = True
         with self.assertRaises(m.MatrixError):
             m.validate(forged)
         forged = deepcopy(m.matrix())

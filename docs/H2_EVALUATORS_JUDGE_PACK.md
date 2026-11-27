@@ -9,9 +9,9 @@ The applicable track is Evaluators, not Apps & Agents. The current official
 rubric is **40 measurement validity and baseline evidence (technical minimum
 28/40), 15 integrity, 10 reproducibility/protocol compatibility, 10 useful
 coverage and demonstrated improvement, 5 documentation/integration, and 20
-organic growth**. The evidence-backed strict assessment is **82/100**, with the
-28/40 technical minimum met exactly; this is a readiness assessment, not an
-organizer score. See the [pinned rubric note](H2_EVALUATORS_RUBRIC_2026-11-27.md)
+organic growth**. The evidence-backed strict assessment is **90/100**, with
+34/40 measurement validity and the 28/40 technical minimum passed; this is a
+readiness assessment, not an organizer score. See the [pinned rubric note](H2_EVALUATORS_RUBRIC_2026-11-27.md)
 and [strict score](H2_FINAL_STRICT_SCORE_2026-11-27.md).
 
 The [mission/workflow matrix](../data/phase5bk-evaluator-mission-workflow-matrix.json)
@@ -24,9 +24,10 @@ records 20/20 eligible rows for the operator-reported current Privy address
 and 0/0 for the distinct historical bounty address, while acceptance,
 registration, and cryptographic ownership remain unverified.
 
-The historical material below uses `SECURITY_REVIEW_GENERAL`. The current
-official catalogue uses `SECURITY_REVIEW`; FALSUM does not silently claim that
-the two names are interchangeable without an independent compatibility check.
+The historical material below uses `SECURITY_REVIEW_GENERAL`. Official bounty
+#96 and [INTENTS.md](https://github.com/telegraphprotocol/bounties/blob/main/docs/INTENTS.md)
+map that child Intent to the `SECURITY_REVIEW` family. This mapping does not
+claim maintainer acceptance or live adapter registration.
 
 ## Current evidence — use this first (November 20)
 
@@ -43,6 +44,7 @@ The full guide below preserves earlier milestone studies, including the former f
 - **Original real model:** still **5/8 provisional source matches, 1/4 complete reversals** vs **4/8 constant-choice baselines**. The failed original LoRA is quarantined and not a registered scoring adapter.
 - **Pending:** independent expert gold **0 confirmed**; third-party mission consumption **not demonstrated**; three real public updates on separate dates **not verified**; registration/star/showcase permission **not authenticated**; 2–5 minute demo/accessibility equivalent **not authorized**; **final H2 entry NOT filed**.
 - **Phase 5BI bounded measurement improvement:** the [reviewed-reference scorecard](../src/falsum/phase5bi_measurement_scorecard.py) now joins the live Phase 5Y/5Z source-verifying studies into one CI artifact. Against the frozen public roster, the recorded paid/HTTP-200 accept-all baseline displays 12 references including 2 known inapplicable references; FALSUM displays 10 exact package/version-reviewed references and suppresses both known inapplicable instances. This is a measured **2/12 false-positive reduction and 10/10 narrow reviewed-reference precision**, not recall, expert gold, model accuracy, ranking uplift or adoption. Reproduce with `PYTHONPATH=src python -m falsum.cli audit-evaluator-measurement --out scorecard.json`.
+- **Phase 5BL discriminative measurement audit:** the [cross-source report](../data/phase5bl-cross-source-measurement-discrimination.json) and [adversarial contracts](../tests/test_phase5bl_measurement_discrimination.py) add a fair comparison surface across the original Truvian fixtures, the complete 129-case Gig Guard ledger, the reviewed-reference scorecard, and the fresh public holdout. FALSUM rejects **3/3** explicit missing-evidence clean candidates versus **3/3** verdict-only and **2/3** count-plus-verdict clean outcomes; suppresses **2/2** version-inapplicable references versus accept-all; removes **8** vulnerable-label PASS outcomes versus count-only; ties verdict-only; and agrees **66/66** with the competent fresh baseline. This is a new cross-source analysis, not human AppSec gold or ranking uplift.
 
 **Judge-safe summary:** a live independently reproducible **evaluation-material contribution**, not a newly improved or registered trained evaluator. Use the current [first-place readiness audit](H2_NOV20_FIRST_PLACE_READINESS_AUDIT.md) for remaining risks and owner gates; use older milestone paragraphs below to inspect the research chronology.
 

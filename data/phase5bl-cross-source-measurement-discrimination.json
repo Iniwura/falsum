@@ -1,0 +1,94 @@
+{
+  "fair_comparisons": {
+    "fresh_provider_competent_baseline": {
+      "competent_baseline_superiority": false,
+      "contrastive_result": "FALSUM agrees 66/66 with the separately implemented exact-target interval baseline; this validates reproducibility, not superiority.",
+      "denominator": 66,
+      "falsum_baseline_agreement": 66
+    },
+    "missing_evidence_contrast": {
+      "contrastive_result": "FALSUM rejects 3/3 clean-looking answers that explicitly lack reviewable code/configuration evidence; verdict-only accepts 3/3 and count-plus-verdict accepts 2/3.",
+      "count_verdict_clean": 2,
+      "denominator": 3,
+      "falsum_review_not_clean": 3,
+      "verdict_only_clean": 3
+    },
+    "published_external_policy_population": {
+      "cases": 129,
+      "contrastive_result": "FALSUM removes 8 vulnerable-label PASS outcomes versus count-only, but ties verdict-only and flags 5/22 audited controls; no superiority claim is made.",
+      "count_only_vulnerable_label_pass": 8,
+      "falsum_audited_control_flags": 5,
+      "falsum_vulnerable_label_pass": 0,
+      "verdict_only_audited_control_flags": 5,
+      "verdict_only_vulnerable_label_pass": 0
+    },
+    "version_boundary_contrast": {
+      "accept_all_known_inapplicable": 2,
+      "contrastive_result": "FALSUM suppresses both independently reviewed version-inapplicable references while the recorded accept-all policy displays both.",
+      "denominator": 12,
+      "falsum_known_inapplicable": 0
+    }
+  },
+  "limits": [
+    "The cross-source report is a new analysis of authenticated prior studies, not a claim that every underlying case is an unseen blind holdout.",
+    "External maintainer corroboration and GitHub-reviewed advisory records are defensible checks, not qualified human AppSec gold.",
+    "Published application labels are external records; audited controls are not proven bug-free and archived settlement metadata is not live settlement proof.",
+    "The fresh-provider comparison has no FALSUM-versus-baseline delta and therefore proves no ranking superiority.",
+    "No independent customer adoption, registered network evaluator, maintainer acceptance, or H2 submission is claimed."
+  ],
+  "measurement_conclusion": {
+    "competent_baseline_ties": 1,
+    "independent_human_appsec_gold": 0,
+    "new_paid_telegraph_execution": false,
+    "ranking_improvement": false,
+    "security_clearance": false,
+    "summary": "FALSUM demonstrates two source-bound, safety-relevant contrasts against weaker policies, ties a competent version-aware baseline on fresh evidence, and preserves the negative finding that it does not beat verdict-only on the published application population.",
+    "verdict_only_superiority": false,
+    "weaker_policy_contrasts_demonstrated": 2
+  },
+  "measurement_scope": {
+    "historical_child_intent": "SECURITY_REVIEW_GENERAL",
+    "new_analysis": "Predeclared cross-source comparison of evidence-sensitive policy contrasts and fair baselines; no underlying source row is relabeled.",
+    "security_review_family": "SECURITY_REVIEW",
+    "source_studies": [
+      "Phase 5AR",
+      "Phase 5AK",
+      "Phase 5BI",
+      "Phase 5BJ"
+    ]
+  },
+  "reference_evidence_tiers": [
+    {
+      "cases": 3,
+      "maintainer_confirmed_cases": 2,
+      "role": "Defensible response-integrity checks, not semantic AppSec gold.",
+      "source": "Truvian original fixture source and maintainer review",
+      "tier": "EXTERNAL_MAINTAINER_CORROBORATED"
+    },
+    {
+      "applicable_instances": 10,
+      "inapplicable_instances": 2,
+      "instances": 12,
+      "role": "Exact package/version reference facts, not full recall or human gold.",
+      "source": "Pinned GitHub Advisory Database records",
+      "tier": "INDEPENDENTLY_REVIEWED_ADVISORY_SOURCE"
+    },
+    {
+      "audited_labeled_cases": 22,
+      "cases": 129,
+      "role": "Independent of FALSUM policy code, but audited controls are not proven bug-free.",
+      "source": "Gig Guard complete published scale ledger",
+      "tier": "PUBLISHED_EXTERNAL_APPLICATION_LABELS",
+      "vulnerable_labeled_cases": 107
+    },
+    {
+      "instances": 66,
+      "role": "Unseen provider evidence with a separately implemented competent baseline.",
+      "source": "Pinned public PR Guard fixtures plus pinned advisory source",
+      "source_resolved": 38,
+      "tier": "FRESH_PUBLIC_PROVIDER_HOLDOUT"
+    }
+  ],
+  "schema_version": 1,
+  "status": "PHASE5BL_CROSS_SOURCE_DISCRIMINATIVE_MEASUREMENT_AUDIT"
+}

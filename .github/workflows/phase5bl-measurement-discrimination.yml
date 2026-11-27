@@ -1,0 +1,71 @@
+name: Phase 5BL - cross-source discriminative measurement audit
+
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5bl_measurement_discrimination.py'
+      - 'tests/test_phase5bl_measurement_discrimination.py'
+      - 'data/phase5bl-cross-source-measurement-discrimination.json'
+      - '.github/workflows/phase5bl-measurement-discrimination.yml'
+      - 'src/falsum/phase5ak_external_label_baselines.py'
+      - 'src/falsum/phase5ar_response_integrity.py'
+      - 'src/falsum/phase5bi_measurement_scorecard.py'
+      - 'src/falsum/phase5bj_fresh_provider_holdout.py'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5bl_measurement_discrimination.py'
+      - 'tests/test_phase5bl_measurement_discrimination.py'
+      - 'data/phase5bl-cross-source-measurement-discrimination.json'
+      - '.github/workflows/phase5bl-measurement-discrimination.yml'
+      - 'src/falsum/phase5ak_external_label_baselines.py'
+      - 'src/falsum/phase5ar_response_integrity.py'
+      - 'src/falsum/phase5bi_measurement_scorecard.py'
+      - 'src/falsum/phase5bj_fresh_provider_holdout.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: Verify cross-source measurement / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Run adversarial contracts and source-bound audit
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5bl_measurement_discrimination.py' -v
+          mkdir -p phase5bl-evidence
+          python -m falsum.cli audit-measurement-discrimination \
+            --out phase5bl-evidence/CROSS-SOURCE-MEASUREMENT.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          expected = json.loads(Path('data/phase5bl-cross-source-measurement-discrimination.json').read_text())
+          actual = json.loads(Path('phase5bl-evidence/CROSS-SOURCE-MEASUREMENT.json').read_text())
+          assert actual == expected
+          assert actual['measurement_conclusion']['independent_human_appsec_gold'] == 0
+          assert actual['measurement_conclusion']['verdict_only_superiority'] is False
+          assert actual['measurement_conclusion']['competent_baseline_ties'] == 1
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5bl-cross-source-measurement-${{ matrix.python }}
+          path: phase5bl-evidence/
+          retention-days: 90
+          if-no-files-found: error

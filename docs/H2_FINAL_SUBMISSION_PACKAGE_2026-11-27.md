@@ -7,13 +7,15 @@
 - Project: **FALSUM**
 - Track: **Evaluators**
 - Intent: **`SECURITY_REVIEW_GENERAL`**
-- Current official catalogue name: **`SECURITY_REVIEW`**; exact compatibility
-  with the historical `GENERAL` suffix is explicitly unverified.
+- Official mapping: **`SECURITY_REVIEW_GENERAL`** is the child Intent of the
+  **`SECURITY_REVIEW`** judgment family, as documented by [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96)
+  and [INTENTS.md](https://github.com/telegraphprotocol/bounties/blob/main/docs/INTENTS.md).
+  This does not claim maintainer acceptance or live adapter registration.
 - Contribution shape: **evaluation material**; no released model adapter is
   claimed.
 - Repository: <https://github.com/Iniwura/falsum>
 - Judge guide: [H2 final judge experience](H2_FINAL_JUDGE_EXPERIENCE_2026-11-27.md)
-- Strict Evaluators assessment: [82/100 under the correct rubric](H2_FINAL_STRICT_SCORE_2026-11-27.md)
+- Strict Evaluators assessment: [90/100 under the correct rubric](H2_FINAL_STRICT_SCORE_2026-11-27.md)
 - Optional ACP integration: suspended, excluded from the final claim.
 
 ## Short public summary draft
@@ -27,7 +29,11 @@ lodash response; 38 canonical sources resolve, 27 are applicable, 39 remain
 fail-closed unknown/insufficient, and a separate version-aware baseline agrees
 on every row. Two official mission workflows have repeatable supporting tests:
 Model Economy supply-chain verification and Web3 Native and DeFi
-security/bug-bounty proof. A prior frozen roster measured a bounded 2/12 reduction in known
+security/bug-bounty proof. The cross-source measurement audit rejects 3/3
+explicit missing-evidence clean candidates, suppresses 2/2 independently
+reviewed version-inapplicable references, removes 8 count-only vulnerable-label
+PASS outcomes, and agrees 66/66 with a competent baseline while tying
+verdict-only. A prior frozen roster measured a bounded 2/12 reduction in known
 version-inapplicable displays. These results are reproducible evaluation
 material—not security clearance, human AppSec gold, recall, customer adoption,
 ranking uplift, or a new paid Telegraph transaction.
@@ -69,6 +75,8 @@ does not become current production usage.
 | Mission/workflow support | [Phase 5BK matrix](../data/phase5bk-evaluator-mission-workflow-matrix.json) | Two repeatable supporting workflows; no completed mission or app consumption claim |
 | Current Anjoman status | [Phase 5BK read-only status](../evidence/phase5bk-2026-11-27-anjoman-status.json) | 20/20 current Eligible rows for the operator-reported Privy address; acceptance/registration unverified |
 | Prior bounded measurement | [Phase 5BI scorecard](../src/falsum/phase5bi_measurement_scorecard.py) and [hosted CI](https://github.com/Iniwura/falsum/actions/runs/45918441661) | 2/12 known false-positive reduction; narrow reviewed roster |
+| Cross-source discriminative measurement | [Phase 5BL report](../data/phase5bl-cross-source-measurement-discrimination.json) and [contracts](../tests/test_phase5bl_measurement_discrimination.py) | Two weaker-policy contrasts, competent-baseline tie, verdict-only tie preserved |
+| Official Intent mapping | [Bounty #96](https://github.com/telegraphprotocol/bounties/issues/96) and [INTENTS.md](https://github.com/telegraphprotocol/bounties/blob/main/docs/INTENTS.md) | Child Intent maps to `SECURITY_REVIEW` family; no acceptance or adapter registration claim |
 | Safety and provenance | [Phase 5B/5BG tests](../tests/) and current GitHub Actions workflows | Fail-closed evidence handling; no security clearance |
 | Telegraph relevance | [final competitive audit](H2_FINAL_COMPETITIVE_AUDIT_2026-11-27.md) | Historical/public evidence only; ACP suspended |
 | Demo/equivalent | [final storyboard](H2_FINAL_DEMO_STORYBOARD_2026-11-27.md) | Prepared, not recorded or submitted |

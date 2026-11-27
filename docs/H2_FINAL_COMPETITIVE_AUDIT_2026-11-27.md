@@ -72,17 +72,20 @@ Evaluators rubric is recorded in the [rubric evidence note](H2_EVALUATORS_RUBRIC
 measurement validity/baseline 40 (minimum 28), integrity 15,
 reproducibility/protocol compatibility 10, useful coverage/improvement 10,
 documentation/integration 5, and growth 20. The corrected strict assessment is
-[82/100](H2_FINAL_STRICT_SCORE_2026-11-27.md), with 28/40 measurement validity
-met exactly.
+[90/100](H2_FINAL_STRICT_SCORE_2026-11-27.md), with 34/40 measurement validity
+and the 28/40 technical minimum passed.
 
 The [Phase 5BK matrix](../data/phase5bk-evaluator-mission-workflow-matrix.json)
 maps proven material to two official H2 workflows that explicitly name
 `SECURITY_REVIEW`: Model Economy supply-chain verification priced per commit,
 and Web3 Native and DeFi machine-proved security/bug-bounty review. Each has
 repeatable tests and public evidence. Neither is claimed as a completed mission,
-independent app consumption, ranking change, or customer adoption. The current
-official catalogue uses `SECURITY_REVIEW`; historical FALSUM material uses
-`SECURITY_REVIEW_GENERAL`, so compatibility remains an explicit external gap.
+independent app consumption, ranking change, or customer adoption. Official
+[INTENTS.md](https://github.com/telegraphprotocol/bounties/blob/main/docs/INTENTS.md)
+and [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96) map
+historical FALSUM material's `SECURITY_REVIEW_GENERAL` child Intent to the
+`SECURITY_REVIEW` family. Maintainer acceptance and live adapter registration
+remain separate and unverified.
 
 The [current Anjoman read-only record](../evidence/phase5bk-2026-11-27-anjoman-status.json)
 shows 20 total / 20 Eligible rows for the operator-reported Privy address and
@@ -107,11 +110,20 @@ reproduced by both Phase 5Y and Phase 5Z. It is evaluation material and
 valuable version-aware coverage, not general security accuracy, recall, expert
 gold, network ranking uplift or independent adoption.
 
-The current head `050f59b` is hosted-verified by the [Phase 5BJ fresh-provider workflow](https://github.com/Iniwura/falsum/actions/runs/45918441740), with all three contract-test Python versions and the live authenticated public-source replay green. The same head also passed the [Phase 5BI scorecard workflow](https://github.com/Iniwura/falsum/actions/runs/45918441661), [Foundation suite](https://github.com/Iniwura/falsum/actions/runs/45918441798), and the relevant prior official data gates. The Phase 5BJ run carries a non-blocking GitHub Actions Node.js 20 deprecation annotation from the hosted action wrappers; all jobs completed successfully.
+The [Phase 5BL cross-source measurement audit](../data/phase5bl-cross-source-measurement-discrimination.json)
+adds a new fair comparison surface across the original Truvian fixtures, the
+complete 129-case Gig Guard ledger, the Phase 5BI roster and the fresh Phase
+5BJ holdout. It records two source-bound contrasts against weaker policies,
+ties the competent baseline 66/66, and preserves the negative verdict-only
+tie. This supports the 34/40 measurement allocation; it is not human gold or
+a ranking-improvement claim.
 
-It does not currently have evidence for a 90+/100 outcome. The largest score
-and excellence-award risks are independent reproducibility, proven measurement
-improvement, a registered/usable evaluator contribution, and external adoption.
+The current head `981d711` is hosted-verified by the [Phase 5BJ fresh-provider workflow](https://github.com/Iniwura/falsum/actions/runs/45919862041), the [Phase 5BI scorecard workflow](https://github.com/Iniwura/falsum/actions/runs/45919861960), the [Phase 5BL measurement workflow](../.github/workflows/phase5bl-measurement-discrimination.yml), and the [Foundation suite](https://github.com/Iniwura/falsum/actions/runs/45919862008). The current Phase 5BK matrix also passed on all three Python versions. Hosted action Node.js deprecation annotations are non-blocking; successful conclusions are the authoritative results.
+
+The 90/100 result is an internal, evidence-mapped readiness assessment, not an
+organizer score. The largest remaining excellence-award risks are independent
+human adjudication, a registered/usable evaluator contribution, and external
+adoption.
 The official rules explicitly distinguish testnet/internal activity from
 independently funded customer demand and prohibit self-dealing from being
 presented as external demand.

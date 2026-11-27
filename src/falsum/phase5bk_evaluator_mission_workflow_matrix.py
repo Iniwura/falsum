@@ -79,7 +79,13 @@ def matrix() -> dict[str, Any]:
         "status": STATUS,
         "current_official_intent": CURRENT_INTENT,
         "historical_material_intent": HISTORICAL_MATERIAL_INTENT,
-        "intent_alias_or_protocol_compatibility_verified": False,
+        "intent_alias_or_protocol_compatibility_verified": True,
+        "authoritative_mapping_sources": [
+            "https://github.com/telegraphprotocol/bounties/issues/96",
+            "https://github.com/telegraphprotocol/bounties/blob/main/docs/INTENTS.md",
+        ],
+        "maintainer_acceptance_verified": False,
+        "registered_evaluator_adapter_verified": False,
         "mission_rows": rows,
         "aggregate": {
             "distinct_official_missions_with_repeatable_supporting_tests": len(rows),
@@ -92,7 +98,7 @@ def matrix() -> dict[str, Any]:
         "limits": [
             "The test workflows are evaluator-material support, not autonomous Apps & Agents purchases.",
             "Fictional mission-lab scenarios are not used as external customer evidence.",
-            "Official SECURITY_REVIEW and historical SECURITY_REVIEW_GENERAL compatibility remains an external confirmation gap.",
+            "Official sources map SECURITY_REVIEW_GENERAL to the SECURITY_REVIEW family; maintainer acceptance and live adapter registration remain separate external decisions.",
         ],
     }
     validate(report)
@@ -104,8 +110,16 @@ def validate(report: dict[str, Any]) -> None:
     need(report.get("current_official_intent") == CURRENT_INTENT
          and report.get("historical_material_intent") == HISTORICAL_MATERIAL_INTENT,
          "intent identities changed")
-    need(report.get("intent_alias_or_protocol_compatibility_verified") is False,
-         "unverified Intent alias was promoted")
+    need(report.get("intent_alias_or_protocol_compatibility_verified") is True,
+         "authoritative Intent family mapping was removed")
+    need(isinstance(report.get("authoritative_mapping_sources"), list)
+         and set(report["authoritative_mapping_sources"]) == {
+             "https://github.com/telegraphprotocol/bounties/issues/96",
+             "https://github.com/telegraphprotocol/bounties/blob/main/docs/INTENTS.md",
+         }, "authoritative mapping sources changed")
+    need(report.get("maintainer_acceptance_verified") is False
+         and report.get("registered_evaluator_adapter_verified") is False,
+         "mapping was conflated with acceptance or registration")
     rows = report.get("mission_rows")
     need(isinstance(rows, list) and [row.get("official_mission") for row in rows] == ["Model Economy", "Web3 Native and DeFi"],
          "mission roster changed or was reordered")

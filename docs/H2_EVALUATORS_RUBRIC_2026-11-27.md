@@ -32,13 +32,34 @@ commercial missions, distinct H2 app workflows, independently verified
 mission-critical Intent needs, then combined technical quality. Evaluator ties
 prefer proven measurement improvement or valuable new coverage, then validity.
 
-## Scope correction
+## Authoritative Intent mapping and material gate
 
-The current official Intent catalogue identifies the shared Intent as
-`SECURITY_REVIEW`; FALSUM's historical Anjoman material and request evidence
-use `SECURITY_REVIEW_GENERAL`. This package therefore treats the exact alias
-or pipeline compatibility as **not independently verified** until Telegraph
-confirms the mapping. It does not silently relabel one as the other.
+The official [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96)
+and the current [INTENTS.md catalogue](https://github.com/telegraphprotocol/bounties/blob/main/docs/INTENTS.md)
+explicitly map the child Intent `SECURITY_REVIEW_GENERAL` to the judgment
+family `SECURITY_REVIEW`, whose adapter is registered at the family level.
+The catalogue defines the response shape as `verdict`,
+`vulnerability_count`, `issues`, and `summary`, and lists question-pair
+material with an adapter on `SECURITY_REVIEW`.
+
+This resolves the former naming/family mapping gap. It does **not** establish
+maintainer acceptance of FALSUM's contribution, live adapter registration, or
+that the network is currently using these rows for ranking.
+
+The official [evaluation-material requirements](https://anjoman.ai/docs/scoring/contribute-evaluation-data)
+say that judgment material is question/better-answer/worse-answer data;
+`eligible` means the row is in a frozen snapshot and is usable by the network.
+Question material needs at least five contributors before an Intent's pool is
+used, and row content is never returned by the public status endpoint. Bounty
+#96 separately states that an individual contributor's part counts once their
+rows are `eligible`, while maintainer approval and network use are separate
+decisions.
+
+FALSUM's current read-only status is **20/20 eligible rows** for the
+operator-reported Privy address. That satisfies the individual contribution
+gate evidenced by #96, but it does not prove the five-contributor pool gate,
+active-snapshot use, maintainer acceptance, cryptographic ownership, or live
+adapter registration.
 
 FALSUM's strongest eligible shape is evaluation material: source-authenticated
 reference checks, version-boundary logic, response-integrity controls, a

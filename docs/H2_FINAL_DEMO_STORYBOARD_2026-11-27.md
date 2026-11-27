@@ -71,9 +71,9 @@ signer, payment, deposit, or transaction is used in this demo.
 
 Show the final score page and say:
 
-“The strict Evaluators assessment is 82/100 today under the official
-40/15/10/10/5/20 rubric, with the 28/40 measurement minimum met. The missing
-points are real
+“The strict Evaluators assessment is 90/100 today under the official
+40/15/10/10/5/20 rubric, with 34/40 measurement validity and the 28/40
+technical minimum met. The missing points are real
 external verification, current owner-controlled submission actions, and a
 final recording—not hidden features. FALSUM's claim is deliberately narrow:
 source-authenticated, version-aware, fail-closed evaluation material that a

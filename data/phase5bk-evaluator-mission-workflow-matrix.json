@@ -8,11 +8,17 @@
   },
   "current_official_intent": "SECURITY_REVIEW",
   "historical_material_intent": "SECURITY_REVIEW_GENERAL",
-  "intent_alias_or_protocol_compatibility_verified": false,
+  "intent_alias_or_protocol_compatibility_verified": true,
+  "authoritative_mapping_sources": [
+    "https://github.com/telegraphprotocol/bounties/issues/96",
+    "https://github.com/telegraphprotocol/bounties/blob/main/docs/INTENTS.md"
+  ],
+  "maintainer_acceptance_verified": false,
+  "registered_evaluator_adapter_verified": false,
   "limits": [
     "The test workflows are evaluator-material support, not autonomous Apps & Agents purchases.",
     "Fictional mission-lab scenarios are not used as external customer evidence.",
-    "Official SECURITY_REVIEW and historical SECURITY_REVIEW_GENERAL compatibility remains an external confirmation gap."
+    "Official sources map SECURITY_REVIEW_GENERAL to the SECURITY_REVIEW family; maintainer acceptance and live adapter registration remain separate external decisions."
   ],
   "mission_rows": [
     {
