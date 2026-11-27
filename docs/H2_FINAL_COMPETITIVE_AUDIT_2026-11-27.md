@@ -54,6 +54,8 @@ reproduced by both Phase 5Y and Phase 5Z. It is evaluation material and
 valuable version-aware coverage, not general security accuracy, recall, expert
 gold, network ranking uplift or independent adoption.
 
+Commit `3e1529b` is hosted-verified by the [Phase 5BI scorecard workflow](https://github.com/Iniwura/falsum/actions/runs/45915924410), with all three contract-test Python versions and the live authenticated public-source replay green. The same head passed the [Foundation suite](https://github.com/Iniwura/falsum/actions/runs/45915924271) and [official data gate](https://github.com/Iniwura/falsum/actions/runs/45915924459).
+
 It does not currently have evidence for a 90+/100 outcome. The largest score
 and excellence-award risks are independent reproducibility, proven measurement
 improvement, a registered/usable evaluator contribution, and external adoption.
