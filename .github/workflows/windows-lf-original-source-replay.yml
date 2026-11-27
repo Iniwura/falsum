@@ -35,8 +35,8 @@ jobs:
     env:
       PYTHONPATH: src
       PYTHONDONTWRITEBYTECODE: '1'
-      FALSUM_PHASE5BN_NODE_PATH: ${{ github.workspace }}/.phase5-node/node_modules
-      FALSUM_PHASE5BO_NODE_PATH: ${{ github.workspace }}/.phase5-node/node_modules
+      FALSUM_PHASE5BN_NODE_PATH: ${{ github.workspace }}\.phase5bn-node\node_modules
+      FALSUM_PHASE5BO_NODE_PATH: ${{ github.workspace }}\.phase5bo-node\node_modules
     steps:
       - name: Simulate common Windows Git default BEFORE checkout
         shell: pwsh
@@ -73,11 +73,22 @@ jobs:
             }
           }
       - name: Install exact version-semantic dependencies
-        shell: bash
+        shell: pwsh
         run: |
-          set -euo pipefail
           python -m pip install --disable-pip-version-check --no-deps packaging==26.4
-          npm install --prefix .phase5-node --ignore-scripts --no-audit --no-fund semver@7.8.6
+          $bnRoot = Join-Path $env:GITHUB_WORKSPACE '.phase5bn-node'
+          $boRoot = Join-Path $env:GITHUB_WORKSPACE '.phase5bo-node'
+          npm install --prefix $bnRoot --ignore-scripts --no-audit --no-fund semver@7.8.6
+          npm install --prefix $boRoot --ignore-scripts --no-audit --no-fund semver@7.8.6
+          $bnModules = Join-Path $bnRoot 'node_modules'
+          $boModules = Join-Path $boRoot 'node_modules'
+          $bnVersion = node -e "console.log(require(process.argv[1] + '/semver/package.json').version)" $bnModules
+          $boVersion = node -e "console.log(require(process.argv[1] + '/semver/package.json').version)" $boModules
+          if ($bnVersion.Trim() -ne '7.8.6' -or $boVersion.Trim() -ne '7.8.6') {
+            throw "Pinned semver resolver verification failed: BN=$bnVersion BO=$boVersion"
+          }
+          "FALSUM_PHASE5BN_NODE_PATH=$bnModules" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "FALSUM_PHASE5BO_NODE_PATH=$boModules" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Assert actual disk LF bytes and explicit checkout attributes
         shell: bash
         run: |
