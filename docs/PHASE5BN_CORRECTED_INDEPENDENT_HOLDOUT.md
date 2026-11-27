@@ -57,6 +57,8 @@ python -m unittest discover -s tests -p "test_phase5bn_corrected_independent_hol
 
 The output must match `data/phase5bn-corrected-independent-holdout-result.json`. Hosted CI repeats the registry existence checks on Ubuntu across Python 3.11, 3.12 and 3.13.
 
+The hosted replay passed all three matrix jobs in [run 45949446218](https://github.com/Iniwura/falsum/actions/runs/45949446218).
+
 ## Limits
 
 The experiment uses public advisory and package metadata, not independently adjudicated human labels. It does not prove exploitability, remediation quality, live Telegraph delivery, customer adoption or ranking. ACP remains suspended and no financial transaction is part of this evidence.

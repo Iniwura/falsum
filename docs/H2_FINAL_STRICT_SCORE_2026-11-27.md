@@ -111,7 +111,8 @@ All 48 answer surfaces are target-specific and action-bearing. The adversarial
 suite mutates labels to correlate with case index and answer token and requires
 the computed permutation audit to detect both; the clean protocol reports no
 detected signal at the predeclared alpha. This is version-applicability evidence,
-not human security adjudication.
+not human security adjudication. Hosted CI passed the Python 3.11, 3.12 and
+3.13 matrix in [run 45949446218](https://github.com/Iniwura/falsum/actions/runs/45949446218).
 
 ### Current Anjoman status
 
