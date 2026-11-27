@@ -28,11 +28,17 @@ class PublicAnswerQualityTests(unittest.TestCase):
             {"rule_id": "sql-injection-risk", "recommendation": "Use parameterized queries."},
             {"rule_id": "dynamic-code-execution", "recommendation": "Replace eval with an allow-list."},
         ]}
-        evidence = [{"excerpt": code.split("\n")[0]}, {"excerpt": "res.send(String(eval(req.body.expr)));"}]
+        evidence = [
+            {"excerpt": code.split("\n")[0], "metadata": {"rule_id": "sql-injection-risk"}, "source_id": "fixture:sql"},
+            {"excerpt": "res.send(String(eval(req.body.expr)));", "metadata": {"rule_id": "dynamic-code-execution"}, "source_id": "fixture:eval"},
+        ]
         row = raw_capture(code, answer, evidence=evidence, uncertainty=[{"code": "static"}])
         gate = row["comparisons"]["falsum_source_bound"]
         self.assertEqual(gate["action"], "BLOCK_OR_REMEDIATE")
         self.assertEqual(gate["quality_checks"], gate["quality_denominator"])
+        self.assertTrue(gate["individual_finding_bindings"])
+        self.assertEqual(gate["binding_mode"], "structured_finding_fields")
+        self.assertTrue(all(binding["binding_valid"] for binding in row["answer_claims"]["finding_bindings"]))
 
     def test_missing_action_does_not_become_a_block(self):
         code = "exec('ping -c 1 ' + req.query.host)"
@@ -48,7 +54,31 @@ class PublicAnswerQualityTests(unittest.TestCase):
         row = raw_capture(code, answer, evidence=[{"excerpt": "exec(req.query.host)"}], uncertainty=[{"code": "static"}])
         gate = row["comparisons"]["falsum_source_bound"]
         self.assertFalse(gate["checks"]["target_bound_evidence"])
+        self.assertFalse(gate["individual_finding_bindings"])
         self.assertEqual(gate["action"], "HOLD_FOR_REVIEW")
+
+    def test_each_structured_finding_requires_its_own_evidence_and_recommendation(self):
+        code = "const rows = await db.query(\"SELECT * FROM users WHERE id = '\" + req.query.id + \"'\");\nres.send(String(eval(req.body.expr)));"
+        answer = {"findings": [
+            {"rule_id": "sql-injection-risk", "recommendation": "Use parameterized queries."},
+            {"rule_id": "dynamic-code-execution", "recommendation": "Replace eval with an allow-list."},
+        ]}
+        evidence = [{"excerpt": code.split("\n")[0], "metadata": {"rule_id": "sql-injection-risk"}}]
+        row = raw_capture(code, answer, evidence=evidence, uncertainty=[{"code": "static"}])
+        gate = row["comparisons"]["falsum_source_bound"]
+        self.assertFalse(gate["checks"]["target_bound_evidence"])
+        self.assertFalse(gate["checks"]["action_or_uncertainty_complete"])
+        self.assertFalse(gate["individual_finding_bindings"])
+        bindings = {item["rule_id"]: item for item in row["answer_claims"]["finding_bindings"]}
+        self.assertTrue(bindings["sql-injection-risk"]["binding_valid"])
+        self.assertFalse(bindings["dynamic-code-execution"]["binding_valid"])
+
+    def test_natural_language_claims_are_not_upgraded_to_structured_bindings(self):
+        code = "exec('ping -c 1 ' + req.query.host)"
+        answer = "Verdict: vulnerable; exec('ping -c 1 ' + req.query.host) permits command injection. Use validation."
+        row = raw_capture(code, answer, verdict="vulnerable")
+        self.assertEqual(row["answer_claims"]["finding_binding_mode"], "natural_language_exact_evidence_only")
+        self.assertFalse(row["comparisons"]["falsum_source_bound"]["individual_finding_bindings"])
 
     def test_clean_free_text_without_uncertainty_is_not_security_clearance(self):
         code = "db.query(\"SELECT * FROM users WHERE id = $1\", [req.params.id])"

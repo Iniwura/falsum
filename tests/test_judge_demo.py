@@ -22,7 +22,7 @@ class JudgeDemoTests(unittest.TestCase):
         try:
             def forged(root, relative):
                 value = original(root, relative)
-                if relative.endswith("phase5bp-public-answer-quality-result.json"):
+                if relative.endswith("phase5bp-public-answer-quality-result-v2.json"):
                     value = deepcopy(value)
                     value["status"] = "FABRICATED"
                 return value

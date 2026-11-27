@@ -23,10 +23,17 @@ is a reproducible pattern oracle, not human AppSec gold.
 For each provider answer, FALSUM checks:
 
 1. evidence excerpts are exact substrings of the requested code;
-2. claimed rule IDs cover the source-derived rules without extras;
-3. each risky claim has a remediation recommendation, or a clean/empty result
+2. structured findings bind each individual `rule_id` to evidence whose
+   metadata names that same rule and to that finding's own recommendation;
+3. claimed rule IDs cover the source-derived rules without extras;
+4. each risky claim has a remediation recommendation, or a clean/empty result
    carries an explicit bounded-review uncertainty statement; and
-4. the answer exposes a scope boundary.
+5. the answer exposes a scope boundary.
+
+Natural-language answers are evaluated separately: exact code excerpts and
+remediation language can support bounded heuristics, but they are explicitly
+reported as `natural_language_exact_evidence_only` and never upgraded into
+structured per-finding bindings.
 
 The controls are deliberately weaker: verdict-only and finding-presence-only
 actions are reported without source-bound evidence or remediation checks.
@@ -52,6 +59,11 @@ This result is not a claim of human security accuracy, independent adoption,
 Telegraph ranking improvement, settlement, customer activity or ACP execution.
 It is useful evidence that FALSUM distinguishes complete, target-bound
 security actions from confident but incomplete answer surfaces.
+
+The corrected companion artifact is
+[`data/phase5bp-public-answer-quality-result-v2.json`](../data/phase5bp-public-answer-quality-result-v2.json).
+The original result remains unchanged; V2 adds the explicit per-finding binding
+records and binding mode without changing the aggregate score.
 
 ## Reproduction
 

@@ -160,10 +160,21 @@ def _extract_claims(result: Mapping[str, Any], code: str) -> dict[str, Any]:
             claimed.add(EVAL_RULE)
 
     evidence = result.get("evidence") if isinstance(result.get("evidence"), list) else []
-    exact_evidence = []
+    evidence_records: list[dict[str, Any]] = []
+    exact_evidence: list[bool] = []
     for row in evidence:
-        if isinstance(row, dict) and isinstance(row.get("excerpt"), str):
-            exact_evidence.append(row["excerpt"] in code)
+        if not isinstance(row, dict) or not isinstance(row.get("excerpt"), str):
+            continue
+        metadata = row.get("metadata") if isinstance(row.get("metadata"), dict) else {}
+        excerpt = row["excerpt"]
+        exact = excerpt in code
+        exact_evidence.append(exact)
+        evidence_records.append({
+            "source_id": row.get("source_id") if isinstance(row.get("source_id"), str) else None,
+            "rule_id": metadata.get("rule_id") if isinstance(metadata.get("rule_id"), str) else None,
+            "excerpt_sha256": hashlib.sha256(excerpt.encode("utf-8")).hexdigest(),
+            "matches_target": exact,
+        })
     if not structured:
         # Free-text captures may quote the risky sink instead of returning a
         # structured evidence list; only exact target substrings count.
@@ -178,6 +189,40 @@ def _extract_claims(result: Mapping[str, Any], code: str) -> dict[str, Any]:
     uncertainty = result.get("uncertainty") if isinstance(result.get("uncertainty"), list) else []
     uncertainty_text = " ".join(str(row) for row in uncertainty)
     uncertainty_present = bool(uncertainty) or bool(_UNCERTAINTY.search(text))
+    finding_bindings: list[dict[str, Any]] = []
+    if structured:
+        for index, finding in enumerate(findings):
+            if not isinstance(finding, dict) or not isinstance(finding.get("rule_id"), str):
+                continue
+            rule_id = finding["rule_id"]
+            matching_evidence = [row for row in evidence_records if row["rule_id"] == rule_id]
+            recommendation = finding.get("recommendation")
+            recommendation_present = isinstance(recommendation, str) and bool(recommendation.strip())
+            finding_bindings.append({
+                "finding_index": index,
+                "rule_id": rule_id,
+                "evidence": {
+                    "source_ids": [row["source_id"] for row in matching_evidence if row["source_id"]],
+                    "matching_source_count": sum(row["matches_target"] for row in matching_evidence),
+                    "matches_target": any(row["matches_target"] for row in matching_evidence),
+                },
+                "recommendation": {"present": recommendation_present},
+                "binding_valid": any(row["matches_target"] for row in matching_evidence) and recommendation_present,
+            })
+    else:
+        # A natural-language answer can be checked for exact target excerpts,
+        # but it has no explicit finding-to-evidence-to-remediation linkage.
+        # Keep that limitation visible rather than upgrading a text heuristic
+        # into structured binding evidence.
+        finding_bindings = [{
+            "finding_index": None,
+            "rule_id": rule_id,
+            "evidence": {"matches_target": False, "matching_source_count": 0, "source_ids": []},
+            "recommendation": {"present": False},
+            "binding_valid": False,
+            "binding_unavailable_reason": "natural_language_answer_has_no_explicit_finding_binding",
+        } for rule_id in sorted(claimed)]
+    all_claimed_findings_bound = all(binding["binding_valid"] for binding in finding_bindings)
     return {
         "surface": "structured" if structured else "free_text",
         "verdict": result.get("verdict") if isinstance(result.get("verdict"), str) else None,
@@ -186,6 +231,9 @@ def _extract_claims(result: Mapping[str, Any], code: str) -> dict[str, Any]:
         "exact_target_evidence_count": sum(exact_evidence),
         "evidence_count": len(exact_evidence),
         "recommendation_count": sum(recommendations),
+        "finding_bindings": finding_bindings,
+        "all_claimed_findings_bound": all_claimed_findings_bound,
+        "finding_binding_mode": "structured_finding_fields" if structured else "natural_language_exact_evidence_only",
         "uncertainty_present": uncertainty_present,
         "text_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
         "target_code_sha256": hashlib.sha256(code.encode("utf-8")).hexdigest(),
@@ -205,12 +253,31 @@ def _provider_capture(path: str, expected_blob: str, raw: bytes) -> dict[str, An
     reference_rules = _reference_rules(code)
     claims = _extract_claims(result, code)
     claimed_rules = frozenset(claims["claimed_rules"])
+    bindings_by_rule = {
+        binding["rule_id"]: binding
+        for binding in claims["finding_bindings"]
+        if isinstance(binding.get("rule_id"), str)
+    }
+    structured_target_bound = bool(reference_rules) and all(
+        rule_id in bindings_by_rule and bindings_by_rule[rule_id]["evidence"]["matches_target"]
+        for rule_id in reference_rules
+    )
     target_bound = (not reference_rules and claims["surface"] == "structured") or (
-        bool(reference_rules) and claims["exact_target_evidence_count"] >= len(reference_rules)
+        bool(reference_rules) and (
+            structured_target_bound if claims["surface"] == "structured"
+            else claims["exact_target_evidence_count"] >= len(reference_rules)
+        )
     )
     claims_match = claimed_rules == reference_rules
+    structured_remediation_complete = bool(reference_rules) and all(
+        rule_id in bindings_by_rule and bindings_by_rule[rule_id]["binding_valid"]
+        for rule_id in reference_rules
+    )
     remediation_complete = (not reference_rules and claims["uncertainty_present"]) or (
-        bool(reference_rules) and claims["recommendation_count"] >= len(reference_rules)
+        bool(reference_rules) and (
+            structured_remediation_complete if claims["surface"] == "structured"
+            else claims["recommendation_count"] >= len(reference_rules)
+        )
     )
     scoped = claims["surface"] == "structured" and claims["uncertainty_present"]
     quality_checks = {
@@ -242,7 +309,9 @@ def _provider_capture(path: str, expected_blob: str, raw: bytes) -> dict[str, An
             "finding_presence_only": {"action": finding_action, "quality_checks": 0},
             "falsum_source_bound": {"action": falsum_action, "quality_checks": quality_passed,
                                     "quality_denominator": len(quality_checks),
-                                    "checks": quality_checks},
+                                    "checks": quality_checks,
+                                    "individual_finding_bindings": claims["all_claimed_findings_bound"],
+                                    "binding_mode": claims["finding_binding_mode"]},
         },
         "provider_capture": {
             "paid_http200_structure_verified": capture.get("paid") is True and capture.get("status") == 200,

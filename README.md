@@ -55,6 +55,10 @@ Run `PYTHONPATH=src python -m falsum.cli judge-demo` for one concise, no-network
 
 ## Solana / Anchor evaluation coverage
 
+The current Anjoman candidate work is the V2, exact-schema, generated/unverified
+packet described in [PHASE5BQ_ANJOMAN_PAIR_PREPARATION.md](docs/PHASE5BQ_ANJOMAN_PAIR_PREPARATION.md);
+it remains explicitly not submitted.
+
 [Verified Solana Anchor advisory material](docs/PHASE5AU_SOLANA_ANCHOR_EVIDENCE.md) authenticates three original Git sources and matches all 12 constructed target/version queries versus three for a citation-only baseline. [Original-source CI](https://github.com/Iniwura/falsum/actions/runs/45489641572) passed. A correct range-aware baseline would be equivalent. No model accuracy or Solana deployment claim. [Original upstream Rust runtime replay](https://github.com/Iniwura/falsum/actions/runs/45490186795) separately confirmed four fixed-revision passes and exactly one expected affected-revision assertion failure, with the three remaining controls passing. [Reproduce](docs/PHASE5AV_SOLANA_ANCHOR_RUNTIME.md).
 
 ## ACP provider integration — read-only verified, prepare-only runtime

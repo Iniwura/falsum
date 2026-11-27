@@ -179,6 +179,7 @@ def main(argv: list[str] | None = None) -> int:
         help="prepare deduplicated source-backed Anjoman pair candidates; never submits or claims eligibility",
     )
     anjoman_pairs.add_argument("--out", type=Path, required=True)
+    anjoman_pairs.add_argument("--jsonl-out", type=Path, help="write the exact unsigned Anjoman JSONL preview")
     judge_demo = commands.add_parser(
         "judge-demo",
         help="print one concise judge-facing route from committed evidence; no network or transaction",
@@ -324,7 +325,10 @@ def main(argv: list[str] | None = None) -> int:
             return public_answer_quality_main(["--out", str(args.out)])
         if args.command == "prepare-anjoman-pairs":
             from .phase5bq_anjoman_pair_preparation import main as anjoman_pairs_main
-            return anjoman_pairs_main(["--out", str(args.out)])
+            command = ["--out", str(args.out)]
+            if args.jsonl_out is not None:
+                command.extend(["--jsonl-out", str(args.jsonl_out)])
+            return anjoman_pairs_main(command)
         if args.command == "judge-demo":
             from .judge_demo import main as judge_demo_main
             argv = [] if args.out is None else ["--out", str(args.out)]

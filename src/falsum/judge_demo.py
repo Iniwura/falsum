@@ -30,16 +30,18 @@ def _read(root: Path, relative: str) -> dict[str, Any]:
 
 
 def build(root: Path = ROOT) -> dict[str, Any]:
-    answer = _read(root, "data/phase5bp-public-answer-quality-result.json")
+    answer = _read(root, "data/phase5bp-public-answer-quality-result-v2.json")
     semantics = _read(root, "data/phase5bo-ecosystem-semantics-result.json")
     missions = _read(root, "data/phase5bk-evaluator-mission-workflow-matrix.json")
-    pairs = _read(root, "data/phase5bq-anjoman-pair-candidate-packet.json")
+    pairs = _read(root, "data/phase5bq-anjoman-pair-candidate-packet-v2.json")
 
     need(answer.get("status") == "PHASE5BP_PUBLIC_PROVIDER_ANSWER_QUALITY_AUDIT", "public answer evidence status changed")
     need(semantics.get("status") == "PHASE5BO_ECOSYSTEM_SEMANTICS_AUDIT", "ecosystem evidence status changed")
     need(missions.get("aggregate", {}).get("distinct_official_missions_with_repeatable_supporting_tests") == 2,
          "mission evidence count changed")
-    need(pairs.get("candidate_pair_count") == 14 and pairs.get("quality_gate_passed") is True
+    need(pairs.get("schema_version") == 2
+         and pairs.get("intent") == "SECURITY_REVIEW_GENERAL"
+         and pairs.get("candidate_pair_count") == 14 and pairs.get("quality_gate_passed") is True
          and pairs.get("submission_state") == "OWNER_REVIEW_REQUIRED_NOT_SUBMITTED",
          "pair preparation is not a non-submitted quality-gated packet")
 
@@ -80,6 +82,8 @@ def build(root: Path = ROOT) -> dict[str, Any]:
             "candidate_pairs": pairs["candidate_pair_count"],
             "quality_gate_passed": pairs["quality_gate_passed"],
             "submission_state": pairs["submission_state"],
+            "intent": pairs["intent"],
+            "upload_preview": "data/phase5bq-anjoman-upload-preview-v2.jsonl",
         },
         "limits": [
             "No human AppSec gold, independent customer adoption, live evaluator registration or ranking change is claimed.",
