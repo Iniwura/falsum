@@ -1,5 +1,17 @@
 # FALSUM
 
+## Final Evaluators route — 27 November 2026
+
+Use the [final judge experience](docs/H2_FINAL_JUDGE_EXPERIENCE_2026-11-27.md),
+then the [strict score and gap audit](docs/H2_FINAL_STRICT_SCORE_2026-11-27.md)
+and [submission package](docs/H2_FINAL_SUBMISSION_PACKAGE_2026-11-27.md).
+The fresh public-provider holdout is reproducible with no wallet, token or
+payment: it authenticates a frozen Django 3.2.0 capture and a zero-reference
+lodash 4.18.1 capture selected before response inspection. The current strict
+internal score is **56/100**, not an organizer score; independent adoption,
+expert AppSec gold, current paid execution and final owner-controlled form
+actions remain unverified.
+
 ## Start here: a five-minute reproducible judge route
 
 **[Open the FALSUM judge guide](docs/H2_NOV24_JUDGE_START.md)** to see the live original-source witness, reproduce the no-key independent reviewer workflow, test an authenticated Axios/Rack advisory decision, and inspect the actual failed-model baseline. The guide separates verified evidence from constructed test inputs and lists the remaining Season II submission obligations. The [latest measured application comparison](docs/PHASE5AK_EXTERNAL_LABEL_BASELINES.md) covers 129 externally labeled contracts and 202 historical purchase records. FALSUM avoids eight count-only vulnerable-label PASS predictions but ties verdict-only. Explore the [live application evidence](https://falsum-evidence-lab.vercel.app/applications/). [Public Gig Guard source-maintainer review](https://github.com/Iniwura/falsum/issues/97#issuecomment-7126424685) confirmed the historical counts and clarified the pre-request input-limit holds; the [implemented coverage taxonomy](docs/PHASE5AN_MAINTAINER_COVERAGE_TAXONOMY.md) passed all three Python versions. [Truvian Shield maintainer's public memo verification](https://github.com/Iniwura/falsum/issues/97#issuecomment-7132041935) confirmed two parsed responses; the [portable response-integrity gate](docs/PHASE5AR_TRUVIAN_RESPONSE_INTEGRITY_GATE.md) reduced unsupported clean candidates from 3/3 (verdict-only) to 0/3 on the three documented missing-code fixtures. The full 129-case comparison still ties verdict-only. [Public growth evidence and dated updates](docs/H2_VERIFIED_GROWTH_EVIDENCE.md). Production checkpoint `52fc6557` READY; official entry **not submitted**.

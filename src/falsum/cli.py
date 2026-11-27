@@ -137,6 +137,11 @@ def main(argv: list[str] | None = None) -> int:
         help="run the source-authenticated Phase 5Y/5Z bounded measurement scorecard; not model accuracy or network ranking",
     )
     measurement.add_argument("--out", type=Path, required=True)
+    fresh_holdout = commands.add_parser(
+        "audit-fresh-provider-holdout",
+        help="run the frozen public-provider holdout against FALSUM and an independent version-aware baseline",
+    )
+    fresh_holdout.add_argument("--out", type=Path, required=True)
     consume = commands.add_parser(
         "audit-telegraph-consumption",
         help="strict original source-bound application allow/deny policy; two authentic real paid captures and 24 constructed tests, not network scoring",
@@ -252,6 +257,9 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "audit-evaluator-measurement":
             from .phase5bi_measurement_scorecard import main as measurement_main
             return measurement_main(["--out", str(args.out)])
+        if args.command == "audit-fresh-provider-holdout":
+            from .phase5bj_fresh_provider_holdout import main as fresh_holdout_main
+            return fresh_holdout_main(["--out", str(args.out)])
         if args.command == "audit-telegraph-consumption":
             from .phase5t_application_consumption import main as consume_main
             cmd=["--out",str(args.out)]

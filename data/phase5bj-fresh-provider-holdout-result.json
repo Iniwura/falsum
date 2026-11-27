@@ -1,0 +1,638 @@
+{
+  "aggregate": {
+    "baseline_fail_closed_count": 39,
+    "falsum_baseline_disagreement_count": 0,
+    "falsum_fail_closed_count": 39,
+    "reported_reference_count": 66,
+    "source_applicable_reference_count": 27,
+    "source_inapplicable_reference_count": 0,
+    "source_resolved_reference_count": 38,
+    "source_uncertain_or_unknown_count": 39,
+    "unique_reference_count": 66
+  },
+  "captures": [
+    {
+      "baseline_counts": {
+        "APPLICABLE": 27,
+        "INAPPLICABLE": 0,
+        "UNKNOWN_OR_INSUFFICIENT": 39
+      },
+      "decisions": [
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-2gwj-7jmv-h26r",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-2gwj-7jmv-h26r",
+          "source_blob_sha1": "45661d47b8b72e19b70243f5c4839d5957895180",
+          "source_path": "advisories/github-reviewed/2022/04/GHSA-2gwj-7jmv-h26r/GHSA-2gwj-7jmv-h26r.json"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": "GHSA-2hrw-hx67-34x6",
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-2hrw-hx67-34x6",
+          "source_blob_sha1": "9612d1f713af0eefae127155baac02553f03cef6",
+          "source_path": "advisories/github-reviewed/2023/02/GHSA-2hrw-hx67-34x6/GHSA-2hrw-hx67-34x6.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-3h9f-r86x-qvjx",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-3h9f-r86x-qvjx",
+          "source_blob_sha1": "b7c6f533f26e6f3869f1b31f008ba3f97a491d5c",
+          "source_path": "advisories/github-reviewed/2026/07/GHSA-3h9f-r86x-qvjx/GHSA-3h9f-r86x-qvjx.json"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": "GHSA-53qw-q765-4fww",
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-53qw-q765-4fww",
+          "source_blob_sha1": "b5735326f8fd48f3ccd43389998c87553d60334f",
+          "source_path": "advisories/github-reviewed/2022/01/GHSA-53qw-q765-4fww/GHSA-53qw-q765-4fww.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-68w8-qjq3-2gfm",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-68w8-qjq3-2gfm",
+          "source_blob_sha1": "ac15ab00991f9cf21d264e8f08a4409da6630749",
+          "source_path": "advisories/github-reviewed/2021/06/GHSA-68w8-qjq3-2gfm/GHSA-68w8-qjq3-2gfm.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-6cw3-g6wv-c2xv",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-6cw3-g6wv-c2xv",
+          "source_blob_sha1": "e398c781b2d573c69a2e088cb89fa3eaf7e7e75a",
+          "source_path": "advisories/github-reviewed/2022/02/GHSA-6cw3-g6wv-c2xv/GHSA-6cw3-g6wv-c2xv.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-6w2r-r2m5-xq5w",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-6w2r-r2m5-xq5w",
+          "source_blob_sha1": "bbd655506e78540fcb6c690621981c2c2cd74342",
+          "source_path": "advisories/github-reviewed/2025/09/GHSA-6w2r-r2m5-xq5w/GHSA-6w2r-r2m5-xq5w.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-7h4p-27mh-hmrw",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-7h4p-27mh-hmrw",
+          "source_blob_sha1": "ba19ef1dbbbb620f01520904a1ffe7a784098cf1",
+          "source_path": "advisories/github-reviewed/2023/11/GHSA-7h4p-27mh-hmrw/GHSA-7h4p-27mh-hmrw.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-7xr5-9hcq-chf9",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-7xr5-9hcq-chf9",
+          "source_blob_sha1": "ace1e167d4a438cdb462671efaf6304f1096d771",
+          "source_path": "advisories/github-reviewed/2025/06/GHSA-7xr5-9hcq-chf9/GHSA-7xr5-9hcq-chf9.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-8c5j-9r9f-c6w8",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-8c5j-9r9f-c6w8",
+          "source_blob_sha1": "4af8a84edb090a94b16bfae68dd56ea98e9f916a",
+          "source_path": "advisories/github-reviewed/2022/01/GHSA-8c5j-9r9f-c6w8/GHSA-8c5j-9r9f-c6w8.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-8cjm-8mp7-r2xf",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-8cjm-8mp7-r2xf",
+          "source_blob_sha1": "39a931c70fffdffd8d2416f22f5568d8e8b49b87",
+          "source_path": "advisories/github-reviewed/2026/06/GHSA-8cjm-8mp7-r2xf/GHSA-8cjm-8mp7-r2xf.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-8qcx-xf44-272x",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-8qcx-xf44-272x",
+          "source_blob_sha1": "50130cb55e76028171ee2f375b0db04a5053599e",
+          "source_path": "advisories/github-reviewed/2026/07/GHSA-8qcx-xf44-272x/GHSA-8qcx-xf44-272x.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-8x94-hmjh-97hq",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-8x94-hmjh-97hq",
+          "source_blob_sha1": "e23da87f89bb88547f3f9279fa3ff6955c6b8fa5",
+          "source_path": "advisories/github-reviewed/2022/08/GHSA-8x94-hmjh-97hq/GHSA-8x94-hmjh-97hq.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-923m-gv2p-w5qp",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-923m-gv2p-w5qp",
+          "source_blob_sha1": "795b581967cfc621a6697800534940bdfb12fb1a",
+          "source_path": "advisories/github-reviewed/2026/06/GHSA-923m-gv2p-w5qp/GHSA-923m-gv2p-w5qp.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-95rw-fx8r-36v6",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-95rw-fx8r-36v6",
+          "source_blob_sha1": "0e34a138f559c929e8ad71f1836e7282e683379d",
+          "source_path": "advisories/github-reviewed/2022/02/GHSA-95rw-fx8r-36v6/GHSA-95rw-fx8r-36v6.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-crhf-3pfg-w68w",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-crhf-3pfg-w68w",
+          "source_blob_sha1": "b3d43fb9f51466c57315b327b7951950379f7780",
+          "source_path": "advisories/github-reviewed/2026/07/GHSA-crhf-3pfg-w68w/GHSA-crhf-3pfg-w68w.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-frmv-pr5f-9mcr",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-frmv-pr5f-9mcr",
+          "source_blob_sha1": "75ff6c28c0f4b5be387213bfebfe57c2f30ce676",
+          "source_path": "advisories/github-reviewed/2025/11/GHSA-frmv-pr5f-9mcr/GHSA-frmv-pr5f-9mcr.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-h7pc-vwp9-298g",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-h7pc-vwp9-298g",
+          "source_blob_sha1": "f6045e098948be553ab22f8104c3bd973284b142",
+          "source_path": "advisories/github-reviewed/2026/06/GHSA-h7pc-vwp9-298g/GHSA-h7pc-vwp9-298g.json"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": "GHSA-h8gc-pgj2-vjm3",
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-h8gc-pgj2-vjm3",
+          "source_blob_sha1": "562e1289bfbe10b0aeb27e61ea92bc7389aed97c",
+          "source_path": "advisories/github-reviewed/2023/11/GHSA-h8gc-pgj2-vjm3/GHSA-h8gc-pgj2-vjm3.json"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": "GHSA-jh3w-4vvf-mjgr",
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-jh3w-4vvf-mjgr",
+          "source_blob_sha1": "c891f5443a7f717636e9fc3294e45be9b4c65420",
+          "source_path": "advisories/github-reviewed/2023/07/GHSA-jh3w-4vvf-mjgr/GHSA-jh3w-4vvf-mjgr.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-jrh2-hc4r-7jwx",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-jrh2-hc4r-7jwx",
+          "source_blob_sha1": "379b580ad8302314d5efbf83d8b597da497e4045",
+          "source_path": "advisories/github-reviewed/2022/01/GHSA-jrh2-hc4r-7jwx/GHSA-jrh2-hc4r-7jwx.json"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": "GHSA-p64x-8rxx-wf6q",
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-p64x-8rxx-wf6q",
+          "source_blob_sha1": "79bdf3852935d283544ebc42cf65f2c8595e5112",
+          "source_path": "advisories/github-reviewed/2022/07/GHSA-p64x-8rxx-wf6q/GHSA-p64x-8rxx-wf6q.json"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": "GHSA-p99v-5w3c-jqq9",
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-p99v-5w3c-jqq9",
+          "source_blob_sha1": "04aa72396ad707dafa6c2cea8fa5d5ee74e60fa2",
+          "source_path": "advisories/github-reviewed/2021/06/GHSA-p99v-5w3c-jqq9/GHSA-p99v-5w3c-jqq9.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-q238-5cxm-5c9h",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-q238-5cxm-5c9h",
+          "source_blob_sha1": "642dd9cb74d6c450c547d68f57e70755b419ffd5",
+          "source_path": "advisories/github-reviewed/2026/08/GHSA-q238-5cxm-5c9h/GHSA-q238-5cxm-5c9h.json"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": "GHSA-q2jf-h9jm-m7p4",
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-q2jf-h9jm-m7p4",
+          "source_blob_sha1": "995a9c1948b98d2c70ad89b88a5c588e53520b2c",
+          "source_path": "advisories/github-reviewed/2023/02/GHSA-q2jf-h9jm-m7p4/GHSA-q2jf-h9jm-m7p4.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-qm57-vhq3-3fwf",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-qm57-vhq3-3fwf",
+          "source_blob_sha1": "473106f8639c755be1f7f12d62b6a19b81246eff",
+          "source_path": "advisories/github-reviewed/2021/06/GHSA-qm57-vhq3-3fwf/GHSA-qm57-vhq3-3fwf.json"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": "GHSA-qmf9-6jqf-j8fq",
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-qmf9-6jqf-j8fq",
+          "source_blob_sha1": "422f6e781ef8886262d1e4f8c2a26ca8bcd150ca",
+          "source_path": "advisories/github-reviewed/2023/11/GHSA-qmf9-6jqf-j8fq/GHSA-qmf9-6jqf-j8fq.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-qrw5-5h28-6cmg",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-qrw5-5h28-6cmg",
+          "source_blob_sha1": "f70a2ba5f84c3cbd6b585f9b8969189c4c7eaa46",
+          "source_path": "advisories/github-reviewed/2022/10/GHSA-qrw5-5h28-6cmg/GHSA-qrw5-5h28-6cmg.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-qw25-v68c-qjf3",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-qw25-v68c-qjf3",
+          "source_blob_sha1": "d0b889ad643de1ed12f32dcb26e58b97fc88d016",
+          "source_path": "advisories/github-reviewed/2025/11/GHSA-qw25-v68c-qjf3/GHSA-qw25-v68c-qjf3.json"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": "GHSA-r3xc-prgr-mg9p",
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-r3xc-prgr-mg9p",
+          "source_blob_sha1": "c13d9150a14e68d57f34917f27a0676b29f87680",
+          "source_path": "advisories/github-reviewed/2023/05/GHSA-r3xc-prgr-mg9p/GHSA-r3xc-prgr-mg9p.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-rrqc-c2jx-6jgv",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-rrqc-c2jx-6jgv",
+          "source_blob_sha1": "114ec369059573e902a04b7765002d1f676e8712",
+          "source_path": "advisories/github-reviewed/2024/10/GHSA-rrqc-c2jx-6jgv/GHSA-rrqc-c2jx-6jgv.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-rxjp-mfm9-w4wr",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-rxjp-mfm9-w4wr",
+          "source_blob_sha1": "ec59353efd6e064f51225594bc22bead1f366d67",
+          "source_path": "advisories/github-reviewed/2021/06/GHSA-rxjp-mfm9-w4wr/GHSA-rxjp-mfm9-w4wr.json"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": "GHSA-v6rh-hp5x-86rv",
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-v6rh-hp5x-86rv",
+          "source_blob_sha1": "92491ca6eb98b6cb09bdac1caf0635fa7cca7573",
+          "source_path": "advisories/github-reviewed/2021/12/GHSA-v6rh-hp5x-86rv/GHSA-v6rh-hp5x-86rv.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-vm8q-m57g-pff3",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-vm8q-m57g-pff3",
+          "source_blob_sha1": "612a412374c90d3945ead4a1d693e92b204de041",
+          "source_path": "advisories/github-reviewed/2024/03/GHSA-vm8q-m57g-pff3/GHSA-vm8q-m57g-pff3.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-w24h-v9qh-8gxj",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-w24h-v9qh-8gxj",
+          "source_blob_sha1": "f44ccb6675a19cf3d66ac92447442af5a4079d36",
+          "source_path": "advisories/github-reviewed/2022/04/GHSA-w24h-v9qh-8gxj/GHSA-w24h-v9qh-8gxj.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-wvqv-fj8w-qmhm",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-wvqv-fj8w-qmhm",
+          "source_blob_sha1": "b71fbea24554f6b4b4fe0ac3f1111de7e40ff655",
+          "source_path": "advisories/github-reviewed/2026/08/GHSA-wvqv-fj8w-qmhm/GHSA-wvqv-fj8w-qmhm.json"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": "GHSA-xpfp-f569-q3p2",
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-xpfp-f569-q3p2",
+          "source_blob_sha1": "c87cc5ae14a72ec71d00aeccb77b56931cedb4c5",
+          "source_path": "advisories/github-reviewed/2021/09/GHSA-xpfp-f569-q3p2/GHSA-xpfp-f569-q3p2.json"
+        },
+        {
+          "baseline": "APPLICABLE",
+          "canonical_ghsa_id": "GHSA-xxj9-f6rv-m3x4",
+          "falsum": "APPLICABLE",
+          "reason": "AUTHENTICATED_SOURCE_INTERVAL_EVALUATED",
+          "reported_identifier": "GHSA-xxj9-f6rv-m3x4",
+          "source_blob_sha1": "d40e098f33decd8f1103da9e5c8fd8dbd104b134",
+          "source_path": "advisories/github-reviewed/2024/02/GHSA-xxj9-f6rv-m3x4/GHSA-xxj9-f6rv-m3x4.json"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2021-109"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2021-439"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2021-7"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2021-8"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2021-98"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2021-99"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2022-1"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2022-19"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2022-190"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2022-191"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2022-2"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2022-20"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2022-213"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2022-245"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2022-3"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2022-304"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2023-100"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2023-12"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2023-13"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2023-222"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2023-225"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2023-226"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2023-61"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2024-28"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2024-47"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2026-1297"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2026-3717"
+        },
+        {
+          "baseline": "UNKNOWN_OR_INSUFFICIENT",
+          "canonical_ghsa_id": null,
+          "falsum": "UNKNOWN_OR_INSUFFICIENT",
+          "reason": "IDENTIFIER_NOT_IN_PINNED_SOURCE_SET",
+          "reported_identifier": "PYSEC-2026-4035"
+        }
+      ],
+      "falsum_baseline_agreement_count": 66,
+      "falsum_baseline_disagreement_count": 0,
+      "falsum_counts": {
+        "APPLICABLE": 27,
+        "INAPPLICABLE": 0,
+        "UNKNOWN_OR_INSUFFICIENT": 39
+      },
+      "miner_id": "190048",
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW/190048-pypi-django-3.2.0-200-paid.json",
+      "provider_blob_sha1": "58959d9239b621cf7adec4ae4bcdf3d01ca2b9f1",
+      "reported_reference_count": 66,
+      "source_resolved_reference_count": 38,
+      "structural_paid_http200": true,
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "django",
+        "version": "3.2.0"
+      },
+      "unique_reference_count": 66,
+      "unknown_or_insufficient_count": 39
+    },
+    {
+      "baseline_counts": {
+        "APPLICABLE": 0,
+        "INAPPLICABLE": 0,
+        "UNKNOWN_OR_INSUFFICIENT": 0
+      },
+      "decisions": [],
+      "falsum_baseline_agreement_count": 0,
+      "falsum_baseline_disagreement_count": 0,
+      "falsum_counts": {
+        "APPLICABLE": 0,
+        "INAPPLICABLE": 0,
+        "UNKNOWN_OR_INSUFFICIENT": 0
+      },
+      "miner_id": "77010",
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW/77010-npm-lodash-4.18.1-200-paid.json",
+      "provider_blob_sha1": "96ab6123b2746ef54e1017dd64f62f9bcaa94b6e",
+      "reported_reference_count": 0,
+      "source_resolved_reference_count": 0,
+      "structural_paid_http200": true,
+      "target": {
+        "ecosystem": "npm",
+        "package": "lodash",
+        "version": "4.18.1"
+      },
+      "unique_reference_count": 0,
+      "unknown_or_insufficient_count": 0
+    }
+  ],
+  "independent_source": {
+    "authenticated_canonical_sources": 38,
+    "commit": "76955defc62d048f8f7cc68bc39a2f6dd1899ebe",
+    "repository": "github/advisory-database"
+  },
+  "interpretation": {
+    "independent_adoption_claimed": false,
+    "measurement_improvement_claimed": false,
+    "new_paid_telegraph_execution": false,
+    "result": "The fresh provider evidence was evaluated without outcome-based reselection; FALSUM was compared with a separate exact-target numeric interval baseline.",
+    "security_clearance_granted": false
+  },
+  "limits": [
+    "This is not human AppSec gold, a blind model holdout, advisory recall, or current-feed completeness.",
+    "A clean lodash response with zero reported advisories is a valid negative observation, not proof of security.",
+    "Provider paid/charged flags are structural fields in a public capture, not independent settlement proof.",
+    "No raw provider response, payment object, receipt, or token is included in this report."
+  ],
+  "protocol": {
+    "git_blob_sha1": "0b51a6b645f38aaeb31ace53e6bbde146a2d3bf6",
+    "path": "data/phase5bj-fresh-provider-holdout-protocol.json"
+  },
+  "provider_source": {
+    "commit": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+    "repository": "anvithagowda098/pr-guard"
+  },
+  "schema_version": 1,
+  "status": "PHASE5BJ_FRESH_PUBLIC_PROVIDER_HOLDOUT_VERSION_AWARE_COMPARISON"
+}

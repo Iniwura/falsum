@@ -1,0 +1,111 @@
+name: Phase 5BJ - frozen fresh public-provider holdout
+
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5bj_fresh_provider_holdout.py'
+      - 'src/falsum/phase4l_external_receipt_evidence.py'
+      - 'src/falsum/phase5m_real_source_sensitive_model.py'
+      - 'src/falsum/cli.py'
+      - 'data/phase5bj-fresh-provider-holdout-protocol.json'
+      - 'tests/test_phase5bj_fresh_provider_holdout.py'
+      - '.github/workflows/phase5bj-fresh-provider-holdout.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5bj_fresh_provider_holdout.py'
+      - 'src/falsum/phase4l_external_receipt_evidence.py'
+      - 'src/falsum/phase5m_real_source_sensitive_model.py'
+      - 'src/falsum/cli.py'
+      - 'data/phase5bj-fresh-provider-holdout-protocol.json'
+      - 'tests/test_phase5bj_fresh_provider_holdout.py'
+      - '.github/workflows/phase5bj-fresh-provider-holdout.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  adversarial-contracts:
+    name: Fresh holdout contracts / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Run frozen holdout contract tests
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5bj_fresh_provider_holdout.py' -v
+          python -m falsum.cli --help | grep -F audit-fresh-provider-holdout
+
+  live-public-replay:
+    name: Replay pinned provider and advisory sources
+    needs: adversarial-contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run source-authenticated fresh-provider holdout
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p phase5bj-evidence
+          python -m falsum.cli audit-fresh-provider-holdout \
+            --out phase5bj-evidence/FRESH-PROVIDER-HOLDOUT.json
+      - name: Assert exact scope, agreement and sensitive-field exclusion
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('phase5bj-evidence/FRESH-PROVIDER-HOLDOUT.json')
+          report=json.loads(path.read_text())
+          assert report['status']=='PHASE5BJ_FRESH_PUBLIC_PROVIDER_HOLDOUT_VERSION_AWARE_COMPARISON'
+          assert report['protocol']['git_blob_sha1']=='0b51a6b645f38aaeb31ace53e6bbde146a2d3bf6'
+          assert report['aggregate']['reported_reference_count']==66
+          assert report['aggregate']['source_resolved_reference_count']==38
+          assert report['aggregate']['source_applicable_reference_count']==27
+          assert report['aggregate']['source_uncertain_or_unknown_count']==39
+          assert report['aggregate']['falsum_baseline_disagreement_count']==0
+          assert report['aggregate']['falsum_fail_closed_count']==39
+          assert report['aggregate']['baseline_fail_closed_count']==39
+          assert report['captures'][1]['reported_reference_count']==0
+          assert report['interpretation']['measurement_improvement_claimed'] is False
+          assert report['interpretation']['independent_adoption_claimed'] is False
+          assert report['interpretation']['security_clearance_granted'] is False
+          raw=path.read_text()
+          for forbidden in ('"body":', '"bodyText":', '"payment":', '"receipt":', '"token":'):
+              assert forbidden not in raw
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'],'a') as summary:
+              summary.write('## Phase 5BJ fresh public-provider holdout\n\n')
+              summary.write('Two preselected public captures were authenticated at immutable Git revisions before body inspection. Django emitted 66 references: 38 canonical sources resolved, 27 applicable, 39 fail-closed unknown/insufficient. Lodash 4.18.1 emitted zero advisories. A separately implemented version-aware baseline agreed on all rows.\n\n')
+              summary.write('This is reproducibility and new coverage evidence, not human AppSec gold, recall, security clearance, independent adoption, or a new paid Telegraph execution. Raw bodies, payment objects, receipts and tokens were excluded.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5bj-fresh-public-provider-holdout
+          path: phase5bj-evidence/
+          retention-days: 90
+          if-no-files-found: error

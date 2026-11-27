@@ -36,6 +36,35 @@ measurement safeguards, not with an unverified ACP transaction.
 | Adoption | Maintainer feedback and public technical discussion are real external validation | No accepted outside integration, independently funded customer, or verified retention | Claim feedback, not adoption |
 | Growth | Dated technical material and useful public explanations exist | Owner-controlled registration, bounties star, showcase permissions, and final form receipt remain unresolved | Complete the owner-controlled submission checklist |
 
+## Phase 5BJ fresh public-provider holdout
+
+The [frozen protocol](../data/phase5bj-fresh-provider-holdout-protocol.json)
+selected two exact paths from public provider-tree metadata before either
+response body was inspected. The [source-authenticated implementation](../src/falsum/phase5bj_fresh_provider_holdout.py)
+then verified the provider Git blobs and the pinned GitHub Advisory Database
+records without returning raw response bodies, payment objects, receipts, or
+tokens.
+
+The unseen Django 3.2.0 response emitted 66 identifiers. Thirty-eight mapped
+to canonical GitHub-reviewed advisory records at the pinned commit; 27 were
+applicable to the exact PyPI target and 39 remained unknown/insufficient and
+were not forced positive. The unseen lodash 4.18.1 response emitted zero
+advisories. An independently implemented numeric version-interval baseline
+agreed with FALSUM on all 66 rows, including explicit abstention behavior.
+
+This adds genuine public-provider coverage and reproducibility. It does not
+claim a fresh accuracy gain, recall, security clearance, human AppSec gold,
+current advisory completeness, customer adoption, ranking improvement, or a
+new paid Telegraph execution. The [contract suite](../tests/test_phase5bj_fresh_provider_holdout.py)
+checks source/target tampering, fixed/last-affected boundaries, unsupported
+ranges, and sensitive-field exclusion. The [hosted workflow](../.github/workflows/phase5bj-fresh-provider-holdout.yml)
+is the authoritative CI path for this study.
+
+The [final judge experience](H2_FINAL_JUDGE_EXPERIENCE_2026-11-27.md) puts this
+fresh coverage beside the prior Phase 5BI bounded 2/12 measurement, with the
+[strict score](H2_FINAL_STRICT_SCORE_2026-11-27.md) and [submission packet](H2_FINAL_SUBMISSION_PACKAGE_2026-11-27.md)
+keeping all owner and external-verification gaps explicit.
+
 ## Competitive conclusion
 
 FALSUM has a credible technical-material entry and a differentiated safety story:
