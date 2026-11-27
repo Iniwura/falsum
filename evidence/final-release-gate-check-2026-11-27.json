@@ -47,7 +47,13 @@
         "actual_secret_material_pattern": false
       }
     ],
-    "local_evidence_links_resolved": true
+    "local_evidence_links_resolved": true,
+    "rendered_browser_visual_check": {
+      "performed": false,
+      "blocked": true,
+      "reason": "The local visual computer-use runtime timed out during initialization and the authorized browser surface returned an OS path error.",
+      "scope_preserved": "HTTP/HTML structural checks are verified; no visual or assistive-technology result is claimed."
+    }
   },
   "preserved_boundaries": {
     "phase5bn_unchanged": true,
