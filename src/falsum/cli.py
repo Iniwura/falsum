@@ -152,6 +152,11 @@ def main(argv: list[str] | None = None) -> int:
         help="cross-check source-bound policy contrasts and fair baselines; not human gold or ranking",
     )
     discrimination.add_argument("--out", type=Path, required=True)
+    balanced_holdout = commands.add_parser(
+        "audit-independent-balanced-holdout",
+        help="run the new balanced OSV/GitHub-reviewed holdout with independent baselines and shortcut audits",
+    )
+    balanced_holdout.add_argument("--out", type=Path, required=True)
     consume = commands.add_parser(
         "audit-telegraph-consumption",
         help="strict original source-bound application allow/deny policy; two authentic real paid captures and 24 constructed tests, not network scoring",
@@ -276,6 +281,9 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "audit-measurement-discrimination":
             from .phase5bl_measurement_discrimination import main as discrimination_main
             return discrimination_main(["--out", str(args.out)])
+        if args.command == "audit-independent-balanced-holdout":
+            from .phase5bm_independent_balanced_holdout import main as balanced_holdout_main
+            return balanced_holdout_main(["--out", str(args.out)])
         if args.command == "audit-telegraph-consumption":
             from .phase5t_application_consumption import main as consume_main
             cmd=["--out",str(args.out)]

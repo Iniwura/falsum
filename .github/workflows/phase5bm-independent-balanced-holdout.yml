@@ -1,0 +1,68 @@
+name: Phase 5BM - independent balanced holdout
+
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5bm_independent_balanced_holdout.py'
+      - 'tests/test_phase5bm_independent_balanced_holdout.py'
+      - 'data/phase5bm-independent-balanced-holdout-protocol.json'
+      - 'data/phase5bm-independent-balanced-holdout-result.json'
+      - '.github/workflows/phase5bm-independent-balanced-holdout.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5bm_independent_balanced_holdout.py'
+      - 'tests/test_phase5bm_independent_balanced_holdout.py'
+      - 'data/phase5bm-independent-balanced-holdout-protocol.json'
+      - 'data/phase5bm-independent-balanced-holdout-result.json'
+      - '.github/workflows/phase5bm-independent-balanced-holdout.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: Verify independent balanced holdout / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Run adversarial contracts and pinned-source audit
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5bm_independent_balanced_holdout.py' -v
+          mkdir -p phase5bm-evidence
+          python -m falsum.cli audit-independent-balanced-holdout \
+            --out phase5bm-evidence/INDEPENDENT-BALANCED-HOLDOUT.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          expected = json.loads(Path('data/phase5bm-independent-balanced-holdout-result.json').read_text())
+          actual = json.loads(Path('phase5bm-evidence/INDEPENDENT-BALANCED-HOLDOUT.json').read_text())
+          assert actual == expected
+          assert actual['balance'] == {'total': 24, 'applicable': 12, 'inapplicable': 12, 'package_families': 6, 'ecosystems': {'PyPI': 12, 'npm': 12}}
+          assert actual['policies']['falsum']['correct'] == 24
+          assert actual['policies']['independent_interval']['correct'] == 24
+          assert actual['policies']['citation_only']['correct'] == 12
+          assert actual['shortcut_audit']['label_leakage_detected'] is False
+          assert actual['interpretation']['falsum_beats_competent_baseline'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5bm-independent-balanced-holdout-${{ matrix.python }}
+          path: phase5bm-evidence/
+          retention-days: 90
+          if-no-files-found: error

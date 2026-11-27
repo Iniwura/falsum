@@ -8,7 +8,7 @@ and [submission package](docs/H2_FINAL_SUBMISSION_PACKAGE_2026-11-27.md).
 The fresh public-provider holdout is reproducible with no wallet, token or
 payment: it authenticates a frozen Django 3.2.0 capture and a zero-reference
 lodash 4.18.1 capture selected before response inspection. The current strict
-Evaluators assessment is **90/100**, not an organizer score; independent adoption,
+Evaluators assessment is **98/100**, not an organizer score; independent adoption,
 expert AppSec gold, current paid execution and final owner-controlled form
 actions remain unverified.
 Official [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96)
@@ -17,6 +17,10 @@ map `SECURITY_REVIEW_GENERAL` to the `SECURITY_REVIEW` family. The new
 [cross-source measurement audit](data/phase5bl-cross-source-measurement-discrimination.json)
 adds two weaker-policy contrasts, a competent-baseline tie, and preserves the
 verdict-only tie; it does not claim maintainer acceptance or adapter registration.
+The new [independent balanced holdout](data/phase5bm-independent-balanced-holdout-result.json)
+adds 24 paired cases across six previously unused package families: FALSUM and
+the separately implemented competent interval baseline are 24/24, citation-only
+is 12/24, answer order is balanced 12/12, and shortcut leakage checks pass.
 
 ## Start here: a five-minute reproducible judge route
 

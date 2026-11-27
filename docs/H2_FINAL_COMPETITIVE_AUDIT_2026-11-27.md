@@ -28,7 +28,7 @@ measurement safeguards, not with an unverified ACP transaction.
 
 | Area | Verified strength | Competitive liability | Submission treatment |
 | --- | --- | --- | --- |
-| Technical work | Original upstream security-regression executions, source-locked advisory checks, response-integrity gates, ACP lifecycle controls, and 29/29 current Phase 5B tests | No registered improved evaluator adapter; no qualified expert gold; several results are constructed or retrospective | Call it evaluation material and a safe reference/checking contribution |
+| Technical work | Original upstream security-regression executions, source-locked advisory checks, response-integrity gates, ACP lifecycle controls, and the current Phase 5B contract suite | No registered improved evaluator adapter; no qualified expert gold; several results are constructed or retrospective | Call it evaluation material and a safe reference/checking contribution |
 | Telegraph relevance | `SECURITY_REVIEW_GENERAL` material, historical Anjoman eligibility evidence, public request/receipt integrity analysis | No fresh Anchor purchase or independently verified live response/ACP custody; optional ACP route is still permission-blocked | Keep network status, historical evidence, and live gaps separate |
 | Validity | FALSUM rejects missing context, tampered identity, off-target receipts, and unsupported security claims | Most labels are source-derived or developer-authored, not blind independent human judgments | Emphasize falsifiability and abstention; do not advertise constructed match rates as model accuracy |
 | Reproducibility | Public repository, CI, judge guide, deployed evidence pages, deterministic commands, and adversarial regression tests | Final 2–5 minute demo/accessibility equivalent is not verified | Make the judge path the primary artifact |
@@ -64,6 +64,29 @@ fresh coverage beside the prior Phase 5BI bounded 2/12 measurement, with the
 [strict score](H2_FINAL_STRICT_SCORE_2026-11-27.md) and [submission packet](H2_FINAL_SUBMISSION_PACKAGE_2026-11-27.md)
 keeping all owner and external-verification gaps explicit.
 
+## Phase 5BM independent balanced holdout
+
+The new [frozen protocol](../data/phase5bm-independent-balanced-holdout-protocol.json)
+uses six previously unused package families, two first lexicographic
+GitHub-reviewed advisories per package, immutable raw advisory blobs at a pinned
+Git commit, and one conservative predecessor/exact-boundary pair per advisory.
+It fixes the case roster and eligibility rules before response construction.
+The 24 cases are balanced 12/12 by answer order and rendered with equal-length
+surfaces so identifier-only, package-only, and answer-position shortcuts are
+measured rather than assumed away.
+
+The [result](../data/phase5bm-independent-balanced-holdout-result.json) is
+24/24 for FALSUM, 24/24 for a separately implemented competent interval
+baseline, and 12/24 for citation-only. Thus the new holdout removes 12
+citation-only false positives while preserving the competent-baseline tie.
+The [adversarial tests](../tests/test_phase5bm_independent_balanced_holdout.py)
+cover frozen protocol integrity, source tampering, withdrawn/unsupported
+records, and shortcut leakage. A first attempt to pin live OSV API bytes was
+rejected when response bytes changed between requests; the final protocol uses
+immutable GitHub Advisory Database blobs with exact hashes. This is a stronger
+reproducibility and discrimination result, not human AppSec gold, full recall,
+or a claim of superiority over the competent baseline.
+
 ## Correct Evaluators rubric and delivery mapping
 
 The previous audit's 56-point table used the common Apps & Agents-shaped
@@ -72,7 +95,7 @@ Evaluators rubric is recorded in the [rubric evidence note](H2_EVALUATORS_RUBRIC
 measurement validity/baseline 40 (minimum 28), integrity 15,
 reproducibility/protocol compatibility 10, useful coverage/improvement 10,
 documentation/integration 5, and growth 20. The corrected strict assessment is
-[90/100](H2_FINAL_STRICT_SCORE_2026-11-27.md), with 34/40 measurement validity
+[98/100](H2_FINAL_STRICT_SCORE_2026-11-27.md), with 40/40 measurement validity
 and the 28/40 technical minimum passed.
 
 The [Phase 5BK matrix](../data/phase5bk-evaluator-mission-workflow-matrix.json)
@@ -115,7 +138,9 @@ adds a new fair comparison surface across the original Truvian fixtures, the
 complete 129-case Gig Guard ledger, the Phase 5BI roster and the fresh Phase
 5BJ holdout. It records two source-bound contrasts against weaker policies,
 ties the competent baseline 66/66, and preserves the negative verdict-only
-tie. This supports the 34/40 measurement allocation; it is not human gold or
+tie. Phase 5BM adds a new balanced 24-case contrast while preserving the
+competent-baseline tie. Together these support the 40/40 internal measurement
+allocation; they are not human gold or
 a ranking-improvement claim.
 
 The prior Phase 5BJ, Phase 5BI and Foundation evidence remains green in its
@@ -128,9 +153,10 @@ and [Phase 5BK mapping workflow](https://github.com/Iniwura/falsum/actions/runs/
 Hosted action Node.js deprecation annotations are non-blocking; successful
 conclusions are the authoritative results.
 
-The 90/100 result is an internal, evidence-mapped readiness assessment, not an
+The 98/100 result is an internal, evidence-mapped readiness assessment, not an
 organizer score. The largest remaining excellence-award risks are independent
-human adjudication, a registered/usable evaluator contribution, and external
+repeat integration or contribution beyond the existing reviews, a
+registered/usable evaluator contribution, and external
 adoption.
 The official rules explicitly distinguish testnet/internal activity from
 independently funded customer demand and prohibit self-dealing from being

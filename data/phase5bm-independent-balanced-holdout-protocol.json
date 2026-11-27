@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5BM_INDEPENDENT_BALANCED_HOLDOUT_FROZEN",
+  "frozen_date_utc": "2026-11-27",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "family": "SECURITY_REVIEW",
+  "dataset": {
+    "name": "OSV vulnerability database records mirrored from GitHub-reviewed advisories",
+    "source_repository": "github/advisory-database",
+    "source_commit": "76955defc62d048f8f7cc68bc39a2f6dd1899ebe",
+    "source_base": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/",
+    "independent_adjudication": "Each selected record has database_specific.github_reviewed=true; the advisory and affected-version ranges were published independently of FALSUM.",
+    "public_dataset_references": [
+      "https://osv.dev/docs/data-sources/",
+      "https://github.com/github/advisory-database"
+    ]
+  },
+  "selection": {
+    "package_roster_frozen_before_record_fetch": [
+      {"ecosystem": "PyPI", "package": "cryptography"},
+      {"ecosystem": "PyPI", "package": "pymongo"},
+      {"ecosystem": "PyPI", "package": "setuptools"},
+      {"ecosystem": "npm", "package": "node-fetch"},
+      {"ecosystem": "npm", "package": "tar"},
+      {"ecosystem": "npm", "package": "tough-cookie"}
+    ],
+    "candidate_rule": "For each fixed package in the roster, retain GitHub-reviewed GHSA records with a numeric introduced/fixed interval; sort identifiers lexicographically and select the first two. No outcome-based case deletion or reselection is permitted.",
+    "prior_roster_exclusion": "No selected GHSA identifier appears in the existing FALSUM frozen source rosters or Phase 5BJ/5BL reports.",
+    "case_construction": "For each selected advisory, use one source-covered predecessor of the first fixed boundary and the exact fixed boundary. The predecessor is APPLICABLE and the fixed version is INAPPLICABLE according to the pinned source range.",
+    "balance": "12 applicable and 12 inapplicable cases; each package contributes two of each; three PyPI and three npm package families are represented."
+  },
+  "records": [
+    {"id": "GHSA-8fvv-fgr5-f8ch", "ecosystem": "PyPI", "package": "pymongo", "path": "advisories/github-reviewed/2026/10/GHSA-8fvv-fgr5-f8ch/GHSA-8fvv-fgr5-f8ch.json", "sha256": "14a961c57c2ae60babd99fc394592467f3a8c73c22deb2dede7753526ed38ea1"},
+    {"id": "GHSA-98qm-wvgf-w4cf", "ecosystem": "PyPI", "package": "pymongo", "path": "advisories/github-reviewed/2026/10/GHSA-98qm-wvgf-w4cf/GHSA-98qm-wvgf-w4cf.json", "sha256": "dd5b7faa0344602f119a22536f7a2c31cd2da4b998529e4ea550cc868d60fa17"},
+    {"id": "GHSA-27x4-j476-jp5f", "ecosystem": "PyPI", "package": "setuptools", "path": "advisories/github-reviewed/2022/05/GHSA-27x4-j476-jp5f/GHSA-27x4-j476-jp5f.json", "sha256": "751cba3a453eb1f60729a51d7ba0d8aaa27c09195c3994f81185763d4e2f0632"},
+    {"id": "GHSA-5rjg-fvgr-3xxf", "ecosystem": "PyPI", "package": "setuptools", "path": "advisories/github-reviewed/2025/05/GHSA-5rjg-fvgr-3xxf/GHSA-5rjg-fvgr-3xxf.json", "sha256": "40a19376a8a1ba8ec5ff9d3ab0f279f7bb13cdbcb2bdfe5aefc3df273ab22490"},
+    {"id": "GHSA-39hc-v87j-747x", "ecosystem": "PyPI", "package": "cryptography", "path": "advisories/github-reviewed/2022/11/GHSA-39hc-v87j-747x/GHSA-39hc-v87j-747x.json", "sha256": "37a0530bc92bc6d5a8536324d25f4e16a57d66d4581c11e38d4a6611944440dd"},
+    {"id": "GHSA-3ww4-gg4f-jr7f", "ecosystem": "PyPI", "package": "cryptography", "path": "advisories/github-reviewed/2024/02/GHSA-3ww4-gg4f-jr7f/GHSA-3ww4-gg4f-jr7f.json", "sha256": "c5d8733879d126ca46a543176d254dc9aa7c24e9b562f6c263afbbe84a236626"},
+    {"id": "GHSA-r683-j2x4-v87g", "ecosystem": "npm", "package": "node-fetch", "path": "advisories/github-reviewed/2022/01/GHSA-r683-j2x4-v87g/GHSA-r683-j2x4-v87g.json", "sha256": "c2d62792518f2ff73c7ea1eba4c25ae80e97a3f120291f8b0d0012c75ba31df5"},
+    {"id": "GHSA-vp56-6g26-6827", "ecosystem": "npm", "package": "node-fetch", "path": "advisories/github-reviewed/2022/08/GHSA-vp56-6g26-6827/GHSA-vp56-6g26-6827.json", "sha256": "1367c6832699db308e29eb0c87af5b2e330b3abd9bde4d675b755034705afb98"},
+    {"id": "GHSA-23hp-3jrh-7fpw", "ecosystem": "npm", "package": "tar", "path": "advisories/github-reviewed/2026/07/GHSA-23hp-3jrh-7fpw/GHSA-23hp-3jrh-7fpw.json", "sha256": "be05813e293e483855db2cd0400f96f7d5bc4ef5a27dc00d4c631dceaae737ca"},
+    {"id": "GHSA-29xp-372q-xqph", "ecosystem": "npm", "package": "tar", "path": "advisories/github-reviewed/2025/10/GHSA-29xp-372q-xqph/GHSA-29xp-372q-xqph.json", "sha256": "6be7751d75e76af22c2c6c340679548905e445953c83444f4e3878b01ce09e56"},
+    {"id": "GHSA-g7q5-pjjr-gqvp", "ecosystem": "npm", "package": "tough-cookie", "path": "advisories/github-reviewed/2018/07/GHSA-g7q5-pjjr-gqvp/GHSA-g7q5-pjjr-gqvp.json", "sha256": "44b7197a122f65846b373f690ed0c1bdb8637a4f66dfe872c761c860a7e0bb3f"},
+    {"id": "GHSA-qhv9-728r-6jqg", "ecosystem": "npm", "package": "tough-cookie", "path": "advisories/github-reviewed/2018/10/GHSA-qhv9-728r-6jqg/GHSA-qhv9-728r-6jqg.json", "sha256": "c3d336bdf236db3f982e18d5e72df422c4873975320e4b3efd8ea12fea72a2d1"}
+  ],
+  "evaluation_contract": {
+    "target_binding": "Only the exact ecosystem, package and version in a generated case may be evaluated.",
+    "falsum_policy": "Fail closed on withdrawn, mismatched, malformed or unsupported advisory evidence; use introduced/fixed/last_affected semantics.",
+    "competent_baseline": "Independently implemented interval parser with the same source facts, exact package binding and explicit abstention on unsupported ranges; it does not call FALSUM helpers.",
+    "weaker_baseline": "Citation-only policy that treats an exact package/advisory identifier as applicable without checking the version interval.",
+    "quality_discrimination": "Compare each policy against the source-derived applicable/inapplicable label and report wins, ties and losses; do not infer exploitability or network ranking.",
+    "shortcut_audits": [
+      "balanced applicable/inapplicable labels",
+      "balanced left/right answer order",
+      "equal-length counterbalanced answer surfaces",
+      "identifier-only and package-only baselines",
+      "package-family leakage check against prior frozen rosters"
+    ]
+  },
+  "limits": [
+    "This is an unseen source-roster holdout for version applicability, not a human semantic AppSec gold set.",
+    "A GitHub-reviewed advisory is an independently published reference record, not proof of exploitability in an arbitrary deployment.",
+    "Agreement with the competent baseline is not a superiority claim.",
+    "No customer adoption, live Telegraph ranking change, maintainer acceptance or registered evaluator is inferred.",
+    "The benchmark is not used to train or tune FALSUM."
+  ]
+}

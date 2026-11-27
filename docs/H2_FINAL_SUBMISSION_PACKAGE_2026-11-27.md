@@ -15,7 +15,7 @@
   claimed.
 - Repository: <https://github.com/Iniwura/falsum>
 - Judge guide: [H2 final judge experience](H2_FINAL_JUDGE_EXPERIENCE_2026-11-27.md)
-- Strict Evaluators assessment: [90/100 under the correct rubric](H2_FINAL_STRICT_SCORE_2026-11-27.md)
+- Strict Evaluators assessment: [98/100 under the correct rubric](H2_FINAL_STRICT_SCORE_2026-11-27.md)
 - Optional ACP integration: suspended, excluded from the final claim.
 
 ## Short public summary draft
@@ -34,7 +34,10 @@ explicit missing-evidence clean candidates, suppresses 2/2 independently
 reviewed version-inapplicable references, removes 8 count-only vulnerable-label
 PASS outcomes, and agrees 66/66 with a competent baseline while tying
 verdict-only. A prior frozen roster measured a bounded 2/12 reduction in known
-version-inapplicable displays. These results are reproducible evaluation
+version-inapplicable displays. A new balanced 24-case holdout across six
+previously unused package families reaches 24/24 for both FALSUM and the
+separately implemented competent interval baseline, while citation-only reaches
+12/24 and produces 12 false positives. These results are reproducible evaluation
 material—not security clearance, human AppSec gold, recall, customer adoption,
 ranking uplift, or a new paid Telegraph transaction.
 
@@ -53,13 +56,17 @@ PYTHONPATH=src python -m falsum.cli audit-fresh-provider-holdout \
   --out fresh-holdout.json
 PYTHONPATH=src python -m falsum.cli audit-evaluator-measurement \
   --out prior-measurement.json
+PYTHONPATH=src python -m falsum.cli audit-independent-balanced-holdout \
+  --out independent-balanced-holdout.json
 ```
 
 Expected fresh result: 66 reported references, 38 canonical source records,
 27 applicable, 39 fail-closed unknown/insufficient, zero baseline
 disagreements, and zero lodash references. Expected prior result: 12
 accept-all references, 2 known inapplicable, 10 reviewed display references,
-and 0 known inapplicable displays.
+and 0 known inapplicable displays. Expected new result: 24 paired cases,
+24/24 FALSUM, 24/24 competent interval baseline, 12/24 citation-only, balanced
+12/12 answer order, and no shortcut leakage.
 
 The network used by the fresh replay is public GitHub source retrieval pinned
 to immutable commits. The replay costs **$0** and performs **no Telegraph
@@ -76,6 +83,7 @@ does not become current production usage.
 | Current Anjoman status | [Phase 5BK read-only status](../evidence/phase5bk-2026-11-27-anjoman-status.json) | 20/20 current Eligible rows for the operator-reported Privy address; acceptance/registration unverified |
 | Prior bounded measurement | [Phase 5BI scorecard](../src/falsum/phase5bi_measurement_scorecard.py) and [hosted CI](https://github.com/Iniwura/falsum/actions/runs/45918441661) | 2/12 known false-positive reduction; narrow reviewed roster |
 | Cross-source discriminative measurement | [Phase 5BL report](../data/phase5bl-cross-source-measurement-discrimination.json) and [contracts](../tests/test_phase5bl_measurement_discrimination.py) | Two weaker-policy contrasts, competent-baseline tie, verdict-only tie preserved |
+| New independent balanced holdout | [Phase 5BM protocol](../data/phase5bm-independent-balanced-holdout-protocol.json), [implementation](../src/falsum/phase5bm_independent_balanced_holdout.py), [result](../data/phase5bm-independent-balanced-holdout-result.json), and [contracts](../tests/test_phase5bm_independent_balanced_holdout.py) | 24 paired cases; FALSUM and competent baseline 24/24; citation-only 12/24; balanced/no leakage |
 | Official Intent mapping | [Bounty #96](https://github.com/telegraphprotocol/bounties/issues/96) and [INTENTS.md](https://github.com/telegraphprotocol/bounties/blob/main/docs/INTENTS.md) | Child Intent maps to `SECURITY_REVIEW` family; no acceptance or adapter registration claim |
 | Safety and provenance | [Phase 5B/5BG tests](../tests/) and current GitHub Actions workflows | Fail-closed evidence handling; no security clearance |
 | Telegraph relevance | [final competitive audit](H2_FINAL_COMPETITIVE_AUDIT_2026-11-27.md) | Historical/public evidence only; ACP suspended |

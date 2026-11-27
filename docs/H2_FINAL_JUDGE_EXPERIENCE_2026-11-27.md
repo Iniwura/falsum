@@ -24,11 +24,15 @@ run the two zero-credential commands in the [submission package](H2_FINAL_SUBMIS
    references suppressed, 8 count-only vulnerable-label PASS outcomes removed,
    and 66/66 agreement with the competent baseline; it preserves the tie with
    verdict-only.
-6. Two distinct official mission workflows have repeatable supporting tests:
+6. The new balanced holdout covers six previously unused package families and
+   24 paired boundary cases: FALSUM and the separately implemented competent
+   interval baseline are 24/24, while citation-only is 12/24. Answer order is
+   balanced 12/12, surfaces are equal-length, and shortcut/leakage checks pass.
+7. Two distinct official mission workflows have repeatable supporting tests:
    Model Economy supply-chain verification and Web3 Native and DeFi
    security/bug-bounty proof. They are not claimed as completed missions or
    independent app consumption.
-7. The project is honest about what remains: no independent customer adoption,
+8. The project is honest about what remains: no independent customer adoption,
    no human AppSec gold, no current paid transaction in this sprint, no
    ranking uplift, and no submitted entry.
 
@@ -50,6 +54,7 @@ minimum](H2_EVALUATORS_RUBRIC_2026-11-27.md), not the Apps & Agents-shaped
 | 8 | [Mission/workflow matrix](../data/phase5bk-evaluator-mission-workflow-matrix.json) | Two repeatable supporting workflows, no inflated delivery claim |
 | 9 | [Current Anjoman status](../evidence/phase5bk-2026-11-27-anjoman-status.json) | 20/20 current Eligible rows for the operator-reported Privy address |
 | 10 | [Cross-source measurement audit](../data/phase5bl-cross-source-measurement-discrimination.json) | Fair contrasts, baseline tie, and preserved negative findings |
+| 11 | [Independent balanced holdout](../data/phase5bm-independent-balanced-holdout-result.json) | 24 paired cases, balanced order, shortcut audit, and citation-only contrast |
 
 ## Claims a judge can safely repeat
 

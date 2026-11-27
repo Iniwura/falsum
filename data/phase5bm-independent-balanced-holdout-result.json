@@ -1,0 +1,466 @@
+{
+  "balance": {
+    "applicable": 12,
+    "ecosystems": {
+      "PyPI": 12,
+      "npm": 12
+    },
+    "inapplicable": 12,
+    "package_families": 6,
+    "total": 24
+  },
+  "cases": [
+    {
+      "advisory_id": "GHSA-8fvv-fgr5-f8ch",
+      "case_id": "ghsa-8fvv-fgr5-f8ch-0",
+      "citation_only": "APPLICABLE",
+      "correct_side": "right",
+      "expected": "APPLICABLE",
+      "falsum": "APPLICABLE",
+      "independent_interval": "APPLICABLE",
+      "left": "Range answer B for PyPI pymongo 4.18.0; source-bound review, no exploitability claim.",
+      "right": "Range answer A for PyPI pymongo 4.18.0; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "pymongo",
+        "version": "4.18.0"
+      }
+    },
+    {
+      "advisory_id": "GHSA-8fvv-fgr5-f8ch",
+      "case_id": "ghsa-8fvv-fgr5-f8ch-1",
+      "citation_only": "APPLICABLE",
+      "correct_side": "left",
+      "expected": "INAPPLICABLE",
+      "falsum": "INAPPLICABLE",
+      "independent_interval": "INAPPLICABLE",
+      "left": "Range answer A for PyPI pymongo 4.18.1; source-bound review, no exploitability claim.",
+      "right": "Range answer B for PyPI pymongo 4.18.1; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "pymongo",
+        "version": "4.18.1"
+      }
+    },
+    {
+      "advisory_id": "GHSA-98qm-wvgf-w4cf",
+      "case_id": "ghsa-98qm-wvgf-w4cf-0",
+      "citation_only": "APPLICABLE",
+      "correct_side": "left",
+      "expected": "APPLICABLE",
+      "falsum": "APPLICABLE",
+      "independent_interval": "APPLICABLE",
+      "left": "Range answer A for PyPI pymongo 4.18.2; source-bound review, no exploitability claim.",
+      "right": "Range answer B for PyPI pymongo 4.18.2; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "pymongo",
+        "version": "4.18.2"
+      }
+    },
+    {
+      "advisory_id": "GHSA-98qm-wvgf-w4cf",
+      "case_id": "ghsa-98qm-wvgf-w4cf-1",
+      "citation_only": "APPLICABLE",
+      "correct_side": "right",
+      "expected": "INAPPLICABLE",
+      "falsum": "INAPPLICABLE",
+      "independent_interval": "INAPPLICABLE",
+      "left": "Range answer B for PyPI pymongo 4.18.3; source-bound review, no exploitability claim.",
+      "right": "Range answer A for PyPI pymongo 4.18.3; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "pymongo",
+        "version": "4.18.3"
+      }
+    },
+    {
+      "advisory_id": "GHSA-27x4-j476-jp5f",
+      "case_id": "ghsa-27x4-j476-jp5f-0",
+      "citation_only": "APPLICABLE",
+      "correct_side": "right",
+      "expected": "APPLICABLE",
+      "falsum": "APPLICABLE",
+      "independent_interval": "APPLICABLE",
+      "left": "Range answer B for PyPI setuptools 0.6; source-bound review, no exploitability claim.",
+      "right": "Range answer A for PyPI setuptools 0.6; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "setuptools",
+        "version": "0.6"
+      }
+    },
+    {
+      "advisory_id": "GHSA-27x4-j476-jp5f",
+      "case_id": "ghsa-27x4-j476-jp5f-1",
+      "citation_only": "APPLICABLE",
+      "correct_side": "left",
+      "expected": "INAPPLICABLE",
+      "falsum": "INAPPLICABLE",
+      "independent_interval": "INAPPLICABLE",
+      "left": "Range answer A for PyPI setuptools 0.7; source-bound review, no exploitability claim.",
+      "right": "Range answer B for PyPI setuptools 0.7; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "setuptools",
+        "version": "0.7"
+      }
+    },
+    {
+      "advisory_id": "GHSA-5rjg-fvgr-3xxf",
+      "case_id": "ghsa-5rjg-fvgr-3xxf-0",
+      "citation_only": "APPLICABLE",
+      "correct_side": "right",
+      "expected": "APPLICABLE",
+      "falsum": "APPLICABLE",
+      "independent_interval": "APPLICABLE",
+      "left": "Range answer B for PyPI setuptools 78.1.0; source-bound review, no exploitability claim.",
+      "right": "Range answer A for PyPI setuptools 78.1.0; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "setuptools",
+        "version": "78.1.0"
+      }
+    },
+    {
+      "advisory_id": "GHSA-5rjg-fvgr-3xxf",
+      "case_id": "ghsa-5rjg-fvgr-3xxf-1",
+      "citation_only": "APPLICABLE",
+      "correct_side": "left",
+      "expected": "INAPPLICABLE",
+      "falsum": "INAPPLICABLE",
+      "independent_interval": "INAPPLICABLE",
+      "left": "Range answer A for PyPI setuptools 78.1.1; source-bound review, no exploitability claim.",
+      "right": "Range answer B for PyPI setuptools 78.1.1; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "setuptools",
+        "version": "78.1.1"
+      }
+    },
+    {
+      "advisory_id": "GHSA-39hc-v87j-747x",
+      "case_id": "ghsa-39hc-v87j-747x-0",
+      "citation_only": "APPLICABLE",
+      "correct_side": "right",
+      "expected": "APPLICABLE",
+      "falsum": "APPLICABLE",
+      "independent_interval": "APPLICABLE",
+      "left": "Range answer B for PyPI cryptography 38.0.2; source-bound review, no exploitability claim.",
+      "right": "Range answer A for PyPI cryptography 38.0.2; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "cryptography",
+        "version": "38.0.2"
+      }
+    },
+    {
+      "advisory_id": "GHSA-39hc-v87j-747x",
+      "case_id": "ghsa-39hc-v87j-747x-1",
+      "citation_only": "APPLICABLE",
+      "correct_side": "left",
+      "expected": "INAPPLICABLE",
+      "falsum": "INAPPLICABLE",
+      "independent_interval": "INAPPLICABLE",
+      "left": "Range answer A for PyPI cryptography 38.0.3; source-bound review, no exploitability claim.",
+      "right": "Range answer B for PyPI cryptography 38.0.3; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "cryptography",
+        "version": "38.0.3"
+      }
+    },
+    {
+      "advisory_id": "GHSA-3ww4-gg4f-jr7f",
+      "case_id": "ghsa-3ww4-gg4f-jr7f-0",
+      "citation_only": "APPLICABLE",
+      "correct_side": "left",
+      "expected": "APPLICABLE",
+      "falsum": "APPLICABLE",
+      "independent_interval": "APPLICABLE",
+      "left": "Range answer A for PyPI cryptography 41.999.999; source-bound review, no exploitability claim.",
+      "right": "Range answer B for PyPI cryptography 41.999.999; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "cryptography",
+        "version": "41.999.999"
+      }
+    },
+    {
+      "advisory_id": "GHSA-3ww4-gg4f-jr7f",
+      "case_id": "ghsa-3ww4-gg4f-jr7f-1",
+      "citation_only": "APPLICABLE",
+      "correct_side": "right",
+      "expected": "INAPPLICABLE",
+      "falsum": "INAPPLICABLE",
+      "independent_interval": "INAPPLICABLE",
+      "left": "Range answer B for PyPI cryptography 42.0.0; source-bound review, no exploitability claim.",
+      "right": "Range answer A for PyPI cryptography 42.0.0; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "PyPI",
+        "package": "cryptography",
+        "version": "42.0.0"
+      }
+    },
+    {
+      "advisory_id": "GHSA-r683-j2x4-v87g",
+      "case_id": "ghsa-r683-j2x4-v87g-0",
+      "citation_only": "APPLICABLE",
+      "correct_side": "right",
+      "expected": "APPLICABLE",
+      "falsum": "APPLICABLE",
+      "independent_interval": "APPLICABLE",
+      "left": "Range answer B for npm node-fetch 3.1.0; source-bound review, no exploitability claim.",
+      "right": "Range answer A for npm node-fetch 3.1.0; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "npm",
+        "package": "node-fetch",
+        "version": "3.1.0"
+      }
+    },
+    {
+      "advisory_id": "GHSA-r683-j2x4-v87g",
+      "case_id": "ghsa-r683-j2x4-v87g-1",
+      "citation_only": "APPLICABLE",
+      "correct_side": "left",
+      "expected": "INAPPLICABLE",
+      "falsum": "INAPPLICABLE",
+      "independent_interval": "INAPPLICABLE",
+      "left": "Range answer A for npm node-fetch 3.1.1; source-bound review, no exploitability claim.",
+      "right": "Range answer B for npm node-fetch 3.1.1; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "npm",
+        "package": "node-fetch",
+        "version": "3.1.1"
+      }
+    },
+    {
+      "advisory_id": "GHSA-vp56-6g26-6827",
+      "case_id": "ghsa-vp56-6g26-6827-0",
+      "citation_only": "APPLICABLE",
+      "correct_side": "left",
+      "expected": "APPLICABLE",
+      "falsum": "APPLICABLE",
+      "independent_interval": "APPLICABLE",
+      "left": "Range answer A for npm node-fetch 3.2.9; source-bound review, no exploitability claim.",
+      "right": "Range answer B for npm node-fetch 3.2.9; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "npm",
+        "package": "node-fetch",
+        "version": "3.2.9"
+      }
+    },
+    {
+      "advisory_id": "GHSA-vp56-6g26-6827",
+      "case_id": "ghsa-vp56-6g26-6827-1",
+      "citation_only": "APPLICABLE",
+      "correct_side": "right",
+      "expected": "INAPPLICABLE",
+      "falsum": "INAPPLICABLE",
+      "independent_interval": "INAPPLICABLE",
+      "left": "Range answer B for npm node-fetch 3.2.10; source-bound review, no exploitability claim.",
+      "right": "Range answer A for npm node-fetch 3.2.10; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "npm",
+        "package": "node-fetch",
+        "version": "3.2.10"
+      }
+    },
+    {
+      "advisory_id": "GHSA-23hp-3jrh-7fpw",
+      "case_id": "ghsa-23hp-3jrh-7fpw-0",
+      "citation_only": "APPLICABLE",
+      "correct_side": "left",
+      "expected": "APPLICABLE",
+      "falsum": "APPLICABLE",
+      "independent_interval": "APPLICABLE",
+      "left": "Range answer A for npm tar 7.5.18; source-bound review, no exploitability claim.",
+      "right": "Range answer B for npm tar 7.5.18; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tar",
+        "version": "7.5.18"
+      }
+    },
+    {
+      "advisory_id": "GHSA-23hp-3jrh-7fpw",
+      "case_id": "ghsa-23hp-3jrh-7fpw-1",
+      "citation_only": "APPLICABLE",
+      "correct_side": "right",
+      "expected": "INAPPLICABLE",
+      "falsum": "INAPPLICABLE",
+      "independent_interval": "INAPPLICABLE",
+      "left": "Range answer B for npm tar 7.5.19; source-bound review, no exploitability claim.",
+      "right": "Range answer A for npm tar 7.5.19; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tar",
+        "version": "7.5.19"
+      }
+    },
+    {
+      "advisory_id": "GHSA-29xp-372q-xqph",
+      "case_id": "ghsa-29xp-372q-xqph-0",
+      "citation_only": "APPLICABLE",
+      "correct_side": "left",
+      "expected": "APPLICABLE",
+      "falsum": "APPLICABLE",
+      "independent_interval": "APPLICABLE",
+      "left": "Range answer A for npm tar 7.5.1; source-bound review, no exploitability claim.",
+      "right": "Range answer B for npm tar 7.5.1; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tar",
+        "version": "7.5.1"
+      }
+    },
+    {
+      "advisory_id": "GHSA-29xp-372q-xqph",
+      "case_id": "ghsa-29xp-372q-xqph-1",
+      "citation_only": "APPLICABLE",
+      "correct_side": "right",
+      "expected": "INAPPLICABLE",
+      "falsum": "INAPPLICABLE",
+      "independent_interval": "INAPPLICABLE",
+      "left": "Range answer B for npm tar 7.5.2; source-bound review, no exploitability claim.",
+      "right": "Range answer A for npm tar 7.5.2; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tar",
+        "version": "7.5.2"
+      }
+    },
+    {
+      "advisory_id": "GHSA-g7q5-pjjr-gqvp",
+      "case_id": "ghsa-g7q5-pjjr-gqvp-0",
+      "citation_only": "APPLICABLE",
+      "correct_side": "right",
+      "expected": "APPLICABLE",
+      "falsum": "APPLICABLE",
+      "independent_interval": "APPLICABLE",
+      "left": "Range answer B for npm tough-cookie 2.3.2; source-bound review, no exploitability claim.",
+      "right": "Range answer A for npm tough-cookie 2.3.2; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tough-cookie",
+        "version": "2.3.2"
+      }
+    },
+    {
+      "advisory_id": "GHSA-g7q5-pjjr-gqvp",
+      "case_id": "ghsa-g7q5-pjjr-gqvp-1",
+      "citation_only": "APPLICABLE",
+      "correct_side": "left",
+      "expected": "INAPPLICABLE",
+      "falsum": "INAPPLICABLE",
+      "independent_interval": "INAPPLICABLE",
+      "left": "Range answer A for npm tough-cookie 2.3.3; source-bound review, no exploitability claim.",
+      "right": "Range answer B for npm tough-cookie 2.3.3; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tough-cookie",
+        "version": "2.3.3"
+      }
+    },
+    {
+      "advisory_id": "GHSA-qhv9-728r-6jqg",
+      "case_id": "ghsa-qhv9-728r-6jqg-0",
+      "citation_only": "APPLICABLE",
+      "correct_side": "left",
+      "expected": "APPLICABLE",
+      "falsum": "APPLICABLE",
+      "independent_interval": "APPLICABLE",
+      "left": "Range answer A for npm tough-cookie 1.999.999; source-bound review, no exploitability claim.",
+      "right": "Range answer B for npm tough-cookie 1.999.999; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tough-cookie",
+        "version": "1.999.999"
+      }
+    },
+    {
+      "advisory_id": "GHSA-qhv9-728r-6jqg",
+      "case_id": "ghsa-qhv9-728r-6jqg-1",
+      "citation_only": "APPLICABLE",
+      "correct_side": "right",
+      "expected": "INAPPLICABLE",
+      "falsum": "INAPPLICABLE",
+      "independent_interval": "INAPPLICABLE",
+      "left": "Range answer B for npm tough-cookie 2.3.0; source-bound review, no exploitability claim.",
+      "right": "Range answer A for npm tough-cookie 2.3.0; source-bound review, no exploitability claim.",
+      "target": {
+        "ecosystem": "npm",
+        "package": "tough-cookie",
+        "version": "2.3.0"
+      }
+    }
+  ],
+  "dataset": "OSV records with github_reviewed=true",
+  "family": "SECURITY_REVIEW",
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "interpretation": {
+    "falsum_beats_citation_only_on_fixed_boundaries": 12,
+    "falsum_beats_competent_baseline": false,
+    "independent_human_appsec_gold": false,
+    "meaningful_quality_discrimination": true,
+    "new_paid_telegraph_execution": false,
+    "ranking_improvement": false,
+    "security_clearance": false,
+    "summary": "On a new balanced source-roster holdout, FALSUM exactly separates affected from fixed boundaries and removes 12 citation-only false positives, while tying rather than beating the independently implemented competent interval baseline."
+  },
+  "limits": [
+    "The selected source records are independent public advisory facts, not human semantic AppSec gold.",
+    "Synthetic boundary targets are source-covered version probes, not evidence that a deployment is exploitable.",
+    "The result demonstrates applicability discrimination, not general vulnerability recall or a network ranking change."
+  ],
+  "pairwise_discrimination": {
+    "falsum_vs_citation_only": {
+      "falsum_losses": 0,
+      "falsum_wins": 12,
+      "ties": 12
+    },
+    "falsum_vs_independent_interval": {
+      "falsum_losses": 0,
+      "falsum_wins": 0,
+      "ties": 24
+    }
+  },
+  "policies": {
+    "citation_only": {
+      "correct": 12,
+      "denominator": 24,
+      "incorrect": 12
+    },
+    "falsum": {
+      "correct": 24,
+      "denominator": 24,
+      "incorrect": 0
+    },
+    "independent_interval": {
+      "correct": 24,
+      "denominator": 24,
+      "incorrect": 0
+    }
+  },
+  "protocol": "data/phase5bm-independent-balanced-holdout-protocol.json",
+  "schema_version": 1,
+  "shortcut_audit": {
+    "correct_side_counts": {
+      "left": 12,
+      "right": 12
+    },
+    "equal_answer_length": true,
+    "identifier_only_baseline": {
+      "correct": 12,
+      "denominator": 24
+    },
+    "label_leakage_detected": false,
+    "package_only_baseline": {
+      "correct": 12,
+      "denominator": 24
+    },
+    "selection_reopened_after_observation": false
+  },
+  "source_records": 12,
+  "status": "PHASE5BM_INDEPENDENT_BALANCED_HOLDOUT_AUDIT"
+}

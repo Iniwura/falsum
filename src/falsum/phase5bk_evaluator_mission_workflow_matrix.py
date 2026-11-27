@@ -47,6 +47,11 @@ def matrix() -> dict[str, Any]:
                     "evidence": "Phase 5BJ hosted replay",
                     "result": "Fresh public provider evidence: 66 reported references, 38 canonical sources, 27 applicable, 39 fail-closed unknown/insufficient.",
                 },
+                {
+                    "command": "PYTHONPATH=src python -m falsum.cli audit-independent-balanced-holdout --out phase5bm.json",
+                    "evidence": "Phase 5BM hosted replay on a new pinned GitHub-reviewed advisory roster",
+                    "result": "Balanced 24-case workflow: FALSUM separates 12 applicable from 12 fixed boundaries, removes 12 citation-only false positives, and ties the independent interval baseline.",
+                },
             ],
             "workflow_status": "REPEATABLE_SUPPORTING_TEST",
             "independent_application_consumption_verified": False,
