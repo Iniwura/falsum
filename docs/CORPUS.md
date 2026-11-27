@@ -50,8 +50,12 @@ Avoid treating simple affected-version statements as confirmation of exploitabil
 
 For OSV `ECOSYSTEM` ranges, the offline checker handles *only* exact stable
 `major.minor.patch` numbers in npm or PyPI; for OSV `SEMVER` it handles strict
-SemVer. Non-stable PyPI versions, PEP 440 epochs, local versions, npm prereleases
-in ECOSYSTEM ranges, `GIT` ranges, and unsupported range events are `unknown`.
+SemVer and PEP 440 are handled with ecosystem-specific semantics: npm
+prereleases use strict SemVer ordering, while PyPI prereleases, epochs, post
+releases and local versions use `packaging`'s PEP 440 ordering. Numeric OSV
+`limit` events, malformed/overlapping interval streams, `GIT` ranges and other
+unsupported range events remain `unknown` rather than being treated as a safe
+boundary.
 This prevents a missing or unsupported range from being mislabelled as safe.
 For general production use, replace this limited parser with tested,
 ecosystem-native version libraries rather than expanding string comparisons.

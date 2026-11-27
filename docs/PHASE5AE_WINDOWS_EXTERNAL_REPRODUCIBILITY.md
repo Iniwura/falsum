@@ -15,6 +15,9 @@ Git for Windows can replace `LF` with `CRLF` at checkout. The resulting working-
 The new repository-root [`.gitattributes`](../.gitattributes) makes all detected text files checkout as LF, with explicit `*.json`, `*.py`, `*.md`, `*.yml`, `*.yaml`, `*.toml` and other text source rules. Git still treats binary files as binary. The historical raw-byte `Git blob SHA-1` and pinned source locks remain mandatory and unchanged: **no Unicode normalization, line-ending normalization inside the verifier, skip-if-Windows exceptions, hash overrides, or bypass flags** are introduced.
 
 The [new Windows CI workflow](../.github/workflows/windows-lf-original-source-replay.yml) intentionally configures `git config --global core.autocrlf true` **before** `actions/checkout` on `windows-latest`. It:
+0. Enables Windows Developer Mode and runs a real symbolic-link probe before
+   the suite, so symlink rejection tests exercise their intended security
+   path instead of failing during fixture setup with `WinError 1314`.
 1. Asserts Git's actual `eol: lf` effective checkout attribute for representative source and lock files.
 2. Inspects their raw bytes and refuses a CRLF worktree lock.
 3. Recomputes the locked Git blob SHA-1 from the actual Windows checkout and compares it to the unchanged original fingerprint.

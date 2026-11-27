@@ -169,6 +169,21 @@ def main(argv: list[str] | None = None) -> int:
     )
     ecosystem_semantics.add_argument("--out", type=Path, required=True)
     ecosystem_semantics.add_argument("--freeze", action="store_true")
+    public_answer_quality = commands.add_parser(
+        "audit-public-answer-quality",
+        help="authenticate public provider answers and compare source-bound claims/actions with verdict-only controls",
+    )
+    public_answer_quality.add_argument("--out", type=Path, required=True)
+    anjoman_pairs = commands.add_parser(
+        "prepare-anjoman-pairs",
+        help="prepare deduplicated source-backed Anjoman pair candidates; never submits or claims eligibility",
+    )
+    anjoman_pairs.add_argument("--out", type=Path, required=True)
+    judge_demo = commands.add_parser(
+        "judge-demo",
+        help="print one concise judge-facing route from committed evidence; no network or transaction",
+    )
+    judge_demo.add_argument("--out", type=Path)
     consume = commands.add_parser(
         "audit-telegraph-consumption",
         help="strict original source-bound application allow/deny policy; two authentic real paid captures and 24 constructed tests, not network scoring",
@@ -304,6 +319,16 @@ def main(argv: list[str] | None = None) -> int:
             from .phase5bo_ecosystem_semantics import main as ecosystem_semantics_main
             command = (["--freeze"] if args.freeze else []) + ["--out", str(args.out)]
             return ecosystem_semantics_main(command)
+        if args.command == "audit-public-answer-quality":
+            from .phase5bp_public_answer_quality import main as public_answer_quality_main
+            return public_answer_quality_main(["--out", str(args.out)])
+        if args.command == "prepare-anjoman-pairs":
+            from .phase5bq_anjoman_pair_preparation import main as anjoman_pairs_main
+            return anjoman_pairs_main(["--out", str(args.out)])
+        if args.command == "judge-demo":
+            from .judge_demo import main as judge_demo_main
+            argv = [] if args.out is None else ["--out", str(args.out)]
+            return judge_demo_main(argv)
         if args.command == "audit-telegraph-consumption":
             from .phase5t_application_consumption import main as consume_main
             cmd=["--out",str(args.out)]

@@ -199,47 +199,62 @@ def _parse_events(events: object, parser, comparator) -> tuple[list[tuple[Any, s
         return [], True
     intervals: list[tuple[Any, str | None, str | None]] = []
     opened: str | None = None
+    previous_end: Any | None = None
+    previous_kind: str | None = None
+    terminated_unbounded = False
     unsupported = False
     for event in events:
         if not isinstance(event, dict) or len(event) != 1:
-            unsupported = True
-            continue
+            return [], True
         kind, raw = next(iter(event.items()))
         if not isinstance(raw, str):
-            unsupported = True
-            continue
+            return [], True
         if kind == "introduced" and opened is None:
             try:
-                parser(raw, partial=True)
-            except EcosystemSemanticsError:
-                unsupported = True
+                parsed = parser(raw, partial=True)
+                if terminated_unbounded:
+                    return [], True
+                if previous_end is not None:
+                    relation = comparator(parsed, previous_end)
+                    if relation < 0 or (relation == 0 and previous_kind == "last_affected"):
+                        return [], True
+            except (EcosystemSemanticsError, ValueError, TypeError):
+                return [], True
             opened = raw
         elif kind in ("fixed", "last_affected") and opened is not None:
             try:
                 start = parser(opened, partial=True)
                 end = parser(raw, partial=True)
-                if comparator(start, end) > 0:
-                    unsupported = True
-                else:
-                    intervals.append((start, raw, kind))
-            except EcosystemSemanticsError:
-                unsupported = True
+                if opened != "0" and comparator(start, end) > 0:
+                    return [], True
+                intervals.append((start, raw, kind))
+                previous_end, previous_kind = end, kind
+            except (EcosystemSemanticsError, ValueError, TypeError):
+                return [], True
             opened = None
+        elif kind == "limit" and opened is not None and raw == "*":
+            try:
+                intervals.append((parser(opened, partial=True), None, "limit"))
+            except (EcosystemSemanticsError, ValueError, TypeError):
+                return [], True
+            opened = None
+            terminated_unbounded = True
         else:
-            unsupported = True
+            return [], True
     if opened is not None:
         try:
             intervals.append((parser(opened, partial=True), None, None))
-        except EcosystemSemanticsError:
-            unsupported = True
-    return intervals, unsupported
+        except (EcosystemSemanticsError, ValueError, TypeError):
+            return [], True
+    return intervals, unsupported or not intervals
 
 
 def _matching_affected(advisory: dict[str, Any], ecosystem: str, package: str) -> list[dict[str, Any]]:
     result = []
-    for affected in advisory.get("affected", []):
-        if not isinstance(affected, dict):
-            continue
+    affected_rows = advisory.get("affected")
+    if not isinstance(affected_rows, list) or any(not isinstance(row, dict) for row in affected_rows):
+        raise EcosystemSemanticsError("malformed affected rows")
+    for affected in affected_rows:
         item = affected.get("package")
         if isinstance(item, dict) and item.get("ecosystem", "").casefold() == ecosystem.casefold() \
                 and item.get("name", "").casefold() == package.casefold():
@@ -249,7 +264,10 @@ def _matching_affected(advisory: dict[str, Any], ecosystem: str, package: str) -
 
 def _candidate_status(advisory: dict[str, Any], ecosystem: str, package: str, version: str) -> str:
     """Candidate policy: native parsing, unioned disjoint intervals, fail closed."""
-    if advisory.get("withdrawn") or not advisory.get("database_specific", {}).get("github_reviewed"):
+    database_specific = advisory.get("database_specific")
+    if (not isinstance(advisory, dict) or advisory.get("withdrawn")
+            or not isinstance(database_specific, dict)
+            or not database_specific.get("github_reviewed")):
         return UNKNOWN
     try:
         if ecosystem == "PyPI":
@@ -265,13 +283,18 @@ def _candidate_status(advisory: dict[str, Any], ecosystem: str, package: str, ve
             return UNKNOWN
     except Exception:
         return UNKNOWN
-    affected_rows = _matching_affected(advisory, ecosystem, package)
+    try:
+        affected_rows = _matching_affected(advisory, ecosystem, package)
+    except EcosystemSemanticsError:
+        return UNKNOWN
     if not affected_rows:
         return INAPPLICABLE
     unsupported = False
     supported = False
     for affected in affected_rows:
         exact = affected.get("versions", [])
+        if not isinstance(exact, list):
+            return UNKNOWN
         if isinstance(exact, list) and version in exact:
             return APPLICABLE
         ranges = affected.get("ranges")
@@ -323,6 +346,9 @@ def _range_strings(events: object) -> tuple[list[str], bool]:
             end_operator = "<=" if key == "last_affected" else "<"
             ranges.append(f">={opened} {end_operator}{value}")
             opened = None
+        elif key == "limit" and opened is not None and value == "*":
+            ranges.append(f">={opened}")
+            opened = None
         else:
             unsupported = True
     if opened is not None:
@@ -336,13 +362,19 @@ def _pypi_reference_status(advisory: dict[str, Any], package: str, version: str)
         parsed = Version(version)
     except InvalidVersion:
         return UNKNOWN
-    rows = _matching_affected(advisory, "PyPI", package)
+    try:
+        rows = _matching_affected(advisory, "PyPI", package)
+    except EcosystemSemanticsError:
+        return UNKNOWN
     if not rows:
         return INAPPLICABLE
     unsupported = False
     supported = False
     for affected in rows:
-        if isinstance(affected.get("versions"), list) and version in affected["versions"]:
+        exact = affected.get("versions", [])
+        if not isinstance(exact, list):
+            return UNKNOWN
+        if version in exact:
             return APPLICABLE
         ranges = affected.get("ranges")
         if not isinstance(ranges, list) or not ranges:
@@ -411,13 +443,19 @@ def _npm_reference_status(advisory: dict[str, Any], package: str, version: str) 
         _parse_semver(version)
     except EcosystemSemanticsError:
         return UNKNOWN
-    rows = _matching_affected(advisory, "npm", package)
+    try:
+        rows = _matching_affected(advisory, "npm", package)
+    except EcosystemSemanticsError:
+        return UNKNOWN
     if not rows:
         return INAPPLICABLE
     unsupported = False
     supported = False
     for affected in rows:
-        if isinstance(affected.get("versions"), list) and version in affected["versions"]:
+        exact = affected.get("versions", [])
+        if not isinstance(exact, list):
+            return UNKNOWN
+        if version in exact:
             return APPLICABLE
         ranges = affected.get("ranges")
         if not isinstance(ranges, list) or not ranges:

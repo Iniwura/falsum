@@ -1,7 +1,14 @@
 # FALSUM — final judge experience
 
-Start here: [final storyboard](H2_FINAL_DEMO_STORYBOARD_2026-11-27.md), then
-run the two zero-credential commands in the [submission package](H2_FINAL_SUBMISSION_PACKAGE_2026-11-27.md).
+Start here: run the one-command [unified judge demo](../src/falsum/judge_demo.py)
+or `PYTHONPATH=src python -m falsum.cli judge-demo`, then follow the [final
+storyboard](H2_FINAL_DEMO_STORYBOARD_2026-11-27.md) and the two zero-credential
+commands in the [submission package](H2_FINAL_SUBMISSION_PACKAGE_2026-11-27.md).
+
+The earlier 96/100 internal readiness assessment is historical. The reopened
+excellence sprint was triggered by an independent judge-style audit at 84/100;
+this guide records substantive new work but does not silently replace that
+audit with another arbitrary score.
 
 ## Current measurement result
 
@@ -26,6 +33,30 @@ candidate claims/actions rather than label-derived answer tokens. It records
 14/14 candidate decisions and 14/14 structured claim/action selections. The
 option prose is display-only, not natural-language answer scoring. No score
 points are added automatically for this regression suite.
+
+## Public-provider answer quality
+
+Phase 5BP adds a separate, source-authenticated answer-quality study using six
+real public PR Guard response captures. It derives a narrow source reference
+from each requested code sample before reading the candidate answer, then
+checks actual claims, exact target evidence, remediation actions and explicit
+uncertainty. It reports verdict-only and finding-presence controls beside the
+source-bound policy. The run passed 18/24 integrity checks, produced two fully
+evidenced `BLOCK_OR_REMEDIATE` outcomes and held four answers for review. This
+is bounded static-pattern evidence—not human AppSec gold, a blind holdout,
+customer adoption or a ranking claim. Reproduce with
+`PYTHONPATH=src python -m falsum.cli audit-public-answer-quality --out result.json`;
+see the [protocol](../data/phase5bp-public-answer-quality-protocol.json),
+[implementation](../src/falsum/phase5bp_public_answer_quality.py),
+[result](../data/phase5bp-public-answer-quality-result.json), and
+[adversarial tests](../tests/test_phase5bp_public_answer_quality.py).
+
+## Prepared evaluation-material candidates
+
+The [Phase 5BQ candidate packet](PHASE5BQ_ANJOMAN_PAIR_PREPARATION.md) adds 14
+deduplicated, source-backed preference-pair candidates with immutable advisory
+and registry provenance. They remain owner-review material only: no upload,
+eligibility, maintainer acceptance or human adjudication is claimed.
 
 ## What the judge should learn in three minutes
 
@@ -58,11 +89,14 @@ points are added automatically for this regression suite.
    decisions and 14/14 structured claim/action selections, without
    reference-label-to-token mappings. Its option prose is display-only; this
    is not natural-language answer scoring.
-8. Two distinct official mission workflows have repeatable supporting tests:
+ 8. Actual public-provider answer claims are distinguished from raw verdicts:
+    target-bound evidence and remediation pass only for the complete structured
+    cases; incomplete free-text cases are held rather than promoted.
+ 9. Two distinct official mission workflows have repeatable supporting tests:
    Model Economy supply-chain verification and Web3 Native and DeFi
    security/bug-bounty proof. They are not claimed as completed missions or
    independent app consumption.
-9. The project is honest about what remains: no independent customer adoption,
+ 10. The project is honest about what remains: no independent customer adoption,
    no human AppSec gold, no current paid transaction in this sprint, no
    ranking uplift, and no submitted entry.
 
@@ -87,8 +121,12 @@ minimum](H2_EVALUATORS_RUBRIC_2026-11-27.md), not the Apps & Agents-shaped
 | 11 | [Independent balanced holdout](../data/phase5bm-independent-balanced-holdout-result.json) | 24 paired cases, balanced order, shortcut audit, and citation-only contrast |
 | 12 | [Corrected independent holdout](PHASE5BN_CORRECTED_INDEPENDENT_HOLDOUT.md) | Independent labels, external resolver, version existence, meaningful answers, and computed leakage audit |
 | 13 | [Ecosystem-native semantic audit](PHASE5BO_ECOSYSTEM_SEMANTICS.md) | PEP 440/SemVer semantics, offline registry snapshots, disjoint/unsupported ranges, and structured claim/action selection |
-| 14 | [Final release-gate record](../evidence/final-release-gate-check-2026-11-27.json) | Reviewer command smoke checks, public-route accessibility checks, resolved local links, and owner-controlled blockers |
-| 15 | [Hosted Playwright and axe inspection](https://github.com/Iniwura/falsum/actions/runs/45978583401) | Four desktop/mobile screenshots, zero automated WCAG axe violations, and public-route structural checks |
+| 14 | [Public-provider answer quality](PHASE5BP_PUBLIC_ANSWER_QUALITY.md) | Actual claims/actions, target-bound evidence, remediation and uncertainty controls |
+| 15 | [Anjoman candidate packet](PHASE5BQ_ANJOMAN_PAIR_PREPARATION.md) | 14 deduplicated source-backed candidates; explicitly not submitted or eligible |
+| 16 | [Five-minute reviewer route](INDEPENDENT_REVIEWER_5MIN.md) | Fast independent reproduction with no wallet, payment or model download |
+| 17 | [Competitor audit](H2_COMPETITIVE_AUDIT_ADVERSARIALEVAL_2026-11-27.md) | Public strengths, weaknesses and FALSUM's non-imitative differentiation |
+| 18 | [Final release-gate record](../evidence/final-release-gate-check-2026-11-27.json) | Reviewer command smoke checks, public-route accessibility checks, resolved local links, and owner-controlled blockers |
+| 19 | [Hosted Playwright and axe inspection](https://github.com/Iniwura/falsum/actions/runs/45978583401) | Four desktop/mobile screenshots, zero automated WCAG axe violations, and public-route structural checks |
 
 ## Claims a judge can safely repeat
 
@@ -100,6 +138,8 @@ minimum](H2_EVALUATORS_RUBRIC_2026-11-27.md), not the Apps & Agents-shaped
 - “The prior measured effect is bounded to a frozen reviewed-reference roster.”
 - “The cross-source audit shows two safety-relevant contrasts against weaker
   policies, ties a competent baseline, and preserves the verdict-only tie.”
+- “FALSUM checks the actual public-provider claim, exact evidence anchor,
+  remediation and uncertainty boundary; incomplete answers are held.”
 - “FALSUM supplies repeatable supporting tests for two official mission
   workflows; it does not claim completed mission delivery or independent app
   consumption.”

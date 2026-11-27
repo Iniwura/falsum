@@ -1,0 +1,112 @@
+name: Phase 5BP - public-provider answer quality
+
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5bp_public_answer_quality.py'
+      - 'src/falsum/phase4l_external_receipt_evidence.py'
+      - 'src/falsum/phase5m_real_source_sensitive_model.py'
+      - 'src/falsum/cli.py'
+      - 'data/phase5bp-public-answer-quality-protocol.json'
+      - 'tests/test_phase5bp_public_answer_quality.py'
+      - '.github/workflows/phase5bp-public-answer-quality.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5bp_public_answer_quality.py'
+      - 'src/falsum/phase4l_external_receipt_evidence.py'
+      - 'src/falsum/phase5m_real_source_sensitive_model.py'
+      - 'src/falsum/cli.py'
+      - 'data/phase5bp-public-answer-quality-protocol.json'
+      - 'tests/test_phase5bp_public_answer_quality.py'
+      - '.github/workflows/phase5bp-public-answer-quality.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    name: Contract tests / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Install declared runtime dependency
+        run: python -m pip install --disable-pip-version-check --no-deps packaging==26.4
+      - name: Run adversarial contracts and CLI registration check
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5bp_public_answer_quality.py' -v
+          python -m falsum.cli --help | grep -F audit-public-answer-quality
+
+  live-public-replay:
+    name: Replay pinned public response blobs
+    needs: contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: src
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install declared runtime dependency
+        run: python -m pip install --disable-pip-version-check --no-deps packaging==26.4
+      - name: Run source-authenticated answer-quality audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p phase5bp-evidence
+          python -m falsum.cli audit-public-answer-quality \
+            --out phase5bp-evidence/PUBLIC-ANSWER-QUALITY.json
+      - name: Assert bounded scope and sensitive-field exclusion
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('phase5bp-evidence/PUBLIC-ANSWER-QUALITY.json')
+          report=json.loads(path.read_text())
+          assert report['status']=='PHASE5BP_PUBLIC_PROVIDER_ANSWER_QUALITY_AUDIT'
+          assert report['provider_source']['commit']=='99d2e3c93890a8fc083947bde4f21217516b7a5f'
+          assert report['aggregate']['cases']==6
+          assert report['aggregate']['falsum_quality_checks_passed']==18
+          assert report['aggregate']['falsum_quality_checks_total']==24
+          assert report['aggregate']['falsum_block_or_remediate']==2
+          assert report['aggregate']['falsum_hold_for_review']==4
+          assert report['interpretation']['human_appsec_gold'] is False
+          assert report['interpretation']['independent_adoption'] is False
+          assert report['interpretation']['ranking_improvement'] is False
+          raw=path.read_text()
+          for forbidden in ('"body":', '"bodyText":', '"payment":', '"receipt":', '"token":'):
+              assert forbidden not in raw
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'],'a') as summary:
+              summary.write('## Phase 5BP public-provider answer quality\n\n')
+              summary.write('Six immutable public PR Guard captures were scored on actual claims, target-bound evidence, remediation and uncertainty. The source-bound policy passed 18/24 checks, fully supported 2/6 actions, and held 4/6 for review.\n\n')
+              summary.write('This is bounded static-pattern evidence, not human AppSec gold, a blind holdout, customer adoption, ranking improvement, ACP execution or financial activity. Raw bodies and payment fields were excluded.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5bp-public-answer-quality
+          path: phase5bp-evidence/
+          retention-days: 90
+          if-no-files-found: error

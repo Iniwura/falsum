@@ -33,9 +33,10 @@ def matrix() -> dict[str, Any]:
     rows = [
         {
             "official_mission": "Model Economy",
+            "official_mission_issue": "https://github.com/telegraphprotocol/bounties/issues/198",
             "official_workflow": "GitHub supply-chain verification priced per commit",
             "official_example_intents": ["SECURITY_REVIEW", "VULNERABILITY_TRIAGE", "CODE_REVIEW", "SOCIAL_BOT_DETECTION"],
-            "falsum_capability": "Exact package/version advisory-reference gating and response-integrity checks for a PR/dependency security result.",
+            "falsum_capability": "Exact package/version advisory-reference gating plus source-bound answer claims, remediation actions and uncertainty checks for a PR/dependency security result.",
             "repeatable_supporting_tests": [
                 {
                     "command": "PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase5z_reviewed_advisory_consumption.py' -v",
@@ -52,13 +53,20 @@ def matrix() -> dict[str, Any]:
                     "evidence": "Phase 5BM hosted replay on a new pinned GitHub-reviewed advisory roster",
                     "result": "Balanced 24-case workflow: FALSUM separates 12 applicable from 12 fixed boundaries, removes 12 citation-only false positives, and ties the independent interval baseline.",
                 },
+                {
+                    "command": "PYTHONPATH=src python -m falsum.cli audit-public-answer-quality --out answer-quality.json",
+                    "evidence": "Phase 5BP public-provider answer/action audit",
+                    "result": "Six actual public security-review responses are checked for target-bound evidence, complete claims, remediation and uncertainty: 18/24 integrity checks pass, 2/6 actions are fully supported and 4/6 are held for review.",
+                },
             ],
             "workflow_status": "REPEATABLE_SUPPORTING_TEST",
+            "contribution_record": "SUPPORTING_TEST_RECORDED_NOT_SUBMITTED",
             "independent_application_consumption_verified": False,
             "mission_completed": False,
         },
         {
             "official_mission": "Web3 Native and DeFi",
+            "official_mission_issue": "https://github.com/telegraphprotocol/bounties/issues/202",
             "official_workflow": "Machine-proved bug-bounty or smart-contract/dependency security review before capital or payout decisions",
             "official_example_intents": ["SMART_CONTRACT_AUDIT", "VULNERABILITY_TRIAGE", "SECURITY_REVIEW", "CODE_PATCH_VERIFY"],
             "falsum_capability": "Anchor/Rust advisory version boundaries plus original upstream regression execution, with fail-closed unsupported evidence.",
@@ -75,6 +83,7 @@ def matrix() -> dict[str, Any]:
                 },
             ],
             "workflow_status": "REPEATABLE_SUPPORTING_TEST",
+            "contribution_record": "SUPPORTING_TEST_RECORDED_NOT_SUBMITTED",
             "independent_application_consumption_verified": False,
             "mission_completed": False,
         },
@@ -130,9 +139,16 @@ def validate(report: dict[str, Any]) -> None:
          "mission roster changed or was reordered")
     for row in rows:
         need(row.get("workflow_status") == "REPEATABLE_SUPPORTING_TEST"
+             and row.get("contribution_record") == "SUPPORTING_TEST_RECORDED_NOT_SUBMITTED"
              and row.get("independent_application_consumption_verified") is False
              and row.get("mission_completed") is False,
              "supporting test was inflated into mission delivery")
+        expected_issue = {
+            "Model Economy": "https://github.com/telegraphprotocol/bounties/issues/198",
+            "Web3 Native and DeFi": "https://github.com/telegraphprotocol/bounties/issues/202",
+        }[row["official_mission"]]
+        need(row.get("official_mission_issue") == expected_issue,
+             "mission contribution record is not tied to its official issue")
         tests = row.get("repeatable_supporting_tests")
         need(isinstance(tests, list) and len(tests) >= 2,
              "mission-specific test evidence is incomplete")
