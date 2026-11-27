@@ -57,6 +57,7 @@ general security accuracy, expert gold, ranking uplift or adoption.
 ```bash
 python -m pip install --no-deps packaging==26.4
 npm install --prefix .phase5bn-node --ignore-scripts --no-audit --no-fund semver@7.8.6
+npm install --prefix .phase5bo-node --ignore-scripts --no-audit --no-fund semver@7.8.6
 PYTHONPATH=src FALSUM_PHASE5BN_NODE_PATH=.phase5bn-node/node_modules \
   python -m falsum.cli audit-corrected-independent-holdout \
   --out /tmp/falsum-corrected-holdout.json

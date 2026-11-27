@@ -5,6 +5,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: src
+      FALSUM_PHASE5BN_NODE_PATH: ${{ github.workspace }}/.phase5-node/node_modules
+      FALSUM_PHASE5BO_NODE_PATH: ${{ github.workspace }}/.phase5-node/node_modules
     strategy:
       matrix:
         python-version: ['3.11', '3.12', '3.13']
@@ -13,9 +17,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install exact version-semantic dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps packaging==26.4
+          npm install --prefix .phase5-node --ignore-scripts --no-audit --no-fund semver@7.8.6
       - name: Check syntax
         run: python -m compileall -q src tests
       - name: Run offline evidence gates and tests
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
+        run: python -m unittest discover -s tests -v
       - name: Audit pinned security guidance
-        run: PYTHONPATH=src python -m falsum audit-scenarios data/draft-scenarios.json
+        run: python -m falsum audit-scenarios data/draft-scenarios.json

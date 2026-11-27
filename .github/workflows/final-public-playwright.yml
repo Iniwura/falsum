@@ -1,0 +1,50 @@
+name: Final public Playwright and accessibility inspection
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tests/browser/final_public_experience.mjs"
+      - ".github/workflows/final-public-playwright.yml"
+      - "README.md"
+      - "docs/**"
+      - "evidence/**"
+  pull_request:
+    paths:
+      - "tests/browser/final_public_experience.mjs"
+      - ".github/workflows/final-public-playwright.yml"
+      - "README.md"
+      - "docs/**"
+      - "evidence/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-experience:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install pinned Playwright and axe
+        run: npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.55.0 @axe-core/playwright@4.10.2
+      - name: Install Chromium runtime
+        run: npx playwright install --with-deps chromium
+      - name: Test public desktop and mobile routes
+        env:
+          PLAYWRIGHT_OUTPUT_DIR: playwright-artifacts
+        run: node tests/browser/final_public_experience.mjs
+      - name: Upload screenshots and accessibility report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FALSUM-FINAL-PUBLIC-PLAYWRIGHT-EVIDENCE
+          path: playwright-artifacts/
+          if-no-files-found: error
+          retention-days: 30
