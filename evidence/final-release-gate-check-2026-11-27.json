@@ -3,6 +3,7 @@
   "verified_utc": "2026-11-27T09:45:28.3001587Z",
   "status": "INTERNAL_RELEASE_GATE_VERIFIED",
   "scope": "read-only release verification; no publication, submission, payment or ACP activity",
+  "hosted_ci_run": "https://github.com/Iniwura/falsum/actions/runs/45976774179",
   "semantic_regression": {
     "pypi_reference_union_fixed": true,
     "local_tests_passed": 12,
