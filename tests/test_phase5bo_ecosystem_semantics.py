@@ -67,11 +67,19 @@ class EcosystemSemanticsTests(unittest.TestCase):
     def test_additional_unseen_cases_and_claim_actions_are_scored(self):
         self.assertEqual(self.result["coverage"]["additional_unseen_cases"], 12)
         self.assertEqual(self.result["coverage"]["prerelease_cases"], 4)
-        self.assertEqual(self.result["policies"]["answer_claim_action_selection"], {
+        self.assertEqual(self.result["policies"]["structured_claim_action_selection"], {
             "correct": 14, "incorrect": 0, "denominator": 14,
         })
         self.assertTrue(self.result["answer_surface_audit"]["selection_by_candidate_claim_and_action"])
         self.assertFalse(self.result["answer_surface_audit"]["reference_label_to_token_mapping_used"])
+        self.assertEqual(self.result["answer_surface_audit"]["selection_contract"],
+                         "structured_decision_and_action")
+        self.assertFalse(self.result["answer_surface_audit"]["natural_language_answer_evaluation_performed"])
+        self.assertEqual(self.result["interpretation"]["natural_language_answer_evaluation"], {
+            "performed": False,
+            "scored": False,
+            "reason": "Phase5BO evaluates structured decision/action claims; option prose is display text, not a natural-language model answer.",
+        })
         for case in self.protocol["cases"]:
             self.assertEqual(len(case["options"]), 3)
             self.assertNotIn("correct_answer_token", case["reference"])
@@ -80,9 +88,19 @@ class EcosystemSemanticsTests(unittest.TestCase):
 
     def test_answer_selection_uses_candidate_claim_not_reference_label(self):
         case = next(case for case in self.protocol["cases"] if case["reference"]["label"] == m.INAPPLICABLE)
-        selected = m._select_answer(case["options"], m.APPLICABLE)
+        selected = m._select_structured_claim_action(case["options"], m.APPLICABLE, m.BLOCK_OR_UPGRADE)
         self.assertEqual(selected["claim"]["decision"], m.APPLICABLE)
         self.assertEqual(case["reference"]["label"], m.INAPPLICABLE)
+
+    def test_structured_selection_requires_matching_action(self):
+        case = self.protocol["cases"][0]
+        with self.assertRaises(m.EcosystemSemanticsError):
+            m._select_structured_claim_action(case["options"], m.APPLICABLE, m.NO_ACTION_FOR_ADVISORY)
+
+    def test_natural_language_option_text_is_not_scored_as_model_answer(self):
+        case = self.protocol["cases"][0]
+        self.assertTrue(all(isinstance(option["claim"]["text"], str) for option in case["options"]))
+        self.assertNotIn("natural_language_answer", case)
 
     def test_pypi_disjoint_intervals_and_boundaries(self):
         advisory = pypi_advisory([
@@ -94,6 +112,17 @@ class EcosystemSemanticsTests(unittest.TestCase):
         self.assertEqual(m._candidate_status(advisory, "PyPI", "demo", "2.5"), m.APPLICABLE)
         self.assertEqual(m._candidate_status(advisory, "PyPI", "demo", "3.0"), m.APPLICABLE)
         self.assertEqual(m._candidate_status(advisory, "PyPI", "demo", "3.1"), m.INAPPLICABLE)
+
+    def test_pypi_reference_unions_disjoint_intervals(self):
+        advisory = pypi_advisory([
+            {"introduced": "0"}, {"fixed": "1.0"},
+            {"introduced": "2.0"}, {"last_affected": "3.0"},
+        ])
+        self.assertEqual(m._pypi_reference_status(advisory, "demo", "0.6c11"), m.APPLICABLE)
+        self.assertEqual(m._pypi_reference_status(advisory, "demo", "1.5"), m.INAPPLICABLE)
+        self.assertEqual(m._pypi_reference_status(advisory, "demo", "2.5"), m.APPLICABLE)
+        self.assertEqual(m._pypi_reference_status(advisory, "demo", "3.0"), m.APPLICABLE)
+        self.assertEqual(m._pypi_reference_status(advisory, "demo", "3.1"), m.INAPPLICABLE)
 
     def test_npm_prerelease_interval_is_semver_aware(self):
         advisory = npm_advisory([

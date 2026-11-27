@@ -48,7 +48,7 @@ jobs:
         run: python -m falsum.cli audit-ecosystem-semantics --out .phase5bo-ci-result.json
       - name: Assert the bounded result without awarding points
         run: >-
-          python -c "import json; expected=json.load(open('data/phase5bo-ecosystem-semantics-result.json',encoding='utf-8')); actual=json.load(open('.phase5bo-ci-result.json',encoding='utf-8')); assert actual==expected; assert actual['offline_snapshot_only'] is True; assert actual['registry_snapshot_verification']['live_registry_reads']==0; assert actual['policies']['improved_candidate']=={'correct':14,'incorrect':0,'denominator':14}; assert actual['policies']['answer_claim_action_selection']=={'correct':14,'incorrect':0,'denominator':14}; assert actual['answer_surface_audit']['reference_label_to_token_mapping_used'] is False"
+          python -c "import json; expected=json.load(open('data/phase5bo-ecosystem-semantics-result.json',encoding='utf-8')); actual=json.load(open('.phase5bo-ci-result.json',encoding='utf-8')); assert actual==expected; assert actual['offline_snapshot_only'] is True; assert actual['registry_snapshot_verification']['live_registry_reads']==0; assert actual['policies']['improved_candidate']=={'correct':14,'incorrect':0,'denominator':14}; assert actual['policies']['structured_claim_action_selection']=={'correct':14,'incorrect':0,'denominator':14}; assert actual['answer_surface_audit']['reference_label_to_token_mapping_used'] is False; assert actual['answer_surface_audit']['natural_language_answer_evaluation_performed'] is False"
       - name: Upload offline semantic evidence
         uses: actions/upload-artifact@v4
         with:

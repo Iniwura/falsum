@@ -3,8 +3,8 @@
 Phase 5BN is intentionally unchanged.  This follow-up fixes the two observed
 abstentions with PEP 440-aware and strict SemVer-aware candidate logic, retains
 the exact registry responses used to establish version existence, exercises
-disjoint intervals and unsupported ranges, and evaluates complete answer
-claims/actions rather than mapping a reference label to an opaque token.
+disjoint intervals and unsupported ranges, and evaluates structured
+claim/actions rather than mapping a reference label to an opaque token.
 
 The committed audit is offline after snapshot capture.  Its external resolver
 is a reference check, not human AppSec gold or independent adoption evidence.
@@ -356,33 +356,33 @@ def _pypi_reference_status(advisory: dict[str, Any], package: str, version: str)
             if not isinstance(events, list):
                 unsupported = True
                 continue
-            parts: list[str] = []
-            opened: str | None = None
-            bad = False
-            for event in events:
-                if not isinstance(event, dict) or len(event) != 1:
-                    bad = True
-                    continue
-                key, value = next(iter(event.items()))
-                if key == "introduced" and opened is None and isinstance(value, str):
-                    opened = value
-                elif key in ("fixed", "last_affected") and opened is not None and isinstance(value, str):
-                    parts.extend((f">={opened}", ("<=" if key == "last_affected" else "<") + value))
-                    opened = None
-                else:
-                    bad = True
-            if opened is not None:
-                parts.append(f">={opened}")
-            if bad or not parts:
+            # OSV events describe a union of intervals.  A single SpecifierSet
+            # would intersect every lower/upper bound and incorrectly turn
+            # disjoint intervals into an empty set.
+            intervals, bad = _parse_events(
+                events,
+                lambda value, partial=False: Version(value),
+                lambda left, right: (left > right) - (left < right),
+            )
+            if bad or not intervals:
                 unsupported = True
                 continue
-            try:
-                spec = SpecifierSet(",".join(parts))
-                supported = True
-                if spec.contains(parsed, prereleases=True):
-                    return APPLICABLE
-            except (InvalidVersion, ValueError):
-                unsupported = True
+            for start, raw_end, end_kind in intervals:
+                parts = [f">={start}"]
+                if raw_end is not None:
+                    try:
+                        end = Version(raw_end)
+                    except InvalidVersion:
+                        unsupported = True
+                        continue
+                    parts.append(("<=" if end_kind == "last_affected" else "<") + str(end))
+                try:
+                    spec = SpecifierSet(",".join(parts))
+                    supported = True
+                    if spec.contains(parsed, prereleases=True):
+                        return APPLICABLE
+                except (InvalidVersion, ValueError):
+                    unsupported = True
     if unsupported or not supported:
         return UNKNOWN
     return INAPPLICABLE
@@ -470,10 +470,19 @@ def _answer_option(ecosystem: str, package: str, version: str, advisory_id: str,
     }
 
 
-def _select_answer(options: list[dict[str, Any]], candidate_decision: str) -> dict[str, Any]:
-    matches = [option for option in options if option.get("claim", {}).get("decision") == candidate_decision]
-    need(len(matches) == 1, "answer options do not contain exactly one candidate claim")
+def _select_structured_claim_action(options: list[dict[str, Any]], candidate_decision: str,
+                                    candidate_action: str) -> dict[str, Any]:
+    """Select a structured claim/action; display text is not parsed here."""
+    matches = [option for option in options
+               if option.get("claim", {}).get("decision") == candidate_decision
+               and option.get("claim", {}).get("action") == candidate_action]
+    need(len(matches) == 1, "answer options do not contain exactly one candidate claim/action")
     return matches[0]
+
+
+def _structured_claim_action_correct(claim: dict[str, Any], reference_decision: str,
+                                     reference_action: str) -> bool:
+    return claim.get("decision") == reference_decision and claim.get("action") == reference_action
 
 
 def _snapshot_paths(root: Path, kind: str, key: str) -> tuple[Path, Path]:
@@ -626,16 +635,19 @@ def audit(root: Path = ROOT) -> dict[str, Any]:
         candidate = _candidate_status(advisory, target["ecosystem"], target["package"], target["version"])
         reference = _reference_status(advisory, target["ecosystem"], target["package"], target["version"])
         need(reference == frozen["reference"]["label"], f"reference label changed: {frozen['case_id']}")
-        selected = _select_answer(frozen["options"], candidate)
+        candidate_action = _action_for(candidate)
+        selected = _select_structured_claim_action(frozen["options"], candidate, candidate_action)
         claim = selected["claim"]
-        claim_correct = claim["decision"] == reference and claim["action"] == frozen["reference"]["expected_action"]
+        claim_correct = _structured_claim_action_correct(
+            claim, reference, frozen["reference"]["expected_action"])
         candidate_rows.append({"case_id": frozen["case_id"], "case_index": frozen["case_index"], "target": target,
                                "reference_label": reference, "candidate_decision": candidate,
+                               "candidate_action": candidate_action,
                                "candidate_correct": candidate == reference, "selected_answer_token": selected["answer_token"],
-                               "selected_claim": claim, "answer_claim_correct": claim_correct})
+                               "selected_claim": claim, "structured_claim_action_correct": claim_correct})
     candidate_correct = sum(row["candidate_correct"] for row in candidate_rows)
     reference_correct = len(candidate_rows)
-    answer_correct = sum(row["answer_claim_correct"] for row in candidate_rows)
+    structured_correct = sum(row["structured_claim_action_correct"] for row in candidate_rows)
     option_texts = [option["claim"]["text"] for case in protocol["cases"] for option in case["options"]]
     need(len(set(option_texts)) == len(option_texts), "competing claim text is duplicated")
     need(all(option["claim"]["action"] in {BLOCK_OR_UPGRADE, NO_ACTION_FOR_ADVISORY, ABSTAIN_AND_REQUEST_EVIDENCE}
@@ -646,15 +658,21 @@ def audit(root: Path = ROOT) -> dict[str, Any]:
             "cases": candidate_rows,
             "policies": {"improved_candidate": {"correct": candidate_correct, "incorrect": len(candidate_rows) - candidate_correct, "denominator": len(candidate_rows)},
                          "frozen_external_reference": {"correct": reference_correct, "incorrect": 0, "denominator": len(candidate_rows)},
-                         "answer_claim_action_selection": {"correct": answer_correct, "incorrect": len(candidate_rows) - answer_correct, "denominator": len(candidate_rows)}},
+                         "structured_claim_action_selection": {"correct": structured_correct, "incorrect": len(candidate_rows) - structured_correct, "denominator": len(candidate_rows)}},
             "answer_surface_audit": {"options_per_case": 3, "distinct_claim_texts": len(set(option_texts)),
-                                      "reference_label_to_token_mapping_used": False, "selection_by_candidate_claim_and_action": True},
+                                      "reference_label_to_token_mapping_used": False,
+                                      "selection_by_candidate_claim_and_action": True,
+                                      "selection_contract": "structured_decision_and_action",
+                                      "natural_language_answer_evaluation_performed": False,
+                                      "natural_language_text_role": "display_only_not_parsed_or_scored"},
             "coverage": {"total_cases": len(candidate_rows), "regression_cases": 2, "additional_unseen_cases": 12,
                          "ecosystems": {"PyPI": sum(row["target"]["ecosystem"] == "PyPI" for row in candidate_rows),
                                         "npm": sum(row["target"]["ecosystem"] == "npm" for row in candidate_rows)},
                          "prerelease_cases": sum("-" in row["target"]["version"] or row["target"]["version"].endswith("pre") or "rc" in row["target"]["version"] for row in candidate_rows)},
             "interpretation": {"all_candidate_cases_resolved": candidate_correct == len(candidate_rows),
-                               "meaningful_claims_resolved": answer_correct == len(candidate_rows),
+                               "structured_claim_actions_resolved": structured_correct == len(candidate_rows),
+                               "natural_language_answer_evaluation": {"performed": False, "scored": False,
+                                   "reason": "Phase5BO evaluates structured decision/action claims; option prose is display text, not a natural-language model answer."},
                                "independent_human_appsec_gold": False, "external_validation": False,
                                "new_paid_telegraph_execution": False,
                                "summary": "Phase5BO demonstrates ecosystem-native version applicability and offline snapshot reproducibility. It is not human AppSec gold, external adoption, a ranking result or a security clearance."},
@@ -678,7 +696,7 @@ def main(argv: list[str] | None = None) -> int:
         _write_once(args.out, payload)
         print(json.dumps({"status": payload["status"], "cases": len(payload.get("cases", [])),
                           "candidate_correct": payload.get("policies", {}).get("improved_candidate", {}).get("correct"),
-                          "answer_claims_correct": payload.get("policies", {}).get("answer_claim_action_selection", {}).get("correct"),
+                          "structured_claim_actions_correct": payload.get("policies", {}).get("structured_claim_action_selection", {}).get("correct"),
                           "offline_snapshot_only": payload.get("offline_snapshot_only")}, sort_keys=True))
         return 0
     except (OSError, TypeError, ValueError, KeyError, subprocess.SubprocessError) as exc:

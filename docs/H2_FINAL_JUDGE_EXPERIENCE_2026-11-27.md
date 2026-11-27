@@ -3,7 +3,7 @@
 Start here: [final storyboard](H2_FINAL_DEMO_STORYBOARD_2026-11-27.md), then
 run the two zero-credential commands in the [submission package](H2_FINAL_SUBMISSION_PACKAGE_2026-11-27.md).
 
-## Phase 5BN correction — current measurement result
+## Current measurement result
 
 The earlier Phase 5BM result remains preserved as historical evidence, but it
 is not the current certification basis. The corrected [Phase 5BN independent
@@ -15,16 +15,17 @@ target-specific competing security answers. It records 22/24 FALSUM decisions
 against 24/24 for the external version-resolution reference. The two FALSUM
 unknowns are preserved; this is not human AppSec gold or a perfect-score claim.
 
-## Phase 5BO improvement - current semantic regression
+## Ecosystem-native semantic regression
 
 Phase 5BO is a separate improvement, not a rewrite of Phase5BN. It resolves
 both observed abstentions using PEP 440 and strict SemVer semantics, supports
 disjoint affected intervals, fails closed on unsupported ranges, and uses
 committed raw PyPI/npm registry snapshots with SHA-256 sidecars. Its 14-case
-offline audit includes 12 additional unseen cases and evaluates full candidate
-claims/actions rather than label-derived answer tokens. It records 14/14
-candidate decisions and 14/14 complete claims/actions. No score points are
-added automatically for this regression suite.
+offline audit includes 12 additional unseen cases and evaluates structured
+candidate claims/actions rather than label-derived answer tokens. It records
+14/14 candidate decisions and 14/14 structured claim/action selections. The
+option prose is display-only, not natural-language answer scoring. No score
+points are added automatically for this regression suite.
 
 ## What the judge should learn in three minutes
 
@@ -52,9 +53,11 @@ added automatically for this regression suite.
    cases, 22/24 FALSUM, 24/24 external resolver, 48 distinct target-specific
    answers, and computed index/position/token leakage checks with no detected
    signal at the predeclared threshold.
-7. Phase5BO resolves the two legacy-version abstentions and adds 12 unseen
-   snapshot-backed cases: 14/14 candidate decisions and 14/14 complete
-   claim/action selections, without reference-label-to-token mappings.
+7. The ecosystem-native semantic regression resolves the two legacy-version
+   abstentions and adds 12 unseen snapshot-backed cases: 14/14 candidate
+   decisions and 14/14 structured claim/action selections, without
+   reference-label-to-token mappings. Its option prose is display-only; this
+   is not natural-language answer scoring.
 8. Two distinct official mission workflows have repeatable supporting tests:
    Model Economy supply-chain verification and Web3 Native and DeFi
    security/bug-bounty proof. They are not claimed as completed missions or
@@ -83,7 +86,8 @@ minimum](H2_EVALUATORS_RUBRIC_2026-11-27.md), not the Apps & Agents-shaped
 | 10 | [Cross-source measurement audit](../data/phase5bl-cross-source-measurement-discrimination.json) | Fair contrasts, baseline tie, and preserved negative findings |
 | 11 | [Independent balanced holdout](../data/phase5bm-independent-balanced-holdout-result.json) | 24 paired cases, balanced order, shortcut audit, and citation-only contrast |
 | 12 | [Corrected independent holdout](PHASE5BN_CORRECTED_INDEPENDENT_HOLDOUT.md) | Independent labels, external resolver, version existence, meaningful answers, and computed leakage audit |
-| 13 | [Phase5BO semantic audit](PHASE5BO_ECOSYSTEM_SEMANTICS.md) | PEP 440/SemVer semantics, offline registry snapshots, disjoint/unsupported ranges, and complete claim/action evaluation |
+| 13 | [Ecosystem-native semantic audit](PHASE5BO_ECOSYSTEM_SEMANTICS.md) | PEP 440/SemVer semantics, offline registry snapshots, disjoint/unsupported ranges, and structured claim/action selection |
+| 14 | [Final release-gate record](../evidence/final-release-gate-check-2026-11-27.json) | Reviewer command smoke checks, public-route accessibility checks, resolved local links, and owner-controlled blockers |
 
 ## Claims a judge can safely repeat
 

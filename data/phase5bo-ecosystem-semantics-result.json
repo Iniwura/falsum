@@ -1,13 +1,16 @@
 {
   "answer_surface_audit": {
     "distinct_claim_texts": 42,
+    "natural_language_answer_evaluation_performed": false,
+    "natural_language_text_role": "display_only_not_parsed_or_scored",
     "options_per_case": 3,
     "reference_label_to_token_mapping_used": false,
-    "selection_by_candidate_claim_and_action": true
+    "selection_by_candidate_claim_and_action": true,
+    "selection_contract": "structured_decision_and_action"
   },
   "cases": [
     {
-      "answer_claim_correct": true,
+      "candidate_action": "NO_ACTION_FOR_THIS_ADVISORY",
       "candidate_correct": true,
       "candidate_decision": "INAPPLICABLE",
       "case_id": "8df2da52be65dfe5",
@@ -20,6 +23,7 @@
         "scope": "version_applicability_only",
         "text": "For npm:axios@0.30.0, advisory GHSA-jr5f-v2jv-69x6 matches no published affected interval. Take no action for this advisory alone, while checking other advisories and application-specific evidence."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "npm",
         "package": "axios",
@@ -27,7 +31,7 @@
       }
     },
     {
-      "answer_claim_correct": true,
+      "candidate_action": "BLOCK_OR_UPGRADE",
       "candidate_correct": true,
       "candidate_decision": "APPLICABLE",
       "case_id": "fee485e2c2815519",
@@ -40,6 +44,7 @@
         "scope": "version_applicability_only",
         "text": "For PyPI:pymongo@3.9.0, advisory GHSA-98qm-wvgf-w4cf matches a published affected interval. Block or upgrade this dependency for this advisory, while keeping the claim limited to version applicability and not exploitability."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "PyPI",
         "package": "pymongo",
@@ -47,7 +52,7 @@
       }
     },
     {
-      "answer_claim_correct": true,
+      "candidate_action": "NO_ACTION_FOR_THIS_ADVISORY",
       "candidate_correct": true,
       "candidate_decision": "INAPPLICABLE",
       "case_id": "cc5709e6dd6aae0f",
@@ -60,6 +65,7 @@
         "scope": "version_applicability_only",
         "text": "For npm:shescape@2.1.2, advisory GHSA-66pp-5p9w-q87j matches no published affected interval. Take no action for this advisory alone, while checking other advisories and application-specific evidence."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "npm",
         "package": "shescape",
@@ -67,7 +73,7 @@
       }
     },
     {
-      "answer_claim_correct": true,
+      "candidate_action": "BLOCK_OR_UPGRADE",
       "candidate_correct": true,
       "candidate_decision": "APPLICABLE",
       "case_id": "52544753136f814c",
@@ -80,6 +86,7 @@
         "scope": "version_applicability_only",
         "text": "For npm:shescape@2.0.0-rc1, advisory GHSA-66pp-5p9w-q87j matches a published affected interval. Block or upgrade this dependency for this advisory, while keeping the claim limited to version applicability and not exploitability."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "npm",
         "package": "shescape",
@@ -87,7 +94,7 @@
       }
     },
     {
-      "answer_claim_correct": true,
+      "candidate_action": "BLOCK_OR_UPGRADE",
       "candidate_correct": true,
       "candidate_decision": "APPLICABLE",
       "case_id": "ebad8e977101df8b",
@@ -100,6 +107,7 @@
         "scope": "version_applicability_only",
         "text": "For npm:axios@0.20.0-0, advisory GHSA-jr5f-v2jv-69x6 matches a published affected interval. Block or upgrade this dependency for this advisory, while keeping the claim limited to version applicability and not exploitability."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "npm",
         "package": "axios",
@@ -107,7 +115,7 @@
       }
     },
     {
-      "answer_claim_correct": true,
+      "candidate_action": "BLOCK_OR_UPGRADE",
       "candidate_correct": true,
       "candidate_decision": "APPLICABLE",
       "case_id": "dde13b57d6502181",
@@ -120,6 +128,7 @@
         "scope": "version_applicability_only",
         "text": "For PyPI:setuptools@0.6c11, advisory GHSA-27x4-j476-jp5f matches a published affected interval. Block or upgrade this dependency for this advisory, while keeping the claim limited to version applicability and not exploitability."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "PyPI",
         "package": "setuptools",
@@ -127,7 +136,7 @@
       }
     },
     {
-      "answer_claim_correct": true,
+      "candidate_action": "NO_ACTION_FOR_THIS_ADVISORY",
       "candidate_correct": true,
       "candidate_decision": "INAPPLICABLE",
       "case_id": "794eb47db8fa98e9",
@@ -140,6 +149,7 @@
         "scope": "version_applicability_only",
         "text": "For npm:axios@1.8.2, advisory GHSA-jr5f-v2jv-69x6 matches no published affected interval. Take no action for this advisory alone, while checking other advisories and application-specific evidence."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "npm",
         "package": "axios",
@@ -147,7 +157,7 @@
       }
     },
     {
-      "answer_claim_correct": true,
+      "candidate_action": "NO_ACTION_FOR_THIS_ADVISORY",
       "candidate_correct": true,
       "candidate_decision": "INAPPLICABLE",
       "case_id": "09f5c2d094f00f95",
@@ -160,6 +170,7 @@
         "scope": "version_applicability_only",
         "text": "For npm:prismjs@1.30.0, advisory GHSA-x7hr-w5r2-h6wg matches no published affected interval. Take no action for this advisory alone, while checking other advisories and application-specific evidence."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "npm",
         "package": "prismjs",
@@ -167,7 +178,7 @@
       }
     },
     {
-      "answer_claim_correct": true,
+      "candidate_action": "BLOCK_OR_UPGRADE",
       "candidate_correct": true,
       "candidate_decision": "APPLICABLE",
       "case_id": "a2608a0dfae68109",
@@ -180,6 +191,7 @@
         "scope": "version_applicability_only",
         "text": "For PyPI:jinja2@3.1.4, advisory GHSA-q2x7-8rv6-6q7h matches a published affected interval. Block or upgrade this dependency for this advisory, while keeping the claim limited to version applicability and not exploitability."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "PyPI",
         "package": "jinja2",
@@ -187,7 +199,7 @@
       }
     },
     {
-      "answer_claim_correct": true,
+      "candidate_action": "BLOCK_OR_UPGRADE",
       "candidate_correct": true,
       "candidate_decision": "APPLICABLE",
       "case_id": "1e139f78da63bac4",
@@ -200,6 +212,7 @@
         "scope": "version_applicability_only",
         "text": "For npm:axios@1.7.0-beta.0, advisory GHSA-jr5f-v2jv-69x6 matches a published affected interval. Block or upgrade this dependency for this advisory, while keeping the claim limited to version applicability and not exploitability."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "npm",
         "package": "axios",
@@ -207,7 +220,7 @@
       }
     },
     {
-      "answer_claim_correct": true,
+      "candidate_action": "NO_ACTION_FOR_THIS_ADVISORY",
       "candidate_correct": true,
       "candidate_decision": "INAPPLICABLE",
       "case_id": "59d9646a53b9c9dd",
@@ -220,6 +233,7 @@
         "scope": "version_applicability_only",
         "text": "For PyPI:jinja2@3.1.5, advisory GHSA-q2x7-8rv6-6q7h matches no published affected interval. Take no action for this advisory alone, while checking other advisories and application-specific evidence."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "PyPI",
         "package": "jinja2",
@@ -227,7 +241,7 @@
       }
     },
     {
-      "answer_claim_correct": true,
+      "candidate_action": "NO_ACTION_FOR_THIS_ADVISORY",
       "candidate_correct": true,
       "candidate_decision": "INAPPLICABLE",
       "case_id": "b8cfbb8df540aa98",
@@ -240,6 +254,7 @@
         "scope": "version_applicability_only",
         "text": "For PyPI:pymongo@0.1pre, advisory GHSA-98qm-wvgf-w4cf matches no published affected interval. Take no action for this advisory alone, while checking other advisories and application-specific evidence."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "PyPI",
         "package": "pymongo",
@@ -247,7 +262,7 @@
       }
     },
     {
-      "answer_claim_correct": true,
+      "candidate_action": "BLOCK_OR_UPGRADE",
       "candidate_correct": true,
       "candidate_decision": "APPLICABLE",
       "case_id": "02499845537b08eb",
@@ -260,6 +275,7 @@
         "scope": "version_applicability_only",
         "text": "For npm:prismjs@1.29.0, advisory GHSA-x7hr-w5r2-h6wg matches a published affected interval. Block or upgrade this dependency for this advisory, while keeping the claim limited to version applicability and not exploitability."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "npm",
         "package": "prismjs",
@@ -267,7 +283,7 @@
       }
     },
     {
-      "answer_claim_correct": true,
+      "candidate_action": "NO_ACTION_FOR_THIS_ADVISORY",
       "candidate_correct": true,
       "candidate_decision": "INAPPLICABLE",
       "case_id": "012c1d64d22945c6",
@@ -280,6 +296,7 @@
         "scope": "version_applicability_only",
         "text": "For PyPI:setuptools@0.7.2, advisory GHSA-27x4-j476-jp5f matches no published affected interval. Take no action for this advisory alone, while checking other advisories and application-specific evidence."
       },
+      "structured_claim_action_correct": true,
       "target": {
         "ecosystem": "PyPI",
         "package": "setuptools",
@@ -301,8 +318,13 @@
     "all_candidate_cases_resolved": true,
     "external_validation": false,
     "independent_human_appsec_gold": false,
-    "meaningful_claims_resolved": true,
+    "natural_language_answer_evaluation": {
+      "performed": false,
+      "reason": "Phase5BO evaluates structured decision/action claims; option prose is display text, not a natural-language model answer.",
+      "scored": false
+    },
     "new_paid_telegraph_execution": false,
+    "structured_claim_actions_resolved": true,
     "summary": "Phase5BO demonstrates ecosystem-native version applicability and offline snapshot reproducibility. It is not human AppSec gold, external adoption, a ranking result or a security clearance."
   },
   "limits": [
@@ -311,17 +333,17 @@
   ],
   "offline_snapshot_only": true,
   "policies": {
-    "answer_claim_action_selection": {
-      "correct": 14,
-      "denominator": 14,
-      "incorrect": 0
-    },
     "frozen_external_reference": {
       "correct": 14,
       "denominator": 14,
       "incorrect": 0
     },
     "improved_candidate": {
+      "correct": 14,
+      "denominator": 14,
+      "incorrect": 0
+    },
+    "structured_claim_action_selection": {
       "correct": 14,
       "denominator": 14,
       "incorrect": 0

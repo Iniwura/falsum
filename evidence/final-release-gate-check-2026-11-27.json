@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "verified_utc": "2026-11-27T09:45:28.3001587Z",
+  "status": "INTERNAL_RELEASE_GATE_VERIFIED",
+  "scope": "read-only release verification; no publication, submission, payment or ACP activity",
+  "semantic_regression": {
+    "pypi_reference_union_fixed": true,
+    "local_tests_passed": 12,
+    "phase5bo_candidate_correct": "14/14",
+    "structured_claim_action_selection": "14/14",
+    "natural_language_answer_evaluation_performed": false,
+    "natural_language_text_role": "display_only_not_parsed_or_scored",
+    "offline_snapshot_only": true,
+    "live_registry_reads": 0
+  },
+  "reviewer_command_smoke": {
+    "fresh_provider_contract_tests": "8 passed",
+    "fresh_provider_holdout": "66 references; 27 applicable; 39 fail-closed; 0 baseline disagreements",
+    "bounded_measurement": "2/12 known false positives removed; 0/10 gated known false positives",
+    "balanced_holdout": "24/24 FALSUM; 24/24 independent interval reference; shortcut leakage false",
+    "corrected_independent_holdout": "22/24 FALSUM; 24/24 external reference; label leakage false",
+    "ecosystem_semantics": "14/14 candidate; 14/14 structured claim/action; snapshot-only replay"
+  },
+  "public_experience": {
+    "routes": [
+      {
+        "url": "https://falsum-evidence-lab.vercel.app/witness/",
+        "status": 200,
+        "viewport_meta": true,
+        "main_landmark": true,
+        "single_h1": true,
+        "keyboard_focus_rules": true,
+        "responsive_media_rules": true,
+        "images_without_alt": 0,
+        "actual_secret_material_pattern": false
+      },
+      {
+        "url": "https://falsum-evidence-lab.vercel.app/applications/",
+        "status": 200,
+        "viewport_meta": true,
+        "main_landmark": true,
+        "single_h1": true,
+        "keyboard_focus_rules": true,
+        "responsive_media_rules": true,
+        "images_without_alt": 0,
+        "actual_secret_material_pattern": false
+      }
+    ],
+    "local_evidence_links_resolved": true
+  },
+  "preserved_boundaries": {
+    "phase5bn_unchanged": true,
+    "acp_suspended": true,
+    "score_changed": false,
+    "current_strict_internal_score": "96/100",
+    "external_validation_or_adoption_claimed": false
+  },
+  "owner_controlled_requirements": [
+    "final form submission and receipt",
+    "bounties-repository star and username",
+    "contact and showcase permissions",
+    "recording or owner-approved accessible equivalent",
+    "any current paid Telegraph execution or independent customer evidence"
+  ]
+}

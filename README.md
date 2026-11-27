@@ -29,7 +29,9 @@ separate improvement: it resolves the legacy/prerelease abstentions with
 ecosystem-native PEP 440 and SemVer rules, exercises disjoint and unsupported
 ranges, retains immutable PyPI/npm registry snapshots, and evaluates complete
 answer claims/actions. It covers 14 cases (12 additional unseen) with 14/14
-candidate decisions and 14/14 claim/actions. These regression results do not
+candidate decisions and 14/14 structured claim/action selections. The option
+prose is display-only and is not natural-language answer scoring. These
+regression results do not
 automatically add score points or establish external validation. Its hosted
 [three-version replay](https://github.com/Iniwura/falsum/actions/runs/45972932870)
 passed. The public

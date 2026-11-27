@@ -42,12 +42,14 @@ prerequisite. The advisory source bytes are snapshotted as well.
 
 ## Answer-claim evaluation
 
-Every case has three complete answer options: affected/block-or-upgrade,
-inapplicable/no-action-for-this-advisory, and unresolved/abstain-and-request-
-evidence. Opaque tokens are assigned independently and are not mapped from the
-reference label. The candidate emits a decision; the evaluator selects the
-unique option whose claim decision and action match that output. Only after the
-selection is made is the selected claim compared with the frozen reference.
+Every case has three complete structured claim/action options:
+affected/block-or-upgrade, inapplicable/no-action-for-this-advisory, and
+unresolved/abstain-and-request-evidence. Opaque tokens are assigned
+independently and are not mapped from the reference label. The candidate emits
+a structured decision and action; the evaluator selects the unique option
+whose structured claim matches both. Only after selection is the claim
+compared with the frozen reference. The prose attached to each option is
+display text, not a natural-language model answer and is not parsed or scored.
 
 The committed result is:
 
@@ -55,7 +57,7 @@ The committed result is:
 | --- | ---: | ---: |
 | Improved candidate | 14 | 14 |
 | Frozen external semantic reference | 14 | 14 |
-| Complete answer claim/action | 14 | 14 |
+| Structured claim/action selection | 14 | 14 |
 
 These are semantic and protocol regression results. They do not earn points
 automatically, prove customer adoption, establish exploitability or qualify as

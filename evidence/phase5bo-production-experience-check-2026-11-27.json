@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "verified_utc": "2026-11-27T09:17:12.5564863Z",
-  "method": "read-only HTTPS GET with redirect cap 3; response body hashed after retrieval",
+  "verified_utc": "2026-11-27T09:42:42.3938973Z",
+  "method": "read-only HTTPS GET with redirect cap 3; response body hashed after retrieval; structural HTML checks performed without executing page actions",
   "routes": [
     {
       "url": "https://falsum-evidence-lab.vercel.app/witness/",
@@ -10,7 +10,18 @@
       "sha256": "40df4767844b3e11ee67bac19f1f45e17dc73876f5007f6d9bb74bf5a282ca9d",
       "title": "FALSUM — Real source evidence",
       "public_safe": true,
-      "checks": ["source-evidence text present", "ABSTAIN text present", "navigation markup present"]
+      "accessibility_and_responsive_checks": {
+        "viewport_meta": true,
+        "main_landmark": true,
+        "h1_count": 1,
+        "h2_count": 2,
+        "link_count": 12,
+        "aria_attribute_count": 25,
+        "images_without_alt": 0,
+        "media_rule_count": 4,
+        "focus_rule_count": 3
+      },
+      "checks": ["source-evidence text present", "ABSTAIN text present", "navigation markup present", "responsive viewport present", "semantic main and single h1 present", "keyboard focus rules present", "no images missing alt", "no actual secret-material pattern detected"]
     },
     {
       "url": "https://falsum-evidence-lab.vercel.app/applications/",
@@ -19,7 +30,18 @@
       "sha256": "51347bed5ccd1230db219401ed68d99e3cca8464a255040cfe1f3dd551e70a04",
       "title": "Application evidence — FALSUM",
       "public_safe": true,
-      "checks": ["application evidence text present", "no private key/token/secret text detected"]
+      "accessibility_and_responsive_checks": {
+        "viewport_meta": true,
+        "main_landmark": true,
+        "h1_count": 1,
+        "h2_count": 5,
+        "link_count": 18,
+        "aria_attribute_count": 14,
+        "images_without_alt": 0,
+        "media_rule_count": 2,
+        "focus_rule_count": 2
+      },
+      "checks": ["application evidence text present", "responsive viewport present", "semantic main and single h1 present", "keyboard focus rules present", "no images missing alt", "no actual secret-material pattern detected"]
     }
   ],
   "limits": [

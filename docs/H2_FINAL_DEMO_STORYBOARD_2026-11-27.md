@@ -3,8 +3,10 @@
 **Prepared, not recorded or submitted.** The walkthrough is public-safe: it
 uses pinned source metadata and generated summaries, never raw provider
 response bodies, receipts, payment headers, private keys or hidden material.
+The judge can follow this sequence from the problem and visible outcomes; no
+knowledge of FALSUM's internal phase names is required.
 
-## 0:00-0:20 - name the problem
+## 0:00-0:20 - name the decision problem
 
 "FALSUM is Evaluator material for `SECURITY_REVIEW_GENERAL`. It prevents a
 security-review result from treating a paid HTTP response, advisory identifier
@@ -27,7 +29,7 @@ fail-closed unknown/insufficient; and lodash 4.18.1 with zero advisories.
 State that paths were selected from public tree metadata before response
 inspection, so this is not blind model holdout or human gold.
 
-## 0:55-1:35 - inspect one bound decision
+## 0:55-1:35 - inspect one source-bound decision
 
 Open one JSON row and show its identifier, canonical advisory path, immutable
 Git blob SHA, exact `PyPI:django@3.2.0` target, FALSUM decision and baseline
@@ -37,7 +39,7 @@ Point to fixed-exclusive, last-affected-inclusive and unsupported-range tests.
 The independently implemented baseline agrees on all 66 rows. This proves
 repeatable source-bound evaluation, not superiority over the baseline.
 
-## 1:35-2:05 - show the previously measured bounded improvement
+## 1:35-2:05 - show the measured safety improvement
 
 ```bash
 PYTHONPATH=src python -m falsum.cli audit-evaluator-measurement \
@@ -50,7 +52,7 @@ suppresses both. Say "2/12 known false-positive reduction; 10/10 narrow
 reviewed-reference precision," then state that this does not prove recall,
 general security accuracy, expert gold, ranking uplift or adoption.
 
-## 2:05-2:35 - run the corrected independent-label holdout
+## 2:05-2:35 - compare against an independent reference
 
 ```bash
 python -m pip install --no-deps packaging==26.4
@@ -64,10 +66,10 @@ Show the independent reference stage, verified registry versions, 22/24 FALSUM
 decisions versus 24/24 external-resolver decisions, and the two explicit
 unknown disagreements. Show that all 48 answer surfaces are target-specific,
 then open the computed case-index, answer-position and answer-token leakage
-metrics. State that this corrected result supersedes the historical Phase5BM
-perfect result for current certification.
+metrics. State that this is the current certification result; the older
+perfect diagnostic remains preserved separately and is not used to inflate it.
 
-## 2:35-3:10 - run the ecosystem-native offline audit
+## 2:35-3:10 - demonstrate ecosystem-native version handling
 
 ```bash
 PYTHONPATH=src FALSUM_PHASE5BO_NODE_PATH=.phase5bo-node/node_modules \
@@ -76,7 +78,9 @@ PYTHONPATH=src FALSUM_PHASE5BO_NODE_PATH=.phase5bo-node/node_modules \
 ```
 
 Show the committed registry snapshot manifest and SHA-256 sidecars, then show
-14/14 candidate decisions and 14/14 complete answer claims/actions. Highlight
+14/14 candidate decisions and 14/14 structured claim/action selections.
+Explicitly say that the option prose is display-only, not natural-language
+answer scoring. Highlight
 `pymongo@0.1pre`, `setuptools@0.6c11`, Axios's two disjoint intervals and the
 four prerelease cases. State that the audit performs zero live registry reads;
 the snapshot is evidence of captured package existence, not freshness.

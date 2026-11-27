@@ -121,8 +121,10 @@ implementation and does not alter Phase5BN. It resolves both observed legacy
 version abstentions, tests PEP 440 and strict SemVer prereleases, exercises
 Axios's disjoint intervals and unsupported-range abstention, and replays from
 six committed PyPI/npm registry snapshots without live registry reads. It
-adds 12 additional unseen cases to the two regressions and evaluates complete
-claim/action answers: 14/14 candidate decisions and 14/14 claims.
+adds 12 additional unseen cases to the two regressions and evaluates
+structured claim/action selection: 14/14 candidate decisions and 14/14
+structured selections. The option prose is display-only, not natural-language
+answer scoring.
 
 The [three-version hosted replay](https://github.com/Iniwura/falsum/actions/runs/45972932870)
 passed. The current internal score remains **96/100**. No points are added
