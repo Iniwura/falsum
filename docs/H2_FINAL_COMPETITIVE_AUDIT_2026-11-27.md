@@ -118,7 +118,15 @@ ties the competent baseline 66/66, and preserves the negative verdict-only
 tie. This supports the 34/40 measurement allocation; it is not human gold or
 a ranking-improvement claim.
 
-Measurement commit `b8db95d` is hosted-verified by the [Phase 5BJ fresh-provider workflow](https://github.com/Iniwura/falsum/actions/runs/45919862041), the [Phase 5BI scorecard workflow](https://github.com/Iniwura/falsum/actions/runs/45919861960), the [Phase 5BL measurement workflow](https://github.com/Iniwura/falsum/actions/runs/45942955107), the [Phase 5BK mapping workflow](https://github.com/Iniwura/falsum/actions/runs/45942955061), and the [Foundation suite](https://github.com/Iniwura/falsum/actions/runs/45919862008). Hosted action Node.js deprecation annotations are non-blocking; successful conclusions are the authoritative results.
+The prior Phase 5BJ, Phase 5BI and Foundation evidence remains green in its
+[fresh-provider](https://github.com/Iniwura/falsum/actions/runs/45919862041),
+[scorecard](https://github.com/Iniwura/falsum/actions/runs/45919861960), and
+[Foundation](https://github.com/Iniwura/falsum/actions/runs/45919862008) runs.
+Measurement commit `b8db95d` is additionally verified by the [Phase 5BL
+measurement workflow](https://github.com/Iniwura/falsum/actions/runs/45942955107)
+and [Phase 5BK mapping workflow](https://github.com/Iniwura/falsum/actions/runs/45942955061).
+Hosted action Node.js deprecation annotations are non-blocking; successful
+conclusions are the authoritative results.
 
 The 90/100 result is an internal, evidence-mapped readiness assessment, not an
 organizer score. The largest remaining excellence-award risks are independent
