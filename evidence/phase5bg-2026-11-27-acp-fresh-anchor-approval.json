@@ -21,6 +21,29 @@
     "provider_offering": "verifySecurityReport at 0.01 USDC with 30-minute SLA",
     "provider_sse_authenticated": true,
     "provider_live_job_received": false,
+    "official_sandbox_preflight": {
+      "route": "https://app.virtuals.io/acp",
+      "mode": "Sandbox Butler chat mode",
+      "required_shape": [
+        "distinct buyer/requestor agent",
+        "FALSUM provider agent",
+        "both agents registered with the Service Registry",
+        "provider actively listening when not using the owned-agent shortcut",
+        "funded Butler/test buyer wallet"
+      ],
+      "cli_testnet_is_not_the_sandbox": true,
+      "official_native_gas_guidance": "Virtuals playbook says test-agent gas is not required; the buyer still needs USDC top-up",
+      "sdk_sponsored_evm_chains": [8453, 84532],
+      "live_account_sponsor_receipt": false,
+      "zero_native_gas_verified_for_this_session": false,
+      "x402_compatibility": {
+        "installed_legacy_sdk_has_eip3009_support": true,
+        "installed_legacy_sdk_base_sepolia_x402_config": true,
+        "installed_cli_legacy_bridge_exposes_x402": false,
+        "required_route": "separate buyer implementation using the official SDK/Privy EIP-712 signer; no provider-wallet reuse"
+      },
+      "browser_access_granted": false
+    },
     "telegraph_quote": "402 Payment Required for 10000 uUSDC exact on Base Sepolia; no payment redeemed",
     "telegraph_request_sha256": "27fec1e82b8a4aab3a930a0092f33f9e63d07e604474fe4526408ec57d750386",
     "acp_mainnet_contract": "0x238E541BfefD82238730D00a2208E5497F1832E0",
