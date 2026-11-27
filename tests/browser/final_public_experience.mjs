@@ -20,7 +20,8 @@ async function main() {
   try {
     for (const route of routes) {
       for (const viewport of viewports) {
-        const page = await browser.newPage(viewport.options);
+        const context = await browser.newContext(viewport.options);
+        const page = await context.newPage();
         try {
           const response = await page.goto(route.url, { waitUntil: "networkidle", timeout: 60000 });
           if (!response || response.status() !== 200) {
@@ -56,7 +57,7 @@ async function main() {
             fullPage: true,
           });
         } finally {
-          await page.close();
+          await context.close();
         }
       }
     }
