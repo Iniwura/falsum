@@ -191,23 +191,51 @@ def _extract_claims(result: Mapping[str, Any], code: str) -> dict[str, Any]:
     uncertainty_present = bool(uncertainty) or bool(_UNCERTAINTY.search(text))
     finding_bindings: list[dict[str, Any]] = []
     if structured:
+        # A source ID may support only one finding for the same rule. Without
+        # this one-to-one assignment, duplicate findings can all inherit the
+        # same single evidence row and appear individually grounded.
+        used_source_ids_by_rule: dict[str, set[str]] = {}
         for index, finding in enumerate(findings):
             if not isinstance(finding, dict) or not isinstance(finding.get("rule_id"), str):
+                finding_bindings.append({
+                    "finding_index": index,
+                    "rule_id": None,
+                    "evidence": {"source_ids": [], "matching_source_count": 0, "matches_target": False},
+                    "recommendation": {"present": False},
+                    "binding_valid": False,
+                    "binding_unavailable_reason": "finding_missing_rule_id",
+                })
                 continue
             rule_id = finding["rule_id"]
-            matching_evidence = [row for row in evidence_records if row["rule_id"] == rule_id]
+            matching_evidence = [
+                row for row in evidence_records
+                if row["rule_id"] == rule_id and row["matches_target"]
+                and isinstance(row["source_id"], str) and row["source_id"]
+            ]
+            used = used_source_ids_by_rule.setdefault(rule_id, set())
+            available = sorted({
+                row["source_id"] for row in matching_evidence
+                if row["source_id"] not in used
+            })
+            source_id = available[0] if available else None
+            if source_id is not None:
+                used.add(source_id)
             recommendation = finding.get("recommendation")
             recommendation_present = isinstance(recommendation, str) and bool(recommendation.strip())
             finding_bindings.append({
                 "finding_index": index,
                 "rule_id": rule_id,
                 "evidence": {
-                    "source_ids": [row["source_id"] for row in matching_evidence if row["source_id"]],
-                    "matching_source_count": sum(row["matches_target"] for row in matching_evidence),
-                    "matches_target": any(row["matches_target"] for row in matching_evidence),
+                    "source_ids": [source_id] if source_id is not None else [],
+                    "matching_source_count": len({
+                        row["source_id"] for row in matching_evidence
+                    }),
+                    "matches_target": source_id is not None,
+                    "one_to_one": source_id is not None,
                 },
                 "recommendation": {"present": recommendation_present},
-                "binding_valid": any(row["matches_target"] for row in matching_evidence) and recommendation_present,
+                "binding_valid": source_id is not None and recommendation_present,
+                "binding_unavailable_reason": None if source_id is not None else "no_distinct_target_bound_source_id",
             })
     else:
         # A natural-language answer can be checked for exact target excerpts,
@@ -222,7 +250,11 @@ def _extract_claims(result: Mapping[str, Any], code: str) -> dict[str, Any]:
             "binding_valid": False,
             "binding_unavailable_reason": "natural_language_answer_has_no_explicit_finding_binding",
         } for rule_id in sorted(claimed)]
-    all_claimed_findings_bound = all(binding["binding_valid"] for binding in finding_bindings)
+    all_claimed_findings_bound = (
+        structured
+        and len(finding_bindings) == len(findings)
+        and all(binding["binding_valid"] for binding in finding_bindings)
+    )
     return {
         "surface": "structured" if structured else "free_text",
         "verdict": result.get("verdict") if isinstance(result.get("verdict"), str) else None,
@@ -258,7 +290,7 @@ def _provider_capture(path: str, expected_blob: str, raw: bytes) -> dict[str, An
         for binding in claims["finding_bindings"]
         if isinstance(binding.get("rule_id"), str)
     }
-    structured_target_bound = bool(reference_rules) and all(
+    structured_target_bound = bool(reference_rules) and claims["all_claimed_findings_bound"] and all(
         rule_id in bindings_by_rule and bindings_by_rule[rule_id]["evidence"]["matches_target"]
         for rule_id in reference_rules
     )
@@ -268,8 +300,10 @@ def _provider_capture(path: str, expected_blob: str, raw: bytes) -> dict[str, An
             else claims["exact_target_evidence_count"] >= len(reference_rules)
         )
     )
-    claims_match = claimed_rules == reference_rules
-    structured_remediation_complete = bool(reference_rules) and all(
+    claims_match = claimed_rules == reference_rules and (
+        claims["surface"] != "structured" or claims["all_claimed_findings_bound"]
+    )
+    structured_remediation_complete = bool(reference_rules) and claims["all_claimed_findings_bound"] and all(
         rule_id in bindings_by_rule and bindings_by_rule[rule_id]["binding_valid"]
         for rule_id in reference_rules
     )
