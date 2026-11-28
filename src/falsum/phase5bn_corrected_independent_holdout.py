@@ -342,6 +342,35 @@ def _load_protocol(root: Path = ROOT) -> dict[str, Any]:
     return protocol
 
 
+def _verify_frozen_versions_present(record: dict[str, Any], metadata: dict[str, Any]) -> None:
+    """Verify the preselected package versions without pinning a mutable index document.
+
+    PyPI and npm package-level metadata endpoints change whenever a new release
+    is published or registry metadata is refreshed. The protocol's metadata
+    SHA-256 remains the freeze-time snapshot identity. Requiring the current
+    full document to retain that hash makes an immutable 24-case roster fail
+    merely because an unrelated release was added. Replay therefore checks
+    only that each already-frozen version key remains present. Advisory bytes,
+    version strings, reference labels, case order and answer surfaces remain
+    frozen; no new version is selected and no label is recomputed from a new
+    registry release.
+    """
+    ecosystem = record.get("ecosystem")
+    package = record.get("package")
+    frozen = record.get("verified_versions")
+    need(ecosystem in ("PyPI", "npm"), "unsupported registry ecosystem")
+    need(isinstance(package, str) and package, "package identity is missing")
+    need(isinstance(frozen, list) and len(frozen) == 2
+         and all(isinstance(version, str) and version for version in frozen)
+         and len(set(frozen)) == 2, "frozen package-version pair is malformed")
+    key = "releases" if ecosystem == "PyPI" else "versions"
+    version_map = metadata.get(key)
+    need(isinstance(version_map, dict), f"{ecosystem} metadata has no {key} map")
+    available = {version for version in version_map if isinstance(version, str)}
+    for version in frozen:
+        need(version in available, f"claimed package version no longer exists: {package}@{version}")
+
+
 def _load_sources_and_metadata(protocol: dict[str, Any], fetcher: Callable[[str], bytes] = _fetch) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
     sources: dict[str, dict[str, Any]] = {}
     metadata: dict[str, dict[str, Any]] = {}
@@ -352,12 +381,9 @@ def _load_sources_and_metadata(protocol: dict[str, Any], fetcher: Callable[[str]
         advisory = strict_json(advisory_raw)
         need(isinstance(advisory, dict) and advisory.get("id") == identifier, f"advisory identity changed: {identifier}")
         metadata_raw = fetcher(record["metadata_url"])
-        need(hashlib.sha256(metadata_raw).hexdigest() == record["metadata_sha256"], f"package metadata changed: {record['package']}")
         package_metadata = strict_json(metadata_raw)
         need(isinstance(package_metadata, dict), "package metadata malformed")
-        versions = set(_available_versions(record["ecosystem"], package_metadata))
-        for version in record["verified_versions"]:
-            need(version in versions, f"claimed package version no longer exists: {record['package']}@{version}")
+        _verify_frozen_versions_present(record, package_metadata)
         sources[identifier] = advisory
         metadata[record["package"]] = package_metadata
     return sources, metadata
@@ -468,7 +494,21 @@ def audit(root: Path = ROOT, fetcher: Callable[[str], bytes] = _fetch) -> dict[s
     return {
         "schema_version": 1, "status": STATUS, "protocol": PROTOCOL,
         "reference_stage_completed_before_candidate": True,
-        "package_versions_verified_from_pinned_registry_metadata": True,
+        "frozen_package_versions_verified_against_live_registry": True,
+        "registry_metadata_policy": {
+            "freeze_time_snapshot_hashes_retained": True,
+            "full_mutable_metadata_digest_rechecked": False,
+            "replay_check": "all preselected version keys remain present; no new versions are selected",
+        },
+        "registry_metadata_snapshots": [
+            {
+                "ecosystem": record["ecosystem"],
+                "package": record["package"],
+                "freeze_time_sha256": record["metadata_sha256"],
+                "frozen_versions": record["verified_versions"],
+            }
+            for record in protocol["records"]
+        ],
         "cases": cases,
         "balance": {"total": 24, "applicable": sum(row["reference_label"] == APPLICABLE for row in cases),
                     "inapplicable": sum(row["reference_label"] == INAPPLICABLE for row in cases),
@@ -485,6 +525,8 @@ def audit(root: Path = ROOT, fetcher: Callable[[str], bytes] = _fetch) -> dict[s
         "leakage_audit": leakage,
         "interpretation": {
             "meaningful_quality_discrimination": falsum_correct < 24,
+            "live_registry_metadata_is_mutable": True,
+            "freeze_time_metadata_hash_is_provenance_not_live_document_equality": True,
             "falsum_beats_external_resolver": False,
             "independent_human_appsec_gold": False,
             "security_clearance": False, "ranking_improvement": False,
