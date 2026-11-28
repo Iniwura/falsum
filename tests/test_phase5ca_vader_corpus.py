@@ -171,8 +171,8 @@ class Phase5CAVaderCorpusTests(unittest.TestCase):
 
     def test_description_line_endings_normalize_before_identity_comparison(self):
         vader_rows, graded_rows = self._rows()
-        vader_rows[0]["Description"] = "first line\\r\\nsecond line  \\r\\n"
-        graded_rows[0]["Description"] = "first line\\nsecond line\\n"
+        vader_rows[0]["Description"] = "first line\r\nsecond line  \r\n"
+        graded_rows[0]["Description"] = "first line\nsecond line\n"
         report, _ = build_report(vader_rows, graded_rows, self._protocol(), [])
         self.assertEqual(report["corpus"]["matched_cases"], 1)
         self.assertEqual(report["alignment"]["excluded_records"], [])
