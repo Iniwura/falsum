@@ -52,14 +52,23 @@ class AdversarialEvalSourceScopeTests(unittest.TestCase):
             {"CVE-2024-29041"},
         )
 
-    def test_source_identity_does_not_depend_on_candidate_answer_order(self):
-        prompt = "Triage GHSA-P6MC-M468-83GW for lodash-es 4.17.19."
-        source_url = "https://github.com/advisories/GHSA-p6mc-m468-83gw"
+    def test_classification_uses_source_ids_not_answer_only_ids(self):
+        public_ids = {"GHSA-RV95-896H-C2VC"}
+        prompt = (
+            "Our Express 4.21.1 app does res.redirect(req.query.returnUrl) "
+            "after login with no validation. Severity?"
+        )
+        source_url = "https://cwe.mitre.org/data/definitions/601.html"
         source_ids = m.source_identifiers(prompt, source_url)
-        self.assertEqual(source_ids, {"GHSA-P6MC-M468-83GW"})
+        answer_ids = m.answer_only_identifiers(
+            "Needs changes, CWE-601 open redirect.",
+            "Secure, 0 issues; GHSA-RV95-896H-C2VC fixes all redirects.",
+            source_ids,
+        )
+        self.assertEqual(answer_ids, public_ids)
         self.assertEqual(
-            m.source_identifiers(prompt, source_url),
-            m.source_identifiers(prompt, source_url),
+            m.bw._classify_pair(source_ids, public_ids),
+            ("UNCLASSIFIED_NO_ADVISORY_ID", []),
         )
 
     def test_protocol_blob_tampering_is_rejected(self):
