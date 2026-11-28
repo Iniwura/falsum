@@ -4,7 +4,7 @@
 
 ## Fixed internal sprint score
 
-The internal sprint rubric remains unchanged. This is a project-readiness score, not Telegraph's official score.
+The five-category internal sprint rubric remains unchanged. This is a project-readiness assessment, not Telegraph's official score.
 
 | Internal criterion | Score |
 | --- | ---: |
@@ -17,45 +17,77 @@ The internal sprint rubric remains unchanged. This is a project-readiness score,
 
 **Required pre-demo threshold: 90/100. Gap: 12 points.**
 
-No score increase is recorded in this handoff. The RealVuln maintainer's adoption of the order-invariance fix is real external benchmark impact, but it does not establish Telegraph evaluator-material acceptance, a Solana app workflow, or Telegraph network usage. It therefore does not change this fixed internal score.
+No score increase is recorded. The RealVuln maintainer's adoption of the order-invariance correction is genuine external benchmark impact, but it does not establish FALSUM's Telegraph material acceptance, a Solana application integration adopted by its maintainer, or Telegraph network usage. It does not change the fixed internal score.
 
 ## Official Season II rules — separate from the internal score
 
-The [official rules page](https://hackathon.telegraphprotocol.com/rules) was checked on 28 November 2026. It defines the Evaluators track as an evaluation adapter, evaluation material, or both. Every track must show a working contribution, real Telegraph integration, repeatable results, safe handling, accurate claims, and the required bounties-repository star.
+The [official rules page](https://hackathon.telegraphprotocol.com/rules) defines the Evaluators track separately from Apps & Agents. The repository's [Evaluators rubric extraction note](H2_EVALUATORS_RUBRIC_2026-11-27.md) records a track-specific client-bundle extraction and hash, but explicitly says that extraction was not independently re-fetched and re-hashed during this sprint. The visible rules page's server-rendered summary shows Apps & Agents weights while the Evaluators selector is client-rendered. Therefore the track-specific weights remain **provisional** here.
 
-The current repo's [Evaluators rubric extraction note](H2_EVALUATORS_RUBRIC_2026-11-27.md) records a client-bundle extraction with these track-specific weights: measurement validity/baselines 40 (technical minimum 28), integrity 15, reproducibility/protocol compatibility 10, useful coverage/improvement 10, documentation/integration 5, and organic growth 20. That note records the official bundle URL and SHA-256. The visible rules page's server-rendered default summary currently shows the Apps & Agents weights (35/25/10/5/5/20), while the page's track selector is client-rendered. The Evaluators bundle was not independently re-fetched and re-hashed during this run; treat the track-specific extraction as source-recorded but provisional until revalidated. Do not use either official rubric to alter the fixed internal sprint weights.
+**No official organizer score is available or assigned.** Do not use the provisional extraction, the historical 96/100 readiness mapping, or the 84/100 judge-style audit to alter the five fixed internal categories. The official deadline is **1 December 2026, 23:59 UTC**.
 
-**No official organizer score is available or assigned here.** The historical 96/100 internal readiness mapping and 84/100 judge-style audit mentioned in the November 27 documents are separate historical assessments. Neither is an organizer score, and neither replaces the fixed 78/100 internal sprint score above.
+## Latest verified repository state
 
-For Evaluators delivery awards, the official rules prioritize distinct commercial missions, distinct H2 app workflows, independently verified missing mission-critical Intent needs, and combined technical quality. Evaluator excellence ties prefer proven measurement improvement or valuable new coverage, then validity. The main competition deadline is **1 December 2026, 23:59 UTC**.
+Main is at [`78beff3789e629b9e1556dfce59f92f4b630564f`](https://github.com/Iniwura/falsum/commit/78beff3789e629b9e1556dfce59f92f4b630564f). This includes the scorecard handoff from [PR #124](https://github.com/Iniwura/falsum/pull/124) and the Phase5BN reproducibility fix from [PR #127](https://github.com/Iniwura/falsum/pull/127).
 
-## Current verified evidence and limits
+### Phase 5BN corrected independent holdout replay
 
-### Phase 5BP public-provider answer audit
+[PR #127](https://github.com/Iniwura/falsum/pull/127) merged after its seven hosted workflow runs passed. The [Phase5BN workflow](https://github.com/Iniwura/falsum/actions/runs/46116935498) passed the Python 3.11–3.13 matrix; the 3.13 job ran 10 focused tests, replayed the live registry inputs and reproduced the frozen 24-case result:
 
-[PR #122](https://github.com/Iniwura/falsum/pull/122) remains open. Its previous head `18552161af0727889ff8d58b3f27d3a7d47f0429` had 36 successful pull-request workflow runs. The focused [Phase 5BP workflow](https://github.com/Iniwura/falsum/actions/runs/46036978276) passed. After the finding-binding fix below was merged into the feature branch, PR #122 advanced to head `9ef7b0e8dddf05dc04b1891678ca73233294d586`; its new 36-run matrix was still queued/in progress at the latest check. Do not merge PR #122 until that exact head completes CI and its 40-file diff receives a final review.
+- External resolver: **24/24**.
+- FALSUM: **22/24**.
+- Leakage audit: **no label leakage detected**.
+- The two candidate misses remain negative results; no improvement is claimed.
 
-The audit uses six immutable public PR Guard response blobs from one pinned commit: three structured and three free-text responses. The recorded result is 18/24 source-bound integrity checks, two fully supported structured actions, and four review holds. The reference oracle is a narrow source-derived pattern check (SQL concatenation, shell construction, and dynamic execution), not human AppSec gold, a blind source-disjoint holdout, or a general vulnerability detector. It does not establish provider accuracy or a Telegraph ranking change.
+The fix preserves freeze-time registry metadata SHA-256 values as provenance while replaying against mutable PyPI/npm indexes by checking the exact already-frozen version keys and package identity. It never selects new versions or changes labels. The committed cases, balance, policies, leakage audit and answer-surface audit remain identical to the frozen result.
 
-A code review found that duplicate findings could reuse one evidence source and malformed findings without a rule ID were skipped. [PR #123](https://github.com/Iniwura/falsum/pull/123) is now merged into the feature branch as commit [`9ef7b0e8dddf05dc04b1891678ca73233294d586`](https://github.com/Iniwura/falsum/commit/9ef7b0e8dddf05dc04b1891678ca73233294d586), not into main. Its eight hosted workflows passed. The Phase 5BP contract job ran 11 tests, including duplicate-source reuse rejection, malformed-finding rejection, and a valid two-source positive case; the public replay remained 18/24, 2/6 supported actions, and 4/6 holds. Evidence: [Phase 5BP run](https://github.com/Iniwura/falsum/actions/runs/46114762639) and [Foundation run](https://github.com/Iniwura/falsum/actions/runs/46114762622).
+This is a reproducibility correction, not a new accuracy gain. The external resolver is a version-semantics baseline, not human AppSec gold or an independent evaluator adapter.
 
-### Anjoman material
+### Phase 5BP public-provider answer/action audit
 
-[Phase 5BQ](PHASE5BQ_ANJOMAN_PAIR_PREPARATION.md) prepares 14 source-backed candidate preference pairs for `SECURITY_REVIEW_GENERAL`, mapped to the `SECURITY_REVIEW` judgment family by [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96) and the official [INTENTS.md](https://github.com/telegraphprotocol/bounties/blob/main/docs/INTENTS.md).
+[PR #122](https://github.com/Iniwura/falsum/pull/122) remains open at head [`0c2899bccfa4c2565971c557bc72d48bb670460b`](https://github.com/Iniwura/falsum/commit/0c2899bccfa4c2565971c557bc72d48bb670460b), after [PR #123](https://github.com/Iniwura/falsum/pull/123) and the Phase5BN branch sync [PR #126](https://github.com/Iniwura/falsum/pull/126) were merged into its feature branch. The new hosted matrix for this exact head has started but is not yet complete. Do not merge PR #122 until every required check finishes and the full 43-file diff is reviewed.
 
-The packet is generated from pinned advisory and registry snapshots. It is **not uploaded**, not human-adjudicated, not eligible, and not used for network ranking. Its `source_kind: generated` provenance must not be relabelled. Bounty #96 asks for realistic questions, a believable wrong answer of comparable length, varied answers, and multiple contributors before the pool is used. The owner-only upload path requires an EIP-191 signature. No signature, wallet action, upload, or official submission was performed; these remain outside the authorized scope.
+The Phase5BP study uses six immutable public PR Guard response blobs from one pinned commit: three structured and three free-text responses. The recorded result remains 18/24 source-bound integrity checks, two fully supported structured actions, and four review holds. Its reference oracle is a narrow source-derived pattern check (SQL concatenation, shell construction and dynamic execution), not human AppSec gold, a blind source-disjoint holdout, or a general vulnerability detector. It does not establish provider accuracy or a Telegraph ranking change.
 
-### RealVuln upstream result
+### Phase 5BU real Solana application compatibility
 
-FALSUM's [reproducibility issue #68](https://github.com/kolega-ai/Real-Vuln-Benchmark/issues/68) received a maintainer-confirmed resolution. Upstream [PR #70](https://github.com/kolega-ai/Real-Vuln-Benchmark/pull/70) merged as `d376b96b64337de19e01e17a51ddb2f54814f432`; the maintainer reports deployment in [RealVuln v4.0.0](https://realvuln.com/v/4.0.0/dashboard.html). The maintainer reports 5,609 saved reports replayed, 90 additional true positives, zero per-report true positives lost, and identical assignments when both input lists are reversed. These are upstream-reported results, not an independent FALSUM rerun.
+[PR #125](https://github.com/Iniwura/falsum/pull/125) is still open on its child branch at head [`84334e2c4f240e5ec61fd7a83237b48fcba562c5`](https://github.com/Iniwura/falsum/commit/84334e2c4f240e5ec61fd7a83237b48fcba562c5). Its eight hosted workflows passed. The [Phase5BU CI run](https://github.com/Iniwura/falsum/actions/runs/46115849700) verified a pinned ResQ Programs Anchor workspace and 235 KB Cargo.lock, then checked locked `anchor-lang 1.0.0-rc.4` against two pinned RustSec advisories.
 
-FALSUM's earlier 51-report comparison tied the original published F3 on all 51 reports and improved on the sorted-greedy control in only one case. This is a reproducibility finding, not improved scanner detection, and not Telegraph adoption.
+The [machine-readable artifact](https://github.com/Iniwura/falsum/actions/runs/46115849700/artifacts/15250699975) reports:
+
+| Measure | Result |
+| --- | ---: |
+| Applications | 1 |
+| Locked package versions | 1 |
+| Package/advisory pairs | 2 |
+| FALSUM coverage / abstentions | 2 / 0 |
+| Agreement with independent `semver@7.8.6` reference | 2/2 |
+| False acceptances / rejections vs that reference | 0 / 0 |
+| Citation-only false applicables | 2 |
+
+This is a read-only lockfile compatibility result. It is **not** a full Cargo.lock audit, Solana program-source analysis, human AppSec gold, ResQ maintainer review, independent app adoption, security clearance, or Telegraph network improvement. The artifact is owner-run CI, not independent reproduction.
+
+## Telegraph material and ecosystem boundary
+
+The historical [SECURITY_REVIEW bounty #96](https://github.com/telegraphprotocol/bounties/issues/96) is closed and points contributors to the current mission issues, including [Model Economy #198](https://github.com/telegraphprotocol/bounties/issues/198) and [Web3 Native & DeFi #202](https://github.com/telegraphprotocol/bounties/issues/202).
+
+The official [Contribute Evaluation Data guide](https://anjoman.ai/docs/scoring/contribute-evaluation-data) states that:
+- judgment questions enter the pool only after at least **five different contributors** have material;
+- the pool is split into a hidden testing half and a ranking half;
+- only rows in an active eligible snapshot are used;
+- `source_kind: llm`, `synthetic`, `generated` or `model` is always classified as unverified, even when a URL is present.
+
+FALSUM's evidence file records 20 rows as UI-visible eligible, but it also explicitly records that independent API verification of those user-owned rows and maintainer approval are null/false. Do not claim those rows were used for ranking. The 14 Phase5BQ rows remain generated, unsubmitted candidates and are not eligible material.
+
+A public MIT-licensed external Evaluators project, [Ritapossible/AdversarialEval](https://github.com/Ritapossible/AdversarialEval), publishes a 40-pair test set from two independent authors and a reported 31/40 (77.5%) adapter result. It is a useful candidate external corpus, not a FALSUM result. An initial source-ID comparison found two overlapping identifiers (CVE-2025-27152 and GHSA-JR5F-V2JV-69X6, the same advisory family) in FALSUM's publicly visible corpus, plus eight candidate rows across six other GHSA sources that are disjoint from those public sources. The private content of FALSUM's historical 20 eligible rows is not available in the repository, so complete source-disjointness cannot be proven. Do not call this a blind held-out set or claim FALSUM accuracy from it. Next: pin the external repo commit and file blob, build a reproducible ingestion/overlap harness, and keep the private-overlap limitation explicit before any candidate evaluation.
+
+A single attempt to post the ResQ compatibility result and request reproduction on mission #202 was blocked by GitHub's integration permission: **403, Resource not accessible by integration**. No comment was published. Do not retry through the same permission boundary. The PR, CI artifact and this handoff remain public evidence; an authorized human maintainer or reviewer is still needed for independent reproduction.
 
 ## Next actionable handoff
 
-1. Verify [PR #125](https://github.com/Iniwura/falsum/pull/125), the new pinned ResQ Solana Cargo.lock compatibility harness, against its exact head. It freezes a real application lockfile and two RustSec advisories before candidate implementation; do not count the expected replay until hosted CI completes.
-2. Wait for the 36-run matrix on PR #122's exact head `9ef7b0e8dddf05dc04b1891678ca73233294d586`, then review the complete 40-file diff before considering a merge.
-3. Seek a genuinely independent, same-Intent review or source-disjoint adjudicated response set. If authentic paired reference answers are unavailable, keep the reproducible ingestion harness honest; do not manufacture gold or label the six PR Guard captures as blind held-out cases.
-4. Keep the Anjoman packet in generated/unsubmitted state until the owner separately authorizes the signature and upload. No wallet/signature action is part of this sprint.
+1. **Finish PR #122 at its exact current head.** Monitor the queued 36-workflow matrix for `0c2899bccfa4c2565971c557bc72d48bb670460b`, review any failures, and inspect the complete diff before merge.
+2. **Review PR #125** and decide whether the two-pair ResQ lockfile compatibility result is sufficient as a bounded integration or whether a real full-lockfile tool comparison is warranted. Do not claim app adoption.
+3. **Build the external AdversarialEval ingestion/overlap harness** against its pinned MIT-licensed 40-pair corpus. Verify the published 31/40 baseline from its raw score file, report the 8 public-source-disjoint candidates separately, and explicitly mark overlap with private FALSUM material as unknown. Do not invent a FALSUM score or human gold.
+4. **Seek independent reproduction only through an authorized channel.** The GitHub integration cannot post to Telegraph's mission repository; do not impersonate a maintainer or repeatedly retry the 403.
+5. Keep Phase5BQ in generated/unsubmitted state. No wallet/signature action, material upload, official submission, payment, demo publication or external account change is authorized.
 
-Re-score only when evidence materially changes one of the five fixed internal categories. Do not record a demo below 90/100. If the threshold is eventually met, recording capability must be confirmed before promising a video; otherwise provide a runnable 2–5 minute demo plan.
+Re-score only when evidence materially changes one of the five fixed internal categories. Do not record a demo below 90/100. At the threshold, confirm recording capability; if unavailable, provide a runnable 2–5 minute walkthrough plan instead of claiming a video.
