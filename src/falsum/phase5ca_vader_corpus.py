@@ -242,6 +242,7 @@ def _model_response(row: dict[str, str], model: str) -> dict:
         "other": other,
         "total": total,
         "strict_json_object": strict_json_ok,
+        "answer_present": bool(answer.strip()),
     }
 
 
@@ -262,6 +263,8 @@ def _score_summary(cases: list[dict]) -> dict:
             "mean_remediation": round(mean(x["remediation"] for x in rows), 6) if rows else None,
             "mean_other": round(mean(x["other"] for x in rows), 6) if rows else None,
             "strict_json_objects": sum(x["strict_json_object"] for x in rows),
+            "nonempty_responses": sum(x["answer_present"] for x in rows),
+            "empty_responses": sum(not x["answer_present"] for x in rows),
         }
     return result
 
@@ -300,11 +303,6 @@ def _pairwise_summary(cases: list[dict]) -> dict:
 
 def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, str]],
                  protocol: dict, file_metadata: list[dict]) -> tuple[dict, dict]:
-    need(len(vader_rows) == protocol["expected"]["cases_per_source_file"],
-         "vader.csv row count differs from the frozen 174-case source snapshot")
-    need(len(graded_rows) == protocol["expected"]["cases_per_source_file"],
-         "graded.csv row count differs from the frozen 174-case score snapshot")
-
     vader_by_id: dict[str, dict] = {}
     graded_by_id: dict[str, dict] = {}
     for row in vader_rows:
@@ -334,7 +332,10 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
         scored_cwe = _cwes(scored["CWE"])
         source_severity = _severity(source["Severity"], numeric_allowed=False)
         scored_severity = _severity(scored["Severity"], numeric_allowed=True)
-        if source_repo != scored_repo or source_cwe != scored_cwe or source_severity != scored_severity:
+        source_description = "\\n".join(line.rstrip() for line in source["Description"].replace("\\r\\n", "\\n").splitlines()).strip()
+        graded_description = "\\n".join(line.rstrip() for line in scored["Description"].replace("\\r\\n", "\\n").splitlines()).strip()
+        if (source_repo != scored_repo or source_cwe != scored_cwe
+                or source_severity != scored_severity or source_description != graded_description):
             excluded_identity.append({
                 "id": ident,
                 "reason": "repository_or_CWE_or_severity_mismatch",
@@ -344,6 +345,7 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
                 "graded_cwe": list(scored_cwe),
                 "vader_severity": source_severity,
                 "graded_severity": scored_severity,
+                "description_matches": source_description == graded_description,
             })
             continue
         source_case = _case_number(source["Case"])
@@ -352,9 +354,6 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
             case_number_mismatches.append({
                 "id": ident, "vader_case": source_case, "graded_case": graded_case,
             })
-        if source["Description"].strip() != scored["Description"].strip():
-            description_mismatches.append(ident)
-
         responses = {model: _model_response(scored, model) for model in MODELS}
         repo = source_repo
         bucket = _holdout_bucket(repo)
@@ -402,6 +401,10 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
     minimum_holdout = protocol["selection"]["minimum_reserved_holdout_cases"]
     minimum_repos = protocol["selection"]["minimum_reserved_holdout_repositories"]
     ready_reasons = []
+    if len(vader_rows) != protocol["expected"]["cases_per_source_file"]:
+        ready_reasons.append("vader_csv_row_count_differs_from_frozen_expectation")
+    if len(graded_rows) != protocol["expected"]["cases_per_source_file"]:
+        ready_reasons.append("graded_csv_row_count_differs_from_frozen_expectation")
     if len(matched) < minimum_cases:
         ready_reasons.append("matched_case_count_below_frozen_minimum")
     if len(holdout) < minimum_holdout:
@@ -430,8 +433,6 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
             "source_identity_mismatches_excluded": excluded_identity,
             "case_number_mismatch_count": len(case_number_mismatches),
             "case_number_mismatch_examples": case_number_mismatches[:20],
-            "description_mismatch_count": len(description_mismatches),
-            "description_mismatch_ids": description_mismatches[:20],
         },
         "corpus": {
             "matched_cases": len(matched),
@@ -440,6 +441,8 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
             "models": list(MODELS),
             "published_human_scored_responses": len(matched) * len(MODELS),
             "complete_six_model_cases": complete_case_count,
+            "nonempty_model_responses": sum(x["answer_present"] for case in matched for x in case["responses"].values()),
+            "empty_model_responses": sum(not x["answer_present"] for case in matched for x in case["responses"].values()),
             "cwe_case_counts": dict(sorted(cwe_counts.items())),
             "severity_case_counts": dict(sorted(severity_counts.items())),
             "published_score_summary": score_summary,
