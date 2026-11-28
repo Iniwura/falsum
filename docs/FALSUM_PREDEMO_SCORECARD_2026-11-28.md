@@ -53,7 +53,7 @@ FALSUM's [issue #68](https://github.com/kolega-ai/Real-Vuln-Benchmark/issues/68)
 
 ### Phase 5CA VADER corpus freeze
 
-[Phase 5CA workflow](https://github.com/Iniwura/falsum/actions/runs/46135755402) authenticated the pinned AfterQuery/VADER source and published [the aggregate manifest and reserved roster](https://github.com/Iniwura/falsum/actions/runs/46135755402/artifacts/15258978091). It found 177 VADER rows, 173 valid graded rows, 60 malformed graded records, 159 metadata-valid matched cases, 12 source-identity mismatches, two invalid source-metadata records, four source-only IDs, and 43 reserved holdout cases across 39 repositories. The frozen readiness gate failed. No model inference, candidate training, or baseline comparison was performed. Full details and exact blockers are in [Phase 5CA corpus results](PHASE5CA_VADER_CORPUS.md).
+[Phase 5CA workflow](https://github.com/Iniwura/falsum/actions/runs/46136480080) authenticated the pinned AfterQuery/VADER source and published [the aggregate manifest and reserved roster](https://github.com/Iniwura/falsum/actions/runs/46136480080/artifacts/15260111211). It found 177 VADER rows, 173 valid graded rows, 60 malformed graded records, 159 metadata-valid matched cases, 12 source-identity mismatches, two invalid source-metadata records, four source-only IDs, and 43 reserved holdout cases across 39 repositories. The frozen readiness gate failed. No model inference, candidate training, or baseline comparison was performed. Full details and exact blockers are in [Phase 5CA corpus results](PHASE5CA_VADER_CORPUS.md).
 
 ## Next actionable handoff
 
