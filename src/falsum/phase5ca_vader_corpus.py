@@ -222,7 +222,7 @@ def _number(value: str, label: str, maximum: float) -> float:
 
 def _model_response(row: dict[str, str], model: str) -> dict:
     answer = row.get(model, "")
-    need(isinstance(answer, str) and answer.strip(), model + " has an empty response")
+    need(isinstance(answer, str), model + " response field is malformed")
     explanation = _number(row.get(model + "-explanation", ""), model + " explanation score", 2)
     remediation = _number(row.get(model + "-remediation", ""), model + " remediation score", 5)
     other = _number(row.get(model + "-other", ""), model + " other score", 3)
@@ -322,7 +322,6 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
     matched: list[dict] = []
     excluded_identity = []
     case_number_mismatches = []
-    description_mismatches = []
     for ident in common_ids:
         source = vader_by_id[ident]
         scored = graded_by_id[ident]
@@ -366,7 +365,7 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
             "repository_sha256": sha256(repo.encode("utf-8")),
             "cwe": list(source_cwe),
             "severity": source_severity,
-            "description_sha256": sha256(source["Description"].strip().encode("utf-8")),
+            "description_sha256": sha256(source_description.encode("utf-8")),
             "responses": responses,
             "reserved_holdout": reserved,
             "known_public_overlap": repo in known_public,
