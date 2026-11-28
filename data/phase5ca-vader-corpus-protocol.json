@@ -77,6 +77,8 @@
     "join_vader_and_graded_files_by_ID_only": true,
     "exclude_unmatched_IDs_from_all_benchmark_metrics": true,
     "report_vader_only_and_graded_only_IDs": true,
+    "malformed_csv_records_are_excluded_without_repair": true,
+    "report_malformed_record_numbers_and_ids": true,
     "normalize_repository_to_lowercase_owner_repo": true,
     "holdout_grouping_unit": "canonical_github_repository",
     "holdout_hash": "sha256('FALSUM-PHASE5CA-VADER-HOLDOUT-v1\u0000' + canonical_repository)",
