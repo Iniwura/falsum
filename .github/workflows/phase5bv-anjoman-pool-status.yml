@@ -55,7 +55,7 @@ jobs:
               summary.write('- Active snapshot available for current epoch: **{}**\n'.format(pool['active_pool_available_for_current_epoch']))
               summary.write('- Latest snapshot active: **{}**\n'.format(pool['latest_snapshot_is_active']))
               summary.write('- Active snapshot metadata: {}\n\n'.format(json.dumps(pool['active_snapshot'], sort_keys=True)))
-              summary.write('This read-only aggregate endpoint does not identify contributors or rows. It does not prove FALSUM\\'s 20 rows were included or used, maintainer acceptance, evaluator registration, or a ranking change. No wallet, signature, upload, transaction, or network write was used.\n')
+              summary.write("This read-only aggregate endpoint does not identify contributors or rows. It does not prove FALSUM's 20 rows were included or used, maintainer acceptance, evaluator registration, or a ranking change. No wallet, signature, upload, transaction, or network write was used.\n")
           PY
       - uses: actions/upload-artifact@v4
         with:
