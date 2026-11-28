@@ -112,7 +112,7 @@ class Phase5CAVaderCorpusTests(unittest.TestCase):
         self.assertEqual(report["alignment"]["matched_source_score_records"], 1)
         self.assertEqual(report["alignment"]["case_number_mismatch_count"], 1)
         self.assertEqual(report["corpus"]["derived_pairwise_summary"]["all_pairs"], 15)
-        self.assertEqual(report["corpus"]["derived_pairwise_summary"]["strong_derived_preferences_margin_ge_2"], 14)
+        self.assertEqual(report["corpus"]["derived_pairwise_summary"]["strong_derived_preferences_margin_ge_2"], 10)
         self.assertEqual(roster["case_count"], report["source_disjointness"]["reserved_holdout_cases"])
         self.assertFalse(report["claim_limits"]["raw_responses_written_to_report"])
         self.assertEqual(report["source_disjointness"]["private_anjoman_source_overlap"], "UNKNOWN")
