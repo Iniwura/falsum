@@ -33,11 +33,11 @@ For Evaluators delivery awards, the official rules prioritize distinct commercia
 
 ### Phase 5BP public-provider answer audit
 
-[PR #122](https://github.com/Iniwura/falsum/pull/122) is open at head `18552161af0727889ff8d58b3f27d3a7d47f0429`. Its associated 36 pull-request workflow runs completed successfully. The focused [Phase 5BP workflow](https://github.com/Iniwura/falsum/actions/runs/46036978276) passed.
+[PR #122](https://github.com/Iniwura/falsum/pull/122) remains open. Its previous head `18552161af0727889ff8d58b3f27d3a7d47f0429` had 36 successful pull-request workflow runs. The focused [Phase 5BP workflow](https://github.com/Iniwura/falsum/actions/runs/46036978276) passed. After the finding-binding fix below was merged into the feature branch, PR #122 advanced to head `9ef7b0e8dddf05dc04b1891678ca73233294d586`; its new 36-run matrix was still queued/in progress at the latest check. Do not merge PR #122 until that exact head completes CI and its 40-file diff receives a final review.
 
 The audit uses six immutable public PR Guard response blobs from one pinned commit: three structured and three free-text responses. The recorded result is 18/24 source-bound integrity checks, two fully supported structured actions, and four review holds. The reference oracle is a narrow source-derived pattern check (SQL concatenation, shell construction, and dynamic execution), not human AppSec gold, a blind source-disjoint holdout, or a general vulnerability detector. It does not establish provider accuracy or a Telegraph ranking change.
 
-A code review found that duplicate findings could reuse one evidence source and malformed findings without a rule ID were skipped. The fix is isolated in [stacked PR #123](https://github.com/Iniwura/falsum/pull/123). It assigns source IDs one-to-one within a rule and fails closed on malformed findings. Three adversarial tests cover reuse rejection, malformed-finding rejection, and a valid two-source positive case. PR #123 is not yet verified by hosted test runs and must not be merged until its exact head passes CI.
+A code review found that duplicate findings could reuse one evidence source and malformed findings without a rule ID were skipped. [PR #123](https://github.com/Iniwura/falsum/pull/123) is now merged into the feature branch as commit [`9ef7b0e8dddf05dc04b1891678ca73233294d586`](https://github.com/Iniwura/falsum/commit/9ef7b0e8dddf05dc04b1891678ca73233294d586), not into main. Its eight hosted workflows passed. The Phase 5BP contract job ran 11 tests, including duplicate-source reuse rejection, malformed-finding rejection, and a valid two-source positive case; the public replay remained 18/24, 2/6 supported actions, and 4/6 holds. Evidence: [Phase 5BP run](https://github.com/Iniwura/falsum/actions/runs/46114762639) and [Foundation run](https://github.com/Iniwura/falsum/actions/runs/46114762622).
 
 ### Anjoman material
 
@@ -53,9 +53,9 @@ FALSUM's earlier 51-report comparison tied the original published F3 on all 51 r
 
 ## Next actionable handoff
 
-1. Verify [PR #123](https://github.com/Iniwura/falsum/pull/123) against its exact head. Merge it into the feature branch only after the full relevant hosted tests pass; do not merge to `main` merely to advance the score.
-2. Seek a genuinely independent, same-Intent review or source-disjoint adjudicated response set. If authentic paired reference answers are unavailable, record that blocker and keep the reproducible ingestion harness honest; do not manufacture gold or label the six PR Guard captures as blind held-out cases.
-3. Pursue one real Solana application compatibility result or independent reproduction using public fixtures. An owner-run test is compatibility evidence, not adoption. Do not claim a completed mission without an independently rerun workflow.
+1. Verify [PR #125](https://github.com/Iniwura/falsum/pull/125), the new pinned ResQ Solana Cargo.lock compatibility harness, against its exact head. It freezes a real application lockfile and two RustSec advisories before candidate implementation; do not count the expected replay until hosted CI completes.
+2. Wait for the 36-run matrix on PR #122's exact head `9ef7b0e8dddf05dc04b1891678ca73233294d586`, then review the complete 40-file diff before considering a merge.
+3. Seek a genuinely independent, same-Intent review or source-disjoint adjudicated response set. If authentic paired reference answers are unavailable, keep the reproducible ingestion harness honest; do not manufacture gold or label the six PR Guard captures as blind held-out cases.
 4. Keep the Anjoman packet in generated/unsubmitted state until the owner separately authorizes the signature and upload. No wallet/signature action is part of this sprint.
 
 Re-score only when evidence materially changes one of the five fixed internal categories. Do not record a demo below 90/100. If the threshold is eventually met, recording capability must be confirmed before promising a video; otherwise provide a runnable 2–5 minute demo plan.
