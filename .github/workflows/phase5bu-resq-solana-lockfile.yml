@@ -1,0 +1,110 @@
+name: Phase 5BU - real ResQ Solana Cargo.lock compatibility
+
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5bu_resq_solana_lockfile.py'
+      - 'src/falsum/phase5aj_cross_app_evidence.py'
+      - 'src/falsum/phase5bo_ecosystem_semantics.py'
+      - 'data/phase5bu-resq-solana-lockfile-protocol.json'
+      - 'tests/test_phase5bu_resq_solana_lockfile.py'
+      - '.github/workflows/phase5bu-resq-solana-lockfile.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5bu_resq_solana_lockfile.py'
+      - 'src/falsum/phase5aj_cross_app_evidence.py'
+      - 'src/falsum/phase5bo_ecosystem_semantics.py'
+      - 'data/phase5bu-resq-solana-lockfile-protocol.json'
+      - 'tests/test_phase5bu_resq_solana_lockfile.py'
+      - '.github/workflows/phase5bu-resq-solana-lockfile.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    name: SemVer and lockfile contracts / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install exact independent SemVer reference
+        run: |
+          npm install --prefix .phase5bu-node --ignore-scripts --no-audit --no-fund semver@7.8.6
+          test "$(NODE_PATH="$GITHUB_WORKSPACE/.phase5bu-node/node_modules" node -p "require('semver/package.json').version")" = "7.8.6"
+      - name: Run contracts
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+          FALSUM_PHASE5BO_NODE_PATH: ${{ github.workspace }}/.phase5bu-node/node_modules
+        run: python -m unittest discover -s tests -p 'test_phase5bu_resq_solana_lockfile.py' -v
+
+  live-application-replay:
+    name: Replay pinned ResQ Cargo.lock and RustSec sources
+    needs: contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install exact independent SemVer reference
+        run: |
+          npm install --prefix .phase5bu-node --ignore-scripts --no-audit --no-fund semver@7.8.6
+          test "$(NODE_PATH="$GITHUB_WORKSPACE/.phase5bu-node/node_modules" node -p "require('semver/package.json').version")" = "7.8.6"
+      - name: Replay actual public application and advisory bytes
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+          FALSUM_PHASE5BO_NODE_PATH: ${{ github.workspace }}/.phase5bu-node/node_modules
+        run: |
+          set -euo pipefail
+          mkdir -p phase5bu-evidence
+          python -m falsum.phase5bu_resq_solana_lockfile --out phase5bu-evidence/RESQ-SOLANA-LOCKFILE.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('phase5bu-evidence/RESQ-SOLANA-LOCKFILE.json').read_text())
+          assert report['application']['repository'] == 'resq-software/programs'
+          assert report['application']['resolved_version'] == '1.0.0-rc.4'
+          assert report['sample_sizes']['applications'] == 1
+          assert report['sample_sizes']['package_advisory_pairs'] == 2
+          assert report['aggregate']['falsum_coverage'] == 2
+          assert report['aggregate']['falsum_abstentions'] == 0
+          assert report['aggregate']['falsum_semver_agreement'] == 2
+          assert report['aggregate']['falsum_false_acceptances_vs_semver_reference'] == 0
+          assert report['aggregate']['falsum_false_rejections_vs_semver_reference'] == 0
+          assert report['aggregate']['citation_only_false_applicables_vs_semver_reference'] == 2
+          assert report['interpretation']['reference_is_human_appsec_gold'] is False
+          assert report['interpretation']['independent_application_adoption'] is False
+          assert report['interpretation']['security_clearance'] is False
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('## Phase 5BU: real Solana application compatibility\n\n')
+              summary.write('Pinned ResQ Programs Cargo.lock resolves anchor-lang 1.0.0-rc.4. Two pinned RustSec advisory ranges were checked. FALSUM matched the independent semver@7.8.6 reference on 2/2 package-advisory pairs, with 2/2 coverage and 0/2 abstentions. The citation-only control marked both applicable; the SemVer reference marked both inapplicable.\n\n')
+              summary.write('This is one owner-run lockfile compatibility result, not a full dependency audit, program source analysis, human AppSec gold, external adoption, security clearance, or Telegraph network improvement.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5bu-resq-solana-lockfile
+          path: phase5bu-evidence/
+          retention-days: 90
+          if-no-files-found: error

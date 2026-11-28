@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5BU_RESQ_SOLANA_LOCKFILE_FROZEN",
+  "application": {
+    "repository": "resq-software/programs",
+    "commit": "76ac2d3765b7d5defa403c1b141e898782b4c923",
+    "description": "ResQ Programs, a decentralized coordination layer for autonomous aerospace and delivery operations built on Solana",
+    "workspace_members": [
+      "resq-delivery",
+      "resq-airspace",
+      "resq-gating"
+    ],
+    "sources": [
+      {
+        "key": "readme",
+        "path": "README.md",
+        "blob": "05251a1a0a2984ab91242b13869a0971f06496f5"
+      },
+      {
+        "key": "workspace_manifest",
+        "path": "Cargo.toml",
+        "blob": "3bf709a937ed11bce023282cb7a2b86dde826374"
+      },
+      {
+        "key": "anchor_config",
+        "path": "Anchor.toml",
+        "blob": "cb1fabc6461f2d2e440569cfeb16f92a657a9bb8"
+      },
+      {
+        "key": "resolved_lockfile",
+        "path": "Cargo.lock",
+        "blob": "73f06efd4b385fb1629ccf06d2e1f540d42c47d7"
+      }
+    ],
+    "package": "anchor-lang",
+    "resolved_version": "1.0.0-rc.4"
+  },
+  "advisory_database": {
+    "repository": "rustsec/advisory-db",
+    "commit": "c5279d0b0c9e8b70df666eb6d1edbabcfd1176bd",
+    "advisories": [
+      {
+        "id": "RUSTSEC-2026-0144",
+        "ghsa": "GHSA-c6rc-8jpp-2fgc",
+        "path": "crates/anchor-lang/RUSTSEC-2026-0144.md",
+        "blob": "326e19060236047b244fbb35c2c6f231b3c6753e",
+        "introduced": "1.0.0",
+        "fixed": "1.0.2",
+        "reference": "https://rustsec.org/advisories/RUSTSEC-2026-0144.html"
+      },
+      {
+        "id": "RUSTSEC-2026-0146",
+        "ghsa": "GHSA-429q-fhh4-r6hj",
+        "path": "crates/anchor-lang/RUSTSEC-2026-0146.md",
+        "blob": "6c48a77b69fe362e3cc90bcf272f1b0d8f5e19cb",
+        "introduced": "1.0.0-rc.1",
+        "fixed": "1.0.0-rc.2",
+        "reference": "https://rustsec.org/advisories/RUSTSEC-2026-0146.html"
+      }
+    ]
+  },
+  "selection": {
+    "package_and_advisory_roster_frozen_before_candidate_implementation": true,
+    "resolved_lockfile_version_frozen_before_candidate_implementation": true,
+    "version_semantics": "SemVer half-open affected intervals derived from pinned RustSec patched/unaffected bounds",
+    "independent_reference": "semver@7.8.6 satisfies(range, {includePrerelease:true})",
+    "cases": [
+      {
+        "id": "resq-anchor-lang-rustsec-2026-0144",
+        "package": "anchor-lang",
+        "version": "1.0.0-rc.4",
+        "advisory": "RUSTSEC-2026-0144",
+        "reference_status": "INAPPLICABLE"
+      },
+      {
+        "id": "resq-anchor-lang-rustsec-2026-0146",
+        "package": "anchor-lang",
+        "version": "1.0.0-rc.4",
+        "advisory": "RUSTSEC-2026-0146",
+        "reference_status": "INAPPLICABLE"
+      }
+    ]
+  },
+  "limits": [
+    "Two package-advisory pairs from one real pinned Cargo.lock; not a full dependency audit.",
+    "Reference decisions are derived from pinned RustSec bounds and an independent SemVer library, not human AppSec gold.",
+    "No program source analysis, deployed binary verification, exploitability analysis, or security clearance.",
+    "Owner-run compatibility/reproducibility evidence only; no external application adoption or independent developer review.",
+    "An inapplicable result applies only to these two pinned advisory records."
+  ]
+}
