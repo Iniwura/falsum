@@ -21,7 +21,7 @@ from falsum.phase5aj_cross_app_evidence import AuditError, git_blob, parse, requ
 
 ROOT = Path(__file__).resolve().parents[2]
 PROTOCOL_PATH = "data/phase5bw-adversarialeval-ingestion-protocol.json"
-PROTOCOL_BLOB = "bf5f043d90c15bf14a903146af14a8a37d247f7e"
+PROTOCOL_BLOB = "7664937b1c30db9d2a7947182e36c180178fe047"
 IDENTIFIER = re.compile(
     r"\b(?:CVE-\d{4}-\d{4,7}|GHSA(?:-[23456789cfghjmpqrvwx]{4}){3})\b",
     re.I,
