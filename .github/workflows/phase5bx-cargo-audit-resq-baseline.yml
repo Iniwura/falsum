@@ -30,7 +30,7 @@ permissions:
 
 jobs:
   contracts:
-    name: cargo-audit adapter contracts / Python \${{ matrix.python }}
+    name: cargo-audit adapter contracts / Python ${{ matrix.python }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     strategy:
@@ -43,7 +43,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '\${{ matrix.python }}'
+          python-version: '${{ matrix.python }}'
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -56,7 +56,7 @@ jobs:
         env:
           PYTHONPATH: src
           PYTHONDONTWRITEBYTECODE: '1'
-          FALSUM_PHASE5BO_NODE_PATH: \${{ github.workspace }}/.phase5bx-node/node_modules
+          FALSUM_PHASE5BO_NODE_PATH: ${{ github.workspace }}/.phase5bx-node/node_modules
         run: python -m unittest discover -s tests -p 'test_phase5bx_cargo_audit_resq_baseline.py' -v
 
   real-application-baseline:
@@ -100,7 +100,7 @@ jobs:
         env:
           PYTHONPATH: src
           PYTHONDONTWRITEBYTECODE: '1'
-          FALSUM_PHASE5BO_NODE_PATH: \${{ github.workspace }}/.phase5bx-node/node_modules
+          FALSUM_PHASE5BO_NODE_PATH: ${{ github.workspace }}/.phase5bx-node/node_modules
         shell: bash
         run: |
           set -euo pipefail
