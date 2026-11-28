@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 
 from falsum import phase5bu_resq_solana_lockfile as m
 
@@ -51,6 +52,34 @@ unaffected = ["< 1.0.0-rc.1"]
             with self.subTest(version=version, introduced=introduced, fixed=fixed):
                 self.assertEqual(m._candidate_status(version, introduced, fixed), expected)
                 self.assertEqual(m._node_reference_status(version, introduced, fixed), expected)
+
+    def test_large_lockfile_fetch_is_bounded_and_git_blob_verified(self):
+        raw = b"version = 4\\n"
+        spec = {
+            "key": "resolved_lockfile",
+            "repo": "resq-software/programs",
+            "commit": "76ac2d3765b7d5defa403c1b141e898782b4c923",
+            "path": "Cargo.lock",
+            "blob": m.git_blob(raw),
+        }
+
+        class Response:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            def read(self, limit):
+                return raw[:limit]
+
+        with patch.object(m, "urlopen", return_value=Response()):
+            self.assertEqual(m._fetch_app_source(spec), raw)
+
+        bad = dict(spec, blob="0" * 40)
+        with patch.object(m, "urlopen", return_value=Response()):
+            with self.assertRaises(Exception):
+                m._fetch_app_source(bad)
 
     def test_cargo_lock_requires_one_registry_resolved_package(self):
         raw = b'''version = 4
