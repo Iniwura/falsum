@@ -118,8 +118,11 @@ def _audit_telegraph_material(pairs: list[dict], raw_jsonl: bytes, intent_id: st
                 f"Anjoman compatibility: row {index} provenance fields are malformed")
         source_kind = provenance.get("source_kind")
         source_url = provenance.get("source_url")
-        require(isinstance(source_kind, str) and source_kind.strip(),
-                f"Anjoman compatibility: row {index} source_kind is missing")
+        require(isinstance(source_kind, str) and source_kind.strip()
+                and "\\x00" not in source_kind,
+                f"Anjoman compatibility: row {index} source_kind is missing or invalid")
+        require(isinstance(source_url, str) and "\\x00" not in source_url,
+                f"Anjoman compatibility: row {index} source_url is invalid")
         parsed_url = urlparse(source_url) if isinstance(source_url, str) else None
         require(parsed_url is not None and parsed_url.scheme == "https" and parsed_url.netloc,
                 f"Anjoman compatibility: row {index} source_url is not an absolute HTTPS URL")
