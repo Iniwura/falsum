@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5BY_RESQ_RUSTSEC_ADVISORY_EXPANSION_FROZEN",
+  "frozen_before_candidate_implementation": true,
+  "freeze_base_commit": "c05a5d129d3db3bfd3ab19f6860f6561e303404c",
+  "application": {
+    "repository": "resq-software/programs",
+    "commit": "76ac2d3765b7d5defa403c1b141e898782b4c923",
+    "lockfile_path": "Cargo.lock",
+    "lockfile_git_blob": "73f06efd4b385fb1629ccf06d2e1f540d42c47d7",
+    "locked_dependency_count_from_cargo_audit": 805,
+    "sample_applications": 1
+  },
+  "advisory_database": {
+    "repository": "rustsec/advisory-db",
+    "commit": "c5279d0b0c9e8b70df666eb6d1edbabcfd1176bd",
+    "new_advisories": [
+      {
+        "id": "RUSTSEC-2026-0387",
+        "path": "crates/crypto-bigint/RUSTSEC-2026-0387.md",
+        "blob": "a642322bd704a5acfd221e1a61203512b33402cc",
+        "package": "crypto-bigint",
+        "version": "0.5.5",
+        "cargo_audit_status": "APPLICABLE"
+      },
+      {
+        "id": "RUSTSEC-2024-0344",
+        "path": "crates/curve25519-dalek/RUSTSEC-2024-0344.md",
+        "blob": "67b854219fc9063d1c24c80ab5586b139754af9c",
+        "package": "curve25519-dalek",
+        "version": "3.2.0",
+        "cargo_audit_status": "APPLICABLE"
+      },
+      {
+        "id": "RUSTSEC-2022-0093",
+        "path": "crates/ed25519-dalek/RUSTSEC-2022-0093.md",
+        "blob": "36d43cfac0c23c39dee3802e113834b6cdf8b631",
+        "package": "ed25519-dalek",
+        "version": "1.0.1",
+        "cargo_audit_status": "APPLICABLE"
+      },
+      {
+        "id": "RUSTSEC-2026-0592",
+        "path": "crates/url/RUSTSEC-2026-0592.md",
+        "blob": "1e509a7c084d13aabbdc5e60349f9bf4e70d0a3d",
+        "package": "url",
+        "version": "2.5.8",
+        "cargo_audit_status": "APPLICABLE",
+        "affected_functions_present": true
+      }
+    ],
+    "calibration_advisories": [
+      {
+        "id": "RUSTSEC-2026-0144",
+        "path": "crates/anchor-lang/RUSTSEC-2026-0144.md",
+        "blob": "326e19060236047b244fbb35c2c6f231b3c6753e",
+        "package": "anchor-lang",
+        "version": "1.0.0-rc.4",
+        "cargo_audit_status": "INAPPLICABLE",
+        "prior_candidate_use": true
+      },
+      {
+        "id": "RUSTSEC-2026-0146",
+        "path": "crates/anchor-lang/RUSTSEC-2026-0146.md",
+        "blob": "6c48a77b69fe362e3cc90bcf272f1b0d8f5e19cb",
+        "package": "anchor-lang",
+        "version": "1.0.0-rc.4",
+        "cargo_audit_status": "INAPPLICABLE",
+        "prior_candidate_use": true
+      }
+    ]
+  },
+  "baseline": {
+    "tool": "cargo-audit",
+    "version": "0.22.2",
+    "rust_toolchain": "1.88.0",
+    "prior_hosted_run": "https://github.com/Iniwura/falsum/actions/runs/46125092512",
+    "prior_artifact_id": 15255925118,
+    "prior_artifact_sha256": "46e675cb5c539976168ce2580597e485bcf0fe9016d5ba75b785bdfe2baa8295",
+    "lockfile_dependencies": 805,
+    "full_lockfile_findings": 4
+  },
+  "candidate_boundary": {
+    "candidate_has_not_been_executed_on_new_advisories": true,
+    "baseline_was_executed_before_this_candidate_protocol": true,
+    "interpretation": "Precommitted FALSUM replay on four new package/advisory records selected from the pinned full-lockfile cargo-audit findings. This is not a blind benchmark because the cargo-audit baseline predates the candidate protocol.",
+    "public_record_disjointness": "The four new advisory IDs and package names are disjoint from the prior public FALSUM RustSec anchor-lang cases. They share the same RustSec advisory database source family and the same pinned ResQ application; do not call this an independent source-family holdout.",
+    "calibration_controls_are_not_held_out": true
+  },
+  "selection": {
+    "rule": "Freeze all four exact package/version/advisory triples reported by cargo-audit 0.22.2 in the pinned ResQ Cargo.lock replay. Do not add or remove a case after candidate execution.",
+    "new_case_count": 4,
+    "calibration_case_count": 2,
+    "new_cases_are_all_cargo_audit_positive": true,
+    "no_negative_new_case_is_claimed": true
+  },
+  "candidate": {
+    "scope": "Source-authenticated RustSec package-version applicability only",
+    "range_semantics": "RustSec patched and unaffected VersionReq ranges both describe versions that are not affected. If neither list contains a range, RustSec treats all versions as affected. Unsupported range syntax must abstain.",
+    "semver_reference": "semver@7.8.6, restricted to explicitly supported Cargo-compatible comparator syntax",
+    "affected_functions_policy": "Function metadata is preserved as context but does not establish call-site reachability. Match the package-level cargo-audit finding without claiming the affected function is used.",
+    "no_exploitability_or_reachability_claim": true
+  },
+  "limits": [
+    "One pinned ResQ Solana application and one RustSec database snapshot.",
+    "Four new positive package/advisory pairs; specificity on new cases is not measured.",
+    "Two previously used anchor-lang negative controls are calibration only, not held-out evidence.",
+    "cargo-audit is a credible tool reference, not human AppSec gold.",
+    "No Solana program source, deployed binary, call graph, runtime behavior, transaction, or validator is analyzed.",
+    "No ResQ maintainer adoption, independent developer reproduction, Anjoman acceptance, Telegraph ranking change, or network improvement is claimed."
+  ]
+}
