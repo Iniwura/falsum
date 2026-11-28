@@ -1,7 +1,7 @@
 import unittest
 from io import BytesIO
-
-from openpyxl import Workbook
+from xml.sax.saxutils import escape
+from zipfile import ZIP_DEFLATED, ZipFile
 
 from falsum import phase5ca_vader_corpus as ca
 from falsum.phase5cb_vader_xlsx_audit import parse_workbook, _row_digest
@@ -27,16 +27,73 @@ def sample_row():
     return row
 
 
+def _column_name(index):
+    result = ""
+    index += 1
+    while index:
+        index, remainder = divmod(index - 1, 26)
+        result = chr(65 + remainder) + result
+    return result
+
+
 def workbook_bytes(rows, header=None):
-    book = Workbook()
-    sheet = book.active
-    sheet.title = "graded"
-    sheet.append(list(header or ca.GRADED_FIELDS))
-    for row in rows:
-        sheet.append([row.get(field, "") for field in (header or ca.GRADED_FIELDS)])
+    """Build the minimal OOXML subset consumed by the stdlib parser.
+
+    Keeping fixtures dependency-free ensures the repository-wide test suite
+    does not need a workbook-writing package just to import these tests.
+    """
+    columns = list(ca.GRADED_FIELDS if header is None else header)
+    table = [columns]
+    table.extend([[row.get(field, "") for field in columns] for row in rows])
+    worksheet_rows = []
+    for row_number, values in enumerate(table, start=1):
+        cells = []
+        for column_number, value in enumerate(values):
+            reference = f"{_column_name(column_number)}{row_number}"
+            text = escape(str(value))
+            cells.append(
+                f'<c r="{reference}" t="inlineStr"><is><t>{text}</t></is></c>'
+            )
+        worksheet_rows.append(
+            f'<row r="{row_number}">{"".join(cells)}</row>'
+        )
+    worksheet = (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+        f'<sheetData>{"".join(worksheet_rows)}</sheetData>'
+        '</worksheet>'
+    )
+    workbook = (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+        '<sheets><sheet name="graded" sheetId="1" r:id="rId1"/></sheets>'
+        '</workbook>'
+    )
+    relationships = (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+        '<Relationship Id="rId1" '
+        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" '
+        'Target="worksheets/sheet1.xml"/>'
+        '</Relationships>'
+    )
+    content_types = (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+        '<Default Extension="xml" ContentType="application/xml"/>'
+        '<Override PartName="/xl/workbook.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
+        '<Override PartName="/xl/worksheets/sheet1.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
+        '</Types>'
+    )
     stream = BytesIO()
-    book.save(stream)
-    book.close()
+    with ZipFile(stream, "w", compression=ZIP_DEFLATED) as archive:
+        archive.writestr("[Content_Types].xml", content_types)
+        archive.writestr("xl/workbook.xml", workbook)
+        archive.writestr("xl/_rels/workbook.xml.rels", relationships)
+        archive.writestr("xl/worksheets/sheet1.xml", worksheet)
     return stream.getvalue()
 
 
