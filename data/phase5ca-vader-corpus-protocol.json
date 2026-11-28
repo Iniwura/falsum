@@ -35,6 +35,12 @@
     }
   ],
   "expected": {
+    "cases_per_source_file": 174,
+    "minimum_matched_cases_for_research": 100,
+    "join_key": "ID",
+    "case_number_is_not_a_join_key": true,
+    "case_number_mismatch_is_reported_not_silently_joined": true,
+    "case_folder_number_source": "vader.csv.Case",
     "cases": 174,
     "models": [
       "claude-3.7-sonnet",
@@ -68,6 +74,9 @@
   "selection": {
     "selection_rule_frozen_before_candidate_changes": true,
     "use_all_cases_for_source_inventory_audit": true,
+    "join_vader_and_graded_files_by_ID_only": true,
+    "exclude_unmatched_IDs_from_all_benchmark_metrics": true,
+    "report_vader_only_and_graded_only_IDs": true,
     "normalize_repository_to_lowercase_owner_repo": true,
     "holdout_grouping_unit": "canonical_github_repository",
     "holdout_hash": "sha256('FALSUM-PHASE5CA-VADER-HOLDOUT-v1\u0000' + canonical_repository)",
@@ -77,6 +86,7 @@
     "exclude_known_public_falsum_repositories_from_holdout": true,
     "selection_does_not_use_human_scores_or_model_answers": true,
     "minimum_reserved_holdout_cases": 20,
+    "minimum_matched_case_count_for_benchmark_ready": 100,
     "minimum_reserved_holdout_repositories": 20
   },
   "known_public_falsum_source_inventory": {
