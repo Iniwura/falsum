@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5BR_EXTERNAL_ADVERSARIALEVAL_INGESTION_FROZEN",
+  "purpose": "Reproducible ingestion and public-source-overlap audit of an independent external Evaluators preference-pair corpus. This protocol does not score FALSUM.",
+  "external_repository": {
+    "full_name": "Ritapossible/AdversarialEval",
+    "commit": "09f9fa4a584b513720b215731baf54187039ac10",
+    "license": {
+      "path": "LICENSE",
+      "git_blob_sha1": "f008fe5682cb6056954a8695dfe26ef825d3d73e",
+      "spdx": "MIT"
+    },
+    "files": [
+      {
+        "key": "test_pairs",
+        "path": "data/test/security_review.test.jsonl",
+        "git_blob_sha1": "e5b57e2b56c8a99026740d31d34087895718ccdf",
+        "sha256": "66b37e83df6391bb9364112e11747bad95b3afa0e32d4bda0290f5c5fc49e81b"
+      },
+      {
+        "key": "test_metadata",
+        "path": "data/meta/security_review.test.meta.jsonl",
+        "git_blob_sha1": "e05bf89591e79d9b8b0754b7b5b8b2ba4e4e14c7",
+        "sha256": "7cc55e20d0527c9f96f24b390cfbcebead13a60be9865e38d7691f3716d8f32f"
+      },
+      {
+        "key": "raw_adapter_scores",
+        "path": "eval/reports/raw/2026-11-24-test-scores.json",
+        "git_blob_sha1": "d2d162855e3a3b188aca4cd8f8e9b702e06965e3"
+      },
+      {
+        "key": "score_report",
+        "path": "eval/reports/2026-11-24-test-score.md",
+        "git_blob_sha1": "0ebb2ebeca059eb8477a9b2d4d3c9d74f9e812f8"
+      },
+      {
+        "key": "freeze_report",
+        "path": "eval/reports/2026-11-24-test-freeze.md",
+        "git_blob_sha1": "f54bf37c6c49c531de5853622fe3321c25c53e2f"
+      },
+      {
+        "key": "row_identity_implementation",
+        "path": "tools/common.py",
+        "git_blob_sha1": "30cf1936f1b48216f40ad4bbb3339aeb78209012"
+      }
+    ],
+    "advisory_sources": [
+      {
+        "id": "GHSA-p6mc-m468-83gw",
+        "path": "data/sources/osv/GHSA-p6mc-m468-83gw.json",
+        "git_blob_sha1": "9984569dcb2555466ea5136416fc08d663523f48"
+      },
+      {
+        "id": "GHSA-xvch-5gv4-984h",
+        "path": "data/sources/osv/GHSA-xvch-5gv4-984h.json",
+        "git_blob_sha1": "f209ad2eb1030e5ad953271a1dfd0f08d167d8d5"
+      },
+      {
+        "id": "GHSA-xxjr-mmjv-4gpg",
+        "path": "data/sources/osv/GHSA-xxjr-mmjv-4gpg.json",
+        "git_blob_sha1": "570ee0f6f0db0c14244f58e4fcf341949e0c74ff"
+      },
+      {
+        "id": "GHSA-f23m-r3pf-42rh",
+        "path": "data/sources/osv/GHSA-f23m-r3pf-42rh.json",
+        "git_blob_sha1": "112af29abf536a4b5b3f48dd63d9c357823e5c3a"
+      },
+      {
+        "id": "GHSA-rv95-896h-c2vc",
+        "path": "data/sources/osv/GHSA-rv95-896h-c2vc.json",
+        "git_blob_sha1": "074d18767e82b2c726bce5050955b864528f3722"
+      },
+      {
+        "id": "GHSA-r5fr-rjxr-66jc",
+        "path": "data/sources/osv/GHSA-r5fr-rjxr-66jc.json",
+        "git_blob_sha1": "f9adbc63640e2efd27a1919ebc3d182c5ec888f2"
+      }
+    ]
+  },
+  "external_test_set": {
+    "row_count": 40,
+    "authors": {
+      "reviewer:fexx": 20,
+      "reviewer:lino": 20
+    },
+    "source_kind": "ai_assisted",
+    "author_reviewed": true,
+    "drafting_models": [
+      "GPT-6",
+      "Grok"
+    ],
+    "fully_human_written": false,
+    "row_id_algorithm": "SHA256(NFC-normalize each of prompt/chosen/rejected, collapse whitespace runs to one ASCII space, strip, join with NUL bytes)",
+    "row_id_implementation": "tools/common.py at pinned external commit"
+  },
+  "falsum_public_source_manifest": {
+    "base_commit": "2cf693306659aab31e77da370aa4221e57b021bb",
+    "files": [
+      {
+        "path": "data/phase5ax-original-cwe-integrity-protocol.json",
+        "git_blob_sha1": "ce36b460698683c912d881a0e5d6e43e653de845"
+      },
+      {
+        "path": "data/phase5ay-gig-guard-compatibility-protocol.json",
+        "git_blob_sha1": "13876608620632801caedc567acd8c98345633e4"
+      },
+      {
+        "path": "data/phase5az-realvuln-protocol.json",
+        "git_blob_sha1": "4c433b63641a16cd77d6f5f5514683f0caa19fea"
+      },
+      {
+        "path": "data/phase5ba-realvuln-census-protocol.json",
+        "git_blob_sha1": "fdbabeabdc2b2140ec077b5a3de8b95ac1268aa0"
+      },
+      {
+        "path": "data/phase5bj-fresh-provider-holdout-result.json",
+        "git_blob_sha1": "1d68aad18c6d45cb3b120bbc1ba04869b8383bba"
+      },
+      {
+        "path": "data/phase5bm-independent-balanced-holdout-protocol.json",
+        "git_blob_sha1": "1baa2410183c5b563c1b4aef44ce68606f6c84a9"
+      },
+      {
+        "path": "data/phase5bn-corrected-independent-holdout-protocol.json",
+        "git_blob_sha1": "7473089995aafcbe41c3ffbf351202f6302bb648"
+      },
+      {
+        "path": "data/phase5bp-public-answer-quality-protocol.json",
+        "git_blob_sha1": "4645674dfcf37d00a837c50f500018d4717121a8"
+      },
+      {
+        "path": "data/phase5bp-public-answer-quality-result-v2.json",
+        "git_blob_sha1": "83b350b83754fa661a8af6d8e66e1049e6f54e50"
+      },
+      {
+        "path": "data/draft-ledger.json",
+        "git_blob_sha1": "8658bada6ea0281cbcbdf8624fa131959251977c"
+      },
+      {
+        "path": "docs/CORPUS.md",
+        "git_blob_sha1": "1d27be55da51e4d4a942634dbd08cd83575a2a3e"
+      }
+    ],
+    "expected_unique_advisory_ids": 56,
+    "expected_external_source_overlap": [
+      "GHSA-JR5F-V2JV-69X6"
+    ],
+    "private_material_evidence": {
+      "path": "evidence/phase3o-2026-11-02-20-eligible.json",
+      "git_blob_sha1": "7fad080935a9cfbcfe677bcd47958287a7896264",
+      "contains_private_row_source_identities": false,
+      "overlap_status": "UNKNOWN"
+    }
+  },
+  "candidate_selection": {
+    "frozen_before_any_FALSUM_candidate_scoring": true,
+    "rule": "Include every external test row whose metadata source_url contains a GHSA ID absent from the enumerated public FALSUM source manifest. Exclude rows with no GHSA source URL or a GHSA ID present in the public FALSUM manifest.",
+    "public_source_disjoint_row_count": 8,
+    "public_source_disjoint_ghsa_ids": [
+      "GHSA-P6MC-M468-83GW",
+      "GHSA-XVCH-5GV4-984H",
+      "GHSA-XXJR-MMJV-4GPG",
+      "GHSA-F23M-R3PF-42RH",
+      "GHSA-RV95-896H-C2VC",
+      "GHSA-R5FR-RJXR-66JC"
+    ],
+    "public_source_disjoint_row_ids": [
+      "6930bc33b41f65ddd7c0901bf3797e0f9f35a4653a945cdcb711bdf28f96ceb7",
+      "d517c4f3e3b4a2cfbf62b8f8096e218f507bd77f1c3a40bb7c32cffe556931c6",
+      "16b85df567dcd21a1afafd71d960335f1cc6b0251bc40b38dc258d649f7c163f",
+      "0cd7adfa6607eef77e261f950857040e38be4645e1ef7fc1e5f8cfc9f516f656",
+      "66699fa778f3e909c6abbaf6c934721254ae64205dcad4c4177233b0d879f840",
+      "5ea844c3a4a12098e5a256307f44b96f6ba3288a20d7e1e822aaa82f75738624",
+      "5a4a4faa5a16fe39157a3f9e4548b5acf0f2609dd245eb70de46d144573a001f",
+      "1975e14d39a885eaaf955ef7ffa32a8cd773d22d4d17d0b0ad38bdf1b4a7a011"
+    ],
+    "public_source_overlap_rows": 1,
+    "public_source_overlap_ghsa_ids": [
+      "GHSA-JR5F-V2JV-69X6"
+    ],
+    "private_material_overlap": "UNKNOWN",
+    "blind_holdout": false
+  },
+  "baselines": {
+    "verdict_only": {
+      "rule": "Order verdict labels Insecure > Needs changes > Secure; choose the higher-severity answer, abstain on equal verdicts.",
+      "selected_subset": {
+        "chosen": 6,
+        "rejected": 1,
+        "abstained": 1,
+        "denominator": 8,
+        "accuracy_on_non_abstained": 0.8571428571428571,
+        "effective_correct_fraction": 0.75
+      }
+    },
+    "external_context_aware_adapter": {
+      "model": "SECURITY_REVIEW-cpu-v3-seed13",
+      "training_pairs": 264,
+      "validation_pairs": 87,
+      "overall": {
+        "correct": 31,
+        "denominator": 40,
+        "accuracy": 0.775,
+        "wilson95_lower": 0.625,
+        "upper": 0.877
+      },
+      "selected_subset": {
+        "correct": 6,
+        "denominator": 8,
+        "accuracy": 0.75,
+        "abstained": 0
+      }
+    },
+    "strongest_reported_shortcut_overall": {
+      "name": "more advisory ids cited",
+      "accuracy": 0.6,
+      "denominator": 40,
+      "source": "pinned external score report"
+    }
+  },
+  "falsum_candidate": {
+    "status": "NOT_SCORED",
+    "accuracy": null,
+    "false_acceptance": null,
+    "false_rejection": null,
+    "coverage": null,
+    "abstentions": null,
+    "reason": "This commit freezes and validates external ingestion and baseline records only. FALSUM candidate implementation/evaluation must follow in a later commit against the unchanged eight-row roster."
+  },
+  "interpretation": {
+    "external_corpus_is_independently_authored": true,
+    "external_corpus_is_fully_human_written": false,
+    "external_adapter_is_human_appsec_gold": false,
+    "public_source_disjointness_only": true,
+    "private_source_disjointness_proven": false,
+    "telegraph_network_improvement": false,
+    "official_material_upload": false,
+    "external_application_adoption": false
+  },
+  "limits": [
+    "The eight selected rows are disjoint only from the enumerated public FALSUM source manifest.",
+    "FALSUM's private historical 20 eligible Anjoman rows have no source identities in the repository; overlap with them is unknown.",
+    "The 40 external pairs are AI-assisted and author-reviewed by two independent authors, not fully human-written.",
+    "The published external adapter raw scores are re-counted from a pinned file; the adapter was not rerun by FALSUM.",
+    "This protocol does not score FALSUM or establish Telegraph network improvement."
+  ]
+}
