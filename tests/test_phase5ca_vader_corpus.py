@@ -181,5 +181,16 @@ class Phase5CAVaderCorpusTests(unittest.TestCase):
 
 
 
+    def test_unparseable_cwe_is_reported_and_excluded_without_aborting(self):
+        vader_rows, graded_rows = self._rows()
+        vader_rows[0]["CWE"] = "not classified"
+        report, _ = build_report(vader_rows, graded_rows, self._protocol(), [])
+        self.assertEqual(report["corpus"]["matched_cases"], 0)
+        self.assertEqual(len(report["alignment"]["invalid_source_metadata_excluded"]), 1)
+        self.assertIn("invalid_source_metadata_excluded", report["benchmark_readiness"]["reasons"])
+        self.assertIn("invalid_source_metadata_records_excluded", report["benchmark_readiness"]["warnings"])
+
+
+
 if __name__ == "__main__":
     unittest.main()
