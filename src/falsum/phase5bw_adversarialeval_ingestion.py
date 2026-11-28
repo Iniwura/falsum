@@ -23,10 +23,10 @@ ROOT = Path(__file__).resolve().parents[2]
 PROTOCOL_PATH = "data/phase5bw-adversarialeval-ingestion-protocol.json"
 PROTOCOL_BLOB = "bf5f043d90c15bf14a903146af14a8a37d247f7e"
 IDENTIFIER = re.compile(
-    r"\\b(?:CVE-\\d{4}-\\d{4,7}|GHSA(?:-[23456789cfghjmpqrvwx]{4}){3})\\b",
+    r"\b(?:CVE-\d{4}-\d{4,7}|GHSA(?:-[23456789cfghjmpqrvwx]{4}){3})\b",
     re.I,
 )
-WHITESPACE = re.compile(r"\\s+")
+WHITESPACE = re.compile(r"\s+")
 
 
 def _load_protocol(root: Path = ROOT) -> dict:
@@ -66,7 +66,7 @@ def _normalise(text: str) -> str:
 
 
 def _row_id(prompt: str, chosen: str, rejected: str) -> str:
-    payload = "\\0".join(_normalise(x) for x in (prompt, chosen, rejected)).encode("utf-8")
+    payload = "\0".join(_normalise(x) for x in (prompt, chosen, rejected)).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
 
 
@@ -189,7 +189,7 @@ def _audit_external(lock: dict, raw: dict[str, bytes]) -> dict:
         require(meta is not None, f"pair {index}: row identity missing from metadata")
         require(meta.get("source_url") == url, f"pair {index}: provenance URL mismatch")
         pair_identifiers.append(_identifiers(
-            pair["prompt"] + "\\n" + pair["chosen"] + "\\n" + pair["rejected"] + "\\n" + url
+            pair["prompt"] + "\n" + pair["chosen"] + "\n" + pair["rejected"] + "\n" + url
         ))
     require(set(pair_ids) == set(metadata_by_id), "unmatched test metadata rows")
 
@@ -366,9 +366,9 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
     result = audit()
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    with args.out.open("x", encoding="utf-8", newline="\\n") as handle:
+    with args.out.open("x", encoding="utf-8", newline="\n") as handle:
         json.dump(result, handle, indent=2, sort_keys=True, allow_nan=False)
-        handle.write("\\n")
+        handle.write("\n")
     print(json.dumps({
         "status": result["status"],
         "external_pairs": result["external_corpus"]["sample_sizes"]["pairs"],
