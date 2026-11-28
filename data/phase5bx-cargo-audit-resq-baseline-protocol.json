@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5BX_RESQ_CARGO_AUDIT_BASELINE_FROZEN",
+  "frozen_before_baseline_adapter_implementation": true,
+  "freeze_base_commit": "fc95c4d120e6c1fca1de57d1afed08c1439a67a8",
+  "application": {
+    "repository": "resq-software/programs",
+    "commit": "76ac2d3765b7d5defa403c1b141e898782b4c923",
+    "lockfile_path": "Cargo.lock",
+    "lockfile_git_blob": "73f06efd4b385fb1629ccf06d2e1f540d42c47d7",
+    "package": "anchor-lang",
+    "resolved_version": "1.0.0-rc.4",
+    "sample_applications": 1
+  },
+  "advisory_database": {
+    "repository": "rustsec/advisory-db",
+    "commit": "c5279d0b0c9e8b70df666eb6d1edbabcfd1176bd",
+    "advisories": [
+      {
+        "id": "RUSTSEC-2026-0144",
+        "path": "crates/anchor-lang/RUSTSEC-2026-0144.md",
+        "blob": "326e19060236047b244fbb35c2c6f231b3c6753e",
+        "introduced": "1.0.0",
+        "fixed": "1.0.2"
+      },
+      {
+        "id": "RUSTSEC-2026-0146",
+        "path": "crates/anchor-lang/RUSTSEC-2026-0146.md",
+        "blob": "6c48a77b69fe362e3cc90bcf272f1b0d8f5e19cb",
+        "introduced": "1.0.0-rc.1",
+        "fixed": "1.0.0-rc.2"
+      }
+    ]
+  },
+  "baseline": {
+    "tool": "cargo-audit",
+    "version": "0.22.2",
+    "rust_toolchain": "1.86.0",
+    "output_format": "json",
+    "flags": [
+      "--no-fetch",
+      "--no-yanked",
+      "--db",
+      "--file",
+      "--json"
+    ],
+    "database_policy": "Use a local git checkout of the exact advisory_database.commit. Verify both advisory Git blobs and the checked-out commit before invoking cargo-audit; --no-fetch prevents mutation of the frozen database.",
+    "lockfile_policy": "Pass the pinned Cargo.lock through --file and run cargo-audit from a temporary directory outside the application repository. Do not execute Cargo builds, build scripts, or project code.",
+    "finding_identity": "A finding applies to a frozen pair only when the JSON vulnerability entry matches the exact advisory ID, package name, and locked package version. Absence means INAPPLICABLE only after verifying that the package/version is present in the pinned lockfile and the advisory blob is present in the pinned database.",
+    "scope": "Run cargo-audit across the complete pinned Cargo.lock, then compare its result for the two preselected anchor-lang package-advisory pairs."
+  },
+  "candidate_boundary": {
+    "falsum_candidate_was_executed_before_this_baseline_freeze": true,
+    "interpretation": "This is a post-hoc independent-tool corroboration of an existing candidate result, not a blind holdout and not a claim that the candidate was frozen before its first execution.",
+    "falsum_candidate_source": "Phase5BU report generated from the already frozen Phase5BU application/advisory protocol"
+  },
+  "selection": {
+    "case_roster": [
+      {
+        "id": "resq-anchor-lang-rustsec-2026-0144",
+        "package": "anchor-lang",
+        "version": "1.0.0-rc.4",
+        "advisory": "RUSTSEC-2026-0144",
+        "semver_reference_status": "INAPPLICABLE",
+        "falsum_candidate_status": "INAPPLICABLE"
+      },
+      {
+        "id": "resq-anchor-lang-rustsec-2026-0146",
+        "package": "anchor-lang",
+        "version": "1.0.0-rc.4",
+        "advisory": "RUSTSEC-2026-0146",
+        "semver_reference_status": "INAPPLICABLE",
+        "falsum_candidate_status": "INAPPLICABLE"
+      }
+    ],
+    "sample_size": 2,
+    "no_case_addition_after_baseline_execution": true
+  },
+  "limits": [
+    "One pinned ResQ Solana Anchor workspace, one locked anchor-lang version, and two selected advisory pairs.",
+    "cargo-audit findings are a tool reference, not human AppSec gold or exploitability adjudication.",
+    "The full Cargo.lock scan is cargo-audit output; FALSUM is compared only on the two selected anchor-lang pairs.",
+    "No Solana program source, deployed binary, runtime behavior, transaction, validator, or reachability analysis is performed.",
+    "No independent ResQ maintainer review or application adoption is claimed.",
+    "No Telegraph network scoring, ranking change, material acceptance, or provider improvement is claimed."
+  ]
+}
