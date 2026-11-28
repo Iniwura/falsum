@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5BW_TELEGRAPH_INTENT_CONTRACT_FROZEN",
+  "official_catalogue": {
+    "repository": "telegraphprotocol/bounties",
+    "commit": "d0789fe004372341bf53121e9468ee66bd8bd0b2",
+    "path": "docs/INTENTS.md",
+    "git_blob_sha1": "d3afba8ad9cc95695e59357d895e02e4cda5b5a6",
+    "byte_length": 169037
+  },
+  "intent": {
+    "child": "SECURITY_REVIEW_GENERAL",
+    "kind": "judgment",
+    "family": "SECURITY_REVIEW",
+    "family_kind": "judgment",
+    "adapter_scope": "family",
+    "evaluation_material": "question_pairs",
+    "asks": ["target"],
+    "answers": ["verdict", "vulnerability_count", "issues", "summary"],
+    "h2_missions": ["Exchange", "Model Economy", "Web3 Native & DeFi"]
+  },
+  "response_evidence": {
+    "repository": "mrnetwork0001/Truvian",
+    "commit": "1d7b9248d853eb1ca1f1fdc3270c60d3502f4e60",
+    "path": "src/scripts/test-preflight.ts",
+    "git_blob_sha1": "98563828f58cd58a589cfc6ccc28685d0761c494",
+    "source_class": "developer-published historical fixture; two parsed field records independently confirmed against maintainer memos; not a raw HTTP capture",
+    "expected_intent": "SECURITY_REVIEW_GENERAL",
+    "expected_direct_declarations": 9,
+    "maintainer_confirmed_fixture_variables": ["secureUnseen", "secureQueryOnly"],
+    "expected_maintainer_confirmed_count": 2,
+    "fixture_record_params": "empty_object",
+    "target_present_in_fixture_record": false,
+    "raw_request_or_http_body": false
+  },
+  "expected_contract": {
+    "response_fields_must_match_official_answers": true,
+    "same_child_intent_required": true,
+    "family_adapter_registration_not_claimed": true,
+    "target_input_presence_must_not_be_inferred_from_response": true
+  },
+  "limits": {
+    "independent_human_appsec_gold": false,
+    "raw_http_capture": false,
+    "request_target_conformance_verified": false,
+    "maintainer_acceptance": false,
+    "adapter_registration": false,
+    "operator_rows_in_active_snapshot_verified": false,
+    "operator_rows_used_for_ranking_verified": false,
+    "security_clearance": false,
+    "h2_award": false
+  }
+}
