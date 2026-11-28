@@ -198,6 +198,14 @@ def _read_sheet(archive: zipfile.ZipFile, path: str, shared: list[str]):
     return rows, max_row, max_column
 
 
+def _trim(values: list[str]) -> list[str]:
+    """Return a copy without trailing empty worksheet cells."""
+    trimmed = list(values)
+    while trimmed and trimmed[-1] == "":
+        trimmed.pop()
+    return trimmed
+
+
 def parse_workbook(raw: bytes) -> tuple[list[dict[str, str]], dict]:
     ca.need(zipfile.is_zipfile(BytesIO(raw)), "graded.xlsx is not a valid ZIP workbook")
     try:
