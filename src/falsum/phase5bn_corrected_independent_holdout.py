@@ -360,9 +360,18 @@ def _verify_frozen_versions_present(record: dict[str, Any], metadata: dict[str, 
     frozen = record.get("verified_versions")
     need(ecosystem in ("PyPI", "npm"), "unsupported registry ecosystem")
     need(isinstance(package, str) and package, "package identity is missing")
+    snapshot_digest = record.get("metadata_sha256")
+    need(isinstance(snapshot_digest, str) and re.fullmatch(r"[0-9a-f]{64}", snapshot_digest) is not None,
+         "freeze-time registry metadata digest is malformed")
     need(isinstance(frozen, list) and len(frozen) == 2
          and all(isinstance(version, str) and version for version in frozen)
          and len(set(frozen)) == 2, "frozen package-version pair is malformed")
+    if ecosystem == "npm":
+        need(metadata.get("name") == package, "npm metadata package identity changed")
+    else:
+        info = metadata.get("info")
+        need(isinstance(info, dict) and info.get("name") == package,
+             "PyPI metadata package identity changed")
     key = "releases" if ecosystem == "PyPI" else "versions"
     version_map = metadata.get(key)
     need(isinstance(version_map, dict), f"{ecosystem} metadata has no {key} map")
