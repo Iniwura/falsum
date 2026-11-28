@@ -502,6 +502,10 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
             "vader_only_ids": vader_only,
             "graded_only_ids": graded_only,
             "excluded_records": excluded_records,
+            "source_identity_mismatches_excluded": [
+                record for record in excluded_records
+                if record.get("reason") == "repository_or_CWE_or_severity_mismatch"
+            ],
             "csv_parse_diagnostics": file_parse_diagnostics,
             "case_number_mismatch_count": len(case_number_mismatches),
             "case_number_mismatch_examples": case_number_mismatches[:20],
