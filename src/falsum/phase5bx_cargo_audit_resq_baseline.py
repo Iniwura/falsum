@@ -16,7 +16,7 @@ from .phase5bu_resq_solana_lockfile import (
 )
 from .phase5m_real_source_sensitive_model import ROOT
 
-PROTOCOL_BLOB = "b3d2e114f1c375bcafd6b5b4e926ad60e3db727e"
+PROTOCOL_BLOB = "61d79e3b74e08063d678a2fe4d979d1e1c797c61"
 APPLICABLE = "APPLICABLE"
 INAPPLICABLE = "INAPPLICABLE"
 UNKNOWN = "INSUFFICIENT_EVIDENCE"
