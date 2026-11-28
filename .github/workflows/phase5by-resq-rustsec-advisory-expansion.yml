@@ -8,6 +8,10 @@ on:
       - 'src/falsum/phase5bx_cargo_audit_resq_baseline.py'
       - 'src/falsum/phase5bu_resq_solana_lockfile.py'
       - 'src/falsum/phase5bo_ecosystem_semantics.py'
+      - 'src/falsum/phase5aj_cross_app_evidence.py'
+      - 'src/falsum/phase5m_real_source_sensitive_model.py'
+      - 'data/phase5bu-resq-solana-lockfile-protocol.json'
+      - 'data/phase5bx-cargo-audit-resq-baseline-protocol.json'
       - 'tests/test_phase5by_resq_rustsec_advisory_expansion.py'
       - 'docs/PHASE5BY_RESQ_RUSTSEC_ADVISORY_EXPANSION.md'
       - '.github/workflows/phase5by-resq-rustsec-advisory-expansion.yml'
@@ -94,10 +98,10 @@ jobs:
           assert report['baseline']['lockfile_dependencies'] == 805
           assert report['baseline']['full_lockfile_finding_count'] == 4
           with open(__import__('os').environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
-              summary.write('## Phase 5BY: ResQ RustSec package-version expansion\\n\\n')
-              summary.write(f"New pairs: {report['sample_sizes']['new_package_advisory_pairs']}; candidate/cargo-audit agreement: {report['new_case_metrics']['agreement_with_cargo_audit']}/4; coverage: {report['new_case_metrics']['falsum_coverage']}/4; abstentions: {report['new_case_metrics']['falsum_abstentions']}.\\n\\n")
-              summary.write(f"Prior calibration controls: {report['calibration_metrics']['agreement_with_cargo_audit']}/2. Full lockfile cargo-audit baseline: {report['baseline']['lockfile_dependencies']} dependencies, {report['baseline']['full_lockfile_finding_count']} findings.\\n\\n")
-              summary.write('This is a source-bound package-version replay, not a blind source-family holdout, human AppSec gold, full FALSUM dependency scan, code reachability analysis, app adoption, or Telegraph network improvement.\\n')
+              summary.write('## Phase 5BY: ResQ RustSec package-version expansion\n\n')
+              summary.write(f"New pairs: {report['sample_sizes']['new_package_advisory_pairs']}; candidate/cargo-audit agreement: {report['new_case_metrics']['agreement_with_cargo_audit']}/4; candidate/semver agreement: {report['new_case_metrics']['agreement_with_semver_7_8_6']}/4; coverage: {report['new_case_metrics']['falsum_coverage']}/4; abstentions: {report['new_case_metrics']['falsum_abstentions']}.\n\n")
+              summary.write(f"Prior calibration controls: {report['calibration_metrics']['agreement_with_cargo_audit']}/2. Full lockfile cargo-audit baseline: {report['baseline']['lockfile_dependencies']} dependencies, {report['baseline']['full_lockfile_finding_count']} findings.\n\n")
+              summary.write('This is a source-bound package-version replay, not a blind source-family holdout, human AppSec gold, full FALSUM dependency scan, code reachability analysis, app adoption, or Telegraph network improvement.\n')
           PY
       - uses: actions/upload-artifact@v4
         with:
