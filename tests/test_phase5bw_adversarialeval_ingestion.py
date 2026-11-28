@@ -22,7 +22,7 @@ class AnjomanMaterialCompatibilityTests(unittest.TestCase):
     @staticmethod
     def raw(rows):
         return b"".join(
-            (json.dumps(row, ensure_ascii=False, separators=(",", ":")) + "\\n").encode("utf-8")
+            (json.dumps(row, ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf-8")
             for row in rows
         )
 
