@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 import subprocess
 import tomllib
+from urllib.request import urlopen
 
 from .phase5aj_cross_app_evidence import git_blob, require, source_bytes
 from .phase5bo_ecosystem_semantics import (
@@ -23,6 +24,7 @@ PROTOCOL_BLOB = "9f9345411057dba0fc5acc6485a1e877e8646efb"
 APPLICABLE = "APPLICABLE"
 INAPPLICABLE = "INAPPLICABLE"
 UNKNOWN = "INSUFFICIENT_EVIDENCE"
+MAX_LOCK_BYTES = 1_000_000
 
 
 def _load_protocol(root: Path = ROOT) -> dict:
@@ -46,6 +48,22 @@ def _source_spec(repo: str, commit: str, source: dict, *, key: str | None = None
         "path": source["path"],
         "blob": source["blob"],
     }
+
+
+def _fetch_app_source(spec: dict, fetcher=None) -> bytes:
+    if fetcher is not None:
+        return fetcher(spec)
+    if spec["path"] != "Cargo.lock":
+        return source_bytes(spec)
+    url = (
+        "https://raw.githubusercontent.com/" + spec["repo"] + "/" +
+        spec["commit"] + "/" + spec["path"]
+    )
+    with urlopen(url, timeout=30) as response:
+        raw = response.read(MAX_LOCK_BYTES + 1)
+    require(len(raw) <= MAX_LOCK_BYTES, "oversized pinned Cargo.lock")
+    require(git_blob(raw) == spec["blob"], "Cargo.lock Git byte identity mismatch")
+    return raw
 
 
 def _cargo_lock_package(raw: bytes, package_name: str) -> dict:
@@ -130,13 +148,13 @@ process.stdin.on('end', () => {
     return result.stdout.strip()
 
 
-def audit(root: Path = ROOT, fetcher=source_bytes) -> dict:
+def audit(root: Path = ROOT, fetcher=None) -> dict:
     protocol = _load_protocol(root)
     app = protocol["application"]
     app_sources = {}
     for source in app["sources"]:
         spec = _source_spec(app["repository"], app["commit"], source)
-        app_sources[source["key"]] = fetcher(spec)
+        app_sources[source["key"]] = _fetch_app_source(spec, fetcher)
 
     readme = app_sources["readme"].decode("utf-8", "strict")
     manifest = app_sources["workspace_manifest"].decode("utf-8", "strict")
@@ -162,7 +180,7 @@ def audit(root: Path = ROOT, fetcher=source_bytes) -> dict:
             advisory_db["commit"],
             {"key": advisory["id"], "path": advisory["path"], "blob": advisory["blob"]},
         )
-        raw = fetcher(spec)
+        raw = source_bytes(spec) if fetcher is None else fetcher(spec)
         introduced, fixed = _rustsec_interval(raw, advisory["id"], app["package"])
         require(introduced == advisory["introduced"] and fixed == advisory["fixed"],
                 "frozen RustSec range differs from its pinned source")
