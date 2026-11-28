@@ -2,6 +2,8 @@
 
 **Status:** protocol frozen before candidate implementation. This is a public-source ingestion and reproducibility result, not a FALSUM accuracy benchmark.
 
+The original protocol was committed at `2026-11-28T07:32:17Z` in [`79e914d`](https://github.com/Iniwura/falsum/commit/79e914ddb2c611627bb4d1ea26aa0ec992a3b569); the first candidate module commit followed at `07:33:46Z`. The original timestamp field had used the run-start time and was corrected in a metadata-only follow-up. The source roster, hashes, overlap rule and expected rows were unchanged.
+
 ## Frozen external source
 
 The source is [Ritapossible/AdversarialEval](https://github.com/Ritapossible/AdversarialEval), pinned at commit [09f9fa4a584b513720b215731baf54187039ac10](https://github.com/Ritapossible/AdversarialEval/commit/09f9fa4a584b513720b215731baf54187039ac10), under its pinned [MIT license](https://github.com/Ritapossible/AdversarialEval/blob/09f9fa4a584b513720b215731baf54187039ac10/LICENSE).
