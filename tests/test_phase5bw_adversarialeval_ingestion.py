@@ -1,9 +1,81 @@
+import json
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
 from falsum import phase5bw_adversarialeval_ingestion as m
+
+
+class AnjomanMaterialCompatibilityTests(unittest.TestCase):
+    @staticmethod
+    def row(prompt="Review this dependency and configuration for security findings.",
+            source_kind="ai_assisted", source_url="https://example.org/security-review"):
+        return {
+            "prompt": prompt,
+            "chosen": "Insecure, one bounded issue with a source-backed explanation.",
+            "rejected": "Secure, no issues; the current evidence is sufficient.",
+            "label_kind": "preference_pair",
+            "provenance": {"source_kind": source_kind, "source_url": source_url},
+        }
+
+    @staticmethod
+    def raw(rows):
+        return b"".join(
+            (json.dumps(row, ensure_ascii=False, separators=(",", ":")) + "\\n").encode("utf-8")
+            for row in rows
+        )
+
+    def audit(self, rows, intent="SECURITY_REVIEW_GENERAL", authors=None):
+        return m._audit_telegraph_material(
+            rows, self.raw(rows), intent, authors or {"reviewer:a": 1, "reviewer:b": 1}
+        )
+
+    def test_documented_preference_pair_shape_passes_without_submission_claim(self):
+        report = self.audit([self.row()])
+        self.assertTrue(report["structural_compatibility_verified"])
+        self.assertEqual(report["structurally_compatible_rows"], 1)
+        self.assertEqual(report["intent"]["family"], "SECURITY_REVIEW")
+        self.assertEqual(report["intent"]["kind"], "judgment")
+        self.assertEqual(report["pool_activation"]["minimum_distinct_contributors"], 5)
+        self.assertFalse(report["submission"]["upload_attempted"])
+        self.assertFalse(report["submission"]["signature_created"])
+        self.assertFalse(report["submission"]["eligible_claimed"])
+        self.assertEqual(
+            report["provenance"]["node_provenance_classification"],
+            "NOT_OBSERVED_NO_UPLOAD",
+        )
+
+    def test_ai_assisted_source_kind_is_preserved_not_promoted(self):
+        report = self.audit([self.row(source_kind="ai_assisted")])
+        self.assertEqual(report["provenance"]["source_kind_counts"], {"ai_assisted": 1})
+        self.assertEqual(
+            report["provenance"]["node_provenance_classification"],
+            "NOT_OBSERVED_NO_UPLOAD",
+        )
+
+    def test_wrong_intent_is_rejected(self):
+        row = self.row()
+        row["intent_id"] = "CODE_REVIEW_GENERAL"
+        with self.assertRaises(m.AuditError):
+            self.audit([row])
+
+    def test_duplicate_prompt_after_official_normalization_is_rejected(self):
+        rows = [
+            self.row(prompt="Review this dependency and configuration for security findings."),
+            self.row(prompt="Review this dependency and  configuration for security findings."),
+        ]
+        with self.assertRaises(m.AuditError):
+            self.audit(rows)
+
+    def test_prompt_length_below_documented_minimum_is_rejected(self):
+        with self.assertRaises(m.AuditError):
+            self.audit([self.row(prompt="Too short")])
+
+    def test_raw_jsonl_row_over_64_kib_is_rejected(self):
+        row = self.row(source_url="https://" + "a" * (65 * 1024))
+        with self.assertRaises(m.AuditError):
+            self.audit([row])
 
 
 class AdversarialEvalIngestionTests(unittest.TestCase):
