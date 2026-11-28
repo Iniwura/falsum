@@ -74,6 +74,15 @@ def _identifiers(value: str) -> set[str]:
     return {match.group(0).upper() for match in IDENTIFIER.finditer(value)}
 
 
+def _classify_pair(identifiers: set[str], public_ids: set[str]) -> tuple[str, list[str]]:
+    overlap = sorted(identifiers & public_ids)
+    if overlap:
+        return "PUBLIC_SOURCE_OVERLAP", overlap
+    if identifiers:
+        return "PUBLIC_SOURCE_DISJOINT_CANDIDATE", []
+    return "UNCLASSIFIED_NO_ADVISORY_ID", []
+
+
 def _wilson(correct: int, total: int, z: float = 1.96) -> tuple[float, float]:
     require(total > 0 and 0 <= correct <= total, "invalid Wilson inputs")
     p = correct / total
@@ -278,15 +287,12 @@ def _audit_overlap(lock: dict, external: dict, own_raw: dict[str, bytes]) -> dic
     external_ids: set[str] = set()
     for index, (ident, ids) in enumerate(zip(external["pair_ids"], external["pair_identifiers"]), 1):
         external_ids.update(ids)
-        overlap = ids & own_ids
-        if overlap:
-            overlap_rows.append({"row_number": index, "row_id": ident, "identifiers": sorted(overlap)})
-        elif ids:
+        classification, overlap = _classify_pair(ids, own_ids)
+        if classification == "PUBLIC_SOURCE_OVERLAP":
+            overlap_rows.append({"row_number": index, "row_id": ident, "identifiers": overlap})
+        elif classification == "PUBLIC_SOURCE_DISJOINT_CANDIDATE":
             ghsa = sorted(x for x in ids if x.startswith("GHSA-"))
-            if ghsa:
-                candidate_rows.append({"row_number": index, "row_id": ident, "ghsa": ghsa})
-            else:
-                unclassified += 1
+            candidate_rows.append({"row_number": index, "row_id": ident, "ghsa": ghsa})
         else:
             unclassified += 1
 
