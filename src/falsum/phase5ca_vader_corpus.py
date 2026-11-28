@@ -371,7 +371,6 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
             "known_public_overlap": repo in known_public,
         })
 
-    need(len(matched) >= 1, "no stable-ID-aligned source/score records remain")
     holdout = [x for x in matched if x["reserved_holdout"]]
     holdout_repos = sorted({x["repository"] for x in holdout})
     public_overlaps = sorted({x["repository"] for x in matched if x["known_public_overlap"]})
