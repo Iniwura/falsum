@@ -154,7 +154,7 @@ def _read_csv(raw: bytes, expected_fields: tuple[str, ...], label: str) -> tuple
         reader = csv.DictReader(
             io.StringIO(text, newline=""),
             restkey="__EXTRA_FIELDS__",
-            restval="",
+            restval=None,
         )
         need(tuple(reader.fieldnames or ()) == expected_fields, label + " header differs from frozen schema")
         rows: list[dict[str, str]] = []
@@ -362,8 +362,8 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
         scored_cwe = _cwes(scored["CWE"])
         source_severity = _severity(source["Severity"], numeric_allowed=False)
         scored_severity = _severity(scored["Severity"], numeric_allowed=True)
-        source_description = "\\n".join(line.rstrip() for line in source["Description"].replace("\\r\\n", "\\n").splitlines()).strip()
-        graded_description = "\\n".join(line.rstrip() for line in scored["Description"].replace("\\r\\n", "\\n").splitlines()).strip()
+        source_description = "\n".join(line.rstrip() for line in source["Description"].splitlines()).strip()
+        graded_description = "\n".join(line.rstrip() for line in scored["Description"].splitlines()).strip()
         if (source_repo != scored_repo or source_cwe != scored_cwe
                 or source_severity != scored_severity or source_description != graded_description):
             excluded_records.append({
@@ -384,7 +384,11 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
             case_number_mismatches.append({
                 "id": ident, "vader_case": source_case, "graded_case": graded_case,
             })
-        try:\n            responses = {model: _model_response(scored, model) for model in MODELS}\n        except VaderCorpusError as exc:\n            excluded_records.append({"id": ident, "reason": "invalid_model_response_or_score", "detail": str(exc)})\n            continue
+        try:
+            responses = {model: _model_response(scored, model) for model in MODELS}
+        except VaderCorpusError as exc:
+            excluded_records.append({"id": ident, "reason": "invalid_model_response_or_score", "detail": str(exc)})
+            continue
         repo = source_repo
         bucket = _holdout_bucket(repo)
         reserved = bucket == 0 and repo not in known_public
@@ -406,7 +410,8 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
     holdout_repos = sorted({x["repository"] for x in holdout})
     public_overlaps = sorted({x["repository"] for x in matched if x["known_public_overlap"]})
     complete_case_count = sum(
-        all(model in case["responses"] for model in MODELS) for case in matched
+        all(case["responses"][model]["answer_present"] for model in MODELS)
+        for case in matched
     )
     cwe_counts = Counter(cwe for case in matched for cwe in case["cwe"])
     severity_counts = Counter(case["severity"] for case in matched)
@@ -426,6 +431,32 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
         "cwe": x["cwe"], "severity": x["severity"],
     } for x in matched]
     matched_case_sha = sha256(canonical_json(case_roster))
+    excluded_identity = any(
+        record.get("reason") == "repository_or_CWE_or_severity_mismatch"
+        for record in excluded_records
+    )
+    invalid_response_excluded = any(
+        record.get("reason") == "invalid_model_response_or_score"
+        for record in excluded_records
+    )
+    vader_diag = file_parse_diagnostics.get("vader_csv", {})
+    graded_diag = file_parse_diagnostics.get("graded_csv", {})
+    malformed_csv_excluded = bool(
+        vader_diag.get("malformed_records", 0) or graded_diag.get("malformed_records", 0)
+    )
+    warnings = []
+    for label, diagnostic in (("vader.csv", vader_diag), ("graded.csv", graded_diag)):
+        malformed_count = diagnostic.get("malformed_records", 0)
+        if malformed_count:
+            warnings.append(f"{label}: {malformed_count} malformed records excluded")
+    if case_number_mismatches:
+        warnings.append("case_number_mismatches_reported_not_used_for_join")
+    if excluded_identity:
+        warnings.append("source_metadata_identity_mismatches_excluded")
+    if invalid_response_excluded:
+        warnings.append("invalid_model_response_or_score_records_excluded")
+    if vader_only or graded_only:
+        warnings.append("unmatched_stable_IDs_excluded")
     minimum_cases = protocol["selection"]["minimum_matched_case_count_for_benchmark_ready"]
     minimum_holdout = protocol["selection"]["minimum_reserved_holdout_cases"]
     minimum_repos = protocol["selection"]["minimum_reserved_holdout_repositories"]
@@ -442,6 +473,10 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
         ready_reasons.append("reserved_holdout_repository_count_below_frozen_minimum")
     if excluded_identity:
         ready_reasons.append("source_metadata_identity_mismatches_excluded")
+    if invalid_response_excluded:
+        ready_reasons.append("invalid_model_response_or_score_records_excluded")
+    if malformed_csv_excluded:
+        ready_reasons.append("malformed_csv_records_excluded")
     if vader_only or graded_only:
         ready_reasons.append("unmatched_stable_IDs_excluded")
     report = {
@@ -450,7 +485,14 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
         "dataset": protocol["dataset"],
         "dataset_revision": protocol["dataset"]["revision"],
         "source_files": file_metadata,
-        "source_row_counts": {"vader_csv": len(vader_rows), "graded_csv": len(graded_rows)},
+        "source_row_counts": {
+            "vader_csv": len(vader_rows),
+            "graded_csv": len(graded_rows),
+            "vader_csv_physical_records": vader_diag.get("physical_records", len(vader_rows)),
+            "graded_csv_physical_records": graded_diag.get("physical_records", len(graded_rows)),
+            "vader_csv_malformed_records": vader_diag.get("malformed_records", 0),
+            "graded_csv_malformed_records": graded_diag.get("malformed_records", 0),
+        },
         "alignment": {
             "join_key": "ID",
             "vader_unique_ids": len(vader_ids),
@@ -459,7 +501,8 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
             "matched_source_score_records": len(matched),
             "vader_only_ids": vader_only,
             "graded_only_ids": graded_only,
-            "excluded_records": excluded_records,\n            "csv_parse_diagnostics": file_parse_diagnostics,
+            "excluded_records": excluded_records,
+            "csv_parse_diagnostics": file_parse_diagnostics,
             "case_number_mismatch_count": len(case_number_mismatches),
             "case_number_mismatch_examples": case_number_mismatches[:20],
         },
@@ -493,7 +536,8 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
         },
         "benchmark_readiness": {
             "ready_for_next_candidate_stage": not ready_reasons,
-            "reasons": ready_reasons,\n            "warnings": warnings,
+            "reasons": ready_reasons,
+            "warnings": warnings,
             "candidate_scores_exist": False,
             "candidate_training_on_vader": False,
             "candidate_inference_performed": False,
@@ -549,9 +593,15 @@ def run(root: Path = ROOT) -> tuple[dict, dict]:
         "graded.csv", source_specs["graded.csv"]["git_blob_sha1"],
         source_specs["graded.csv"]["max_bytes"], revision,
     )
-    vader_rows = _read_csv(vader_raw, VADER_FIELDS, "vader.csv")
-    graded_rows = _read_csv(graded_raw, GRADED_FIELDS, "graded.csv")
-    return build_report(vader_rows, graded_rows, protocol, [vader_meta, graded_meta])
+    vader_rows, vader_parse = _read_csv(vader_raw, VADER_FIELDS, "vader.csv")
+    graded_rows, graded_parse = _read_csv(graded_raw, GRADED_FIELDS, "graded.csv")
+    return build_report(
+        vader_rows,
+        graded_rows,
+        protocol,
+        [vader_meta, graded_meta],
+        {"vader_csv": vader_parse, "graded_csv": graded_parse},
+    )
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -572,7 +622,9 @@ def main(argv: list[str] | None = None) -> int:
             "status": report["status"],
             "vader_rows": report["source_row_counts"]["vader_csv"],
             "graded_rows": report["source_row_counts"]["graded_csv"],
-            "matched_cases": report["corpus"]["matched_cases"],\n            "vader_malformed_records": report["source_row_counts"]["vader_csv_malformed_records"],\n            "graded_malformed_records": report["source_row_counts"]["graded_csv_malformed_records"],
+            "matched_cases": report["corpus"]["matched_cases"],
+            "vader_malformed_records": report["source_row_counts"]["vader_csv_malformed_records"],
+            "graded_malformed_records": report["source_row_counts"]["graded_csv_malformed_records"],
             "holdout_cases": report["source_disjointness"]["reserved_holdout_cases"],
             "strong_derived_preferences": report["corpus"]["derived_pairwise_summary"]["strong_derived_preferences_margin_ge_2"],
             "benchmark_ready": report["benchmark_readiness"]["ready_for_next_candidate_stage"],
