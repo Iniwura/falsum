@@ -153,6 +153,7 @@ def parse_workbook(raw: bytes) -> tuple[list[dict[str, str]], dict]:
         seen_ids = set()
         invalid_scores = []
         incomplete_answers = []
+        physical_data_rows = 0
         for row_number, values in enumerate(
             sheet.iter_rows(min_row=header_row + 1,
                             max_col=sheet.max_column, values_only=True),
@@ -161,6 +162,7 @@ def parse_workbook(raw: bytes) -> tuple[list[dict[str, str]], dict]:
             normalized = [cell_text(v) for v in values]
             if not any(normalized):
                 continue
+            physical_data_rows += 1
             extras = normalized[len(ca.GRADED_FIELDS):]
             if any(extras):
                 malformed.append({"row": row_number, "reason": "nonempty_extra_columns"})
@@ -192,7 +194,7 @@ def parse_workbook(raw: bytes) -> tuple[list[dict[str, str]], dict]:
             "header_row": header_row,
             "worksheet_max_row": sheet.max_row,
             "worksheet_max_column": sheet.max_column,
-            "data_rows": len(rows) + len(malformed),
+            "data_rows": physical_data_rows,
             "valid_rows": len(rows),
             "malformed_rows": malformed,
             "malformed_row_count": len(malformed),
