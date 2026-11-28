@@ -110,9 +110,12 @@ case. Replay therefore verifies that every already-frozen version key remains
 present in the current registry metadata; it does not require the entire live
 document to retain its freeze-time digest and never selects a new version or
 changes a reference label. The immutable advisory blobs, exact selected
-versions, case order and answer-token assignment remain fixed. The case order
-and answer-token assignment use one fixed label-blind seed; no seed search is
-performed against labels or candidate output.
+versions, case order and answer-token assignment remain fixed. The committed
+result file is the original freeze-time report; hosted replay compares its
+cases, labels, decisions, leakage and answer-surface results while separately
+recording the current mutable-registry policy. The case order and answer-token
+assignment use one fixed label-blind seed; no seed search is performed against
+labels or candidate output.
 
 The [result](../data/phase5bn-corrected-independent-holdout-result.json) records
 24/24 external-resolver reference decisions and 22/24 FALSUM decisions. The
