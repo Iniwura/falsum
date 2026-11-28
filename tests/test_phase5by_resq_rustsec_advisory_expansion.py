@@ -11,7 +11,9 @@ class Phase5BYRealSourceTests(unittest.TestCase):
         cls.protocol = m._load_protocol()
         raw_dir = os.environ.get("FALSUM_PHASE5BY_DB_DIR")
         if not raw_dir:
-            raise RuntimeError("FALSUM_PHASE5BY_DB_DIR is required for real-source tests")
+            raise unittest.SkipTest(
+                "Requires the pinned RustSec checkout; the dedicated Phase 5BY workflow runs these real-source tests."
+            )
         cls.db_dir = Path(raw_dir)
         cls.verified = m._verify_database(cls.db_dir, cls.protocol)
 
