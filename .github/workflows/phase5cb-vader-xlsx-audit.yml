@@ -34,8 +34,8 @@ jobs:
           python-version: '3.11'
       - name: Install pinned workbook parser
         run: |
-          python -m pip install --disable-pip-version-check --no-deps openpyxl==3.1.5
-          python -c "import openpyxl; assert openpyxl.__version__ == '3.1.5'"
+          python -m pip install --disable-pip-version-check --no-deps openpyxl==3.1.5 et-xmlfile==2.0.0
+          python -c "import openpyxl, et_xmlfile; assert openpyxl.__version__ == '3.1.5' and et_xmlfile.__version__ == '2.0.0'"
       - name: Run workbook parser and cross-format contract tests
         env:
           PYTHONPATH: src
