@@ -41,14 +41,16 @@ those functions.
 
 RustSec treats the union of versions.patched and versions.unaffected
 requirements as versions that are not affected. If neither list contains a
-range, RustSec treats all versions as affected. Phase 5BY implements a
-deliberately narrow comparator subset for the six frozen records and abstains
-on unsupported syntax. The exact source blobs are verified before parsing.
+range, RustSec treats all versions as affected. FALSUM uses its own Python
+SemVer parser for the candidate decisions and compares it with both
+cargo-audit 0.22.2 and an independent semver@7.8.6 range reference. The
+comparator subset is deliberately narrow; unsupported syntax abstains. Exact
+source blobs are verified before parsing.
 
-The context-aware reference is the real cargo-audit 0.22.2 full-lockfile
-result. A citation-only baseline marks every advisory applicable. Two earlier
-anchor-lang negatives are retained as calibration controls only; they are
-not held-out cases.
+The context-aware references are the real cargo-audit 0.22.2 full-lockfile
+result and the independent semver@7.8.6 range resolver. A citation-only
+baseline marks every advisory applicable. Two earlier anchor-lang negatives
+are retained as calibration controls only; they are not held-out cases.
 
 ## Results
 
@@ -56,7 +58,7 @@ The authoritative machine-readable result is the hosted
 Phase 5BY workflow artifact. The workflow records:
 
 - four new package/advisory pairs and two prior calibration controls;
-- candidate coverage, abstentions and agreement with cargo-audit;
+- candidate coverage, abstentions and agreement with cargo-audit and semver@7.8.6;
 - false acceptances and false rejections relative to cargo-audit;
 - the citation-only control's false-applicable decisions;
 - the complete cargo-audit findings from the 805-dependency lockfile.
