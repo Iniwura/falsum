@@ -10,7 +10,7 @@ This is a post-hoc independent-tool corroboration. FALSUM had already been run o
 - Locked package: **anchor-lang 1.0.0-rc.4**
 - RustSec database: [c5279d0](https://github.com/rustsec/advisory-db/commit/c5279d0b0c9e8b70df666eb6d1edbabcfd1176bd)
 - Advisory records: **RUSTSEC-2026-0144** and **RUSTSEC-2026-0146**, with exact Git blob pins in the [protocol](../data/phase5bx-cargo-audit-resq-baseline-protocol.json)
-- Baseline: **cargo-audit 0.22.2**, Rust **1.86.0**
+- Baseline: **cargo-audit 0.22.2**, Rust **1.88.0**
 
 The roster and baseline version were committed before the adapter implementation. The exact advisory files are checked out and their Git blob IDs verified before cargo-audit runs.
 
