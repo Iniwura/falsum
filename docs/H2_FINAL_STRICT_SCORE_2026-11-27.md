@@ -102,10 +102,20 @@ competent baseline.
 The [corrected protocol](../data/phase5bn-corrected-independent-holdout-protocol.json)
 is separate from Phase 5BM and is the current measurement basis. It derives
 labels with the established external `packaging==26.4` and `semver@7.8.6`
-implementations, verifies the selected versions against pinned live PyPI or npm
-metadata, and completes that reference stage before any FALSUM call. The case
-order and answer-token assignment use one fixed label-blind seed; no seed search
-is performed against labels or candidate output.
+implementations and completes that reference stage before any FALSUM call. The
+protocol retains SHA-256 identities for the full PyPI/npm package metadata
+snapshots used at freeze time. Those registry endpoints are mutable: new
+releases can change the full metadata document without changing any selected
+case. Replay therefore verifies that every already-frozen version key remains
+present in the current registry metadata; it does not require the entire live
+document to retain its freeze-time digest and never selects a new version or
+changes a reference label. The immutable advisory blobs, exact selected
+versions, case order and answer-token assignment remain fixed. The committed
+result file is the original freeze-time report; hosted replay compares its
+cases, labels, decisions, leakage and answer-surface results while separately
+recording the current mutable-registry policy. The case order and answer-token
+assignment use one fixed label-blind seed; no seed search is performed against
+labels or candidate output.
 
 The [result](../data/phase5bn-corrected-independent-holdout-result.json) records
 24/24 external-resolver reference decisions and 22/24 FALSUM decisions. The
