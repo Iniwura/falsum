@@ -127,7 +127,7 @@ def parse_workbook(raw: bytes) -> tuple[list[dict[str, str]], dict]:
         ca.need(len(names) <= 5000, "workbook contains too many ZIP members")
         ca.need(not any(name.startswith("/") or ".." in Path(name).parts for name in names),
                 "workbook contains an unsafe ZIP member path")
-        ca.need(not any("vbaProject.bin" in name.lower() for name in names),
+        ca.need(not any("vbaproject.bin" in name.lower() for name in names),
                 "macro-enabled content is not permitted")
     try:
         workbook = load_workbook(BytesIO(raw), read_only=True, data_only=True)
