@@ -33,7 +33,7 @@ FALSUM_PHASE5BO_NODE_PATH='$PWD/.phase5bu-node/node_modules' PYTHONPATH=src pyth
 FALSUM_PHASE5BO_NODE_PATH='$PWD/.phase5bu-node/node_modules' PYTHONPATH=src python -m falsum.phase5bu_resq_solana_lockfile --out RESQ-SOLANA-LOCKFILE.json
 ```
 
-The workflow fetches only immutable public GitHub raw URLs and verifies each Git blob before parsing. It also uploads the machine-readable result as a CI artifact.
+The workflow fetches only immutable public GitHub raw URLs and verifies each Git blob before parsing. The shared small-source helper caps files at its normal limit; the 235 KB Cargo.lock uses a dedicated 1 MB bounded fetch and the same Git blob verification. It also uploads the machine-readable result as a CI artifact.
 
 ## Limits
 
