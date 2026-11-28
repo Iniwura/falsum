@@ -1,0 +1,115 @@
+name: Phase 5CC - AdversarialEval source identity correction
+
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5cc_adversarialeval_source_scope.py'
+      - 'src/falsum/phase5bw_adversarialeval_ingestion.py'
+      - 'src/falsum/phase5aj_cross_app_evidence.py'
+      - 'data/phase5cc-adversarialeval-source-scope-protocol.json'
+      - 'data/phase5bw-adversarialeval-ingestion-protocol.json'
+      - 'tests/test_phase5cc_adversarialeval_source_scope.py'
+      - '.github/workflows/phase5cc-adversarialeval-source-scope.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5cc_adversarialeval_source_scope.py'
+      - 'src/falsum/phase5bw_adversarialeval_ingestion.py'
+      - 'src/falsum/phase5aj_cross_app_evidence.py'
+      - 'data/phase5cc-adversarialeval-source-scope-protocol.json'
+      - 'data/phase5bw-adversarialeval-ingestion-protocol.json'
+      - 'tests/test_phase5cc_adversarialeval_source_scope.py'
+      - '.github/workflows/phase5cc-adversarialeval-source-scope.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    name: Source identity contracts / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Run source identity regression contracts
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -m unittest discover -s tests -p 'test_phase5cc_adversarialeval_source_scope.py' -v
+
+  live-public-source-audit:
+    name: Re-authenticate corpus and corrected source roster
+    needs: contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reproduce source-only identity audit from pinned public blobs
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          mkdir -p phase5cc-evidence
+          python -m falsum.phase5cc_adversarialeval_source_scope --out phase5cc-evidence/PHASE5CC-ADVERSARIALEVAL-SOURCE-SCOPE.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('phase5cc-evidence/PHASE5CC-ADVERSARIALEVAL-SOURCE-SCOPE.json').read_text())
+          external = report['external_corpus']
+          source = report['source_identity']
+          adapter = external['published_external_adapter']
+          candidates = source['public_source_disjoint_candidates']
+          assert external['sample_sizes']['pairs'] == 40
+          assert external['sample_sizes']['reviewers'] == {'reviewer:fexx': 20, 'reviewer:lino': 20}
+          assert external['sample_sizes']['author_reviewed_ai_assisted'] == 40
+          assert external['sample_sizes']['fully_human_written'] == 0
+          assert adapter['correct'] == 31 and adapter['incorrect'] == 9 and adapter['ties'] == 0
+          assert adapter['accuracy_percent'] == 77.5
+          assert adapter['raw_score_arithmetic_replayed'] is True
+          assert adapter['adapter_inference_reproduced'] is False
+          assert source['rule'] == 'PROMPT_AND_PROVENANCE_URL_ONLY'
+          assert source['answer_text_used_for_source_identity'] is False
+          assert source['source_identifier_count'] == 10
+          assert source['public_overlap']['pair_count'] == 1
+          assert candidates['pair_count'] == 8 and candidates['distinct_ghsa_count'] == 6
+          assert [x['row_number'] for x in candidates['pairs']] == [3, 6, 25, 28, 33, 35, 39, 40]
+          assert candidates['eligible_as_blind_heldout'] is False
+          assert candidates['private_pool_overlap'] == 'UNKNOWN_NOT_PUBLICLY_ACCESSIBLE'
+          assert source['unclassified_pairs_without_source_identifiers'] == 31
+          assert source['legacy_answer_inclusive_candidate_count'] == 9
+          assert source['legacy_unclassified_count'] == 30
+          answer_only = source['answer_only_identifier_rows']
+          assert len(answer_only) == 2
+          row23 = next(x for x in answer_only if x['row_number'] == 23)
+          assert row23['classification'] == 'UNCLASSIFIED_NO_SOURCE_IDENTIFIER'
+          assert row23['answer_only_identifiers'] == ['GHSA-RV95-896H-C2VC']
+          assert report['interpretation']['falsum_scored'] is False
+          assert report['interpretation']['candidate_inference_run'] is False
+          assert report['interpretation']['complete_source_disjoint_holdout'] is False
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('## Phase 5CC: corrected AdversarialEval source identity\n\n')
+              summary.write('Source identity now uses only the task prompt and declared provenance URL; chosen/rejected answers are excluded. The 40-pair corpus re-authenticates and the external published 31/40 (77.5%) score arithmetic replays, but the external inference itself was not rerun.\n\n')
+              summary.write('Corrected roster: 1 public-overlap pair, 8 public-source-disjoint candidates across 6 GHSA IDs, and 31 unclassified pairs. Row 23 is no longer misclassified as a candidate because its only GHSA appears in the rejected answer while its declared source is CWE-601.\n\n')
+              summary.write('All 8 candidates remain **ineligible as blind holdout** because private FALSUM pool overlap is UNKNOWN. The corpus is AI-assisted and author-reviewed by two external authors; it is not fully human-written gold. No FALSUM score, model inference, matched baseline comparison, Telegraph acceptance, or ranking change is claimed.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5cc-adversarialeval-source-scope
+          path: phase5cc-evidence/
+          retention-days: 90
+          if-no-files-found: error
