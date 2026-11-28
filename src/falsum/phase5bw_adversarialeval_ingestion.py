@@ -132,7 +132,8 @@ def _audit_external(lock: dict, raw: dict[str, bytes]) -> dict:
     registration_rule = raw["registration_rule"].decode("utf-8", "strict")
     require("77.5%" in readme and "40 pairs from 2 outside authors" in readme,
             "README no longer states the published independent test")
-    require("31 of 40" in score_report and "77.5%" in score_report,
+    require("**All 40**" in score_report and "**31**" in score_report
+            and "**77.5%**" in score_report,
             "published score report does not state 31/40")
     require("more advisory ids cited" in score_report and "60%" in score_report,
             "published shortcut baseline statement is missing")
