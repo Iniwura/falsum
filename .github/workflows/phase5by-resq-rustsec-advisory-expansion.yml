@@ -1,0 +1,107 @@
+name: Phase 5BY - new RustSec package coverage on ResQ Solana lockfile
+
+on:
+  push:
+    paths:
+      - 'data/phase5by-resq-rustsec-advisory-expansion-protocol.json'
+      - 'src/falsum/phase5by_resq_rustsec_advisory_expansion.py'
+      - 'src/falsum/phase5bx_cargo_audit_resq_baseline.py'
+      - 'src/falsum/phase5bu_resq_solana_lockfile.py'
+      - 'src/falsum/phase5bo_ecosystem_semantics.py'
+      - 'tests/test_phase5by_resq_rustsec_advisory_expansion.py'
+      - 'docs/PHASE5BY_RESQ_RUSTSEC_ADVISORY_EXPANSION.md'
+      - '.github/workflows/phase5by-resq-rustsec-advisory-expansion.yml'
+  pull_request:
+    paths:
+      - 'data/phase5by-resq-rustsec-advisory-expansion-protocol.json'
+      - 'src/falsum/phase5by_resq_rustsec_advisory_expansion.py'
+      - 'src/falsum/phase5bx_cargo_audit_resq_baseline.py'
+      - 'src/falsum/phase5bu_resq_solana_lockfile.py'
+      - 'src/falsum/phase5bo_ecosystem_semantics.py'
+      - 'tests/test_phase5by_resq_rustsec_advisory_expansion.py'
+      - 'docs/PHASE5BY_RESQ_RUSTSEC_ADVISORY_EXPANSION.md'
+      - '.github/workflows/phase5by-resq-rustsec-advisory-expansion.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  real-source-replay:
+    name: ResQ full-lockfile cargo-audit plus FALSUM source replay
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: '1.88.0'
+          cache: false
+      - name: Install exact Python and SemVer dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps packaging==26.4
+          npm install --prefix .phase5by-node --ignore-scripts --no-audit --no-fund semver@7.8.6
+          test "$(NODE_PATH="$GITHUB_WORKSPACE/.phase5by-node/node_modules" node -p "require('semver/package.json').version")" = "7.8.6"
+      - name: Install pinned cargo-audit
+        run: |
+          cargo install cargo-audit --version 0.22.2 --locked
+          test "$(cargo audit --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)" = "0.22.2"
+      - name: Checkout exact RustSec advisory database snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init "$RUNNER_TEMP/phase5by-rustsec-db"
+          git -C "$RUNNER_TEMP/phase5by-rustsec-db" remote add origin https://github.com/rustsec/advisory-db.git
+          git -C "$RUNNER_TEMP/phase5by-rustsec-db" fetch --depth 1 origin c5279d0b0c9e8b70df666eb6d1edbabcfd1176bd
+          git -C "$RUNNER_TEMP/phase5by-rustsec-db" checkout --detach FETCH_HEAD
+          test "$(git -C "$RUNNER_TEMP/phase5by-rustsec-db" rev-parse HEAD)" = "c5279d0b0c9e8b70df666eb6d1edbabcfd1176bd"
+      - name: Run real-source RustSec parser tests
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+          FALSUM_PHASE5BO_NODE_PATH: ${{ github.workspace }}/.phase5by-node/node_modules
+          FALSUM_PHASE5BY_DB_DIR: ${{ runner.temp }}/phase5by-rustsec-db
+        run: |
+          python -m unittest discover -s tests -p 'test_phase5by_resq_rustsec_advisory_expansion.py' -v
+      - name: Replay cargo-audit and FALSUM on the same pinned ResQ inputs
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+          FALSUM_PHASE5BO_NODE_PATH: ${{ github.workspace }}/.phase5by-node/node_modules
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p phase5by-evidence
+          python -m falsum.phase5by_resq_rustsec_advisory_expansion \
+            --db-dir "$RUNNER_TEMP/phase5by-rustsec-db" \
+            --out phase5by-evidence/RESQ-RUSTSEC-EXPANSION.json \
+            --baseline-out phase5by-evidence/RESQ-CARGO-AUDIT-BASELINE.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('phase5by-evidence/RESQ-RUSTSEC-EXPANSION.json').read_text())
+          assert report['status'] == 'PHASE5BY_RESQ_RUSTSEC_ADVISORY_EXPANSION'
+          assert report['sample_sizes']['new_package_advisory_pairs'] == 4
+          assert report['sample_sizes']['prior_calibration_pairs'] == 2
+          assert report['baseline']['lockfile_dependencies'] == 805
+          assert report['baseline']['full_lockfile_finding_count'] == 4
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('## Phase 5BY: ResQ RustSec package-version expansion\\n\\n')
+              summary.write(f"New pairs: {report['sample_sizes']['new_package_advisory_pairs']}; candidate/cargo-audit agreement: {report['new_case_metrics']['agreement_with_cargo_audit']}/4; coverage: {report['new_case_metrics']['falsum_coverage']}/4; abstentions: {report['new_case_metrics']['falsum_abstentions']}.\\n\\n")
+              summary.write(f"Prior calibration controls: {report['calibration_metrics']['agreement_with_cargo_audit']}/2. Full lockfile cargo-audit baseline: {report['baseline']['lockfile_dependencies']} dependencies, {report['baseline']['full_lockfile_finding_count']} findings.\\n\\n")
+              summary.write('This is a source-bound package-version replay, not a blind source-family holdout, human AppSec gold, full FALSUM dependency scan, code reachability analysis, app adoption, or Telegraph network improvement.\\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5by-resq-rustsec-advisory-expansion
+          path: phase5by-evidence/
+          retention-days: 90
+          if-no-files-found: error
