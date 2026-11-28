@@ -1,0 +1,99 @@
+name: Phase 5BW - independent AdversarialEval corpus ingestion
+
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5bw_adversarialeval_ingestion.py'
+      - 'src/falsum/phase5aj_cross_app_evidence.py'
+      - 'data/phase5bw-adversarialeval-ingestion-protocol.json'
+      - 'tests/test_phase5bw_adversarialeval_ingestion.py'
+      - '.github/workflows/phase5bw-adversarialeval-ingestion.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5bw_adversarialeval_ingestion.py'
+      - 'src/falsum/phase5aj_cross_app_evidence.py'
+      - 'data/phase5bw-adversarialeval-ingestion-protocol.json'
+      - 'tests/test_phase5bw_adversarialeval_ingestion.py'
+      - '.github/workflows/phase5bw-adversarialeval-ingestion.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    name: Provenance contracts / Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Run strict ingestion contracts
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -m unittest discover -s tests -p 'test_phase5bw_adversarialeval_ingestion.py' -v
+
+  live-public-replay:
+    name: Replay pinned external corpus and source overlap
+    needs: contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch immutable public Git blobs and verify raw-score arithmetic
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          mkdir -p phase5bw-evidence
+          python -m falsum.phase5bw_adversarialeval_ingestion --out phase5bw-evidence/PHASE5BW-ADVERSARIALEVAL.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('phase5bw-evidence/PHASE5BW-ADVERSARIALEVAL.json').read_text())
+          external = report['external_corpus']
+          baseline = external['published_external_adapter']
+          overlap = report['public_source_overlap']
+          candidates = overlap['public_source_disjoint_candidates']
+          assert external['sample_sizes']['pairs'] == 40
+          assert external['sample_sizes']['reviewers'] == {'reviewer:fexx': 20, 'reviewer:lino': 20}
+          assert baseline['correct'] == 31 and baseline['incorrect'] == 9 and baseline['ties'] == 0
+          assert baseline['accuracy_percent'] == 77.5
+          assert baseline['wilson_95_percent'] == [62.5, 87.7]
+          assert baseline['raw_score_arithmetic_replayed'] is True
+          assert baseline['adapter_inference_reproduced'] is False
+          assert len(overlap['public_overlap']['pairs']) == 1
+          assert len(overlap['public_overlap']['identifiers']) == 2
+          assert candidates['pair_count'] == 9 and candidates['distinct_ghsa_count'] == 6
+          assert candidates['eligible_as_blind_heldout'] is False
+          assert candidates['private_overlap'] == 'UNKNOWN_NOT_PUBLICLY_ACCESSIBLE'
+          assert overlap['unclassified_pairs_without_advisory_identifiers'] == 30
+          assert report['interpretation']['falsum_scored'] is False
+          assert report['interpretation']['telegraph_material_acceptance'] is False
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('## Phase 5BW: independent public corpus ingestion\n\n')
+              summary.write('Pinned AdversarialEval test material: 40 pairs from two independent authors (20 each); all AI-assisted and author-reviewed. The external published adapter raw-score arithmetic replays to 31/40 (77.5%), 9 incorrect, 0 ties; Wilson 95% interval 62.5–87.7%. The adapter inference itself was not rerun.\n\n')
+              summary.write('FALSUM public-source comparison: 1 overlapping pair (2 identifier strings, one advisory family), 9 public-source-disjoint candidate pairs across 6 GHSA identifiers, and 30 pairs without extractable CVE/GHSA identifiers. The private FALSUM pool is unavailable, so the nine candidates are **not** a blind or eligible held-out set.\n\n')
+              summary.write('No FALSUM score, matched-input model comparison, human AppSec gold, Telegraph material acceptance, ranking change, or independent FALSUM reproduction is claimed.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5bw-adversarialeval-ingestion
+          path: phase5bw-evidence/
+          retention-days: 90
+          if-no-files-found: error
