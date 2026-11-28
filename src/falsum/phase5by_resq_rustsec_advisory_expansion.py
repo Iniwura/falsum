@@ -19,6 +19,7 @@ from .phase5bu_resq_solana_lockfile import (
     _source_spec,
 )
 from .phase5bx_cargo_audit_resq_baseline import run as run_phase5bx
+from .phase5bo_ecosystem_semantics import EcosystemSemanticsError, _parse_semver, _semver_compare
 from .phase5m_real_source_sensitive_model import ROOT
 
 PROTOCOL_BLOB = "88f8150d86bf621a5380a250df46c0b080bde868"
@@ -26,7 +27,7 @@ APPLICABLE = "APPLICABLE"
 INAPPLICABLE = "INAPPLICABLE"
 UNKNOWN = "INSUFFICIENT_EVIDENCE"
 _SIMPLE_CARGO_RANGE = re.compile(
-    r"^\s*(?:>=|>|<=|<|=)\s*v?\d+(?:\.\d+){0,2}(?:-[0-9A-Za-z.-]+)?\s*$"
+    r"^\s*(>=|>|<=|<|=)\s*(v?\d+(?:\.\d+){0,2}(?:-[0-9A-Za-z.-]+)?)\s*$"
 )
 
 
@@ -107,8 +108,29 @@ def _frontmatter(raw: bytes, expected_id: str, expected_package: str) -> dict:
     return metadata
 
 
-def _node_satisfies(version: str, requirement: str) -> bool | None:
-    """Evaluate the deliberately narrow Cargo VersionReq subset used by this roster."""
+def _candidate_range_matches(version: str, requirement: str) -> bool | None:
+    """Use FALSUM's Python SemVer implementation for the supported Cargo subset."""
+    match = _SIMPLE_CARGO_RANGE.fullmatch(requirement)
+    if not match:
+        return None
+    operator, boundary_text = match.groups()
+    try:
+        value = _parse_semver(version)
+        boundary = _parse_semver(boundary_text.lstrip("v"))
+    except (EcosystemSemanticsError, TypeError, ValueError):
+        return None
+    comparison = _semver_compare(value, boundary)
+    return {
+        ">=": comparison >= 0,
+        ">": comparison > 0,
+        "<=": comparison <= 0,
+        "<": comparison < 0,
+        "=": comparison == 0,
+    }[operator]
+
+
+def _node_range_matches(version: str, requirement: str) -> bool | None:
+    """Independent semver@7.8.6 range reference for the same pinned source."""
     if not _SIMPLE_CARGO_RANGE.fullmatch(requirement):
         return None
     node_path = os.environ.get("FALSUM_PHASE5BO_NODE_PATH")
@@ -154,7 +176,7 @@ process.stdin.on('end', () => {
 
 
 def _candidate_status(version: str, versions: dict) -> str:
-    """Mirror RustSec's affected-range complement for a narrow, explicit subset.
+    """Mirror RustSec's affected-range complement using FALSUM's own SemVer parser.
 
     RustSec treats the union of patched and unaffected VersionReq ranges as
     unaffected. With no ranges, all versions are affected. Unsupported syntax
@@ -166,7 +188,7 @@ def _candidate_status(version: str, versions: dict) -> str:
     unsupported = False
     matched = False
     for requirement in ranges:
-        result = _node_satisfies(version, requirement)
+        result = _candidate_range_matches(version, requirement)
         if result is None:
             unsupported = True
         elif result:
@@ -177,6 +199,24 @@ def _candidate_status(version: str, versions: dict) -> str:
         return UNKNOWN
     return APPLICABLE
 
+
+def _reference_status(version: str, versions: dict) -> str:
+    ranges = versions.get("patched", []) + versions.get("unaffected", [])
+    if not ranges:
+        return APPLICABLE
+    unsupported = False
+    matched = False
+    for requirement in ranges:
+        result = _node_range_matches(version, requirement)
+        if result is None:
+            unsupported = True
+        elif result:
+            matched = True
+    if matched:
+        return INAPPLICABLE
+    if unsupported:
+        return UNKNOWN
+    return APPLICABLE
 
 def _load_lockfile(root: Path, protocol: dict) -> tuple[bytes, dict]:
     app_protocol = _load_phase5bu_protocol(root)
@@ -210,6 +250,7 @@ def evaluate(protocol: dict, db_dir: Path, phase5bx_report: dict,
         _require(git_blob(raw) == case["blob"], "advisory bytes differ from frozen blob")
         metadata = _frontmatter(raw, case["id"], case["package"])
         candidate = _candidate_status(case["version"], metadata["versions"])
+        reference = _reference_status(case["version"], metadata["versions"])
         findings = [
             item for item in phase5bx_report["baseline"]["full_lockfile_findings"]
             if item["advisory_id"] == case["id"]
@@ -229,6 +270,7 @@ def evaluate(protocol: dict, db_dir: Path, phase5bx_report: dict,
             "unaffected_ranges": metadata["versions"].get("unaffected", []),
             "affected_functions_present": bool(metadata.get("affected", {}).get("functions")),
             "falsum_candidate": candidate,
+            "semver_7_8_6_reference": reference,
             "cargo_audit_0_22_2": baseline,
             "citation_only_baseline": APPLICABLE,
         })
@@ -240,6 +282,7 @@ def evaluate(protocol: dict, db_dir: Path, phase5bx_report: dict,
         _require(git_blob(raw) == case["blob"], "calibration advisory bytes changed")
         metadata = _frontmatter(raw, case["id"], case["package"])
         candidate = _candidate_status(case["version"], metadata["versions"])
+        reference = _reference_status(case["version"], metadata["versions"])
         baseline_row = phase5bx_rows.get(case["id"])
         _require(baseline_row is not None, "Phase5BX calibration row is missing")
         baseline = baseline_row["cargo_audit_0_22_2"]
@@ -254,6 +297,7 @@ def evaluate(protocol: dict, db_dir: Path, phase5bx_report: dict,
             "patched_ranges": metadata["versions"].get("patched", []),
             "unaffected_ranges": metadata["versions"].get("unaffected", []),
             "falsum_candidate": candidate,
+            "semver_7_8_6_reference": reference,
             "cargo_audit_0_22_2": baseline,
             "citation_only_baseline": APPLICABLE,
             "is_prior_calibration_only": True,
@@ -269,6 +313,12 @@ def evaluate(protocol: dict, db_dir: Path, phase5bx_report: dict,
             "agreement_with_cargo_audit": sum(
                 row["falsum_candidate"] == row["cargo_audit_0_22_2"] for row in rows
             ),
+            "agreement_with_semver_7_8_6": sum(
+                row["falsum_candidate"] == row["semver_7_8_6_reference"] for row in rows
+            ),
+            "semver_reference_coverage": sum(
+                row["semver_7_8_6_reference"] != UNKNOWN for row in rows
+            ),
             "false_acceptances_vs_cargo_audit": sum(
                 row["falsum_candidate"] == APPLICABLE
                 and row["cargo_audit_0_22_2"] == INAPPLICABLE for row in rows
@@ -276,6 +326,14 @@ def evaluate(protocol: dict, db_dir: Path, phase5bx_report: dict,
             "false_rejections_vs_cargo_audit": sum(
                 row["falsum_candidate"] == INAPPLICABLE
                 and row["cargo_audit_0_22_2"] == APPLICABLE for row in rows
+            ),
+            "false_acceptances_vs_semver_7_8_6": sum(
+                row["falsum_candidate"] == APPLICABLE
+                and row["semver_7_8_6_reference"] == INAPPLICABLE for row in rows
+            ),
+            "false_rejections_vs_semver_7_8_6": sum(
+                row["falsum_candidate"] == INAPPLICABLE
+                and row["semver_7_8_6_reference"] == APPLICABLE for row in rows
             ),
             "citation_only_false_applicables_vs_cargo_audit": sum(
                 row["citation_only_baseline"] == APPLICABLE
