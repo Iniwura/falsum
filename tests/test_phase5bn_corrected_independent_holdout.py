@@ -114,10 +114,39 @@ class CorrectedIndependentHoldoutTests(unittest.TestCase):
             "correct": 24, "incorrect": 0, "denominator": 24,
         })
         self.assertFalse(self.result["interpretation"]["falsum_beats_external_resolver"])
-        self.assertTrue(self.result["package_versions_verified_from_pinned_registry_metadata"])
+        self.assertTrue(self.result["frozen_package_versions_verified_against_live_registry"])
+        self.assertTrue(self.result["registry_metadata_policy"]["freeze_time_snapshot_hashes_retained"])
+        self.assertFalse(self.result["registry_metadata_policy"]["full_mutable_metadata_digest_rechecked"])
+        self.assertTrue(self.result["interpretation"]["live_registry_metadata_is_mutable"])
+        self.assertTrue(self.result["interpretation"]["freeze_time_metadata_hash_is_provenance_not_live_document_equality"])
         for record in self.protocol["records"]:
             self.assertEqual(len(record["verified_versions"]), 2)
             self.assertTrue(all(isinstance(version, str) and version for version in record["verified_versions"]))
+
+    def test_unrelated_registry_release_does_not_invalidate_frozen_pair(self):
+        record = {
+            "ecosystem": "npm",
+            "package": "tar",
+            "verified_versions": ["7.5.18", "7.5.19"],
+            "metadata_sha256": "a" * 64,
+        }
+        current = {
+            "versions": {
+                "7.5.18": {"name": "tar", "version": "7.5.18"},
+                "7.5.19": {"name": "tar", "version": "7.5.19"},
+                "7.5.20": {"name": "tar", "version": "7.5.20"},
+            }
+        }
+        self.assertIsNone(m._verify_frozen_versions_present(record, current))
+
+        missing_frozen = {"versions": {"7.5.18": {}, "7.5.20": {}}}
+        with self.assertRaisesRegex(m.CorrectedHoldoutError, "no longer exists: tar@7.5.19"):
+            m._verify_frozen_versions_present(record, missing_frozen)
+
+    def test_malformed_registry_version_map_fails_closed(self):
+        record = {"ecosystem": "PyPI", "package": "sample", "verified_versions": ["1.0", "1.1"]}
+        with self.assertRaisesRegex(m.CorrectedHoldoutError, "no releases map"):
+            m._verify_frozen_versions_present(record, {"releases": []})
 
     def test_corrected_discrimination_preserves_negative_result(self):
         self.assertEqual(self.result["policies"]["falsum"], {
