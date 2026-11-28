@@ -56,3 +56,34 @@ The previous original LoRA artifact is unavailable and the old model remains qua
     PYTHONPATH=src python -m falsum.phase5ca_vader_corpus --out /tmp/PHASE5CA-VADER-CORPUS-MANIFEST.json --roster /tmp/PHASE5CA-VADER-RESERVED-HOLDOUT-ROSTER.json
 
 The [Phase 5CA workflow](../.github/workflows/phase5ca-vader-corpus.yml) performs the same authenticated download and publishes the aggregate manifest and reserved roster as a GitHub Actions artifact. That run is author-operated CI, not independent reproduction.
+
+## Authenticated ingestion result — 28 November 2026
+
+The pinned source bytes were authenticated and the ingestion workflow completed, but the corpus **did not pass the frozen readiness gate**. This is a negative benchmark result, not a candidate score.
+
+[Hosted Phase 5CA run](https://github.com/Iniwura/falsum/actions/runs/46135755402) · [aggregate manifest and reserved roster artifact](https://github.com/Iniwura/falsum/actions/runs/46135755402/artifacts/15258978091)
+
+| Audit field | Observed |
+| --- | ---: |
+| Parsed VADER source rows | 177 |
+| Parsed graded rows | 173 |
+| Malformed VADER records | 0 |
+| Malformed graded records | 60 |
+| Stable IDs present in both files | 173 |
+| Matched cases after metadata validation | 159 |
+| Source-only stable IDs | 4 |
+| Score-only stable IDs | 0 |
+| Repository/CWE/severity/description mismatches excluded | 12 |
+| Invalid source-metadata records excluded | 2 |
+| Displayed Case-number mismatches (not used for joining) | 159 |
+| Reserved public-inventory-disjoint holdout | 43 cases / 39 repositories |
+| Derived total-score preferences with margin >= 2 | 389 |
+| Candidate inference / training | Not run |
+
+The graded CSV has 233 physical records: 173 valid rows and 60 malformed records. The frozen protocol expected 174 rows in each file. The VADER file has 177 valid rows, while the graded file has 173 valid rows. The sanitized malformed examples include non-record/diff-like fragments; no row was repaired, guessed, or manually selected.
+
+The manifest marks the benchmark **not ready** because of the frozen row-count mismatch, malformed graded records, source metadata exclusions, invalid metadata, and four unmatched source IDs. The 159 matched cases and 43-case holdout are large enough for the declared minimums, but those counts do not override the data-integrity blockers.
+
+No verdict-only baseline, context-aware baseline, or FALSUM candidate was run. The 389 pairwise preferences are derived from published human-expert total scores; they are not original pairwise labels. Private Anjoman source overlap remains **UNKNOWN**. This author-operated CI run is not independent reproduction.
+
+Do not relax the frozen 174-row expectation, repair malformed rows after inspection, or treat the reserved public-only holdout as disjoint from private material or model pretraining. The next valid step is an authoritative corrected immutable source revision or a separately frozen authentic paired corpus with defensible references. Until then, Phase 5CA is a reproducible ingestion harness and a documented source-data blocker, not measured evaluator improvement.
