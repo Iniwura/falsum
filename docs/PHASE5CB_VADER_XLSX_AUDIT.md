@@ -84,7 +84,7 @@ The 43-case / 39-repository roster meets the public-inventory holdout minimums, 
 
 No row was repaired, manually selected, or promoted to gold. No verdict-only baseline, context-aware baseline, or FALSUM candidate was run. No inference, training, paid call, wallet/signature action, network upload, or official submission occurred. This is a negative source-integrity result, not a benchmark result.
 
-The Phase 5CB workflow, Foundation tests on Python 3.11/3.12/3.13, Windows CRLF reproducibility, independent reviewer replay, Phase 5AG contract, PR counterfactual gate, Telegraph diagnostic gate, and Playwright/accessibility workflow all passed on PR head `2050a3ddc3b11499fe2795bc2da0aad0f770bfca`. The Vercel preview status was rate-limited by the free-tier daily deployment cap; it is not a code-test result. The CI is author-operated and is not independent reproduction.
+All eight GitHub Actions workflows passed on exact PR head `db2d4bda4ff2a7d1ad073a9185f196236465def2`: Phase 5CB authenticated audit, Foundation tests on Python 3.11/3.12/3.13, Windows CRLF reproducibility, independent reviewer replay, Phase 5AG contract, PR counterfactual gate, Telegraph diagnostic gate, and Playwright/accessibility. [PR #137](https://github.com/Iniwura/falsum/pull/137) was merged as [commit `53cba9c22821494c4a90b8727cfe5a964a4e4146`](https://github.com/Iniwura/falsum/commit/53cba9c22821494c4a90b8727cfe5a964a4e4146). The Vercel preview status was rate-limited by the free-tier daily deployment cap; it is not a code-test result and no paid upgrade was attempted. The CI is author-operated and is not independent reproduction.
 
 ## Decision gate and next step
 
