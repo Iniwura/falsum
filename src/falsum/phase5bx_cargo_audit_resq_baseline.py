@@ -68,13 +68,16 @@ def _verify_database(db_dir: Path, protocol: dict) -> tuple[str, dict[str, str]]
     return actual, blobs
 
 
-def _cargo_audit_json(raw: str | bytes) -> dict:
-    if isinstance(raw, bytes):
-        raw = raw.decode("utf-8", "strict")
-    try:
-        data = json.loads(raw)
-    except (TypeError, ValueError) as exc:
-        raise CargoAuditBaselineError("cargo-audit did not emit valid JSON") from exc
+def _cargo_audit_json(raw: str | bytes | dict) -> dict:
+    if isinstance(raw, dict):
+        data = raw
+    else:
+        if isinstance(raw, bytes):
+            raw = raw.decode("utf-8", "strict")
+        try:
+            data = json.loads(raw)
+        except (TypeError, ValueError) as exc:
+            raise CargoAuditBaselineError("cargo-audit did not emit valid JSON") from exc
     _require(isinstance(data, dict), "cargo-audit JSON root must be an object")
     database = data.get("database")
     lockfile = data.get("lockfile")
@@ -107,6 +110,7 @@ def _cargo_audit_json(raw: str | bytes) -> dict:
 def evaluate(protocol, phase5bu_report, cargo_audit_data, *, cargo_audit_exit_code,
              cargo_audit_version, database_commit, database_blobs):
     """Compare the frozen package/advisory pairs without relabeling the reference."""
+    _require(cargo_audit_exit_code in (0, 1), "cargo-audit exit code is not a valid audit result")
     expected = protocol["selection"]["case_roster"]
     _require(len(expected) == protocol["selection"]["sample_size"],
              "frozen sample size differs from case roster")
