@@ -76,6 +76,16 @@ class AnjomanAggregatePoolStatusTests(unittest.TestCase):
         self.assertIsNone(report["pool"]["active_snapshot"])
         self.assertFalse(report["pool"]["active_pool_available_for_current_epoch"])
 
+    def test_live_node_configured_minimum_can_differ_from_documentation_default(self):
+        payload = status_payload()
+        payload["submitters"] = 3
+        payload["eligible_submitters"] = 3
+        payload["min_submitters"] = 3
+        payload["active_snapshot"]["submitters"] = 3
+        report = m.parse_status(json.dumps(payload).encode())
+        self.assertTrue(report["pool"]["active_snapshot_meets_contributor_minimum"])
+        self.assertTrue(report["pool"]["active_pool_available_for_current_epoch"])
+
     def test_wrong_intent_is_rejected(self):
         payload = status_payload()
         payload["intent_id"] = "CODE_REVIEW_GENERAL"
