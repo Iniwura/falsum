@@ -11,6 +11,8 @@ from falsum.phase5ca_vader_corpus import (
     canonical_repository,
     git_blob_sha1,
     load_protocol,
+    _read_csv,
+    VADER_FIELDS,
 )
 
 
@@ -125,6 +127,56 @@ class Phase5CAVaderCorpusTests(unittest.TestCase):
         self.assertEqual(report["corpus"]["matched_cases"], 0)
         self.assertEqual(len(report["alignment"]["source_identity_mismatches_excluded"]), 1)
         self.assertFalse(report["benchmark_readiness"]["ready_for_next_candidate_stage"])
+
+
+    def test_csv_short_record_is_excluded_and_counted(self):
+        import csv
+        import io
+
+        stream = io.StringIO(newline="")
+        writer = csv.writer(stream)
+        writer.writerow(VADER_FIELDS)
+        writer.writerow([
+            "1", "1745335148884", "https://github.com/owner/repo",
+            "CWE-89", "High", "2025-04-27T00:00:00Z", "2025-04-28T00:00:00Z",
+        ])
+        rows, diagnostics = _read_csv(stream.getvalue().encode("utf-8"), VADER_FIELDS, "vader.csv")
+        self.assertEqual(rows, [])
+        self.assertEqual(diagnostics["physical_records"], 1)
+        self.assertEqual(diagnostics["valid_records"], 0)
+        self.assertEqual(diagnostics["malformed_records"], 1)
+
+    def test_report_propagates_parse_diagnostics_and_blocks_malformed_inputs(self):
+        vader_rows, graded_rows = self._rows()
+        diagnostics = {
+            "vader_csv": {"physical_records": 2, "valid_records": 1, "malformed_records": 1},
+            "graded_csv": {"physical_records": 1, "valid_records": 1, "malformed_records": 0},
+        }
+        report, _ = build_report(vader_rows, graded_rows, self._protocol(), [], diagnostics)
+        self.assertEqual(report["source_row_counts"]["vader_csv_malformed_records"], 1)
+        self.assertEqual(report["source_row_counts"]["vader_csv_physical_records"], 2)
+        self.assertEqual(report["alignment"]["csv_parse_diagnostics"], diagnostics)
+        self.assertIn("malformed_csv_records_excluded", report["benchmark_readiness"]["reasons"])
+        self.assertTrue(any("malformed records excluded" in item for item in report["benchmark_readiness"]["warnings"]))
+
+    def test_complete_six_model_case_requires_six_nonempty_answers(self):
+        vader_rows, graded_rows = self._rows()
+        graded_rows[0]["o3"] = ""
+        for field in ("o3-explanation", "o3-remediation", "o3-other", "o3-rating"):
+            graded_rows[0][field] = "0"
+        report, _ = build_report(vader_rows, graded_rows, self._protocol(), [])
+        self.assertEqual(report["corpus"]["complete_six_model_cases"], 0)
+        self.assertEqual(report["corpus"]["nonempty_model_responses"], 5)
+        self.assertEqual(report["corpus"]["published_human_scored_responses"], 6)
+
+    def test_description_line_endings_normalize_before_identity_comparison(self):
+        vader_rows, graded_rows = self._rows()
+        vader_rows[0]["Description"] = "first line\\r\\nsecond line  \\r\\n"
+        graded_rows[0]["Description"] = "first line\\nsecond line\\n"
+        report, _ = build_report(vader_rows, graded_rows, self._protocol(), [])
+        self.assertEqual(report["corpus"]["matched_cases"], 1)
+        self.assertEqual(report["alignment"]["excluded_records"], [])
+
 
 
 if __name__ == "__main__":
