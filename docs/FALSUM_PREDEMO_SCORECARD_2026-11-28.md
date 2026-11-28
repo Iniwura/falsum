@@ -84,7 +84,7 @@ A single attempt to post the ResQ compatibility result and request reproduction 
 
 ## Next actionable handoff
 
-1. **Finish PR #122 at its exact current head.** Monitor the queued 35+ workflow matrix for `0c2899bccfa4c2565971c557bc72d48bb670460b`, review any failures, and inspect the complete diff before merge.
+1. **Finish PR #122 at its exact current head.** Monitor the queued 36-workflow matrix for `0c2899bccfa4c2565971c557bc72d48bb670460b`, review any failures, and inspect the complete diff before merge.
 2. **Review PR #125** and decide whether the two-pair ResQ lockfile compatibility result is sufficient as a bounded integration or whether a real full-lockfile tool comparison is warranted. Do not claim app adoption.
 3. **Build the external AdversarialEval ingestion/overlap harness** against its pinned MIT-licensed 40-pair corpus. Verify the published 31/40 baseline from its raw score file, report the 8 public-source-disjoint candidates separately, and explicitly mark overlap with private FALSUM material as unknown. Do not invent a FALSUM score or human gold.
 4. **Seek independent reproduction only through an authorized channel.** The GitHub integration cannot post to Telegraph's mission repository; do not impersonate a maintainer or repeatedly retry the 403.
