@@ -126,6 +126,8 @@ class Phase5CAVaderCorpusTests(unittest.TestCase):
         self.assertEqual(report["alignment"]["matched_ids"], 1)
         self.assertEqual(report["corpus"]["matched_cases"], 0)
         self.assertEqual(len(report["alignment"]["source_identity_mismatches_excluded"]), 1)
+        self.assertIn("source_metadata_identity_mismatches_excluded", report["benchmark_readiness"]["reasons"])
+        self.assertIn("source_metadata_identity_mismatches_excluded", report["benchmark_readiness"]["warnings"])
         self.assertFalse(report["benchmark_readiness"]["ready_for_next_candidate_stage"])
 
 
