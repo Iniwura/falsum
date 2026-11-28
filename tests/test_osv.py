@@ -93,6 +93,10 @@ class TestOSV(unittest.TestCase):
         r = record(); r['affected'][0]['ranges'] = []
         self.assertEqual(version_status(r, 'npm', 'fixture-lib', '1.8.0'), 'unknown')
 
+    def test_malformed_advisory_root_fails_closed(self):
+        self.assertEqual(version_status({}, 'npm', 'fixture-lib', '1.0.0'), 'unknown')
+        self.assertEqual(version_status({'affected': {}}, 'npm', 'fixture-lib', '1.0.0'), 'unknown')
+
     def test_explicit_versions_affected(self):
         r = record(); r['affected'][0]['ranges'] = []; r['affected'][0]['versions'] = ['4.0.0']
         self.assertEqual(version_status(r, 'npm', 'fixture-lib', '4.0.0'), 'affected')
@@ -103,6 +107,25 @@ class TestOSV(unittest.TestCase):
         self.assertEqual(version_status(r, 'npm', 'fixture-lib', '1.5.0'), 'unknown')
         r['affected'][0]['ranges'][0]['events'] = [{'fixed': '1.2.0'}]
         self.assertEqual(version_status(r, 'npm', 'fixture-lib', '1.0.0'), 'unknown')
+
+    def test_numeric_limit_is_not_silently_treated_as_fixed(self):
+        r = record(); r['affected'][0]['ranges'][0]['events'] = [
+            {'introduced': '0'}, {'limit': '1.2.0'},
+        ]
+        self.assertEqual(version_status(r, 'npm', 'fixture-lib', '1.0.0'), 'unknown')
+
+    def test_late_malformed_event_invalidates_the_range(self):
+        r = record(); r['affected'][0]['ranges'][0]['events'] = [
+            {'introduced': '0'}, {'fixed': '1.2.0'}, {'nonsense': '2.0.0'},
+        ]
+        self.assertEqual(version_status(r, 'npm', 'fixture-lib', '1.0.0'), 'unknown')
+
+    def test_overlapping_disjoint_intervals_fail_closed(self):
+        r = record(); r['affected'][0]['ranges'][0]['events'] = [
+            {'introduced': '1.0.0'}, {'last_affected': '2.0.0'},
+            {'introduced': '2.0.0'}, {'fixed': '3.0.0'},
+        ]
+        self.assertEqual(version_status(r, 'npm', 'fixture-lib', '2.0.0'), 'unknown')
 
     def test_advisory_identity(self):
         self.assertEqual(parse_osv(raw_record(), 'CVE-2026-12345')['id'], ID)

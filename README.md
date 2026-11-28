@@ -1,6 +1,6 @@
 # FALSUM
 
-## Final Evaluators route — 27 November 2026
+## Reopened Evaluators excellence sprint — 27 November 2026
 
 Use the [final judge experience](docs/H2_FINAL_JUDGE_EXPERIENCE_2026-11-27.md),
 then the [correct Evaluators rubric and strict assessment](docs/H2_FINAL_STRICT_SCORE_2026-11-27.md)
@@ -8,7 +8,9 @@ and [submission package](docs/H2_FINAL_SUBMISSION_PACKAGE_2026-11-27.md).
 The fresh public-provider holdout is reproducible with no wallet, token or
 payment: it authenticates a frozen Django 3.2.0 capture and a zero-reference
 lodash 4.18.1 capture selected before response inspection. The current strict
-Evaluators assessment is **96/100 after the corrected Phase5BN holdout**, not an organizer score; independent adoption,
+assessment is **not yet recertified**: an independent judge-style audit assessed
+the entry at **84/100**, while the earlier **96/100** was an internal readiness
+assessment and remains historical evidence only. Independent adoption,
 expert AppSec gold, current paid execution and final owner-controlled form
 actions remain unverified.
 Official [bounty #96](https://github.com/telegraphprotocol/bounties/issues/96)
@@ -41,11 +43,21 @@ not claimed as deployed there. The final [hosted Playwright + axe inspection](ht
 captured desktop/mobile screenshots for both public routes with zero automated
 axe violations.
 
+The new [Phase5BP public-provider answer-quality audit](docs/PHASE5BP_PUBLIC_ANSWER_QUALITY.md)
+checks actual claims, exact code evidence, remediation and uncertainty on six
+authenticated public response blobs. It passes 18/24 integrity checks, fully
+supports 2/6 actions and holds 4/6 for review. This is bounded static-pattern
+evidence, not human AppSec gold or a replacement score; ACP remains suspended.
+
 ## Start here: a five-minute reproducible judge route
 
-**[Open the FALSUM judge guide](docs/H2_NOV24_JUDGE_START.md)** to see the live original-source witness, reproduce the no-key independent reviewer workflow, test an authenticated Axios/Rack advisory decision, and inspect the actual failed-model baseline. The guide separates verified evidence from constructed test inputs and lists the remaining Season II submission obligations. The [latest measured application comparison](docs/PHASE5AK_EXTERNAL_LABEL_BASELINES.md) covers 129 externally labeled contracts and 202 historical purchase records. FALSUM avoids eight count-only vulnerable-label PASS predictions but ties verdict-only. Explore the [live application evidence](https://falsum-evidence-lab.vercel.app/applications/). [Public Gig Guard source-maintainer review](https://github.com/Iniwura/falsum/issues/97#issuecomment-7126424685) confirmed the historical counts and clarified the pre-request input-limit holds; the [implemented coverage taxonomy](docs/PHASE5AN_MAINTAINER_COVERAGE_TAXONOMY.md) passed all three Python versions. [Truvian Shield maintainer's public memo verification](https://github.com/Iniwura/falsum/issues/97#issuecomment-7132041935) confirmed two parsed responses; the [portable response-integrity gate](docs/PHASE5AR_TRUVIAN_RESPONSE_INTEGRITY_GATE.md) reduced unsupported clean candidates from 3/3 (verdict-only) to 0/3 on the three documented missing-code fixtures. The full 129-case comparison still ties verdict-only. [Public growth evidence and dated updates](docs/H2_VERIFIED_GROWTH_EVIDENCE.md). Production checkpoint `52fc6557` READY; official entry **not submitted**.
+Run `PYTHONPATH=src python -m falsum.cli judge-demo` for one concise, no-network summary of the strongest current evidence, then use the **[five-minute public-provider reviewer route](docs/INDEPENDENT_REVIEWER_5MIN.md)**. The longer **[FALSUM judge guide](docs/H2_NOV24_JUDGE_START.md)** preserves the live original-source witness, no-key historical replays, actual failed-model baseline and remaining Season II obligations. The [latest measured application comparison](docs/PHASE5AK_EXTERNAL_LABEL_BASELINES.md) covers 129 externally labeled contracts and 202 historical purchase records. FALSUM avoids eight count-only vulnerable-label PASS predictions but ties verdict-only. Explore the [live application evidence](https://falsum-evidence-lab.vercel.app/applications/). [Public Gig Guard source-maintainer review](https://github.com/Iniwura/falsum/issues/97#issuecomment-7126424685) confirmed the historical counts and clarified the pre-request input-limit holds; the [implemented coverage taxonomy](docs/PHASE5AN_MAINTAINER_COVERAGE_TAXONOMY.md) passed all three Python versions. [Truvian Shield maintainer's public memo verification](https://github.com/Iniwura/falsum/issues/97#issuecomment-7132041935) confirmed two parsed responses; the [portable response-integrity gate](docs/PHASE5AR_TRUVIAN_RESPONSE_INTEGRITY_GATE.md) reduced unsupported clean candidates from 3/3 (verdict-only) to 0/3 on the three documented missing-code fixtures. The full 129-case comparison still ties verdict-only. [Source-backed Anjoman candidate packet](docs/PHASE5BQ_ANJOMAN_PAIR_PREPARATION.md) is deduplicated and explicitly not submitted. [Public growth evidence and dated updates](docs/H2_VERIFIED_GROWTH_EVIDENCE.md). Production checkpoint `52fc6557` READY; official entry **not submitted**.
 
 ## Solana / Anchor evaluation coverage
+
+The current Anjoman candidate work is the V2, exact-schema, generated/unverified
+packet described in [PHASE5BQ_ANJOMAN_PAIR_PREPARATION.md](docs/PHASE5BQ_ANJOMAN_PAIR_PREPARATION.md);
+it remains explicitly not submitted.
 
 [Verified Solana Anchor advisory material](docs/PHASE5AU_SOLANA_ANCHOR_EVIDENCE.md) authenticates three original Git sources and matches all 12 constructed target/version queries versus three for a citation-only baseline. [Original-source CI](https://github.com/Iniwura/falsum/actions/runs/45489641572) passed. A correct range-aware baseline would be equivalent. No model accuracy or Solana deployment claim. [Original upstream Rust runtime replay](https://github.com/Iniwura/falsum/actions/runs/45490186795) separately confirmed four fixed-revision passes and exactly one expected affected-revision assertion failure, with the three remaining controls passing. [Reproduce](docs/PHASE5AV_SOLANA_ANCHOR_RUNTIME.md).
 

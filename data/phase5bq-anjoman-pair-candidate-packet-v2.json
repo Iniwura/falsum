@@ -1,0 +1,1114 @@
+{
+  "candidate_pair_count": 14,
+  "deduplication_passed": true,
+  "family": "SECURITY_REVIEW",
+  "historical_status": "PHASE5BQ_ANJOMAN_PAIR_CANDIDATE_PACKET",
+  "human_adjudication": false,
+  "intent": "SECURITY_REVIEW_GENERAL",
+  "limits": [
+    "These are source-backed candidate pairs, not accepted Anjoman material or maintainer-approved labels.",
+    "The preference contrast is a deterministic version-applicability pair and is not human AppSec gold.",
+    "No row is uploaded, signed, paid, or presented as independent adoption."
+  ],
+  "network_eligibility": false,
+  "protocol": "data/phase5bo-ecosystem-semantics-protocol.json",
+  "quality_audit": {
+    "answer_length_diversity_check_passed": true,
+    "answer_length_shortcut_check_passed": true,
+    "answer_template_diversity_check_passed": true,
+    "error_indicating_keyword_check_passed": true,
+    "length_only_best_threshold_accuracy": 0.5714285714285714,
+    "length_shortcut_threshold": 0.6,
+    "lexical_overlap_shortcut_check_passed": true,
+    "max_pairwise_prompt_similarity": 0.834592779177162,
+    "maximum_simple_shortcut_accuracy": 0.5714285714285714,
+    "minimum_paired_answer_length_ratio": 0.9785553047404063,
+    "near_duplicate_threshold": 0.85,
+    "official_answer_length": {
+      "maximum": 32000,
+      "minimum": 8
+    },
+    "official_prompt_length": {
+      "maximum": 16000,
+      "minimum": 16
+    },
+    "prompt_near_duplicate_check_passed": true,
+    "recurring_template_shortcut_check_passed": true,
+    "rejected_error_indicating_keyword_hits": [],
+    "shortcut_baselines": {
+      "error_indicating_keyword_presence": 0.5,
+      "length_threshold": 0.5714285714285714,
+      "prompt_answer_lexical_overlap": 0.5357142857142857,
+      "recurring_template": 0.5,
+      "stylistic_punctuation": 0.0
+    },
+    "stylistic_shortcut_check_passed": true
+  },
+  "quality_gate_passed": true,
+  "rows": [
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Review result: the exact not affected. The npm package entry for axios@0.30.0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Resolve the disjoint published branches independently; do not merge their gaps. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: retain the exact registry spelling and fixed endpoint in the review record for audit."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "check every disjoint major-line interval independently and explain why a gap must not inherit a neighboring branch. package under review: npm:axios@0.30.0. advisory: ghsa-jr5f-v2jv-69x6 \u2014 axios requests vulnerable to possible ssrf and credential leakage via absolute url. published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. resolve the disjoint published branches independently; do not merge their gaps.",
+      "pair_id": "c86eb6faa8c7044b1670",
+      "provenance": {
+        "advisory_id": "GHSA-jr5f-v2jv-69x6",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-jr5f-v2jv-69x6.json",
+        "advisory_source_sha256": "77f0eb6ad0808358a56ba849f5cdbb4b9c0fd6313e976bc30f3923aeb4695167",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json",
+        "ecosystem": "npm",
+        "package": "axios",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-axios.json",
+        "registry_source_sha256": "d7c2a6c327fcb47737907ba0564cd99092a95aba229811e24351618e1c48ecbf",
+        "registry_source_url": "https://registry.npmjs.org/axios",
+        "version": "0.30.0"
+      },
+      "published_range_text": ">=1.0.0,<1.8.2; >=0,<0.30.0",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "Check every disjoint major-line interval independently and explain why a gap must not inherit a neighboring branch. Package under review: npm:axios@0.30.0. Advisory: GHSA-jr5f-v2jv-69x6 \u2014 axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL. Published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Resolve the disjoint published branches independently; do not merge their gaps.",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Review result: the exact not affected. The npm package entry for axios@0.30.0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Resolve the disjoint published branches independently; do not merge their gaps. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: retain the exact registry spelling and fixed endpoint in the review record for audit.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "Check every disjoint major-line interval independently and explain why a gap must not inherit a neighboring branch. Package under review: npm:axios@0.30.0. Advisory: GHSA-jr5f-v2jv-69x6 \u2014 axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL. Published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Resolve the disjoint published branches independently; do not merge their gaps.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json"
+        },
+        "rejected": "Review result: the exact affected. The npm package entry for axios@0.30.0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Resolve the disjoint published branches independently; do not merge their gaps. Package metadata places this release in the affected branch. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: keep the package entry and endpoint together in the release review record."
+      },
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Review result: the exact affected. The npm package entry for axios@0.30.0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Resolve the disjoint published branches independently; do not merge their gaps. Package metadata places this release in the affected branch. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: keep the package entry and endpoint together in the release review record."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Source-bound disposition: the exact affected. The PyPI package entry for pymongo@3.9.0 is resolved against GHSA-98qm-wvgf-w4cf (MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element; severity HIGH) under PEP 440. Published intervals: >=3.9.0,<4.18.3. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the ecosystem comparator, not lexical order, is the reproducible basis for this release decision for replay."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "treat the exact release as a fixed-boundary decision and state which side of each exclusive endpoint it occupies. package under review: pypi:pymongo@3.9.0. advisory: ghsa-98qm-wvgf-w4cf \u2014 mongodb python driver: out-of-bounds read in bson decoding via a malformed regex element. published interval text: >=3.9.0,<4.18.3. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. respect the published fixed boundary and the exact package identity.",
+      "pair_id": "dc254bd850c3b7efb143",
+      "provenance": {
+        "advisory_id": "GHSA-98qm-wvgf-w4cf",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-98qm-wvgf-w4cf.json",
+        "advisory_source_sha256": "dd5b7faa0344602f119a22536f7a2c31cd2da4b998529e4ea550cc868d60fa17",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2026/10/GHSA-98qm-wvgf-w4cf/GHSA-98qm-wvgf-w4cf.json",
+        "ecosystem": "PyPI",
+        "package": "pymongo",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/PyPI-pymongo.json",
+        "registry_source_sha256": "ab55e013cdd091ea190ceae52458eebc2109488545a57155fd333a58d6c568c9",
+        "registry_source_url": "https://pypi.org/pypi/pymongo/json",
+        "version": "3.9.0"
+      },
+      "published_range_text": ">=3.9.0,<4.18.3",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "Treat the exact release as a fixed-boundary decision and state which side of each exclusive endpoint it occupies. Package under review: PyPI:pymongo@3.9.0. Advisory: GHSA-98qm-wvgf-w4cf \u2014 MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element. Published interval text: >=3.9.0,<4.18.3. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Source-bound disposition: the exact affected. The PyPI package entry for pymongo@3.9.0 is resolved against GHSA-98qm-wvgf-w4cf (MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element; severity HIGH) under PEP 440. Published intervals: >=3.9.0,<4.18.3. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the ecosystem comparator, not lexical order, is the reproducible basis for this release decision for replay.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "Treat the exact release as a fixed-boundary decision and state which side of each exclusive endpoint it occupies. Package under review: PyPI:pymongo@3.9.0. Advisory: GHSA-98qm-wvgf-w4cf \u2014 MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element. Published interval text: >=3.9.0,<4.18.3. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2026/10/GHSA-98qm-wvgf-w4cf/GHSA-98qm-wvgf-w4cf.json"
+        },
+        "rejected": "Source-bound disposition: the exact not affected. The PyPI package entry for pymongo@3.9.0 is resolved against GHSA-98qm-wvgf-w4cf (MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element; severity HIGH) under PEP 440. Published intervals: >=3.9.0,<4.18.3. Respect the published fixed boundary and the exact package identity. Package metadata places this release beyond the repaired branch. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: record the resolved boundary in the dependency inventory before promotion."
+      },
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Source-bound disposition: the exact not affected. The PyPI package entry for pymongo@3.9.0 is resolved against GHSA-98qm-wvgf-w4cf (MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element; severity HIGH) under PEP 440. Published intervals: >=3.9.0,<4.18.3. Respect the published fixed boundary and the exact package identity. Package metadata places this release beyond the repaired branch. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: record the resolved boundary in the dependency inventory before promotion."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Release-gate finding: the exact not affected. The npm package entry for shescape@2.1.2 is resolved against GHSA-66pp-5p9w-q87j (Shescape has potential environment variable exposure on Windows with CMD; severity LOW) under strict npm SemVer. Published intervals: >=1.7.2,<2.1.2. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: keep each affected branch separate when the advisory publishes more than one interval."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "inspect prerelease ordering under the native comparator, then separate that result from runtime exploitability. package under review: npm:shescape@2.1.2. advisory: ghsa-66pp-5p9w-q87j \u2014 shescape has potential environment variable exposure on windows with cmd. published interval text: >=1.7.2,<2.1.2. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. respect the published fixed boundary and the exact package identity.",
+      "pair_id": "21c28dd0f2a4cccbaea9",
+      "provenance": {
+        "advisory_id": "GHSA-66pp-5p9w-q87j",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-66pp-5p9w-q87j.json",
+        "advisory_source_sha256": "06939765dd2bd9f20c54ef8c14881f8ff81723640c554daf4a8153514e8f574f",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-66pp-5p9w-q87j/GHSA-66pp-5p9w-q87j.json",
+        "ecosystem": "npm",
+        "package": "shescape",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-shescape.json",
+        "registry_source_sha256": "00d4353e52ec376c1c471ec0078ddf1726390cd1a229a979f7b1b649166fe6ee",
+        "registry_source_url": "https://registry.npmjs.org/shescape",
+        "version": "2.1.2"
+      },
+      "published_range_text": ">=1.7.2,<2.1.2",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "Inspect prerelease ordering under the native comparator, then separate that result from runtime exploitability. Package under review: npm:shescape@2.1.2. Advisory: GHSA-66pp-5p9w-q87j \u2014 Shescape has potential environment variable exposure on Windows with CMD. Published interval text: >=1.7.2,<2.1.2. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Release-gate finding: the exact not affected. The npm package entry for shescape@2.1.2 is resolved against GHSA-66pp-5p9w-q87j (Shescape has potential environment variable exposure on Windows with CMD; severity LOW) under strict npm SemVer. Published intervals: >=1.7.2,<2.1.2. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: keep each affected branch separate when the advisory publishes more than one interval.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "Inspect prerelease ordering under the native comparator, then separate that result from runtime exploitability. Package under review: npm:shescape@2.1.2. Advisory: GHSA-66pp-5p9w-q87j \u2014 Shescape has potential environment variable exposure on Windows with CMD. Published interval text: >=1.7.2,<2.1.2. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-66pp-5p9w-q87j/GHSA-66pp-5p9w-q87j.json"
+        },
+        "rejected": "Release-gate finding: the exact affected. The npm package entry for shescape@2.1.2 is resolved against GHSA-66pp-5p9w-q87j (Shescape has potential environment variable exposure on Windows with CMD; severity LOW) under strict npm SemVer. Published intervals: >=1.7.2,<2.1.2. Respect the published fixed boundary and the exact package identity. Package metadata places this release in the affected set. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: recheck the resolved version whenever the lockfile changes."
+      },
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Release-gate finding: the exact affected. The npm package entry for shescape@2.1.2 is resolved against GHSA-66pp-5p9w-q87j (Shescape has potential environment variable exposure on Windows with CMD; severity LOW) under strict npm SemVer. Published intervals: >=1.7.2,<2.1.2. Respect the published fixed boundary and the exact package identity. Package metadata places this release in the affected set. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: recheck the resolved version whenever the lockfile changes."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Evidence check: the exact affected. The npm package entry for shescape@2.0.0-rc1 is resolved against GHSA-66pp-5p9w-q87j (Shescape has potential environment variable exposure on Windows with CMD; severity LOW) under strict npm SemVer. Published intervals: >=1.7.2,<2.1.2. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the cited advisory summary and version range are the evidence anchor for this bounded finding for handoff."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "reconcile the package identity, advisory severity and published interval before choosing block, upgrade or review. package under review: npm:shescape@2.0.0-rc1. advisory: ghsa-66pp-5p9w-q87j \u2014 shescape has potential environment variable exposure on windows with cmd. published interval text: >=1.7.2,<2.1.2. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+      "pair_id": "7063b90a866daa6a71b5",
+      "provenance": {
+        "advisory_id": "GHSA-66pp-5p9w-q87j",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-66pp-5p9w-q87j.json",
+        "advisory_source_sha256": "06939765dd2bd9f20c54ef8c14881f8ff81723640c554daf4a8153514e8f574f",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-66pp-5p9w-q87j/GHSA-66pp-5p9w-q87j.json",
+        "ecosystem": "npm",
+        "package": "shescape",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-shescape.json",
+        "registry_source_sha256": "00d4353e52ec376c1c471ec0078ddf1726390cd1a229a979f7b1b649166fe6ee",
+        "registry_source_url": "https://registry.npmjs.org/shescape",
+        "version": "2.0.0-rc1"
+      },
+      "published_range_text": ">=1.7.2,<2.1.2",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "Reconcile the package identity, advisory severity and published interval before choosing block, upgrade or review. Package under review: npm:shescape@2.0.0-rc1. Advisory: GHSA-66pp-5p9w-q87j \u2014 Shescape has potential environment variable exposure on Windows with CMD. Published interval text: >=1.7.2,<2.1.2. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Evidence check: the exact affected. The npm package entry for shescape@2.0.0-rc1 is resolved against GHSA-66pp-5p9w-q87j (Shescape has potential environment variable exposure on Windows with CMD; severity LOW) under strict npm SemVer. Published intervals: >=1.7.2,<2.1.2. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the cited advisory summary and version range are the evidence anchor for this bounded finding for handoff.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "Reconcile the package identity, advisory severity and published interval before choosing block, upgrade or review. Package under review: npm:shescape@2.0.0-rc1. Advisory: GHSA-66pp-5p9w-q87j \u2014 Shescape has potential environment variable exposure on Windows with CMD. Published interval text: >=1.7.2,<2.1.2. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-66pp-5p9w-q87j/GHSA-66pp-5p9w-q87j.json"
+        },
+        "rejected": "Evidence check: the exact not affected. The npm package entry for shescape@2.0.0-rc1 is resolved against GHSA-66pp-5p9w-q87j (Shescape has potential environment variable exposure on Windows with CMD; severity LOW) under strict npm SemVer. Published intervals: >=1.7.2,<2.1.2. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Package metadata places this release beyond the repaired stable line. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: carry the advisory identifier into the release review record."
+      },
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Evidence check: the exact not affected. The npm package entry for shescape@2.0.0-rc1 is resolved against GHSA-66pp-5p9w-q87j (Shescape has potential environment variable exposure on Windows with CMD; severity LOW) under strict npm SemVer. Published intervals: >=1.7.2,<2.1.2. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Package metadata places this release beyond the repaired stable line. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: carry the advisory identifier into the release review record."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Package review conclusion: the exact affected. The npm package entry for axios@0.20.0-0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the safe action is limited to the exact package identity and published version semantics shown here for later replay."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "audit the legacy spelling as the ecosystem would parse it; do not use lexical string order as evidence. package under review: npm:axios@0.20.0-0. advisory: ghsa-jr5f-v2jv-69x6 \u2014 axios requests vulnerable to possible ssrf and credential leakage via absolute url. published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+      "pair_id": "e6a094f65618f89290b8",
+      "provenance": {
+        "advisory_id": "GHSA-jr5f-v2jv-69x6",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-jr5f-v2jv-69x6.json",
+        "advisory_source_sha256": "77f0eb6ad0808358a56ba849f5cdbb4b9c0fd6313e976bc30f3923aeb4695167",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json",
+        "ecosystem": "npm",
+        "package": "axios",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-axios.json",
+        "registry_source_sha256": "d7c2a6c327fcb47737907ba0564cd99092a95aba229811e24351618e1c48ecbf",
+        "registry_source_url": "https://registry.npmjs.org/axios",
+        "version": "0.20.0-0"
+      },
+      "published_range_text": ">=1.0.0,<1.8.2; >=0,<0.30.0",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "Audit the legacy spelling as the ecosystem would parse it; do not use lexical string order as evidence. Package under review: npm:axios@0.20.0-0. Advisory: GHSA-jr5f-v2jv-69x6 \u2014 axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL. Published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Package review conclusion: the exact affected. The npm package entry for axios@0.20.0-0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the safe action is limited to the exact package identity and published version semantics shown here for later replay.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "Audit the legacy spelling as the ecosystem would parse it; do not use lexical string order as evidence. Package under review: npm:axios@0.20.0-0. Advisory: GHSA-jr5f-v2jv-69x6 \u2014 axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL. Published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json"
+        },
+        "rejected": "Package review conclusion: the exact not affected. The npm package entry for axios@0.20.0-0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Package metadata places this release beyond the repaired stable line. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: keep the package identity and ecosystem comparator together in the incident ticket."
+      },
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Package review conclusion: the exact not affected. The npm package entry for axios@0.20.0-0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Package metadata places this release beyond the repaired stable line. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: keep the package identity and ecosystem comparator together in the incident ticket."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Boundary analysis: the exact affected. The PyPI package entry for setuptools@0.6c11 is resolved against GHSA-27x4-j476-jp5f (Setuptools vulnerable to Man-in-the-middle attacks; severity HIGH) under PEP 440. Published intervals: >=0,<0.7. Apply PEP 440 ordering, including this legacy or prerelease spelling. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: preserve this boundary comparison with the source snapshot so another reviewer can replay it offline."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "use the cited source to show one concrete affected or fixed boundary and name the remaining uncertainty. package under review: pypi:setuptools@0.6c11. advisory: ghsa-27x4-j476-jp5f \u2014 setuptools vulnerable to man-in-the-middle attacks. published interval text: >=0,<0.7. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. apply pep 440 ordering, including this legacy or prerelease spelling.",
+      "pair_id": "d9f61a263500838b3afa",
+      "provenance": {
+        "advisory_id": "GHSA-27x4-j476-jp5f",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-27x4-j476-jp5f.json",
+        "advisory_source_sha256": "751cba3a453eb1f60729a51d7ba0d8aaa27c09195c3994f81185763d4e2f0632",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2022/05/GHSA-27x4-j476-jp5f/GHSA-27x4-j476-jp5f.json",
+        "ecosystem": "PyPI",
+        "package": "setuptools",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/PyPI-setuptools.json",
+        "registry_source_sha256": "1b84d1a1e6d5469d9ac64f06e612b57d2d049b73df26f46e29771eaf34ed7006",
+        "registry_source_url": "https://pypi.org/pypi/setuptools/json",
+        "version": "0.6c11"
+      },
+      "published_range_text": ">=0,<0.7",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "Use the cited source to show one concrete affected or fixed boundary and name the remaining uncertainty. Package under review: PyPI:setuptools@0.6c11. Advisory: GHSA-27x4-j476-jp5f \u2014 Setuptools vulnerable to Man-in-the-middle attacks. Published interval text: >=0,<0.7. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply PEP 440 ordering, including this legacy or prerelease spelling.",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Boundary analysis: the exact affected. The PyPI package entry for setuptools@0.6c11 is resolved against GHSA-27x4-j476-jp5f (Setuptools vulnerable to Man-in-the-middle attacks; severity HIGH) under PEP 440. Published intervals: >=0,<0.7. Apply PEP 440 ordering, including this legacy or prerelease spelling. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: preserve this boundary comparison with the source snapshot so another reviewer can replay it offline.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "Use the cited source to show one concrete affected or fixed boundary and name the remaining uncertainty. Package under review: PyPI:setuptools@0.6c11. Advisory: GHSA-27x4-j476-jp5f \u2014 Setuptools vulnerable to Man-in-the-middle attacks. Published interval text: >=0,<0.7. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply PEP 440 ordering, including this legacy or prerelease spelling.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2022/05/GHSA-27x4-j476-jp5f/GHSA-27x4-j476-jp5f.json"
+        },
+        "rejected": "Boundary analysis: the exact not affected. The PyPI package entry for setuptools@0.6c11 is resolved against GHSA-27x4-j476-jp5f (Setuptools vulnerable to Man-in-the-middle attacks; severity HIGH) under PEP 440. Published intervals: >=0,<0.7. Apply PEP 440 ordering, including this legacy or prerelease spelling. Package metadata places this release beyond the repaired branch. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: preserve the cited interval next to the dependency pin."
+      },
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Boundary analysis: the exact not affected. The PyPI package entry for setuptools@0.6c11 is resolved against GHSA-27x4-j476-jp5f (Setuptools vulnerable to Man-in-the-middle attacks; severity HIGH) under PEP 440. Published intervals: >=0,<0.7. Apply PEP 440 ordering, including this legacy or prerelease spelling. Package metadata places this release beyond the repaired branch. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: preserve the cited interval next to the dependency pin."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Maintainer handoff: the exact not affected. The npm package entry for axios@1.8.2 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Resolve the disjoint published branches independently; do not merge their gaps. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: record whether the release is before, inside or beyond each published endpoint for release."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "compare the target release with all published branches rather than collapsing them into one broad range. package under review: npm:axios@1.8.2. advisory: ghsa-jr5f-v2jv-69x6 \u2014 axios requests vulnerable to possible ssrf and credential leakage via absolute url. published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. resolve the disjoint published branches independently; do not merge their gaps.",
+      "pair_id": "6bff4e43018f9733455f",
+      "provenance": {
+        "advisory_id": "GHSA-jr5f-v2jv-69x6",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-jr5f-v2jv-69x6.json",
+        "advisory_source_sha256": "77f0eb6ad0808358a56ba849f5cdbb4b9c0fd6313e976bc30f3923aeb4695167",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json",
+        "ecosystem": "npm",
+        "package": "axios",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-axios.json",
+        "registry_source_sha256": "d7c2a6c327fcb47737907ba0564cd99092a95aba229811e24351618e1c48ecbf",
+        "registry_source_url": "https://registry.npmjs.org/axios",
+        "version": "1.8.2"
+      },
+      "published_range_text": ">=1.0.0,<1.8.2; >=0,<0.30.0",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "Compare the target release with all published branches rather than collapsing them into one broad range. Package under review: npm:axios@1.8.2. Advisory: GHSA-jr5f-v2jv-69x6 \u2014 axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL. Published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Resolve the disjoint published branches independently; do not merge their gaps.",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Maintainer handoff: the exact not affected. The npm package entry for axios@1.8.2 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Resolve the disjoint published branches independently; do not merge their gaps. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: record whether the release is before, inside or beyond each published endpoint for release.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "Compare the target release with all published branches rather than collapsing them into one broad range. Package under review: npm:axios@1.8.2. Advisory: GHSA-jr5f-v2jv-69x6 \u2014 axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL. Published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Resolve the disjoint published branches independently; do not merge their gaps.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json"
+        },
+        "rejected": "Maintainer handoff: the exact affected. The npm package entry for axios@1.8.2 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Resolve the disjoint published branches independently; do not merge their gaps. Package metadata places this release in the affected branch. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: schedule the next dependency scan after the next package refresh."
+      },
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Maintainer handoff: the exact affected. The npm package entry for axios@1.8.2 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Resolve the disjoint published branches independently; do not merge their gaps. Package metadata places this release in the affected branch. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: schedule the next dependency scan after the next package refresh."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Review result: the exact not affected. The npm package entry for prismjs@1.30.0 is resolved against GHSA-x7hr-w5r2-h6wg (PrismJS DOM Clobbering vulnerability; severity MODERATE) under strict npm SemVer. Published intervals: >=0,<1.30.0. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: retain the exact registry spelling and fixed endpoint in the review record for review replay."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "write a maintainer-ready remediation recommendation whose scope is limited to this advisory's version fact. package under review: npm:prismjs@1.30.0. advisory: ghsa-x7hr-w5r2-h6wg \u2014 prismjs dom clobbering vulnerability. published interval text: >=0,<1.30.0. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. respect the published fixed boundary and the exact package identity.",
+      "pair_id": "0c43a5aeb156c90cf944",
+      "provenance": {
+        "advisory_id": "GHSA-x7hr-w5r2-h6wg",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-x7hr-w5r2-h6wg.json",
+        "advisory_source_sha256": "699d9185c35e4e3d12de840336564e08e10f38838d245509e7c7472c3c62d779",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-x7hr-w5r2-h6wg/GHSA-x7hr-w5r2-h6wg.json",
+        "ecosystem": "npm",
+        "package": "prismjs",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-prismjs.json",
+        "registry_source_sha256": "e15fb4e1b256503d5676239597b8a355619bf96e90a913e2eb0ba97354e399d9",
+        "registry_source_url": "https://registry.npmjs.org/prismjs",
+        "version": "1.30.0"
+      },
+      "published_range_text": ">=0,<1.30.0",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "Write a maintainer-ready remediation recommendation whose scope is limited to this advisory's version fact. Package under review: npm:prismjs@1.30.0. Advisory: GHSA-x7hr-w5r2-h6wg \u2014 PrismJS DOM Clobbering vulnerability. Published interval text: >=0,<1.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Review result: the exact not affected. The npm package entry for prismjs@1.30.0 is resolved against GHSA-x7hr-w5r2-h6wg (PrismJS DOM Clobbering vulnerability; severity MODERATE) under strict npm SemVer. Published intervals: >=0,<1.30.0. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: retain the exact registry spelling and fixed endpoint in the review record for review replay.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "Write a maintainer-ready remediation recommendation whose scope is limited to this advisory's version fact. Package under review: npm:prismjs@1.30.0. Advisory: GHSA-x7hr-w5r2-h6wg \u2014 PrismJS DOM Clobbering vulnerability. Published interval text: >=0,<1.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-x7hr-w5r2-h6wg/GHSA-x7hr-w5r2-h6wg.json"
+        },
+        "rejected": "Review result: the exact affected. The npm package entry for prismjs@1.30.0 is resolved against GHSA-x7hr-w5r2-h6wg (PrismJS DOM Clobbering vulnerability; severity MODERATE) under strict npm SemVer. Published intervals: >=0,<1.30.0. Respect the published fixed boundary and the exact package identity. Package metadata places this release in the affected set. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: keep the package entry and endpoint together in the release review record."
+      },
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Review result: the exact affected. The npm package entry for prismjs@1.30.0 is resolved against GHSA-x7hr-w5r2-h6wg (PrismJS DOM Clobbering vulnerability; severity MODERATE) under strict npm SemVer. Published intervals: >=0,<1.30.0. Respect the published fixed boundary and the exact package identity. Package metadata places this release in the affected set. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: keep the package entry and endpoint together in the release review record."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Source-bound disposition: the exact affected. The PyPI package entry for jinja2@3.1.4 is resolved against GHSA-q2x7-8rv6-6q7h (Jinja has a sandbox breakout through indirect reference to format method; severity MODERATE) under PEP 440. Published intervals: >=0,<3.1.5. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the ecosystem comparator, not lexical order, is the reproducible basis for this release decision for source review."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "explain how a stable release differs from a prerelease under the documented ecosystem semantics. package under review: pypi:jinja2@3.1.4. advisory: ghsa-q2x7-8rv6-6q7h \u2014 jinja has a sandbox breakout through indirect reference to format method. published interval text: >=0,<3.1.5. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. respect the published fixed boundary and the exact package identity.",
+      "pair_id": "5c91454eb531519e3b9a",
+      "provenance": {
+        "advisory_id": "GHSA-q2x7-8rv6-6q7h",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-q2x7-8rv6-6q7h.json",
+        "advisory_source_sha256": "53289d88385a37dbbc878e46d5fd3ea5749e82b9f5581da5f69b0019c0361807",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2024/12/GHSA-q2x7-8rv6-6q7h/GHSA-q2x7-8rv6-6q7h.json",
+        "ecosystem": "PyPI",
+        "package": "jinja2",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/PyPI-jinja2.json",
+        "registry_source_sha256": "f944a0ab4808f42bd0523158b2a78d2638eee650f664ccd9a9a3d6630a298bd4",
+        "registry_source_url": "https://pypi.org/pypi/Jinja2/json",
+        "version": "3.1.4"
+      },
+      "published_range_text": ">=0,<3.1.5",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "Explain how a stable release differs from a prerelease under the documented ecosystem semantics. Package under review: PyPI:jinja2@3.1.4. Advisory: GHSA-q2x7-8rv6-6q7h \u2014 Jinja has a sandbox breakout through indirect reference to format method. Published interval text: >=0,<3.1.5. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Source-bound disposition: the exact affected. The PyPI package entry for jinja2@3.1.4 is resolved against GHSA-q2x7-8rv6-6q7h (Jinja has a sandbox breakout through indirect reference to format method; severity MODERATE) under PEP 440. Published intervals: >=0,<3.1.5. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the ecosystem comparator, not lexical order, is the reproducible basis for this release decision for source review.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "Explain how a stable release differs from a prerelease under the documented ecosystem semantics. Package under review: PyPI:jinja2@3.1.4. Advisory: GHSA-q2x7-8rv6-6q7h \u2014 Jinja has a sandbox breakout through indirect reference to format method. Published interval text: >=0,<3.1.5. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2024/12/GHSA-q2x7-8rv6-6q7h/GHSA-q2x7-8rv6-6q7h.json"
+        },
+        "rejected": "Source-bound disposition: the exact not affected. The PyPI package entry for jinja2@3.1.4 is resolved against GHSA-q2x7-8rv6-6q7h (Jinja has a sandbox breakout through indirect reference to format method; severity MODERATE) under PEP 440. Published intervals: >=0,<3.1.5. Respect the published fixed boundary and the exact package identity. Package metadata places this release beyond the repaired branch. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: record the resolved boundary in the dependency inventory before promotion."
+      },
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Source-bound disposition: the exact not affected. The PyPI package entry for jinja2@3.1.4 is resolved against GHSA-q2x7-8rv6-6q7h (Jinja has a sandbox breakout through indirect reference to format method; severity MODERATE) under PEP 440. Published intervals: >=0,<3.1.5. Respect the published fixed boundary and the exact package identity. Package metadata places this release beyond the repaired branch. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: record the resolved boundary in the dependency inventory before promotion."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Release-gate finding: the exact affected. The npm package entry for axios@1.7.0-beta.0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: keep each affected branch separate when the advisory publishes more than one interval for evidence review."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "verify that the package metadata contains the exact target release before drawing a security conclusion. package under review: npm:axios@1.7.0-beta.0. advisory: ghsa-jr5f-v2jv-69x6 \u2014 axios requests vulnerable to possible ssrf and credential leakage via absolute url. published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+      "pair_id": "a9a34ce542bf483330a5",
+      "provenance": {
+        "advisory_id": "GHSA-jr5f-v2jv-69x6",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-jr5f-v2jv-69x6.json",
+        "advisory_source_sha256": "77f0eb6ad0808358a56ba849f5cdbb4b9c0fd6313e976bc30f3923aeb4695167",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json",
+        "ecosystem": "npm",
+        "package": "axios",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-axios.json",
+        "registry_source_sha256": "d7c2a6c327fcb47737907ba0564cd99092a95aba229811e24351618e1c48ecbf",
+        "registry_source_url": "https://registry.npmjs.org/axios",
+        "version": "1.7.0-beta.0"
+      },
+      "published_range_text": ">=1.0.0,<1.8.2; >=0,<0.30.0",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "Verify that the package metadata contains the exact target release before drawing a security conclusion. Package under review: npm:axios@1.7.0-beta.0. Advisory: GHSA-jr5f-v2jv-69x6 \u2014 axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL. Published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Release-gate finding: the exact affected. The npm package entry for axios@1.7.0-beta.0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: keep each affected branch separate when the advisory publishes more than one interval for evidence review.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "Verify that the package metadata contains the exact target release before drawing a security conclusion. Package under review: npm:axios@1.7.0-beta.0. Advisory: GHSA-jr5f-v2jv-69x6 \u2014 axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL. Published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json"
+        },
+        "rejected": "Release-gate finding: the exact not affected. The npm package entry for axios@1.7.0-beta.0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Package metadata places this release beyond the repaired stable line. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: recheck the resolved version whenever the lockfile changes."
+      },
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Release-gate finding: the exact not affected. The npm package entry for axios@1.7.0-beta.0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Package metadata places this release beyond the repaired stable line. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: recheck the resolved version whenever the lockfile changes."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Evidence check: the exact not affected. The PyPI package entry for jinja2@3.1.5 is resolved against GHSA-q2x7-8rv6-6q7h (Jinja has a sandbox breakout through indirect reference to format method; severity MODERATE) under PEP 440. Published intervals: >=0,<3.1.5. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the cited advisory summary and version range are the evidence anchor for this bounded finding."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "distinguish an advisory applicability result from proof that a particular application is exploitable. package under review: pypi:jinja2@3.1.5. advisory: ghsa-q2x7-8rv6-6q7h \u2014 jinja has a sandbox breakout through indirect reference to format method. published interval text: >=0,<3.1.5. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. respect the published fixed boundary and the exact package identity.",
+      "pair_id": "12554056ea1d90aff52a",
+      "provenance": {
+        "advisory_id": "GHSA-q2x7-8rv6-6q7h",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-q2x7-8rv6-6q7h.json",
+        "advisory_source_sha256": "53289d88385a37dbbc878e46d5fd3ea5749e82b9f5581da5f69b0019c0361807",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2024/12/GHSA-q2x7-8rv6-6q7h/GHSA-q2x7-8rv6-6q7h.json",
+        "ecosystem": "PyPI",
+        "package": "jinja2",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/PyPI-jinja2.json",
+        "registry_source_sha256": "f944a0ab4808f42bd0523158b2a78d2638eee650f664ccd9a9a3d6630a298bd4",
+        "registry_source_url": "https://pypi.org/pypi/Jinja2/json",
+        "version": "3.1.5"
+      },
+      "published_range_text": ">=0,<3.1.5",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "Distinguish an advisory applicability result from proof that a particular application is exploitable. Package under review: PyPI:jinja2@3.1.5. Advisory: GHSA-q2x7-8rv6-6q7h \u2014 Jinja has a sandbox breakout through indirect reference to format method. Published interval text: >=0,<3.1.5. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Evidence check: the exact not affected. The PyPI package entry for jinja2@3.1.5 is resolved against GHSA-q2x7-8rv6-6q7h (Jinja has a sandbox breakout through indirect reference to format method; severity MODERATE) under PEP 440. Published intervals: >=0,<3.1.5. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the cited advisory summary and version range are the evidence anchor for this bounded finding.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "Distinguish an advisory applicability result from proof that a particular application is exploitable. Package under review: PyPI:jinja2@3.1.5. Advisory: GHSA-q2x7-8rv6-6q7h \u2014 Jinja has a sandbox breakout through indirect reference to format method. Published interval text: >=0,<3.1.5. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2024/12/GHSA-q2x7-8rv6-6q7h/GHSA-q2x7-8rv6-6q7h.json"
+        },
+        "rejected": "Evidence check: the exact affected. The PyPI package entry for jinja2@3.1.5 is resolved against GHSA-q2x7-8rv6-6q7h (Jinja has a sandbox breakout through indirect reference to format method; severity MODERATE) under PEP 440. Published intervals: >=0,<3.1.5. Respect the published fixed boundary and the exact package identity. Package metadata places this release in the affected set. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: carry the advisory identifier into the release review record."
+      },
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Evidence check: the exact affected. The PyPI package entry for jinja2@3.1.5 is resolved against GHSA-q2x7-8rv6-6q7h (Jinja has a sandbox breakout through indirect reference to format method; severity MODERATE) under PEP 440. Published intervals: >=0,<3.1.5. Respect the published fixed boundary and the exact package identity. Package metadata places this release in the affected set. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: carry the advisory identifier into the release review record."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Package review conclusion: the exact not affected. The PyPI package entry for pymongo@0.1pre is resolved against GHSA-98qm-wvgf-w4cf (MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element; severity HIGH) under PEP 440. Published intervals: >=3.9.0,<4.18.3. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the safe action is limited to the exact package identity and published version semantics shown here for audit replay."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "reproduce the decision from the public advisory, registry snapshot and package/version identity alone. package under review: pypi:pymongo@0.1pre. advisory: ghsa-98qm-wvgf-w4cf \u2014 mongodb python driver: out-of-bounds read in bson decoding via a malformed regex element. published interval text: >=3.9.0,<4.18.3. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+      "pair_id": "b022fd520cc082790a23",
+      "provenance": {
+        "advisory_id": "GHSA-98qm-wvgf-w4cf",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-98qm-wvgf-w4cf.json",
+        "advisory_source_sha256": "dd5b7faa0344602f119a22536f7a2c31cd2da4b998529e4ea550cc868d60fa17",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2026/10/GHSA-98qm-wvgf-w4cf/GHSA-98qm-wvgf-w4cf.json",
+        "ecosystem": "PyPI",
+        "package": "pymongo",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/PyPI-pymongo.json",
+        "registry_source_sha256": "ab55e013cdd091ea190ceae52458eebc2109488545a57155fd333a58d6c568c9",
+        "registry_source_url": "https://pypi.org/pypi/pymongo/json",
+        "version": "0.1pre"
+      },
+      "published_range_text": ">=3.9.0,<4.18.3",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "Reproduce the decision from the public advisory, registry snapshot and package/version identity alone. Package under review: PyPI:pymongo@0.1pre. Advisory: GHSA-98qm-wvgf-w4cf \u2014 MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element. Published interval text: >=3.9.0,<4.18.3. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Package review conclusion: the exact not affected. The PyPI package entry for pymongo@0.1pre is resolved against GHSA-98qm-wvgf-w4cf (MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element; severity HIGH) under PEP 440. Published intervals: >=3.9.0,<4.18.3. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the safe action is limited to the exact package identity and published version semantics shown here for audit replay.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "Reproduce the decision from the public advisory, registry snapshot and package/version identity alone. Package under review: PyPI:pymongo@0.1pre. Advisory: GHSA-98qm-wvgf-w4cf \u2014 MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element. Published interval text: >=3.9.0,<4.18.3. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2026/10/GHSA-98qm-wvgf-w4cf/GHSA-98qm-wvgf-w4cf.json"
+        },
+        "rejected": "Package review conclusion: the exact affected. The PyPI package entry for pymongo@0.1pre is resolved against GHSA-98qm-wvgf-w4cf (MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element; severity HIGH) under PEP 440. Published intervals: >=3.9.0,<4.18.3. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Package metadata places this release in the affected stable line. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: keep the package identity and ecosystem comparator together in the incident ticket."
+      },
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Package review conclusion: the exact affected. The PyPI package entry for pymongo@0.1pre is resolved against GHSA-98qm-wvgf-w4cf (MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element; severity HIGH) under PEP 440. Published intervals: >=3.9.0,<4.18.3. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Package metadata places this release in the affected stable line. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: keep the package identity and ecosystem comparator together in the incident ticket."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Boundary analysis: the exact affected. The npm package entry for prismjs@1.29.0 is resolved against GHSA-x7hr-w5r2-h6wg (PrismJS DOM Clobbering vulnerability; severity MODERATE) under strict npm SemVer. Published intervals: >=0,<1.30.0. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: preserve this boundary comparison with the source snapshot so another reviewer can replay it offline."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "check the upgrade boundary and make the recommendation fail closed when the published range is unsupported. package under review: npm:prismjs@1.29.0. advisory: ghsa-x7hr-w5r2-h6wg \u2014 prismjs dom clobbering vulnerability. published interval text: >=0,<1.30.0. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. respect the published fixed boundary and the exact package identity.",
+      "pair_id": "9697c302b3873316261f",
+      "provenance": {
+        "advisory_id": "GHSA-x7hr-w5r2-h6wg",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-x7hr-w5r2-h6wg.json",
+        "advisory_source_sha256": "699d9185c35e4e3d12de840336564e08e10f38838d245509e7c7472c3c62d779",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-x7hr-w5r2-h6wg/GHSA-x7hr-w5r2-h6wg.json",
+        "ecosystem": "npm",
+        "package": "prismjs",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-prismjs.json",
+        "registry_source_sha256": "e15fb4e1b256503d5676239597b8a355619bf96e90a913e2eb0ba97354e399d9",
+        "registry_source_url": "https://registry.npmjs.org/prismjs",
+        "version": "1.29.0"
+      },
+      "published_range_text": ">=0,<1.30.0",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "Check the upgrade boundary and make the recommendation fail closed when the published range is unsupported. Package under review: npm:prismjs@1.29.0. Advisory: GHSA-x7hr-w5r2-h6wg \u2014 PrismJS DOM Clobbering vulnerability. Published interval text: >=0,<1.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Boundary analysis: the exact affected. The npm package entry for prismjs@1.29.0 is resolved against GHSA-x7hr-w5r2-h6wg (PrismJS DOM Clobbering vulnerability; severity MODERATE) under strict npm SemVer. Published intervals: >=0,<1.30.0. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: preserve this boundary comparison with the source snapshot so another reviewer can replay it offline.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "Check the upgrade boundary and make the recommendation fail closed when the published range is unsupported. Package under review: npm:prismjs@1.29.0. Advisory: GHSA-x7hr-w5r2-h6wg \u2014 PrismJS DOM Clobbering vulnerability. Published interval text: >=0,<1.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-x7hr-w5r2-h6wg/GHSA-x7hr-w5r2-h6wg.json"
+        },
+        "rejected": "Boundary analysis: the exact not affected. The npm package entry for prismjs@1.29.0 is resolved against GHSA-x7hr-w5r2-h6wg (PrismJS DOM Clobbering vulnerability; severity MODERATE) under strict npm SemVer. Published intervals: >=0,<1.30.0. Respect the published fixed boundary and the exact package identity. Package metadata places this release beyond the repaired branch. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: preserve the cited interval next to the dependency pin."
+      },
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Boundary analysis: the exact not affected. The npm package entry for prismjs@1.29.0 is resolved against GHSA-x7hr-w5r2-h6wg (PrismJS DOM Clobbering vulnerability; severity MODERATE) under strict npm SemVer. Published intervals: >=0,<1.30.0. Respect the published fixed boundary and the exact package identity. Package metadata places this release beyond the repaired branch. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: preserve the cited interval next to the dependency pin."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Maintainer handoff: the exact not affected. The PyPI package entry for setuptools@0.7.2 is resolved against GHSA-27x4-j476-jp5f (Setuptools vulnerable to Man-in-the-middle attacks; severity HIGH) under PEP 440. Published intervals: >=0,<0.7. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: record whether the release is before, inside or beyond each published endpoint for replay."
+      },
+      "deduplication": {
+        "normalization": "Unicode NFC, casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "state the evidence anchor, version semantics and safe next action in a form suitable for an automated review queue. package under review: pypi:setuptools@0.7.2. advisory: ghsa-27x4-j476-jp5f \u2014 setuptools vulnerable to man-in-the-middle attacks. published interval text: >=0,<0.7. use the published advisory and package metadata. state whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. do not infer exploitability from version applicability alone. respect the published fixed boundary and the exact package identity.",
+      "pair_id": "2c18cefd202bb5bea6a5",
+      "provenance": {
+        "advisory_id": "GHSA-27x4-j476-jp5f",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-27x4-j476-jp5f.json",
+        "advisory_source_sha256": "751cba3a453eb1f60729a51d7ba0d8aaa27c09195c3994f81185763d4e2f0632",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2022/05/GHSA-27x4-j476-jp5f/GHSA-27x4-j476-jp5f.json",
+        "ecosystem": "PyPI",
+        "package": "setuptools",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/PyPI-setuptools.json",
+        "registry_source_sha256": "1b84d1a1e6d5469d9ac64f06e612b57d2d049b73df26f46e29771eaf34ed7006",
+        "registry_source_url": "https://pypi.org/pypi/setuptools/json",
+        "version": "0.7.2"
+      },
+      "published_range_text": ">=0,<0.7",
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "answer_length_comparable": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "official_intent_schema": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "rejected_answer_has_no_label_leakage": true,
+        "scope_disclaims_exploitability": true,
+        "technical_evidence_and_action_contrast": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "State the evidence anchor, version semantics and safe next action in a form suitable for an automated review queue. Package under review: PyPI:setuptools@0.7.2. Advisory: GHSA-27x4-j476-jp5f \u2014 Setuptools vulnerable to Man-in-the-middle attacks. Published interval text: >=0,<0.7. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "upload_row": {
+        "chosen": "Maintainer handoff: the exact not affected. The PyPI package entry for setuptools@0.7.2 is resolved against GHSA-27x4-j476-jp5f (Setuptools vulnerable to Man-in-the-middle attacks; severity HIGH) under PEP 440. Published intervals: >=0,<0.7. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: record whether the release is before, inside or beyond each published endpoint for replay.",
+        "intent_id": "SECURITY_REVIEW_GENERAL",
+        "label_kind": "preference_pair",
+        "prompt": "State the evidence anchor, version semantics and safe next action in a form suitable for an automated review queue. Package under review: PyPI:setuptools@0.7.2. Advisory: GHSA-27x4-j476-jp5f \u2014 Setuptools vulnerable to Man-in-the-middle attacks. Published interval text: >=0,<0.7. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+        "provenance": {
+          "source_kind": "generated",
+          "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2022/05/GHSA-27x4-j476-jp5f/GHSA-27x4-j476-jp5f.json"
+        },
+        "rejected": "Maintainer handoff: the exact affected. The PyPI package entry for setuptools@0.7.2 is resolved against GHSA-27x4-j476-jp5f (Setuptools vulnerable to Man-in-the-middle attacks; severity HIGH) under PEP 440. Published intervals: >=0,<0.7. Respect the published fixed boundary and the exact package identity. Package metadata places this release in the affected set. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: schedule the next dependency scan after the next package refresh."
+      },
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "Maintainer handoff: the exact affected. The PyPI package entry for setuptools@0.7.2 is resolved against GHSA-27x4-j476-jp5f (Setuptools vulnerable to Man-in-the-middle attacks; severity HIGH) under PEP 440. Published intervals: >=0,<0.7. Respect the published fixed boundary and the exact package identity. Package metadata places this release in the affected set. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: schedule the next dependency scan after the next package refresh."
+      }
+    }
+  ],
+  "schema_version": 2,
+  "source_policy": "Pinned GitHub-reviewed advisory and immutable package-registry snapshots only",
+  "status": "PHASE5BQ_ANJOMAN_PAIR_CANDIDATE_PACKET_V2",
+  "submission_state": "OWNER_REVIEW_REQUIRED_NOT_SUBMITTED",
+  "upload_rows": [
+    {
+      "chosen": "Review result: the exact not affected. The npm package entry for axios@0.30.0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Resolve the disjoint published branches independently; do not merge their gaps. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: retain the exact registry spelling and fixed endpoint in the review record for audit.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "Check every disjoint major-line interval independently and explain why a gap must not inherit a neighboring branch. Package under review: npm:axios@0.30.0. Advisory: GHSA-jr5f-v2jv-69x6 \u2014 axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL. Published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Resolve the disjoint published branches independently; do not merge their gaps.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json"
+      },
+      "rejected": "Review result: the exact affected. The npm package entry for axios@0.30.0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Resolve the disjoint published branches independently; do not merge their gaps. Package metadata places this release in the affected branch. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: keep the package entry and endpoint together in the release review record."
+    },
+    {
+      "chosen": "Source-bound disposition: the exact affected. The PyPI package entry for pymongo@3.9.0 is resolved against GHSA-98qm-wvgf-w4cf (MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element; severity HIGH) under PEP 440. Published intervals: >=3.9.0,<4.18.3. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the ecosystem comparator, not lexical order, is the reproducible basis for this release decision for replay.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "Treat the exact release as a fixed-boundary decision and state which side of each exclusive endpoint it occupies. Package under review: PyPI:pymongo@3.9.0. Advisory: GHSA-98qm-wvgf-w4cf \u2014 MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element. Published interval text: >=3.9.0,<4.18.3. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2026/10/GHSA-98qm-wvgf-w4cf/GHSA-98qm-wvgf-w4cf.json"
+      },
+      "rejected": "Source-bound disposition: the exact not affected. The PyPI package entry for pymongo@3.9.0 is resolved against GHSA-98qm-wvgf-w4cf (MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element; severity HIGH) under PEP 440. Published intervals: >=3.9.0,<4.18.3. Respect the published fixed boundary and the exact package identity. Package metadata places this release beyond the repaired branch. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: record the resolved boundary in the dependency inventory before promotion."
+    },
+    {
+      "chosen": "Release-gate finding: the exact not affected. The npm package entry for shescape@2.1.2 is resolved against GHSA-66pp-5p9w-q87j (Shescape has potential environment variable exposure on Windows with CMD; severity LOW) under strict npm SemVer. Published intervals: >=1.7.2,<2.1.2. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: keep each affected branch separate when the advisory publishes more than one interval.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "Inspect prerelease ordering under the native comparator, then separate that result from runtime exploitability. Package under review: npm:shescape@2.1.2. Advisory: GHSA-66pp-5p9w-q87j \u2014 Shescape has potential environment variable exposure on Windows with CMD. Published interval text: >=1.7.2,<2.1.2. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-66pp-5p9w-q87j/GHSA-66pp-5p9w-q87j.json"
+      },
+      "rejected": "Release-gate finding: the exact affected. The npm package entry for shescape@2.1.2 is resolved against GHSA-66pp-5p9w-q87j (Shescape has potential environment variable exposure on Windows with CMD; severity LOW) under strict npm SemVer. Published intervals: >=1.7.2,<2.1.2. Respect the published fixed boundary and the exact package identity. Package metadata places this release in the affected set. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: recheck the resolved version whenever the lockfile changes."
+    },
+    {
+      "chosen": "Evidence check: the exact affected. The npm package entry for shescape@2.0.0-rc1 is resolved against GHSA-66pp-5p9w-q87j (Shescape has potential environment variable exposure on Windows with CMD; severity LOW) under strict npm SemVer. Published intervals: >=1.7.2,<2.1.2. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the cited advisory summary and version range are the evidence anchor for this bounded finding for handoff.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "Reconcile the package identity, advisory severity and published interval before choosing block, upgrade or review. Package under review: npm:shescape@2.0.0-rc1. Advisory: GHSA-66pp-5p9w-q87j \u2014 Shescape has potential environment variable exposure on Windows with CMD. Published interval text: >=1.7.2,<2.1.2. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-66pp-5p9w-q87j/GHSA-66pp-5p9w-q87j.json"
+      },
+      "rejected": "Evidence check: the exact not affected. The npm package entry for shescape@2.0.0-rc1 is resolved against GHSA-66pp-5p9w-q87j (Shescape has potential environment variable exposure on Windows with CMD; severity LOW) under strict npm SemVer. Published intervals: >=1.7.2,<2.1.2. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Package metadata places this release beyond the repaired stable line. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: carry the advisory identifier into the release review record."
+    },
+    {
+      "chosen": "Package review conclusion: the exact affected. The npm package entry for axios@0.20.0-0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the safe action is limited to the exact package identity and published version semantics shown here for later replay.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "Audit the legacy spelling as the ecosystem would parse it; do not use lexical string order as evidence. Package under review: npm:axios@0.20.0-0. Advisory: GHSA-jr5f-v2jv-69x6 \u2014 axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL. Published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json"
+      },
+      "rejected": "Package review conclusion: the exact not affected. The npm package entry for axios@0.20.0-0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Package metadata places this release beyond the repaired stable line. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: keep the package identity and ecosystem comparator together in the incident ticket."
+    },
+    {
+      "chosen": "Boundary analysis: the exact affected. The PyPI package entry for setuptools@0.6c11 is resolved against GHSA-27x4-j476-jp5f (Setuptools vulnerable to Man-in-the-middle attacks; severity HIGH) under PEP 440. Published intervals: >=0,<0.7. Apply PEP 440 ordering, including this legacy or prerelease spelling. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: preserve this boundary comparison with the source snapshot so another reviewer can replay it offline.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "Use the cited source to show one concrete affected or fixed boundary and name the remaining uncertainty. Package under review: PyPI:setuptools@0.6c11. Advisory: GHSA-27x4-j476-jp5f \u2014 Setuptools vulnerable to Man-in-the-middle attacks. Published interval text: >=0,<0.7. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply PEP 440 ordering, including this legacy or prerelease spelling.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2022/05/GHSA-27x4-j476-jp5f/GHSA-27x4-j476-jp5f.json"
+      },
+      "rejected": "Boundary analysis: the exact not affected. The PyPI package entry for setuptools@0.6c11 is resolved against GHSA-27x4-j476-jp5f (Setuptools vulnerable to Man-in-the-middle attacks; severity HIGH) under PEP 440. Published intervals: >=0,<0.7. Apply PEP 440 ordering, including this legacy or prerelease spelling. Package metadata places this release beyond the repaired branch. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: preserve the cited interval next to the dependency pin."
+    },
+    {
+      "chosen": "Maintainer handoff: the exact not affected. The npm package entry for axios@1.8.2 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Resolve the disjoint published branches independently; do not merge their gaps. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: record whether the release is before, inside or beyond each published endpoint for release.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "Compare the target release with all published branches rather than collapsing them into one broad range. Package under review: npm:axios@1.8.2. Advisory: GHSA-jr5f-v2jv-69x6 \u2014 axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL. Published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Resolve the disjoint published branches independently; do not merge their gaps.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json"
+      },
+      "rejected": "Maintainer handoff: the exact affected. The npm package entry for axios@1.8.2 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Resolve the disjoint published branches independently; do not merge their gaps. Package metadata places this release in the affected branch. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: schedule the next dependency scan after the next package refresh."
+    },
+    {
+      "chosen": "Review result: the exact not affected. The npm package entry for prismjs@1.30.0 is resolved against GHSA-x7hr-w5r2-h6wg (PrismJS DOM Clobbering vulnerability; severity MODERATE) under strict npm SemVer. Published intervals: >=0,<1.30.0. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: retain the exact registry spelling and fixed endpoint in the review record for review replay.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "Write a maintainer-ready remediation recommendation whose scope is limited to this advisory's version fact. Package under review: npm:prismjs@1.30.0. Advisory: GHSA-x7hr-w5r2-h6wg \u2014 PrismJS DOM Clobbering vulnerability. Published interval text: >=0,<1.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-x7hr-w5r2-h6wg/GHSA-x7hr-w5r2-h6wg.json"
+      },
+      "rejected": "Review result: the exact affected. The npm package entry for prismjs@1.30.0 is resolved against GHSA-x7hr-w5r2-h6wg (PrismJS DOM Clobbering vulnerability; severity MODERATE) under strict npm SemVer. Published intervals: >=0,<1.30.0. Respect the published fixed boundary and the exact package identity. Package metadata places this release in the affected set. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: keep the package entry and endpoint together in the release review record."
+    },
+    {
+      "chosen": "Source-bound disposition: the exact affected. The PyPI package entry for jinja2@3.1.4 is resolved against GHSA-q2x7-8rv6-6q7h (Jinja has a sandbox breakout through indirect reference to format method; severity MODERATE) under PEP 440. Published intervals: >=0,<3.1.5. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the ecosystem comparator, not lexical order, is the reproducible basis for this release decision for source review.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "Explain how a stable release differs from a prerelease under the documented ecosystem semantics. Package under review: PyPI:jinja2@3.1.4. Advisory: GHSA-q2x7-8rv6-6q7h \u2014 Jinja has a sandbox breakout through indirect reference to format method. Published interval text: >=0,<3.1.5. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2024/12/GHSA-q2x7-8rv6-6q7h/GHSA-q2x7-8rv6-6q7h.json"
+      },
+      "rejected": "Source-bound disposition: the exact not affected. The PyPI package entry for jinja2@3.1.4 is resolved against GHSA-q2x7-8rv6-6q7h (Jinja has a sandbox breakout through indirect reference to format method; severity MODERATE) under PEP 440. Published intervals: >=0,<3.1.5. Respect the published fixed boundary and the exact package identity. Package metadata places this release beyond the repaired branch. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: record the resolved boundary in the dependency inventory before promotion."
+    },
+    {
+      "chosen": "Release-gate finding: the exact affected. The npm package entry for axios@1.7.0-beta.0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: keep each affected branch separate when the advisory publishes more than one interval for evidence review.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "Verify that the package metadata contains the exact target release before drawing a security conclusion. Package under review: npm:axios@1.7.0-beta.0. Advisory: GHSA-jr5f-v2jv-69x6 \u2014 axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL. Published interval text: >=1.0.0,<1.8.2; >=0,<0.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json"
+      },
+      "rejected": "Release-gate finding: the exact not affected. The npm package entry for axios@1.7.0-beta.0 is resolved against GHSA-jr5f-v2jv-69x6 (axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL; severity HIGH) under strict npm SemVer. Published intervals: >=1.0.0,<1.8.2; >=0,<0.30.0. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Package metadata places this release beyond the repaired stable line. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: recheck the resolved version whenever the lockfile changes."
+    },
+    {
+      "chosen": "Evidence check: the exact not affected. The PyPI package entry for jinja2@3.1.5 is resolved against GHSA-q2x7-8rv6-6q7h (Jinja has a sandbox breakout through indirect reference to format method; severity MODERATE) under PEP 440. Published intervals: >=0,<3.1.5. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the cited advisory summary and version range are the evidence anchor for this bounded finding.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "Distinguish an advisory applicability result from proof that a particular application is exploitable. Package under review: PyPI:jinja2@3.1.5. Advisory: GHSA-q2x7-8rv6-6q7h \u2014 Jinja has a sandbox breakout through indirect reference to format method. Published interval text: >=0,<3.1.5. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2024/12/GHSA-q2x7-8rv6-6q7h/GHSA-q2x7-8rv6-6q7h.json"
+      },
+      "rejected": "Evidence check: the exact affected. The PyPI package entry for jinja2@3.1.5 is resolved against GHSA-q2x7-8rv6-6q7h (Jinja has a sandbox breakout through indirect reference to format method; severity MODERATE) under PEP 440. Published intervals: >=0,<3.1.5. Respect the published fixed boundary and the exact package identity. Package metadata places this release in the affected set. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: carry the advisory identifier into the release review record."
+    },
+    {
+      "chosen": "Package review conclusion: the exact not affected. The PyPI package entry for pymongo@0.1pre is resolved against GHSA-98qm-wvgf-w4cf (MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element; severity HIGH) under PEP 440. Published intervals: >=3.9.0,<4.18.3. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: the safe action is limited to the exact package identity and published version semantics shown here for audit replay.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "Reproduce the decision from the public advisory, registry snapshot and package/version identity alone. Package under review: PyPI:pymongo@0.1pre. Advisory: GHSA-98qm-wvgf-w4cf \u2014 MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element. Published interval text: >=3.9.0,<4.18.3. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Apply the ecosystem's prerelease ordering rather than comparing version text lexically.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2026/10/GHSA-98qm-wvgf-w4cf/GHSA-98qm-wvgf-w4cf.json"
+      },
+      "rejected": "Package review conclusion: the exact affected. The PyPI package entry for pymongo@0.1pre is resolved against GHSA-98qm-wvgf-w4cf (MongoDB Python Driver: Out-of-bounds read in BSON decoding via a malformed Regex element; severity HIGH) under PEP 440. Published intervals: >=3.9.0,<4.18.3. Apply the ecosystem's prerelease ordering rather than comparing version text lexically. Package metadata places this release in the affected stable line. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: keep the package identity and ecosystem comparator together in the incident ticket."
+    },
+    {
+      "chosen": "Boundary analysis: the exact affected. The npm package entry for prismjs@1.29.0 is resolved against GHSA-x7hr-w5r2-h6wg (PrismJS DOM Clobbering vulnerability; severity MODERATE) under strict npm SemVer. Published intervals: >=0,<1.30.0. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: block or upgrade this dependency before release promotion; keep the evidence scoped to the published affected interval; do not infer runtime exploitability. Scope: package-version applicability. Audit note: preserve this boundary comparison with the source snapshot so another reviewer can replay it offline.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "Check the upgrade boundary and make the recommendation fail closed when the published range is unsupported. Package under review: npm:prismjs@1.29.0. Advisory: GHSA-x7hr-w5r2-h6wg \u2014 PrismJS DOM Clobbering vulnerability. Published interval text: >=0,<1.30.0. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-x7hr-w5r2-h6wg/GHSA-x7hr-w5r2-h6wg.json"
+      },
+      "rejected": "Boundary analysis: the exact not affected. The npm package entry for prismjs@1.29.0 is resolved against GHSA-x7hr-w5r2-h6wg (PrismJS DOM Clobbering vulnerability; severity MODERATE) under strict npm SemVer. Published intervals: >=0,<1.30.0. Respect the published fixed boundary and the exact package identity. Package metadata places this release beyond the repaired branch. Evidence context: the published interval text, package metadata and strict npm SemVer comparator are the basis for this bounded version review. Action: allow this dependency for this advisory; treat the published interval as outside the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: preserve the cited interval next to the dependency pin."
+    },
+    {
+      "chosen": "Maintainer handoff: the exact not affected. The PyPI package entry for setuptools@0.7.2 is resolved against GHSA-27x4-j476-jp5f (Setuptools vulnerable to Man-in-the-middle attacks; severity HIGH) under PEP 440. Published intervals: >=0,<0.7. Respect the published fixed boundary and the exact package identity. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: allow this dependency for this advisory while continuing routine checks; keep the evidence scoped to the published version comparison; do not infer runtime exploitability. Scope: package-version applicability. Audit note: record whether the release is before, inside or beyond each published endpoint for replay.",
+      "intent_id": "SECURITY_REVIEW_GENERAL",
+      "label_kind": "preference_pair",
+      "prompt": "State the evidence anchor, version semantics and safe next action in a form suitable for an automated review queue. Package under review: PyPI:setuptools@0.7.2. Advisory: GHSA-27x4-j476-jp5f \u2014 Setuptools vulnerable to Man-in-the-middle attacks. Published interval text: >=0,<0.7. Use the published advisory and package metadata. State whether this exact dependency is affected, include severity and a concrete evidence anchor, then recommend a safe next action. Do not infer exploitability from version applicability alone. Respect the published fixed boundary and the exact package identity.",
+      "provenance": {
+        "source_kind": "generated",
+        "source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2022/05/GHSA-27x4-j476-jp5f/GHSA-27x4-j476-jp5f.json"
+      },
+      "rejected": "Maintainer handoff: the exact affected. The PyPI package entry for setuptools@0.7.2 is resolved against GHSA-27x4-j476-jp5f (Setuptools vulnerable to Man-in-the-middle attacks; severity HIGH) under PEP 440. Published intervals: >=0,<0.7. Respect the published fixed boundary and the exact package identity. Package metadata places this release in the affected set. Evidence context: the published interval text, package metadata and PEP 440 comparator are the basis for this bounded version review. Action: block this dependency before release promotion; treat the published interval as covering the target; do not infer runtime exploitability. Scope: package-version applicability. Operational note: schedule the next dependency scan after the next package refresh."
+    }
+  ],
+  "upload_schema": {
+    "content_type": "application/x-ndjson",
+    "format": "JSON Lines, one exact object per line",
+    "intent_id": "SECURITY_REVIEW_GENERAL",
+    "label_kind": "preference_pair",
+    "provenance_class": "unverified_generated_with_public_source_url",
+    "rows_are_not_submitted": true
+  }
+}

@@ -6,6 +6,25 @@ response bodies, receipts, payment headers, private keys or hidden material.
 The judge can follow this sequence from the problem and visible outcomes; no
 knowledge of FALSUM's internal phase names is required.
 
+## The 60-second judge route
+
+If time is tight, show only these three screens:
+
+1. **The problem:** a public provider says “secure” or “likely vulnerable,”
+   but a verdict alone does not prove that the answer belongs to this exact
+   code target or contains a safe action.
+2. **The differentiator:** run `audit-public-answer-quality` and show one
+   structured response with exact code anchors and remediation accepted, then
+   one plausible free-text response held because its evidence/action boundary
+   is incomplete.
+3. **The proof boundary:** show the immutable provider blob hash, the 18/24
+   integrity result and the explicit “not human AppSec gold / not adoption /
+   no transaction” limits. Then point to the full holdout and ecosystem
+   semantic replay for judges who want the complete method.
+
+This route communicates FALSUM's advantage without requiring judges to know
+the internal phase names or trust a headline accuracy percentage.
+
 ## 0:00-0:20 - name the decision problem
 
 "FALSUM is Evaluator material for `SECURITY_REVIEW_GENERAL`. It prevents a
@@ -86,7 +105,17 @@ answer scoring. Highlight
 four prerelease cases. State that the audit performs zero live registry reads;
 the snapshot is evidence of captured package existence, not freshness.
 
-## 3:10-3:35 - demonstrate safety and failure handling
+## 3:10-3:35 - demonstrate public answer quality and failure handling
+
+```bash
+PYTHONPATH=src python -m falsum.cli audit-public-answer-quality \
+  --out /tmp/falsum-public-answer-quality.json
+```
+
+Show the actual public-provider answer contract: 18/24 source-bound checks,
+2/6 fully supported actions and 4/6 review holds. Explain that the complete
+structured cases are actionable, while incomplete free-text answers are held
+even when their verdict sounds plausible.
 
 Run the focused adversarial tests. Show that wrong target identity, changed
 source bytes, unsupported intervals, duplicate references, caller-supplied
@@ -97,11 +126,10 @@ suspended; no buyer, signer, payment, deposit or transaction is used.
 
 Show the final score page and say:
 
-> "The corrected strict internal Evaluators assessment is 96/100 under the
-> official 40/15/10/10/5/20 rubric, with 38/40 measurement validity and the
-> 28/40 technical minimum met. Four points remain withheld: two corrected
-> holdout disagreements and no independently verified repeat integration beyond
-> the existing external reviews. That gap is real, as are current
+> "The earlier internal readiness assessment was 96/100 under the official
+> Evaluators rubric. An independent judge-style audit assessed the entry at
+> 84/100, so this reopened sprint does not claim a replacement score yet. The
+> remaining gaps are real: independent adjudication and repeat integration,
 > owner-controlled submission actions and a final recording. FALSUM's claim is
 > deliberately narrow: source-authenticated, version-aware, fail-closed
 > evaluation material that a reviewer can reproduce for a new public input."

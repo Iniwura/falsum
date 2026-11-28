@@ -24,8 +24,9 @@
     {
       "official_example_intents": ["SECURITY_REVIEW", "VULNERABILITY_TRIAGE", "CODE_REVIEW", "SOCIAL_BOT_DETECTION"],
       "official_mission": "Model Economy",
+      "official_mission_issue": "https://github.com/telegraphprotocol/bounties/issues/198",
       "official_workflow": "GitHub supply-chain verification priced per commit",
-      "falsum_capability": "Exact package/version advisory-reference gating and response-integrity checks for a PR/dependency security result.",
+      "falsum_capability": "Exact package/version advisory-reference gating plus source-bound answer claims, remediation actions and uncertainty checks for a PR/dependency security result.",
       "independent_application_consumption_verified": false,
       "mission_completed": false,
       "repeatable_supporting_tests": [
@@ -43,13 +44,20 @@
           "command": "PYTHONPATH=src python -m falsum.cli audit-independent-balanced-holdout --out phase5bm.json",
           "evidence": "Phase 5BM hosted replay on a new pinned GitHub-reviewed advisory roster",
           "result": "Balanced 24-case workflow: FALSUM separates 12 applicable from 12 fixed boundaries, removes 12 citation-only false positives, and ties the independent interval baseline."
+        },
+        {
+          "command": "PYTHONPATH=src python -m falsum.cli audit-public-answer-quality --out answer-quality.json",
+          "evidence": "Phase 5BP public-provider answer/action audit",
+          "result": "Six actual public security-review responses are checked for target-bound evidence, complete claims, remediation and uncertainty: 18/24 integrity checks pass, 2/6 actions are fully supported and 4/6 are held for review."
         }
       ],
-      "workflow_status": "REPEATABLE_SUPPORTING_TEST"
+      "workflow_status": "REPEATABLE_SUPPORTING_TEST",
+      "contribution_record": "SUPPORTING_TEST_RECORDED_NOT_SUBMITTED"
     },
     {
       "official_example_intents": ["SMART_CONTRACT_AUDIT", "VULNERABILITY_TRIAGE", "SECURITY_REVIEW", "CODE_PATCH_VERIFY"],
       "official_mission": "Web3 Native and DeFi",
+      "official_mission_issue": "https://github.com/telegraphprotocol/bounties/issues/202",
       "official_workflow": "Machine-proved bug-bounty or smart-contract/dependency security review before capital or payout decisions",
       "falsum_capability": "Anchor/Rust advisory version boundaries plus original upstream regression execution, with fail-closed unsupported evidence.",
       "independent_application_consumption_verified": false,
@@ -66,7 +74,8 @@
           "result": "The pinned fixed revision passes its original tests and the affected revision produces the exact expected security-regression failure with controls preserved."
         }
       ],
-      "workflow_status": "REPEATABLE_SUPPORTING_TEST"
+      "workflow_status": "REPEATABLE_SUPPORTING_TEST",
+      "contribution_record": "SUPPORTING_TEST_RECORDED_NOT_SUBMITTED"
     }
   ],
   "schema_version": 1,

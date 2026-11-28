@@ -26,8 +26,8 @@ class TestRealEvidence(unittest.TestCase):
         self.assertEqual(version_status(r,'PyPI','jinja2','3.1.5'),'affected')
         self.assertEqual(version_status(r,'PyPI','jinja2','3.1.6'),'unaffected')
         self.assertEqual(version_status(r,'PyPI','jinja2','3.2.0'),'unaffected')
-        self.assertEqual(version_status(r,'PyPI','jinja2','3.1.6rc1'),'unknown')
-        self.assertEqual(version_status(r,'PyPI','jinja2','2.0'),'unknown')
+        self.assertEqual(version_status(r,'PyPI','jinja2','3.1.6rc1'),'affected')
+        self.assertEqual(version_status(r,'PyPI','jinja2','2.0'),'affected')
         self.assertEqual(version_status(r,'PyPI','jinja2','2.0.0'),'affected')
 
     def test_axios_version_boundary(self):
@@ -35,14 +35,22 @@ class TestRealEvidence(unittest.TestCase):
           'ranges':[{'type':'ECOSYSTEM','events':[{'introduced':'1.0.0'},{'fixed':'1.8.2'}]}]}]
         self.assertEqual(version_status(r,'npm','axios','1.8.1'),'affected')
         self.assertEqual(version_status(r,'npm','axios','1.8.2'),'unaffected')
-        self.assertEqual(version_status(r,'npm','axios','1.8.2-rc.1'),'unknown')
+        self.assertEqual(version_status(r,'npm','axios','1.8.2-rc.1'),'affected')
         self.assertEqual(version_status(r,'npm','axios','0.29.0'),'unaffected')  # mock only defines 1.x range
 
-    def test_ecosystem_cannot_safely_order_special_versions(self):
+    def test_ecosystem_rejects_malformed_special_versions_but_orders_valid_ones(self):
         r=jinja_record()
-        r['affected'][0]['ranges'][0]['events'][1]={'fixed':'3.1.6rc1'}
+        r['affected'][0]['ranges'][0]['events'][1]={'fixed':'3..1.6'}
         self.assertEqual(version_status(r,'PyPI','jinja2','3.1.6'),'unknown')
         self.assertEqual(version_status(r,'PyPI','jinja2','3.1.5'),'affected')  # enumerated positive
+
+    def test_pep440_epoch_post_and_local_versions_are_ordered(self):
+        r=jinja_record()
+        r['affected'][0]['ranges'][0]['events']=[{'introduced':'1!0rc1'}, {'fixed':'2!3.1'}]
+        self.assertEqual(version_status(r,'PyPI','jinja2','1!0rc1'),'affected')
+        self.assertEqual(version_status(r,'PyPI','jinja2','2!3.0.post1'),'affected')
+        self.assertEqual(version_status(r,'PyPI','jinja2','2!3.1'),'unaffected')
+        self.assertEqual(version_status(r,'PyPI','jinja2','2!3.0+local'),'affected')
 
     def test_non_ecosystem_package_unknown(self):
         r=jinja_record()

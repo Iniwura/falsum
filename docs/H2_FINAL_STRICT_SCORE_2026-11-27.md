@@ -5,6 +5,10 @@ This assessment uses the current Evaluators-specific rubric, not the Apps &
 Agents rubric. The official source and extracted criteria are recorded in
 [H2_EVALUATORS_RUBRIC_2026-11-27.md](H2_EVALUATORS_RUBRIC_2026-11-27.md).
 
+This is a historical internal readiness assessment. An independent judge-style
+audit later assessed the entry at 84/100; the reopened sprint does not replace
+that external assessment until a fresh rubric audit is completed.
+
 The earlier Phase 5BM 24/24 result is preserved as historical evidence only.
 Phase 5BN is the corrected certification basis: labels are independently
 resolved and frozen before FALSUM execution, the layout seed is not selected
@@ -24,7 +28,7 @@ is measured with a permutation test.
 | Organic growth, education, and developer activation | 20 | — |
 | **Total** | **100** | **70/100 overall published threshold** |
 
-## Corrected strict result: **96 / 100**
+## Historical corrected internal result: **96 / 100**
 
 The corrected 38/40 measurement result clears the 28/40 technical minimum. This
 is a readiness assessment, not evidence that the entry is first. Every awarded
@@ -98,10 +102,20 @@ competent baseline.
 The [corrected protocol](../data/phase5bn-corrected-independent-holdout-protocol.json)
 is separate from Phase 5BM and is the current measurement basis. It derives
 labels with the established external `packaging==26.4` and `semver@7.8.6`
-implementations, verifies the selected versions against pinned live PyPI or npm
-metadata, and completes that reference stage before any FALSUM call. The case
-order and answer-token assignment use one fixed label-blind seed; no seed search
-is performed against labels or candidate output.
+implementations and completes that reference stage before any FALSUM call. The
+protocol retains SHA-256 identities for the full PyPI/npm package metadata
+snapshots used at freeze time. Those registry endpoints are mutable: new
+releases can change the full metadata document without changing any selected
+case. Replay therefore verifies that every already-frozen version key remains
+present in the current registry metadata; it does not require the entire live
+document to retain its freeze-time digest and never selects a new version or
+changes a reference label. The immutable advisory blobs, exact selected
+versions, case order and answer-token assignment remain fixed. The committed
+result file is the original freeze-time report; hosted replay compares its
+cases, labels, decisions, leakage and answer-surface results while separately
+recording the current mutable-registry policy. The case order and answer-token
+assignment use one fixed label-blind seed; no seed search is performed against
+labels or candidate output.
 
 The [result](../data/phase5bn-corrected-independent-holdout-result.json) records
 24/24 external-resolver reference decisions and 22/24 FALSUM decisions. The
@@ -127,7 +141,7 @@ structured selections. The option prose is display-only, not natural-language
 answer scoring.
 
 The [final three-version hosted replay](https://github.com/Iniwura/falsum/actions/runs/45976774179)
-passed. The current internal score remains **96/100**. No points are added
+passed. The historical internal mapping remains **96/100**. No points are added
 merely for passing this regression gate; external validation, human
 adjudication and the two withheld growth points remain separate.
 

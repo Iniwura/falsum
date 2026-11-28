@@ -4,6 +4,11 @@
 organizer score and not a claim of first place. The optional Virtuals ACP
 integration is kept separate so it cannot delay a truthful Evaluators entry.
 
+The prior internal 96/100 assessment is historical. An independent
+judge-style audit assessed the then-current entry at 84/100, which is the
+current external challenge this sprint is addressing. No replacement score is
+awarded here until the rubric is re-audited against the new evidence.
+
 ## Official bar
 
 The current [Season II rules](https://hackathon.telegraphprotocol.com/rules)
@@ -114,10 +119,9 @@ categories. That was incorrect for this entry. The official client-rendered
 Evaluators rubric is recorded in the [rubric evidence note](H2_EVALUATORS_RUBRIC_2026-11-27.md):
 measurement validity/baseline 40 (minimum 28), integrity 15,
 reproducibility/protocol compatibility 10, useful coverage/improvement 10,
-documentation/integration 5, and growth 20. The corrected strict assessment is
-[96/100](H2_FINAL_STRICT_SCORE_2026-11-27.md), with 38/40 corrected
-measurement validity
-and the 28/40 technical minimum passed.
+documentation/integration 5, and growth 20. The [96/100](H2_FINAL_STRICT_SCORE_2026-11-27.md)
+is historical internal evidence mapping only; the latest independent judge-style
+audit remains 84/100, and this sprint does not award a replacement score.
 
 The [Phase 5BK matrix](../data/phase5bk-evaluator-mission-workflow-matrix.json)
 maps proven material to two official H2 workflows that explicitly name
@@ -172,6 +176,26 @@ shows 20 total / 20 Eligible rows for the operator-reported Privy address and
 0/0 for the distinct historical bounty address. Ownership, maintainer
 acceptance, and registration remain unverified.
 
+## Phase 5BP actual answer/action discrimination
+
+The [Phase 5BP protocol](../data/phase5bp-public-answer-quality-protocol.json)
+freezes six public PR Guard response blobs at commit
+[`99d2e3c93890a8fc083947bde4f21217516b7a5f`](https://github.com/anvithagowda098/pr-guard/tree/99d2e3c93890a8fc083947bde4f21217516b7a5f).
+The [implementation](../src/falsum/phase5bp_public_answer_quality.py) derives
+three narrow source-pattern facts from each requested code sample before
+parsing the provider answer, then evaluates actual rule claims, exact code
+anchors, remediation and uncertainty. It reports verdict-only and
+finding-presence controls beside that source-bound policy.
+
+The captured result passes 18/24 integrity checks, fully supports 2/6
+remediation actions and holds 4/6 responses for review. The structured
+responses are materially stronger than the free-text surfaces on this bounded
+quality contract, but the result is not human AppSec gold, a blind holdout,
+independent adoption, customer demand, ranking improvement or a score-point
+claim. The [adversarial tests](../tests/test_phase5bp_public_answer_quality.py)
+cover cross-target evidence, missing actions, clean-answer uncertainty and
+protocol freezing.
+
 ## Competitive conclusion
 
 FALSUM has a credible technical-material entry and a differentiated safety story:
@@ -210,8 +234,9 @@ and [Phase 5BK mapping workflow](https://github.com/Iniwura/falsum/actions/runs/
 Hosted action Node.js deprecation annotations are non-blocking; successful
 conclusions are the authoritative results.
 
-The 96/100 corrected result is an internal, evidence-mapped readiness assessment, not an
-organizer score. The largest remaining excellence-award risks are independent
+The historical 96/100 result is an internal, evidence-mapped readiness assessment,
+not an organizer score or replacement for the independent 84/100 audit. The
+largest remaining excellence-award risks are independent
 repeat integration or contribution beyond the existing reviews, a
 registered/usable evaluator contribution, and external
 adoption.

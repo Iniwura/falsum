@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5BP_PUBLIC_PROVIDER_ANSWER_QUALITY_FROZEN",
+  "repository": "anvithagowda098/pr-guard",
+  "commit": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+  "intent_family": "SECURITY_REVIEW",
+  "cases": [
+    {
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW/302-secreview-clean-200-paid.json",
+      "blob_sha1": "1d0ffb766535535e8d14c21923a8dd6c853fca3c"
+    },
+    {
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW/302-secreview-cmdinj-200-paid.json",
+      "blob_sha1": "7a6ffa87c9abf17de6e473f88bb5b2a62b15e2b9"
+    },
+    {
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW/302-secreview-eval-200-paid.json",
+      "blob_sha1": "093325541440c294f1191045d17b77b67558d448"
+    },
+    {
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW_GENERAL/5530-review-clean-diff-200-paid.json",
+      "blob_sha1": "64ad4608f10f0957ab3102e0ab2e6a597b00455d"
+    },
+    {
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW_GENERAL/5530-review-sqli-eval-diff-200-paid.json",
+      "blob_sha1": "97931d0c376b8bc590f9dab73e5e2c2b29fcac94"
+    },
+    {
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW_GENERAL/5530-review-two-file-diff-200-paid.json",
+      "blob_sha1": "57212bd3560c5e6a407924596a1ccfe27d6f40c7"
+    }
+  ],
+  "selection": {
+    "case_paths_frozen_before_answer_parsing": true,
+    "reference_rules_derived_from_request_code": true,
+    "answer_token_or_caller_classification_selects_result": false,
+    "raw_response_and_payment_fields_committed": false
+  },
+  "reference_policy": {
+    "source": "requested code in each authenticated public provider capture",
+    "rules": [
+      "sql-injection-risk when a query/execute call concatenates req.query or req.params",
+      "os-command-injection when exec concatenates req.* input",
+      "dynamic-code-execution when eval receives req.* input"
+    ],
+    "human_appsec_gold": false
+  }
+}

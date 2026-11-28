@@ -1,0 +1,41 @@
+{
+  "competitive_advantage": [
+    "Exact source, target, transport and response-identity binding.",
+    "PEP 440 and strict SemVer prerelease/disjoint-interval semantics with immutable replay.",
+    "Explicit hold/abstain behavior for malformed or unsupported evidence.",
+    "Actual answer-claim, evidence-anchor, remediation-action and uncertainty checks."
+  ],
+  "headline": "FALSUM binds security answers to exact source, target and action, then holds incomplete evidence.",
+  "limits": [
+    "No human AppSec gold, independent customer adoption, live evaluator registration or ranking change is claimed.",
+    "The public-provider oracle is narrow and source-derived, not a complete vulnerability adjudication.",
+    "ACP and financial execution remain suspended."
+  ],
+  "prepared_material": {
+    "candidate_pairs": 14,
+    "quality_gate_passed": true,
+    "submission_state": "OWNER_REVIEW_REQUIRED_NOT_SUBMITTED"
+  },
+  "schema_version": 1,
+  "sixty_second_route": [
+    {
+      "command": "PYTHONPATH=src python -m falsum.cli audit-public-answer-quality --out reviewer-answer-quality.json",
+      "result": "18/24 source-bound checks pass; 2/6 complete actions are supported and 4/6 are held.",
+      "step": 1,
+      "title": "Actual public-provider answers"
+    },
+    {
+      "command": "PYTHONPATH=src FALSUM_PHASE5BO_NODE_PATH=.phase5bo-node/node_modules python -m falsum.cli audit-ecosystem-semantics --out ecosystem.json",
+      "result": "14/14 candidate decisions and 14/14 structured claim/actions resolve against immutable snapshots.",
+      "step": 2,
+      "title": "Native version semantics"
+    },
+    {
+      "command": "PYTHONPATH=src python -m falsum.cli audit-evaluator-mission-matrix --out missions.json",
+      "result": "Two distinct official mission workflows have repeatable supporting tests; neither is presented as completed delivery or adoption.",
+      "step": 3,
+      "title": "Mission usefulness"
+    }
+  ],
+  "status": "FALSUM_UNIFIED_JUDGE_DEMO_SUMMARY"
+}

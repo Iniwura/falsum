@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "Evidence-grounded security review evaluation dataset quality gates"
 requires-python = ">=3.11"
 license = {text = "MIT"}
+dependencies = ["packaging>=26.4,<27"]
 
 [project.scripts]
 falsum = "falsum.cli:main"

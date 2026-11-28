@@ -2,6 +2,8 @@
 
 **No wallet · no API key · no Telegraph payment · no model download · no hidden evaluation prompts**
 
+For the fastest current route, start with the [five-minute public-provider review](INDEPENDENT_REVIEWER_5MIN.md). It authenticates six pinned responses and exercises FALSUM's source-bound claim, evidence, action and uncertainty checks before the longer historical replay below.
+
 This is a public, reproducible developer review task for [FALSUM](https://github.com/Iniwura/falsum), a **Telegraph Season II Evaluators hackathon entry** focused on source-grounded security-review evidence. It is not a promise of a payment, reward, credential, approved network evaluator or validated scoring improvement.
 
 ## What to test (seven public-source exercises with distinct provenance)

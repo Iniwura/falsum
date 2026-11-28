@@ -7,8 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PYTHONPATH: src
-      FALSUM_PHASE5BN_NODE_PATH: ${{ github.workspace }}/.phase5-node/node_modules
-      FALSUM_PHASE5BO_NODE_PATH: ${{ github.workspace }}/.phase5-node/node_modules
+      FALSUM_PHASE5BN_NODE_PATH: ${{ github.workspace }}/.phase5bn-node/node_modules
+      FALSUM_PHASE5BO_NODE_PATH: ${{ github.workspace }}/.phase5bo-node/node_modules
     strategy:
       matrix:
         python-version: ['3.11', '3.12', '3.13']
@@ -20,7 +20,10 @@ jobs:
       - name: Install exact version-semantic dependencies
         run: |
           python -m pip install --disable-pip-version-check --no-deps packaging==26.4
-          npm install --prefix .phase5-node --ignore-scripts --no-audit --no-fund semver@7.8.6
+          npm install --prefix "${{ github.workspace }}/.phase5bn-node" --ignore-scripts --no-audit --no-fund semver@7.8.6
+          npm install --prefix "${{ github.workspace }}/.phase5bo-node" --ignore-scripts --no-audit --no-fund semver@7.8.6
+          test "$(NODE_PATH="${{ github.workspace }}/.phase5bn-node/node_modules" node -p "require('semver/package.json').version")" = "7.8.6"
+          test "$(NODE_PATH="${{ github.workspace }}/.phase5bo-node/node_modules" node -p "require('semver/package.json').version")" = "7.8.6"
       - name: Check syntax
         run: python -m compileall -q src tests
       - name: Run offline evidence gates and tests

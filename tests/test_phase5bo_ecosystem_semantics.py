@@ -139,6 +139,29 @@ class EcosystemSemanticsTests(unittest.TestCase):
         self.assertEqual(m._candidate_status(advisory, "PyPI", "demo", "2.0"), m.UNKNOWN)
         self.assertEqual(m._pypi_reference_status(advisory, "demo", "0.5"), m.UNKNOWN)
 
+    def test_numeric_limit_and_late_malformed_events_fail_closed(self):
+        for events in (
+            [{"introduced": "0"}, {"limit": "1.0"}],
+            [{"introduced": "0"}, {"fixed": "1.0"}, {"unexpected": "2.0"}],
+        ):
+            advisory = pypi_advisory(events)
+            self.assertEqual(m._candidate_status(advisory, "PyPI", "demo", "0.5"), m.UNKNOWN)
+            self.assertEqual(m._pypi_reference_status(advisory, "demo", "0.5"), m.UNKNOWN)
+
+    def test_malformed_advisory_shape_fails_closed_without_crashing(self):
+        advisory = pypi_advisory([{ "introduced": "0" }, { "fixed": "1.0" }])
+        advisory["database_specific"] = []
+        self.assertEqual(m._candidate_status(advisory, "PyPI", "demo", "0.5"), m.UNKNOWN)
+        advisory = pypi_advisory([{ "introduced": "0" }, { "fixed": "1.0" }])
+        advisory["affected"].append("not-an-affected-row")
+        self.assertEqual(m._candidate_status(advisory, "PyPI", "demo", "0.5"), m.UNKNOWN)
+        self.assertEqual(m._pypi_reference_status(advisory, "demo", "0.5"), m.UNKNOWN)
+
+    def test_supported_unbounded_limit_is_not_confused_with_numeric_limit(self):
+        advisory = pypi_advisory([{ "introduced": "1.0" }, { "limit": "*" }])
+        self.assertEqual(m._candidate_status(advisory, "PyPI", "demo", "99.0"), m.APPLICABLE)
+        self.assertEqual(m._pypi_reference_status(advisory, "demo", "99.0"), m.APPLICABLE)
+
     def test_candidate_semantics_do_not_call_reference_resolver(self):
         advisory = pypi_advisory([{ "introduced": "0" }, {"fixed": "1.0"}])
         with patch.object(m, "_reference_status", side_effect=AssertionError("reference used by candidate")):

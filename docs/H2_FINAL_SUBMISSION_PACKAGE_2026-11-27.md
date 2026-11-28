@@ -15,7 +15,7 @@
   claimed.
 - Repository: <https://github.com/Iniwura/falsum>
 - Judge guide: [H2 final judge experience](H2_FINAL_JUDGE_EXPERIENCE_2026-11-27.md)
-- Strict Evaluators assessment: [96/100 corrected internal assessment under the correct rubric](H2_FINAL_STRICT_SCORE_2026-11-27.md)
+- Historical internal assessment: [96/100 under the correct rubric](H2_FINAL_STRICT_SCORE_2026-11-27.md); the latest independent judge-style audit remains 84/100, and this package does not recertify a replacement score.
 - Optional ACP integration: suspended, excluded from the final claim.
 
 ## Short public summary draft

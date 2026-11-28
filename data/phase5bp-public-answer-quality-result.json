@@ -1,0 +1,347 @@
+{
+  "aggregate": {
+    "cases": 6,
+    "falsum_block_or_remediate": 2,
+    "falsum_hold_for_review": 4,
+    "falsum_quality_checks_passed": 18,
+    "falsum_quality_checks_total": 24,
+    "finding_presence_actions": {
+      "CLEAN": 2,
+      "FLAG": 4
+    },
+    "free_text_surfaces": 3,
+    "structured_surfaces": 3,
+    "verdict_only_actions": {
+      "CLEAN": 1,
+      "FLAG": 2,
+      "HOLD": 3
+    }
+  },
+  "cases": [
+    {
+      "answer_claims": {
+        "claimed_rules": [],
+        "evidence_count": 0,
+        "exact_target_evidence_count": 0,
+        "finding_count": 0,
+        "recommendation_count": 0,
+        "surface": "free_text",
+        "target_code_sha256": "1c3e3973ccc9ee73e0565c48d47f89cddf79de85f46c3fe6530dc44bdf795d53",
+        "text_sha256": "d8e91f4950d6079a21d3509daee3ab58615beb6abdc733ce7791830e4710c9cc",
+        "uncertainty_present": false,
+        "verdict": null
+      },
+      "comparisons": {
+        "falsum_source_bound": {
+          "action": "HOLD_FOR_REVIEW",
+          "checks": {
+            "action_or_uncertainty_complete": false,
+            "reference_rule_coverage": true,
+            "scope_boundary_present": false,
+            "target_bound_evidence": false
+          },
+          "quality_checks": 1,
+          "quality_denominator": 4
+        },
+        "finding_presence_only": {
+          "action": "CLEAN",
+          "quality_checks": 0
+        },
+        "verdict_only": {
+          "action": "CLEAN",
+          "quality_checks": 0
+        }
+      },
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW/302-secreview-clean-200-paid.json",
+      "provider_blob_sha1": "1d0ffb766535535e8d14c21923a8dd6c853fca3c",
+      "provider_capture": {
+        "paid_http200_structure_verified": true,
+        "payment_or_receipt_published": false,
+        "raw_response_published": false
+      },
+      "reference": {
+        "provenance": "source-derived narrow static pattern oracle; not human AppSec gold",
+        "rules": []
+      },
+      "target_code_sha256": "1c3e3973ccc9ee73e0565c48d47f89cddf79de85f46c3fe6530dc44bdf795d53"
+    },
+    {
+      "answer_claims": {
+        "claimed_rules": [
+          "os-command-injection"
+        ],
+        "evidence_count": 1,
+        "exact_target_evidence_count": 1,
+        "finding_count": 0,
+        "recommendation_count": 0,
+        "surface": "free_text",
+        "target_code_sha256": "b87fb8699d8f800ebfcd5b60878c402027eff5d8acb5651b60ab1e6789138eb2",
+        "text_sha256": "ed1a7cbd675602892d1e7d0bfb0dcac710790b606c129113b23a3f2b6d6027df",
+        "uncertainty_present": false,
+        "verdict": null
+      },
+      "comparisons": {
+        "falsum_source_bound": {
+          "action": "HOLD_FOR_REVIEW",
+          "checks": {
+            "action_or_uncertainty_complete": false,
+            "reference_rule_coverage": true,
+            "scope_boundary_present": false,
+            "target_bound_evidence": true
+          },
+          "quality_checks": 2,
+          "quality_denominator": 4
+        },
+        "finding_presence_only": {
+          "action": "FLAG",
+          "quality_checks": 0
+        },
+        "verdict_only": {
+          "action": "FLAG",
+          "quality_checks": 0
+        }
+      },
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW/302-secreview-cmdinj-200-paid.json",
+      "provider_blob_sha1": "7a6ffa87c9abf17de6e473f88bb5b2a62b15e2b9",
+      "provider_capture": {
+        "paid_http200_structure_verified": true,
+        "payment_or_receipt_published": false,
+        "raw_response_published": false
+      },
+      "reference": {
+        "provenance": "source-derived narrow static pattern oracle; not human AppSec gold",
+        "rules": [
+          "os-command-injection"
+        ]
+      },
+      "target_code_sha256": "b87fb8699d8f800ebfcd5b60878c402027eff5d8acb5651b60ab1e6789138eb2"
+    },
+    {
+      "answer_claims": {
+        "claimed_rules": [
+          "dynamic-code-execution"
+        ],
+        "evidence_count": 1,
+        "exact_target_evidence_count": 1,
+        "finding_count": 0,
+        "recommendation_count": 1,
+        "surface": "free_text",
+        "target_code_sha256": "11ea65d52c4a37af49041cd6c4153123aff2bad76de41b6c1f1459b82a21a83e",
+        "text_sha256": "7de4f814d7f62c1842848097f65633ab1cf405416a83fc14565fbf38ee6531fa",
+        "uncertainty_present": false,
+        "verdict": null
+      },
+      "comparisons": {
+        "falsum_source_bound": {
+          "action": "HOLD_FOR_REVIEW",
+          "checks": {
+            "action_or_uncertainty_complete": true,
+            "reference_rule_coverage": true,
+            "scope_boundary_present": false,
+            "target_bound_evidence": true
+          },
+          "quality_checks": 3,
+          "quality_denominator": 4
+        },
+        "finding_presence_only": {
+          "action": "FLAG",
+          "quality_checks": 0
+        },
+        "verdict_only": {
+          "action": "FLAG",
+          "quality_checks": 0
+        }
+      },
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW/302-secreview-eval-200-paid.json",
+      "provider_blob_sha1": "093325541440c294f1191045d17b77b67558d448",
+      "provider_capture": {
+        "paid_http200_structure_verified": true,
+        "payment_or_receipt_published": false,
+        "raw_response_published": false
+      },
+      "reference": {
+        "provenance": "source-derived narrow static pattern oracle; not human AppSec gold",
+        "rules": [
+          "dynamic-code-execution"
+        ]
+      },
+      "target_code_sha256": "11ea65d52c4a37af49041cd6c4153123aff2bad76de41b6c1f1459b82a21a83e"
+    },
+    {
+      "answer_claims": {
+        "claimed_rules": [],
+        "evidence_count": 0,
+        "exact_target_evidence_count": 0,
+        "finding_count": 0,
+        "recommendation_count": 0,
+        "surface": "structured",
+        "target_code_sha256": "71d6db76818529858a063ea087f7db92491442679c5da44752ba43a8b079f7c1",
+        "text_sha256": "2a21195998e85eceea627c54db94c999fe6e143c7539328a4abff3f8381cfaed",
+        "uncertainty_present": true,
+        "verdict": "uncertain"
+      },
+      "comparisons": {
+        "falsum_source_bound": {
+          "action": "HOLD_FOR_REVIEW",
+          "checks": {
+            "action_or_uncertainty_complete": true,
+            "reference_rule_coverage": true,
+            "scope_boundary_present": true,
+            "target_bound_evidence": true
+          },
+          "quality_checks": 4,
+          "quality_denominator": 4
+        },
+        "finding_presence_only": {
+          "action": "CLEAN",
+          "quality_checks": 0
+        },
+        "verdict_only": {
+          "action": "HOLD",
+          "quality_checks": 0
+        }
+      },
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW_GENERAL/5530-review-clean-diff-200-paid.json",
+      "provider_blob_sha1": "64ad4608f10f0957ab3102e0ab2e6a597b00455d",
+      "provider_capture": {
+        "paid_http200_structure_verified": true,
+        "payment_or_receipt_published": false,
+        "raw_response_published": false
+      },
+      "reference": {
+        "provenance": "source-derived narrow static pattern oracle; not human AppSec gold",
+        "rules": []
+      },
+      "target_code_sha256": "71d6db76818529858a063ea087f7db92491442679c5da44752ba43a8b079f7c1"
+    },
+    {
+      "answer_claims": {
+        "claimed_rules": [
+          "dynamic-code-execution",
+          "sql-injection-risk"
+        ],
+        "evidence_count": 2,
+        "exact_target_evidence_count": 2,
+        "finding_count": 2,
+        "recommendation_count": 2,
+        "surface": "structured",
+        "target_code_sha256": "747a47859ab5d4da31536d795524242bda6cee4da4e3a49caba0e07a849fb359",
+        "text_sha256": "2433fbb95299237dc08120b4980d6d31519d524240e5baf98993f6b9f5dde142",
+        "uncertainty_present": true,
+        "verdict": "likely"
+      },
+      "comparisons": {
+        "falsum_source_bound": {
+          "action": "BLOCK_OR_REMEDIATE",
+          "checks": {
+            "action_or_uncertainty_complete": true,
+            "reference_rule_coverage": true,
+            "scope_boundary_present": true,
+            "target_bound_evidence": true
+          },
+          "quality_checks": 4,
+          "quality_denominator": 4
+        },
+        "finding_presence_only": {
+          "action": "FLAG",
+          "quality_checks": 0
+        },
+        "verdict_only": {
+          "action": "HOLD",
+          "quality_checks": 0
+        }
+      },
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW_GENERAL/5530-review-sqli-eval-diff-200-paid.json",
+      "provider_blob_sha1": "97931d0c376b8bc590f9dab73e5e2c2b29fcac94",
+      "provider_capture": {
+        "paid_http200_structure_verified": true,
+        "payment_or_receipt_published": false,
+        "raw_response_published": false
+      },
+      "reference": {
+        "provenance": "source-derived narrow static pattern oracle; not human AppSec gold",
+        "rules": [
+          "dynamic-code-execution",
+          "sql-injection-risk"
+        ]
+      },
+      "target_code_sha256": "747a47859ab5d4da31536d795524242bda6cee4da4e3a49caba0e07a849fb359"
+    },
+    {
+      "answer_claims": {
+        "claimed_rules": [
+          "dynamic-code-execution",
+          "sql-injection-risk"
+        ],
+        "evidence_count": 2,
+        "exact_target_evidence_count": 2,
+        "finding_count": 2,
+        "recommendation_count": 2,
+        "surface": "structured",
+        "target_code_sha256": "1621c9a38659053a97c4dffaa7367fe8b17e2d16eeded079f4d9cbaf3daeab48",
+        "text_sha256": "8c907019e211c329cdcfa24cd29eea8d9b737966e0a17d25bf9695ab62deb2dc",
+        "uncertainty_present": true,
+        "verdict": "likely"
+      },
+      "comparisons": {
+        "falsum_source_bound": {
+          "action": "BLOCK_OR_REMEDIATE",
+          "checks": {
+            "action_or_uncertainty_complete": true,
+            "reference_rule_coverage": true,
+            "scope_boundary_present": true,
+            "target_bound_evidence": true
+          },
+          "quality_checks": 4,
+          "quality_denominator": 4
+        },
+        "finding_presence_only": {
+          "action": "FLAG",
+          "quality_checks": 0
+        },
+        "verdict_only": {
+          "action": "HOLD",
+          "quality_checks": 0
+        }
+      },
+      "path": "test/fixtures/miner-responses/SECURITY_REVIEW_GENERAL/5530-review-two-file-diff-200-paid.json",
+      "provider_blob_sha1": "57212bd3560c5e6a407924596a1ccfe27d6f40c7",
+      "provider_capture": {
+        "paid_http200_structure_verified": true,
+        "payment_or_receipt_published": false,
+        "raw_response_published": false
+      },
+      "reference": {
+        "provenance": "source-derived narrow static pattern oracle; not human AppSec gold",
+        "rules": [
+          "dynamic-code-execution",
+          "sql-injection-risk"
+        ]
+      },
+      "target_code_sha256": "1621c9a38659053a97c4dffaa7367fe8b17e2d16eeded079f4d9cbaf3daeab48"
+    }
+  ],
+  "interpretation": {
+    "human_appsec_gold": false,
+    "independent_adoption": false,
+    "measurement_improvement_claimed": false,
+    "ranking_improvement": false,
+    "summary": "FALSUM evaluates actual public-provider claims and remediation/uncertainty actions with source-bound checks. The controls report verdict and finding presence without those integrity checks. This is a bounded static-pattern quality audit, not human security truth."
+  },
+  "limits": [
+    "The provider responses are public archived captures, not a sealed blind holdout.",
+    "The three-rule reference oracle is source-derived and narrow; it is not independent human AppSec adjudication or complete vulnerability analysis.",
+    "Paid/HTTP-200 fields are structural evidence only; settlement and customer adoption are not inferred.",
+    "No current registry, live Telegraph request, ACP execution or financial transaction is performed."
+  ],
+  "protocol": {
+    "path": "data/phase5bp-public-answer-quality-protocol.json",
+    "status": "PHASE5BP_PUBLIC_PROVIDER_ANSWER_QUALITY_FROZEN"
+  },
+  "provider_source": {
+    "commit": "99d2e3c93890a8fc083947bde4f21217516b7a5f",
+    "repository": "anvithagowda098/pr-guard"
+  },
+  "schema_version": 1,
+  "status": "PHASE5BP_PUBLIC_PROVIDER_ANSWER_QUALITY_AUDIT"
+}

@@ -1,0 +1,693 @@
+{
+  "candidate_pair_count": 14,
+  "deduplication_passed": true,
+  "historical_material_intent": "SECURITY_REVIEW_GENERAL",
+  "human_adjudication": false,
+  "intent": "SECURITY_REVIEW",
+  "limits": [
+    "These are source-backed candidate pairs, not accepted Anjoman material or maintainer-approved labels.",
+    "The preference contrast is a deterministic version-applicability pair and is not human AppSec gold.",
+    "No row is uploaded, signed, paid, or presented as independent adoption."
+  ],
+  "network_eligibility": false,
+  "protocol": "data/phase5bo-ecosystem-semantics-protocol.json",
+  "quality_gate_passed": true,
+  "rows": [
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:axios@0.30.0 is outside the published affected interval for GHSA-jr5f-v2jv-69x6. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for npm:axios@0.30.0, does advisory ghsa-jr5f-v2jv-69x6 apply according to the published version evidence?",
+      "pair_id": "c86eb6faa8c7044b1670",
+      "provenance": {
+        "advisory_id": "GHSA-jr5f-v2jv-69x6",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-jr5f-v2jv-69x6.json",
+        "advisory_source_sha256": "77f0eb6ad0808358a56ba849f5cdbb4b9c0fd6313e976bc30f3923aeb4695167",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json",
+        "ecosystem": "npm",
+        "package": "axios",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-axios.json",
+        "registry_source_sha256": "d7c2a6c327fcb47737907ba0564cd99092a95aba229811e24351618e1c48ecbf",
+        "registry_source_url": "https://registry.npmjs.org/axios",
+        "version": "0.30.0"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For npm:axios@0.30.0, does advisory GHSA-jr5f-v2jv-69x6 apply according to the published version evidence?",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:axios@0.30.0 falls inside the published affected interval for GHSA-jr5f-v2jv-69x6. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "PyPI:pymongo@3.9.0 falls inside the published affected interval for GHSA-98qm-wvgf-w4cf. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for pypi:pymongo@3.9.0, does advisory ghsa-98qm-wvgf-w4cf apply according to the published version evidence?",
+      "pair_id": "dc254bd850c3b7efb143",
+      "provenance": {
+        "advisory_id": "GHSA-98qm-wvgf-w4cf",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-98qm-wvgf-w4cf.json",
+        "advisory_source_sha256": "dd5b7faa0344602f119a22536f7a2c31cd2da4b998529e4ea550cc868d60fa17",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2026/10/GHSA-98qm-wvgf-w4cf/GHSA-98qm-wvgf-w4cf.json",
+        "ecosystem": "PyPI",
+        "package": "pymongo",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/PyPI-pymongo.json",
+        "registry_source_sha256": "ab55e013cdd091ea190ceae52458eebc2109488545a57155fd333a58d6c568c9",
+        "registry_source_url": "https://pypi.org/pypi/pymongo/json",
+        "version": "3.9.0"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For PyPI:pymongo@3.9.0, does advisory GHSA-98qm-wvgf-w4cf apply according to the published version evidence?",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "PyPI:pymongo@3.9.0 is outside the published affected interval for GHSA-98qm-wvgf-w4cf. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:shescape@2.1.2 is outside the published affected interval for GHSA-66pp-5p9w-q87j. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for npm:shescape@2.1.2, does advisory ghsa-66pp-5p9w-q87j apply according to the published version evidence?",
+      "pair_id": "21c28dd0f2a4cccbaea9",
+      "provenance": {
+        "advisory_id": "GHSA-66pp-5p9w-q87j",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-66pp-5p9w-q87j.json",
+        "advisory_source_sha256": "06939765dd2bd9f20c54ef8c14881f8ff81723640c554daf4a8153514e8f574f",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-66pp-5p9w-q87j/GHSA-66pp-5p9w-q87j.json",
+        "ecosystem": "npm",
+        "package": "shescape",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-shescape.json",
+        "registry_source_sha256": "00d4353e52ec376c1c471ec0078ddf1726390cd1a229a979f7b1b649166fe6ee",
+        "registry_source_url": "https://registry.npmjs.org/shescape",
+        "version": "2.1.2"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For npm:shescape@2.1.2, does advisory GHSA-66pp-5p9w-q87j apply according to the published version evidence?",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:shescape@2.1.2 falls inside the published affected interval for GHSA-66pp-5p9w-q87j. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:shescape@2.0.0-rc1 falls inside the published affected interval for GHSA-66pp-5p9w-q87j. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for npm:shescape@2.0.0-rc1, does advisory ghsa-66pp-5p9w-q87j apply according to the published version evidence?",
+      "pair_id": "7063b90a866daa6a71b5",
+      "provenance": {
+        "advisory_id": "GHSA-66pp-5p9w-q87j",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-66pp-5p9w-q87j.json",
+        "advisory_source_sha256": "06939765dd2bd9f20c54ef8c14881f8ff81723640c554daf4a8153514e8f574f",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-66pp-5p9w-q87j/GHSA-66pp-5p9w-q87j.json",
+        "ecosystem": "npm",
+        "package": "shescape",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-shescape.json",
+        "registry_source_sha256": "00d4353e52ec376c1c471ec0078ddf1726390cd1a229a979f7b1b649166fe6ee",
+        "registry_source_url": "https://registry.npmjs.org/shescape",
+        "version": "2.0.0-rc1"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For npm:shescape@2.0.0-rc1, does advisory GHSA-66pp-5p9w-q87j apply according to the published version evidence?",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:shescape@2.0.0-rc1 is outside the published affected interval for GHSA-66pp-5p9w-q87j. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:axios@0.20.0-0 falls inside the published affected interval for GHSA-jr5f-v2jv-69x6. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for npm:axios@0.20.0-0, does advisory ghsa-jr5f-v2jv-69x6 apply according to the published version evidence?",
+      "pair_id": "e6a094f65618f89290b8",
+      "provenance": {
+        "advisory_id": "GHSA-jr5f-v2jv-69x6",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-jr5f-v2jv-69x6.json",
+        "advisory_source_sha256": "77f0eb6ad0808358a56ba849f5cdbb4b9c0fd6313e976bc30f3923aeb4695167",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json",
+        "ecosystem": "npm",
+        "package": "axios",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-axios.json",
+        "registry_source_sha256": "d7c2a6c327fcb47737907ba0564cd99092a95aba229811e24351618e1c48ecbf",
+        "registry_source_url": "https://registry.npmjs.org/axios",
+        "version": "0.20.0-0"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For npm:axios@0.20.0-0, does advisory GHSA-jr5f-v2jv-69x6 apply according to the published version evidence?",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:axios@0.20.0-0 is outside the published affected interval for GHSA-jr5f-v2jv-69x6. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "PyPI:setuptools@0.6c11 falls inside the published affected interval for GHSA-27x4-j476-jp5f. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for pypi:setuptools@0.6c11, does advisory ghsa-27x4-j476-jp5f apply according to the published version evidence?",
+      "pair_id": "d9f61a263500838b3afa",
+      "provenance": {
+        "advisory_id": "GHSA-27x4-j476-jp5f",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-27x4-j476-jp5f.json",
+        "advisory_source_sha256": "751cba3a453eb1f60729a51d7ba0d8aaa27c09195c3994f81185763d4e2f0632",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2022/05/GHSA-27x4-j476-jp5f/GHSA-27x4-j476-jp5f.json",
+        "ecosystem": "PyPI",
+        "package": "setuptools",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/PyPI-setuptools.json",
+        "registry_source_sha256": "1b84d1a1e6d5469d9ac64f06e612b57d2d049b73df26f46e29771eaf34ed7006",
+        "registry_source_url": "https://pypi.org/pypi/setuptools/json",
+        "version": "0.6c11"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For PyPI:setuptools@0.6c11, does advisory GHSA-27x4-j476-jp5f apply according to the published version evidence?",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "PyPI:setuptools@0.6c11 is outside the published affected interval for GHSA-27x4-j476-jp5f. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:axios@1.8.2 is outside the published affected interval for GHSA-jr5f-v2jv-69x6. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for npm:axios@1.8.2, does advisory ghsa-jr5f-v2jv-69x6 apply according to the published version evidence?",
+      "pair_id": "6bff4e43018f9733455f",
+      "provenance": {
+        "advisory_id": "GHSA-jr5f-v2jv-69x6",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-jr5f-v2jv-69x6.json",
+        "advisory_source_sha256": "77f0eb6ad0808358a56ba849f5cdbb4b9c0fd6313e976bc30f3923aeb4695167",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json",
+        "ecosystem": "npm",
+        "package": "axios",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-axios.json",
+        "registry_source_sha256": "d7c2a6c327fcb47737907ba0564cd99092a95aba229811e24351618e1c48ecbf",
+        "registry_source_url": "https://registry.npmjs.org/axios",
+        "version": "1.8.2"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For npm:axios@1.8.2, does advisory GHSA-jr5f-v2jv-69x6 apply according to the published version evidence?",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:axios@1.8.2 falls inside the published affected interval for GHSA-jr5f-v2jv-69x6. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:prismjs@1.30.0 is outside the published affected interval for GHSA-x7hr-w5r2-h6wg. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for npm:prismjs@1.30.0, does advisory ghsa-x7hr-w5r2-h6wg apply according to the published version evidence?",
+      "pair_id": "0c43a5aeb156c90cf944",
+      "provenance": {
+        "advisory_id": "GHSA-x7hr-w5r2-h6wg",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-x7hr-w5r2-h6wg.json",
+        "advisory_source_sha256": "699d9185c35e4e3d12de840336564e08e10f38838d245509e7c7472c3c62d779",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-x7hr-w5r2-h6wg/GHSA-x7hr-w5r2-h6wg.json",
+        "ecosystem": "npm",
+        "package": "prismjs",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-prismjs.json",
+        "registry_source_sha256": "e15fb4e1b256503d5676239597b8a355619bf96e90a913e2eb0ba97354e399d9",
+        "registry_source_url": "https://registry.npmjs.org/prismjs",
+        "version": "1.30.0"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For npm:prismjs@1.30.0, does advisory GHSA-x7hr-w5r2-h6wg apply according to the published version evidence?",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:prismjs@1.30.0 falls inside the published affected interval for GHSA-x7hr-w5r2-h6wg. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "PyPI:jinja2@3.1.4 falls inside the published affected interval for GHSA-q2x7-8rv6-6q7h. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for pypi:jinja2@3.1.4, does advisory ghsa-q2x7-8rv6-6q7h apply according to the published version evidence?",
+      "pair_id": "5c91454eb531519e3b9a",
+      "provenance": {
+        "advisory_id": "GHSA-q2x7-8rv6-6q7h",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-q2x7-8rv6-6q7h.json",
+        "advisory_source_sha256": "53289d88385a37dbbc878e46d5fd3ea5749e82b9f5581da5f69b0019c0361807",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2024/12/GHSA-q2x7-8rv6-6q7h/GHSA-q2x7-8rv6-6q7h.json",
+        "ecosystem": "PyPI",
+        "package": "jinja2",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/PyPI-jinja2.json",
+        "registry_source_sha256": "f944a0ab4808f42bd0523158b2a78d2638eee650f664ccd9a9a3d6630a298bd4",
+        "registry_source_url": "https://pypi.org/pypi/Jinja2/json",
+        "version": "3.1.4"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For PyPI:jinja2@3.1.4, does advisory GHSA-q2x7-8rv6-6q7h apply according to the published version evidence?",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "PyPI:jinja2@3.1.4 is outside the published affected interval for GHSA-q2x7-8rv6-6q7h. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:axios@1.7.0-beta.0 falls inside the published affected interval for GHSA-jr5f-v2jv-69x6. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for npm:axios@1.7.0-beta.0, does advisory ghsa-jr5f-v2jv-69x6 apply according to the published version evidence?",
+      "pair_id": "a9a34ce542bf483330a5",
+      "provenance": {
+        "advisory_id": "GHSA-jr5f-v2jv-69x6",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-jr5f-v2jv-69x6.json",
+        "advisory_source_sha256": "77f0eb6ad0808358a56ba849f5cdbb4b9c0fd6313e976bc30f3923aeb4695167",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-jr5f-v2jv-69x6/GHSA-jr5f-v2jv-69x6.json",
+        "ecosystem": "npm",
+        "package": "axios",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-axios.json",
+        "registry_source_sha256": "d7c2a6c327fcb47737907ba0564cd99092a95aba229811e24351618e1c48ecbf",
+        "registry_source_url": "https://registry.npmjs.org/axios",
+        "version": "1.7.0-beta.0"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For npm:axios@1.7.0-beta.0, does advisory GHSA-jr5f-v2jv-69x6 apply according to the published version evidence?",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:axios@1.7.0-beta.0 is outside the published affected interval for GHSA-jr5f-v2jv-69x6. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "PyPI:jinja2@3.1.5 is outside the published affected interval for GHSA-q2x7-8rv6-6q7h. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for pypi:jinja2@3.1.5, does advisory ghsa-q2x7-8rv6-6q7h apply according to the published version evidence?",
+      "pair_id": "12554056ea1d90aff52a",
+      "provenance": {
+        "advisory_id": "GHSA-q2x7-8rv6-6q7h",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-q2x7-8rv6-6q7h.json",
+        "advisory_source_sha256": "53289d88385a37dbbc878e46d5fd3ea5749e82b9f5581da5f69b0019c0361807",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2024/12/GHSA-q2x7-8rv6-6q7h/GHSA-q2x7-8rv6-6q7h.json",
+        "ecosystem": "PyPI",
+        "package": "jinja2",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/PyPI-jinja2.json",
+        "registry_source_sha256": "f944a0ab4808f42bd0523158b2a78d2638eee650f664ccd9a9a3d6630a298bd4",
+        "registry_source_url": "https://pypi.org/pypi/Jinja2/json",
+        "version": "3.1.5"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For PyPI:jinja2@3.1.5, does advisory GHSA-q2x7-8rv6-6q7h apply according to the published version evidence?",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "PyPI:jinja2@3.1.5 falls inside the published affected interval for GHSA-q2x7-8rv6-6q7h. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "PyPI:pymongo@0.1pre is outside the published affected interval for GHSA-98qm-wvgf-w4cf. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for pypi:pymongo@0.1pre, does advisory ghsa-98qm-wvgf-w4cf apply according to the published version evidence?",
+      "pair_id": "b022fd520cc082790a23",
+      "provenance": {
+        "advisory_id": "GHSA-98qm-wvgf-w4cf",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-98qm-wvgf-w4cf.json",
+        "advisory_source_sha256": "dd5b7faa0344602f119a22536f7a2c31cd2da4b998529e4ea550cc868d60fa17",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2026/10/GHSA-98qm-wvgf-w4cf/GHSA-98qm-wvgf-w4cf.json",
+        "ecosystem": "PyPI",
+        "package": "pymongo",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/PyPI-pymongo.json",
+        "registry_source_sha256": "ab55e013cdd091ea190ceae52458eebc2109488545a57155fd333a58d6c568c9",
+        "registry_source_url": "https://pypi.org/pypi/pymongo/json",
+        "version": "0.1pre"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For PyPI:pymongo@0.1pre, does advisory GHSA-98qm-wvgf-w4cf apply according to the published version evidence?",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "PyPI:pymongo@0.1pre falls inside the published affected interval for GHSA-98qm-wvgf-w4cf. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:prismjs@1.29.0 falls inside the published affected interval for GHSA-x7hr-w5r2-h6wg. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for npm:prismjs@1.29.0, does advisory ghsa-x7hr-w5r2-h6wg apply according to the published version evidence?",
+      "pair_id": "9697c302b3873316261f",
+      "provenance": {
+        "advisory_id": "GHSA-x7hr-w5r2-h6wg",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-x7hr-w5r2-h6wg.json",
+        "advisory_source_sha256": "699d9185c35e4e3d12de840336564e08e10f38838d245509e7c7472c3c62d779",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2025/03/GHSA-x7hr-w5r2-h6wg/GHSA-x7hr-w5r2-h6wg.json",
+        "ecosystem": "npm",
+        "package": "prismjs",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/npm-prismjs.json",
+        "registry_source_sha256": "e15fb4e1b256503d5676239597b8a355619bf96e90a913e2eb0ba97354e399d9",
+        "registry_source_url": "https://registry.npmjs.org/prismjs",
+        "version": "1.29.0"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For npm:prismjs@1.29.0, does advisory GHSA-x7hr-w5r2-h6wg apply according to the published version evidence?",
+      "reference_label": "APPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "npm:prismjs@1.29.0 is outside the published affected interval for GHSA-x7hr-w5r2-h6wg. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      }
+    },
+    {
+      "better_answer": {
+        "action": "NO_ACTION_FOR_THIS_ADVISORY",
+        "decision": "INAPPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "PyPI:setuptools@0.7.2 is outside the published affected interval for GHSA-27x4-j476-jp5f. Take no action for this advisory alone, while checking other advisories and application-specific evidence; this is a version-applicability claim and does not establish exploitability."
+      },
+      "deduplication": {
+        "normalization": "casefold and collapse whitespace",
+        "unique_pair_fingerprint_in_packet": true,
+        "unique_question_in_packet": true
+      },
+      "human_adjudicated": false,
+      "network_eligible": false,
+      "normalized_question": "for pypi:setuptools@0.7.2, does advisory ghsa-27x4-j476-jp5f apply according to the published version evidence?",
+      "pair_id": "2c18cefd202bb5bea6a5",
+      "provenance": {
+        "advisory_id": "GHSA-27x4-j476-jp5f",
+        "advisory_snapshot": "data/phase5bo-registry-snapshots/advisories/GHSA-27x4-j476-jp5f.json",
+        "advisory_source_sha256": "751cba3a453eb1f60729a51d7ba0d8aaa27c09195c3994f81185763d4e2f0632",
+        "advisory_source_url": "https://raw.githubusercontent.com/github/advisory-database/76955defc62d048f8f7cc68bc39a2f6dd1899ebe/advisories/github-reviewed/2022/05/GHSA-27x4-j476-jp5f/GHSA-27x4-j476-jp5f.json",
+        "ecosystem": "PyPI",
+        "package": "setuptools",
+        "registry_snapshot": "data/phase5bo-registry-snapshots/registry/PyPI-setuptools.json",
+        "registry_source_sha256": "1b84d1a1e6d5469d9ac64f06e612b57d2d049b73df26f46e29771eaf34ed7006",
+        "registry_source_url": "https://pypi.org/pypi/setuptools/json",
+        "version": "0.7.2"
+      },
+      "quality_checks": {
+        "advisory_identity_verified": true,
+        "advisory_source_pinned": true,
+        "better_and_worse_are_distinct": true,
+        "both_answers_are_scope_limited": true,
+        "reference_label_reproduced": true,
+        "registry_source_pinned": true,
+        "scope_disclaims_exploitability": true,
+        "version_exists_in_immutable_registry_snapshot": true
+      },
+      "question": "For PyPI:setuptools@0.7.2, does advisory GHSA-27x4-j476-jp5f apply according to the published version evidence?",
+      "reference_label": "INAPPLICABLE",
+      "submission_state": "CANDIDATE_NOT_SUBMITTED",
+      "worse_answer": {
+        "action": "BLOCK_OR_UPGRADE",
+        "decision": "APPLICABLE",
+        "scope": "version_applicability_only",
+        "text": "PyPI:setuptools@0.7.2 falls inside the published affected interval for GHSA-27x4-j476-jp5f. Block or upgrade for this advisory, while limiting the claim to version applicability rather than exploitability."
+      }
+    }
+  ],
+  "schema_version": 1,
+  "source_policy": "Pinned GitHub-reviewed advisory and immutable package-registry snapshots only",
+  "status": "PHASE5BQ_ANJOMAN_PAIR_CANDIDATE_PACKET",
+  "submission_state": "OWNER_REVIEW_REQUIRED_NOT_SUBMITTED"
+}

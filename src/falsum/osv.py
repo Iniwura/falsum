@@ -9,6 +9,12 @@ import json
 import re
 from pathlib import Path
 
+try:
+    from packaging.version import InvalidVersion, Version
+except ImportError:  # pragma: no cover - packaging is a declared runtime dependency
+    InvalidVersion = None
+    Version = None
+
 ADVISORY = re.compile(r"^(?:CVE-\d{4}-\d{4,}|GHSA-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4})$", re.I)
 SEMVER = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$")
 STABLE = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
@@ -53,25 +59,45 @@ def _cmp(a: str, b: str) -> int:
 
 
 def _stable_cmp(a: str, b: str) -> int:
-    """Only three-component, stable versions common to npm and PyPI.
+    """Backward-compatible name for the strict npm SemVer comparator.
 
-    PyPI prereleases, epochs, local versions and npm prereleases are intentionally
-    not ordered by this limited comparator. Use ecosystem-native tooling for them.
+    Older callers imported this private helper while the resolver intentionally
+    supported only stable triples.  New decisions use the ecosystem-native
+    comparator below; retaining this function avoids silently changing those
+    callers while removing the old PyPI/npm conflation from ``version_status``.
     """
-    aa, bb = STABLE.fullmatch(a), STABLE.fullmatch(b)
-    if not aa or not bb:
-        raise SourceError('unsupported ecosystem-specific version syntax')
-    x, y = tuple(map(int, aa.groups())), tuple(map(int, bb.groups()))
-    return (x > y) - (x < y)
+    return _cmp(a, b)
 
 
-def _in_events(version: str, item: dict, comparator) -> bool:
+def _pypi(value: str):
+    if Version is None:
+        raise SourceError('packaging is required for PyPI version semantics')
+    try:
+        return Version(value)
+    except (InvalidVersion, TypeError) as exc:
+        raise SourceError(f'unsupported PEP 440 version: {value!r}') from exc
+
+
+def _pypi_cmp(a: str, b: str) -> int:
+    left, right = _pypi(a), _pypi(b)
+    return (left > right) - (left < right)
+
+
+def _event_intervals(item: dict, comparator):
+    """Parse one OSV event stream into a validated union of intervals.
+
+    A malformed event invalidates the whole range.  In particular, numeric
+    ``limit`` values are not treated as ``fixed`` bounds, and a valid interval
+    cannot hide a later malformed interval in the same event stream.
+    """
     events = item.get('events')
     if not isinstance(events, list) or not events:
         raise SourceError('missing OSV range events')
-    start = None
-    previous = None
-    matched = False
+    intervals = []
+    opened = None
+    previous_end = None
+    previous_kind = None
+    terminated_unbounded = False
     for event in events:
         if not isinstance(event, dict) or len(event) != 1:
             raise SourceError('invalid OSV event')
@@ -79,33 +105,49 @@ def _in_events(version: str, item: dict, comparator) -> bool:
         if kind not in ('introduced', 'fixed', 'last_affected', 'limit') or not isinstance(bound, str):
             raise SourceError('unsupported OSV event')
         if kind == 'introduced':
-            if start is not None:
-                raise SourceError('overlapping OSV range')
+            if opened is not None or terminated_unbounded:
+                raise SourceError('overlapping or unterminated OSV range')
             if bound != '0':
                 comparator(bound, bound)
-                if previous is not None and comparator(bound, previous) < 0:
-                    raise SourceError('unordered OSV range')
-            start = bound
-            previous = bound if bound != '0' else previous
-        else:
-            if start is None:
-                raise SourceError('OSV closing event without introduced')
-            if bound == '*' and kind == 'limit':
-                if start == '0' or comparator(version, start) >= 0:
-                    matched = True
-                start = None
-                continue
-            comparator(bound, bound)
-            if start != '0' and comparator(start, bound) > 0:
-                raise SourceError('reversed OSV range')
-            if (start == '0' or comparator(version, start) >= 0) and (
-                comparator(version, bound) <= 0 if kind == 'last_affected'
-                else comparator(version, bound) < 0
-            ):
-                matched = True
-            start = None
-            previous = bound
-    return matched or (start is not None and (start == '0' or comparator(version, start) >= 0))
+                if previous_end is not None:
+                    relation = comparator(bound, previous_end)
+                    if relation < 0 or (relation == 0 and previous_kind == 'last_affected'):
+                        raise SourceError('overlapping or unordered OSV range')
+            elif previous_end is not None:
+                raise SourceError('unbounded OSV range follows a closed range')
+            opened = bound
+            continue
+        if opened is None:
+            raise SourceError('OSV closing event without introduced')
+        if kind == 'limit':
+            if bound != '*':
+                raise SourceError('numeric OSV limit is unsupported')
+            intervals.append((opened, None, 'limit'))
+            opened = None
+            terminated_unbounded = True
+            continue
+        comparator(bound, bound)
+        if opened != '0' and comparator(opened, bound) > 0:
+            raise SourceError('reversed OSV range')
+        intervals.append((opened, bound, kind))
+        previous_end, previous_kind = bound, kind
+        opened = None
+    if opened is not None:
+        intervals.append((opened, None, None))
+    if not intervals:
+        raise SourceError('OSV range contains no interval')
+    return intervals
+
+
+def _in_events(version: str, item: dict, comparator) -> bool:
+    matched = False
+    for start, end, kind in _event_intervals(item, comparator):
+        left = start == '0' or comparator(version, start) >= 0
+        right = end is None or (
+            comparator(version, end) <= 0 if kind == 'last_affected' else comparator(version, end) < 0
+        )
+        matched = matched or (left and right)
+    return matched
 
 
 def _in_semver_range(version: str, item: dict) -> bool:
@@ -137,12 +179,15 @@ def parse_osv(raw: bytes, advisory_id: str) -> dict:
 def version_status(record: dict, ecosystem: str, package: str, version: str) -> str:
     """Return affected/unaffected/unknown for one advisory, never for the deployment.
 
-    ECOSYSTEM ranges support ONLY stable numeric npm/PyPI release boundaries.
-    Exact enumerated versions may establish 'affected' for other formats, but
-    missing versions never establish 'unaffected' without complete range support.
+    ECOSYSTEM ranges use strict SemVer for npm and PEP 440 for PyPI.  Exact
+    enumerated versions may establish ``affected`` for other formats, but a
+    missing version never establishes ``unaffected`` without complete range
+    support.
     """
     if not all(isinstance(x, str) and x for x in (ecosystem, package, version)):
         raise SourceError('ecosystem/package/version required')
+    if not isinstance(record, dict) or not isinstance(record.get('affected'), list):
+        return 'unknown'
     found, undecidable, complete, affected_positive = False, False, False, False
     for affected in record.get('affected', []):
         if not isinstance(affected, dict):
@@ -173,10 +218,17 @@ def version_status(record: dict, ecosystem: str, package: str, version: str) -> 
                 except SourceError:
                     undecidable = True
                     continue
-            elif kind == 'ECOSYSTEM' and ecosystem.casefold() in ('npm', 'pypi'):
+            elif kind == 'ECOSYSTEM' and ecosystem.casefold() == 'npm':
                 try:
-                    _stable_cmp(version, version)
-                    matched = _in_events(version, item, _stable_cmp)
+                    _semver(version)
+                    matched = _in_events(version, item, _cmp)
+                except SourceError:
+                    undecidable = True
+                    continue
+            elif kind == 'ECOSYSTEM' and ecosystem.casefold() == 'pypi':
+                try:
+                    _pypi(version)
+                    matched = _in_events(version, item, _pypi_cmp)
                 except SourceError:
                     undecidable = True
                     continue
