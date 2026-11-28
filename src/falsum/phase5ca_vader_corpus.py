@@ -356,14 +356,28 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
     for ident in common_ids:
         source = vader_by_id[ident]
         scored = graded_by_id[ident]
-        source_repo = canonical_repository(source["Repository"])
-        scored_repo = canonical_repository(scored["Repository"])
-        source_cwe = _cwes(source["CWE"])
-        scored_cwe = _cwes(scored["CWE"])
-        source_severity = _severity(source["Severity"], numeric_allowed=False)
-        scored_severity = _severity(scored["Severity"], numeric_allowed=True)
-        source_description = "\n".join(line.rstrip() for line in source["Description"].splitlines()).strip()
-        graded_description = "\n".join(line.rstrip() for line in scored["Description"].splitlines()).strip()
+        try:
+            source_repo = canonical_repository(source["Repository"])
+            scored_repo = canonical_repository(scored["Repository"])
+            source_cwe = _cwes(source["CWE"])
+            scored_cwe = _cwes(scored["CWE"])
+            source_severity = _severity(source["Severity"], numeric_allowed=False)
+            scored_severity = _severity(scored["Severity"], numeric_allowed=True)
+            source_description = "\n".join(line.rstrip() for line in source["Description"].splitlines()).strip()
+            graded_description = "\n".join(line.rstrip() for line in scored["Description"].splitlines()).strip()
+        except (KeyError, VaderCorpusError) as exc:
+            excluded_records.append({
+                "id": ident,
+                "reason": "invalid_source_metadata",
+                "detail": str(exc),
+                "vader_repository": source.get("Repository", ""),
+                "graded_repository": scored.get("Repository", ""),
+                "vader_cwe": source.get("CWE", ""),
+                "graded_cwe": scored.get("CWE", ""),
+                "vader_severity": source.get("Severity", ""),
+                "graded_severity": scored.get("Severity", ""),
+            })
+            continue
         if (source_repo != scored_repo or source_cwe != scored_cwe
                 or source_severity != scored_severity or source_description != graded_description):
             excluded_records.append({
@@ -378,8 +392,18 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
                 "description_matches": source_description == graded_description,
             })
             continue
-        source_case = _case_number(source["Case"])
-        graded_case = _case_number(scored["Case"])
+        try:
+            source_case = _case_number(source["Case"])
+            graded_case = _case_number(scored["Case"])
+        except (KeyError, VaderCorpusError) as exc:
+            excluded_records.append({
+                "id": ident,
+                "reason": "invalid_source_metadata",
+                "detail": str(exc),
+                "vader_case": source.get("Case", ""),
+                "graded_case": scored.get("Case", ""),
+            })
+            continue
         if source_case != graded_case:
             case_number_mismatches.append({
                 "id": ident, "vader_case": source_case, "graded_case": graded_case,
@@ -435,6 +459,10 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
         record.get("reason") == "repository_or_CWE_or_severity_mismatch"
         for record in excluded_records
     )
+    invalid_source_metadata_excluded = any(
+        record.get("reason") == "invalid_source_metadata"
+        for record in excluded_records
+    )
     invalid_response_excluded = any(
         record.get("reason") == "invalid_model_response_or_score"
         for record in excluded_records
@@ -453,6 +481,8 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
         warnings.append("case_number_mismatches_reported_not_used_for_join")
     if excluded_identity:
         warnings.append("source_metadata_identity_mismatches_excluded")
+    if invalid_source_metadata_excluded:
+        warnings.append("invalid_source_metadata_records_excluded")
     if invalid_response_excluded:
         warnings.append("invalid_model_response_or_score_records_excluded")
     if vader_only or graded_only:
@@ -473,6 +503,8 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
         ready_reasons.append("reserved_holdout_repository_count_below_frozen_minimum")
     if excluded_identity:
         ready_reasons.append("source_metadata_identity_mismatches_excluded")
+    if invalid_source_metadata_excluded:
+        ready_reasons.append("invalid_source_metadata_excluded")
     if invalid_response_excluded:
         ready_reasons.append("invalid_model_response_or_score_records_excluded")
     if malformed_csv_excluded:
@@ -505,6 +537,10 @@ def build_report(vader_rows: list[dict[str, str]], graded_rows: list[dict[str, s
             "source_identity_mismatches_excluded": [
                 record for record in excluded_records
                 if record.get("reason") == "repository_or_CWE_or_severity_mismatch"
+            ],
+            "invalid_source_metadata_excluded": [
+                record for record in excluded_records
+                if record.get("reason") == "invalid_source_metadata"
             ],
             "csv_parse_diagnostics": file_parse_diagnostics,
             "case_number_mismatch_count": len(case_number_mismatches),
