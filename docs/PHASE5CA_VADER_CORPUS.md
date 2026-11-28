@@ -61,7 +61,7 @@ The [Phase 5CA workflow](../.github/workflows/phase5ca-vader-corpus.yml) perform
 
 The pinned source bytes were authenticated and the ingestion workflow completed, but the corpus **did not pass the frozen readiness gate**. This is a negative benchmark result, not a candidate score.
 
-[Hosted Phase 5CA run](https://github.com/Iniwura/falsum/actions/runs/46135755402) · [aggregate manifest and reserved roster artifact](https://github.com/Iniwura/falsum/actions/runs/46135755402/artifacts/15258978091)
+[Hosted Phase 5CA run](https://github.com/Iniwura/falsum/actions/runs/46136480080) · [aggregate manifest and reserved roster artifact](https://github.com/Iniwura/falsum/actions/runs/46136480080/artifacts/15260111211)
 
 | Audit field | Observed |
 | --- | ---: |
@@ -92,7 +92,7 @@ Do not relax the frozen 174-row expectation, repair malformed rows after inspect
 
 The pinned source bytes were authenticated and the ingestion workflow completed, but the corpus **did not pass the frozen readiness gate**. This is a negative benchmark result, not a candidate score.
 
-[Hosted Phase 5CA run](https://github.com/Iniwura/falsum/actions/runs/46135755402) · [aggregate manifest and reserved roster artifact](https://github.com/Iniwura/falsum/actions/runs/46135755402/artifacts/15258978091)
+[Hosted Phase 5CA run](https://github.com/Iniwura/falsum/actions/runs/46136480080) · [aggregate manifest and reserved roster artifact](https://github.com/Iniwura/falsum/actions/runs/46136480080/artifacts/15260111211)
 
 | Audit field | Observed |
 | --- | ---: |
