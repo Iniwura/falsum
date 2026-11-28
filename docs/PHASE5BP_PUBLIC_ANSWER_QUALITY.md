@@ -24,7 +24,10 @@ For each provider answer, FALSUM checks:
 
 1. evidence excerpts are exact substrings of the requested code;
 2. structured findings bind each individual `rule_id` to evidence whose
-   metadata names that same rule and to that finding's own recommendation;
+   metadata names that same rule and to that finding's own recommendation.
+   Within a rule, evidence source IDs are assigned one-to-one: duplicate
+   findings cannot reuse one source ID, and malformed findings without a rule
+   identity fail closed;
 3. claimed rule IDs cover the source-derived rules without extras;
 4. each risky claim has a remediation recommendation, or a clean/empty result
    carries an explicit bounded-review uncertainty statement; and
