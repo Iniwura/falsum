@@ -83,11 +83,11 @@ def parse_status(raw: bytes, *, observed_utc: str | None = None) -> dict[str, An
     eligible_submitters = _integer(payload.get("eligible_submitters"), "eligible_submitters")
     min_submitters = _integer(payload.get("min_submitters"), "min_submitters")
     current_epoch = _integer(payload.get("current_epoch"), "current_epoch")
+    need(min_submitters >= 1, "minimum contributor threshold must be positive")
+    need(eligible_submitters <= submitters, "eligible submitter count exceeds total submitters")
+
     latest = _snapshot(payload.get("snapshot"), "snapshot")
     active = _snapshot(payload.get("active_snapshot"), "active_snapshot")
-
-    if latest is not None:
-        need(latest["activation_epoch"] >= 0, "snapshot activation epoch is invalid")
     if active is not None:
         need(active["activation_epoch"] <= current_epoch,
              "active snapshot activation epoch is ahead of current epoch")
@@ -172,9 +172,9 @@ def write_once(path: Path, report: dict[str, Any]) -> None:
     need(path.suffix == ".json", "output path must end in .json")
     need(not path.exists() and not path.is_symlink(), "output must be a new path")
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("x", encoding="utf-8", newline="\\n") as handle:
+    with path.open("x", encoding="utf-8", newline="\n") as handle:
         json.dump(report, handle, indent=2, sort_keys=True, allow_nan=False)
-        handle.write("\\n")
+        handle.write("\n")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -197,7 +197,7 @@ def main(argv: list[str] | None = None) -> int:
         }, sort_keys=True))
         return 0
     except (OSError, TypeError, ValueError, KeyError) as exc:
-        parser.exit(1, "PHASE5BV ANJOMAN STATUS CHECK FAILED: " + str(exc)[:300] + "\\n")
+        parser.exit(1, "PHASE5BV ANJOMAN STATUS CHECK FAILED: " + str(exc)[:300] + "\n")
 
 
 if __name__ == "__main__":
