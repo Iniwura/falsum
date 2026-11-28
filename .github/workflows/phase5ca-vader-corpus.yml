@@ -1,0 +1,81 @@
+name: Phase 5CA - VADER human-scored corpus freeze
+on:
+  push:
+    paths:
+      - 'data/phase5ca-vader-corpus-protocol.json'
+      - 'src/falsum/phase5ca_vader_corpus.py'
+      - 'tests/test_phase5ca_vader_corpus.py'
+      - 'docs/PHASE5CA_VADER_CORPUS.md'
+      - '.github/workflows/phase5ca-vader-corpus.yml'
+  pull_request:
+    paths:
+      - 'data/phase5ca-vader-corpus-protocol.json'
+      - 'src/falsum/phase5ca_vader_corpus.py'
+      - 'tests/test_phase5ca_vader_corpus.py'
+      - 'docs/PHASE5CA_VADER_CORPUS.md'
+      - '.github/workflows/phase5ca-vader-corpus.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  freeze-and-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run offline protocol, stable-ID, and provenance tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python -m unittest discover -s tests -p 'test_phase5ca_vader_corpus.py' -v
+      - name: Download and authenticate immutable public VADER records
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m falsum.phase5ca_vader_corpus \
+            --out "$RUNNER_TEMP/PHASE5CA-VADER-CORPUS-MANIFEST.json" \
+            --roster "$RUNNER_TEMP/PHASE5CA-VADER-RESERVED-HOLDOUT-ROSTER.json"
+        env:
+          PYTHONPATH: src
+      - name: Publish exact corpus counts and limitations
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          report=json.loads((root/"PHASE5CA-VADER-CORPUS-MANIFEST.json").read_text())
+          align=report["alignment"]
+          corpus=report["corpus"]
+          ready=report["benchmark_readiness"]
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as out:
+              out.write("# Phase 5CA VADER corpus freeze\n\n")
+              out.write(f'- Source rows: vader.csv {report["source_row_counts"]["vader_csv"]}; graded.csv {report["source_row_counts"]["graded_csv"]}.\n')
+              out.write(f'- Stable-ID matched cases: **{corpus["matched_cases"]}**; unmatched source IDs {len(align["vader_only_ids"])}; unmatched score IDs {len(align["graded_only_ids"])}.\n')
+              out.write(f'- Case-number mismatches (reported, not used for joining): {align["case_number_mismatch_count"]}.\n')
+              out.write(f'- Source identity mismatches excluded: {len(align["source_identity_mismatches_excluded"])}.\n')
+              out.write(f'- Human-scored responses: {corpus["published_human_scored_responses"]}; derived score-margin>=2 preferences: {corpus["derived_pairwise_summary"]["strong_derived_preferences_margin_ge_2"]}.\n')
+              out.write(f'- Reserved public-inventory-disjoint cases: {report["source_disjointness"]["reserved_holdout_cases"]} across {report["source_disjointness"]["reserved_holdout_repositories"]} repositories.\n')
+              out.write(f'- Next candidate stage ready: **{ready["ready_for_next_candidate_stage"]}**.\n')
+              out.write('- Private Anjoman overlap: **UNKNOWN**. No model inference, training, upload, or official submission was performed.\n')
+              if ready["reasons"]:
+                  out.write('\n## Readiness blockers\n')
+                  for reason in ready["reasons"]:
+                      out.write(f'- {reason}\n')
+          if not ready["ready_for_next_candidate_stage"]:
+              print("::warning::VADER source corpus is authenticated but not ready for candidate scoring; inspect manifest blockers.")
+          PY
+      - name: Preserve aggregate manifest and reserved roster only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PHASE5CA-VADER-CORPUS-FREEZE
+          path: |
+            ${{ runner.temp }}/PHASE5CA-VADER-CORPUS-MANIFEST.json
+            ${{ runner.temp }}/PHASE5CA-VADER-RESERVED-HOLDOUT-ROSTER.json
+          retention-days: 30
+          if-no-files-found: warn
