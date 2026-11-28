@@ -39,6 +39,7 @@
     "output_format": "json",
     "flags": [
       "--no-fetch",
+      "--stale",
       "--no-yanked",
       "--db",
       "--file",
