@@ -116,7 +116,7 @@ def _candidate_range_matches(version: str, requirement: str) -> bool | None:
     operator, boundary_text = match.groups()
     try:
         value = _parse_semver(version)
-        boundary = _parse_semver(boundary_text.lstrip("v"))
+        boundary = _parse_semver(boundary_text.lstrip("v"), partial=True)
     except (EcosystemSemanticsError, TypeError, ValueError):
         return None
     comparison = _semver_compare(value, boundary)
