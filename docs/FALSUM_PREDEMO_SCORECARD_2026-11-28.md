@@ -66,7 +66,7 @@ FALSUM's [issue #68](https://github.com/kolega-ai/Real-Vuln-Benchmark/issues/68)
 - XLSX/CSV common IDs: 171; all 171 common rows are byte-normalized identical. There is still 1 workbook-only and 2 CSV-only IDs.
 - Candidate readiness remains **false** because of malformed workbook rows, source metadata mismatches, and cross-format unmatched IDs requiring source-owner resolution.
 
-The workbook has fewer malformed rows than the CSV, but it is not a clean corrected source. No row was repaired or promoted to gold. No candidate inference or baseline comparison ran. The Phase 5CB result does not raise the 78/100 score. The parser/test failures found on the first PR head were fixed with a standard-library parser helper and dependency-free OOXML fixtures; the full PR workflow rerun is being checked before merge.
+The workbook has fewer malformed rows than the CSV, but it is not a clean corrected source. No row was repaired or promoted to gold. No candidate inference or baseline comparison ran. The Phase 5CB result does not raise the 78/100 score. The parser/test failures found on the first PR head were fixed with a standard-library parser helper and dependency-free OOXML fixtures. All eight GitHub Actions workflows passed on exact PR head `db2d4bda4ff2a7d1ad073a9185f196236465def2`; [PR #137](https://github.com/Iniwura/falsum/pull/137) was merged as [commit `53cba9c`](https://github.com/Iniwura/falsum/commit/53cba9c22821494c4a90b8727cfe5a964a4e4146). The Vercel preview status remains rate-limited by its free-tier daily deployment cap; no paid upgrade was attempted.
 
 ## Next actionable handoff
 
