@@ -1,0 +1,65 @@
+name: Phase 5BV - read-only Anjoman evaluation-pool status
+
+on:
+  push:
+    paths:
+      - 'src/falsum/phase5bv_anjoman_pool_status.py'
+      - 'tests/test_phase5bv_anjoman_pool_status.py'
+      - '.github/workflows/phase5bv-anjoman-pool-status.yml'
+  pull_request:
+    paths:
+      - 'src/falsum/phase5bv_anjoman_pool_status.py'
+      - 'tests/test_phase5bv_anjoman_pool_status.py'
+      - '.github/workflows/phase5bv-anjoman-pool-status.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  aggregate-pool-status:
+    name: Verify public SECURITY_REVIEW_GENERAL pool status
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run aggregate-status contract tests
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -m unittest discover -s tests -p 'test_phase5bv_anjoman_pool_status.py' -v
+      - name: Read public aggregate pool status
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          mkdir -p phase5bv-evidence
+          python -m falsum.phase5bv_anjoman_pool_status \
+            --out phase5bv-evidence/ANJOMAN-POOL-STATUS.json
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          report = json.loads(Path('phase5bv-evidence/ANJOMAN-POOL-STATUS.json').read_text())
+          pool = report['pool']
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as summary:
+              summary.write('# Anjoman SECURITY_REVIEW_GENERAL aggregate pool status\n\n')
+              summary.write('- Eligible contributors: **{} / {} minimum**\n'.format(pool['eligible_submitters'], pool['min_submitters']))
+              summary.write('- Active snapshot available for current epoch: **{}**\n'.format(pool['active_pool_available_for_current_epoch']))
+              summary.write('- Latest snapshot active: **{}**\n'.format(pool['latest_snapshot_is_active']))
+              summary.write('- Active snapshot metadata: {}\n\n'.format(json.dumps(pool['active_snapshot'], sort_keys=True)))
+              summary.write("This read-only aggregate endpoint does not identify contributors or rows. It does not prove FALSUM's 20 rows were included or used, maintainer acceptance, evaluator registration, or a ranking change. No wallet, signature, upload, transaction, or network write was used.\n")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5bv-anjoman-pool-status
+          path: phase5bv-evidence/
+          retention-days: 90
+          if-no-files-found: error
