@@ -1,0 +1,84 @@
+name: Phase 5CB - VADER graded workbook cross-format audit
+on:
+  pull_request:
+    paths:
+      - 'data/phase5cb-vader-xlsx-protocol.json'
+      - 'src/falsum/phase5cb_vader_xlsx_audit.py'
+      - 'src/falsum/phase5ca_vader_corpus.py'
+      - 'data/phase5ca-vader-corpus-protocol.json'
+      - 'tests/test_phase5cb_vader_xlsx_audit.py'
+      - '.github/workflows/phase5cb-vader-xlsx-audit.yml'
+      - 'docs/PHASE5CB_VADER_XLSX_AUDIT.md'
+  push:
+    paths:
+      - 'data/phase5cb-vader-xlsx-protocol.json'
+      - 'src/falsum/phase5cb_vader_xlsx_audit.py'
+      - 'src/falsum/phase5ca_vader_corpus.py'
+      - 'data/phase5ca-vader-corpus-protocol.json'
+      - 'tests/test_phase5cb_vader_xlsx_audit.py'
+      - '.github/workflows/phase5cb-vader-xlsx-audit.yml'
+      - 'docs/PHASE5CB_VADER_XLSX_AUDIT.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authenticated-cross-format-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run workbook parser and cross-format contract tests
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p 'test_phase5cb_vader_xlsx_audit.py' -v
+      - name: Authenticate and audit the actual pinned VADER workbook and CSV files
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          python -m falsum.phase5cb_vader_xlsx_audit \
+            --out "$RUNNER_TEMP/PHASE5CB-VADER-XLSX-MANIFEST.json" \
+            --roster "$RUNNER_TEMP/PHASE5CB-VADER-HOLDOUT-ROSTER.json"
+      - name: Publish aggregate findings and readiness blockers
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"])
+          report = json.loads((root / "PHASE5CB-VADER-XLSX-MANIFEST.json").read_text())
+          workbook = report["workbook"]
+          alignment = report["alignment"]
+          cross = report["csv_cross_format"]
+          readiness = report["candidate_readiness"]
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as out:
+              out.write("# Phase 5CB VADER workbook cross-format audit\n\n")
+              out.write(f'- Authenticated workbook SHA-256: {report["file_metadata"][0]["sha256"]}.\n')
+              out.write(f'- Worksheet: {workbook["sheet"]}; data rows {workbook["data_rows"]}; valid rows {workbook["valid_rows"]}; malformed {workbook["malformed_row_count"]}; duplicate IDs {workbook["duplicate_stable_id_count"]}.\n')
+              out.write(f'- Matched source metadata IDs: **{alignment["matched_workbook_source_IDs"]}**; source-only {alignment["source_only_IDs_excluded"]}; workbook-only {alignment["workbook_only_IDs"]}; metadata mismatches {alignment["source_metadata_mismatch_count"]}.\n')
+              out.write(f'- XLSX/CSV common IDs: {cross["common_stable_IDs"]}; identical rows {cross["identical_rows"]}; differing rows {cross["differing_rows"]}; workbook-only vs CSV {cross["workbook_only_vs_valid_csv_IDs"]}; CSV-only vs workbook {cross["valid_csv_only_vs_workbook_IDs"]}.\n')
+              out.write(f'- Public-inventory-disjoint holdout: {report["source_disjointness"]["reserved_holdout_cases"]} cases across {report["source_disjointness"]["reserved_holdout_repositories"]} repositories.\n')
+              out.write(f'- Candidate scoring ready: **{readiness["ready_for_candidate_scoring"]}**.\n')
+              out.write('- Private Anjoman overlap: **UNKNOWN**. No model inference, training, raw-answer artifact, upload, or official submission occurred.\n')
+              if readiness["reasons"]:
+                  out.write("\n## Blockers\n")
+                  for reason in readiness["reasons"]:
+                      out.write(f'- {reason}\n')
+          PY
+      - name: Preserve aggregate manifest and score-blind roster only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PHASE5CB-VADER-XLSX-CROSS-FORMAT-AUDIT
+          path: |
+            ${{ runner.temp }}/PHASE5CB-VADER-XLSX-MANIFEST.json
+            ${{ runner.temp }}/PHASE5CB-VADER-HOLDOUT-ROSTER.json
+          retention-days: 30
+          if-no-files-found: warn

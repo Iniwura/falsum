@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "phase": "5CB",
+  "status": "VADER_GRADED_XLSX_CROSS_FORMAT_AUDIT_FROZEN_BEFORE_CANDIDATE_SCORING",
+  "freeze_base_commit": "b83667f6e289514019ff2149452a2179030a27d5",
+  "dataset": {
+    "repository": "AfterQuery/vader",
+    "revision": "9bef4b3b1994ce138d8a043b68ab0d8a81d8472d",
+    "license": "CC-BY-4.0",
+    "dataset_url": "https://huggingface.co/datasets/AfterQuery/vader",
+    "workbook_path": "graded.xlsx",
+    "workbook_sha256": "9da644c6e9012fe124b95bd4460853ba045cafe78d26110e5cedde34dc20f158",
+    "workbook_xet_hash": "0326e16365c63e3e7ad11c0a89cf4ca88ab8d2f4f44da3682512ff36544ad5fe",
+    "workbook_max_bytes": 2000000
+  },
+  "reference_sources": {
+    "vader_csv_git_blob_sha1": "e56111018098061cbe661bfe05963e6f0c93e1dc",
+    "graded_csv_git_blob_sha1": "77765c6cc511279b95d00fd49c0978b1d867f305",
+    "phase5ca_protocol_git_blob_sha1": "7a12ad6411544047988b41e8e0c9e2f7446fc37c",
+    "stable_join_key": "ID"
+  },
+  "workbook_contract": {
+    "required_header": "exact Phase 5CA GRADED_FIELDS tuple",
+    "header_scan_first_rows": 10,
+    "exactly_one_matching_worksheet": true,
+    "expected_data_rows": 174,
+    "duplicate_stable_ids_forbidden": true,
+    "all_six_model_answers_required_for_candidate_readiness": true,
+    "component_scores_must_sum_to_published_total": true,
+    "no_formula_recalculation": true,
+    "read_only_workbook": true,
+    "raw_answers_must_not_be_written_to_artifacts": true
+  },
+  "selection": {
+    "selection_rule_frozen_before_candidate_scoring": true,
+    "join_workbook_to_vader_csv_by_stable_ID_only": true,
+    "exclude_unmatched_IDs_from_candidate_metrics": true,
+    "report_all_unmatched_ID_counts": true,
+    "report_metadata_mismatches": true,
+    "no_row_repair_or_manual_selection": true,
+    "selection_does_not_use_human_scores_or_model_answers": true,
+    "holdout_grouping_unit": "canonical_github_repository",
+    "holdout_hash": "sha256('FALSUM-PHASE5CA-VADER-HOLDOUT-v1\\u0000' + canonical_repository)",
+    "holdout_modulus": 5,
+    "holdout_bucket": 0,
+    "exclude_known_public_falsum_repositories_from_holdout": true,
+    "minimum_matched_cases_for_candidate_readiness": 100,
+    "minimum_reserved_holdout_cases": 20,
+    "minimum_reserved_holdout_repositories": 20
+  },
+  "known_public_falsum_source_inventory": {
+    "completeness": "PARTIAL_KNOWN_PUBLIC_SOURCE_INVENTORY_NOT_ALL_HISTORICAL_OR_PRIVATE_MATERIAL",
+    "repositories": [
+      "kludex/starlette",
+      "psf/requests",
+      "tornadoweb/tornado",
+      "nodejs/undici",
+      "python-websockets/websockets",
+      "facelessuser/pymdown-extensions",
+      "anvithagowda098/pr-guard",
+      "resq-software/programs",
+      "pyjwt/pyjwt",
+      "pallets/werkzeug",
+      "modelcontextprotocol/python-sdk",
+      "python-pillow/pillow",
+      "koajs/koa",
+      "langchain-ai/langchain",
+      "honojs/hono",
+      "aio-libs/aiohttp"
+    ]
+  },
+  "private_material_boundary": {
+    "anjoman_private_eligible_rows": 20,
+    "private_anjoman_source_overlap": "UNKNOWN",
+    "claim_fully_disjoint_from_private_anjoman_material": false,
+    "claim_fully_disjoint_from_model_pretraining": false
+  },
+  "readiness": {
+    "exact_workbook_row_count_required": true,
+    "zero_workbook_parse_errors_required": true,
+    "zero_duplicate_IDs_required": true,
+    "zero_source_metadata_mismatches_required": true,
+    "zero_invalid_score_rows_required": true,
+    "all_six_answers_nonempty_required": true,
+    "minimum_matched_cases": 100,
+    "minimum_holdout_cases": 20,
+    "minimum_holdout_repositories": 20,
+    "csv_cross_format_differences_are_reported_not_repaired": true,
+    "csv_cross_format_differences_require_manual_source_owner_resolution_before_candidate_scoring": true
+  },
+  "safety_and_claim_limits": {
+    "raw_third_party_answers_committed": false,
+    "raw_third_party_answers_uploaded_as_artifacts": false,
+    "third_party_code_or_tests_executed": false,
+    "model_inference_performed": false,
+    "candidate_training_performed": false,
+    "network_upload": false,
+    "official_submission": false,
+    "wallet_or_signature_action": false,
+    "paid_api_calls": false,
+    "telegraph_network_improvement_claim": false,
+    "network_eligible_material_claim": false,
+    "note": "This is a read-only cross-format integrity audit of a second immutable file in the same VADER dataset revision. It is not an independent dataset, corrected source revision, human-authored answer corpus, or candidate benchmark. Any CSV/XLSX disagreement remains a blocker pending source-owner clarification. The public-only source holdout does not prove disjointness from private Anjoman rows or model pretraining."
+  }
+}
