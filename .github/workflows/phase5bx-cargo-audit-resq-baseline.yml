@@ -23,6 +23,7 @@ on:
       - 'src/falsum/phase5bo_ecosystem_semantics.py'
       - 'src/falsum/phase5m_real_source_sensitive_model.py'
       - 'tests/test_phase5bx_cargo_audit_resq_baseline.py'
+      - 'docs/PHASE5BX_RESQ_CARGO_AUDIT_BASELINE.md'
       - '.github/workflows/phase5bx-cargo-audit-resq-baseline.yml'
   workflow_dispatch:
 
