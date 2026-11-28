@@ -92,7 +92,7 @@ def _audit_telegraph_material(pairs: list[dict], raw_jsonl: bytes, intent_id: st
                 f"Anjoman compatibility: row {index} has unsupported fields")
         for field in ("prompt", "chosen", "rejected"):
             value = row.get(field)
-            require(isinstance(value, str) and value.strip() and "\\x00" not in value,
+            require(isinstance(value, str) and value.strip() and "\x00" not in value,
                     f"Anjoman compatibility: row {index} has invalid {field}")
         prompt = _normalise(row["prompt"])
         chosen = _normalise(row["chosen"])
