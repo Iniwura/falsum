@@ -7,6 +7,7 @@ on:
       - 'src/falsum/phase5aj_cross_app_evidence.py'
       - 'data/phase5bw-adversarialeval-ingestion-protocol.json'
       - 'tests/test_phase5bw_adversarialeval_ingestion.py'
+      - 'docs/PHASE5BW_TELEGRAPH_MATERIAL_COMPATIBILITY.md'
       - '.github/workflows/phase5bw-adversarialeval-ingestion.yml'
   pull_request:
     paths:
@@ -14,6 +15,7 @@ on:
       - 'src/falsum/phase5aj_cross_app_evidence.py'
       - 'data/phase5bw-adversarialeval-ingestion-protocol.json'
       - 'tests/test_phase5bw_adversarialeval_ingestion.py'
+      - 'docs/PHASE5BW_TELEGRAPH_MATERIAL_COMPATIBILITY.md'
       - '.github/workflows/phase5bw-adversarialeval-ingestion.yml'
   workflow_dispatch:
 
@@ -68,6 +70,7 @@ jobs:
           report = json.loads(Path('phase5bw-evidence/PHASE5BW-ADVERSARIALEVAL.json').read_text())
           external = report['external_corpus']
           baseline = external['published_external_adapter']
+          material = external['telegraph_material_compatibility']
           overlap = report['public_source_overlap']
           candidates = overlap['public_source_disjoint_candidates']
           assert external['sample_sizes']['pairs'] == 40
@@ -77,6 +80,13 @@ jobs:
           assert baseline['wilson_95_percent'] == [62.5, 87.7]
           assert baseline['raw_score_arithmetic_replayed'] is True
           assert baseline['adapter_inference_reproduced'] is False
+          assert material['structural_compatibility_verified'] is True
+          assert material['structurally_compatible_rows'] == 40
+          assert material['normalized_unique_prompts'] == 40
+          assert material['provenance']['node_provenance_classification'] == 'NOT_OBSERVED_NO_UPLOAD'
+          assert material['pool_activation']['minimum_distinct_contributors'] == 5
+          assert material['submission']['upload_attempted'] is False
+          assert material['submission']['signature_created'] is False
           assert len(overlap['public_overlap']['pairs']) == 1
           assert len(overlap['public_overlap']['identifiers']) == 2
           assert candidates['pair_count'] == 9 and candidates['distinct_ghsa_count'] == 6
@@ -89,7 +99,9 @@ jobs:
               summary.write('## Phase 5BW: independent public corpus ingestion\n\n')
               summary.write('Pinned AdversarialEval test material: 40 pairs from two independent authors (20 each); all AI-assisted and author-reviewed. The external published adapter raw-score arithmetic replays to 31/40 (77.5%), 9 incorrect, 0 ties; Wilson 95% interval 62.5–87.7%. The adapter inference itself was not rerun.\n\n')
               summary.write('FALSUM public-source comparison: 1 overlapping pair (2 identifier strings, one advisory family), 9 public-source-disjoint candidate pairs across 6 GHSA identifiers, and 30 pairs without extractable CVE/GHSA identifiers. The private FALSUM pool is unavailable, so the nine candidates are **not** a blind or eligible held-out set.\n\n')
-              summary.write('No FALSUM score, matched-input model comparison, human AppSec gold, Telegraph material acceptance, ranking change, or independent FALSUM reproduction is claimed.\n')
+              summary.write(f"Anjoman material contract: {material['structurally_compatible_rows']}/40 rows match the documented preference-pair shape and bounds; {material['normalized_unique_prompts']} normalized prompts are unique; maximum raw row size is {material['maximum_raw_jsonl_row_bytes']} bytes.\\n\\n")
+              summary.write('No upload or signature was attempted. The guide requires five distinct contributors before question material is used; the two external dataset authors are not counted as network contributors. Node provenance, eligibility, active-snapshot use and ranking remain unverified.\\n\\n')
+              summary.write('No FALSUM score, matched-input model comparison, human AppSec gold, Telegraph material acceptance, ranking change, or independent FALSUM reproduction is claimed.\\n')
           PY
       - uses: actions/upload-artifact@v4
         with:
