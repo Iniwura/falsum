@@ -65,6 +65,137 @@ def _normalise(text: str) -> str:
     return WHITESPACE.sub(" ", unicodedata.normalize("NFC", text)).strip()
 
 
+def _audit_telegraph_material(pairs: list[dict], raw_jsonl: bytes, intent_id: str,
+                               authors: dict[str, int]) -> dict:
+    """Check the pinned public pairs against the documented Anjoman row contract.
+
+    This is a read-only structural audit. It does not upload, sign, infer node
+    provenance state, or claim that any row is eligible or active.
+    """
+    prompt_min, prompt_max = 16, 16_000
+    answer_min, answer_max = 8, 32_000
+    row_max_bytes = 64 * 1024
+    lines = raw_jsonl.splitlines()
+    require(len(lines) == len(pairs), "Anjoman compatibility: JSONL line count differs")
+    seen_prompts = set()
+    prompt_lengths, chosen_lengths, rejected_lengths = [], [], []
+    row_sizes = []
+    source_kinds: dict[str, int] = {}
+    https_rows = 0
+    intent_id_rows = 0
+    label_kinds: dict[str, int] = {}
+
+    for index, (row, raw_line) in enumerate(zip(pairs, lines), 1):
+        required = {"prompt", "chosen", "rejected", "label_kind", "provenance"}
+        allowed = required | {"intent_id"}
+        require(type(row) is dict and required.issubset(row) and set(row).issubset(allowed),
+                f"Anjoman compatibility: row {index} has unsupported fields")
+        for field in ("prompt", "chosen", "rejected"):
+            value = row.get(field)
+            require(isinstance(value, str) and value.strip() and "\\x00" not in value,
+                    f"Anjoman compatibility: row {index} has invalid {field}")
+        prompt = _normalise(row["prompt"])
+        chosen = _normalise(row["chosen"])
+        rejected = _normalise(row["rejected"])
+        require(prompt_min <= len(prompt) <= prompt_max,
+                f"Anjoman compatibility: row {index} prompt length is outside documented bounds")
+        require(answer_min <= len(chosen) <= answer_max and answer_min <= len(rejected) <= answer_max,
+                f"Anjoman compatibility: row {index} answer length is outside documented bounds")
+        require(chosen != rejected, f"Anjoman compatibility: row {index} answers are identical")
+        require(prompt not in seen_prompts, "Anjoman compatibility: duplicate normalized prompt")
+        seen_prompts.add(prompt)
+
+        require(row.get("label_kind") == "preference_pair",
+                f"Anjoman compatibility: row {index} is not a preference_pair")
+        label_kinds[row["label_kind"]] = label_kinds.get(row["label_kind"], 0) + 1
+        if "intent_id" in row:
+            intent_id_rows += 1
+            require(row["intent_id"] == intent_id,
+                    f"Anjoman compatibility: row {index} targets a different Intent")
+
+        provenance = row.get("provenance")
+        require(type(provenance) is dict and set(provenance) == {"source_kind", "source_url"},
+                f"Anjoman compatibility: row {index} provenance fields are malformed")
+        source_kind = provenance.get("source_kind")
+        source_url = provenance.get("source_url")
+        require(isinstance(source_kind, str) and source_kind.strip(),
+                f"Anjoman compatibility: row {index} source_kind is missing")
+        parsed_url = urlparse(source_url) if isinstance(source_url, str) else None
+        require(parsed_url is not None and parsed_url.scheme == "https" and parsed_url.netloc,
+                f"Anjoman compatibility: row {index} source_url is not an absolute HTTPS URL")
+        source_kinds[source_kind] = source_kinds.get(source_kind, 0) + 1
+        https_rows += 1
+
+        row_size = len(raw_line)
+        require(row_size <= row_max_bytes,
+                f"Anjoman compatibility: row {index} exceeds the 64 KiB row limit")
+        row_sizes.append(row_size)
+        prompt_lengths.append(len(prompt))
+        chosen_lengths.append(len(chosen))
+        rejected_lengths.append(len(rejected))
+
+    return {
+        "official_sources": {
+            "material_guide": "https://anjoman.ai/docs/scoring/contribute-evaluation-data",
+            "intent_catalogue": "https://github.com/telegraphprotocol/bounties/blob/main/docs/INTENTS.md",
+            "bounty": "https://github.com/telegraphprotocol/bounties/issues/96",
+            "checked_date": "2026-11-28",
+        },
+        "intent": {
+            "intent_id": intent_id,
+            "kind": "judgment",
+            "family": "SECURITY_REVIEW",
+            "family_adapter_required": True,
+            "response_shape": ["verdict", "vulnerability_count", "issues", "summary"],
+        },
+        "row_contract": {
+            "format": "JSON Lines",
+            "label_kind": "preference_pair",
+            "required_fields": ["prompt", "chosen", "rejected"],
+            "optional_fields": ["label_kind", "intent_id", "provenance"],
+            "prompt_characters": {"minimum": prompt_min, "maximum": prompt_max},
+            "answer_characters": {"minimum": answer_min, "maximum": answer_max},
+            "maximum_row_bytes": row_max_bytes,
+            "prompt_normalization": "Unicode NFC; collapse runs of whitespace; no case folding",
+        },
+        "sample_size": len(pairs),
+        "structurally_compatible_rows": len(pairs),
+        "structural_compatibility_verified": True,
+        "normalized_unique_prompts": len(seen_prompts),
+        "prompt_length_characters": {
+            "minimum": min(prompt_lengths), "maximum": max(prompt_lengths),
+        },
+        "chosen_length_characters": {
+            "minimum": min(chosen_lengths), "maximum": max(chosen_lengths),
+        },
+        "rejected_length_characters": {
+            "minimum": min(rejected_lengths), "maximum": max(rejected_lengths),
+        },
+        "maximum_raw_jsonl_row_bytes": max(row_sizes),
+        "label_kind_counts": label_kinds,
+        "intent_id_present_rows": intent_id_rows,
+        "provenance": {
+            "source_kind_counts": source_kinds,
+            "https_source_url_rows": https_rows,
+            "node_provenance_classification": "NOT_OBSERVED_NO_UPLOAD",
+            "note": "The source_kind value is preserved verbatim; no attested, admitted, eligible or active status is inferred without a node response.",
+        },
+        "pool_activation": {
+            "minimum_distinct_contributors": 5,
+            "external_dataset_authors": authors,
+            "external_authors_counted_as_network_contributors": False,
+            "active_snapshot_verified": False,
+        },
+        "submission": {
+            "upload_attempted": False,
+            "signature_created": False,
+            "network_row_status_observed": False,
+            "eligible_claimed": False,
+            "ranking_use_claimed": False,
+        },
+    }
+
+
 def _row_id(prompt: str, chosen: str, rejected: str) -> str:
     payload = "\0".join(_normalise(x) for x in (prompt, chosen, rejected)).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
@@ -202,6 +333,9 @@ def _audit_external(lock: dict, raw: dict[str, bytes]) -> dict:
             pair["prompt"] + "\n" + pair["chosen"] + "\n" + pair["rejected"] + "\n" + url
         ))
     require(set(pair_ids) == set(metadata_by_id), "unmatched test metadata rows")
+    material_compatibility = _audit_telegraph_material(
+        pairs, raw["test_pairs"], ext["intent"], author_counts
+    )
 
     raw_scores = parse(raw["raw_scores"])
     require(type(raw_scores) is list and len(raw_scores) == len(pairs),
@@ -255,6 +389,7 @@ def _audit_external(lock: dict, raw: dict[str, bytes]) -> dict:
             "author_reviewed_ai_assisted": len(metadata),
             "fully_human_written": 0,
         },
+        "telegraph_material_compatibility": material_compatibility,
         "published_external_adapter": {
             "correct": correct,
             "incorrect": incorrect,
@@ -359,6 +494,7 @@ def audit(root: Path = ROOT) -> dict:
             "matched_falsum_baseline_comparison": False,
             "independent_human_gold": False,
             "complete_source_disjoint_holdout": False,
+            "telegraph_material_schema_compatibility": external["telegraph_material_compatibility"]["structural_compatibility_verified"],
             "telegraph_material_acceptance": False,
             "telegraph_ranking_change": False,
             "independent_falsum_reproduction": False,
