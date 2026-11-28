@@ -35,7 +35,7 @@
   "baseline": {
     "tool": "cargo-audit",
     "version": "0.22.2",
-    "rust_toolchain": "1.86.0",
+    "rust_toolchain": "1.88.0",
     "output_format": "json",
     "flags": [
       "--no-fetch",
@@ -84,5 +84,22 @@
     "No Solana program source, deployed binary, runtime behavior, transaction, validator, or reachability analysis is performed.",
     "No independent ResQ maintainer review or application adoption is claimed.",
     "No Telegraph network scoring, ranking change, material acceptance, or provider improvement is claimed."
+  ],
+  "protocol_amendments": [
+    {
+      "amended_at": "2026-11-28T08:10:46Z",
+      "reason": "The first hosted cargo-audit install did not execute the baseline: cargo-audit 0.22.2 requires rustc 1.88 or newer, while the initial pinned toolchain was 1.86.0.",
+      "changed": [
+        "baseline.rust_toolchain"
+      ],
+      "unchanged": [
+        "cargo-audit version",
+        "ResQ application commit and Cargo.lock blob",
+        "RustSec database commit and advisory blobs",
+        "two-case roster",
+        "pre-existing FALSUM candidate result"
+      ],
+      "baseline_execution_occurred": false
+    }
   ]
 }
