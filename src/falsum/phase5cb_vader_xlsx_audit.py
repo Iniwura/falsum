@@ -8,17 +8,17 @@ runs a candidate model and never writes raw answers to disk.
 from __future__ import annotations
 
 import argparse
-from datetime import date, datetime
+from decimal import Decimal, InvalidOperation
 from io import BytesIO
 import json
 import math
-from pathlib import Path
+from pathlib import Path, PurePosixPath
+import posixpath
 import re
+import xml.etree.ElementTree as ET
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 import zipfile
-
-from openpyxl import load_workbook
 
 from . import phase5ca_vader_corpus as ca
 
@@ -99,54 +99,160 @@ def download_workbook(protocol: dict) -> tuple[bytes, dict]:
     }
 
 
-def cell_text(value: object) -> str:
-    if value is None:
+MAIN_NS = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+REL_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+PKG_NS = "http://schemas.openxmlformats.org/package/2006/relationships"
+
+
+def _read_xml(archive: zipfile.ZipFile, path: str):
+    raw = archive.read(path)
+    upper = raw.upper()
+    ca.need(b"<!DOCTYPE" not in upper and b"<!ENTITY" not in upper,
+            "workbook XML DTD/entity declarations are not permitted")
+    try:
+        return ET.fromstring(raw)
+    except ET.ParseError as exc:
+        raise ca.VaderCorpusError("workbook contains malformed XML: " + path) from exc
+
+
+def _column_index(reference: str) -> int:
+    match = re.fullmatch(r"([A-Z]+)[1-9][0-9]*", reference)
+    ca.need(match is not None, "workbook contains an invalid cell reference")
+    value = 0
+    for char in match.group(1):
+        value = value * 26 + ord(char) - 64
+    return value - 1
+
+
+def _shared_strings(archive: zipfile.ZipFile, names: set[str]) -> list[str]:
+    path = "xl/sharedStrings.xml"
+    if path not in names:
+        return []
+    root = _read_xml(archive, path)
+    return [
+        "".join(node.text or "" for node in item.iter(f"{{{MAIN_NS}}}t"))
+        for item in root.findall(f"{{{MAIN_NS}}}si")
+    ]
+
+
+def _cell_value(cell, shared: list[str]) -> str:
+    ca.need(cell.find(f"{{{MAIN_NS}}}f") is None,
+            "formula cells are not permitted in the frozen source workbook")
+    kind = cell.get("t")
+    if kind == "inlineStr":
+        inline = cell.find(f"{{{MAIN_NS}}}is")
+        return "" if inline is None else "".join(
+            node.text or "" for node in inline.iter(f"{{{MAIN_NS}}}t")
+        )
+    value_node = cell.find(f"{{{MAIN_NS}}}v")
+    raw = "" if value_node is None or value_node.text is None else value_node.text
+    if kind == "s":
+        try:
+            index = int(raw)
+            return shared[index]
+        except (ValueError, IndexError) as exc:
+            raise ca.VaderCorpusError("invalid shared-string reference in workbook") from exc
+    if kind == "b":
+        ca.need(raw in ("0", "1"), "invalid boolean cell in workbook")
+        return "TRUE" if raw == "1" else "FALSE"
+    if kind == "e":
+        raise ca.VaderCorpusError("Excel error cell is not a valid graded value")
+    if kind in ("str", "d"):
+        return raw
+    ca.need(kind in (None, "n"), "unsupported workbook cell type: " + str(kind))
+    if not raw:
         return ""
-    if isinstance(value, bool):
-        return "TRUE" if value else "FALSE"
-    if isinstance(value, int):
-        return str(value)
-    if isinstance(value, float):
-        ca.need(math.isfinite(value), "non-finite Excel cell value")
-        return format(value, ".15g")
-    if isinstance(value, (datetime, date)):
-        return value.isoformat()
-    return str(value)
+    try:
+        number = Decimal(raw)
+    except InvalidOperation:
+        raise ca.VaderCorpusError("invalid numeric cell in workbook")
+    ca.need(number.is_finite(), "non-finite numeric cell in workbook")
+    if number == number.to_integral_value():
+        return format(number.quantize(Decimal(1)), "f")
+    return format(number.normalize(), "f")
 
 
-def _trim(values: list[str]) -> list[str]:
-    while values and values[-1] == "":
-        values.pop()
-    return values
+def _read_sheet(archive: zipfile.ZipFile, path: str, shared: list[str]):
+    root = _read_xml(archive, path)
+    sheet_data = root.find(f"{{{MAIN_NS}}}sheetData")
+    ca.need(sheet_data is not None, "worksheet has no sheetData")
+    rows = []
+    max_row = 0
+    max_column = 0
+    for row_node in sheet_data.findall(f"{{{MAIN_NS}}}row"):
+        try:
+            row_number = int(row_node.get("r", "0"))
+        except ValueError as exc:
+            raise ca.VaderCorpusError("worksheet row has an invalid index") from exc
+        ca.need(row_number > 0, "worksheet row index must be positive")
+        cells = {}
+        for cell in row_node.findall(f"{{{MAIN_NS}}}c"):
+            reference = cell.get("r", "")
+            column = _column_index(reference)
+            ca.need(column not in cells, "duplicate cell reference in worksheet row")
+            cells[column] = _cell_value(cell, shared)
+            max_column = max(max_column, column + 1)
+        max_row = max(max_row, row_number)
+        values = [cells.get(index, "") for index in range(max_column)]
+        rows.append((row_number, values))
+    return rows, max_row, max_column
 
 
 def parse_workbook(raw: bytes) -> tuple[list[dict[str, str]], dict]:
     ca.need(zipfile.is_zipfile(BytesIO(raw)), "graded.xlsx is not a valid ZIP workbook")
-    with zipfile.ZipFile(BytesIO(raw)) as archive:
-        names = archive.namelist()
-        ca.need(len(names) <= 5000, "workbook contains too many ZIP members")
-        ca.need(not any(name.startswith("/") or ".." in Path(name).parts for name in names),
-                "workbook contains an unsafe ZIP member path")
+    try:
+        archive = zipfile.ZipFile(BytesIO(raw))
+    except zipfile.BadZipFile as exc:
+        raise ca.VaderCorpusError("graded.xlsx ZIP container is malformed") from exc
+    with archive:
+        infos = archive.infolist()
+        names = {item.filename for item in infos}
+        ca.need(len(infos) <= 5000, "workbook contains too many ZIP members")
+        ca.need(sum(item.file_size for item in infos) <= 20_000_000,
+                "workbook expanded size exceeds the frozen safety cap")
+        ca.need(not any(
+            name.startswith("/") or ".." in PurePosixPath(name).parts
+            for name in names
+        ), "workbook contains an unsafe ZIP member path")
         ca.need(not any("vbaproject.bin" in name.lower() for name in names),
                 "macro-enabled content is not permitted")
-    try:
-        workbook = load_workbook(BytesIO(raw), read_only=True, data_only=True)
-    except Exception as exc:
-        raise ca.VaderCorpusError("graded.xlsx cannot be opened as a read-only workbook") from exc
-    try:
+        ca.need(not any(name.startswith("xl/externalLinks/") for name in names),
+                "external workbook links are not permitted")
+        workbook_root = _read_xml(archive, "xl/workbook.xml")
+        rels_root = _read_xml(archive, "xl/_rels/workbook.xml.rels")
+        relationships = {}
+        for relation in rels_root.findall(f"{{{PKG_NS}}}Relationship"):
+            ca.need(relation.get("TargetMode") != "External",
+                    "external workbook relationships are not permitted")
+            relationships[relation.get("Id")] = relation.get("Target", "")
+        shared = _shared_strings(archive, names)
+        sheets = []
+        for sheet_node in workbook_root.findall(f".//{{{MAIN_NS}}}sheet"):
+            sheet_name = sheet_node.get("name", "")
+            relation_id = sheet_node.get(f"{{{REL_NS}}}id", "")
+            target = relationships.get(relation_id, "")
+            ca.need(bool(sheet_name) and bool(target),
+                    "workbook sheet has no valid relationship target")
+            if target.startswith("/"):
+                sheet_path = target.lstrip("/")
+            else:
+                sheet_path = posixpath.normpath(posixpath.join("xl", target))
+            ca.need(sheet_path.startswith("xl/")
+                    and ".." not in PurePosixPath(sheet_path).parts
+                    and sheet_path in names,
+                    "workbook sheet target is outside the approved workbook tree")
+            sheet_rows, max_row, max_column = _read_sheet(archive, sheet_path, shared)
+            sheets.append((sheet_name, sheet_rows, max_row, max_column))
         matches = []
-        for sheet in workbook.worksheets:
-            max_scan = min(int(sheet.max_row or 0), 10)
-            for row_number in range(1, max_scan + 1):
-                values = _trim([cell_text(v) for v in next(
-                    sheet.iter_rows(min_row=row_number, max_row=row_number,
-                                    max_col=sheet.max_column, values_only=True)
-                )])
-                if tuple(values) == ca.GRADED_FIELDS:
-                    matches.append((sheet, row_number))
+        for sheet_name, sheet_rows, max_row, max_column in sheets:
+            for row_number, values in sheet_rows:
+                if row_number > 10:
+                    continue
+                if tuple(_trim(list(values))) == ca.GRADED_FIELDS:
+                    matches.append((sheet_name, sheet_rows, max_row, max_column, row_number))
         ca.need(len(matches) == 1,
                 "workbook must contain exactly one worksheet with the frozen graded schema")
-        sheet, header_row = matches[0]
+        sheet_name, sheet_rows, max_row, max_column, header_row = matches[0]
         rows: list[dict[str, str]] = []
         malformed = []
         duplicate_ids = []
@@ -154,12 +260,10 @@ def parse_workbook(raw: bytes) -> tuple[list[dict[str, str]], dict]:
         invalid_scores = []
         incomplete_answers = []
         physical_data_rows = 0
-        for row_number, values in enumerate(
-            sheet.iter_rows(min_row=header_row + 1,
-                            max_col=sheet.max_column, values_only=True),
-            start=header_row + 1,
-        ):
-            normalized = [cell_text(v) for v in values]
+        for row_number, values in sheet_rows:
+            if row_number <= header_row:
+                continue
+            normalized = list(values)
             if not any(normalized):
                 continue
             physical_data_rows += 1
@@ -178,7 +282,10 @@ def parse_workbook(raw: bytes) -> tuple[list[dict[str, str]], dict]:
                 ca._severity(row.get("Severity", ""), numeric_allowed=True)
                 responses = {model: ca._model_response(row, model) for model in ca.MODELS}
             except (KeyError, ca.VaderCorpusError) as exc:
-                malformed.append({"row": row_number, "reason": str(exc)[:160]})
+                reason = str(exc)[:160]
+                malformed.append({"row": row_number, "reason": reason})
+                if any(word in reason.lower() for word in ("score", "total", "explanation", "remediation", "other")):
+                    invalid_scores.append(row.get("ID", "") or f"row:{row_number}")
                 continue
             if ident in seen_ids:
                 duplicate_ids.append(ident)
@@ -187,13 +294,11 @@ def parse_workbook(raw: bytes) -> tuple[list[dict[str, str]], dict]:
             if not all(item["answer_present"] for item in responses.values()):
                 incomplete_answers.append(ident)
             rows.append(row)
-            if len(responses) != 6:
-                invalid_scores.append(ident)
         return rows, {
-            "sheet": sheet.title,
+            "sheet": sheet_name,
             "header_row": header_row,
-            "worksheet_max_row": sheet.max_row,
-            "worksheet_max_column": sheet.max_column,
+            "worksheet_max_row": max_row,
+            "worksheet_max_column": max_column,
             "data_rows": physical_data_rows,
             "valid_rows": len(rows),
             "malformed_rows": malformed,
@@ -205,8 +310,6 @@ def parse_workbook(raw: bytes) -> tuple[list[dict[str, str]], dict]:
             "invalid_score_ids": invalid_scores,
             "invalid_score_count": len(invalid_scores),
         }
-    finally:
-        workbook.close()
 
 
 def _description(value: str) -> str:
@@ -427,16 +530,16 @@ def build_report(protocol: dict, workbook_rows: list[dict[str, str]],
 def run(root: Path = ROOT) -> tuple[dict, dict]:
     protocol = load_protocol(root)
     phase5ca_protocol = ca.load_protocol(root)
-    ds = phase5ca_protocol["dataset"]
+    source_files = phase5ca_protocol["source_files"]
     xlsx_raw, xlsx_meta = download_workbook(protocol)
     xlsx_rows, xlsx_diag = parse_workbook(xlsx_raw)
     vader_raw, vader_meta = ca._download(
-        "vader.csv", ds["source_files"][0]["git_blob_sha1"],
-        ds["source_files"][0]["max_bytes"], ds["revision"],
+        "vader.csv", source_files[0]["git_blob_sha1"],
+        source_files[0]["max_bytes"], phase5ca_protocol["dataset"]["revision"],
     )
     graded_raw, graded_meta = ca._download(
-        "graded.csv", ds["source_files"][1]["git_blob_sha1"],
-        ds["source_files"][1]["max_bytes"], ds["revision"],
+        "graded.csv", source_files[1]["git_blob_sha1"],
+        source_files[1]["max_bytes"], phase5ca_protocol["dataset"]["revision"],
     )
     vader_rows, vader_diag = ca._read_csv(vader_raw, ca.VADER_FIELDS, "vader.csv")
     graded_rows, graded_diag = ca._read_csv(graded_raw, ca.GRADED_FIELDS, "graded.csv")
