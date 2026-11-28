@@ -39,6 +39,32 @@ The JSON artifact reports:
 
 The false-acceptance/rejection labels are relative to cargo-audit, not human AppSec gold. Any disagreement is preserved in the report; the workflow does not force a preferred result.
 
+## Observed hosted result — 28 November 2026
+
+The [Phase 5BX hosted run](https://github.com/Iniwura/falsum/actions/runs/46124652210) completed successfully. Its [machine-readable artifact](https://github.com/Iniwura/falsum/actions/runs/46124652210/artifacts/15254403582) is pinned to head `fd5b139224ad34df03e182d630e40cbd95374778`.
+
+| Measure | Result |
+| --- | ---: |
+| Full ResQ lockfile dependencies scanned by cargo-audit | 805 |
+| Full lockfile RustSec findings from cargo-audit | 4 |
+| Selected anchor-lang package/advisory pairs | 2 |
+| FALSUM / cargo-audit agreement | 2/2 |
+| SemVer 7.8.6 / cargo-audit agreement | 2/2 |
+| FALSUM false acceptances / false rejections vs cargo-audit | 0 / 0 |
+| FALSUM coverage / abstentions | 2 / 0 |
+| Citation-only false-applicables vs cargo-audit | 2 |
+
+Both selected pairs, RUSTSEC-2026-0144 and RUSTSEC-2026-0146, are **INAPPLICABLE** to the locked anchor-lang 1.0.0-rc.4. The citation-only control marks both applicable. cargo-audit's full-lockfile scan found four other package advisories:
+
+- RUSTSEC-2026-0387 — crypto-bigint 0.5.5
+- RUSTSEC-2024-0344 — curve25519-dalek 3.2.0
+- RUSTSEC-2022-0093 — ed25519-dalek 1.0.1
+- RUSTSEC-2026-0592 — url 2.5.8
+
+cargo-audit exited 1 because those four findings exist; the baseline job and artifact generation succeeded. There were no anchor-lang findings in the full report.
+
+This is owner-run CI. The result is not an independent developer reproduction, human AppSec gold, or a FALSUM scan of the other 803 locked dependencies. It does not establish ResQ adoption or Telegraph network improvement. The result does not change the internal score.
+
 ## Reproduce
 
 The hosted [Phase 5BX workflow](../.github/workflows/phase5bx-cargo-audit-resq-baseline.yml) performs the complete install, immutable database checkout, source verification, full lockfile scan, comparison, and sanitized artifact upload.
