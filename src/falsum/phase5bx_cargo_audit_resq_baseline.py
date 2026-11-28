@@ -16,7 +16,7 @@ from .phase5bu_resq_solana_lockfile import (
 )
 from .phase5m_real_source_sensitive_model import ROOT
 
-PROTOCOL_BLOB = "61d79e3b74e08063d678a2fe4d979d1e1c797c61"
+PROTOCOL_BLOB = "324210d4504c16adb51d3b8fa7b1e9dc09249a23"
 APPLICABLE = "APPLICABLE"
 INAPPLICABLE = "INAPPLICABLE"
 UNKNOWN = "INSUFFICIENT_EVIDENCE"
@@ -262,6 +262,12 @@ def run(db_dir: Path, root: Path = ROOT) -> dict:
     tool_version = match.group(1)
     _require(tool_version == protocol["baseline"]["version"],
              "installed cargo-audit version differs from frozen protocol")
+    rust_result = subprocess.run(["rustc", "--version"], text=True,
+                                  capture_output=True, check=False)
+    rust_match = re.search(r"\b(\d+\.\d+\.\d+)\b", rust_result.stdout)
+    _require(rust_result.returncode == 0 and rust_match is not None
+             and rust_match.group(1) == protocol["baseline"]["rust_toolchain"],
+             "active rustc version differs from frozen cargo-audit toolchain")
 
     with tempfile.TemporaryDirectory(prefix="falsum-phase5bx-") as temp:
         temp_dir = Path(temp)
