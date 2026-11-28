@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "PHASE5BW_EXTERNAL_ADVERSARIALEVAL_INGESTION_FROZEN",
-  "freeze_time_utc": "2026-11-28T07:21:10Z",
+  "freeze_time_utc": "2026-11-28T07:32:17Z",
   "purpose": "Reproducibly ingest and audit a public independently authored Evaluators preference-pair corpus. This protocol does not score FALSUM, train a model, or claim a fully source-disjoint blind holdout.",
   "external": {
     "repository": "Ritapossible/AdversarialEval",
