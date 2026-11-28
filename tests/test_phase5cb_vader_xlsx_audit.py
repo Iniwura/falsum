@@ -56,6 +56,7 @@ class Phase5CBWorkbookTests(unittest.TestCase):
         rows, diag = parse_workbook(workbook_bytes([row, row]))
         self.assertEqual(len(rows), 1)
         self.assertEqual(diag["duplicate_stable_id_count"], 1)
+        self.assertEqual(diag["data_rows"], 2)
         self.assertEqual(diag["duplicate_stable_ids"], [row["ID"]])
 
     def test_invalid_component_total_is_excluded(self):
