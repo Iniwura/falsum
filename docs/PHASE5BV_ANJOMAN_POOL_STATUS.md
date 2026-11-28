@@ -7,11 +7,17 @@ that the pool is active.
 ## Official protocol facts
 
 The [Anjoman contribution guide](https://anjoman.ai/docs/scoring/contribute-evaluation-data)
-defines eligible as inclusion in a frozen snapshot. Judgment questions are
-used only after the pool has material from at least five different
-contributors. The aggregate endpoint exposes contributor counts and both the
-latest and active snapshots. The guide also states that there is no public
-endpoint for per-row ranking-use records.
+describes a five-contributor minimum for judgment questions and defines
+eligible rows as inclusion in a frozen snapshot. It documents an aggregate
+endpoint exposing contributor counts and both the latest and active snapshots.
+It also states that there is no public endpoint for per-row ranking-use
+records.
+
+The live node response observed on 2026-11-28 reported min_submitters = 3,
+while the guide describes five. This is a documentation/runtime discrepancy.
+The implementation reads the node's min_submitters field and does not
+hard-code either value. The live node field is the configured threshold for
+that observed response; the documentation remains the published general rule.
 
 The official [SECURITY_REVIEW bounty #96](https://github.com/telegraphprotocol/bounties/issues/96)
 says an individual's contribution counts once their rows are eligible;
@@ -27,7 +33,7 @@ The script stores only:
 
 - aggregate counts by row state;
 - total and eligible contributor counts;
-- the minimum contributor threshold;
+- the node-reported minimum contributor threshold;
 - current epoch;
 - row count, submitter count and activation epoch for the latest and active
   snapshots.
@@ -36,10 +42,28 @@ It does not request a contributor address, the per-contributor submissions
 endpoint, row IDs, prompts, answers, signatures or private content. It does
 not sign, upload, register, submit, pay or write to the network.
 
+## Observed result
+
+Hosted read-only run:
+https://github.com/Iniwura/falsum/actions/runs/46119192105
+
+At 2026-11-28T07:00:50Z, the node reported:
+
+- 1,379 eligible rows and 44 rejected rows;
+- 11 total and 11 eligible submitters;
+- node-configured minimum of 3 submitters;
+- active snapshot: 1,379 rows, 11 submitters, activation epoch 11;
+- latest snapshot equals the active snapshot;
+- current epoch 70.
+
+This confirms the aggregate SECURITY_REVIEW_GENERAL judgment pool had a
+qualifying active snapshot at observation time. It does not identify which
+contributors or rows were included.
+
 ## Interpretation
 
 active_pool_available_for_current_epoch is true only when the active snapshot
-contains rows and meets the documented minimum contributor count.
+contains rows and meets the node-reported contributor minimum.
 latest_snapshot_is_active separately identifies whether the most recent
 frozen snapshot has reached the active epoch. A newer snapshot can be waiting
 while the previous snapshot remains active.
