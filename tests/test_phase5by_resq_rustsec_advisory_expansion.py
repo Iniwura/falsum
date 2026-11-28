@@ -34,6 +34,10 @@ class Phase5BYRealSourceTests(unittest.TestCase):
                     m._candidate_status(row["version"], metadata["versions"]),
                     m.APPLICABLE,
                 )
+                self.assertEqual(
+                    m._reference_status(row["version"], metadata["versions"]),
+                    m.APPLICABLE,
+                )
 
     def test_two_prior_anchor_controls_remain_inapplicable(self):
         expected = {
@@ -47,6 +51,10 @@ class Phase5BYRealSourceTests(unittest.TestCase):
                 metadata = m._frontmatter(raw, row["id"], row["package"])
                 self.assertEqual(
                     m._candidate_status(row["version"], metadata["versions"]),
+                    expected[row["id"]],
+                )
+                self.assertEqual(
+                    m._reference_status(row["version"], metadata["versions"]),
                     expected[row["id"]],
                 )
 
