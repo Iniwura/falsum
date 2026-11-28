@@ -1,0 +1,134 @@
+name: Phase 5BX - cargo-audit baseline for real ResQ Solana application
+
+on:
+  push:
+    paths:
+      - 'data/phase5bx-cargo-audit-resq-baseline-protocol.json'
+      - 'data/phase5bu-resq-solana-lockfile-protocol.json'
+      - 'src/falsum/phase5bx_cargo_audit_resq_baseline.py'
+      - 'src/falsum/phase5bu_resq_solana_lockfile.py'
+      - 'src/falsum/phase5aj_cross_app_evidence.py'
+      - 'src/falsum/phase5bo_ecosystem_semantics.py'
+      - 'src/falsum/phase5m_real_source_sensitive_model.py'
+      - 'tests/test_phase5bx_cargo_audit_resq_baseline.py'
+      - '.github/workflows/phase5bx-cargo-audit-resq-baseline.yml'
+  pull_request:
+    paths:
+      - 'data/phase5bx-cargo-audit-resq-baseline-protocol.json'
+      - 'data/phase5bu-resq-solana-lockfile-protocol.json'
+      - 'src/falsum/phase5bx_cargo_audit_resq_baseline.py'
+      - 'src/falsum/phase5bu_resq_solana_lockfile.py'
+      - 'src/falsum/phase5aj_cross_app_evidence.py'
+      - 'src/falsum/phase5bo_ecosystem_semantics.py'
+      - 'src/falsum/phase5m_real_source_sensitive_model.py'
+      - 'tests/test_phase5bx_cargo_audit_resq_baseline.py'
+      - '.github/workflows/phase5bx-cargo-audit-resq-baseline.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    name: cargo-audit adapter contracts / Python \${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '\${{ matrix.python }}'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install exact Python and SemVer dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps packaging==26.4
+          npm install --prefix .phase5bx-node --ignore-scripts --no-audit --no-fund semver@7.8.6
+          test "$(NODE_PATH="$GITHUB_WORKSPACE/.phase5bx-node/node_modules" node -p "require('semver/package.json').version")" = "7.8.6"
+      - name: Run cargo-audit JSON contract tests
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+          FALSUM_PHASE5BO_NODE_PATH: \${{ github.workspace }}/.phase5bx-node/node_modules
+        run: python -m unittest discover -s tests -p 'test_phase5bx_cargo_audit_resq_baseline.py' -v
+
+  real-application-baseline:
+    name: Scan pinned ResQ Cargo.lock with cargo-audit
+    needs: contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: '1.86.0'
+          cache: false
+      - name: Install exact Python and SemVer dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps packaging==26.4
+          npm install --prefix .phase5bx-node --ignore-scripts --no-audit --no-fund semver@7.8.6
+          test "$(NODE_PATH="$GITHUB_WORKSPACE/.phase5bx-node/node_modules" node -p "require('semver/package.json').version")" = "7.8.6"
+      - name: Install pinned cargo-audit
+        run: |
+          cargo install cargo-audit --version 0.22.2 --locked
+          test "$(cargo audit --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)" = "0.22.2"
+      - name: Checkout exact RustSec advisory database snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init "$RUNNER_TEMP/phase5bx-rustsec-db"
+          git -C "$RUNNER_TEMP/phase5bx-rustsec-db" remote add origin https://github.com/rustsec/advisory-db.git
+          git -C "$RUNNER_TEMP/phase5bx-rustsec-db" fetch --depth 1 origin c5279d0b0c9e8b70df666eb6d1edbabcfd1176bd
+          git -C "$RUNNER_TEMP/phase5bx-rustsec-db" checkout --detach FETCH_HEAD
+          test "$(git -C "$RUNNER_TEMP/phase5bx-rustsec-db" rev-parse HEAD)" = "c5279d0b0c9e8b70df666eb6d1edbabcfd1176bd"
+      - name: Run matched-input FALSUM and cargo-audit comparison
+        env:
+          PYTHONPATH: src
+          PYTHONDONTWRITEBYTECODE: '1'
+          FALSUM_PHASE5BO_NODE_PATH: \${{ github.workspace }}/.phase5bx-node/node_modules
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p phase5bx-evidence
+          python -m falsum.phase5bx_cargo_audit_resq_baseline \
+            --db-dir "$RUNNER_TEMP/phase5bx-rustsec-db" \
+            --out phase5bx-evidence/RESQ-CARGO-AUDIT-BASELINE.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('phase5bx-evidence/RESQ-CARGO-AUDIT-BASELINE.json').read_text())
+          assert report['status'] == 'PHASE5BX_RESQ_CARGO_AUDIT_BASELINE'
+          assert report['baseline']['version'] == '0.22.2'
+          assert report['advisory_database']['commit'] == 'c5279d0b0c9e8b70df666eb6d1edbabcfd1176bd'
+          assert report['sample_sizes']['applications'] == 1
+          assert report['sample_sizes']['package_advisory_pairs'] == 2
+          assert report['baseline']['project_code_executed'] is False
+          assert report['interpretation']['cargo_audit_is_human_appsec_gold'] is False
+          assert report['interpretation']['independent_application_adoption'] is False
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('## Phase 5BX: ResQ Solana Cargo.lock baseline\n\n')
+              summary.write(f"cargo-audit scanned {report['baseline']['lockfile_dependency_count']} locked dependencies and reported {report['baseline']['full_lockfile_vulnerability_count']} findings in the full lockfile.\n\n")
+              summary.write(f"On the two frozen anchor-lang pairs, FALSUM agreed with cargo-audit on {report['aggregate']['falsum_cargo_audit_agreement']}/2; the independent semver reference agreed on {report['aggregate']['semver_cargo_audit_agreement']}/2.\n\n")
+              summary.write('This is a post-hoc independent-tool corroboration, not a blind holdout, human AppSec gold, full FALSUM dependency scan, application adoption, or Telegraph network improvement.\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phase5bx-resq-cargo-audit-baseline
+          path: phase5bx-evidence/
+          retention-days: 90
+          if-no-files-found: error
