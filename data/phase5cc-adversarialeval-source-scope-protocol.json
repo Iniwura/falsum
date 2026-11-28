@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "status": "PHASE5CC_ADVERSARIALEVAL_SOURCE_IDENTITY_ROSTER_FROZEN",
+  "freeze_time_utc": "2026-11-28T11:20:51Z",
+  "purpose": "Correct the Phase 5BW source-overlap audit by deriving source identity only from the task prompt and its declared provenance URL. This protocol freezes a public-source candidate roster before any FALSUM candidate inference. It does not establish private-pool disjointness or a blind holdout.",
+  "upstream_phase5bw": {
+    "repository": "Iniwura/falsum",
+    "path": "data/phase5bw-adversarialeval-ingestion-protocol.json",
+    "git_blob_sha1": "7664937b1c30db9d2a7947182e36c180178fe047",
+    "role": "Authenticate the immutable external corpus, author metadata, row identities, published raw-score arithmetic, and the previously frozen public FALSUM source inventory."
+  },
+  "external": {
+    "repository": "Ritapossible/AdversarialEval",
+    "commit": "09f9fa4a584b513720b215731baf54187039ac10",
+    "license": "MIT",
+    "intent": "SECURITY_REVIEW_GENERAL",
+    "test_pairs_path": "data/test/security_review.test.jsonl",
+    "test_pairs_git_blob_sha1": "e5b57e2b56c8a99026740d31d34087895718ccdf",
+    "test_pairs_sha256": "66b37e83df6391bb9364112e11747bad95b3afa0e32d4bda0290f5c5fc49e81b",
+    "metadata_path": "data/meta/security_review.test.meta.jsonl",
+    "metadata_git_blob_sha1": "e05bf89591e79d9b8b0754b7b5b8b2ba4e4e14c7",
+    "metadata_sha256": "7cc55e20d0527c9f96f24b390cfbcebead13a60be9865e38d7691f3716d8f32f",
+    "row_identity_algorithm": "SHA256(UTF8(NFC-and-whitespace-normalized prompt + NUL + chosen + NUL + rejected))",
+    "expected_pair_count": 40,
+    "expected_metadata_count": 40,
+    "reviewers": {
+      "reviewer:fexx": 20,
+      "reviewer:lino": 20
+    },
+    "author_reviewed_pairs": 40,
+    "ai_assisted_pairs": 40,
+    "fully_human_written_pairs": 0
+  },
+  "falsum_public_inventory": {
+    "repository": "Iniwura/falsum",
+    "base_commit": "888afe14a5d75160963f5a85169fc3f8d6f85ec7",
+    "files": [
+      {"path":"docs/CORPUS.md","blob":"1d27be55da51e4d4a942634dbd08cd83575a2a3e"},
+      {"path":"data/advisory-queue.json","blob":"e3d6ae14298ea407836c186f703a00194e5caf4e"},
+      {"path":"data/draft-scenarios.json","blob":"228c3d6b35296e8fc45ba4fe35aeb3438522add4"},
+      {"path":"data/draft-pr-benchmark.json","blob":"a34c0223b040a152bba34cccee8d0d2446a59f95"}
+    ],
+    "expected_advisory_identifier_count": 35,
+    "private_pool_overlap": "UNKNOWN_NOT_PUBLICLY_ACCESSIBLE"
+  },
+  "selection_policy": {
+    "source_identity_fields": ["prompt", "provenance.source_url"],
+    "excluded_from_source_identity": ["chosen", "rejected"],
+    "reason": "Candidate answer text can contain incorrect advisory identifiers. Using an identifier that appears only in an answer as source provenance can falsely classify a pair as source-disjoint. Row 23 demonstrates this failure.",
+    "overlap_rule": "A pair overlaps if any CVE/GHSA identifier extracted from prompt or provenance.source_url appears in the frozen public FALSUM inventory.",
+    "candidate_rule": "A pair is a public-source-disjoint candidate only when at least one CVE/GHSA identifier appears in prompt or provenance.source_url and none overlaps the frozen public inventory.",
+    "unclassified_rule": "Pairs with no CVE/GHSA identifier in prompt or provenance.source_url remain unclassified, even if an identifier appears in chosen or rejected answer text.",
+    "row_identity_rule": "Continue to use the upstream row identity algorithm over prompt, chosen, and rejected for one-to-one corpus/metadata binding. This identity hash is not used as source provenance.",
+    "answer_only_identifiers": "May be reported as a diagnostic but must never alter source classification.",
+    "candidate_inference_before_freeze": false,
+    "heldout_eligible": false,
+    "reason_heldout_ineligible": "The private contents of FALSUM's historical Anjoman evaluation material are not publicly accessible for exact source-identity comparison."
+  },
+  "expected": {
+    "source_identifier_count": 10,
+    "public_overlap": [
+      {
+        "row_number": 9,
+        "row_id": "880bfff3b78c94ba18dcda4dc9197435253a832dd020dc6f02ed18c00b43815c",
+        "identifiers": ["CVE-2025-27152", "GHSA-JR5F-V2JV-69X6"]
+      }
+    ],
+    "public_source_disjoint_candidates": [
+      {"row_number":3,"row_id":"6930bc33b41f65ddd7c0901bf3797e0f9f35a4653a945cdcb711bdf28f96ceb7","identifiers":["CVE-2020-8203","GHSA-P6MC-M468-83GW"]},
+      {"row_number":6,"row_id":"d517c4f3e3b4a2cfbf62b8f8096e218f507bd77f1c3a40bb7c32cffe556931c6","identifiers":["CVE-2021-44906","GHSA-XVCH-5GV4-984H"]},
+      {"row_number":25,"row_id":"16b85df567dcd21a1afafd71d960335f1cc6b0251bc40b38dc258d649f7c163f","identifiers":["GHSA-XXJR-MMJV-4GPG"]},
+      {"row_number":28,"row_id":"0cd7adfa6607eef77e261f950857040e38be4645e1ef7fc1e5f8cfc9f516f656","identifiers":["GHSA-F23M-R3PF-42RH"]},
+      {"row_number":33,"row_id":"66699fa778f3e909c6abbaf6c934721254ae64205dcad4c4177233b0d879f840","identifiers":["GHSA-RV95-896H-C2VC"]},
+      {"row_number":35,"row_id":"5ea844c3a4a12098e5a256307f44b96f6ba3288a20d7e1e822aaa82f75738624","identifiers":["GHSA-XXJR-MMJV-4GPG"]},
+      {"row_number":39,"row_id":"5a4a4faa5a16fe39157a3f9e4548b5acf0f2609dd245eb70de46d144573a001f","identifiers":["GHSA-F23M-R3PF-42RH"]},
+      {"row_number":40,"row_id":"1975e14d39a885eaaf955ef7ffa32a8cd773d22d4d17d0b0ad38bdf1b4a7a011","identifiers":["GHSA-R5FR-RJXR-66JC"]}
+    ],
+    "distinct_candidate_ghsa_count": 6,
+    "unclassified_pair_count": 31,
+    "answer_only_identifier_rows": [
+      {
+        "row_number": 23,
+        "row_id": "76d76f47a872dff582d05bb4ad57938d60e8d94063f13915297007c4c2932669",
+        "source_url": "https://cwe.mitre.org/data/definitions/601.html",
+        "answer_only_identifiers": ["GHSA-RV95-896H-C2VC"],
+        "classification": "UNCLASSIFIED_NO_SOURCE_IDENTIFIER"
+      },
+      {
+        "row_number": 33,
+        "row_id": "66699fa778f3e909c6abbaf6c934721254ae64205dcad4c4177233b0d879f840",
+        "source_url": "https://github.com/advisories/GHSA-rv95-896h-c2vc",
+        "answer_only_identifiers": ["CVE-2024-29041"],
+        "classification": "PUBLIC_SOURCE_DISJOINT_CANDIDATE"
+      }
+    ]
+  },
+  "limits": [
+    "The 40 pairs are AI-assisted and author-reviewed by two external authors; none is fully human-written.",
+    "The external project's 31/40 adapter result is published arithmetic, not a reproduced model inference.",
+    "The reported 60% strongest shortcut baseline is an external report claim; raw shortcut predictions were not independently replayed.",
+    "The 8 public-source-disjoint candidates are not a blind or eligible heldout set because private FALSUM pool overlap is UNKNOWN.",
+    "The 8 candidates contain 6 distinct GHSA identifiers and are not 8 independent advisory families.",
+    "No FALSUM model score, false-acceptance rate, false-rejection rate, coverage, abstention, or improvement is measured by this source-identity protocol.",
+    "No Telegraph material acceptance, active pool use, ranking change, third-party adoption, or official score is implied."
+  ]
+}
